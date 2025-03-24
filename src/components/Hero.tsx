@@ -75,12 +75,14 @@ const Hero = () => {
               </div>
             </div>
             <div className="bg-white">
-              {/* Using a reliable Unsplash image that we know exists */}
               <div 
                 className="h-[400px] md:h-[500px] bg-center bg-cover"
                 style={{ 
-                  backgroundImage: "url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d')",
-                  backgroundPosition: 'center top'
+                  backgroundImage: "url('/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png')",
+                  backgroundPosition: 'center top',
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundColor: '#f5f5f7'
                 }}
               ></div>
             </div>
