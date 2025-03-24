@@ -21,9 +21,9 @@ const ClientDashboard = () => {
   const isMobile = useIsMobile();
   
   const upcomingSessions = [
-    { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" },
-    { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "pending" },
-    { id: 3, name: "Yoga Basics", trainer: "Michael Chen", time: "17:30 - 18:30", date: "Thursday", status: "confirmed" },
+    { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed", price: 45 },
+    { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "pending", price: 60 },
+    { id: 3, name: "Yoga Basics", trainer: "Michael Chen", time: "17:30 - 18:30", date: "Thursday", status: "confirmed", price: 35 },
   ];
   
   const trainerMessages = [
