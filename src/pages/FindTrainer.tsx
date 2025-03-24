@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Search, MapPin, Star, Calendar } from "lucide-react";
@@ -15,7 +16,7 @@ const FindTrainer = () => {
   // Mock trainer data
   const trainers = [
     {
-      id: 1,
+      id: "t1",
       name: "Sarah Johnson",
       specialty: "Strength Training",
       location: "New York, NY",
@@ -26,7 +27,7 @@ const FindTrainer = () => {
       image: "/placeholder.svg"
     },
     {
-      id: 2,
+      id: "t2",
       name: "Michael Thompson",
       specialty: "HIIT Workouts",
       location: "Los Angeles, CA",
@@ -37,7 +38,7 @@ const FindTrainer = () => {
       image: "/placeholder.svg"
     },
     {
-      id: 3,
+      id: "t3",
       name: "Emma Davis",
       specialty: "Yoga Instructor",
       location: "Chicago, IL",
@@ -48,7 +49,7 @@ const FindTrainer = () => {
       image: "/placeholder.svg"
     },
     {
-      id: 4,
+      id: "t4",
       name: "James Wilson",
       specialty: "Nutrition Coach",
       location: "Austin, TX",
@@ -134,9 +135,11 @@ const FindTrainer = () => {
                     </div>
                   </div>
                   
-                  <button className="w-full mt-4 py-2 bg-primary text-white rounded-lg font-medium button-hover">
-                    View Profile
-                  </button>
+                  <Link to={`/trainer/${trainer.id}`} className="block w-full mt-4">
+                    <button className="w-full py-2 bg-primary text-white rounded-lg font-medium button-hover">
+                      View Profile
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}
