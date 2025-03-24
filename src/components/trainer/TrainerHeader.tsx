@@ -1,5 +1,5 @@
 
-import { MapPin, Star, Clock, User } from "lucide-react";
+import { MapPin, Star, Clock, User, Award, Verified, ThumbsUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 
@@ -89,6 +89,49 @@ export const TrainerHeader = ({ trainer }: TrainerHeaderProps) => {
             <div className="flex items-center gap-2 mt-1 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">{getStatusMessage()}</span>
+            </div>
+          </div>
+          
+          {/* New enhanced section for Trainer Highlights */}
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-secondary/50 rounded-lg p-4 flex items-start space-x-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Award className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-medium">Certified Trainer</h3>
+                <p className="text-sm text-muted-foreground">Internationally recognized certifications</p>
+              </div>
+            </div>
+            
+            <div className="bg-secondary/50 rounded-lg p-4 flex items-start space-x-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Verified className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-medium">Identity Verified</h3>
+                <p className="text-sm text-muted-foreground">Background checked & verified</p>
+              </div>
+            </div>
+            
+            <div className="bg-secondary/50 rounded-lg p-4 flex items-start space-x-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <User className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-medium">80+ Clients</h3>
+                <p className="text-sm text-muted-foreground">Experienced with diverse needs</p>
+              </div>
+            </div>
+            
+            <div className="bg-secondary/50 rounded-lg p-4 flex items-start space-x-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <ThumbsUp className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-medium">90% Success Rate</h3>
+                <p className="text-sm text-muted-foreground">Clients achieve their fitness goals</p>
+              </div>
             </div>
           </div>
         </div>
