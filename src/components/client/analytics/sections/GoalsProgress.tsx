@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Target, TrendingUp, Award } from "lucide-react";
+import { Target, TrendingUp, Award, Dumbbell } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 

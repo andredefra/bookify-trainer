@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Activity, ChevronUp, ChevronDown, Zap, TrendingUp, Dumbbell } from "lucide-react";
+import { Activity, ChevronUp, ChevronDown, Zap, TrendingUp, Dumbbell, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function StatisticsSummary() {
