@@ -3,19 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users } from "lucide-react";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number;
-  attendees?: number;
-  maxAttendees?: number;
-  description?: string;
-}
+import { SessionItem } from "@/types/sessions";
 
 interface SessionDetailsDialogProps {
   open: boolean;
