@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { InfoCircle } from "lucide-react";
 import { FitnessAppIntegration } from "@/components/client/settings/FitnessAppIntegration";
 
 interface SettingsTabProps {
@@ -62,14 +63,15 @@ export function SettingsTab({ user, goals }: SettingsTabProps) {
             
             <Separator />
             
-            <div>
-              <h3 className="font-medium mb-2">Account Plan</h3>
-              <div className="flex items-center justify-between">
+            <div className="bg-blue-50 border border-blue-100 rounded-md p-4">
+              <div className="flex gap-3">
+                <InfoCircle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium">{user.plan || "Free Plan"}</p>
-                  <p className="text-sm text-muted-foreground">Basic features</p>
+                  <h3 className="font-medium text-blue-700 mb-1">Client Account</h3>
+                  <p className="text-sm text-blue-600">
+                    The app is always free for clients. Premium features like custom training programs and advanced progress tracking are available based on your trainer's subscription plan.
+                  </p>
                 </div>
-                <Button variant="outline">Upgrade</Button>
               </div>
             </div>
           </TabsContent>

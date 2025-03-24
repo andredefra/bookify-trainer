@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PricingSection = () => {
@@ -42,7 +42,7 @@ const PricingSection = () => {
     "Priority Support",
     "Advanced Analytics",
     "Waitlist Management",
-    "Custom Training Programs", // Added new premium feature
+    "Custom Training Programs",
     "Fitness Progress Tracking",
   ];
 
@@ -53,9 +53,16 @@ const PricingSection = () => {
           <h2 className="reveal text-3xl md:text-4xl font-display font-bold tracking-tight text-primary mb-6">
             Simple, Transparent Pricing
           </h2>
-          <p className="reveal reveal-delay-1 text-lg text-muted-foreground mb-10">
+          <p className="reveal reveal-delay-1 text-lg text-muted-foreground mb-5">
             Choose the plan that works best for your business. No hidden fees or long-term commitments.
           </p>
+          
+          <div className="reveal reveal-delay-2 flex items-center justify-center gap-2 mb-6">
+            <Users className="h-5 w-5 text-emerald-600" />
+            <p className="text-emerald-700 font-medium">
+              Always free for clients — they access premium features through your subscription
+            </p>
+          </div>
           
           <div className="reveal reveal-delay-2 inline-flex p-1 bg-secondary rounded-full mb-10">
             <button
@@ -149,6 +156,9 @@ const PricingSection = () => {
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
             All plans include secure payment processing via Stripe. Transaction fees are charged only on successful payments. 
             You can upgrade, downgrade, or cancel your subscription at any time.
+          </p>
+          <p className="text-sm text-primary font-medium mt-4 max-w-2xl mx-auto">
+            Your clients never pay for the app — they get access to premium features through your subscription
           </p>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { UpcomingSessionsCard } from "@/components/client/overview/UpcomingSessi
 import { TrainerCard } from "@/components/client/overview/TrainerCard";
 import { MessagesCard } from "@/components/client/overview/MessagesCard";
 import { useEffect, useState } from "react";
+import { InfoCircle } from "lucide-react";
 
 interface ProgressItem {
   goal: string;
@@ -20,6 +21,7 @@ interface SessionItem {
   time: string;
   date: string;
   status: string;
+  price?: number; // Adding optional price field
 }
 
 interface MessageItem {
@@ -54,8 +56,25 @@ export function Overview({ progressData, upcomingSessions, trainerMessages }: Ov
     });
   }, []);
 
+  // Check if trainer has premium features
+  const hasPremiumTrainer = localStorage.getItem('trainerIsPremium') === 'true';
+
   return (
     <div className="space-y-6">
+      {!hasPremiumTrainer && (
+        <div className="bg-amber-50 border border-amber-100 rounded-md p-4">
+          <div className="flex gap-3">
+            <InfoCircle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-amber-700 mb-1">Basic Training Plan</h3>
+              <p className="text-sm text-amber-600">
+                Your trainer is on a basic plan. Advanced features like custom training programs and detailed progress tracking will be available if they upgrade to a premium plan.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <FitnessProgressCard 
         progressData={progressData} 
         connectedApps={connectedApps} 

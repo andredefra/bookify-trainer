@@ -9,6 +9,7 @@ import { ClientsTab } from "./tabs/ClientsTab";
 import { MessagesTab } from "./tabs/MessagesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { ProgramsTab } from "./tabs/ProgramsTab";
+import { toast } from "sonner";
 
 export function DashboardContainer() {
   const navigate = useNavigate();
@@ -17,9 +18,9 @@ export function DashboardContainer() {
   
   // Mock data
   const upcomingSessions = [
-    { id: 1, name: "Morning HIIT", time: "09:00 - 10:00", date: "Today", participants: 4, maxParticipants: 6 },
-    { id: 2, name: "Personal Training with Sarah", time: "13:00 - 14:00", date: "Today", participants: 1, maxParticipants: 1 },
-    { id: 3, name: "Yoga Basics", time: "17:30 - 18:30", date: "Tomorrow", participants: 8, maxParticipants: 10 },
+    { id: 1, name: "Morning HIIT", time: "09:00 - 10:00", date: "Today", participants: 4, maxParticipants: 6, price: 25 },
+    { id: 2, name: "Personal Training with Sarah", time: "13:00 - 14:00", date: "Today", participants: 1, maxParticipants: 1, price: 50 },
+    { id: 3, name: "Yoga Basics", time: "17:30 - 18:30", date: "Tomorrow", participants: 8, maxParticipants: 10, price: 20 },
   ];
   
   const clients = [
@@ -38,7 +39,12 @@ export function DashboardContainer() {
     // Check if user is logged in
     const storedUser = localStorage.getItem('demo-user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const userData = JSON.parse(storedUser);
+      setUser(userData);
+      
+      // Set a flag in localStorage to indicate if the trainer has premium features
+      // This is used in the client dashboard to show appropriate UI
+      localStorage.setItem('trainerIsPremium', userData.plan === 'pro' ? 'true' : 'false');
     } else {
       navigate('/login');
     }
@@ -46,8 +52,21 @@ export function DashboardContainer() {
 
   const handleLogout = () => {
     localStorage.removeItem('demo-user');
+    localStorage.removeItem('trainerIsPremium');
     navigate('/');
   };
+
+  const isPremium = user?.plan === 'pro';
+
+  useEffect(() => {
+    // Show toast with information about client access
+    if (user && !toast.dismiss) {
+      toast.info(
+        "Your clients can access the app for free. Premium features like custom training programs are only available with a Pro subscription.",
+        { duration: 6000 }
+      );
+    }
+  }, [user]);
 
   if (!user) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -63,6 +82,11 @@ export function DashboardContainer() {
             Welcome, {user.name || user.email.split('@')[0]}
           </h1>
           <p className="text-muted-foreground">Manage your sessions, clients, and business all in one place.</p>
+          {!isPremium && (
+            <p className="text-sm text-amber-600 mt-2">
+              You're on the basic plan. Upgrade to Pro to access premium features for you and your clients.
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-12 gap-6">
