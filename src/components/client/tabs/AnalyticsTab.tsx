@@ -4,39 +4,39 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from "lucide-react";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 
-// Sample data for the charts 
+// Sample data for the charts - adjusted to match expected types
 const weeklyWorkoutData = [
-  { day: "Mon", workouts: 1, calories: 350, duration: 45 },
-  { day: "Tue", workouts: 2, calories: 560, duration: 60 },
-  { day: "Wed", workouts: 0, calories: 0, duration: 0 },
-  { day: "Thu", workouts: 1, calories: 400, duration: 30 },
-  { day: "Fri", workouts: 1, calories: 420, duration: 40 },
-  { day: "Sat", workouts: 2, calories: 700, duration: 90 },
-  { day: "Sun", workouts: 1, calories: 300, duration: 20 },
+  { day: "Mon", minutes: 45, calories: 350 },
+  { day: "Tue", minutes: 60, calories: 560 },
+  { day: "Wed", minutes: 0, calories: 0 },
+  { day: "Thu", minutes: 30, calories: 400 },
+  { day: "Fri", minutes: 40, calories: 420 },
+  { day: "Sat", minutes: 90, calories: 700 },
+  { day: "Sun", minutes: 20, calories: 300 },
 ];
 
 const monthlyGoalsData = [
-  { type: "Weight Loss", progress: 75, target: 100 },
-  { type: "Cardio", progress: 60, target: 100 },
-  { type: "Strength", progress: 85, target: 100 },
-  { type: "Flexibility", progress: 40, target: 100 },
+  { type: "Weight Loss", current: 75, target: 100 },
+  { type: "Cardio", current: 60, target: 100 },
+  { type: "Strength", current: 85, target: 100 },
+  { type: "Flexibility", current: 40, target: 100 },
 ];
 
 const workoutTypesData = [
-  { name: "HIIT", sessions: 12 },
-  { name: "Strength", sessions: 8 },
-  { name: "Cardio", sessions: 15 },
-  { name: "Yoga", sessions: 6 },
-  { name: "Pilates", sessions: 4 },
+  { name: "HIIT", value: 12, color: "#0088FE" },
+  { name: "Strength", value: 8, color: "#00C49F" },
+  { name: "Cardio", value: 15, color: "#FFBB28" },
+  { name: "Yoga", value: 6, color: "#FF8042" },
+  { name: "Pilates", value: 4, color: "#8884d8" },
 ];
 
 const progressHistoryData = [
-  { month: "Jan", weight: 75, strength: 30, endurance: 40 },
-  { month: "Feb", weight: 74, strength: 35, endurance: 42 },
-  { month: "Mar", weight: 73, strength: 40, endurance: 45 },
-  { month: "Apr", weight: 71, strength: 45, endurance: 50 },
-  { month: "May", weight: 70, strength: 48, endurance: 55 },
-  { month: "Jun", weight: 69, strength: 52, endurance: 60 },
+  { week: "Jan", weight: 75, strength: 30, endurance: 40 },
+  { week: "Feb", weight: 74, strength: 35, endurance: 42 },
+  { week: "Mar", weight: 73, strength: 40, endurance: 45 },
+  { week: "Apr", weight: 71, strength: 45, endurance: 50 },
+  { week: "May", weight: 70, strength: 48, endurance: 55 },
+  { week: "Jun", weight: 69, strength: 52, endurance: 60 },
 ];
 
 export function AnalyticsTab() {
@@ -60,7 +60,7 @@ export function AnalyticsTab() {
           <div className="grid gap-6">
             <WorkoutAnalytics 
               weeklyData={weeklyWorkoutData}
-              monthlyGoals={monthlyGoalsData}
+              monthlyData={monthlyGoalsData}
               workoutTypes={workoutTypesData}
               progressHistory={progressHistoryData}
             />
