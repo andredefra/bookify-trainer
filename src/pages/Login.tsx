@@ -8,18 +8,25 @@ import { toast } from "sonner";
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginType, setLoginType] = useState('trainer'); // New state for login type
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempted with:", { email, password });
+    console.log("Login attempted with:", { email, password, loginType });
     
     // Demo mode: Accept any credentials
     if (email && password) {
       toast.success("Demo login successful!");
-      // For demo purposes, store that user is logged in
-      localStorage.setItem('demo-user', JSON.stringify({ email, type: 'trainer' }));
-      navigate('/dashboard');
+      // For demo purposes, store that user is logged in with their type
+      localStorage.setItem('demo-user', JSON.stringify({ email, type: loginType }));
+      
+      // Redirect based on user type
+      if (loginType === 'client') {
+        navigate('/client-dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } else {
       toast.error("Please enter both email and password");
     }
@@ -38,6 +45,32 @@ const Login = () => {
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Login Type Selector */}
+              <div className="flex border border-border rounded-lg overflow-hidden mb-2">
+                <button
+                  type="button"
+                  className={`flex-1 py-3 text-sm font-medium ${
+                    loginType === 'trainer' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-white text-muted-foreground'
+                  }`}
+                  onClick={() => setLoginType('trainer')}
+                >
+                  Trainer
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 py-3 text-sm font-medium ${
+                    loginType === 'client' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-white text-muted-foreground'
+                  }`}
+                  onClick={() => setLoginType('client')}
+                >
+                  Client
+                </button>
+              </div>
+              
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-1">
                   Email address
@@ -77,7 +110,7 @@ const Login = () => {
                 type="submit"
                 className="w-full py-3 bg-primary text-white rounded-full font-medium button-hover"
               >
-                Access Demo
+                {loginType === 'client' ? 'Access Client Demo' : 'Access Trainer Demo'}
               </button>
             </form>
             
