@@ -13,14 +13,14 @@ interface MetricCardProps {
 
 export function MetricCard({ title, metrics }: MetricCardProps) {
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-6">
           {metrics.map((metric, index) => (
-            <div key={index} className="flex flex-col items-center">
+            <div key={index} className="flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50">
               <div className="text-xl font-bold">{metric.value}</div>
               <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
                 {metric.icon}

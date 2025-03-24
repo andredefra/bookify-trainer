@@ -6,9 +6,11 @@ import { MetricCard } from "../cards/MetricCard";
 
 export function StatisticsSection() {
   return (
-    <div className="grid gap-6">
-      {/* Stats row using improved layout and visual design */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold">Statistiche Fitness</h3>
+      
+      {/* Stats row using improved layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
           title="Completed Workouts" 
           value="32"
@@ -47,8 +49,8 @@ export function StatisticsSection() {
         />
       </div>
 
-      {/* Detailed metrics cards with better layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Detailed metrics cards with better spacing */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         <MetricCard 
           title="Weekly Stats" 
           metrics={[
