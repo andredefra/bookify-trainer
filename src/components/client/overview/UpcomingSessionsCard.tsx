@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { bookingSchema } from "@/components/trainer/BookingForm";
-import { SessionItem } from "@/types/sessions";
+import { SessionItem, SessionStatus } from "@/types/sessions";
 
 import { UpcomingSessionItem } from "./sessions/UpcomingSessionItem";
 import { FeaturedSessionItem } from "./sessions/FeaturedSessionItem";
@@ -35,13 +36,13 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
     
     // Automatically show payment dialog after booking
     if (selectedTrainer) {
-      const mockSession = {
+      const mockSession: SessionItem = {
         id: Math.floor(Math.random() * 1000),
         name: "Personal Training",
         trainer: selectedTrainer,
         time: data.time,
         date: data.date.toLocaleDateString(),
-        status: "pending",
+        status: "pending" as SessionStatus,
         price: 45
       };
       setSelectedSession(mockSession);

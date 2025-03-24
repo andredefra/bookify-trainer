@@ -3,19 +3,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { SessionCard } from "./SessionCard";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number;
-  attendees?: number;
-  maxAttendees?: number;
-  description?: string;
-}
+import { SessionItem } from "@/types/sessions";
 
 interface SessionDiscoveryTabProps {
   availableSessions: SessionItem[];

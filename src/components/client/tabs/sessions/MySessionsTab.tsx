@@ -1,18 +1,6 @@
 
 import { SessionCard } from "./SessionCard";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number;
-  attendees?: number;
-  maxAttendees?: number;
-  description?: string;
-}
+import { SessionItem } from "@/types/sessions";
 
 interface MySessionsTabProps {
   upcomingSessions: SessionItem[];

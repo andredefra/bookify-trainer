@@ -5,6 +5,7 @@ import { TrainerCard } from "@/components/client/overview/TrainerCard";
 import { MessagesCard } from "@/components/client/overview/MessagesCard";
 import { useEffect, useState } from "react";
 import { Info, CheckCircle } from "lucide-react";
+import { SessionItem, SessionStatus } from "@/types/sessions";
 
 interface ProgressItem {
   goal: string;
@@ -12,16 +13,6 @@ interface ProgressItem {
   target: number;
   unit: string;
   progress: number;
-}
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number; // Adding optional price field
 }
 
 interface MessageItem {

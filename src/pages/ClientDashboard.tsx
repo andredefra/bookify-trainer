@@ -13,6 +13,7 @@ import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
 import { TrainingProgramTab } from "@/components/client/tabs/TrainingProgramTab";
 import { TrainingLogTab } from "@/components/client/tabs/TrainingLogTab";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { SessionItem, SessionStatus } from "@/types/sessions";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -20,10 +21,10 @@ const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const isMobile = useIsMobile();
   
-  const upcomingSessions = [
-    { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed", price: 45 },
-    { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "pending", price: 60 },
-    { id: 3, name: "Yoga Basics", trainer: "Michael Chen", time: "17:30 - 18:30", date: "Thursday", status: "confirmed", price: 35 },
+  const upcomingSessions: SessionItem[] = [
+    { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" as SessionStatus, price: 45 },
+    { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "pending" as SessionStatus, price: 60 },
+    { id: 3, name: "Yoga Basics", trainer: "Michael Chen", time: "17:30 - 18:30", date: "Thursday", status: "confirmed" as SessionStatus, price: 35 },
   ];
   
   const trainerMessages = [
