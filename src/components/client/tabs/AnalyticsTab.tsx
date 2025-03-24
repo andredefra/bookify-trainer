@@ -13,7 +13,7 @@ import {
 
 export function AnalyticsTab() {
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-8 w-full">
       <Card className="w-full shadow-sm bg-white/80 backdrop-blur-sm border-slate-200">
         <CardHeader className="py-5 px-6">
           <CardTitle className="text-xl font-bold text-slate-800">Fitness Analytics Dashboard</CardTitle>
@@ -21,15 +21,15 @@ export function AnalyticsTab() {
             Track your progress and visualize your fitness journey with real-time data
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4 lg:p-6">
-          <Alert className="bg-blue-50 border-blue-100 shadow-sm mb-6">
+        <CardContent className="p-6">
+          <Alert className="bg-blue-50 border-blue-100 shadow-sm mb-8">
             <InfoIcon className="h-4 w-4 text-blue-500" />
             <AlertDescription className="text-sm text-blue-700">
               Your analytics are based on your manually logged workouts and metrics.
             </AlertDescription>
           </Alert>
           
-          <div className="space-y-8">
+          <div className="space-y-10">
             <WorkoutAnalytics 
               weeklyData={weeklyWorkoutData}
               monthlyData={monthlyGoalsData}

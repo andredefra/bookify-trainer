@@ -2,8 +2,6 @@
 import React from "react";
 import { StatisticsSummary } from "./StatisticsSummary";
 import { GoalsProgress } from "./GoalsProgress";
-import { BodyMetrics } from "./BodyMetrics";
-import { WeeklyStats } from "./WeeklyStats";
 
 export function StatisticsSection() {
   return (
@@ -15,12 +13,6 @@ export function StatisticsSection() {
         </div>
         <div className="lg:col-span-1">
           <GoalsProgress />
-        </div>
-        <div className="lg:col-span-1">
-          <BodyMetrics />
-        </div>
-        <div className="lg:col-span-3">
-          <WeeklyStats />
         </div>
       </div>
     </div>
