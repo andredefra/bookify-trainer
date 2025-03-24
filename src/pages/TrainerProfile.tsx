@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -29,7 +28,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Mock trainer data - in a real app this would come from an API
 const trainerData = {
   id: "t1",
   name: "Sarah Johnson",
@@ -66,11 +64,10 @@ const trainerData = {
     }
   ],
   profileImage: "/placeholder.svg",
-  status: "in-session", // online, offline, in-session
+  status: "in-session",
   nextAvailability: "Today at 4:00 PM"
 };
 
-// Sample testimonials
 const testimonials = [
   {
     id: 1,
@@ -95,7 +92,6 @@ const testimonials = [
   }
 ];
 
-// Sample AI conversation
 const aiConversation = [
   {
     sender: "client",
@@ -119,7 +115,6 @@ const aiConversation = [
   }
 ];
 
-// Form schemas
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
@@ -127,7 +122,9 @@ const registerSchema = z.object({
 });
 
 const bookingSchema = z.object({
-  date: z.date(),
+  date: z.date({
+    required_error: "Please select a date",
+  }),
   time: z.string().min(1, "Please select a time"),
   notes: z.string().optional()
 });
@@ -154,14 +151,13 @@ const TrainerProfile = () => {
   const bookingForm = useForm({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      notes: "",
-      time: ""
+      date: new Date(),
+      time: "",
+      notes: ""
     }
   });
 
   useEffect(() => {
-    // In a real app, we would fetch the trainer data using the ID
-    // For this demo, we're just using the mock data
     window.scrollTo(0, 0);
   }, [id]);
 
@@ -174,7 +170,6 @@ const TrainerProfile = () => {
   };
 
   const onRegisterSubmit = (data: z.infer<typeof registerSchema>) => {
-    // In a real app, this would call an API to register the user
     console.log("Register data:", data);
     setIsLoggedIn(true);
     setShowRegister(false);
@@ -186,7 +181,6 @@ const TrainerProfile = () => {
   };
 
   const onBookingSubmit = (data: any) => {
-    // In a real app, this would call an API to book the session
     console.log("Booking data:", data);
     setShowBookingForm(false);
     toast({
@@ -227,7 +221,6 @@ const TrainerProfile = () => {
       
       <main className="flex-grow pt-24 pb-16">
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          {/* Back button */}
           <div className="mb-6">
             <Link 
               to="/find-trainer" 
@@ -237,7 +230,6 @@ const TrainerProfile = () => {
             </Link>
           </div>
           
-          {/* Trainer header */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
             <div className="md:col-span-1">
               <div className="rounded-xl overflow-hidden border border-border bg-card shadow-sm">
@@ -379,7 +371,6 @@ const TrainerProfile = () => {
                                 className="mx-auto pointer-events-auto"
                                 disabled={(date) => {
                                   const day = date.getDay();
-                                  // Disable Sundays and past dates
                                   return day === 0 || date < new Date(new Date().setHours(0, 0, 0, 0));
                                 }}
                               />
@@ -527,7 +518,6 @@ const TrainerProfile = () => {
             </div>
           </div>
           
-          {/* Trainer details tabs */}
           <Tabs defaultValue="about" className="mb-12">
             <TabsList className="mb-6">
               <TabsTrigger value="about">About</TabsTrigger>
@@ -667,7 +657,6 @@ const TrainerProfile = () => {
             </TabsContent>
           </Tabs>
           
-          {/* App features for trainers */}
           <div className="mt-12">
             <h2 className="text-2xl font-display font-semibold text-center mb-8">
               How Personal.ai helps trainers like {trainer.name}
