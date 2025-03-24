@@ -28,6 +28,15 @@ const Hero = () => {
     };
   }, []);
 
+  // Log to debug image loading
+  useEffect(() => {
+    console.log("Attempting to load dashboard image");
+    const img = new Image();
+    img.onload = () => console.log("Dashboard image loaded successfully");
+    img.onerror = (e) => console.error("Error loading dashboard image:", e);
+    img.src = "/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png";
+  }, []);
+
   return (
     <section 
       className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden"
@@ -74,11 +83,18 @@ const Hero = () => {
                 <div className="w-3 h-3 rounded-full bg-green-400"></div>
               </div>
             </div>
-            <div className="bg-white">
+            <div className="bg-white p-0 m-0">
+              {/* Use a fallback image in case the uploaded one fails */}
               <img 
-                src="/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png"
-                alt="Trainer dashboard preview" 
-                className="w-full h-[400px] md:h-[500px] object-contain bg-gray-50"
+                src="/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png" 
+                alt="Trainer dashboard preview"
+                className="w-full h-[400px] md:h-[500px] object-contain"
+                onError={(e) => {
+                  console.error("Image failed to load, using fallback");
+                  // If the image fails to load, use a placeholder
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600";
+                }}
               />
             </div>
           </div>
