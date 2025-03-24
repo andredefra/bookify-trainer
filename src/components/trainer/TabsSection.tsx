@@ -4,29 +4,11 @@ import { AboutTab } from "@/components/trainer/AboutTab";
 import { ExperienceTab } from "@/components/trainer/ExperienceTab";
 import { ReviewsTab } from "@/components/trainer/ReviewsTab";
 import { AvailabilityTab } from "@/components/trainer/AvailabilityTab";
+import { Trainer, Testimonial } from "@/data/trainerMockData";
 
 interface TabsSectionProps {
-  trainer: {
-    name: string;
-    certifications: string[];
-    education: string;
-    experience: {
-      title: string;
-      company: string;
-      period: string;
-      description: string;
-    }[];
-    availability: {
-      [key: string]: string[];
-    };
-  };
-  testimonials: {
-    id: number;
-    name: string;
-    image: string;
-    text: string;
-    rating: number;
-  }[];
+  trainer: Trainer;
+  testimonials: Testimonial[];
   onBookSession: () => void;
 }
 

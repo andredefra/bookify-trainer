@@ -3,12 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-
-interface Message {
-  sender: "client" | "ai";
-  message: string;
-  time: string;
-}
+import { Message } from "@/data/trainerMockData";
 
 interface AIChatDialogProps {
   trainerName: string;

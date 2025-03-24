@@ -2,12 +2,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { AIChatDialog } from "@/components/trainer/AIChatDialog";
-
-interface Message {
-  sender: "client" | "ai";
-  message: string;
-  time: string;
-}
+import { Message } from "@/data/trainerMockData";
 
 interface ChatDialogProps {
   open: boolean;
