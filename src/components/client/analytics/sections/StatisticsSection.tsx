@@ -9,11 +9,19 @@ export function StatisticsSection() {
   return (
     <div className="w-full">
       <h2 className="text-xl font-semibold mb-6 text-slate-800">Performance Statistics</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <StatisticsSummary />
-        <GoalsProgress />
-        <BodyMetrics />
-        <WeeklyStats />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <StatisticsSummary />
+        </div>
+        <div>
+          <GoalsProgress />
+        </div>
+        <div>
+          <BodyMetrics />
+        </div>
+        <div className="lg:col-span-2">
+          <WeeklyStats />
+        </div>
       </div>
     </div>
   );
