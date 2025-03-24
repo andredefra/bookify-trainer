@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProgramCreationForm } from "@/components/trainer/training/ProgramCreationForm";
+import { toast } from "sonner";
 
 export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
@@ -29,6 +30,13 @@ export function ProgramsTab() {
     { id: 3, name: "Lisa Garcia", email: "lisa@example.com" },
     { id: 4, name: "David Kim", email: "david@example.com" },
   ];
+  
+  const handleSendProgram = (program: any) => {
+    toast.success("Program created successfully");
+    setShowProgramForm(false);
+    // Here you would typically save the program to the backend
+    console.log("Program created:", program);
+  };
   
   return (
     <Card>
@@ -119,8 +127,10 @@ export function ProgramsTab() {
               <DialogTitle>Create New Training Program</DialogTitle>
             </DialogHeader>
             <ProgramCreationForm 
-              onSave={() => setShowProgramForm(false)}
-              onCancel={() => setShowProgramForm(false)}
+              clientId="new-program"
+              clientName="New Program"
+              onSend={handleSendProgram}
+              isPremium={true}
             />
           </DialogContent>
         </Dialog>
@@ -180,7 +190,10 @@ export function ProgramsTab() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowAssignDialog(false)}>Cancel</Button>
-              <Button onClick={() => setShowAssignDialog(false)}>Assign Program</Button>
+              <Button onClick={() => {
+                setShowAssignDialog(false);
+                toast.success("Program assigned successfully");
+              }}>Assign Program</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
