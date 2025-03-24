@@ -9,23 +9,13 @@ import { Achievements } from "./Achievements";
 export function StatisticsSection() {
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* Left Column - Summary & Weekly Stats */}
-        <div className="space-y-3">
-          <StatisticsSummary />
-        </div>
-
-        {/* Middle Column - Goals & Body Metrics */}
-        <div className="space-y-3">
-          <GoalsProgress />
-          <BodyMetrics />
-        </div>
-
-        {/* Right Column - Weekly Stats & Achievements */}
-        <div className="space-y-3">
-          <WeeklyStats />
-          <Achievements />
-        </div>
+      <h2 className="text-lg font-semibold mb-4 text-slate-800">Performance Statistics</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <StatisticsSummary />
+        <GoalsProgress />
+        <BodyMetrics />
+        <WeeklyStats />
+        <Achievements />
       </div>
     </div>
   );
