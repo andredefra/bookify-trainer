@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +18,7 @@ import {
   Cell
 } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { ChartPie, ChartArea, ChartBarHorizontal, ChartLine } from "lucide-react";
+import { BarChart2, PieChart as PieChartIcon, AreaChart as AreaChartIcon, LineChart as LineChartIcon } from "lucide-react";
 
 interface WorkoutAnalyticsProps {
   weeklyData: {
@@ -69,19 +68,19 @@ export function WorkoutAnalytics({
         <Tabs defaultValue="weekly" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="grid grid-cols-4 w-full max-w-md">
             <TabsTrigger value="weekly" className="flex items-center gap-2">
-              <ChartBarHorizontal className="h-4 w-4" />
+              <BarChart2 className="h-4 w-4" />
               <span className="hidden sm:inline">Weekly</span>
             </TabsTrigger>
             <TabsTrigger value="monthly" className="flex items-center gap-2">
-              <ChartLine className="h-4 w-4" />
+              <LineChartIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Monthly</span>
             </TabsTrigger>
             <TabsTrigger value="workoutTypes" className="flex items-center gap-2">
-              <ChartPie className="h-4 w-4" />
+              <PieChartIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Workout Types</span>
             </TabsTrigger>
             <TabsTrigger value="progress" className="flex items-center gap-2">
-              <ChartArea className="h-4 w-4" />
+              <AreaChartIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Progress</span>
             </TabsTrigger>
           </TabsList>
@@ -241,7 +240,7 @@ function MonthlyGoalsChart({ data }: { data: WorkoutAnalyticsProps['monthlyGoals
             margin={{ top: 10, right: 30, left: 40, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-            <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 100]} />
+            <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} />
             <YAxis 
               dataKey="type" 
               type="category" 
