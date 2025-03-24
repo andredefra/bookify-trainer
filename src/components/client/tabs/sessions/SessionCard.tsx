@@ -2,19 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, CalendarCheck, CreditCard } from "lucide-react";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number;
-  attendees?: number;
-  maxAttendees?: number;
-  description?: string;
-}
+import { SessionItem, SessionStatus } from "@/types/sessions";
 
 interface SessionCardProps {
   session: SessionItem;

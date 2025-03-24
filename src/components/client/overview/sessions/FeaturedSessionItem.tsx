@@ -1,7 +1,8 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
-import { SessionItem } from "@/types/sessions";
+import { SessionItem, SessionStatus } from "@/types/sessions";
 
 interface FeaturedSessionItemProps {
   onRegister: (session: SessionItem) => void;

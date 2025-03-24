@@ -1,5 +1,5 @@
 
-import { SessionItem } from "@/types/sessions";
+import { SessionItem, SessionStatus } from "@/types/sessions";
 
 // Available trainers for booking
 export const availableTrainers = [
@@ -15,7 +15,7 @@ export const availableSessions: SessionItem[] = [
     trainer: "Sarah Johnson", 
     time: "08:00 - 09:00", 
     date: "Monday, July 3", 
-    status: "available", 
+    status: "available" as SessionStatus, 
     price: 25,
     attendees: 8,
     maxAttendees: 15,
@@ -27,7 +27,7 @@ export const availableSessions: SessionItem[] = [
     trainer: "Alex Thompson", 
     time: "18:00 - 19:00", 
     date: "Tuesday, July 4", 
-    status: "available", 
+    status: "available" as SessionStatus, 
     price: 20,
     attendees: 12,
     maxAttendees: 20,
@@ -39,7 +39,7 @@ export const availableSessions: SessionItem[] = [
     trainer: "Sarah Johnson", 
     time: "17:00 - 18:00", 
     date: "Wednesday, July 5", 
-    status: "available", 
+    status: "available" as SessionStatus, 
     price: 30,
     attendees: 5,
     maxAttendees: 12,
@@ -54,7 +54,7 @@ export const featuredSession: SessionItem = {
   trainer: "Sarah Johnson", 
   time: "10:00 - 11:00", 
   date: "Tomorrow", 
-  status: "available", 
+  status: "available" as SessionStatus, 
   price: 35,
   attendees: 12,
   maxAttendees: 20,
