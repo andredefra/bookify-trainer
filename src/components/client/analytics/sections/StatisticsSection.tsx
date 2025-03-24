@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Activity, TrendingUp, Flame, Target, Dumbbell, TrendingDown } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
@@ -7,8 +6,6 @@ import { MetricCard } from "../cards/MetricCard";
 export function StatisticsSection() {
   return (
     <div className="space-y-1 w-full max-w-[98%] mx-auto">
-      <h3 className="text-lg font-semibold">Statistiche Fitness</h3>
-      
       {/* Stats row using full-width responsive layout with more columns */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-1 w-full">
         <StatCard 
