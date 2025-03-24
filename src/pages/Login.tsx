@@ -21,8 +21,8 @@ const Login = () => {
       <main className="flex-grow flex items-center justify-center py-16 px-6">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-display font-bold text-primary mb-2">Welcome back</h1>
-            <p className="text-muted-foreground">Sign in to your account</p>
+            <h1 className="text-3xl font-display font-bold text-primary mb-2">Demo Login</h1>
+            <p className="text-muted-foreground">Try our platform features with a demo account</p>
           </div>
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
@@ -66,15 +66,15 @@ const Login = () => {
                 type="submit"
                 className="w-full py-3 bg-primary text-white rounded-full font-medium button-hover"
               >
-                Sign in
+                Access Demo
               </button>
             </form>
             
             <div className="mt-6 pt-6 border-t border-border text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{" "}
+                Don't have a demo account?{" "}
                 <Link to="/register" className="text-primary hover:underline">
-                  Sign up
+                  Try the Demo
                 </Link>
               </p>
             </div>

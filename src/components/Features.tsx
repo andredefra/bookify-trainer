@@ -1,6 +1,6 @@
 
-import { useEffect, useRef } from 'react';
-import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe } from 'lucide-react';
+import { useEffect } from 'react';
+import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus } from 'lucide-react';
 
 const Features = () => {
   useEffect(() => {
@@ -30,14 +30,19 @@ const Features = () => {
       description: "Intelligent scheduling system that optimizes your calendar and maximizes session availability."
     },
     {
+      icon: <Bot className="h-6 w-6 text-primary" />,
+      title: "AI Client Assistant",
+      description: "Automated chat assistant handles client inquiries when you're unavailable or in a training session."
+    },
+    {
       icon: <CreditCard className="h-6 w-6 text-primary" />,
       title: "Stripe Integration",
-      description: "Get paid automatically with pre-authorizations and post-session charging."
+      description: "Get paid automatically with pre-authorizations and post-session charging. No-show protection included."
     },
     {
       icon: <Users className="h-6 w-6 text-primary" />,
       title: "Private & Group Sessions",
-      description: "Manage individual clients or create group sessions with waitlists and maximums."
+      description: "Manage individual clients or create group sessions with waitlists and capacity limits."
     },
     {
       icon: <Clock className="h-6 w-6 text-primary" />,
@@ -47,12 +52,17 @@ const Features = () => {
     {
       icon: <ListChecks className="h-6 w-6 text-primary" />,
       title: "Waitlist System",
-      description: "Automatically fill cancellations and manage client requests for popular sessions."
+      description: "Automatically fill cancellations and manage client requests for popular sessions with confirmation deadlines."
     },
     {
       icon: <MessageSquare className="h-6 w-6 text-primary" />,
       title: "Integrated Messaging",
       description: "Built-in messaging system allows for direct communication between trainers and clients."
+    },
+    {
+      icon: <UserPlus className="h-6 w-6 text-primary" />,
+      title: "Session Management",
+      description: "Create one-on-one or group sessions with capacity limits and automatic waitlist management."
     },
     {
       icon: <Globe className="h-6 w-6 text-primary" />,

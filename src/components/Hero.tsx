@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { CalendarCheck, CreditCard, MessageSquare } from 'lucide-react';
+import { CalendarCheck, CreditCard, MessageSquare, Bot } from 'lucide-react';
 
 const Hero = () => {
   const isMobile = useIsMobile();
@@ -42,7 +42,7 @@ const Hero = () => {
           </h1>
           
           <p className="reveal reveal-delay-1 mx-auto max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
-            Simplify your calendar, fill your sessions, and get paid automatically — no spreadsheets, no back-and-forth.
+            Simplify your calendar, fill your sessions, and get paid automatically — with AI support for client management and scheduling.
           </p>
           
           <div className="reveal reveal-delay-2 flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
@@ -50,7 +50,7 @@ const Hero = () => {
               to="/register"
               className="w-full sm:w-auto px-8 py-3 md:py-4 bg-primary text-white rounded-full text-base md:text-lg font-medium button-hover"
             >
-              Get Started as a Trainer
+              Try the Demo
             </Link>
             <Link
               to="/find-trainer"
@@ -100,10 +100,10 @@ const Hero = () => {
           
           <div className="reveal reveal-delay-2 flex flex-col items-center text-center p-6 rounded-xl glass">
             <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 mb-4">
-              <MessageSquare className="h-6 w-6 text-primary" />
+              <Bot className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">Client Communication</h3>
-            <p className="text-muted-foreground">Direct messaging, file sharing, and integrated client management tools.</p>
+            <h3 className="text-lg font-semibold mb-2">AI Assistant</h3>
+            <p className="text-muted-foreground">Let AI handle client inquiries when you're unavailable or in a training session.</p>
           </div>
         </div>
       </div>

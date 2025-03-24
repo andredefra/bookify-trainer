@@ -65,13 +65,13 @@ const Navbar = () => {
                 to="/login" 
                 className="px-4 py-2 text-sm font-medium text-primary rounded-full transition-colors"
               >
-                Log in
+                Demo Login
               </Link>
               <Link 
                 to="/register" 
                 className="px-5 py-2 text-sm font-medium text-white bg-primary rounded-full button-hover"
               >
-                Get Started
+                Try the Demo
               </Link>
             </div>
           </div>
@@ -116,14 +116,14 @@ const Navbar = () => {
                 className="w-full py-3 text-center text-primary border border-primary/20 rounded-full"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Log in
+                Demo Login
               </Link>
               <Link 
                 to="/register" 
                 className="w-full py-3 text-center text-white bg-primary rounded-full"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Get Started
+                Try the Demo
               </Link>
             </div>
           </div>
