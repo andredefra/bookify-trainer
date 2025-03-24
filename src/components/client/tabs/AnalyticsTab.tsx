@@ -65,7 +65,7 @@ export function AnalyticsTab() {
               progressHistory={progressHistoryData}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <MetricCard 
                 title="Weekly Stats" 
                 metrics={[
@@ -81,6 +81,37 @@ export function AnalyticsTab() {
                   { label: "Body Fat", value: "18%" },
                   { label: "Muscle Mass", value: "31%" }
                 ]} 
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard 
+                title="Completed Workouts" 
+                value="32"
+                change="+5"
+                trend="up"
+                period="vs last month" 
+              />
+              <StatCard 
+                title="Active Days" 
+                value="18/30"
+                change="+2"
+                trend="up"
+                period="vs last month"
+              />
+              <StatCard 
+                title="Average Duration" 
+                value="42 min"
+                change="-3"
+                trend="down"
+                period="vs last month"
+              />
+              <StatCard 
+                title="Goal Progress" 
+                value="68%"
+                change="+12%"
+                trend="up"
+                period="vs last month"
               />
             </div>
           </div>
@@ -114,6 +145,33 @@ function MetricCard({ title, metrics }: MetricCardProps) {
           ))}
         </div>
       </CardContent>
+    </Card>
+  );
+}
+
+interface StatCardProps {
+  title: string;
+  value: string;
+  change: string;
+  trend: "up" | "down" | "neutral";
+  period: string;
+}
+
+function StatCard({ title, value, change, trend, period }: StatCardProps) {
+  return (
+    <Card className="p-4">
+      <h3 className="text-sm font-medium text-muted-foreground mb-1">{title}</h3>
+      <div className="flex items-baseline">
+        <span className="text-2xl font-bold">{value}</span>
+        <span className={`ml-2 text-xs font-medium ${
+          trend === "up" ? "text-green-600" : 
+          trend === "down" ? "text-red-600" : 
+          "text-gray-600"
+        }`}>
+          {change}
+        </span>
+      </div>
+      <span className="text-xs text-muted-foreground">{period}</span>
     </Card>
   );
 }
