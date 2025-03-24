@@ -1,0 +1,60 @@
+
+import React from "react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+
+interface WorkoutType {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface WorkoutTypesChartProps {
+  workoutTypes: WorkoutType[];
+}
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={workoutTypes}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          outerRadius={100}
+          fill="#8884d8"
+          dataKey="value"
+          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+        >
+          {workoutTypes.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              const data = payload[0].payload;
+              return (
+                <div className="bg-white p-2 shadow-md border rounded">
+                  <p className="font-medium">{data.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Sessions: <span className="font-medium">{data.value}</span>
+                  </p>
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+}

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, TrendingDown, InfoIcon, Activity, Dumbbell, Flame, Target } from "lucide-react";
