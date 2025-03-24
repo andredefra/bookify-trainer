@@ -1,7 +1,6 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Calendar, User, MessageSquare, Settings, Clock, CheckCircle2, PlusCircle, LineChart } from "lucide-react";
+import { Calendar, User, MessageSquare, Settings, Clock, CheckCircle2, PlusCircle, LineChart, Star } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,6 @@ const ClientDashboard = () => {
   const [user, setUser] = useState<{name?: string, email: string, type: string, plan?: string} | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   
-  // Mock data
   const upcomingSessions = [
     { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" },
     { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "pending" },
@@ -35,7 +33,6 @@ const ClientDashboard = () => {
   const goals = ["Weight loss", "Muscle tone", "Flexibility"];
 
   useEffect(() => {
-    // Check if user is logged in
     const storedUser = localStorage.getItem('demo-user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -55,7 +52,6 @@ const ClientDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Dashboard Header */}
       <header className="bg-white border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -82,9 +78,7 @@ const ClientDashboard = () => {
         </div>
       </header>
 
-      {/* Dashboard Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">
             Welcome, {user.name || user.email.split('@')[0]}
@@ -92,9 +86,7 @@ const ClientDashboard = () => {
           <p className="text-muted-foreground">Track your progress and manage your fitness journey.</p>
         </div>
 
-        {/* Main Dashboard */}
         <div className="grid grid-cols-12 gap-6">
-          {/* Sidebar */}
           <div className="col-span-12 lg:col-span-3">
             <Card>
               <CardContent className="p-0">
@@ -141,7 +133,6 @@ const ClientDashboard = () => {
               </CardContent>
             </Card>
             
-            {/* Client Profile Card */}
             <div className="mt-6">
               <ClientProfile 
                 name={user.name || "Demo Client"}
@@ -153,11 +144,9 @@ const ClientDashboard = () => {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="col-span-12 lg:col-span-9">
             {activeTab === "overview" && (
               <div className="space-y-6">
-                {/* Progress Section */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <div>
@@ -186,7 +175,6 @@ const ClientDashboard = () => {
                   </CardContent>
                 </Card>
 
-                {/* Upcoming Sessions */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <div>
@@ -232,7 +220,6 @@ const ClientDashboard = () => {
                 </Card>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Recent Trainers */}
                   <Card>
                     <CardHeader className="pb-2">
                       <CardTitle>My Trainers</CardTitle>
@@ -275,7 +262,6 @@ const ClientDashboard = () => {
                     </CardFooter>
                   </Card>
 
-                  {/* Messages */}
                   <Card>
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
@@ -604,3 +590,4 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
+
