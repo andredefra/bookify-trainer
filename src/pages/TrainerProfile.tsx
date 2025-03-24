@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
@@ -7,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 // Import refactored components
 import { TrainerHeader } from "@/components/trainer/TrainerHeader";
@@ -87,22 +87,22 @@ const testimonials = [
 
 const aiConversation = [
   {
-    sender: "client",
+    sender: "client" as const,
     message: "Hi, I need to reschedule my private session this week. Can I move it to Tuesday?",
     time: "10:23 AM"
   },
   {
-    sender: "ai",
+    sender: "ai" as const,
     message: "Hello! I see you currently have a session scheduled for Thursday at 3:00 PM. Let me check Sarah's availability for Tuesday. She has open slots at 10:00 AM and 4:00 PM on Tuesday. Would either of those work for you?",
     time: "10:24 AM"
   },
   {
-    sender: "client",
+    sender: "client" as const,
     message: "4:00 PM on Tuesday works for me. Can you book that?",
     time: "10:26 AM"
   },
   {
-    sender: "ai",
+    sender: "ai" as const,
     message: "Perfect! I've rescheduled your session to Tuesday at 4:00 PM with Sarah. You'll receive a confirmation email shortly. Sarah has been notified of this change. Is there anything else you need help with?",
     time: "10:27 AM"
   }
