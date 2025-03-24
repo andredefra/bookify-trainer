@@ -14,15 +14,15 @@ interface MetricCardProps {
 export function MetricCard({ title, metrics }: MetricCardProps) {
   return (
     <Card className="h-full shadow-sm hover:shadow transition-shadow w-full">
-      <CardHeader className="py-1 px-2">
+      <CardHeader className="py-0.5 px-1">
         <CardTitle className="text-sm">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="p-1">
-        <div className="grid grid-cols-3 gap-1 w-full">
+      <CardContent className="p-0.5">
+        <div className="grid grid-cols-3 gap-0.5 w-full">
           {metrics.map((metric, index) => (
-            <div key={index} className="flex flex-col items-center justify-center p-1 rounded-lg bg-gray-50">
+            <div key={index} className="flex flex-col items-center justify-center p-0.5 rounded-lg bg-gray-50">
               <div className="text-base font-bold">{metric.value}</div>
-              <div className="flex items-center gap-0.5 text-[9px] text-muted-foreground mt-0.5">
+              <div className="flex items-center gap-0.5 text-[9px] text-muted-foreground">
                 {metric.icon}
                 <span>{metric.label}</span>
               </div>
