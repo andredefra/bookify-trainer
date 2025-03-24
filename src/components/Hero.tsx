@@ -75,7 +75,7 @@ const Hero = () => {
               </div>
             </div>
             <div className="bg-white">
-              <div className="h-[400px] md:h-[500px] bg-[url('/placeholder.svg')] bg-center bg-cover"></div>
+              <div className="h-[400px] md:h-[500px] bg-[url('/dashboard-preview.png')] bg-center bg-cover"></div>
             </div>
           </div>
         </div>
