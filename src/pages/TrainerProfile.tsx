@@ -5,7 +5,6 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { DialogTrigger } from "@/components/ui/dialog";
 
 // Import refactored components
 import { TrainerHeader } from "@/components/trainer/TrainerHeader";
@@ -100,8 +99,6 @@ const TrainerProfile = () => {
           <MarketingSection trainerName={trainer.name} />
           
           {/* Dialogs */}
-          <DialogTrigger className="hidden" />
-          
           <SessionDialogs 
             trainerName={trainer.name}
             showRegister={showRegister}

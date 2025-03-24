@@ -24,8 +24,13 @@ export const SessionDialogs = ({
   onBookingCancel
 }: SessionDialogsProps) => {
   return (
-    <Dialog>
-      <DialogContent className={showRegister || showBookingForm ? undefined : "hidden"}>
+    <Dialog open={showRegister || showBookingForm} onOpenChange={(open) => {
+      if (!open) {
+        if (showRegister) onRegisterCancel();
+        if (showBookingForm) onBookingCancel();
+      }
+    }}>
+      <DialogContent>
         {showRegister && (
           <>
             <DialogHeader>
