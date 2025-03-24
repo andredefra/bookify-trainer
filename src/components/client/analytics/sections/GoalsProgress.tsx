@@ -6,16 +6,16 @@ import { Progress } from "@/components/ui/progress";
 
 export function GoalsProgress() {
   return (
-    <Card className="shadow-md hover:shadow-lg transition-all bg-white border-slate-200 h-full">
-      <CardContent className="p-4">
+    <Card className="shadow-md hover:shadow-lg transition-all bg-white border-slate-200">
+      <CardContent className="p-5">
         <h3 className="text-base font-semibold mb-4 flex items-center text-slate-800">
           <Target className="h-5 w-5 mr-2.5 text-blue-600" />
           <span>Goals Progress</span>
         </h3>
         
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg">
-            <div className="flex justify-between items-center mb-3">
+            <div className="flex justify-between items-center mb-2.5">
               <div className="flex items-center">
                 <TrendingUp className="h-4 w-4 mr-2 text-blue-600" />
                 <span className="text-sm font-medium text-blue-800">Weight Goal</span>
@@ -37,7 +37,7 @@ export function GoalsProgress() {
           </div>
           
           <div className="bg-purple-50 p-4 rounded-lg">
-            <div className="flex justify-between items-center mb-3">
+            <div className="flex justify-between items-center mb-2.5">
               <div className="flex items-center">
                 <Award className="h-4 w-4 mr-2 text-purple-600" />
                 <span className="text-sm font-medium text-purple-800">Body Fat</span>
@@ -59,7 +59,7 @@ export function GoalsProgress() {
           </div>
           
           <div className="bg-teal-50 p-4 rounded-lg">
-            <div className="flex justify-between items-center mb-3">
+            <div className="flex justify-between items-center mb-2.5">
               <div className="flex items-center">
                 <Dumbbell className="h-4 w-4 mr-2 text-teal-600" />
                 <span className="text-sm font-medium text-teal-800">Weekly Workouts</span>
