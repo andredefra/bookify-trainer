@@ -6,11 +6,11 @@ import { MetricCard } from "../cards/MetricCard";
 
 export function StatisticsSection() {
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-4 w-full">
       <h3 className="text-lg font-semibold">Statistiche Fitness</h3>
       
       {/* Stats row using full-width responsive layout with more columns */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-6 gap-3 w-full">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 w-full">
         <StatCard 
           title="Completed Workouts" 
           value="32"
@@ -68,7 +68,7 @@ export function StatisticsSection() {
       </div>
 
       {/* Detailed metrics cards with improved full-width layout */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4 w-full">
         <MetricCard 
           title="Weekly Stats" 
           metrics={[
