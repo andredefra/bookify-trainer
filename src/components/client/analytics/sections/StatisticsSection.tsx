@@ -9,8 +9,8 @@ export function StatisticsSection() {
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Statistiche Fitness</h3>
       
-      {/* Stats row using improved layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Stats row using full-width responsive layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         <StatCard 
           title="Completed Workouts" 
           value="32"
@@ -49,8 +49,8 @@ export function StatisticsSection() {
         />
       </div>
 
-      {/* Detailed metrics cards with better spacing */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+      {/* Detailed metrics cards with improved full-width layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 w-full">
         <MetricCard 
           title="Weekly Stats" 
           metrics={[
