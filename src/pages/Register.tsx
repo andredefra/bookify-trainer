@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -13,6 +14,7 @@ const Register = () => {
   const [plan, setPlan] = useState('freemium'); // freemium or pro
   
   const location = useLocation();
+  const navigate = useNavigate();
   
   useEffect(() => {
     // Get plan from URL if it exists
@@ -26,7 +28,16 @@ const Register = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Registration attempted with:", { name, email, password, userType, plan });
-    // Registration logic would go here
+    
+    // Demo mode: Accept any credentials as long as they're filled
+    if (name && email && password) {
+      toast.success("Demo registration successful!");
+      // For demo purposes, store that user is logged in
+      localStorage.setItem('demo-user', JSON.stringify({ name, email, type: userType, plan }));
+      navigate('/dashboard');
+    } else {
+      toast.error("Please fill in all fields");
+    }
   };
 
   return (
