@@ -9,6 +9,7 @@ import { SessionsTab } from "@/components/client/tabs/SessionsTab";
 import { TrainersTab } from "@/components/client/tabs/TrainersTab";
 import { MessagesTab } from "@/components/client/tabs/MessagesTab";
 import { SettingsTab } from "@/components/client/tabs/SettingsTab";
+import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -92,6 +93,10 @@ const ClientDashboard = () => {
                 upcomingSessions={upcomingSessions}
                 trainerMessages={trainerMessages}
               />
+            )}
+
+            {activeTab === "analytics" && (
+              <AnalyticsTab />
             )}
 
             {activeTab === "sessions" && (

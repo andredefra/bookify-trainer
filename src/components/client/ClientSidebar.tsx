@@ -1,6 +1,5 @@
 
-import { useState } from "react";
-import { Calendar, User, MessageSquare, Settings, LineChart } from "lucide-react";
+import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -21,6 +20,13 @@ export function ClientSidebar({ activeTab, setActiveTab, unreadMessageCount }: C
           >
             <LineChart className="w-5 h-5 mr-3" />
             <span>Overview</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab("analytics")}
+            className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "analytics" ? "bg-primary/5 text-primary" : ""}`}
+          >
+            <BarChart2 className="w-5 h-5 mr-3" />
+            <span>Analytics</span>
           </button>
           <button 
             onClick={() => setActiveTab("sessions")}
