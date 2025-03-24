@@ -1,25 +1,17 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // For the demo, accept any email/password
-    if (email.trim() && password.trim()) {
-      console.log("Demo login successful with:", { email, password });
-      // Navigate to dashboard after successful login
-      navigate('/dashboard');
-    } else {
-      setError('Please fill in both email and password');
-    }
+    console.log("Login attempted with:", { email, password });
+    // Login logic would go here
   };
 
   return (
@@ -34,12 +26,6 @@ const Login = () => {
           </div>
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
-            {error && (
-              <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-1">
