@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { InfoIcon } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, TrendingDown, InfoIcon, Activity, Dumbbell, Flame, Target } from "lucide-react";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 
 // Sample data for the charts - adjusted to match expected types
@@ -65,32 +65,16 @@ export function AnalyticsTab() {
               progressHistory={progressHistoryData}
             />
             
-            <div className="grid grid-cols-2 gap-6">
-              <MetricCard 
-                title="Weekly Stats" 
-                metrics={[
-                  { label: "Workouts", value: "8" },
-                  { label: "Total Time", value: "285 min" },
-                  { label: "Calories", value: "2,730" }
-                ]} 
-              />
-              <MetricCard 
-                title="Current Status" 
-                metrics={[
-                  { label: "Weight", value: "68 kg" },
-                  { label: "Body Fat", value: "18%" },
-                  { label: "Muscle Mass", value: "31%" }
-                ]} 
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Stats row using improved layout and visual design */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <StatCard 
                 title="Completed Workouts" 
                 value="32"
                 change="+5"
                 trend="up"
                 period="vs last month" 
+                icon={<Activity className="h-4 w-4" />}
+                color="#4f46e5"
               />
               <StatCard 
                 title="Active Days" 
@@ -98,6 +82,8 @@ export function AnalyticsTab() {
                 change="+2"
                 trend="up"
                 period="vs last month"
+                icon={<TrendingUp className="h-4 w-4" />}
+                color="#10b981"
               />
               <StatCard 
                 title="Average Duration" 
@@ -105,6 +91,8 @@ export function AnalyticsTab() {
                 change="-3"
                 trend="down"
                 period="vs last month"
+                icon={<Flame className="h-4 w-4" />}
+                color="#f59e0b"
               />
               <StatCard 
                 title="Goal Progress" 
@@ -112,6 +100,28 @@ export function AnalyticsTab() {
                 change="+12%"
                 trend="up"
                 period="vs last month"
+                icon={<Target className="h-4 w-4" />}
+                color="#8884d8"
+              />
+            </div>
+
+            {/* Detailed metrics cards with better layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <MetricCard 
+                title="Weekly Stats" 
+                metrics={[
+                  { label: "Workouts", value: "8", icon: <Dumbbell className="h-3 w-3" /> },
+                  { label: "Total Time", value: "285 min", icon: <Activity className="h-3 w-3" /> },
+                  { label: "Calories", value: "2,730", icon: <Flame className="h-3 w-3" /> }
+                ]} 
+              />
+              <MetricCard 
+                title="Current Status" 
+                metrics={[
+                  { label: "Weight", value: "68 kg", icon: <TrendingDown className="h-3 w-3 text-green-500" /> },
+                  { label: "Body Fat", value: "18%", icon: <TrendingDown className="h-3 w-3 text-green-500" /> },
+                  { label: "Muscle Mass", value: "31%", icon: <TrendingUp className="h-3 w-3 text-blue-500" /> }
+                ]} 
               />
             </div>
           </div>
@@ -126,6 +136,7 @@ interface MetricCardProps {
   metrics: {
     label: string;
     value: string;
+    icon?: React.ReactNode;
   }[];
 }
 
@@ -138,9 +149,12 @@ function MetricCard({ title, metrics }: MetricCardProps) {
       <CardContent>
         <div className="grid grid-cols-3 gap-4">
           {metrics.map((metric, index) => (
-            <div key={index} className="text-center">
-              <div className="text-2xl font-bold">{metric.value}</div>
-              <div className="text-xs text-muted-foreground">{metric.label}</div>
+            <div key={index} className="flex flex-col items-center">
+              <div className="text-xl font-bold">{metric.value}</div>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                {metric.icon}
+                <span>{metric.label}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -155,20 +169,29 @@ interface StatCardProps {
   change: string;
   trend: "up" | "down" | "neutral";
   period: string;
+  icon?: React.ReactNode;
+  color?: string;
 }
 
-function StatCard({ title, value, change, trend, period }: StatCardProps) {
+function StatCard({ title, value, change, trend, period, icon, color }: StatCardProps) {
   return (
-    <Card className="p-4">
-      <h3 className="text-sm font-medium text-muted-foreground mb-1">{title}</h3>
+    <Card className="p-4 border-l-4" style={{ borderLeftColor: color || '#e5e7eb' }}>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-xs font-medium text-muted-foreground">{title}</h3>
+        <div className="bg-gray-100 rounded-full p-1">
+          {icon}
+        </div>
+      </div>
       <div className="flex items-baseline">
-        <span className="text-2xl font-bold">{value}</span>
-        <span className={`ml-2 text-xs font-medium ${
+        <span className="text-xl font-bold">{value}</span>
+        <span className={`ml-2 text-xs font-medium flex items-center ${
           trend === "up" ? "text-green-600" : 
           trend === "down" ? "text-red-600" : 
           "text-gray-600"
         }`}>
           {change}
+          {trend === "up" ? <ArrowUpRight className="h-3 w-3 ml-0.5" /> : 
+           trend === "down" ? <ArrowDownRight className="h-3 w-3 ml-0.5" /> : null}
         </span>
       </div>
       <span className="text-xs text-muted-foreground">{period}</span>
