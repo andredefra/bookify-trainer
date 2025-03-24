@@ -1,26 +1,14 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number;
-  attendees?: number;
-  maxAttendees?: number;
-}
+import { SessionItem } from "@/types/sessions";
 
 interface FeaturedSessionItemProps {
   onRegister: (session: SessionItem) => void;
 }
 
 export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
-  const featuredSession = {
+  const featuredSession: SessionItem = {
     id: 999,
     name: "HIIT Workout (Featured)",
     trainer: "Sarah Johnson",

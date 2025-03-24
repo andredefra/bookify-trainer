@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,23 +6,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { bookingSchema } from "@/components/trainer/BookingForm";
+import { SessionItem } from "@/types/sessions";
 
 import { UpcomingSessionItem } from "./sessions/UpcomingSessionItem";
 import { FeaturedSessionItem } from "./sessions/FeaturedSessionItem";
 import { BookSessionDialog } from "./sessions/BookSessionDialog";
 import { SessionPaymentDialog } from "./sessions/SessionPaymentDialog";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-  status: string;
-  price?: number;
-  attendees?: number;
-  maxAttendees?: number;
-}
 
 interface UpcomingSessionsCardProps {
   upcomingSessions: SessionItem[];
