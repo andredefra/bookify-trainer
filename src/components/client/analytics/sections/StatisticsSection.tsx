@@ -6,7 +6,7 @@ import { GoalsProgress } from "./GoalsProgress";
 export function StatisticsSection() {
   return (
     <div className="w-full">
-      <h2 className="text-xl font-semibold mb-6 text-slate-800">Performance Statistics</h2>
+      <h2 className="text-xl font-semibold mb-5 text-slate-800">Performance Statistics</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
         <div className="lg:col-span-3">
           <StatisticsSummary />
