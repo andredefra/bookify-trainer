@@ -39,7 +39,7 @@ const Navbar = () => {
         
         {!isMobile ? (
           <div className="flex items-center space-x-8">
-            <div className="hidden md:flex space-x-8 items-center">
+            <div className="hidden md:flex space-x-8 items-center justify-center mx-auto">
               <Link 
                 to="/#features" 
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
