@@ -38,7 +38,7 @@ const Navbar = () => {
         </Link>
         
         {!isMobile ? (
-          <div className="flex-1 flex justify-center">
+          <div className="flex-1 flex justify-center ml-16">
             <div className="flex space-x-8 items-center">
               <Link 
                 to="/" 
