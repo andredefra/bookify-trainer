@@ -1,237 +1,270 @@
 
 import React from "react";
-import { Activity, TrendingUp, Flame, Target, Dumbbell, TrendingDown, Heart, Calendar } from "lucide-react";
+import { 
+  Activity, TrendingUp, Flame, Target, Dumbbell, TrendingDown, 
+  Heart, Calendar, Zap, ChevronUp, ChevronDown, User, Scale, Trophy 
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 export function StatisticsSection() {
   return (
-    <div className="w-full mx-auto bg-white rounded-lg p-4">
-      {/* Main stats grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        {/* Workout Summary Card */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-          <CardContent className="p-4">
-            <div className="flex items-center mb-3">
-              <div className="bg-indigo-100 p-2 rounded-full mr-3">
-                <Activity className="h-5 w-5 text-indigo-600" />
-              </div>
-              <h3 className="font-semibold text-sm">Workout Summary</h3>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xl font-bold text-gray-800">32</div>
-                <div className="text-xs text-gray-500 flex items-center">
-                  <span>Completed</span>
-                  <span className="ml-1 text-green-600 flex items-center text-xs">
-                    +5 <TrendingUp className="h-3 w-3 ml-0.5" />
-                  </span>
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Left Column - Summary & Weekly Stats */}
+        <div className="space-y-3">
+          {/* Summary Stats */}
+          <Card className="shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-3">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <Activity className="h-4 w-4 mr-1.5 text-indigo-600" />
+                <span>Workout Summary</span>
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-indigo-50 p-2 rounded flex flex-col">
+                  <span className="text-xs text-indigo-600 font-medium">Total Workouts</span>
+                  <div className="flex items-baseline mt-1">
+                    <span className="text-xl font-bold text-indigo-700">32</span>
+                    <span className="ml-1.5 text-xs text-green-600 flex items-center">
+                      <ChevronUp className="h-3 w-3" /> 5
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="bg-green-50 p-2 rounded flex flex-col">
+                  <span className="text-xs text-green-600 font-medium">Active Days</span>
+                  <div className="flex items-baseline mt-1">
+                    <span className="text-xl font-bold text-green-700">18<span className="text-sm font-normal">/30</span></span>
+                    <span className="ml-1.5 text-xs text-green-600 flex items-center">
+                      <ChevronUp className="h-3 w-3" /> 2
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xl font-bold text-gray-800">18/30</div>
-                <div className="text-xs text-gray-500 flex items-center">
-                  <span>Active Days</span>
-                  <span className="ml-1 text-green-600 flex items-center text-xs">
-                    +2 <TrendingUp className="h-3 w-3 ml-0.5" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Performance Card */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-          <CardContent className="p-4">
-            <div className="flex items-center mb-3">
-              <div className="bg-amber-100 p-2 rounded-full mr-3">
-                <Flame className="h-5 w-5 text-amber-600" />
-              </div>
-              <h3 className="font-semibold text-sm">Performance</h3>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xl font-bold text-gray-800">42 min</div>
-                <div className="text-xs text-gray-500 flex items-center">
-                  <span>Avg Duration</span>
-                  <span className="ml-1 text-red-600 flex items-center text-xs">
-                    -3 <TrendingDown className="h-3 w-3 ml-0.5" />
-                  </span>
+          {/* Performance Stats */}
+          <Card className="shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-3">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <Zap className="h-4 w-4 mr-1.5 text-amber-600" />
+                <span>Performance Metrics</span>
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-amber-50 p-2 rounded flex flex-col">
+                  <span className="text-xs text-amber-600 font-medium">Avg Duration</span>
+                  <div className="flex items-baseline mt-1">
+                    <span className="text-xl font-bold text-amber-700">42<span className="text-sm font-normal">min</span></span>
+                    <span className="ml-1.5 text-xs text-red-500 flex items-center">
+                      <ChevronDown className="h-3 w-3" /> 3
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="bg-orange-50 p-2 rounded flex flex-col">
+                  <span className="text-xs text-orange-600 font-medium">Calories Burned</span>
+                  <div className="flex items-baseline mt-1">
+                    <span className="text-xl font-bold text-orange-700">4.2k</span>
+                    <span className="ml-1.5 text-xs text-green-600 flex items-center">
+                      <ChevronUp className="h-3 w-3" /> 8%
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xl font-bold text-gray-800">4.2k</div>
-                <div className="text-xs text-gray-500 flex items-center">
-                  <span>Calories</span>
-                  <span className="ml-1 text-green-600 flex items-center text-xs">
-                    +8% <TrendingUp className="h-3 w-3 ml-0.5" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
 
-        {/* Goals Card */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-          <CardContent className="p-4">
-            <div className="flex items-center mb-3">
-              <div className="bg-blue-100 p-2 rounded-full mr-3">
-                <Target className="h-5 w-5 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-sm">Goals & Progress</h3>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xl font-bold text-gray-800">68%</div>
-                <div className="text-xs text-gray-500 flex items-center">
-                  <span>Goal Progress</span>
-                  <span className="ml-1 text-green-600 flex items-center text-xs">
-                    +12% <TrendingUp className="h-3 w-3 ml-0.5" />
-                  </span>
+        {/* Middle Column - Goals & Body Metrics */}
+        <div className="space-y-3">
+          {/* Goals Progress */}
+          <Card className="shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-3">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <Target className="h-4 w-4 mr-1.5 text-blue-600" />
+                <span>Goals Progress</span>
+              </h3>
+              
+              <div className="space-y-2.5">
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Weight Goal (65kg)</span>
+                    <span className="font-medium">68kg</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Progress value={70} className="h-2 flex-grow" />
+                    <span className="ml-2 text-xs font-medium">70%</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Body Fat (15%)</span>
+                    <span className="font-medium">18%</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Progress value={60} className="h-2 flex-grow" />
+                    <span className="ml-2 text-xs font-medium">60%</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Weekly Workouts (4x)</span>
+                    <span className="font-medium">3x</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Progress value={75} className="h-2 flex-grow" />
+                    <span className="ml-2 text-xs font-medium">75%</span>
+                  </div>
                 </div>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-xl font-bold text-gray-800">12</div>
-                <div className="text-xs text-gray-500 flex items-center">
-                  <span>Rest Days</span>
-                  <span className="ml-1 text-red-600 flex items-center text-xs">
-                    -2 <TrendingDown className="h-3 w-3 ml-0.5" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
 
-      {/* Weekly Metrics */}
-      <Card className="shadow-sm hover:shadow-md transition-shadow duration-200 mb-4">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center">
-              <div className="bg-purple-100 p-2 rounded-full mr-3">
-                <Calendar className="h-5 w-5 text-purple-600" />
+          {/* Body Metrics */}
+          <Card className="shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-3">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <User className="h-4 w-4 mr-1.5 text-purple-600" />
+                <span>Current Body Metrics</span>
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex items-center justify-between bg-purple-50 p-2 rounded">
+                  <div className="flex items-center">
+                    <Scale className="h-3.5 w-3.5 text-purple-500 mr-1.5" />
+                    <span className="text-xs text-purple-700">Weight</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm font-medium text-purple-900">68 kg</span>
+                    <ChevronDown className="h-3 w-3 ml-1 text-green-600" />
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between bg-purple-50 p-2 rounded">
+                  <div className="flex items-center">
+                    <Heart className="h-3.5 w-3.5 text-purple-500 mr-1.5" />
+                    <span className="text-xs text-purple-700">Body Fat</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm font-medium text-purple-900">18%</span>
+                    <ChevronDown className="h-3 w-3 ml-1 text-green-600" />
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between bg-purple-50 p-2 rounded">
+                  <div className="flex items-center">
+                    <Dumbbell className="h-3.5 w-3.5 text-purple-500 mr-1.5" />
+                    <span className="text-xs text-purple-700">Muscle</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm font-medium text-purple-900">31%</span>
+                    <ChevronUp className="h-3 w-3 ml-1 text-blue-600" />
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between bg-purple-50 p-2 rounded">
+                  <div className="flex items-center">
+                    <Activity className="h-3.5 w-3.5 text-purple-500 mr-1.5" />
+                    <span className="text-xs text-purple-700">BMI</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm font-medium text-purple-900">23.1</span>
+                    <span className="text-xs ml-1 text-blue-600">Normal</span>
+                  </div>
+                </div>
               </div>
-              <h3 className="font-semibold text-sm">Weekly Stats</h3>
-            </div>
-            <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">Last 7 days</span>
-          </div>
-          
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-gray-50 p-3 rounded-lg text-center">
-              <div className="flex items-center justify-center mb-1 text-gray-500">
-                <Dumbbell className="h-4 w-4 mr-1" />
-                <span className="text-xs">Workouts</span>
-              </div>
-              <div className="text-xl font-bold text-gray-800">8</div>
-            </div>
-            <div className="bg-gray-50 p-3 rounded-lg text-center">
-              <div className="flex items-center justify-center mb-1 text-gray-500">
-                <Activity className="h-4 w-4 mr-1" />
-                <span className="text-xs">Total Time</span>
-              </div>
-              <div className="text-xl font-bold text-gray-800">285 min</div>
-            </div>
-            <div className="bg-gray-50 p-3 rounded-lg text-center">
-              <div className="flex items-center justify-center mb-1 text-gray-500">
-                <Flame className="h-4 w-4 mr-1" />
-                <span className="text-xs">Calories</span>
-              </div>
-              <div className="text-xl font-bold text-gray-800">2,730</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Body Metrics & Goals */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Body Metrics */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-          <CardContent className="p-4">
-            <div className="flex items-center mb-3">
-              <div className="bg-green-100 p-2 rounded-full mr-3">
-                <Heart className="h-5 w-5 text-green-600" />
+        {/* Right Column - Weekly Stats & Achievements */}
+        <div className="space-y-3">
+          {/* Weekly Stats */}
+          <Card className="shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium flex items-center">
+                  <Calendar className="h-4 w-4 mr-1.5 text-teal-600" />
+                  <span>Weekly Stats</span>
+                </h3>
+                <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">Last 7 days</span>
               </div>
-              <h3 className="font-semibold text-sm">Current Body Status</h3>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">Weight</span>
-                  <span className="text-sm font-medium">68 kg</span>
+              
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-teal-50 p-2 rounded flex flex-col items-center">
+                  <div className="flex items-center mb-1">
+                    <Dumbbell className="h-3.5 w-3.5 text-teal-500 mr-1" />
+                    <span className="text-xs text-teal-700">Workouts</span>
+                  </div>
+                  <span className="text-xl font-bold text-teal-800">8</span>
                 </div>
-                <span className="text-green-500 flex items-center text-xs">
-                  <TrendingDown className="h-3 w-3 mr-0.5" /> Improving
-                </span>
-              </div>
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">Body Fat</span>
-                  <span className="text-sm font-medium">18%</span>
+                
+                <div className="bg-teal-50 p-2 rounded flex flex-col items-center">
+                  <div className="flex items-center mb-1">
+                    <Activity className="h-3.5 w-3.5 text-teal-500 mr-1" />
+                    <span className="text-xs text-teal-700">Hours</span>
+                  </div>
+                  <span className="text-xl font-bold text-teal-800">4.7</span>
                 </div>
-                <span className="text-green-500 flex items-center text-xs">
-                  <TrendingDown className="h-3 w-3 mr-0.5" /> Improving
-                </span>
-              </div>
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">Muscle Mass</span>
-                  <span className="text-sm font-medium">31%</span>
+                
+                <div className="bg-teal-50 p-2 rounded flex flex-col items-center">
+                  <div className="flex items-center mb-1">
+                    <Flame className="h-3.5 w-3.5 text-teal-500 mr-1" />
+                    <span className="text-xs text-teal-700">Calories</span>
+                  </div>
+                  <span className="text-xl font-bold text-teal-800">2.7k</span>
                 </div>
-                <span className="text-blue-500 flex items-center text-xs">
-                  <TrendingUp className="h-3 w-3 mr-0.5" /> Increasing
-                </span>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Fitness Goals */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-          <CardContent className="p-4">
-            <div className="flex items-center mb-3">
-              <div className="bg-rose-100 p-2 rounded-full mr-3">
-                <Target className="h-5 w-5 text-rose-600" />
+          {/* Recent Achievements */}
+          <Card className="shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-3">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <Trophy className="h-4 w-4 mr-1.5 text-yellow-600" />
+                <span>Recent Achievements</span>
+              </h3>
+              
+              <div className="space-y-2">
+                <div className="flex items-center bg-yellow-50 p-2 rounded">
+                  <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center mr-2">
+                    <Flame className="h-4 w-4 text-yellow-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-yellow-800">Perfect Week</p>
+                    <p className="text-xs text-yellow-600">Completed all planned workouts</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center bg-yellow-50 p-2 rounded">
+                  <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center mr-2">
+                    <TrendingUp className="h-4 w-4 text-yellow-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-yellow-800">Personal Best</p>
+                    <p className="text-xs text-yellow-600">Bench Press: 80kg × 6 reps</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center bg-yellow-50 p-2 rounded">
+                  <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center mr-2">
+                    <Activity className="h-4 w-4 text-yellow-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-yellow-800">30-Day Streak</p>
+                    <p className="text-xs text-yellow-600">Consistent workout tracking</p>
+                  </div>
+                </div>
               </div>
-              <h3 className="font-semibold text-sm">Fitness Goals</h3>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">Target Weight</span>
-                  <span className="text-sm font-medium">65 kg</span>
-                </div>
-                <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: '70%' }}></div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">Body Fat Goal</span>
-                  <span className="text-sm font-medium">15%</span>
-                </div>
-                <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: '60%' }}></div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">Weekly Goal</span>
-                  <span className="text-sm font-medium">4x</span>
-                </div>
-                <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: '75%' }}></div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

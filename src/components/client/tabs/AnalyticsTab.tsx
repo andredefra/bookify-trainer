@@ -14,22 +14,22 @@ import {
 export function AnalyticsTab() {
   return (
     <div className="space-y-4 max-w-full">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Fitness Analytics</CardTitle>
+      <Card className="w-full shadow-sm">
+        <CardHeader className="py-3">
+          <CardTitle className="text-xl">Fitness Analytics</CardTitle>
           <CardDescription>
             Track your progress and visualize your fitness journey
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 p-4">
-          <Alert>
-            <InfoIcon className="h-4 w-4" />
-            <AlertDescription>
+        <CardContent className="p-3 space-y-3">
+          <Alert className="bg-blue-50 border-blue-100">
+            <InfoIcon className="h-4 w-4 text-blue-500" />
+            <AlertDescription className="text-sm text-blue-700">
               Your analytics are based on your completed workouts and logged metrics.
             </AlertDescription>
           </Alert>
           
-          <div className="grid gap-4 w-full">
+          <div className="grid gap-4">
             <WorkoutAnalytics 
               weeklyData={weeklyWorkoutData}
               monthlyData={monthlyGoalsData}
