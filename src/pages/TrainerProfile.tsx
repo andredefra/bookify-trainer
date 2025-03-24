@@ -1,24 +1,21 @@
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 // Import refactored components
 import { TrainerHeader } from "@/components/trainer/TrainerHeader";
 import { TrainerInfo } from "@/components/trainer/TrainerInfo";
-import { AboutTab } from "@/components/trainer/AboutTab";
-import { ExperienceTab } from "@/components/trainer/ExperienceTab";
-import { ReviewsTab } from "@/components/trainer/ReviewsTab";
-import { AvailabilityTab } from "@/components/trainer/AvailabilityTab";
-import { AIChatDialog } from "@/components/trainer/AIChatDialog";
 import { MarketingSection } from "@/components/trainer/MarketingSection";
-import { RegisterForm, registerSchema } from "@/components/trainer/RegisterForm";
-import { BookingForm, bookingSchema } from "@/components/trainer/BookingForm";
+import { registerSchema } from "@/components/trainer/RegisterForm";
+import { bookingSchema } from "@/components/trainer/BookingForm";
+import { SessionDialogs } from "@/components/trainer/SessionDialogs";
+import { ChatDialog } from "@/components/trainer/ChatDialog";
+import { TabsSection } from "@/components/trainer/TabsSection";
 
 // Mock data
 const trainerData = {
@@ -165,91 +162,33 @@ const TrainerProfile = () => {
             />
           </div>
           
-          <Tabs defaultValue="about" className="mb-12">
-            <TabsList className="mb-6">
-              <TabsTrigger value="about">About</TabsTrigger>
-              <TabsTrigger value="experience">Experience</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              <TabsTrigger value="availability">Availability</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="about">
-              <AboutTab certifications={trainer.certifications} education={trainer.education} />
-            </TabsContent>
-            
-            <TabsContent value="experience">
-              <ExperienceTab experience={trainer.experience} />
-            </TabsContent>
-            
-            <TabsContent value="reviews">
-              <ReviewsTab testimonials={testimonials} />
-            </TabsContent>
-            
-            <TabsContent value="availability">
-              <AvailabilityTab 
-                availability={trainer.availability}
-                trainerName={trainer.name}
-                onViewCalendar={handleBookSession}
-              />
-            </TabsContent>
-          </Tabs>
+          <TabsSection 
+            trainer={trainer} 
+            testimonials={testimonials} 
+            onBookSession={handleBookSession} 
+          />
           
           <MarketingSection trainerName={trainer.name} />
           
           {/* Dialogs */}
-          <Dialog>
-            <DialogTrigger className="hidden" />
-            
-            {showRegister ? (
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create an account to book a session</DialogTitle>
-                  <DialogDescription>
-                    Join Personal.ai to book sessions with {trainer.name} and other trainers.
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <RegisterForm 
-                  onSubmit={onRegisterSubmit}
-                  onCancel={() => setShowRegister(false)}
-                />
-              </DialogContent>
-            ) : showBookingForm ? (
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Book a Session with {trainer.name}</DialogTitle>
-                  <DialogDescription>
-                    Select a date and time for your session
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <BookingForm 
-                  trainerName={trainer.name}
-                  onSubmit={onBookingSubmit}
-                  onCancel={() => setShowBookingForm(false)}
-                />
-              </DialogContent>
-            ) : null}
-          </Dialog>
+          <DialogTrigger className="hidden" />
           
-          <Dialog open={openMessageDialog} onOpenChange={setOpenMessageDialog}>
-            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden flex flex-col">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <span>Chat with AI Assistant</span>
-                  <Badge variant="outline" className="ml-2 text-xs">Sarah is in session</Badge>
-                </DialogTitle>
-                <DialogDescription>
-                  Our AI assistant can help you with scheduling, basic questions, and more while Sarah is unavailable.
-                </DialogDescription>
-              </DialogHeader>
-              
-              <AIChatDialog 
-                trainerName={trainer.name}
-                conversation={aiConversation}
-              />
-            </DialogContent>
-          </Dialog>
+          <SessionDialogs 
+            trainerName={trainer.name}
+            showRegister={showRegister}
+            showBookingForm={showBookingForm}
+            onRegisterSubmit={onRegisterSubmit}
+            onBookingSubmit={onBookingSubmit}
+            onRegisterCancel={() => setShowRegister(false)}
+            onBookingCancel={() => setShowBookingForm(false)}
+          />
+          
+          <ChatDialog 
+            open={openMessageDialog}
+            onOpenChange={setOpenMessageDialog}
+            trainerName={trainer.name}
+            conversation={aiConversation}
+          />
         </div>
       </main>
       
