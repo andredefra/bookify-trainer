@@ -1,99 +1,167 @@
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { FitnessAppIntegration } from "@/components/client/settings/FitnessAppIntegration";
 
 interface SettingsTabProps {
-  user: {name?: string, email: string, type: string, plan?: string};
+  user: { email: string; type: string; name?: string; plan?: string; };
   goals: string[];
 }
 
 export function SettingsTab({ user, goals }: SettingsTabProps) {
+  const [activeTab, setActiveTab] = useState("account");
+  const [name, setName] = useState(user.name || "");
+  const [email, setEmail] = useState(user.email);
+  const [selectedGoals, setSelectedGoals] = useState<string[]>(goals);
+
+  const handleGoalToggle = (goal: string) => {
+    if (selectedGoals.includes(goal)) {
+      setSelectedGoals(selectedGoals.filter(g => g !== goal));
+    } else {
+      setSelectedGoals([...selectedGoals, goal]);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Account Settings</CardTitle>
-        <CardDescription>Manage your profile and preferences</CardDescription>
+        <CardTitle>Settings</CardTitle>
+        <CardDescription>
+          Manage your account settings and preferences
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Profile Information</h3>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="space-y-3">
-                <div>
-                  <label className="text-sm font-medium">Your Name</label>
-                  <input 
-                    type="text" 
-                    defaultValue={user.name || "Demo Client"} 
-                    className="w-full mt-1 px-3 py-2 border border-border rounded-md" 
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Email</label>
-                  <input 
-                    type="email" 
-                    defaultValue={user.email} 
-                    className="w-full mt-1 px-3 py-2 border border-border rounded-md" 
-                    disabled 
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="mb-6">
+            <TabsTrigger value="account">Account</TabsTrigger>
+            <TabsTrigger value="preferences">Preferences</TabsTrigger>
+            <TabsTrigger value="integrations">Integrations</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          </TabsList>
           
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Fitness Goals</h3>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="space-y-3">
+          <TabsContent value="account" className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Full Name</Label>
+                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              
+              <div className="pt-2">
+                <Button>Save Changes</Button>
+              </div>
+            </div>
+            
+            <Separator />
+            
+            <div>
+              <h3 className="font-medium mb-2">Account Plan</h3>
+              <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-sm font-medium">Current Goals</label>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {goals.map((goal) => (
-                      <Badge key={goal} variant="secondary">
-                        {goal}
-                        <button className="ml-1 text-muted-foreground hover:text-foreground">×</button>
-                      </Badge>
-                    ))}
-                    <Badge variant="outline" className="cursor-pointer">
-                      + Add Goal
-                    </Badge>
-                  </div>
+                  <p className="font-medium">{user.plan || "Free Plan"}</p>
+                  <p className="text-sm text-muted-foreground">Basic features</p>
                 </div>
+                <Button variant="outline">Upgrade</Button>
               </div>
             </div>
-          </div>
+          </TabsContent>
           
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Notification Preferences</h3>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Session Reminders</span>
-                  <div className="relative inline-block w-10 h-5 rounded-full bg-primary">
-                    <div className="absolute right-1 top-1 w-3 h-3 rounded-full bg-white"></div>
+          <TabsContent value="preferences" className="space-y-6">
+            <div>
+              <h3 className="font-medium mb-4">Fitness Goals</h3>
+              <div className="space-y-2">
+                {["Weight loss", "Muscle tone", "Flexibility", "Cardiovascular health", "Strength building", "Athletic performance"].map((goal) => (
+                  <div key={goal} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`goal-${goal}`}
+                      checked={selectedGoals.includes(goal)}
+                      onChange={() => handleGoalToggle(goal)}
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                    <label htmlFor={`goal-${goal}`} className="ml-2 text-sm cursor-pointer">
+                      {goal}
+                    </label>
                   </div>
+                ))}
+              </div>
+              <Button className="mt-4">Save Goals</Button>
+            </div>
+            
+            <Separator />
+            
+            <div>
+              <h3 className="font-medium mb-2">Language & Region</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="language">Language</Label>
+                  <select id="language" className="w-full rounded-md border border-input bg-background px-3 py-2">
+                    <option>English</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>German</option>
+                  </select>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Trainer Messages</span>
-                  <div className="relative inline-block w-10 h-5 rounded-full bg-primary">
-                    <div className="absolute right-1 top-1 w-3 h-3 rounded-full bg-white"></div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Progress Updates</span>
-                  <div className="relative inline-block w-10 h-5 rounded-full bg-gray-300">
-                    <div className="absolute left-1 top-1 w-3 h-3 rounded-full bg-white"></div>
-                  </div>
+                <div>
+                  <Label htmlFor="units">Measurement Units</Label>
+                  <select id="units" className="w-full rounded-md border border-input bg-background px-3 py-2">
+                    <option>Metric (kg, cm)</option>
+                    <option>Imperial (lb, in)</option>
+                  </select>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </TabsContent>
+          
+          <TabsContent value="integrations">
+            <FitnessAppIntegration user={user} />
+          </TabsContent>
+          
+          <TabsContent value="notifications" className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium">Email Notifications</h3>
+                  <p className="text-sm text-muted-foreground">Receive emails about your account</p>
+                </div>
+                <input type="checkbox" className="toggle toggle-primary" defaultChecked />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium">Session Reminders</h3>
+                  <p className="text-sm text-muted-foreground">Get reminded about upcoming sessions</p>
+                </div>
+                <input type="checkbox" className="toggle toggle-primary" defaultChecked />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium">Workout Notifications</h3>
+                  <p className="text-sm text-muted-foreground">Daily workout reminders</p>
+                </div>
+                <input type="checkbox" className="toggle toggle-primary" defaultChecked />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium">Marketing</h3>
+                  <p className="text-sm text-muted-foreground">Receive promotions and news</p>
+                </div>
+                <input type="checkbox" className="toggle toggle-primary" />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
-      <CardFooter className="border-t flex justify-end pt-6">
-        <Button>Save Changes</Button>
-      </CardFooter>
     </Card>
   );
 }

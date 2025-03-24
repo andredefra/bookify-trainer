@@ -1,5 +1,5 @@
 
-import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Menu } from "lucide-react";
+import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Menu, Dumbbell, Activity } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -38,6 +38,20 @@ export function ClientSidebar({ activeTab, setActiveTab, unreadMessageCount }: C
       >
         <Calendar className="w-5 h-5 mr-3" />
         <span>Sessions</span>
+      </button>
+      <button 
+        onClick={() => setActiveTab("training-program")}
+        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "training-program" ? "bg-primary/5 text-primary" : ""}`}
+      >
+        <Dumbbell className="w-5 h-5 mr-3" />
+        <span>Training Program</span>
+      </button>
+      <button 
+        onClick={() => setActiveTab("training-log")}
+        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "training-log" ? "bg-primary/5 text-primary" : ""}`}
+      >
+        <Activity className="w-5 h-5 mr-3" />
+        <span>Training Log</span>
       </button>
       <button 
         onClick={() => setActiveTab("trainers")}
