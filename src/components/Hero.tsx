@@ -75,16 +75,11 @@ const Hero = () => {
               </div>
             </div>
             <div className="bg-white">
-              <div 
-                className="h-[400px] md:h-[500px] bg-center bg-cover"
-                style={{ 
-                  backgroundImage: "url('/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png')",
-                  backgroundPosition: 'center top',
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundColor: '#f5f5f7'
-                }}
-              ></div>
+              <img 
+                src="/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png"
+                alt="Trainer dashboard preview" 
+                className="w-full h-[400px] md:h-[500px] object-contain bg-gray-50"
+              />
             </div>
           </div>
         </div>
