@@ -13,19 +13,19 @@ import {
 
 export function AnalyticsTab() {
   return (
-    <div className="space-y-4 max-w-full">
+    <div className="space-y-6 max-w-full">
       <Card className="w-full shadow-sm bg-white/80 backdrop-blur-sm border-slate-200">
-        <CardHeader className="py-4 px-5">
+        <CardHeader className="py-5 px-6">
           <CardTitle className="text-xl font-bold text-slate-800">Fitness Analytics Dashboard</CardTitle>
           <CardDescription className="text-slate-600">
             Track your progress and visualize your fitness journey with real-time data
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-5 pb-6 grid gap-5">
+        <CardContent className="p-6 grid grid-cols-1 gap-8">
           <Alert className="bg-blue-50 border-blue-100 shadow-sm">
             <InfoIcon className="h-4 w-4 text-blue-500" />
             <AlertDescription className="text-sm text-blue-700">
-              Your analytics are based on your completed workouts and logged metrics.
+              Your analytics are based on your manually logged workouts and metrics.
             </AlertDescription>
           </Alert>
           
