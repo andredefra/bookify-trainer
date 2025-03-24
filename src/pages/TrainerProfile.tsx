@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -139,7 +140,8 @@ const TrainerProfile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openMessageDialog, setOpenMessageDialog] = useState(false);
   
-  const registerForm = useForm({
+  // Create separate forms with their own independent states
+  const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
@@ -148,7 +150,7 @@ const TrainerProfile = () => {
     }
   });
 
-  const bookingForm = useForm({
+  const bookingForm = useForm<z.infer<typeof bookingSchema>>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       date: new Date(),
@@ -156,6 +158,28 @@ const TrainerProfile = () => {
       notes: ""
     }
   });
+
+  // Reset the booking form when showing it
+  useEffect(() => {
+    if (showBookingForm) {
+      bookingForm.reset({
+        date: new Date(),
+        time: "",
+        notes: ""
+      });
+    }
+  }, [showBookingForm, bookingForm]);
+
+  // Reset the register form when showing it
+  useEffect(() => {
+    if (showRegister) {
+      registerForm.reset({
+        name: "",
+        email: "",
+        password: ""
+      });
+    }
+  }, [showRegister, registerForm]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -180,7 +204,7 @@ const TrainerProfile = () => {
     });
   };
 
-  const onBookingSubmit = (data: any) => {
+  const onBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
     console.log("Booking data:", data);
     setShowBookingForm(false);
     toast({
