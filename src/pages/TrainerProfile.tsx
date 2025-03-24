@@ -8,8 +8,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, MapPin, Star, Clock, MessageSquare, CalendarCheck, CreditCard } from "lucide-react";
+import { 
+  Calendar, 
+  MapPin, 
+  Star, 
+  Clock, 
+  MessageSquare, 
+  CalendarCheck, 
+  CreditCard,
+  User
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Mock trainer data - in a real app this would come from an API
 const trainerData = {
@@ -47,7 +65,9 @@ const trainerData = {
       description: "Led group fitness classes and provided one-on-one training."
     }
   ],
-  profileImage: "/placeholder.svg"
+  profileImage: "/placeholder.svg",
+  status: "in-session", // online, offline, in-session
+  nextAvailability: "Today at 4:00 PM"
 };
 
 // Sample testimonials
@@ -75,11 +95,70 @@ const testimonials = [
   }
 ];
 
+// Sample AI conversation
+const aiConversation = [
+  {
+    sender: "client",
+    message: "Hi, I need to reschedule my private session this week. Can I move it to Tuesday?",
+    time: "10:23 AM"
+  },
+  {
+    sender: "ai",
+    message: "Hello! I see you currently have a session scheduled for Thursday at 3:00 PM. Let me check Sarah's availability for Tuesday. She has open slots at 10:00 AM and 4:00 PM on Tuesday. Would either of those work for you?",
+    time: "10:24 AM"
+  },
+  {
+    sender: "client",
+    message: "4:00 PM on Tuesday works for me. Can you book that?",
+    time: "10:26 AM"
+  },
+  {
+    sender: "ai",
+    message: "Perfect! I've rescheduled your session to Tuesday at 4:00 PM with Sarah. You'll receive a confirmation email shortly. Sarah has been notified of this change. Is there anything else you need help with?",
+    time: "10:27 AM"
+  }
+];
+
+// Form schemas
+const registerSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters")
+});
+
+const bookingSchema = z.object({
+  date: z.date(),
+  time: z.string().min(1, "Please select a time"),
+  notes: z.string().optional()
+});
+
 const TrainerProfile = () => {
   const { id } = useParams();
   const [trainer, setTrainer] = useState(trainerData);
   const { toast } = useToast();
+  const [showRegister, setShowRegister] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openMessageDialog, setOpenMessageDialog] = useState(false);
   
+  const registerForm = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: ""
+    }
+  });
+
+  const bookingForm = useForm({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      notes: "",
+      time: ""
+    }
+  });
+
   useEffect(() => {
     // In a real app, we would fetch the trainer data using the ID
     // For this demo, we're just using the mock data
@@ -87,10 +166,59 @@ const TrainerProfile = () => {
   }, [id]);
 
   const handleBookSession = () => {
+    if (!isLoggedIn) {
+      setShowRegister(true);
+    } else {
+      setShowBookingForm(true);
+    }
+  };
+
+  const onRegisterSubmit = (data: z.infer<typeof registerSchema>) => {
+    // In a real app, this would call an API to register the user
+    console.log("Register data:", data);
+    setIsLoggedIn(true);
+    setShowRegister(false);
+    setShowBookingForm(true);
     toast({
-      title: "Booking requested",
-      description: "Your session request has been sent to Sarah.",
+      title: "Registration successful",
+      description: "You can now book a session with Sarah.",
     });
+  };
+
+  const onBookingSubmit = (data: any) => {
+    // In a real app, this would call an API to book the session
+    console.log("Booking data:", data);
+    setShowBookingForm(false);
+    toast({
+      title: "Booking successful",
+      description: `Your session with ${trainer.name} has been booked for ${data.date.toLocaleDateString()} at ${data.time}.`,
+    });
+  };
+
+  const getStatusBadge = () => {
+    switch (trainer.status) {
+      case "online":
+        return <Badge className="bg-emerald-500">Online</Badge>;
+      case "in-session":
+        return <Badge className="bg-amber-500">In Session</Badge>;
+      case "offline":
+        return <Badge className="bg-slate-500">Offline</Badge>;
+      default:
+        return null;
+    }
+  };
+
+  const getStatusMessage = () => {
+    switch (trainer.status) {
+      case "online":
+        return "Available now";
+      case "in-session":
+        return `Next available: ${trainer.nextAvailability}`;
+      case "offline":
+        return `Next available: ${trainer.nextAvailability}`;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -125,7 +253,10 @@ const TrainerProfile = () => {
             
             <div className="md:col-span-2 space-y-6">
               <div>
-                <h1 className="text-3xl font-display font-bold tracking-tight text-primary">{trainer.name}</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl font-display font-bold tracking-tight text-primary">{trainer.name}</h1>
+                  {getStatusBadge()}
+                </div>
                 <p className="text-lg text-muted-foreground">{trainer.title}</p>
                 
                 <div className="flex items-center gap-2 mt-2">
@@ -138,6 +269,11 @@ const TrainerProfile = () => {
                   <span className="font-medium">{trainer.rating}</span>
                   <span className="text-muted-foreground">({trainer.reviews} reviews)</span>
                 </div>
+
+                <div className="flex items-center gap-2 mt-1 text-sm">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">{getStatusMessage()}</span>
+                </div>
               </div>
               
               <div className="flex flex-wrap gap-2">
@@ -149,14 +285,229 @@ const TrainerProfile = () => {
               <p className="text-base leading-relaxed">{trainer.bio}</p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="flex-1" onClick={handleBookSession}>
-                  <CalendarCheck className="mr-2 h-4 w-4" />
-                  Book a Session
-                </Button>
-                <Button variant="outline" className="flex-1">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Message
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="flex-1" onClick={handleBookSession}>
+                      <CalendarCheck className="mr-2 h-4 w-4" />
+                      Book a Session
+                    </Button>
+                  </DialogTrigger>
+                  
+                  {showRegister ? (
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Create an account to book a session</DialogTitle>
+                        <DialogDescription>
+                          Join Personal.ai to book sessions with {trainer.name} and other trainers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <Form {...registerForm}>
+                        <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
+                          <FormField
+                            control={registerForm.control}
+                            name="name"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Name</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={registerForm.control}
+                            name="email"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                  <Input type="email" placeholder="you@example.com" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={registerForm.control}
+                            name="password"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                  <Input type="password" placeholder="••••••••" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <div className="flex justify-end gap-3 pt-3">
+                            <Button type="button" variant="outline" onClick={() => setShowRegister(false)}>
+                              Cancel
+                            </Button>
+                            <Button type="submit">Create Account & Continue</Button>
+                          </div>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  ) : showBookingForm ? (
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Book a Session with {trainer.name}</DialogTitle>
+                        <DialogDescription>
+                          Select a date and time for your session
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <Form {...bookingForm}>
+                        <form onSubmit={bookingForm.handleSubmit(onBookingSubmit)} className="space-y-4">
+                          <div className="mb-4">
+                            <FormLabel>Select a date</FormLabel>
+                            <div className="border rounded-md p-3 mt-2">
+                              <CalendarComponent
+                                mode="single"
+                                selected={selectedDate}
+                                onSelect={(date) => {
+                                  setSelectedDate(date);
+                                  bookingForm.setValue('date', date as Date);
+                                }}
+                                className="mx-auto pointer-events-auto"
+                                disabled={(date) => {
+                                  const day = date.getDay();
+                                  // Disable Sundays and past dates
+                                  return day === 0 || date < new Date(new Date().setHours(0, 0, 0, 0));
+                                }}
+                              />
+                            </div>
+                          </div>
+                          
+                          <FormField
+                            control={bookingForm.control}
+                            name="time"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Select a time</FormLabel>
+                                <FormControl>
+                                  <select 
+                                    className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                    {...field}
+                                  >
+                                    <option value="">Select a time</option>
+                                    <option value="10:00 AM">10:00 AM</option>
+                                    <option value="11:00 AM">11:00 AM</option>
+                                    <option value="2:00 PM">2:00 PM</option>
+                                    <option value="3:00 PM">3:00 PM</option>
+                                    <option value="4:00 PM">4:00 PM</option>
+                                    <option value="5:00 PM">5:00 PM</option>
+                                  </select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={bookingForm.control}
+                            name="notes"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Notes (optional)</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Any specific goals or concerns for this session?"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <div className="flex justify-end gap-3 pt-3">
+                            <Button type="button" variant="outline" onClick={() => setShowBookingForm(false)}>
+                              Cancel
+                            </Button>
+                            <Button type="submit">Book Session</Button>
+                          </div>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  ) : null}
+                </Dialog>
+                
+                <Dialog open={openMessageDialog} onOpenChange={setOpenMessageDialog}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="flex-1">
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      Message
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden flex flex-col">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center gap-2">
+                        <span>Chat with AI Assistant</span>
+                        <Badge variant="outline" className="ml-2 text-xs">Sarah is in session</Badge>
+                      </DialogTitle>
+                      <DialogDescription>
+                        Our AI assistant can help you with scheduling, basic questions, and more while Sarah is unavailable.
+                      </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="flex-1 overflow-y-auto py-4 max-h-[400px]">
+                      <div className="space-y-4 px-1">
+                        {aiConversation.map((message, index) => (
+                          <div 
+                            key={index} 
+                            className={`flex ${message.sender === 'client' ? 'justify-end' : 'justify-start'}`}
+                          >
+                            <div 
+                              className={`
+                                max-w-[80%] p-3 rounded-lg 
+                                ${message.sender === 'client' 
+                                  ? 'bg-primary text-primary-foreground' 
+                                  : 'bg-muted'
+                                }
+                              `}
+                            >
+                              <div className="text-sm">{message.message}</div>
+                              <div className={`text-xs mt-1 ${message.sender === 'client' ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                                {message.time}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="pt-2 border-t mt-auto">
+                      <div className="flex gap-2">
+                        <Input 
+                          placeholder="Type your message..." 
+                          className="flex-1"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              toast({
+                                description: "This is a demo conversation. In a real app, you would be able to send messages.",
+                              });
+                            }
+                          }}
+                        />
+                        <Button size="sm" onClick={() => {
+                          toast({
+                            description: "This is a demo conversation. In a real app, you would be able to send messages.",
+                          });
+                        }}>
+                          Send
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               
               <Card>
