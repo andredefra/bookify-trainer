@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -21,11 +21,32 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
     workouts: true
   });
 
+  // Load connection status from localStorage on component mount
+  useEffect(() => {
+    const storedGoogleFit = localStorage.getItem('googleFitConnected') === 'true';
+    const storedAppleHealth = localStorage.getItem('appleHealthConnected') === 'true';
+    
+    setGoogleFitConnected(storedGoogleFit);
+    setAppleHealthConnected(storedAppleHealth);
+  }, []);
+
+  // Update localStorage when connection status changes
+  useEffect(() => {
+    localStorage.setItem('googleFitConnected', googleFitConnected.toString());
+    localStorage.setItem('appleHealthConnected', appleHealthConnected.toString());
+  }, [googleFitConnected, appleHealthConnected]);
+
   const handleGoogleFitConnect = () => {
     // In a real app, this would trigger OAuth flow
     if (!googleFitConnected) {
       setTimeout(() => {
         setGoogleFitConnected(true);
+        // Save to localStorage
+        localStorage.setItem('googleFitConnected', 'true');
+        
+        // Simulate updating fitness goals
+        updateGoalsFromFitnessApp('Google Fit');
+        
         toast({
           title: "Google Fit connected",
           description: "Your Google Fit account has been successfully connected"
@@ -33,6 +54,9 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
       }, 1000);
     } else {
       setGoogleFitConnected(false);
+      // Remove from localStorage
+      localStorage.setItem('googleFitConnected', 'false');
+      
       toast({
         title: "Google Fit disconnected",
         description: "Your Google Fit account has been disconnected"
@@ -45,6 +69,12 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
     if (!appleHealthConnected) {
       setTimeout(() => {
         setAppleHealthConnected(true);
+        // Save to localStorage
+        localStorage.setItem('appleHealthConnected', 'true');
+        
+        // Simulate updating fitness goals
+        updateGoalsFromFitnessApp('Apple Health');
+        
         toast({
           title: "Apple Health connected",
           description: "Your Apple Health account has been successfully connected"
@@ -52,6 +82,9 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
       }, 1000);
     } else {
       setAppleHealthConnected(false);
+      // Remove from localStorage
+      localStorage.setItem('appleHealthConnected', 'false');
+      
       toast({
         title: "Apple Health disconnected",
         description: "Your Apple Health account has been disconnected"
@@ -64,6 +97,41 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
       ...dataSync,
       [metric]: !dataSync[metric]
     });
+  };
+
+  // Simulate updating fitness goals from connected app
+  const updateGoalsFromFitnessApp = (appName: string) => {
+    // Load existing goals from localStorage
+    const goalsString = localStorage.getItem('fitnessGoals');
+    if (!goalsString) return;
+    
+    try {
+      const goals = JSON.parse(goalsString);
+      let updated = false;
+      
+      // Update steps goal if exists
+      const stepsGoal = goals.find((g: any) => g.unit === 'steps');
+      if (stepsGoal && dataSync.steps) {
+        // Simulate getting data from fitness app (random steps between 1000-10000)
+        const simSteps = Math.floor(Math.random() * 9000) + 1000;
+        stepsGoal.current = simSteps;
+        stepsGoal.progress = Math.min(100, Math.round((simSteps / stepsGoal.target) * 100));
+        stepsGoal.lastUpdated = new Date().toISOString();
+        updated = true;
+      }
+      
+      // Could do the same for other metrics like workouts, calories, etc.
+      
+      if (updated) {
+        localStorage.setItem('fitnessGoals', JSON.stringify(goals));
+        toast({
+          title: "Goals Updated",
+          description: `Your fitness goals have been updated with ${appName} data`
+        });
+      }
+    } catch (err) {
+      console.error("Error updating goals:", err);
+    }
   };
 
   return (
