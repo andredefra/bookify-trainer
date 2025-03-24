@@ -13,8 +13,8 @@ import {
 
 export function AnalyticsTab() {
   return (
-    <div className="space-y-6">
-      <Card>
+    <div className="space-y-6 max-w-full">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Fitness Analytics</CardTitle>
           <CardDescription>
@@ -29,7 +29,7 @@ export function AnalyticsTab() {
             </AlertDescription>
           </Alert>
           
-          <div className="grid gap-6">
+          <div className="grid gap-6 w-full">
             <WorkoutAnalytics 
               weeklyData={weeklyWorkoutData}
               monthlyData={monthlyGoalsData}
