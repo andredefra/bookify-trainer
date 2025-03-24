@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { CalendarCheck, CreditCard, MessageSquare, Bot } from 'lucide-react';
+import { CalendarCheck, CreditCard, MessageSquare, Bot, Activity } from 'lucide-react';
 
 const Hero = () => {
   const isMobile = useIsMobile();
@@ -47,11 +47,11 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center space-y-8 md:space-y-10">
           <h1 className="reveal text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight text-primary mx-auto max-w-4xl md:leading-tight text-balance">
-            The All-in-One Scheduling and Payment Platform for Personal Trainers
+            The All-in-One Platform for Personal Trainers and Fitness Tracking
           </h1>
           
           <p className="reveal reveal-delay-1 mx-auto max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
-            Simplify your calendar, fill your sessions, and get paid automatically — with AI support for client management and scheduling.
+            Simplify your calendar, fill your sessions, get paid automatically, and track clients' fitness progress — with AI support for client management and training programs.
           </p>
           
           <div className="reveal reveal-delay-2 flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
@@ -101,13 +101,13 @@ const Hero = () => {
         </div>
 
         {/* Feature overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto mt-16">
           <div className="reveal flex flex-col items-center text-center p-6 rounded-xl glass">
             <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 mb-4">
               <CalendarCheck className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Smart Scheduling</h3>
-            <p className="text-muted-foreground">Sync with Google Calendar and let clients book directly based on your availability.</p>
+            <p className="text-muted-foreground">Sync with Google Calendar and let clients book directly.</p>
           </div>
           
           <div className="reveal reveal-delay-1 flex flex-col items-center text-center p-6 rounded-xl glass">
@@ -115,7 +115,7 @@ const Hero = () => {
               <CreditCard className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Automated Payments</h3>
-            <p className="text-muted-foreground">Connect your Stripe account and get paid automatically when sessions are completed.</p>
+            <p className="text-muted-foreground">Connect Stripe and get paid automatically when sessions are completed.</p>
           </div>
           
           <div className="reveal reveal-delay-2 flex flex-col items-center text-center p-6 rounded-xl glass">
@@ -123,7 +123,15 @@ const Hero = () => {
               <Bot className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">AI Assistant</h3>
-            <p className="text-muted-foreground">Let AI handle client inquiries when you're unavailable or in a training session.</p>
+            <p className="text-muted-foreground">Let AI handle client inquiries when you're unavailable.</p>
+          </div>
+          
+          <div className="reveal reveal-delay-2 flex flex-col items-center text-center p-6 rounded-xl glass">
+            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 mb-4">
+              <Activity className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">Fitness Tracking</h3>
+            <p className="text-muted-foreground">Sync with Google Fit and Apple Health to monitor client progress.</p>
           </div>
         </div>
       </div>
