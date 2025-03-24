@@ -10,6 +10,7 @@ import { TrainersTab } from "@/components/client/tabs/TrainersTab";
 import { MessagesTab } from "@/components/client/tabs/MessagesTab";
 import { SettingsTab } from "@/components/client/tabs/SettingsTab";
 import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
+import { TrainingProgramTab } from "@/components/client/tabs/TrainingProgramTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const ClientDashboard = () => {
@@ -117,6 +118,10 @@ const ClientDashboard = () => {
 
             {activeTab === "settings" && (
               <SettingsTab user={user} goals={goals} />
+            )}
+
+            {activeTab === "training-program" && (
+              <TrainingProgramTab />
             )}
           </div>
         </div>

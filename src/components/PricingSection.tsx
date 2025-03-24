@@ -42,6 +42,8 @@ const PricingSection = () => {
     "Priority Support",
     "Advanced Analytics",
     "Waitlist Management",
+    "Custom Training Programs", // Added new premium feature
+    "Fitness Progress Tracking",
   ];
 
   return (
