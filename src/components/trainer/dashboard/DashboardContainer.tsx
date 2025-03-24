@@ -8,6 +8,7 @@ import { SessionsTab } from "./tabs/SessionsTab";
 import { ClientsTab } from "./tabs/ClientsTab";
 import { MessagesTab } from "./tabs/MessagesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
+import { ProgramsTab } from "./tabs/ProgramsTab";
 
 export function DashboardContainer() {
   const navigate = useNavigate();
@@ -86,6 +87,10 @@ export function DashboardContainer() {
 
             {activeTab === "clients" && (
               <ClientsTab clients={clients} />
+            )}
+            
+            {activeTab === "programs" && (
+              <ProgramsTab />
             )}
 
             {activeTab === "messages" && (
