@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,18 +13,6 @@ const Footer = () => {
     }, {
       name: 'How It Works',
       href: '/#how-it-works'
-    }]
-  }, {
-    title: 'Resources',
-    links: [{
-      name: 'Help Center',
-      href: '/help'
-    }, {
-      name: 'Blog',
-      href: '/blog'
-    }, {
-      name: 'API',
-      href: '/api'
     }]
   }, {
     title: 'Company',
@@ -52,7 +41,7 @@ const Footer = () => {
   }];
   return <footer className="bg-white border-t border-border">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           <div className="col-span-2 lg:col-span-1">
             <Link to="/" className="inline-block">
               <span className="font-display text-xl font-bold tracking-tight text-primary">Personal.ai</span>
