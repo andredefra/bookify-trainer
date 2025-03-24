@@ -38,8 +38,8 @@ const Navbar = () => {
         </Link>
         
         {!isMobile ? (
-          <div className="flex items-center space-x-8">
-            <div className="hidden md:flex space-x-8 items-center justify-center mx-auto">
+          <div className="flex-1 flex justify-center">
+            <div className="flex space-x-8 items-center">
               <Link 
                 to="/#features" 
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
@@ -59,21 +59,6 @@ const Navbar = () => {
                 Pricing
               </Link>
             </div>
-            
-            <div className="flex items-center space-x-4">
-              <Link 
-                to="/login" 
-                className="px-4 py-2 text-sm font-medium text-primary rounded-full transition-colors"
-              >
-                Demo Login
-              </Link>
-              <Link 
-                to="/register" 
-                className="px-5 py-2 text-sm font-medium text-white bg-primary rounded-full button-hover"
-              >
-                Try the Demo
-              </Link>
-            </div>
           </div>
         ) : (
           <button 
@@ -82,6 +67,23 @@ const Navbar = () => {
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+        )}
+        
+        {!isMobile && (
+          <div className="flex items-center space-x-4">
+            <Link 
+              to="/login" 
+              className="px-4 py-2 text-sm font-medium text-primary rounded-full transition-colors"
+            >
+              Demo Login
+            </Link>
+            <Link 
+              to="/register" 
+              className="px-5 py-2 text-sm font-medium text-white bg-primary rounded-full button-hover"
+            >
+              Try the Demo
+            </Link>
+          </div>
         )}
       </div>
       
