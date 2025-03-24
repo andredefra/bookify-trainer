@@ -7,6 +7,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { CalendarCheck, Clock, Check } from "lucide-react";
 
 export const bookingSchema = z.object({
   date: z.date({
@@ -24,6 +26,8 @@ interface BookingFormProps {
 
 export const BookingForm = ({ trainerName, onSubmit, onCancel }: BookingFormProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [formData, setFormData] = useState<z.infer<typeof bookingSchema> | null>(null);
   
   const form = useForm<z.infer<typeof bookingSchema>>({
     resolver: zodResolver(bookingSchema),
@@ -34,77 +38,130 @@ export const BookingForm = ({ trainerName, onSubmit, onCancel }: BookingFormProp
     }
   });
 
+  const handleSubmit = (data: z.infer<typeof bookingSchema>) => {
+    setFormData(data);
+    setShowConfirmation(true);
+  };
+
+  const confirmBooking = () => {
+    if (formData) {
+      onSubmit(formData);
+    }
+    setShowConfirmation(false);
+  };
+
+  // Available time slots for demo
+  const timeSlots = [
+    { time: "10:00 AM", available: true },
+    { time: "11:00 AM", available: true },
+    { time: "12:00 PM", available: false },
+    { time: "1:00 PM", available: false },
+    { time: "2:00 PM", available: true },
+    { time: "3:00 PM", available: true },
+    { time: "4:00 PM", available: true },
+    { time: "5:00 PM", available: true },
+  ];
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="mb-4">
-          <FormLabel>Select a date</FormLabel>
-          <div className="border rounded-md p-3 mt-2">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={(date) => {
-                setSelectedDate(date);
-                form.setValue('date', date as Date);
-              }}
-              className="mx-auto pointer-events-auto"
-              disabled={(date) => {
-                const day = date.getDay();
-                return day === 0 || date < new Date(new Date().setHours(0, 0, 0, 0));
-              }}
-            />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <div className="mb-4">
+            <FormLabel className="flex items-center gap-2">
+              <CalendarCheck className="h-4 w-4" />
+              Select a date
+            </FormLabel>
+            <div className="border rounded-md p-3 mt-2">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date);
+                  form.setValue('date', date as Date);
+                }}
+                className="mx-auto pointer-events-auto"
+                disabled={(date) => {
+                  const day = date.getDay();
+                  return day === 0 || date < new Date(new Date().setHours(0, 0, 0, 0));
+                }}
+                initialFocus
+              />
+            </div>
           </div>
-        </div>
-        
-        <FormField
-          control={form.control}
-          name="time"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Select a time</FormLabel>
-              <FormControl>
-                <select 
-                  className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  {...field}
-                >
-                  <option value="">Select a time</option>
-                  <option value="10:00 AM">10:00 AM</option>
-                  <option value="11:00 AM">11:00 AM</option>
-                  <option value="2:00 PM">2:00 PM</option>
-                  <option value="3:00 PM">3:00 PM</option>
-                  <option value="4:00 PM">4:00 PM</option>
-                  <option value="5:00 PM">5:00 PM</option>
-                </select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes (optional)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Any specific goals or concerns for this session?"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <div className="flex justify-end gap-3 pt-3">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="submit">Book Session</Button>
-        </div>
-      </form>
-    </Form>
+          
+          <FormField
+            control={form.control}
+            name="time"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Select a time
+                </FormLabel>
+                <FormControl>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+                    {timeSlots.map((slot) => (
+                      <Button
+                        key={slot.time}
+                        type="button"
+                        variant={field.value === slot.time ? "default" : "outline"}
+                        className={`flex justify-between items-center ${!slot.available ? "opacity-50 cursor-not-allowed" : ""}`}
+                        disabled={!slot.available}
+                        onClick={() => field.onChange(slot.time)}
+                      >
+                        <span>{slot.time}</span>
+                        {field.value === slot.time && <Check className="ml-2 h-4 w-4" />}
+                      </Button>
+                    ))}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notes (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Any specific goals or concerns for this session?"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <div className="flex justify-end gap-3 pt-3">
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button type="submit">Book Session</Button>
+          </div>
+        </form>
+      </Form>
+
+      <AlertDialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm your booking</AlertDialogTitle>
+            <AlertDialogDescription>
+              You're about to book a session with {trainerName} on{" "}
+              {formData?.date?.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} at{" "}
+              {formData?.time}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmBooking}>Confirm Booking</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
