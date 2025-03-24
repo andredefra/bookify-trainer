@@ -15,14 +15,14 @@ interface StatCardProps {
 
 export function StatCard({ title, value, change, trend, period, icon, color }: StatCardProps) {
   return (
-    <Card className="p-1.5 border-l-2 shadow-sm hover:shadow transition-shadow h-auto w-full" style={{ borderLeftColor: color || '#e5e7eb' }}>
+    <Card className="p-1 border-l-2 shadow-sm hover:shadow transition-shadow h-auto w-full" style={{ borderLeftColor: color || '#e5e7eb' }}>
       <div className="flex items-center justify-between mb-0.5">
         <h3 className="text-xs font-medium text-muted-foreground">{title}</h3>
         <div className="bg-gray-100 rounded-full p-0.5">
           {icon}
         </div>
       </div>
-      <div className="flex items-baseline space-x-1.5">
+      <div className="flex items-baseline space-x-1">
         <span className="text-base font-bold">{value}</span>
         <span className={`text-[10px] font-medium flex items-center ${
           trend === "up" ? "text-green-600" : 
