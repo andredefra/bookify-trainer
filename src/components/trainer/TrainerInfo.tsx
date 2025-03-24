@@ -2,7 +2,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, CalendarCheck, Clock } from "lucide-react";
+import { MessageSquare, CalendarCheck, Clock, ExternalLink } from "lucide-react";
 
 interface TrainerInfoProps {
   trainer: {
@@ -16,7 +16,7 @@ interface TrainerInfoProps {
 
 export const TrainerInfo = ({ trainer, onBookSession, onMessageClick }: TrainerInfoProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-10">
       <div className="flex flex-wrap gap-2">
         {trainer.specialties.map((specialty) => (
           <Badge key={specialty} variant="secondary">{specialty}</Badge>
@@ -49,6 +49,15 @@ export const TrainerInfo = ({ trainer, onBookSession, onMessageClick }: TrainerI
               <span>Available today</span>
             </div>
           </div>
+          
+          <Button 
+            variant="link" 
+            className="mt-4 p-0 h-auto text-sm flex items-center text-blue-600 hover:text-blue-800" 
+            onClick={onBookSession}
+          >
+            <ExternalLink className="h-3 w-3 mr-1" />
+            View availability calendar
+          </Button>
         </CardContent>
       </Card>
     </div>
