@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,8 +11,8 @@ import FindTrainer from "./pages/FindTrainer";
 import TrainerProfile from "./pages/TrainerProfile";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 
-// Component to handle scroll restoration
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -24,7 +23,6 @@ const ScrollToTop = () => {
   return null;
 };
 
-// Setup for animations
 const RevealObserver = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -66,6 +64,7 @@ const App = () => (
           <Route path="/find-trainer" element={<FindTrainer />} />
           <Route path="/trainer/:id" element={<TrainerProfile />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
