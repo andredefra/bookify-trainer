@@ -10,11 +10,13 @@ import { TrainersTab } from "@/components/client/tabs/TrainersTab";
 import { MessagesTab } from "@/components/client/tabs/MessagesTab";
 import { SettingsTab } from "@/components/client/tabs/SettingsTab";
 import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<{name?: string, email: string, type: string, plan?: string} | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const isMobile = useIsMobile();
   
   const upcomingSessions = [
     { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" },
@@ -68,25 +70,27 @@ const ClientDashboard = () => {
         </div>
 
         <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-3">
-            <ClientSidebar 
-              activeTab={activeTab} 
-              setActiveTab={setActiveTab} 
-              unreadMessageCount={unreadMessageCount}
-            />
-            
-            <div className="mt-6">
-              <ClientProfile 
-                name={user.name || "Demo Client"}
-                email={user.email}
-                since="March 2023"
-                sessions={24}
-                goals={goals}
+          {!isMobile && (
+            <div className="col-span-12 lg:col-span-3">
+              <ClientSidebar 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab} 
+                unreadMessageCount={unreadMessageCount}
               />
+              
+              <div className="mt-6">
+                <ClientProfile 
+                  name={user.name || "Demo Client"}
+                  email={user.email}
+                  since="March 2023"
+                  sessions={24}
+                  goals={goals}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-span-12 lg:col-span-9">
+          <div className={`col-span-12 ${isMobile ? 'lg:col-span-12' : 'lg:col-span-9'}`}>
             {activeTab === "overview" && (
               <Overview 
                 progressData={progressData}
@@ -117,6 +121,14 @@ const ClientDashboard = () => {
           </div>
         </div>
       </div>
+      
+      {isMobile && (
+        <ClientSidebar 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          unreadMessageCount={unreadMessageCount}
+        />
+      )}
     </div>
   );
 };

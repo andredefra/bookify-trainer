@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  BarChart, 
-  Bar, 
-  LineChart, 
-  Line, 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  BarChart,
+  Bar,
   PieChart,
   Pie,
+  AreaChart, 
+  Area,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Label,
+  LabelList,
   Cell
 } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -23,382 +27,340 @@ import { BarChart2, PieChart as PieChartIcon, AreaChart as AreaChartIcon, LineCh
 interface WorkoutAnalyticsProps {
   weeklyData: {
     day: string;
-    workouts: number;
+    minutes: number;
     calories: number;
-    duration: number;
   }[];
-  monthlyGoals: {
+  monthlyData: {
     type: string;
-    progress: number;
+    current: number;
     target: number;
   }[];
   workoutTypes: {
     name: string;
-    sessions: number;
+    value: number;
+    color: string;
   }[];
   progressHistory: {
-    month: string;
+    week: string;
     weight: number;
     strength: number;
     endurance: number;
   }[];
 }
 
-const COLORS = ['#8b5cf6', '#0ea5e9', '#f97316', '#ef4444', '#10b981', '#f59e0b'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
-export function WorkoutAnalytics({ 
-  weeklyData, 
-  monthlyGoals, 
-  workoutTypes,
-  progressHistory 
-}: WorkoutAnalyticsProps) {
-  const [activeTab, setActiveTab] = useState("weekly");
+export function WorkoutAnalytics({ weeklyData, monthlyData, workoutTypes, progressHistory }: WorkoutAnalyticsProps) {
+  const [timeframe, setTimeframe] = useState("weekly");
+  const [chartType, setChartType] = useState("bar");
+  const [progressMetric, setProgressMetric] = useState("weight");
+
+  const WeeklyActivityChart = () => {
+    if (chartType === "bar") {
+      return (
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={weeklyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="day" axisLine={false} tickLine={false} />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip
+              content={({ active, payload, label }) => {
+                if (active && payload && payload.length) {
+                  return (
+                    <div className="bg-white p-2 shadow-md border rounded">
+                      <p className="font-medium">{label}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Minutes: <span className="font-medium">{payload[0].value}</span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Calories: <span className="font-medium">{payload[1].value}</span>
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
+            <Bar dataKey="minutes" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="calories" fill="#10b981" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      );
+    } else if (chartType === "line") {
+      return (
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={weeklyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="day" axisLine={false} tickLine={false} />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip
+              content={({ active, payload, label }) => {
+                if (active && payload && payload.length) {
+                  return (
+                    <div className="bg-white p-2 shadow-md border rounded">
+                      <p className="font-medium">{label}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Minutes: <span className="font-medium">{payload[0].value}</span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Calories: <span className="font-medium">{payload[1].value}</span>
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
+            <Line type="monotone" dataKey="minutes" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="calories" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      );
+    } else if (chartType === "area") {
+      return (
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart data={weeklyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="day" axisLine={false} tickLine={false} />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip
+              content={({ active, payload, label }) => {
+                if (active && payload && payload.length) {
+                  return (
+                    <div className="bg-white p-2 shadow-md border rounded">
+                      <p className="font-medium">{label}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Minutes: <span className="font-medium">{payload[0].value}</span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Calories: <span className="font-medium">{payload[1].value}</span>
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
+            <Area type="monotone" dataKey="minutes" fill="#4f46e5" stroke="#4f46e5" fillOpacity={0.2} />
+            <Area type="monotone" dataKey="calories" fill="#10b981" stroke="#10b981" fillOpacity={0.2} />
+          </AreaChart>
+        </ResponsiveContainer>
+      );
+    }
+    return null;
+  };
+
+  const WorkoutTypesChart = () => (
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={workoutTypes}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          outerRadius={100}
+          fill="#8884d8"
+          dataKey="value"
+          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+        >
+          {workoutTypes.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              const data = payload[0].payload;
+              return (
+                <div className="bg-white p-2 shadow-md border rounded">
+                  <p className="font-medium">{data.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Sessions: <span className="font-medium">{data.value}</span>
+                  </p>
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+
+  const MonthlyGoalsChart = () => (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart
+        layout="vertical"
+        data={monthlyData}
+        margin={{ top: 10, right: 30, left: 40, bottom: 0 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+        <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} />
+        <YAxis 
+          dataKey="type" 
+          type="category" 
+          axisLine={false} 
+          tickLine={false}
+        />
+        <Tooltip 
+          content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              const data = payload[0].payload;
+              return (
+                <div className="bg-white p-2 shadow-md border rounded">
+                  <p className="font-medium">{data.type}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Current: <span className="font-medium">{data.current}</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Goal: <span className="font-medium">{data.target}</span>
+                  </p>
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
+        <Bar dataKey="current" fill="#4f46e5" radius={[4, 4, 4, 4]}>
+          {monthlyData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.current >= entry.target ? "#10b981" : "#4f46e5"} />
+          ))}
+          <LabelList 
+            dataKey="current" 
+            position="right" 
+            formatter={(value: number, entry: any) => `${value}/${entry.target}`} 
+            style={{ fill: "#6b7280", fontSize: "12px" }}
+          />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+
+  const ProgressChart = () => (
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={progressHistory} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="week" axisLine={false} tickLine={false} />
+        <YAxis axisLine={false} tickLine={false} />
+        <Tooltip
+          content={({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+              const data = payload[0].payload;
+              return (
+                <div className="bg-white p-2 shadow-md border rounded">
+                  <p className="font-medium">{label}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Weight: <span className="font-medium">{data.weight} kg</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Strength: <span className="font-medium">{data.strength}/10</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Endurance: <span className="font-medium">{data.endurance}/10</span>
+                  </p>
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
+        {progressMetric === "all" ? (
+          <>
+            <Line type="monotone" dataKey="weight" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="strength" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="endurance" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
+          </>
+        ) : (
+          <Line type="monotone" dataKey={progressMetric} stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+        )}
+      </LineChart>
+    </ResponsiveContainer>
+  );
 
   return (
-    <Card>
+    <Card className="col-span-12">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <CardTitle>Workout Analytics</CardTitle>
-            <CardDescription>Visualize your fitness progress over time</CardDescription>
+            <CardDescription>Track your workout patterns and progress</CardDescription>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Select value={timeframe} onValueChange={setTimeframe}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Timeframe" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="yearly">Yearly</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={chartType} onValueChange={setChartType}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Chart Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bar">Bar Chart</SelectItem>
+                <SelectItem value="line">Line Chart</SelectItem>
+                <SelectItem value="area">Area Chart</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="weekly" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid grid-cols-4 w-full max-w-md">
-            <TabsTrigger value="weekly" className="flex items-center gap-2">
+        <Tabs defaultValue="activity" className="space-y-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <TabsTrigger value="activity" className="flex items-center gap-2">
               <BarChart2 className="h-4 w-4" />
-              <span className="hidden sm:inline">Weekly</span>
+              <span>Activity</span>
             </TabsTrigger>
-            <TabsTrigger value="monthly" className="flex items-center gap-2">
-              <LineChartIcon className="h-4 w-4" />
-              <span className="hidden sm:inline">Monthly</span>
-            </TabsTrigger>
-            <TabsTrigger value="workoutTypes" className="flex items-center gap-2">
+            <TabsTrigger value="types" className="flex items-center gap-2">
               <PieChartIcon className="h-4 w-4" />
-              <span className="hidden sm:inline">Workout Types</span>
+              <span>Workout Types</span>
+            </TabsTrigger>
+            <TabsTrigger value="goals" className="flex items-center gap-2">
+              <AreaChartIcon className="h-4 w-4" />
+              <span>Monthly Goals</span>
             </TabsTrigger>
             <TabsTrigger value="progress" className="flex items-center gap-2">
-              <AreaChartIcon className="h-4 w-4" />
-              <span className="hidden sm:inline">Progress</span>
+              <LineChartIcon className="h-4 w-4" />
+              <span>Progress</span>
             </TabsTrigger>
           </TabsList>
-
-          <TabsContent value="weekly" className="space-y-4">
-            <WeeklyWorkoutChart data={weeklyData} />
+          
+          <TabsContent value="activity" className="space-y-4">
+            <WeeklyActivityChart />
           </TabsContent>
-
-          <TabsContent value="monthly" className="space-y-4">
-            <MonthlyGoalsChart data={monthlyGoals} />
+          
+          <TabsContent value="types" className="space-y-4">
+            <WorkoutTypesChart />
           </TabsContent>
-
-          <TabsContent value="workoutTypes" className="space-y-4">
-            <WorkoutTypesPieChart data={workoutTypes} />
+          
+          <TabsContent value="goals" className="space-y-4">
+            <MonthlyGoalsChart />
           </TabsContent>
-
+          
           <TabsContent value="progress" className="space-y-4">
-            <ProgressHistoryChart data={progressHistory} />
+            <div className="flex justify-end mb-4">
+              <Select value={progressMetric} onValueChange={setProgressMetric}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Metric" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="weight">Weight</SelectItem>
+                  <SelectItem value="strength">Strength</SelectItem>
+                  <SelectItem value="endurance">Endurance</SelectItem>
+                  <SelectItem value="all">All Metrics</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <ProgressChart />
           </TabsContent>
         </Tabs>
       </CardContent>
     </Card>
-  );
-}
-
-function WeeklyWorkoutChart({ data }: { data: WorkoutAnalyticsProps['weeklyData'] }) {
-  return (
-    <div className="space-y-4">
-      <div className="text-sm font-medium">Workouts & Calories Burned</div>
-      <div className="h-[300px] w-full">
-        <ChartContainer 
-          config={{
-            workouts: {
-              label: "Workouts",
-              color: "#8b5cf6",
-            },
-            calories: {
-              label: "Calories",
-              color: "#ef4444",
-            }
-          }}
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={data}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis 
-                dataKey="day" 
-                axisLine={false} 
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <YAxis 
-                yAxisId="left" 
-                orientation="left" 
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <YAxis 
-                yAxisId="right" 
-                orientation="right" 
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <ChartTooltip 
-                content={<ChartTooltipContent />} 
-              />
-              <Bar 
-                yAxisId="left" 
-                dataKey="workouts" 
-                fill="var(--color-workouts)" 
-                radius={[4, 4, 0, 0]} 
-                barSize={20}
-                name="workouts"
-              />
-              <Bar 
-                yAxisId="right" 
-                dataKey="calories" 
-                fill="var(--color-calories)" 
-                radius={[4, 4, 0, 0]} 
-                barSize={20}
-                name="calories"
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      </div>
-
-      <div className="text-sm font-medium mt-6">Workout Duration (minutes)</div>
-      <div className="h-[200px] w-full">
-        <ChartContainer 
-          config={{
-            duration: {
-              label: "Minutes",
-              color: "#0ea5e9",
-            },
-          }}
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
-              data={data}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis 
-                dataKey="day" 
-                axisLine={false} 
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <YAxis 
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12 }}
-              />
-              <ChartTooltip 
-                content={<ChartTooltipContent />} 
-              />
-              <Area 
-                type="monotone" 
-                dataKey="duration" 
-                stroke="var(--color-duration)" 
-                fill="var(--color-duration)" 
-                fillOpacity={0.2}
-                name="duration"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      </div>
-    </div>
-  );
-}
-
-function MonthlyGoalsChart({ data }: { data: WorkoutAnalyticsProps['monthlyGoals'] }) {
-  return (
-    <div className="h-[300px] w-full">
-      <ChartContainer 
-        config={Object.fromEntries(
-          data.map(item => [
-            item.type,
-            { 
-              label: item.type,
-              color: COLORS[data.findIndex(x => x.type === item.type) % COLORS.length]
-            }
-          ])
-        )}
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={data}
-            layout="vertical"
-            margin={{ top: 10, right: 30, left: 40, bottom: 0 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-            <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} />
-            <YAxis 
-              dataKey="type" 
-              type="category" 
-              axisLine={false} 
-              tickLine={false} 
-              width={100}
-              tick={{ fontSize: 12 }}
-            />
-            <ChartTooltip 
-              content={
-                ({active, payload}) => {
-                  if (active && payload && payload.length) {
-                    const data = payload[0].payload;
-                    return (
-                      <div className="p-2 bg-background border rounded shadow text-xs">
-                        <p className="font-medium">{data.type}</p>
-                        <p>{data.progress} / {data.target} ({Math.round(data.progress/data.target*100)}%)</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }
-              } 
-            />
-            <Bar dataKey="progress" name="progress">
-              {data.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={`var(--color-${entry.type})`} 
-                  radius={[4, 4, 4, 4]}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </ChartContainer>
-    </div>
-  );
-}
-
-function WorkoutTypesPieChart({ data }: { data: WorkoutAnalyticsProps['workoutTypes'] }) {
-  return (
-    <div className="space-y-4">
-      <div className="text-sm font-medium">Workout Type Distribution</div>
-      <div className="h-[300px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="sessions"
-              nameKey="name"
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value, name) => [`${value} sessions`, name]}
-              contentStyle={{ 
-                backgroundColor: 'white', 
-                border: '1px solid #f0f0f0',
-                borderRadius: '4px',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="flex justify-center flex-wrap gap-4 pt-4">
-        {data.map((entry, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <div 
-              className="w-3 h-3 rounded-full" 
-              style={{ backgroundColor: COLORS[index % COLORS.length] }}
-            />
-            <span className="text-sm">{entry.name}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ProgressHistoryChart({ data }: { data: WorkoutAnalyticsProps['progressHistory'] }) {
-  return (
-    <div className="h-[300px] w-full">
-      <ChartContainer 
-        config={{
-          weight: {
-            label: "Weight",
-            color: "#ef4444",
-          },
-          strength: {
-            label: "Strength",
-            color: "#8b5cf6",
-          },
-          endurance: {
-            label: "Endurance",
-            color: "#0ea5e9",
-          }
-        }}
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis 
-              dataKey="month" 
-              axisLine={false} 
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <ChartTooltip 
-              content={<ChartTooltipContent />} 
-            />
-            <Line 
-              type="monotone" 
-              dataKey="weight" 
-              stroke="var(--color-weight)" 
-              strokeWidth={2}
-              dot={{ r: 4, strokeWidth: 2 }}
-              activeDot={{ r: 6 }}
-              name="weight"
-            />
-            <Line 
-              type="monotone" 
-              dataKey="strength" 
-              stroke="var(--color-strength)" 
-              strokeWidth={2}
-              dot={{ r: 4, strokeWidth: 2 }}
-              activeDot={{ r: 6 }}
-              name="strength"
-            />
-            <Line 
-              type="monotone" 
-              dataKey="endurance" 
-              stroke="var(--color-endurance)" 
-              strokeWidth={2}
-              dot={{ r: 4, strokeWidth: 2 }}
-              activeDot={{ r: 6 }}
-              name="endurance"
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </ChartContainer>
-    </div>
   );
 }
