@@ -3,40 +3,17 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { PlusCircle, Trash2, Send, Dumbbell } from "lucide-react";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Send, Dumbbell } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
-
-interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  notes?: string;
-}
-
-interface WorkoutDay {
-  id: string;
-  day: string;
-  exercises: Exercise[];
-}
-
-interface ProgramFormProps {
-  clientId: string;
-  clientName: string;
-  onSend: (program: any) => void;
-  isPremium: boolean;
-}
+import { ProgramFormProps, TrainingProgram, WorkoutDay } from "./types";
+import { PremiumFeatureCard } from "./PremiumFeatureCard";
+import { DayTabs } from "./DayTabs";
+import { WorkoutDayPanel } from "./WorkoutDayPanel";
 
 export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }: ProgramFormProps) {
-  const [program, setProgram] = useState<{
-    title: string;
-    weekStart: string;
-    days: WorkoutDay[];
-  }>({
+  const [program, setProgram] = useState<TrainingProgram>({
     title: "Weekly Training Program",
     weekStart: "",
     days: [
@@ -156,22 +133,7 @@ export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }:
   });
 
   if (!isPremium) {
-    return (
-      <Card className="border-amber-200 bg-amber-50/50">
-        <CardHeader>
-          <CardTitle className="text-amber-800">Premium Feature</CardTitle>
-          <CardDescription>
-            Training program creation and sharing is a premium feature.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-amber-700 mb-4">
-            Upgrade to our Pro plan to access advanced features like custom training programs, which you can create and share with your clients.
-          </p>
-          <Button>Upgrade to Pro</Button>
-        </CardContent>
-      </Card>
-    );
+    return <PremiumFeatureCard />;
   }
 
   return (
@@ -225,126 +187,21 @@ export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }:
             </div>
             
             <div className="border rounded-md">
-              <div className="grid grid-cols-7 border-b">
-                {program.days.map((day) => (
-                  <button
-                    key={day.id}
-                    type="button"
-                    className={`p-3 text-center border-r last:border-r-0 transition-colors ${
-                      activeDay === day.id ? "bg-primary/10 text-primary" : "hover:bg-gray-50"
-                    }`}
-                    onClick={() => setActiveDay(day.id)}
-                  >
-                    <div className="text-xs font-medium">{day.day}</div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {day.exercises.length} exercises
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <DayTabs 
+                days={program.days} 
+                activeDay={activeDay} 
+                setActiveDay={setActiveDay} 
+              />
 
               {program.days.map((day) => (
-                <div key={day.id} className={activeDay === day.id ? "block" : "hidden"}>
-                  <div className="p-4 border-b">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="font-medium">{day.day}'s Workout</h3>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAddExercise(day.id)}
-                      >
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Add Exercise
-                      </Button>
-                    </div>
-
-                    {day.exercises.length === 0 ? (
-                      <div className="text-center py-6 text-muted-foreground">
-                        No exercises added for this day yet.
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {day.exercises.map((exercise) => (
-                          <div key={exercise.id} className="border rounded-md p-4">
-                            <div className="grid grid-cols-2 gap-4 mb-3">
-                              <div>
-                                <FormLabel>Exercise Name</FormLabel>
-                                <Input
-                                  value={exercise.name}
-                                  onChange={(e) =>
-                                    handleUpdateExercise(day.id, exercise.id, "name", e.target.value)
-                                  }
-                                  placeholder="e.g. Squat, Bench Press, etc."
-                                />
-                              </div>
-                              <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                  <FormLabel>Sets</FormLabel>
-                                  <Input
-                                    type="number"
-                                    value={exercise.sets}
-                                    onChange={(e) =>
-                                      handleUpdateExercise(
-                                        day.id,
-                                        exercise.id,
-                                        "sets",
-                                        parseInt(e.target.value)
-                                      )
-                                    }
-                                  />
-                                </div>
-                                <div>
-                                  <FormLabel>Reps</FormLabel>
-                                  <Input
-                                    value={exercise.reps}
-                                    onChange={(e) =>
-                                      handleUpdateExercise(
-                                        day.id,
-                                        exercise.id,
-                                        "reps",
-                                        e.target.value
-                                      )
-                                    }
-                                    placeholder="e.g. 10, 8-12, etc."
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <FormLabel>Notes</FormLabel>
-                              <Textarea
-                                value={exercise.notes || ""}
-                                onChange={(e) =>
-                                  handleUpdateExercise(
-                                    day.id,
-                                    exercise.id,
-                                    "notes",
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="Instructions, tempo, rest periods, etc."
-                                rows={2}
-                              />
-                            </div>
-                            <div className="flex justify-end mt-3">
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="text-destructive"
-                                onClick={() => handleRemoveExercise(day.id, exercise.id)}
-                              >
-                                <Trash2 className="h-4 w-4 mr-1" />
-                                Remove
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <WorkoutDayPanel
+                  key={day.id}
+                  day={day}
+                  activeDay={activeDay}
+                  onAddExercise={handleAddExercise}
+                  onUpdateExercise={handleUpdateExercise}
+                  onRemoveExercise={handleRemoveExercise}
+                />
               ))}
             </div>
           </CardContent>
