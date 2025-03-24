@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { InfoCircle } from "lucide-react";
+import { Info } from "lucide-react";
 import { FitnessAppIntegration } from "@/components/client/settings/FitnessAppIntegration";
 
 interface SettingsTabProps {
@@ -65,7 +65,7 @@ export function SettingsTab({ user, goals }: SettingsTabProps) {
             
             <div className="bg-blue-50 border border-blue-100 rounded-md p-4">
               <div className="flex gap-3">
-                <InfoCircle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                <Info className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-medium text-blue-700 mb-1">Client Account</h3>
                   <p className="text-sm text-blue-600">

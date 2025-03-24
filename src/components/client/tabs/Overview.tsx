@@ -4,7 +4,7 @@ import { UpcomingSessionsCard } from "@/components/client/overview/UpcomingSessi
 import { TrainerCard } from "@/components/client/overview/TrainerCard";
 import { MessagesCard } from "@/components/client/overview/MessagesCard";
 import { useEffect, useState } from "react";
-import { InfoCircle } from "lucide-react";
+import { Info } from "lucide-react";
 
 interface ProgressItem {
   goal: string;
@@ -64,7 +64,7 @@ export function Overview({ progressData, upcomingSessions, trainerMessages }: Ov
       {!hasPremiumTrainer && (
         <div className="bg-amber-50 border border-amber-100 rounded-md p-4">
           <div className="flex gap-3">
-            <InfoCircle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+            <Info className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="font-medium text-amber-700 mb-1">Basic Training Plan</h3>
               <p className="text-sm text-amber-600">
