@@ -13,11 +13,50 @@ export function ProgramsTab() {
   const [activeClient, setActiveClient] = useState<string | null>(null);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   
-  // Mock programs
+  // Mock programs with extended data
   const programs = [
-    { id: 1, title: "Strength & Conditioning", type: "strength", clientCount: 3, lastUpdated: "2 days ago" },
-    { id: 2, title: "Weight Loss Program", type: "cardio", clientCount: 5, lastUpdated: "5 days ago" },
-    { id: 3, title: "Flexibility & Recovery", type: "mobility", clientCount: 2, lastUpdated: "1 week ago" },
+    { 
+      id: 1, 
+      title: "Strength & Conditioning", 
+      type: "strength", 
+      clientCount: 3, 
+      lastUpdated: "2 days ago", 
+      objective: "Build muscle",
+      duration: 8,
+      isPaid: true,
+      price: 49.99
+    },
+    { 
+      id: 2, 
+      title: "Weight Loss Program", 
+      type: "cardio", 
+      clientCount: 5, 
+      lastUpdated: "5 days ago",
+      objective: "Lose weight",
+      duration: 12,
+      isPaid: true,
+      price: 69.99
+    },
+    { 
+      id: 3, 
+      title: "Flexibility & Recovery", 
+      type: "mobility", 
+      clientCount: 2, 
+      lastUpdated: "1 week ago",
+      objective: "Improve mobility",
+      duration: 4,
+      isPaid: false
+    },
+    { 
+      id: 4, 
+      title: "Beginners Workout Plan", 
+      type: "general", 
+      clientCount: 7, 
+      lastUpdated: "3 days ago",
+      objective: "Learn basics",
+      duration: 6,
+      isPaid: false
+    },
   ];
   
   // Mock clients

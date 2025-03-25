@@ -10,10 +10,16 @@ interface CreateProgramDialogProps {
 
 export function CreateProgramDialog({ open, onOpenChange }: CreateProgramDialogProps) {
   const handleSendProgram = (program: any) => {
-    toast.success("Program created successfully");
-    onOpenChange(false);
-    // Here you would typically save the program to the backend
     console.log("Program created:", program);
+    
+    // Customize the toast message based on whether the program is paid
+    if (program.isPaid) {
+      toast.success(`Program "${program.title}" created successfully - Price: €${program.price}`);
+    } else {
+      toast.success(`Program "${program.title}" created successfully - Free program`);
+    }
+    
+    onOpenChange(false);
   };
 
   return (

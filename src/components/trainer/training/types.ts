@@ -16,6 +16,11 @@ export interface WorkoutDay {
 export interface TrainingProgram {
   title: string;
   weekStart: string;
+  duration: number;
+  objective: string;
+  description?: string;
+  price?: number;
+  isPaid: boolean;
   days: WorkoutDay[];
 }
 

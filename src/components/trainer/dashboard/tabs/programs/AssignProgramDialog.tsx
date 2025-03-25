@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -7,13 +7,22 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
 
 interface AssignProgramDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   activeClient: string | null;
   clients: { id: number; name: string; email: string }[];
-  programs: { id: number; title: string; type: string; clientCount: number; lastUpdated: string }[];
+  programs: { 
+    id: number; 
+    title: string; 
+    type: string; 
+    clientCount: number; 
+    lastUpdated: string;
+    isPaid?: boolean;
+    price?: number;
+  }[];
 }
 
 export function AssignProgramDialog({ 
@@ -25,6 +34,29 @@ export function AssignProgramDialog({
 }: AssignProgramDialogProps) {
   const [isPaid, setIsPaid] = useState(false);
   const [price, setPrice] = useState("");
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
+  const [additionalNotes, setAdditionalNotes] = useState("");
+  
+  // Reset form when dialog opens
+  useEffect(() => {
+    if (open) {
+      setSelectedProgram("");
+      setIsPaid(false);
+      setPrice("");
+      setAdditionalNotes("");
+    }
+  }, [open]);
+  
+  // Update price when program is selected
+  useEffect(() => {
+    if (selectedProgram) {
+      const program = programs.find(p => p.id.toString() === selectedProgram);
+      if (program && program.isPaid) {
+        setIsPaid(true);
+        setPrice(program.price?.toString() || "");
+      }
+    }
+  }, [selectedProgram, programs]);
 
   const handleAssign = () => {
     const message = isPaid 
@@ -64,7 +96,7 @@ export function AssignProgramDialog({
           
           <div className="space-y-2">
             <Label htmlFor="program">Select Program</Label>
-            <Select>
+            <Select value={selectedProgram} onValueChange={setSelectedProgram}>
               <SelectTrigger id="program">
                 <SelectValue placeholder="Select a program" />
               </SelectTrigger>
@@ -110,7 +142,13 @@ export function AssignProgramDialog({
           
           <div className="space-y-2">
             <Label htmlFor="notes">Notes</Label>
-            <Input id="notes" placeholder="Add any specific instructions" />
+            <Textarea 
+              id="notes" 
+              placeholder="Add any specific instructions or objectives for this client"
+              value={additionalNotes}
+              onChange={(e) => setAdditionalNotes(e.target.value)}
+              className="min-h-[100px]"
+            />
           </div>
         </div>
         <DialogFooter>

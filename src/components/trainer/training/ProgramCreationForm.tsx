@@ -26,6 +26,11 @@ export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }:
     defaultValues: {
       title: program.title,
       weekStart: program.weekStart,
+      duration: program.duration,
+      objective: program.objective,
+      description: program.description,
+      isPaid: program.isPaid,
+      price: program.price,
     },
   });
 
@@ -34,6 +39,11 @@ export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }:
       ...program,
       title: data.title,
       weekStart: data.weekStart,
+      duration: data.duration,
+      objective: data.objective,
+      description: data.description,
+      isPaid: data.isPaid,
+      price: data.isPaid ? data.price : 0,
     };
     
     onSend(finalProgram);

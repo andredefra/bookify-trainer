@@ -6,6 +6,11 @@ export function useProgramForm() {
   const [program, setProgram] = useState<TrainingProgram>({
     title: "Weekly Training Program",
     weekStart: "",
+    duration: 4,
+    objective: "Strength & Conditioning",
+    description: "",
+    isPaid: false,
+    price: 0,
     days: [
       {
         id: "1",
