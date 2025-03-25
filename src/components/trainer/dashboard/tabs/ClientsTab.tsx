@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { ClientProfileDialog } from "./clients/ClientProfileDialog";
 
 interface ClientItem {
   id: number;
@@ -24,10 +25,17 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showClientDialog, setShowClientDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [activeClient, setActiveClient] = useState<ClientItem | null>(null);
   
   const goalTypes = [
     "Weight Loss", "Muscle Gain", "Endurance", "Flexibility", "Strength", "Recovery"
   ];
+  
+  const handleViewProfile = (client: ClientItem) => {
+    setActiveClient(client);
+    setShowProfileDialog(true);
+  };
   
   return (
     <>
@@ -89,7 +97,11 @@ export function ClientsTab({ clients }: ClientsTabProps) {
                       <Target className="mr-1 h-4 w-4" />
                       Set Goals
                     </Button>
-                    <Button variant="ghost" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleViewProfile(client)}
+                    >
                       <Eye className="mr-1 h-4 w-4" />
                       View Profile
                     </Button>
@@ -225,6 +237,13 @@ export function ClientsTab({ clients }: ClientsTabProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Detailed Client Profile Dialog */}
+      <ClientProfileDialog 
+        client={activeClient}
+        open={showProfileDialog}
+        onOpenChange={setShowProfileDialog}
+      />
     </>
   );
 }
