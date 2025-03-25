@@ -121,7 +121,8 @@ const Features = () => {
               <img 
                 src="/caab9089-03c6-46ad-bc57-2f0290f1ab06.png" 
                 alt="Personal trainer profile" 
-                className="h-full w-auto object-contain"
+                className="max-h-full object-contain"
+                style={{ width: 'auto', maxWidth: '100%' }}
               />
             </div>
           </div>
