@@ -117,11 +117,11 @@ const Features = () => {
                 personal.ai/johndoe
               </div>
             </div>
-            <div className="h-[300px] w-full flex items-center justify-center">
+            <div className="h-[300px] overflow-hidden flex items-center justify-center bg-white rounded-lg p-2">
               <img 
-                src="/lovable-uploads/caab9089-03c6-46ad-bc57-2f0290f1ab06.png" 
+                src="/caab9089-03c6-46ad-bc57-2f0290f1ab06.png" 
                 alt="Personal trainer profile" 
-                className="max-h-full max-w-full object-contain rounded-lg"
+                className="h-full w-auto object-contain"
               />
             </div>
           </div>
