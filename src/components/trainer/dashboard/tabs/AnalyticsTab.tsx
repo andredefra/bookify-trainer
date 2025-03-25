@@ -8,7 +8,7 @@ import { ClientPerformance } from "./analytics/ClientPerformance";
 
 export function AnalyticsTab() {
   return (
-    <Card>
+    <Card className="shadow-sm">
       <CardHeader>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>

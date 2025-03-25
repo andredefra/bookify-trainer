@@ -22,21 +22,24 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
   return (
-    <div className="w-full h-[300px]">
+    <div className="w-full h-[300px] flex items-center justify-center">
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
+        <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
           <Pie
             data={workoutTypes}
             cx="50%"
             cy="50%"
             labelLine={false}
-            outerRadius={80}
+            outerRadius={100}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           >
             {workoutTypes.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+              <Cell 
+                key={`cell-${index}`} 
+                fill={entry.color || COLORS[index % COLORS.length]} 
+              />
             ))}
           </Pie>
           <Tooltip

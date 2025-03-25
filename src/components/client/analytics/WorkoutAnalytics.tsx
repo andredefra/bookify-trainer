@@ -26,8 +26,8 @@ export function WorkoutAnalytics({
   const [progressMetric, setProgressMetric] = useState("weight");
 
   return (
-    <Card className="col-span-12 border bg-white shadow-sm">
-      <CardHeader className="pb-0 pt-4 px-4">
+    <Card className="col-span-12 border shadow-sm">
+      <CardHeader className="pb-1 pt-4 px-4">
         <ChartHeader 
           title="Workout Analytics"
           description="Track your workout patterns and progress"
@@ -39,7 +39,7 @@ export function WorkoutAnalytics({
       </CardHeader>
       <CardContent className="p-4">
         <Tabs defaultValue="activity" className="space-y-4">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 bg-slate-50/80 p-1 rounded-md w-full border">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-50/80 p-1 rounded-md w-full border">
             <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-2">
               <BarChart2 className="h-4 w-4 mr-1" />
               <span>Activity</span>

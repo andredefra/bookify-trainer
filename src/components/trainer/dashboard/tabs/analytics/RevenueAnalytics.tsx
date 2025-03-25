@@ -1,5 +1,5 @@
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import React from "react";
 import { 
   BarChart, 
   Bar, 
@@ -82,39 +82,33 @@ export function RevenueAnalytics() {
       <div className="bg-white p-4 rounded-lg border shadow-sm">
         <h3 className="text-base font-medium mb-4">Monthly Revenue</h3>
         <div className="w-full h-[300px]">
-          <ChartContainer
-            config={{
-              programs: {
-                label: "Programs",
-                color: "#4f46e5"
-              },
-              sessions: {
-                label: "Sessions",
-                color: "#06b6d4"
-              }
-            }}
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={monthlyRevenue}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis
-                  stroke="#94a3b8"
-                  tickFormatter={(value) => `€${value}`}
-                />
-                <ChartTooltip
-                  content={
-                    <ChartTooltipContent
-                      formatter={(value) => [`€${value}`, ""]}
-                    />
-                  }
-                />
-                <Legend iconSize={10} />
-                <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart 
+              data={monthlyRevenue}
+              margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis 
+                dataKey="name" 
+                stroke="#94a3b8" 
+                axisLine={false} 
+                tickLine={false}
+              />
+              <YAxis
+                stroke="#94a3b8"
+                tickFormatter={(value) => `€${value}`}
+                axisLine={false} 
+                tickLine={false}
+              />
+              <Tooltip 
+                formatter={(value) => [`€${value}`, ""]}
+                contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+              />
+              <Legend iconSize={10} />
+              <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={40} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
       
@@ -122,7 +116,7 @@ export function RevenueAnalytics() {
         {/* Revenue by Product */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-4">Revenue by Product</h3>
-          <div className="h-[300px]">
+          <div className="h-[300px] flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -140,7 +134,10 @@ export function RevenueAnalytics() {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => [`€${value}`, 'Revenue']} />
+                <Tooltip 
+                  formatter={(value) => [`€${value}`, 'Revenue']}
+                  contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -150,35 +147,36 @@ export function RevenueAnalytics() {
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-4">Client Growth</h3>
           <div className="h-[300px]">
-            <ChartContainer
-              config={{
-                clients: {
-                  label: "Clients",
-                  color: "#10b981"
-                }
-              }}
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={clientGrowth}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="name" stroke="#94a3b8" />
-                  <YAxis stroke="#94a3b8" />
-                  <ChartTooltip
-                    content={
-                      <ChartTooltipContent />
-                    }
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="clients" 
-                    stroke="#10b981" 
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart 
+                data={clientGrowth}
+                margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis 
+                  dataKey="name" 
+                  stroke="#94a3b8" 
+                  axisLine={false} 
+                  tickLine={false}
+                />
+                <YAxis 
+                  stroke="#94a3b8" 
+                  axisLine={false} 
+                  tickLine={false}
+                />
+                <Tooltip
+                  contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="clients" 
+                  stroke="#10b981" 
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>

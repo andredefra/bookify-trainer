@@ -29,16 +29,21 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
         <BarChart
           layout="vertical"
           data={monthlyData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-          <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} />
+          <XAxis 
+            type="number" 
+            axisLine={false} 
+            tickLine={false} 
+            domain={[0, 'dataMax']} 
+          />
           <YAxis 
             dataKey="type" 
             type="category" 
             axisLine={false} 
             tickLine={false}
-            width={120}
+            width={100}
           />
           <Tooltip 
             content={({ active, payload }) => {

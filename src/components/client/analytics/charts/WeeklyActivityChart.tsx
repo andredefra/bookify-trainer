@@ -47,28 +47,58 @@ export function WeeklyActivityChart({ weeklyData, chartType }: WeeklyActivityCha
     <div className="w-full h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         {chartType === "bar" ? (
-          <BarChart data={weeklyData} margin={{ top: 5, right: 20, left: 5, bottom: 5 }}>
+          <BarChart 
+            data={weeklyData} 
+            margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="day" />
-            <YAxis />
+            <XAxis 
+              dataKey="day" 
+              axisLine={false} 
+              tickLine={false}
+            />
+            <YAxis 
+              axisLine={false} 
+              tickLine={false}
+            />
             <Tooltip content={renderTooltipContent} />
             <Bar dataKey="minutes" fill="#4f46e5" radius={[3, 3, 0, 0]} />
             <Bar dataKey="calories" fill="#10b981" radius={[3, 3, 0, 0]} />
           </BarChart>
         ) : chartType === "line" ? (
-          <LineChart data={weeklyData} margin={{ top: 5, right: 20, left: 5, bottom: 5 }}>
+          <LineChart 
+            data={weeklyData} 
+            margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="day" />
-            <YAxis />
+            <XAxis 
+              dataKey="day" 
+              axisLine={false} 
+              tickLine={false}
+            />
+            <YAxis 
+              axisLine={false} 
+              tickLine={false}
+            />
             <Tooltip content={renderTooltipContent} />
             <Line type="monotone" dataKey="minutes" stroke="#4f46e5" strokeWidth={2} dot={{ r: 3 }} />
             <Line type="monotone" dataKey="calories" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
           </LineChart>
         ) : (
-          <AreaChart data={weeklyData} margin={{ top: 5, right: 20, left: 5, bottom: 5 }}>
+          <AreaChart 
+            data={weeklyData} 
+            margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="day" />
-            <YAxis />
+            <XAxis 
+              dataKey="day" 
+              axisLine={false} 
+              tickLine={false}
+            />
+            <YAxis 
+              axisLine={false} 
+              tickLine={false}
+            />
             <Tooltip content={renderTooltipContent} />
             <Area type="monotone" dataKey="minutes" fill="#4f46e5" stroke="#4f46e5" fillOpacity={0.3} />
             <Area type="monotone" dataKey="calories" fill="#10b981" stroke="#10b981" fillOpacity={0.3} />

@@ -31,8 +31,17 @@ export function ProgressChart({ progressHistory, progressMetric }: ProgressChart
           margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
-          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+          <XAxis 
+            dataKey="week" 
+            axisLine={false} 
+            tickLine={false} 
+            tick={{ fontSize: 12 }} 
+          />
+          <YAxis 
+            axisLine={false} 
+            tickLine={false} 
+            tick={{ fontSize: 12 }} 
+          />
           <Tooltip
             content={({ active, payload, label }) => {
               if (active && payload && payload.length) {

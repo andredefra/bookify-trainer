@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { 
   BarChart, 
   Bar, 
@@ -70,15 +70,27 @@ export function ClientPerformance() {
           <h3 className="text-base font-medium mb-4">Client Performance Metrics</h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={performanceData}>
+              <LineChart 
+                data={performanceData}
+                margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
+                <XAxis 
+                  dataKey="name" 
+                  stroke="#94a3b8" 
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis 
+                  stroke="#94a3b8"
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip 
                   formatter={(value) => [`${value}%`, '']}
                   contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
                 />
-                <Legend />
+                <Legend iconSize={10} />
                 <Line 
                   type="monotone" 
                   dataKey="attendance" 
@@ -114,9 +126,9 @@ export function ClientPerformance() {
         <Card>
           <CardContent className="pt-6">
             <h3 className="text-base font-medium mb-4">Client Retention</h3>
-            <div className="h-[300px]">
+            <div className="h-[300px] flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                   <Pie
                     data={retentionData}
                     cx="50%"
@@ -151,11 +163,22 @@ export function ClientPerformance() {
                 <BarChart 
                   data={goalAchievementData}
                   layout="vertical"
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                  margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-                  <XAxis type="number" domain={[0, 100]} />
-                  <YAxis type="category" dataKey="name" width={100} />
+                  <XAxis 
+                    type="number" 
+                    domain={[0, 100]}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis 
+                    type="category" 
+                    dataKey="name" 
+                    width={70}
+                    axisLine={false}
+                    tickLine={false}
+                  />
                   <Tooltip 
                     formatter={(value) => [`${value}%`, '']}
                     contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}

@@ -23,7 +23,7 @@ export function ChartHeader({
   showChartTypeSelector = true 
 }: ChartHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
       <div>
         <CardTitle className="text-base">{title}</CardTitle>
         <CardDescription className="text-sm">{description}</CardDescription>
