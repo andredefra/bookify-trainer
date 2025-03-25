@@ -12,12 +12,19 @@ import {
   Settings,
   CreditCard,
   LineChart,
-  Menu,
-  X
+  ChevronUp,
+  Circle
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger
+} from "@/components/ui/sheet";
+import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 interface DashboardSidebarProps {
   showSidebar: boolean;
@@ -32,6 +39,32 @@ export function DashboardSidebar({
 }: DashboardSidebarProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [isOpen, setIsOpen] = useState(false);
+  const [status, setStatus] = useState<"online" | "in-session" | "offline">(() => {
+    // Load status from localStorage if available
+    const savedStatus = localStorage.getItem('trainer-status');
+    if (savedStatus && ["online", "in-session", "offline"].includes(savedStatus)) {
+      return savedStatus as "online" | "in-session" | "offline";
+    }
+    return "online";
+  });
+
+  // Default profile image
+  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+
+  const handleStatusChange = (newStatus: "online" | "in-session" | "offline") => {
+    setStatus(newStatus);
+    // Save status to localStorage
+    localStorage.setItem('trainer-status', newStatus);
+    
+    // Show toast notification
+    const statusMessages = {
+      "online": "You're now shown as available to clients",
+      "in-session": "You're now shown as in a session",
+      "offline": "You're now shown as offline to clients"
+    };
+    
+    toast.success(statusMessages[newStatus]);
+  };
 
   const navigationItems = [
     {
@@ -58,6 +91,7 @@ export function DashboardSidebar({
       title: "Messages",
       icon: MessageSquare,
       href: "messages",
+      badge: 3,
     },
     {
       title: "Transactions",
@@ -81,59 +115,130 @@ export function DashboardSidebar({
     setIsOpen(false); // Close the sheet after selecting a tab
   };
 
-  // Mobile sidebar using Sheet component
+  // Mobile sidebar using bottom drawer with swipe gesture
   if (!isDesktop) {
+    // Only show the most important tabs in the mobile bottom navigation
+    const primaryNavItems = navigationItems.slice(0, 5);
+    
     return (
-      <div className="block lg:hidden fixed bottom-4 left-4 z-50">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full shadow-lg bg-white">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-[80%] max-w-[280px]">
-            <div className="bg-white h-full flex flex-col">
-              <div className="flex items-center justify-between px-4 py-3 border-b">
-                <h2 className="font-semibold text-primary">Dashboard</h2>
-                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-                  <X className="h-4 w-4" />
-                </Button>
+      <>
+        {/* Bottom Navigation Bar */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex justify-around py-2">
+          {primaryNavItems.map((item) => (
+            <button
+              key={item.href}
+              onClick={() => handleTabClick(item.href)}
+              className={`flex flex-col items-center justify-center px-2 py-1 relative ${
+                activeTab === item.href ? "text-primary" : "text-gray-500"
+              }`}
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="text-xs mt-1">{item.title}</span>
+              {item.badge && (
+                <Badge className="absolute -top-1 -right-1 h-4 min-w-4 p-0 flex items-center justify-center">
+                  {item.badge}
+                </Badge>
+              )}
+            </button>
+          ))}
+          
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <button className="flex flex-col items-center justify-center px-2 py-1 text-gray-500">
+                <ChevronUp className="w-5 h-5" />
+                <span className="text-xs mt-1">More</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-xl border-t-0">
+              <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-2.5 mb-4" />
+              
+              {/* Header with trainer profile and status in mobile sheet */}
+              <div className="p-4 border-b">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={defaultImage} />
+                      <AvatarFallback>T</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">Trainer</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <Circle 
+                            className={cn("h-2.5 w-2.5 fill-current", {
+                              "text-emerald-500": status === "online",
+                              "text-amber-500": status === "in-session",
+                              "text-slate-500": status === "offline",
+                            })} 
+                          />
+                          <span className="text-xs text-gray-500">
+                            {status === "online" ? "Available" : 
+                             status === "in-session" ? "In Session" : "Offline"}
+                          </span>
+                        </div>
+                        <Badge variant="secondary" className="bg-primary/10 text-primary text-xs h-5">
+                          Pro
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="h-8 px-2 text-xs"
+                      onClick={() => handleStatusChange(
+                        status === "online" ? "in-session" : 
+                        status === "in-session" ? "offline" : "online"
+                      )}
+                    >
+                      Change Status
+                    </Button>
+                  </div>
+                </div>
               </div>
-              <ScrollArea className="flex-1">
-                <div className="flex flex-col space-y-1 px-2 py-4">
+
+              <ScrollArea className="h-[calc(85vh-8rem)] py-2">
+                <div className="flex flex-col space-y-1 px-2 py-2">
                   {navigationItems.map((item) => (
                     <Button
                       key={item.href}
                       variant={activeTab === item.href ? "default" : "ghost"}
-                      className="justify-start"
+                      className="justify-start relative"
                       onClick={() => handleTabClick(item.href)}
                     >
                       <item.icon className="w-5 h-5 mr-2" />
                       <span>{item.title}</span>
+                      {item.badge && (
+                        <Badge className="ml-auto">{item.badge}</Badge>
+                      )}
                     </Button>
                   ))}
                 </div>
-                <Separator className="my-2" />
+                
+                <Separator className="my-4" />
+                
                 <div className="px-4 py-2">
                   <div className="text-sm font-medium text-muted-foreground mb-2">
                     Upcoming
                   </div>
                   <div className="flex flex-col space-y-2">
-                    <div className="bg-muted/30 p-2 rounded-md">
+                    <div className="bg-muted/30 p-3 rounded-md">
                       <p className="text-sm font-medium">Sarah J. Session</p>
                       <p className="text-xs text-muted-foreground">Today, 2:00 PM</p>
                     </div>
-                    <div className="bg-muted/30 p-2 rounded-md">
+                    <div className="bg-muted/30 p-3 rounded-md">
                       <p className="text-sm font-medium">Mike P. Session</p>
                       <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
                     </div>
                   </div>
                 </div>
               </ScrollArea>
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </>
     );
   }
 

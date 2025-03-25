@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
@@ -49,10 +49,6 @@ export function DashboardContainer({ customName = "Alex" }: DashboardContainerPr
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(true);
 
-  const handleMobileMenuClick = () => {
-    setShowSidebar(!showSidebar);
-  };
-
   // Mock logout function
   const handleLogout = () => {
     console.log("Logging out...");
@@ -62,7 +58,7 @@ export function DashboardContainer({ customName = "Alex" }: DashboardContainerPr
     <div className="min-h-screen flex flex-col">
       <DashboardHeader 
         name={customName} 
-        onMobileMenuClick={handleMobileMenuClick}
+        onMobileMenuClick={() => {}} // No longer needed with our new navigation
         user={mockUser}
         onLogout={handleLogout}
       />
@@ -72,7 +68,7 @@ export function DashboardContainer({ customName = "Alex" }: DashboardContainerPr
           activeTab={activeTab} 
           setActiveTab={setActiveTab} 
         />
-        <main className="flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8">
+        <main className="flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8 pb-20 lg:pb-6">
           <div className="mx-auto max-w-6xl">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsContent value="overview" className="mt-0">
