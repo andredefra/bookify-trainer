@@ -1,5 +1,5 @@
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { useState } from "react";
 import { 
   BarChart, 
   Bar, 
@@ -12,193 +12,166 @@ import {
   Line,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  ResponsiveContainer
 } from "recharts";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
-// Mock data for client performance
-const sessionCompletionRate = [
-  { name: 'Jan', completed: 85, canceled: 15 },
-  { name: 'Feb', completed: 88, canceled: 12 },
-  { name: 'Mar', completed: 90, canceled: 10 },
-  { name: 'Apr', completed: 92, canceled: 8 },
-  { name: 'May', completed: 95, canceled: 5 },
-  { name: 'Jun', completed: 93, canceled: 7 },
+// Mock data for client performance analytics
+const performanceData = [
+  { name: 'Week 1', attendance: 80, progress: 60, satisfaction: 75 },
+  { name: 'Week 2', attendance: 85, progress: 65, satisfaction: 80 },
+  { name: 'Week 3', attendance: 90, progress: 70, satisfaction: 85 },
+  { name: 'Week 4', attendance: 88, progress: 75, satisfaction: 90 },
+  { name: 'Week 5', attendance: 92, progress: 80, satisfaction: 88 },
+  { name: 'Week 6', attendance: 95, progress: 85, satisfaction: 92 },
 ];
 
-const clientProgress = [
-  { name: 'Jan', weight: 2, strength: 5, cardio: 3 },
-  { name: 'Feb', weight: 4, strength: 7, cardio: 6 },
-  { name: 'Mar', weight: 5, strength: 8, cardio: 7 },
-  { name: 'Apr', weight: 7, strength: 9, cardio: 8 },
-  { name: 'May', weight: 8, strength: 10, cardio: 8 },
-  { name: 'Jun', weight: 9, strength: 12, cardio: 10 },
+const retentionData = [
+  { name: '1-3 months', value: 45, color: '#FF8042' },
+  { name: '3-6 months', value: 30, color: '#FFBB28' },
+  { name: '6-12 months', value: 15, color: '#00C49F' },
+  { name: '1+ year', value: 10, color: '#0088FE' },
 ];
 
-const clientRetention = [
-  { name: 'Active', value: 65 },
-  { name: 'Inactive', value: 20 },
-  { name: 'New', value: 15 },
+const goalAchievementData = [
+  { name: 'Weight Loss', achieved: 65, total: 100 },
+  { name: 'Strength', achieved: 80, total: 100 },
+  { name: 'Endurance', achieved: 70, total: 100 },
+  { name: 'Flexibility', achieved: 55, total: 100 },
 ];
 
 // Colors for pie chart
-const COLORS = ['#10b981', '#f97316', '#4f46e5'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export function ClientPerformance() {
-  // Calculate summary metrics
-  const activeClients = clientRetention.find((segment) => segment.name === 'Active')?.value || 0;
-  const totalClients = clientRetention.reduce((sum, segment) => sum + segment.value, 0);
-  const retentionRate = (activeClients / totalClients) * 100;
-  const avgCompletionRate = sessionCompletionRate.reduce((sum, month) => sum + month.completed, 0) / sessionCompletionRate.length;
+  const [timeframe, setTimeframe] = useState("weekly");
   
   return (
-    <div className="space-y-4">
-      {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <div className="text-sm font-medium text-muted-foreground">Client Retention</div>
-          <div className="text-xl font-bold mt-1">{retentionRate.toFixed(1)}%</div>
-          <div className="text-xs text-muted-foreground mt-1">Active clients</div>
-        </div>
-        
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <div className="text-sm font-medium text-muted-foreground">Session Completion</div>
-          <div className="text-xl font-bold mt-1">{avgCompletionRate.toFixed(1)}%</div>
-          <div className="text-xs text-muted-foreground mt-1">Average completion rate</div>
-        </div>
-        
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <div className="text-sm font-medium text-muted-foreground">Client Progress</div>
-          <div className="text-xl font-bold mt-1">+{clientProgress[clientProgress.length - 1].weight}</div>
-          <div className="text-xs text-muted-foreground mt-1">Avg. weight loss (kg)</div>
-        </div>
+    <div className="space-y-6">
+      {/* Filter controls */}
+      <div className="flex justify-end">
+        <Select value={timeframe} onValueChange={setTimeframe}>
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Timeframe" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="weekly">Weekly</SelectItem>
+            <SelectItem value="monthly">Monthly</SelectItem>
+            <SelectItem value="quarterly">Quarterly</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       
-      {/* Session Completion Chart */}
-      <div className="bg-white p-3 rounded-lg border shadow-sm">
-        <h3 className="text-base font-medium mb-2">Session Completion Rate</h3>
-        <div className="w-full" style={{ height: "200px" }}>
-          <ChartContainer
-            config={{
-              completed: {
-                label: "Completed",
-                color: "#10b981"
-              },
-              canceled: {
-                label: "Canceled",
-                color: "#f97316"
-              }
-            }}
-          >
-            <BarChart data={sessionCompletionRate}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
-              <YAxis 
-                stroke="#94a3b8" 
-                tick={{ fontSize: 10 }}
-                tickFormatter={(value) => `${value}%`} 
-              />
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    formatter={(value) => [`${value}%`, ""]}
-                  />
-                }
-              />
-              <Legend iconSize={8} fontSize={10} />
-              <Bar dataKey="completed" fill="#10b981" stackId="a" radius={[4, 4, 0, 0]} maxBarSize={20} />
-              <Bar dataKey="canceled" fill="#f97316" stackId="a" radius={[4, 4, 0, 0]} maxBarSize={20} />
-            </BarChart>
-          </ChartContainer>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Client Progress Chart */}
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <h3 className="text-base font-medium mb-2">Client Progress</h3>
-          <div className="w-full" style={{ height: "200px" }}>
-            <ChartContainer
-              config={{
-                weight: {
-                  label: "Weight Loss",
-                  color: "#4f46e5"
-                },
-                strength: {
-                  label: "Strength",
-                  color: "#10b981"
-                },
-                cardio: {
-                  label: "Cardio",
-                  color: "#f97316"
-                }
-              }}
-            >
-              <LineChart data={clientProgress}>
+      {/* Performance Metrics Chart */}
+      <Card>
+        <CardContent className="pt-6">
+          <h3 className="text-base font-medium mb-4">Client Performance Metrics</h3>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={performanceData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
-                <YAxis stroke="#94a3b8" tick={{ fontSize: 10 }} />
-                <ChartTooltip
-                  content={
-                    <ChartTooltipContent />
-                  }
+                <XAxis dataKey="name" stroke="#94a3b8" />
+                <YAxis stroke="#94a3b8" />
+                <Tooltip 
+                  formatter={(value) => [`${value}%`, '']}
+                  contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
                 />
-                <Legend iconSize={8} fontSize={10} />
+                <Legend />
                 <Line 
                   type="monotone" 
-                  dataKey="weight" 
+                  dataKey="attendance" 
                   stroke="#4f46e5" 
                   strokeWidth={2}
                   dot={{ r: 3 }}
-                  activeDot={{ r: 4 }}
+                  activeDot={{ r: 5 }}
                 />
                 <Line 
                   type="monotone" 
-                  dataKey="strength" 
+                  dataKey="progress" 
                   stroke="#10b981" 
                   strokeWidth={2}
                   dot={{ r: 3 }}
-                  activeDot={{ r: 4 }}
+                  activeDot={{ r: 5 }}
                 />
                 <Line 
                   type="monotone" 
-                  dataKey="cardio" 
-                  stroke="#f97316" 
+                  dataKey="satisfaction" 
+                  stroke="#f59e0b" 
                   strokeWidth={2}
                   dot={{ r: 3 }}
-                  activeDot={{ r: 4 }}
+                  activeDot={{ r: 5 }}
                 />
               </LineChart>
-            </ChartContainer>
+            </ResponsiveContainer>
           </div>
-        </div>
+        </CardContent>
+      </Card>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Client Retention */}
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-base font-medium mb-4">Client Retention</h3>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={retentionData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={3}
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    labelLine={true}
+                  >
+                    {retentionData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => [`${value}%`, 'Clients']}
+                    contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
         
-        {/* Client Retention Chart */}
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <h3 className="text-base font-medium mb-2">Client Retention</h3>
-          <div className="flex justify-center items-center" style={{ height: "200px" }}>
-            <PieChart width={200} height={200}>
-              <Pie
-                data={clientRetention}
-                cx={100}
-                cy={100}
-                innerRadius={40}
-                outerRadius={60}
-                startAngle={90}
-                endAngle={-270}
-                paddingAngle={5}
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                labelLine={false}
-                fontSize={9}
-              >
-                {clientRetention.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value) => [`${value}%`, '']} />
-            </PieChart>
-          </div>
-        </div>
+        {/* Goal Achievement */}
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-base font-medium mb-4">Goal Achievement</h3>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart 
+                  data={goalAchievementData}
+                  layout="vertical"
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+                  <XAxis type="number" domain={[0, 100]} />
+                  <YAxis type="category" dataKey="name" width={100} />
+                  <Tooltip 
+                    formatter={(value) => [`${value}%`, '']}
+                    contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                  />
+                  <Bar 
+                    dataKey="achieved" 
+                    fill="#4f46e5" 
+                    radius={[0, 4, 4, 0]}
+                    barSize={30}
+                    label={{ position: 'right', formatter: (value) => `${value}%`, fill: '#6b7280', fontSize: 12 }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

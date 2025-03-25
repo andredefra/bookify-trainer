@@ -26,11 +26,11 @@ export function ChartHeader({
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
       <div>
         <CardTitle className="text-base">{title}</CardTitle>
-        <CardDescription className="text-xs">{description}</CardDescription>
+        <CardDescription className="text-sm">{description}</CardDescription>
       </div>
       <div className="flex flex-wrap gap-2">
         <Select value={timeframe} onValueChange={onTimeframeChange}>
-          <SelectTrigger className="w-[100px] h-7 text-xs">
+          <SelectTrigger className="w-[120px] h-8">
             <SelectValue placeholder="Timeframe" />
           </SelectTrigger>
           <SelectContent>
@@ -42,7 +42,7 @@ export function ChartHeader({
         
         {showChartTypeSelector && (
           <Select value={chartType} onValueChange={onChartTypeChange}>
-            <SelectTrigger className="w-[100px] h-7 text-xs">
+            <SelectTrigger className="w-[120px] h-8">
               <SelectValue placeholder="Chart Type" />
             </SelectTrigger>
             <SelectContent>

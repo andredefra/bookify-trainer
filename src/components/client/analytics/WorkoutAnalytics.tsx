@@ -27,7 +27,7 @@ export function WorkoutAnalytics({
 
   return (
     <Card className="col-span-12 border bg-white shadow-sm">
-      <CardHeader className="pb-0 pt-3 px-3">
+      <CardHeader className="pb-0 pt-4 px-4">
         <ChartHeader 
           title="Workout Analytics"
           description="Track your workout patterns and progress"
@@ -37,43 +37,43 @@ export function WorkoutAnalytics({
           onChartTypeChange={setChartType}
         />
       </CardHeader>
-      <CardContent className="p-1">
-        <Tabs defaultValue="activity" className="space-y-0">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1 mb-2 bg-slate-50/80 p-1 rounded-md w-full border">
-            <TabsTrigger value="activity" className="flex items-center justify-center gap-1 text-xs py-1 px-2">
-              <BarChart2 className="h-3 w-3" />
+      <CardContent className="p-4">
+        <Tabs defaultValue="activity" className="space-y-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 bg-slate-50/80 p-1 rounded-md w-full border">
+            <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-2">
+              <BarChart2 className="h-4 w-4 mr-1" />
               <span>Activity</span>
             </TabsTrigger>
-            <TabsTrigger value="types" className="flex items-center justify-center gap-1 text-xs py-1 px-2">
-              <PieChartIcon className="h-3 w-3" />
+            <TabsTrigger value="types" className="flex items-center justify-center gap-1 py-2">
+              <PieChartIcon className="h-4 w-4 mr-1" />
               <span>Workout Types</span>
             </TabsTrigger>
-            <TabsTrigger value="goals" className="flex items-center justify-center gap-1 text-xs py-1 px-2">
-              <AreaChartIcon className="h-3 w-3" />
+            <TabsTrigger value="goals" className="flex items-center justify-center gap-1 py-2">
+              <AreaChartIcon className="h-4 w-4 mr-1" />
               <span>Monthly Goals</span>
             </TabsTrigger>
-            <TabsTrigger value="progress" className="flex items-center justify-center gap-1 text-xs py-1 px-2">
-              <LineChartIcon className="h-3 w-3" />
+            <TabsTrigger value="progress" className="flex items-center justify-center gap-1 py-2">
+              <LineChartIcon className="h-4 w-4 mr-1" />
               <span>Progress</span>
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="activity" className="m-0 p-0">
+          <TabsContent value="activity" className="mt-0">
             <WeeklyActivityChart weeklyData={weeklyData} chartType={chartType} />
           </TabsContent>
           
-          <TabsContent value="types" className="m-0 p-0">
+          <TabsContent value="types" className="mt-0">
             <WorkoutTypesChart workoutTypes={workoutTypes} />
           </TabsContent>
           
-          <TabsContent value="goals" className="m-0 p-0">
+          <TabsContent value="goals" className="mt-0">
             <MonthlyGoalsChart monthlyData={monthlyData} />
           </TabsContent>
           
-          <TabsContent value="progress" className="m-0 p-0">
-            <div className="flex justify-end mb-1">
+          <TabsContent value="progress" className="mt-0">
+            <div className="flex justify-end mb-2">
               <Select value={progressMetric} onValueChange={setProgressMetric}>
-                <SelectTrigger className="w-[100px] h-6 text-xs">
+                <SelectTrigger className="w-[140px] h-8">
                   <SelectValue placeholder="Metric" />
                 </SelectTrigger>
                 <SelectContent>
