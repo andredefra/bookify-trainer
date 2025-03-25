@@ -31,9 +31,13 @@ const Hero = () => {
     console.log("Attempting to load dashboard image");
   }, []);
   
-  return <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden" style={{
-    background: 'radial-gradient(circle at 50% 50%, rgba(245, 245, 247, 0.5) 0%, rgba(250, 250, 252, 0.2) 100%)'
-  }}>
+  return <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden" 
+    style={{
+      backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.93)), url("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center space-y-8 md:space-y-10">
           <h1 className="reveal text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight text-primary mx-auto max-w-4xl md:leading-tight text-balance">The All-in-One Platform for Personal Trainers</h1>
