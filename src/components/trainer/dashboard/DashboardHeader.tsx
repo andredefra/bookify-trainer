@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Circle } from "lucide-react";
+import { Circle, Menu } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -70,6 +70,17 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
+            {isMobile && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={onMobileMenuClick}
+                className="mr-2"
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle sidebar</span>
+              </Button>
+            )}
             <span className="font-display text-xl font-bold text-primary">Personal.ai</span>
           </div>
           <div className="flex items-center space-x-4">
@@ -122,6 +133,25 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
                 )}
               </div>
             )}
+            {isMobile ? (
+              <div className="flex items-center">
+                <div className="mr-2">
+                  <Circle 
+                    className={`h-3 w-3 ${
+                      status === "online" ? "text-emerald-500 fill-emerald-500" :
+                      status === "in-session" ? "text-amber-500 fill-amber-500" :
+                      "text-slate-500 fill-slate-500"
+                    }`} 
+                  />
+                </div>
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.profileImage || defaultImage} alt={displayName} />
+                  <AvatarFallback className="bg-primary/10 text-primary">
+                    {displayName.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            ) : null}
             <Button variant="outline" size="sm" onClick={onLogout}>
               Log out
             </Button>

@@ -1,8 +1,8 @@
-
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
   LayoutDashboard,
   Users,
@@ -12,33 +12,30 @@ import {
   Settings,
   CreditCard,
   LineChart,
-  ChevronUp,
+  X,
   Circle
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger
-} from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface DashboardSidebarProps {
   showSidebar: boolean;
+  setShowSidebar: (show: boolean) => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }
 
 export function DashboardSidebar({
   showSidebar,
+  setShowSidebar,
   activeTab,
   setActiveTab,
 }: DashboardSidebarProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-  const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState<"online" | "in-session" | "offline">(() => {
     // Load status from localStorage if available
     const savedStatus = localStorage.getItem('trainer-status');
@@ -112,133 +109,124 @@ export function DashboardSidebar({
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    setIsOpen(false); // Close the sheet after selecting a tab
+    
+    // Only close the sidebar on mobile when a tab is clicked
+    if (!isDesktop) {
+      setShowSidebar(false);
+    }
   };
 
-  // Mobile sidebar using bottom drawer with swipe gesture
+  // Mobile sidebar using Sheet component
   if (!isDesktop) {
-    // Only show the most important tabs in the mobile bottom navigation
-    const primaryNavItems = navigationItems.slice(0, 5);
-    
     return (
-      <>
-        {/* Bottom Navigation Bar */}
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex justify-around py-2">
-          {primaryNavItems.map((item) => (
-            <button
-              key={item.href}
-              onClick={() => handleTabClick(item.href)}
-              className={`flex flex-col items-center justify-center px-2 py-1 relative ${
-                activeTab === item.href ? "text-primary" : "text-gray-500"
-              }`}
-            >
-              <item.icon className="w-5 h-5" />
-              <span className="text-xs mt-1">{item.title}</span>
-              {item.badge && (
-                <Badge className="absolute -top-1 -right-1 h-4 min-w-4 p-0 flex items-center justify-center">
-                  {item.badge}
-                </Badge>
-              )}
-            </button>
-          ))}
-          
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <button className="flex flex-col items-center justify-center px-2 py-1 text-gray-500">
-                <ChevronUp className="w-5 h-5" />
-                <span className="text-xs mt-1">More</span>
-              </button>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-xl border-t-0">
-              <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-2.5 mb-4" />
-              
-              {/* Header with trainer profile and status in mobile sheet */}
-              <div className="p-4 border-b">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={defaultImage} />
-                      <AvatarFallback>T</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">Trainer</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <div className="flex items-center gap-1.5">
-                          <Circle 
-                            className={cn("h-2.5 w-2.5 fill-current", {
-                              "text-emerald-500": status === "online",
-                              "text-amber-500": status === "in-session",
-                              "text-slate-500": status === "offline",
-                            })} 
-                          />
-                          <span className="text-xs text-gray-500">
-                            {status === "online" ? "Available" : 
-                             status === "in-session" ? "In Session" : "Offline"}
-                          </span>
-                        </div>
-                        <Badge variant="secondary" className="bg-primary/10 text-primary text-xs h-5">
-                          Pro
-                        </Badge>
-                      </div>
-                    </div>
+      <Sheet open={showSidebar} onOpenChange={setShowSidebar}>
+        <SheetContent side="left" className="p-0 w-[270px] max-w-[80vw]">
+          <div className="flex flex-col h-full">
+            {/* Mobile sidebar header with profile info */}
+            <div className="border-b p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={defaultImage} alt="Trainer" />
+                    <AvatarFallback>T</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-medium">Trainer</p>
+                    <Badge variant="secondary" className="bg-primary/10 text-primary text-xs h-5 mt-1">
+                      Pro
+                    </Badge>
                   </div>
-                  
-                  <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      className="h-8 px-2 text-xs"
-                      onClick={() => handleStatusChange(
-                        status === "online" ? "in-session" : 
-                        status === "in-session" ? "offline" : "online"
-                      )}
-                    >
-                      Change Status
-                    </Button>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => setShowSidebar(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              {/* Status selector */}
+              <div className="mt-3">
+                <Select value={status} onValueChange={(value) => handleStatusChange(value as "online" | "in-session" | "offline")}>
+                  <SelectTrigger className="w-full h-9">
+                    <div className="flex items-center space-x-2">
+                      <Circle className={cn("h-3 w-3 fill-current", {
+                        "text-emerald-500": status === "online",
+                        "text-amber-500": status === "in-session",
+                        "text-slate-500": status === "offline",
+                      })} />
+                      <span>
+                        {status === "online" ? "Available" : 
+                         status === "in-session" ? "In Session" : "Offline"}
+                      </span>
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="online">
+                      <div className="flex items-center">
+                        <Circle className="h-3 w-3 mr-2 text-emerald-500 fill-emerald-500" />
+                        <span>Available</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="in-session">
+                      <div className="flex items-center">
+                        <Circle className="h-3 w-3 mr-2 text-amber-500 fill-amber-500" />
+                        <span>In Session</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="offline">
+                      <div className="flex items-center">
+                        <Circle className="h-3 w-3 mr-2 text-slate-500 fill-slate-500" />
+                        <span>Offline</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            {/* Navigation menu */}
+            <ScrollArea className="flex-1">
+              <div className="flex flex-col space-y-1 p-2">
+                {navigationItems.map((item) => (
+                  <Button
+                    key={item.href}
+                    variant={activeTab === item.href ? "default" : "ghost"}
+                    className="justify-start relative"
+                    onClick={() => handleTabClick(item.href)}
+                  >
+                    <item.icon className="w-5 h-5 mr-2" />
+                    <span>{item.title}</span>
+                    {item.badge && (
+                      <Badge className="ml-auto">{item.badge}</Badge>
+                    )}
+                  </Button>
+                ))}
+              </div>
+              
+              <Separator className="my-4" />
+              
+              {/* Upcoming sessions section */}
+              <div className="p-2">
+                <div className="text-sm font-medium text-muted-foreground mb-2">
+                  Upcoming
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <div className="bg-muted/30 p-3 rounded-md">
+                    <p className="text-sm font-medium">Sarah J. Session</p>
+                    <p className="text-xs text-muted-foreground">Today, 2:00 PM</p>
+                  </div>
+                  <div className="bg-muted/30 p-3 rounded-md">
+                    <p className="text-sm font-medium">Mike P. Session</p>
+                    <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
                   </div>
                 </div>
               </div>
-
-              <ScrollArea className="h-[calc(85vh-8rem)] py-2">
-                <div className="flex flex-col space-y-1 px-2 py-2">
-                  {navigationItems.map((item) => (
-                    <Button
-                      key={item.href}
-                      variant={activeTab === item.href ? "default" : "ghost"}
-                      className="justify-start relative"
-                      onClick={() => handleTabClick(item.href)}
-                    >
-                      <item.icon className="w-5 h-5 mr-2" />
-                      <span>{item.title}</span>
-                      {item.badge && (
-                        <Badge className="ml-auto">{item.badge}</Badge>
-                      )}
-                    </Button>
-                  ))}
-                </div>
-                
-                <Separator className="my-4" />
-                
-                <div className="px-4 py-2">
-                  <div className="text-sm font-medium text-muted-foreground mb-2">
-                    Upcoming
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    <div className="bg-muted/30 p-3 rounded-md">
-                      <p className="text-sm font-medium">Sarah J. Session</p>
-                      <p className="text-xs text-muted-foreground">Today, 2:00 PM</p>
-                    </div>
-                    <div className="bg-muted/30 p-3 rounded-md">
-                      <p className="text-sm font-medium">Mike P. Session</p>
-                      <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
-                    </div>
-                  </div>
-                </div>
-              </ScrollArea>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </>
+            </ScrollArea>
+          </div>
+        </SheetContent>
+      </Sheet>
     );
   }
 

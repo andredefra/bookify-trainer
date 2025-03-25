@@ -47,7 +47,7 @@ const mockUser = {
 
 export function DashboardContainer({ customName = "Alex" }: DashboardContainerProps) {
   const [activeTab, setActiveTab] = useState("overview");
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   // Mock logout function
   const handleLogout = () => {
@@ -58,13 +58,14 @@ export function DashboardContainer({ customName = "Alex" }: DashboardContainerPr
     <div className="min-h-screen flex flex-col">
       <DashboardHeader 
         name={customName} 
-        onMobileMenuClick={() => {}} // No longer needed with our new navigation
+        onMobileMenuClick={() => setShowSidebar(!showSidebar)}
         user={mockUser}
         onLogout={handleLogout}
       />
       <div className="flex flex-1 overflow-hidden">
         <DashboardSidebar 
           showSidebar={showSidebar} 
+          setShowSidebar={setShowSidebar}
           activeTab={activeTab} 
           setActiveTab={setActiveTab} 
         />
