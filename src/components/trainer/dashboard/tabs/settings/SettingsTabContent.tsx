@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 import { ProfileSection } from "./ProfileSection";
 import { AvailabilitySection } from "./AvailabilitySection";
@@ -23,6 +24,12 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
   if (!user) return null;
   
   const [selectedTab, setSelectedTab] = useState("profile");
+
+  const handleSaveChanges = () => {
+    // Here you would typically save the changes to a database
+    // For this demo, we'll just show a success toast
+    toast.success("Settings saved successfully");
+  };
 
   return (
     <Card>
@@ -57,7 +64,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
         </Tabs>
       </CardContent>
       <CardFooter className="border-t flex justify-end pt-6">
-        <Button>Save Changes</Button>
+        <Button onClick={handleSaveChanges}>Save Changes</Button>
       </CardFooter>
     </Card>
   );
