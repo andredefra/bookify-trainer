@@ -127,29 +127,31 @@ export function ClientPerformance() {
           <CardContent className="pt-6">
             <h3 className="text-base font-medium mb-4">Client Retention</h3>
             <div className="h-[300px] flex items-center justify-center">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
-                  <Pie
-                    data={retentionData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={3}
-                    dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={true}
-                  >
-                    {retentionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    formatter={(value) => [`${value}%`, 'Clients']}
-                    contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <div className="h-[200px] w-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={retentionData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={80}
+                      paddingAngle={3}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      labelLine={true}
+                    >
+                      {retentionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      formatter={(value) => [`${value}%`, 'Clients']}
+                      contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
