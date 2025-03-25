@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Calendar, Share, CreditCard } from 'lucide-react';
 
 const HowItWorks = () => {
   useEffect(() => {
@@ -28,19 +28,19 @@ const HowItWorks = () => {
       number: "01",
       title: "Create your profile and sync your Google Calendar",
       description: "Set up your profile with your services, pricing, and availability. Connect your Google Calendar to sync your existing schedule.",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop"
+      icon: Calendar
     },
     {
       number: "02",
       title: "Share your personal page and set session rules",
       description: "Share your custom URL with clients. Set up your working hours, session types, and booking rules.",
-      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop"
+      icon: Share
     },
     {
       number: "03",
       title: "Get booked and paid automatically via Stripe",
       description: "Clients book available slots and pre-authorize payment. Get paid automatically after sessions are completed.",
-      image: "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?q=80&w=2072&auto=format&fit=crop"
+      icon: CreditCard
     }
   ];
 
@@ -57,35 +57,34 @@ const HowItWorks = () => {
         </div>
 
         <div className="space-y-12 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
-          {steps.map((step, index) => (
-            <div 
-              key={index} 
-              className={`reveal reveal-delay-${index} relative`}
-            >
-              <div className="flex flex-col h-full bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={step.image} 
-                    alt={`Step ${index + 1}: ${step.title}`} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="mb-4">
-                    <span className="text-5xl font-display font-bold text-primary/10">{step.number}</span>
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <div 
+                key={index} 
+                className={`reveal reveal-delay-${index} relative`}
+              >
+                <div className="flex flex-col h-full bg-white rounded-2xl shadow-sm overflow-hidden">
+                  <div className="h-48 flex items-center justify-center bg-primary/5">
+                    <Icon className="w-24 h-24 text-primary/60" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.description}</p>
-                </div>
-                
-                {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-10 left-full w-16 transform -translate-x-8">
-                    <ArrowRight className="w-6 h-6 text-primary/20" />
+                  <div className="p-6">
+                    <div className="mb-4">
+                      <span className="text-5xl font-display font-bold text-primary/10">{step.number}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+                    <p className="text-muted-foreground">{step.description}</p>
                   </div>
-                )}
+                  
+                  {index < steps.length - 1 && (
+                    <div className="hidden md:block absolute top-10 left-full w-16 transform -translate-x-8">
+                      <ArrowRight className="w-6 h-6 text-primary/20" />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-24 max-w-4xl mx-auto">
