@@ -1,7 +1,10 @@
 
+import { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 
 interface SessionItem {
   id: number;
@@ -33,19 +36,35 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
+  const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
+  
   return (
     <div className="space-y-6">
-      <UpcomingSessionsCard sessions={upcomingSessions} />
+      <UpcomingSessionsCard 
+        sessions={upcomingSessions} 
+        onNewSession={() => setShowCreateSessionDialog(true)} 
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <RecentClientsCard clients={clients} />
         <MessageRequestsCard messages={messageRequests} />
       </div>
+      
+      <CreateSessionDialog 
+        open={showCreateSessionDialog} 
+        onOpenChange={setShowCreateSessionDialog}
+        onSubmit={(data) => {
+          // Here you would typically save the session to your database
+          console.log("New session data:", data);
+          toast.success("Session created successfully!");
+          setShowCreateSessionDialog(false);
+        }}
+      />
     </div>
   );
 }
 
-function UpcomingSessionsCard({ sessions }: { sessions: SessionItem[] }) {
+function UpcomingSessionsCard({ sessions, onNewSession }: { sessions: SessionItem[], onNewSession: () => void }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -53,7 +72,7 @@ function UpcomingSessionsCard({ sessions }: { sessions: SessionItem[] }) {
           <CardTitle>Upcoming Sessions</CardTitle>
           <CardDescription>Your scheduled training sessions</CardDescription>
         </div>
-        <Button className="flex items-center">
+        <Button className="flex items-center" onClick={onNewSession}>
           <PlusCircle className="mr-2 h-4 w-4" />
           New Session
         </Button>

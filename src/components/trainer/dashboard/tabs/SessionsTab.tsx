@@ -1,8 +1,11 @@
 
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 
 interface SessionItem {
   id: number;
@@ -18,6 +21,8 @@ interface SessionsTabProps {
 }
 
 export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
+  const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
+  
   return (
     <Card>
       <CardHeader>
@@ -26,7 +31,7 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
             <CardTitle>Training Sessions</CardTitle>
             <CardDescription>Create and manage your training sessions</CardDescription>
           </div>
-          <Button className="flex items-center">
+          <Button className="flex items-center" onClick={() => setShowCreateSessionDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Create Session
           </Button>
@@ -75,6 +80,17 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
             </div>
           </TabsContent>
         </Tabs>
+        
+        <CreateSessionDialog 
+          open={showCreateSessionDialog} 
+          onOpenChange={setShowCreateSessionDialog}
+          onSubmit={(data) => {
+            // Here you would typically save the session to your database
+            console.log("New session data:", data);
+            toast.success("Session created successfully!");
+            setShowCreateSessionDialog(false);
+          }}
+        />
       </CardContent>
     </Card>
   );
