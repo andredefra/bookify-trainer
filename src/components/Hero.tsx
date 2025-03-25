@@ -67,11 +67,11 @@ const Hero = () => {
               </div>
             </div>
             <div className="bg-white p-0 m-0">
-              {/* Updated image to fit within container while showing entire image */}
+              {/* Mobile image with no padding/margin */}
               <img 
                 src="/lovable-uploads/60b9f4d1-45d1-4edb-a115-9c2a83d8df7c.png" 
                 alt="Trainer dashboard analytics" 
-                className="w-full h-[300px] md:h-[500px] object-contain object-center"
+                className="w-full h-[320px] md:h-[500px] object-contain object-center"
                 onError={(e) => {
                   console.error("Image failed to load, using fallback");
                   e.currentTarget.onerror = null;
