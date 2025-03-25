@@ -23,15 +23,15 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
   return (
     <div className="w-full h-[300px] flex flex-col items-center justify-center">
-      <div className="h-[200px] w-[200px]">
+      <div className="h-[180px] w-[180px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={workoutTypes}
               cx="50%"
               cy="50%"
-              innerRadius={40}
-              outerRadius={80}
+              innerRadius={30}
+              outerRadius={70}
               paddingAngle={3}
               fill="#8884d8"
               dataKey="value"
