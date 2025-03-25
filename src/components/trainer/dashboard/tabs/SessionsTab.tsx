@@ -7,24 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { Badge } from "@/components/ui/badge";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  time: string;
-  date: string;
-  participants: number;
-  maxParticipants: number;
-  waitingList?: number;
-  paymentStatus?: {
-    paid: number;
-    pending: number;
-    total: number;
-  };
-}
+import { TrainerSessionItem } from "./overview/UpcomingSessionsCard";
 
 interface SessionsTabProps {
-  upcomingSessions: SessionItem[];
+  upcomingSessions: TrainerSessionItem[];
 }
 
 export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
@@ -73,16 +59,16 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
                     </div>
                     <div className="flex mt-2 gap-2">
                       <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                        {session.paymentStatus.paid} paid
+                        {session.paymentStatus?.paid || 0} paid
                       </Badge>
-                      {session.paymentStatus.pending > 0 && (
+                      {(session.paymentStatus?.pending || 0) > 0 && (
                         <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                          {session.paymentStatus.pending} pending
+                          {session.paymentStatus?.pending || 0} pending
                         </Badge>
                       )}
-                      {session.waitingList > 0 && (
+                      {(session.waitingList || 0) > 0 && (
                         <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                          {session.waitingList} waiting
+                          {session.waitingList || 0} waiting
                         </Badge>
                       )}
                     </div>

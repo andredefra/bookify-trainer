@@ -16,4 +16,13 @@ export interface SessionItem {
   attendees?: number;
   maxAttendees?: number;
   description?: string;
+  // Additional properties for trainer dashboard
+  participants?: number;
+  maxParticipants?: number;
+  waitingList?: number;
+  paymentStatus?: {
+    paid: number;
+    pending: number;
+    total: number;
+  };
 }

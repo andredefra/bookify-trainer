@@ -11,13 +11,14 @@ import { MessagesTab } from "./tabs/MessagesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
+import { TrainerSessionItem } from "./tabs/overview/UpcomingSessionsCard";
 
 interface DashboardContainerProps {
   customName?: string;
 }
 
 // Mock data for sessions, clients, and messages
-const mockSessions = [
+const mockSessions: TrainerSessionItem[] = [
   { id: 1, name: "Personal Training", time: "10:00 AM", date: "Today", participants: 1, maxParticipants: 1 },
   { id: 2, name: "Group HIIT Class", time: "4:30 PM", date: "Tomorrow", participants: 8, maxParticipants: 12 },
   { id: 3, name: "Yoga Session", time: "7:00 PM", date: "Jul 25", participants: 5, maxParticipants: 10 },

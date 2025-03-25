@@ -3,10 +3,25 @@ import { PlusCircle } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SessionItem } from "@/types/sessions";
+
+// Define a TrainerSessionItem interface specifically for the trainer dashboard
+export interface TrainerSessionItem {
+  id: number;
+  name: string;
+  time: string;
+  date: string;
+  participants: number;
+  maxParticipants: number;
+  waitingList?: number;
+  paymentStatus?: {
+    paid: number;
+    pending: number;
+    total: number;
+  };
+}
 
 interface UpcomingSessionsCardProps {
-  sessions: SessionItem[];
+  sessions: TrainerSessionItem[];
   onNewSession: () => void;
 }
 
@@ -34,16 +49,16 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
                 </div>
                 <div className="flex mt-2 gap-2">
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    {session.paymentStatus.paid} paid
+                    {session.paymentStatus?.paid || 0} paid
                   </Badge>
-                  {session.paymentStatus.pending > 0 && (
+                  {(session.paymentStatus?.pending || 0) > 0 && (
                     <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                      {session.paymentStatus.pending} pending
+                      {session.paymentStatus?.pending || 0} pending
                     </Badge>
                   )}
-                  {session.waitingList > 0 && (
+                  {(session.waitingList || 0) > 0 && (
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                      {session.waitingList} waiting
+                      {session.waitingList || 0} waiting
                     </Badge>
                   )}
                 </div>

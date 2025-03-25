@@ -1,25 +1,10 @@
 
 import { useState } from "react";
-import { UpcomingSessionsCard } from "./overview/UpcomingSessionsCard";
+import { UpcomingSessionsCard, TrainerSessionItem } from "./overview/UpcomingSessionsCard";
 import { RecentClientsCard } from "./overview/RecentClientsCard";
 import { MessageRequestsCard } from "./overview/MessageRequestsCard";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { toast } from "sonner";
-
-interface SessionItem {
-  id: number;
-  name: string;
-  time: string;
-  date: string;
-  participants: number;
-  maxParticipants: number;
-  waitingList?: number;
-  paymentStatus?: {
-    paid: number;
-    pending: number;
-    total: number;
-  };
-}
 
 interface ClientItem {
   id: number;
@@ -36,7 +21,7 @@ interface MessageItem {
 }
 
 interface OverviewTabProps {
-  upcomingSessions: SessionItem[];
+  upcomingSessions: TrainerSessionItem[];
   clients: ClientItem[];
   messageRequests: MessageItem[];
 }
