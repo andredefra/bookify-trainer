@@ -121,7 +121,7 @@ const Features = () => {
               <img 
                 src="/lovable-uploads/60d8d824-f090-4fbc-8935-e858e4d59547.png" 
                 alt="Personal trainer profile" 
-                className="h-full w-auto object-contain"
+                className="max-h-[280px] w-auto object-contain"
               />
             </div>
           </div>
