@@ -1,5 +1,5 @@
 
-import { FitnessAppIntegration } from "@/components/client/settings/FitnessAppIntegration";
+import { FitnessAppIntegration } from "@/components/client/settings/fitness-integrations/FitnessAppIntegration";
 
 interface IntegrationsSectionProps {
   user: { 
