@@ -11,11 +11,13 @@ import {
   MessageSquare,
   Settings,
   CreditCard,
-  LineChart
+  LineChart,
+  Menu,
+  X
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { useState } from "react";
 
 interface DashboardSidebarProps {
   showSidebar: boolean;
@@ -29,6 +31,7 @@ export function DashboardSidebar({
   setActiveTab,
 }: DashboardSidebarProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigationItems = [
     {
@@ -73,11 +76,16 @@ export function DashboardSidebar({
     },
   ];
 
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    setIsOpen(false); // Close the sheet after selecting a tab
+  };
+
   // Mobile sidebar using Sheet component
   if (!isDesktop) {
     return (
-      <div className="block md:hidden fixed bottom-4 left-4 z-50">
-        <Sheet open={showSidebar} onOpenChange={(open) => setActiveTab(activeTab)}>
+      <div className="block lg:hidden fixed bottom-4 left-4 z-50">
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="rounded-full shadow-lg bg-white">
               <Menu className="h-5 w-5" />
@@ -85,38 +93,40 @@ export function DashboardSidebar({
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-[80%] max-w-[280px]">
             <div className="bg-white h-full flex flex-col">
-              <ScrollArea className="py-6 h-full">
-                <div className="flex flex-col flex-1 space-y-1 px-4">
+              <div className="flex items-center justify-between px-4 py-3 border-b">
+                <h2 className="font-semibold text-primary">Dashboard</h2>
+                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <ScrollArea className="flex-1">
+                <div className="flex flex-col space-y-1 px-2 py-4">
                   {navigationItems.map((item) => (
                     <Button
                       key={item.href}
                       variant={activeTab === item.href ? "default" : "ghost"}
                       className="justify-start"
-                      onClick={() => setActiveTab(item.href)}
+                      onClick={() => handleTabClick(item.href)}
                     >
                       <item.icon className="w-5 h-5 mr-2" />
                       <span>{item.title}</span>
                     </Button>
                   ))}
                 </div>
-                <Separator className="my-4" />
-                <div className="px-4">
+                <Separator className="my-2" />
+                <div className="px-4 py-2">
                   <div className="text-sm font-medium text-muted-foreground mb-2">
                     Upcoming
                   </div>
-                  <div className="flex flex-col space-y-1">
-                    <Button variant="ghost" className="justify-start cursor-default">
-                      <div className="flex flex-col items-start">
-                        <span className="text-xs">Sarah J. Session</span>
-                        <span className="text-xs text-muted-foreground">Today, 2:00 PM</span>
-                      </div>
-                    </Button>
-                    <Button variant="ghost" className="justify-start cursor-default">
-                      <div className="flex flex-col items-start">
-                        <span className="text-xs">Mike P. Session</span>
-                        <span className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</span>
-                      </div>
-                    </Button>
+                  <div className="flex flex-col space-y-2">
+                    <div className="bg-muted/30 p-2 rounded-md">
+                      <p className="text-sm font-medium">Sarah J. Session</p>
+                      <p className="text-xs text-muted-foreground">Today, 2:00 PM</p>
+                    </div>
+                    <div className="bg-muted/30 p-2 rounded-md">
+                      <p className="text-sm font-medium">Mike P. Session</p>
+                      <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
+                    </div>
                   </div>
                 </div>
               </ScrollArea>
@@ -128,15 +138,11 @@ export function DashboardSidebar({
   }
 
   // Desktop sidebar
-  if (!showSidebar && !isDesktop) {
-    return null;
-  }
-
   return (
     <div
       className={cn(
-        "pb-12 w-20 md:w-60 flex-shrink-0 bg-white border-r",
-        isDesktop ? "relative block" : "fixed inset-y-0 left-0 z-10"
+        "pb-12 w-20 md:w-60 flex-shrink-0 bg-white border-r hidden lg:block",
+        isDesktop ? "relative" : "fixed inset-y-0 left-0 z-10"
       )}
     >
       <ScrollArea className="py-6 h-full">
