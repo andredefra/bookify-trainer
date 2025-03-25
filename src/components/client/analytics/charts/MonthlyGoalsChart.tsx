@@ -8,8 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   Cell,
-  LabelList,
-  ResponsiveContainer
+  LabelList
 } from "recharts";
 
 interface MonthlyGoal {
@@ -24,8 +23,10 @@ interface MonthlyGoalsChartProps {
 
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={120}>
+    <div className="w-full h-[120px] flex justify-center">
       <BarChart
+        width={400}
+        height={120}
         layout="vertical"
         data={monthlyData}
         margin={{ top: 0, right: 10, left: 15, bottom: 0 }}
@@ -71,6 +72,6 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
           />
         </Bar>
       </BarChart>
-    </ResponsiveContainer>
+    </div>
   );
 }

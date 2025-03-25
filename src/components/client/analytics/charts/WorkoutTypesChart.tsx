@@ -4,8 +4,7 @@ import {
   PieChart,
   Pie,
   Cell,
-  Tooltip,
-  ResponsiveContainer
+  Tooltip
 } from "recharts";
 
 interface WorkoutType {
@@ -22,8 +21,8 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={120}>
-      <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+    <div className="w-full h-[120px] flex justify-center">
+      <PieChart width={300} height={120}>
         <Pie
           data={workoutTypes}
           cx="50%"
@@ -32,7 +31,7 @@ export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
           outerRadius={40}
           fill="#8884d8"
           dataKey="value"
-          label={({ name }) => name}
+          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           fontSize={8}
         >
           {workoutTypes.map((entry, index) => (
@@ -56,6 +55,6 @@ export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
           }}
         />
       </PieChart>
-    </ResponsiveContainer>
+    </div>
   );
 }

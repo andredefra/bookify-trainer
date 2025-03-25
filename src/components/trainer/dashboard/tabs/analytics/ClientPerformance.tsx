@@ -153,28 +153,26 @@ export function ClientPerformance() {
         <div className="bg-white p-3 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-2">Client Retention</h3>
           <div className="h-[180px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <Pie
-                  data={clientRetention}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={60}
-                  startAngle={90}
-                  endAngle={-270}
-                  dataKey="value"
-                  label={({ name, value }) => `${name} ${value}%`}
-                  labelLine={false}
-                  fontSize={9}
-                >
-                  {clientRetention.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => [`${value}%`, '']} />
-              </PieChart>
-            </ResponsiveContainer>
+            <PieChart width={300} height={180}>
+              <Pie
+                data={clientRetention}
+                cx="50%"
+                cy="50%"
+                innerRadius={40}
+                outerRadius={60}
+                startAngle={90}
+                endAngle={-270}
+                dataKey="value"
+                label={({ name, value }) => `${name} ${value}%`}
+                labelLine={false}
+                fontSize={9}
+              >
+                {clientRetention.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => [`${value}%`, '']} />
+            </PieChart>
           </div>
         </div>
         

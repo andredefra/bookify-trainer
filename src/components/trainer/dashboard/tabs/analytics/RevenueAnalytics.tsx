@@ -122,27 +122,25 @@ export function RevenueAnalytics() {
         <div className="bg-white p-3 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-2">Revenue by Product</h3>
           <div className="h-[180px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <Pie
-                  data={revenueByProduct}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={60}
-                  paddingAngle={3}
-                  dataKey="value"
-                  label={({ name }) => name}
-                  labelLine={false}
-                  fontSize={9}
-                >
-                  {revenueByProduct.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => [`€${value}`, 'Revenue']} />
-              </PieChart>
-            </ResponsiveContainer>
+            <PieChart width={300} height={180}>
+              <Pie
+                data={revenueByProduct}
+                cx="50%"
+                cy="50%"
+                innerRadius={40}
+                outerRadius={60}
+                paddingAngle={3}
+                dataKey="value"
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                labelLine={false}
+                fontSize={9}
+              >
+                {revenueByProduct.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => [`€${value}`, 'Revenue']} />
+            </PieChart>
           </div>
         </div>
         
