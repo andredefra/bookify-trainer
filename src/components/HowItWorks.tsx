@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Calendar, Share2, CreditCard } from 'lucide-react';
 
 const HowItWorks = () => {
   useEffect(() => {
@@ -90,8 +90,8 @@ const HowItWorks = () => {
               </div>
               <div className="h-64 md:h-auto bg-cover bg-center" 
                 style={{
-                  backgroundImage: "url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop')",
-                  backgroundPosition: "center 30%"
+                  backgroundImage: "url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=2070&auto=format&fit=crop')",
+                  backgroundPosition: "center"
                 }}>
               </div>
             </div>
