@@ -31,23 +31,18 @@ const Hero = () => {
     console.log("Attempting to load dashboard image");
     const loadImage = async () => {
       try {
-        // Create a public URL for the image
-        const { data, error } = await supabase
+        // Create a public URL for the image - note this doesn't return an error property in the newer version
+        const { data } = await supabase
           .storage
           .from('images')
           .getPublicUrl('trainer-dashboard.png');
-          
-        if (error) {
-          console.error("Error getting public URL:", error);
-          return;
-        }
         
         console.log("Dashboard image URL generated:", data.publicUrl);
         
         // Test loading the image
         const img = new Image();
         img.onload = () => console.log("Dashboard image loaded successfully");
-        img.onerror = e => console.error("Error loading dashboard image:", e);
+        img.onerror = (e) => console.error("Error loading dashboard image:", e);
         img.src = data.publicUrl;
       } catch (error) {
         console.error("General error loading dashboard image:", error);
