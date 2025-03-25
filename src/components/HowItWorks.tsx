@@ -27,20 +27,17 @@ const HowItWorks = () => {
     {
       number: "01",
       title: "Create your profile and sync your Google Calendar",
-      description: "Set up your profile with your services, pricing, and availability. Connect your Google Calendar to sync your existing schedule.",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop"
+      description: "Set up your profile with your services, pricing, and availability. Connect your Google Calendar to sync your existing schedule."
     },
     {
       number: "02",
       title: "Share your personal page and set session rules",
-      description: "Share your custom URL with clients. Set up your working hours, session types, and booking rules.",
-      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop"
+      description: "Share your custom URL with clients. Set up your working hours, session types, and booking rules."
     },
     {
       number: "03",
       title: "Get booked and paid automatically via Stripe",
-      description: "Clients book available slots and pre-authorize payment. Get paid automatically after sessions are completed.",
-      image: "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?q=80&w=2072&auto=format&fit=crop"
+      description: "Clients book available slots and pre-authorize payment. Get paid automatically after sessions are completed."
     }
   ];
 
@@ -62,21 +59,12 @@ const HowItWorks = () => {
               key={index} 
               className={`reveal reveal-delay-${index} relative`}
             >
-              <div className="flex flex-col h-full bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={step.image} 
-                    alt={`Step ${index + 1}: ${step.title}`} 
-                    className="w-full h-full object-cover"
-                  />
+              <div className="flex flex-col h-full">
+                <div className="mb-4">
+                  <span className="text-5xl font-display font-bold text-primary/10">{step.number}</span>
                 </div>
-                <div className="p-6">
-                  <div className="mb-4">
-                    <span className="text-5xl font-display font-bold text-primary/10">{step.number}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.description}</p>
-                </div>
+                <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+                <p className="text-muted-foreground flex-grow">{step.description}</p>
                 
                 {index < steps.length - 1 && (
                   <div className="hidden md:block absolute top-10 left-full w-16 transform -translate-x-8">
