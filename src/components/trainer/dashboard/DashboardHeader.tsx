@@ -30,6 +30,8 @@ interface DashboardHeaderProps {
 export function DashboardHeader({ name, customName, onMobileMenuClick, user, onLogout }: DashboardHeaderProps) {
   const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
   const displayName = user?.name || name || customName || "Trainer";
+  // Use the same default image as in ProfileSection
+  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
 
   useEffect(() => {
     // Load status from localStorage if available
@@ -100,7 +102,7 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
               </div>
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.profileImage || "/placeholder.svg"} alt={displayName} />
+                  <AvatarImage src={user?.profileImage || defaultImage} alt={displayName} />
                   <AvatarFallback className="bg-primary/10 text-primary">
                     {displayName.charAt(0)}
                   </AvatarFallback>
