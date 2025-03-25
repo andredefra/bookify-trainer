@@ -28,7 +28,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
       <BarChart
         layout="vertical"
         data={monthlyData}
-        margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+        margin={{ top: 2, right: 25, left: 35, bottom: 2 }}
       >
         <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
         <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} />
@@ -37,7 +37,8 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
           type="category" 
           axisLine={false} 
           tickLine={false}
-          width={70}
+          width={60}
+          tick={{ fontSize: 11 }}
         />
         <Tooltip 
           content={({ active, payload }) => {
@@ -66,7 +67,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             dataKey="current" 
             position="right" 
             formatter={(value: number, entry: any) => `${value}/${entry.target}`} 
-            style={{ fill: "#6b7280", fontSize: "11px" }}
+            style={{ fill: "#6b7280", fontSize: "10px" }}
           />
         </Bar>
       </BarChart>

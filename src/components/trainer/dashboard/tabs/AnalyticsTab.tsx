@@ -27,18 +27,18 @@ export function AnalyticsTab() {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 pb-6">
         <Tabs defaultValue="revenue">
           <TabsList className="mb-6">
             <TabsTrigger value="revenue">Revenue</TabsTrigger>
             <TabsTrigger value="clients">Client Performance</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="revenue">
+          <TabsContent value="revenue" className="mt-0">
             <RevenueAnalytics />
           </TabsContent>
           
-          <TabsContent value="clients">
+          <TabsContent value="clients" className="mt-0">
             <ClientPerformance />
           </TabsContent>
         </Tabs>

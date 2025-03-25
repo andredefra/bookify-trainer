@@ -28,15 +28,15 @@ export function BodyMetrics() {
         </h3>
         
         <div className="grid grid-cols-1 gap-4">
-          <div className="flex justify-center h-48">
+          <div className="flex justify-center h-40">
             <ResponsiveContainer width="100%" height="100%">
               <RechartsBar>
                 <Pie
                   data={bodyCompositionData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={45}
+                  outerRadius={60}
                   paddingAngle={2}
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
@@ -65,7 +65,7 @@ export function BodyMetrics() {
           </div>
 
           <div className="grid grid-cols-2 gap-3 mt-1">
-            <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg">
+            <div className="flex items-center justify-between bg-slate-50 p-2.5 rounded-lg">
               <div className="flex items-center">
                 <Scale className="h-4 w-4 text-slate-600 mr-1.5" />
                 <span className="text-sm text-slate-700">Weight</span>
@@ -76,7 +76,7 @@ export function BodyMetrics() {
               </div>
             </div>
             
-            <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg">
+            <div className="flex items-center justify-between bg-slate-50 p-2.5 rounded-lg">
               <div className="flex items-center">
                 <Activity className="h-4 w-4 text-slate-600 mr-1.5" />
                 <span className="text-sm text-slate-700">BMI</span>

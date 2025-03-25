@@ -23,16 +23,17 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
+      <PieChart margin={{ top: 0, right: 5, left: 5, bottom: 0 }}>
         <Pie
           data={workoutTypes}
           cx="50%"
           cy="50%"
           labelLine={false}
-          outerRadius={80}
+          outerRadius={65}
           fill="#8884d8"
           dataKey="value"
           label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+          fontSize={11}
         >
           {workoutTypes.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />

@@ -59,19 +59,19 @@ export function WorkoutAnalytics({
           </TabsList>
           
           <TabsContent value="activity" className="m-0 p-0">
-            <div className="h-[240px]">
+            <div className="h-[200px]">
               <WeeklyActivityChart weeklyData={weeklyData} chartType={chartType} />
             </div>
           </TabsContent>
           
           <TabsContent value="types" className="m-0 p-0">
-            <div className="h-[240px]">
+            <div className="h-[200px]">
               <WorkoutTypesChart workoutTypes={workoutTypes} />
             </div>
           </TabsContent>
           
           <TabsContent value="goals" className="m-0 p-0">
-            <div className="h-[240px]">
+            <div className="h-[200px]">
               <MonthlyGoalsChart monthlyData={monthlyData} />
             </div>
           </TabsContent>
@@ -90,7 +90,7 @@ export function WorkoutAnalytics({
                 </SelectContent>
               </Select>
             </div>
-            <div className="h-[240px]">
+            <div className="h-[200px]">
               <ProgressChart progressHistory={progressHistory} progressMetric={progressMetric} />
             </div>
           </TabsContent>
