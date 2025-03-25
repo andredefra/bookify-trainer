@@ -29,27 +29,6 @@ const Hero = () => {
   // Log to debug image loading
   useEffect(() => {
     console.log("Attempting to load dashboard image");
-    const loadImage = async () => {
-      try {
-        // Create a public URL for the image - note this doesn't return an error property in the newer version
-        const { data } = await supabase
-          .storage
-          .from('images')
-          .getPublicUrl('trainer-dashboard.png');
-        
-        console.log("Dashboard image URL generated:", data.publicUrl);
-        
-        // Test loading the image
-        const img = new Image();
-        img.onload = () => console.log("Dashboard image loaded successfully");
-        img.onerror = (e) => console.error("Error loading dashboard image:", e);
-        img.src = data.publicUrl;
-      } catch (error) {
-        console.error("General error loading dashboard image:", error);
-      }
-    };
-    
-    loadImage();
   }, []);
   
   return <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden" style={{
@@ -84,10 +63,10 @@ const Hero = () => {
               </div>
             </div>
             <div className="bg-white p-0 m-0">
-              {/* Use the image from Supabase storage with a fallback */}
+              {/* Use the new uploaded image */}
               <img 
-                src="https://cxclisripwxqathhnjfx.supabase.co/storage/v1/object/public/images/trainer-dashboard.png" 
-                alt="Trainer dashboard preview" 
+                src="/lovable-uploads/60b9f4d1-45d1-4edb-a115-9c2a83d8df7c.png" 
+                alt="Trainer dashboard analytics" 
                 className="w-full h-[400px] md:h-[500px] object-contain"
                 onError={(e) => {
                   console.error("Image failed to load, using fallback");
