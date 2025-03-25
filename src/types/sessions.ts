@@ -5,20 +5,28 @@
 
 export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'pending' | 'completed';
 
-export interface SessionItem {
+// Base session interface with common properties for all contexts
+export interface SessionBase {
   id: number;
   name: string;
-  trainer: string;
   time: string;
   date: string;
+  description?: string;
+}
+
+// Client-facing session properties
+export interface SessionItem extends SessionBase {
+  trainer: string;
   status: SessionStatus;
   price?: number;
   attendees?: number;
   maxAttendees?: number;
-  description?: string;
-  // Additional properties for trainer dashboard
-  participants?: number;
-  maxParticipants?: number;
+}
+
+// Trainer-facing session properties
+export interface TrainerSessionItem extends SessionBase {
+  participants: number;
+  maxParticipants: number;
   waitingList?: number;
   paymentStatus?: {
     paid: number;
@@ -26,3 +34,6 @@ export interface SessionItem {
     total: number;
   };
 }
+
+// For backwards compatibility
+export type { TrainerSessionItem as SessionWithPayment };

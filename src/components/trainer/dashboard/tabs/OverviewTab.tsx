@@ -1,10 +1,11 @@
 
 import { useState } from "react";
-import { UpcomingSessionsCard, TrainerSessionItem } from "./overview/UpcomingSessionsCard";
+import { UpcomingSessionsCard } from "./overview/UpcomingSessionsCard";
 import { RecentClientsCard } from "./overview/RecentClientsCard";
 import { MessageRequestsCard } from "./overview/MessageRequestsCard";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { toast } from "sonner";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface ClientItem {
   id: number;

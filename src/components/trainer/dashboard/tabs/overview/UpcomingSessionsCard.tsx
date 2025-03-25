@@ -3,22 +3,7 @@ import { PlusCircle } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-// Define a TrainerSessionItem interface specifically for the trainer dashboard
-export interface TrainerSessionItem {
-  id: number;
-  name: string;
-  time: string;
-  date: string;
-  participants: number;
-  maxParticipants: number;
-  waitingList?: number;
-  paymentStatus?: {
-    paid: number;
-    pending: number;
-    total: number;
-  };
-}
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface UpcomingSessionsCardProps {
   sessions: TrainerSessionItem[];

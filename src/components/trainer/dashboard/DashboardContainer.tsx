@@ -11,7 +11,7 @@ import { MessagesTab } from "./tabs/MessagesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
-import { TrainerSessionItem } from "./tabs/overview/UpcomingSessionsCard";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface DashboardContainerProps {
   customName?: string;
