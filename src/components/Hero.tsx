@@ -66,21 +66,34 @@ const Hero = () => {
                 <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-400"></div>
               </div>
             </div>
-            {/* Removed p-0 m-0 as they're default values */}
+            
             <div className="bg-white">
-              {/* Fixed mobile image container */}
-              <div className={isMobile ? "h-[300px] flex items-center justify-center" : ""}>
+              {isMobile ? (
+                <div className="flex items-center justify-center" style={{ margin: 0, padding: 0 }}>
+                  <img 
+                    src="/lovable-uploads/60b9f4d1-45d1-4edb-a115-9c2a83d8df7c.png" 
+                    alt="Trainer dashboard analytics" 
+                    className="w-full h-auto"
+                    style={{ display: 'block', maxHeight: '280px' }}
+                    onError={(e) => {
+                      console.error("Image failed to load, using fallback");
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600";
+                    }}
+                  />
+                </div>
+              ) : (
                 <img 
                   src="/lovable-uploads/60b9f4d1-45d1-4edb-a115-9c2a83d8df7c.png" 
                   alt="Trainer dashboard analytics" 
-                  className={`w-full ${isMobile ? 'h-auto max-h-[300px]' : 'h-[500px] object-contain object-center'}`}
+                  className="w-full h-[500px] object-contain object-center"
                   onError={(e) => {
                     console.error("Image failed to load, using fallback");
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600";
                   }}
                 />
-              </div>
+              )}
             </div>
           </div>
         </div>
