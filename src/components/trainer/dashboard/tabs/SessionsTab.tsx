@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { Badge } from "@/components/ui/badge";
-import { TrainerSessionItem } from "./overview/UpcomingSessionsCard";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface SessionsTabProps {
   upcomingSessions: TrainerSessionItem[];
