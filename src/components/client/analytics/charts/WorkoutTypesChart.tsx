@@ -25,8 +25,8 @@ export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
       <PieChart width={300} height={120}>
         <Pie
           data={workoutTypes}
-          cx="50%"
-          cy="50%"
+          cx={150}
+          cy={60}
           labelLine={false}
           outerRadius={40}
           fill="#8884d8"

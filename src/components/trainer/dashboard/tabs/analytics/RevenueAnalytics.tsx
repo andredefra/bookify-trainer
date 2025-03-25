@@ -1,7 +1,6 @@
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { 
-  ResponsiveContainer,
   BarChart, 
   Bar, 
   XAxis, 
@@ -121,12 +120,12 @@ export function RevenueAnalytics() {
         {/* Revenue by Product */}
         <div className="bg-white p-3 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-2">Revenue by Product</h3>
-          <div className="h-[180px]">
+          <div className="h-[180px] flex justify-center items-center">
             <PieChart width={300} height={180}>
               <Pie
                 data={revenueByProduct}
-                cx="50%"
-                cy="50%"
+                cx={150}
+                cy={80}
                 innerRadius={40}
                 outerRadius={60}
                 paddingAngle={3}
