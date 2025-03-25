@@ -1,8 +1,17 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { Circle } from "lucide-react";
+import { toast } from "sonner";
 
 interface DashboardHeaderProps {
   user: {
@@ -15,6 +24,31 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
+  const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
+
+  useEffect(() => {
+    // Load status from localStorage if available
+    const savedStatus = localStorage.getItem('trainer-status');
+    if (savedStatus && ["online", "in-session", "offline"].includes(savedStatus)) {
+      setStatus(savedStatus as "online" | "in-session" | "offline");
+    }
+  }, []);
+
+  const handleStatusChange = (newStatus: "online" | "in-session" | "offline") => {
+    setStatus(newStatus);
+    // Save status to localStorage
+    localStorage.setItem('trainer-status', newStatus);
+    
+    // Show toast notification
+    const statusMessages = {
+      "online": "You're now shown as available to clients",
+      "in-session": "You're now shown as in a session",
+      "offline": "You're now shown as offline to clients"
+    };
+    
+    toast.success(statusMessages[newStatus]);
+  };
+
   if (!user) return null;
   
   return (
@@ -25,7 +59,35 @@ export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
             <span className="font-display text-xl font-bold text-primary">Personal.ai</span>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-muted-foreground">Status:</span>
+                <Select value={status} onValueChange={(value) => handleStatusChange(value as "online" | "in-session" | "offline")}>
+                  <SelectTrigger className="w-[140px] h-8">
+                    <SelectValue placeholder="Set your status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="online" className="flex items-center">
+                      <div className="flex items-center">
+                        <Circle className="h-3 w-3 mr-2 text-emerald-500 fill-emerald-500" />
+                        <span>Available</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="in-session">
+                      <div className="flex items-center">
+                        <Circle className="h-3 w-3 mr-2 text-amber-500 fill-amber-500" />
+                        <span>In Session</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="offline">
+                      <div className="flex items-center">
+                        <Circle className="h-3 w-3 mr-2 text-slate-500 fill-slate-500" />
+                        <span>Offline</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <span className="text-sm text-muted-foreground">Demo Mode</span>
               <Badge variant="secondary" className="bg-primary/10 text-primary">
                 {user.type === 'trainer' ? 'Trainer' : 'Client'}
