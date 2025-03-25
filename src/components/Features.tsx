@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus } from 'lucide-react';
 
@@ -116,7 +117,13 @@ const Features = () => {
                 personal.ai/johndoe
               </div>
             </div>
-            <div className="h-[300px] bg-[url('/lovable-uploads/caab9089-03c6-46ad-bc57-2f0290f1ab06.png')] bg-contain bg-no-repeat bg-center rounded-lg"></div>
+            <div className="h-[300px] w-full flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/caab9089-03c6-46ad-bc57-2f0290f1ab06.png" 
+                alt="Personal trainer profile" 
+                className="max-h-full max-w-full object-contain rounded-lg"
+              />
+            </div>
           </div>
         </div>
       </div>
