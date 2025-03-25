@@ -78,8 +78,8 @@ export function DashboardSidebar({
   return (
     <div
       className={cn(
-        "pb-12 w-20 md:w-60 flex-shrink-0 bg-white border-r z-20",
-        isDesktop ? "block" : "fixed inset-y-0"
+        "pb-12 w-20 md:w-60 flex-shrink-0 bg-white border-r",
+        isDesktop ? "relative block" : "fixed inset-y-0 left-0 z-10"
       )}
     >
       <ScrollArea className="py-6 h-full">
