@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { 
   Select,
   SelectContent,
@@ -14,17 +13,21 @@ import { Circle } from "lucide-react";
 import { toast } from "sonner";
 
 interface DashboardHeaderProps {
-  user: {
+  name?: string; // Make 'name' optional and add it to the interface
+  customName?: string; // Keep customName for backward compatibility
+  onMobileMenuClick: () => void;
+  user?: {
     name?: string;
     email: string;
     type: string;
     plan?: string;
   } | null;
-  onLogout: () => void;
+  onLogout?: () => void;
 }
 
-export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
+export function DashboardHeader({ name, customName, onMobileMenuClick, user, onLogout }: DashboardHeaderProps) {
   const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
+  const displayName = name || customName || "Trainer";
 
   useEffect(() => {
     // Load status from localStorage if available
@@ -49,7 +52,12 @@ export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
     toast.success(statusMessages[newStatus]);
   };
 
-  if (!user) return null;
+  // Create a dummy user if none provided for backward compatibility
+  const dummyUser = user || {
+    name: displayName,
+    email: "trainer@example.com",
+    type: "trainer"
+  };
   
   return (
     <header className="bg-white border-b border-border shadow-sm">
@@ -90,11 +98,11 @@ export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
               </div>
               <span className="text-sm text-muted-foreground">Demo Mode</span>
               <Badge variant="secondary" className="bg-primary/10 text-primary">
-                {user.type === 'trainer' ? 'Trainer' : 'Client'}
+                {dummyUser.type === 'trainer' ? 'Trainer' : 'Client'}
               </Badge>
-              {user.plan && (
+              {dummyUser.plan && (
                 <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  {user.plan === 'pro' ? 'Pro Plan' : 'Freemium'}
+                  {dummyUser.plan === 'pro' ? 'Pro Plan' : 'Freemium'}
                 </Badge>
               )}
             </div>
