@@ -54,7 +54,7 @@ export function RevenueAnalytics() {
   const percentChange = ((lastMonthRevenue - prevMonthRevenue) / prevMonthRevenue) * 100;
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded-lg border shadow-sm">
@@ -81,7 +81,7 @@ export function RevenueAnalytics() {
       {/* Monthly Revenue Chart */}
       <div className="bg-white p-4 rounded-lg border shadow-sm">
         <h3 className="text-lg font-medium mb-4">Monthly Revenue</h3>
-        <div className="h-[300px]">
+        <div className="h-[250px]">
           <ChartContainer
             config={{
               programs: {
@@ -120,18 +120,19 @@ export function RevenueAnalytics() {
         {/* Revenue by Product */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-lg font-medium mb-4">Revenue by Product</h3>
-          <div className="h-[300px]">
+          <div className="h-[250px]">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <Pie
                   data={revenueByProduct}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
-                  outerRadius={90}
+                  outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  labelLine={false}
                 >
                   {revenueByProduct.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -146,7 +147,7 @@ export function RevenueAnalytics() {
         {/* Client Growth */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-lg font-medium mb-4">Client Growth</h3>
-          <div className="h-[300px]">
+          <div className="h-[250px]">
             <ChartContainer
               config={{
                 clients: {
@@ -169,8 +170,8 @@ export function RevenueAnalytics() {
                   dataKey="clients" 
                   stroke="#10b981" 
                   strokeWidth={2}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
                 />
               </LineChart>
             </ChartContainer>

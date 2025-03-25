@@ -94,7 +94,7 @@ export function ClientPerformance() {
   const overallAchievementRate = calculateAchievementRate(totalAchieved, totalGoals);
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded-lg border shadow-sm">
@@ -119,7 +119,7 @@ export function ClientPerformance() {
       {/* Goal Achievement Chart */}
       <div className="bg-white p-4 rounded-lg border shadow-sm">
         <h3 className="text-lg font-medium mb-4">Client Goal Achievement by Category</h3>
-        <div className="h-[300px]">
+        <div className="h-[250px]">
           <ChartContainer
             config={{
               achieved: {
@@ -152,19 +152,20 @@ export function ClientPerformance() {
         {/* Client Retention Chart */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-lg font-medium mb-4">Client Retention</h3>
-          <div className="h-[300px]">
+          <div className="h-[250px]">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <Pie
                   data={clientRetention}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
-                  outerRadius={90}
+                  outerRadius={80}
                   startAngle={90}
                   endAngle={-270}
                   dataKey="value"
                   label={({ name, value }) => `${name} ${value}%`}
+                  labelLine={false}
                 >
                   {clientRetention.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -179,7 +180,7 @@ export function ClientPerformance() {
         {/* Top Performing Clients */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-lg font-medium mb-4">Top Performing Clients</h3>
-          <div className="overflow-auto max-h-[300px]">
+          <div className="overflow-auto max-h-[250px]">
             <Table>
               <TableHeader>
                 <TableRow>

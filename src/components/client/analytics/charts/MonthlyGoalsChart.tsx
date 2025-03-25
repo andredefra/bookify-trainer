@@ -24,11 +24,11 @@ interface MonthlyGoalsChartProps {
 
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height="100%">
       <BarChart
         layout="vertical"
         data={monthlyData}
-        margin={{ top: 10, right: 30, left: 40, bottom: 0 }}
+        margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
       >
         <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
         <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} />
@@ -37,6 +37,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
           type="category" 
           axisLine={false} 
           tickLine={false}
+          width={70}
         />
         <Tooltip 
           content={({ active, payload }) => {
@@ -65,7 +66,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             dataKey="current" 
             position="right" 
             formatter={(value: number, entry: any) => `${value}/${entry.target}`} 
-            style={{ fill: "#6b7280", fontSize: "12px" }}
+            style={{ fill: "#6b7280", fontSize: "11px" }}
           />
         </Bar>
       </BarChart>

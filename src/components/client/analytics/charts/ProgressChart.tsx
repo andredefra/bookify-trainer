@@ -24,8 +24,8 @@ interface ProgressChartProps {
 
 export function ProgressChart({ progressHistory, progressMetric }: ProgressChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={progressHistory} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={progressHistory} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="week" axisLine={false} tickLine={false} />
         <YAxis axisLine={false} tickLine={false} />
@@ -53,12 +53,12 @@ export function ProgressChart({ progressHistory, progressMetric }: ProgressChart
         />
         {progressMetric === "all" ? (
           <>
-            <Line type="monotone" dataKey="weight" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
-            <Line type="monotone" dataKey="strength" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} />
-            <Line type="monotone" dataKey="endurance" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="weight" stroke="#4f46e5" strokeWidth={2} dot={{ r: 3 }} />
+            <Line type="monotone" dataKey="strength" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
+            <Line type="monotone" dataKey="endurance" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
           </>
         ) : (
-          <Line type="monotone" dataKey={progressMetric} stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+          <Line type="monotone" dataKey={progressMetric} stroke="#4f46e5" strokeWidth={2} dot={{ r: 3 }} />
         )}
       </LineChart>
     </ResponsiveContainer>
