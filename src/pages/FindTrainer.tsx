@@ -35,7 +35,7 @@ const FindTrainer = () => {
       reviews: 98,
       price: "€45",
       availability: "Available tomorrow",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1470&auto=format&fit=crop"
+      image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop"
     },
     {
       id: "t3",
