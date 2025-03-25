@@ -1,115 +1,131 @@
 
-import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Menu, Dumbbell, Activity } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
+import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Dumbbell, Activity, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ClientProfile } from "@/components/ClientProfile";
+import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface ClientSidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   unreadMessageCount: number;
+  showSidebar: boolean;
+  setShowSidebar: (show: boolean) => void;
 }
 
-export function ClientSidebar({ activeTab, setActiveTab, unreadMessageCount }: ClientSidebarProps) {
-  const isMobile = useIsMobile();
+export function ClientSidebar({ 
+  activeTab, 
+  setActiveTab, 
+  unreadMessageCount, 
+  showSidebar, 
+  setShowSidebar 
+}: ClientSidebarProps) {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   
   const sidebarContent = (
-    <nav className="flex flex-col divide-y divide-border">
-      <button 
-        onClick={() => setActiveTab("overview")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "overview" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <LineChart className="w-5 h-5 mr-3" />
-        <span>Overview</span>
-      </button>
-      <button 
-        onClick={() => setActiveTab("analytics")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "analytics" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <BarChart2 className="w-5 h-5 mr-3" />
-        <span>Analytics</span>
-      </button>
-      <button 
-        onClick={() => setActiveTab("sessions")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "sessions" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <Calendar className="w-5 h-5 mr-3" />
-        <span>Sessions</span>
-      </button>
-      <button 
-        onClick={() => setActiveTab("training-program")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "training-program" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <Dumbbell className="w-5 h-5 mr-3" />
-        <span>Training Program</span>
-      </button>
-      <button 
-        onClick={() => setActiveTab("training-log")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "training-log" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <Activity className="w-5 h-5 mr-3" />
-        <span>Training Log</span>
-      </button>
-      <button 
-        onClick={() => setActiveTab("trainers")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "trainers" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <User className="w-5 h-5 mr-3" />
-        <span>My Trainers</span>
-      </button>
-      <button 
-        onClick={() => setActiveTab("messages")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "messages" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <MessageSquare className="w-5 h-5 mr-3" />
-        <span>Messages</span>
-        {unreadMessageCount > 0 && (
-          <Badge className="ml-auto">{unreadMessageCount}</Badge>
-        )}
-      </button>
-      <button 
-        onClick={() => setActiveTab("settings")}
-        className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "settings" ? "bg-primary/5 text-primary" : ""}`}
-      >
-        <Settings className="w-5 h-5 mr-3" />
-        <span>Settings</span>
-      </button>
-    </nav>
+    <div className="flex flex-col h-full">
+      {isMobile && (
+        <div className="flex justify-between items-center p-4 border-b">
+          <div className="font-semibold">Menu</div>
+          <Button variant="ghost" size="icon" onClick={() => setShowSidebar(false)}>
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+      )}
+      
+      {isMobile && (
+        <div className="p-4 border-b">
+          <ClientProfile 
+            name="Demo Client"
+            email="client@example.com"
+            since="March 2023"
+            sessions={24}
+            goals={["Weight loss", "Muscle tone", "Flexibility"]}
+          />
+        </div>
+      )}
+      
+      <nav className="flex flex-col divide-y divide-border overflow-y-auto flex-1">
+        <button 
+          onClick={() => { setActiveTab("overview"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "overview" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <LineChart className="w-5 h-5 mr-3" />
+          <span>Overview</span>
+        </button>
+        <button 
+          onClick={() => { setActiveTab("analytics"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "analytics" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <BarChart2 className="w-5 h-5 mr-3" />
+          <span>Analytics</span>
+        </button>
+        <button 
+          onClick={() => { setActiveTab("sessions"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "sessions" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <Calendar className="w-5 h-5 mr-3" />
+          <span>Sessions</span>
+        </button>
+        <button 
+          onClick={() => { setActiveTab("training-program"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "training-program" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <Dumbbell className="w-5 h-5 mr-3" />
+          <span>Training Program</span>
+        </button>
+        <button 
+          onClick={() => { setActiveTab("training-log"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "training-log" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <Activity className="w-5 h-5 mr-3" />
+          <span>Training Log</span>
+        </button>
+        <button 
+          onClick={() => { setActiveTab("trainers"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "trainers" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <User className="w-5 h-5 mr-3" />
+          <span>My Trainers</span>
+        </button>
+        <button 
+          onClick={() => { setActiveTab("messages"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "messages" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <MessageSquare className="w-5 h-5 mr-3" />
+          <span>Messages</span>
+          {unreadMessageCount > 0 && (
+            <Badge className="ml-auto">{unreadMessageCount}</Badge>
+          )}
+        </button>
+        <button 
+          onClick={() => { setActiveTab("settings"); if (isMobile) setShowSidebar(false); }}
+          className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "settings" ? "bg-primary/5 text-primary" : ""}`}
+        >
+          <Settings className="w-5 h-5 mr-3" />
+          <span>Settings</span>
+        </button>
+      </nav>
+    </div>
   );
   
-  // For mobile: use a bottom drawer on very small screens, side sheet on slightly larger mobile screens
+  // For mobile: show a sheet sidebar when triggered
   if (isMobile) {
     return (
-      <>
-        <div className="md:hidden block fixed bottom-4 right-4 z-40">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" className="rounded-full shadow-lg">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0">
-              <Card className="h-full border-0 rounded-none">
-                <CardContent className="p-0 h-full">
-                  {sidebarContent}
-                </CardContent>
-              </Card>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </>
+      <Sheet open={showSidebar} onOpenChange={setShowSidebar}>
+        <SheetContent side="left" className="p-0 w-[280px] sm:w-[350px]">
+          {sidebarContent}
+        </SheetContent>
+      </Sheet>
     );
   }
   
   // For desktop: show the regular sidebar
   return (
-    <Card>
-      <CardContent className="p-0">
-        {sidebarContent}
-      </CardContent>
-    </Card>
+    <div className="hidden md:block w-64 border-r border-border bg-white overflow-y-auto">
+      {sidebarContent}
+    </div>
   );
 }

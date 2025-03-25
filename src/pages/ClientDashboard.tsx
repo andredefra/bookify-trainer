@@ -12,14 +12,14 @@ import { SettingsTab } from "@/components/client/tabs/SettingsTab";
 import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
 import { TrainingProgramTab } from "@/components/client/tabs/TrainingProgramTab";
 import { TrainingLogTab } from "@/components/client/tabs/TrainingLogTab";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<{name?: string, email: string, type: string, plan?: string} | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
-  const isMobile = useIsMobile();
+  const [showSidebar, setShowSidebar] = useState(false);
   
   const upcomingSessions: SessionItem[] = [
     { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" as SessionStatus, price: 45 },
@@ -61,85 +61,66 @@ const ClientDashboard = () => {
   const unreadMessageCount = trainerMessages.filter(m => !m.read).length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <ClientHeader user={user} onLogout={handleLogout} />
+    <div className="min-h-screen flex flex-col">
+      <ClientHeader 
+        user={user} 
+        onLogout={handleLogout}
+        onMobileMenuClick={() => setShowSidebar(!showSidebar)}
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Welcome, {user.name || user.email.split('@')[0]}
-          </h1>
-          <p className="text-muted-foreground">Track your progress and manage your fitness journey.</p>
-        </div>
-
-        <div className="grid grid-cols-12 gap-6">
-          {!isMobile && (
-            <div className="col-span-12 lg:col-span-3">
-              <ClientSidebar 
-                activeTab={activeTab} 
-                setActiveTab={setActiveTab} 
-                unreadMessageCount={unreadMessageCount}
-              />
-              
-              <div className="mt-6">
-                <ClientProfile 
-                  name={user.name || "Demo Client"}
-                  email={user.email}
-                  since="March 2023"
-                  sessions={24}
-                  goals={goals}
-                />
-              </div>
-            </div>
-          )}
-
-          <div className={`col-span-12 ${isMobile ? 'lg:col-span-12' : 'lg:col-span-9'}`}>
-            {activeTab === "overview" && (
-              <Overview 
-                progressData={progressData}
-                upcomingSessions={upcomingSessions}
-                trainerMessages={trainerMessages}
-              />
-            )}
-
-            {activeTab === "analytics" && (
-              <AnalyticsTab />
-            )}
-
-            {activeTab === "sessions" && (
-              <SessionsTab upcomingSessions={upcomingSessions} />
-            )}
-
-            {activeTab === "trainers" && (
-              <TrainersTab />
-            )}
-
-            {activeTab === "messages" && (
-              <MessagesTab messages={trainerMessages} />
-            )}
-
-            {activeTab === "settings" && (
-              <SettingsTab user={user} goals={goals} />
-            )}
-
-            {activeTab === "training-program" && (
-              <TrainingProgramTab />
-            )}
-
-            {activeTab === "training-log" && (
-              <TrainingLogTab />
-            )}
-          </div>
-        </div>
-      </div>
-      
-      {isMobile && (
+      <div className="flex flex-1 overflow-hidden">
         <ClientSidebar 
           activeTab={activeTab} 
           setActiveTab={setActiveTab} 
           unreadMessageCount={unreadMessageCount}
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
         />
-      )}
+        
+        <main className="flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8 pb-20 lg:pb-6">
+          <div className="mx-auto max-w-6xl">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsContent value="overview" className="mt-0">
+                <Overview 
+                  progressData={progressData}
+                  upcomingSessions={upcomingSessions}
+                  trainerMessages={trainerMessages}
+                />
+              </TabsContent>
+
+              <TabsContent value="analytics" className="mt-0">
+                <AnalyticsTab />
+              </TabsContent>
+
+              <TabsContent value="sessions" className="mt-0">
+                <SessionsTab upcomingSessions={upcomingSessions} />
+              </TabsContent>
+
+              <TabsContent value="training-program" className="mt-0">
+                <TrainingProgramTab />
+              </TabsContent>
+
+              <TabsContent value="training-log" className="mt-0">
+                <TrainingLogTab />
+              </TabsContent>
+
+              <TabsContent value="trainers" className="mt-0">
+                <TrainersTab />
+              </TabsContent>
+
+              <TabsContent value="messages" className="mt-0">
+                <MessagesTab messages={trainerMessages} />
+              </TabsContent>
+
+              <TabsContent value="settings" className="mt-0">
+                <SettingsTab user={user} goals={goals} />
+              </TabsContent>
+            </Tabs>
+            
+            {/* Client Profile section moved to the sidebar */}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
