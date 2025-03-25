@@ -26,8 +26,8 @@ export function WorkoutAnalytics({
   const [progressMetric, setProgressMetric] = useState("weight");
 
   return (
-    <Card className="col-span-12 border bg-white shadow-sm hover:shadow-md transition-all duration-200">
-      <CardHeader className="pb-1 pt-3 px-4">
+    <Card className="col-span-12 border bg-white shadow-sm">
+      <CardHeader className="pb-0 pt-3 px-3">
         <ChartHeader 
           title="Workout Analytics"
           description="Track your workout patterns and progress"
@@ -37,7 +37,7 @@ export function WorkoutAnalytics({
           onChartTypeChange={setChartType}
         />
       </CardHeader>
-      <CardContent className="p-2">
+      <CardContent className="p-1">
         <Tabs defaultValue="activity" className="space-y-0">
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1 mb-2 bg-slate-50/80 p-1 rounded-md w-full border">
             <TabsTrigger value="activity" className="flex items-center justify-center gap-1 text-xs py-1 px-2">
@@ -59,27 +59,21 @@ export function WorkoutAnalytics({
           </TabsList>
           
           <TabsContent value="activity" className="m-0 p-0">
-            <div className="h-[140px]">
-              <WeeklyActivityChart weeklyData={weeklyData} chartType={chartType} />
-            </div>
+            <WeeklyActivityChart weeklyData={weeklyData} chartType={chartType} />
           </TabsContent>
           
           <TabsContent value="types" className="m-0 p-0">
-            <div className="h-[140px]">
-              <WorkoutTypesChart workoutTypes={workoutTypes} />
-            </div>
+            <WorkoutTypesChart workoutTypes={workoutTypes} />
           </TabsContent>
           
           <TabsContent value="goals" className="m-0 p-0">
-            <div className="h-[140px]">
-              <MonthlyGoalsChart monthlyData={monthlyData} />
-            </div>
+            <MonthlyGoalsChart monthlyData={monthlyData} />
           </TabsContent>
           
           <TabsContent value="progress" className="m-0 p-0">
             <div className="flex justify-end mb-1">
               <Select value={progressMetric} onValueChange={setProgressMetric}>
-                <SelectTrigger className="w-[110px] h-6 text-xs">
+                <SelectTrigger className="w-[100px] h-6 text-xs">
                   <SelectValue placeholder="Metric" />
                 </SelectTrigger>
                 <SelectContent>
@@ -90,9 +84,7 @@ export function WorkoutAnalytics({
                 </SelectContent>
               </Select>
             </div>
-            <div className="h-[140px]">
-              <ProgressChart progressHistory={progressHistory} progressMetric={progressMetric} />
-            </div>
+            <ProgressChart progressHistory={progressHistory} progressMetric={progressMetric} />
           </TabsContent>
         </Tabs>
       </CardContent>

@@ -54,24 +54,24 @@ export function RevenueAnalytics() {
   const percentChange = ((lastMonthRevenue - prevMonthRevenue) / prevMonthRevenue) * 100;
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Total Revenue</div>
-          <div className="text-2xl font-bold mt-1">€{totalRevenue.toLocaleString()}</div>
+          <div className="text-xl font-bold mt-1">€{totalRevenue.toLocaleString()}</div>
           <div className="text-xs text-muted-foreground mt-1">All time</div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Monthly Average</div>
-          <div className="text-2xl font-bold mt-1">€{averageMonthlyRevenue.toLocaleString()}</div>
+          <div className="text-xl font-bold mt-1">€{averageMonthlyRevenue.toLocaleString()}</div>
           <div className="text-xs text-muted-foreground mt-1">Per month</div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Last Month</div>
-          <div className="text-2xl font-bold mt-1">€{lastMonthRevenue.toLocaleString()}</div>
+          <div className="text-xl font-bold mt-1">€{lastMonthRevenue.toLocaleString()}</div>
           <div className={`text-xs mt-1 ${percentChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {percentChange >= 0 ? '↑' : '↓'} {Math.abs(percentChange).toFixed(1)}% vs previous
           </div>
@@ -79,9 +79,9 @@ export function RevenueAnalytics() {
       </div>
       
       {/* Monthly Revenue Chart */}
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <h3 className="text-lg font-medium mb-4">Monthly Revenue</h3>
-        <div className="h-[250px]">
+      <div className="bg-white p-3 rounded-lg border shadow-sm">
+        <h3 className="text-base font-medium mb-2">Monthly Revenue</h3>
+        <div className="h-[180px]">
           <ChartContainer
             config={{
               programs: {
@@ -96,10 +96,11 @@ export function RevenueAnalytics() {
           >
             <BarChart data={monthlyRevenue}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" stroke="#94a3b8" />
+              <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
               <YAxis
                 stroke="#94a3b8"
                 tickFormatter={(value) => `€${value}`}
+                tick={{ fontSize: 10 }}
               />
               <ChartTooltip
                 content={
@@ -108,31 +109,32 @@ export function RevenueAnalytics() {
                   />
                 }
               />
-              <Legend />
-              <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+              <Legend iconSize={8} fontSize={10} />
+              <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={10} />
+              <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={10} />
             </BarChart>
           </ChartContainer>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Revenue by Product */}
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
-          <h3 className="text-lg font-medium mb-4">Revenue by Product</h3>
-          <div className="h-[250px]">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
+          <h3 className="text-base font-medium mb-2">Revenue by Product</h3>
+          <div className="h-[180px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <Pie
                   data={revenueByProduct}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
+                  innerRadius={40}
+                  outerRadius={60}
+                  paddingAngle={3}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name }) => name}
                   labelLine={false}
+                  fontSize={9}
                 >
                   {revenueByProduct.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -145,9 +147,9 @@ export function RevenueAnalytics() {
         </div>
         
         {/* Client Growth */}
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
-          <h3 className="text-lg font-medium mb-4">Client Growth</h3>
-          <div className="h-[250px]">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
+          <h3 className="text-base font-medium mb-2">Client Growth</h3>
+          <div className="h-[180px]">
             <ChartContainer
               config={{
                 clients: {
@@ -158,8 +160,8 @@ export function RevenueAnalytics() {
             >
               <LineChart data={clientGrowth}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
+                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#94a3b8" tick={{ fontSize: 10 }} />
                 <ChartTooltip
                   content={
                     <ChartTooltipContent />
@@ -171,7 +173,7 @@ export function RevenueAnalytics() {
                   stroke="#10b981" 
                   strokeWidth={2}
                   dot={{ r: 3 }}
-                  activeDot={{ r: 5 }}
+                  activeDot={{ r: 4 }}
                 />
               </LineChart>
             </ChartContainer>

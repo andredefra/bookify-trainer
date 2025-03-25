@@ -94,32 +94,32 @@ export function ClientPerformance() {
   const overallAchievementRate = calculateAchievementRate(totalAchieved, totalGoals);
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Goal Achievement Rate</div>
-          <div className="text-2xl font-bold mt-1">{overallAchievementRate}%</div>
+          <div className="text-xl font-bold mt-1">{overallAchievementRate}%</div>
           <div className="text-xs text-muted-foreground mt-1">Overall goal completion</div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Client Retention</div>
-          <div className="text-2xl font-bold mt-1">85%</div>
+          <div className="text-xl font-bold mt-1">85%</div>
           <div className="text-xs text-muted-foreground mt-1">Average retention rate</div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Active Clients</div>
-          <div className="text-2xl font-bold mt-1">24</div>
+          <div className="text-xl font-bold mt-1">24</div>
           <div className="text-xs text-green-600 mt-1">↑ 4 from last month</div>
         </div>
       </div>
       
       {/* Goal Achievement Chart */}
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <h3 className="text-lg font-medium mb-4">Client Goal Achievement by Category</h3>
-        <div className="h-[250px]">
+      <div className="bg-white p-3 rounded-lg border shadow-sm">
+        <h3 className="text-base font-medium mb-2">Client Goal Achievement by Category</h3>
+        <div className="h-[180px]">
           <ChartContainer
             config={{
               achieved: {
@@ -134,38 +134,39 @@ export function ClientPerformance() {
           >
             <BarChart data={goalCompletionData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
+              <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
+              <YAxis stroke="#94a3b8" tick={{ fontSize: 10 }} />
               <ChartTooltip
                 content={
                   <ChartTooltipContent />
                 }
               />
-              <Bar dataKey="achieved" stackId="a" fill="#10b981" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="inProgress" stackId="a" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="achieved" stackId="a" fill="#10b981" radius={[2, 2, 0, 0]} maxBarSize={14} />
+              <Bar dataKey="inProgress" stackId="a" fill="#f59e0b" radius={[2, 2, 0, 0]} maxBarSize={14} />
             </BarChart>
           </ChartContainer>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Client Retention Chart */}
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
-          <h3 className="text-lg font-medium mb-4">Client Retention</h3>
-          <div className="h-[250px]">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
+          <h3 className="text-base font-medium mb-2">Client Retention</h3>
+          <div className="h-[180px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <Pie
                   data={clientRetention}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={40}
+                  outerRadius={60}
                   startAngle={90}
                   endAngle={-270}
                   dataKey="value"
                   label={({ name, value }) => `${name} ${value}%`}
                   labelLine={false}
+                  fontSize={9}
                 >
                   {clientRetention.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -178,26 +179,26 @@ export function ClientPerformance() {
         </div>
         
         {/* Top Performing Clients */}
-        <div className="bg-white p-4 rounded-lg border shadow-sm">
-          <h3 className="text-lg font-medium mb-4">Top Performing Clients</h3>
-          <div className="overflow-auto max-h-[250px]">
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
+          <h3 className="text-base font-medium mb-2">Top Performing Clients</h3>
+          <div className="overflow-auto max-h-[180px]">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Goals</TableHead>
-                  <TableHead>Attendance</TableHead>
-                  <TableHead>Progress</TableHead>
+                  <TableHead className="text-xs">Client</TableHead>
+                  <TableHead className="text-xs">Goals</TableHead>
+                  <TableHead className="text-xs">Attendance</TableHead>
+                  <TableHead className="text-xs">Progress</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {topPerformingClients.map((client) => (
                   <TableRow key={client.id}>
-                    <TableCell className="font-medium">{client.name}</TableCell>
-                    <TableCell>{client.goalsCompleted}</TableCell>
-                    <TableCell>{client.attendance}</TableCell>
-                    <TableCell>
-                      <Badge className={getProgressColor(client.progress)} variant="outline">
+                    <TableCell className="font-medium text-xs py-1">{client.name}</TableCell>
+                    <TableCell className="text-xs py-1">{client.goalsCompleted}</TableCell>
+                    <TableCell className="text-xs py-1">{client.attendance}</TableCell>
+                    <TableCell className="py-1">
+                      <Badge className={`${getProgressColor(client.progress)} text-xs`} variant="outline">
                         {client.progress}
                       </Badge>
                     </TableCell>

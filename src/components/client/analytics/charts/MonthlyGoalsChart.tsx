@@ -24,29 +24,29 @@ interface MonthlyGoalsChartProps {
 
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={120}>
       <BarChart
         layout="vertical"
         data={monthlyData}
-        margin={{ top: 2, right: 25, left: 30, bottom: 2 }}
+        margin={{ top: 0, right: 10, left: 15, bottom: 0 }}
       >
         <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-        <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} tick={{ fontSize: 9 }} />
+        <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 'dataMax']} tick={{ fontSize: 8 }} />
         <YAxis 
           dataKey="type" 
           type="category" 
           axisLine={false} 
           tickLine={false}
-          width={50}
-          tick={{ fontSize: 9 }}
+          width={60}
+          tick={{ fontSize: 8 }}
         />
         <Tooltip 
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
               const data = payload[0].payload;
               return (
-                <div className="bg-white p-2 shadow-md border rounded text-xs">
-                  <p className="font-medium">{data.type}</p>
+                <div className="bg-white p-1 shadow-md border rounded text-xs">
+                  <p className="font-medium text-xs">{data.type}</p>
                   <p className="text-xs text-muted-foreground">
                     Current: <span className="font-medium">{data.current}</span>
                   </p>
@@ -59,7 +59,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             return null;
           }}
         />
-        <Bar dataKey="current" fill="#4f46e5" radius={[4, 4, 4, 4]}>
+        <Bar dataKey="current" fill="#4f46e5" radius={[3, 3, 3, 3]}>
           {monthlyData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.current >= entry.target ? "#10b981" : "#4f46e5"} />
           ))}
@@ -67,7 +67,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             dataKey="current" 
             position="right" 
             formatter={(value: number, entry: any) => `${value}/${entry.target}`} 
-            style={{ fill: "#6b7280", fontSize: "8px" }}
+            style={{ fill: "#6b7280", fontSize: "7px" }}
           />
         </Bar>
       </BarChart>
