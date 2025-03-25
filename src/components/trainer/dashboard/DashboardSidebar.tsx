@@ -14,6 +14,8 @@ import {
   LineChart
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 interface DashboardSidebarProps {
   showSidebar: boolean;
@@ -27,10 +29,6 @@ export function DashboardSidebar({
   setActiveTab,
 }: DashboardSidebarProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-
-  if (!showSidebar && !isDesktop) {
-    return null;
-  }
 
   const navigationItems = [
     {
@@ -74,6 +72,65 @@ export function DashboardSidebar({
       href: "settings",
     },
   ];
+
+  // Mobile sidebar using Sheet component
+  if (!isDesktop) {
+    return (
+      <div className="block md:hidden fixed bottom-4 left-4 z-50">
+        <Sheet open={showSidebar} onOpenChange={(open) => setActiveTab(activeTab)}>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="rounded-full shadow-lg bg-white">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-[80%] max-w-[280px]">
+            <div className="bg-white h-full flex flex-col">
+              <ScrollArea className="py-6 h-full">
+                <div className="flex flex-col flex-1 space-y-1 px-4">
+                  {navigationItems.map((item) => (
+                    <Button
+                      key={item.href}
+                      variant={activeTab === item.href ? "default" : "ghost"}
+                      className="justify-start"
+                      onClick={() => setActiveTab(item.href)}
+                    >
+                      <item.icon className="w-5 h-5 mr-2" />
+                      <span>{item.title}</span>
+                    </Button>
+                  ))}
+                </div>
+                <Separator className="my-4" />
+                <div className="px-4">
+                  <div className="text-sm font-medium text-muted-foreground mb-2">
+                    Upcoming
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <Button variant="ghost" className="justify-start cursor-default">
+                      <div className="flex flex-col items-start">
+                        <span className="text-xs">Sarah J. Session</span>
+                        <span className="text-xs text-muted-foreground">Today, 2:00 PM</span>
+                      </div>
+                    </Button>
+                    <Button variant="ghost" className="justify-start cursor-default">
+                      <div className="flex flex-col items-start">
+                        <span className="text-xs">Mike P. Session</span>
+                        <span className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</span>
+                      </div>
+                    </Button>
+                  </div>
+                </div>
+              </ScrollArea>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    );
+  }
+
+  // Desktop sidebar
+  if (!showSidebar && !isDesktop) {
+    return null;
+  }
 
   return (
     <div
