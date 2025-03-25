@@ -20,21 +20,21 @@ export function RetentionPieChart({ data, colors }: RetentionPieChartProps) {
     <Card>
       <CardContent className="pt-6">
         <h3 className="text-base font-medium mb-4">Client Retention</h3>
-        <div className="h-[280px] flex items-center justify-center">
-          <div className="h-[240px] w-[240px]">
+        <div className="h-[300px] flex items-center justify-center">
+          <div className="h-[250px] w-[250px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={data}
                   cx="50%"
                   cy="50%"
-                  innerRadius={45}
-                  outerRadius={90}
+                  innerRadius={50}
+                  outerRadius={95}
                   paddingAngle={3}
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  labelLine={{ strokeWidth: 1, stroke: "#888" }}
-                  fontSize={12}
+                  labelLine={{ strokeWidth: 1.5, stroke: "#888" }}
+                  fontSize={13}
                 >
                   {data.map((entry, index) => (
                     <Cell 
@@ -45,7 +45,14 @@ export function RetentionPieChart({ data, colors }: RetentionPieChartProps) {
                 </Pie>
                 <Tooltip 
                   formatter={(value) => [`${value}%`, 'Clients']}
-                  contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '12px' }}
+                  contentStyle={{ 
+                    borderRadius: '4px', 
+                    border: '1px solid #e2e8f0', 
+                    fontSize: '13px',
+                    padding: '8px 12px',
+                    backgroundColor: 'white',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
