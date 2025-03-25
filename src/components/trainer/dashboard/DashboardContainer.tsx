@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardHeader } from "./DashboardHeader";
@@ -11,7 +10,11 @@ import { SettingsTab } from "./tabs/SettingsTab";
 import { ProgramsTab } from "./tabs/ProgramsTab";
 import { toast } from "sonner";
 
-export function DashboardContainer() {
+interface DashboardContainerProps {
+  customName?: string;
+}
+
+export function DashboardContainer({ customName }: DashboardContainerProps) {
   const navigate = useNavigate();
   const [user, setUser] = useState<{name?: string, email: string, type: string, plan?: string} | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -79,7 +82,7 @@ export function DashboardContainer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">
-            Welcome, {user.name || user.email.split('@')[0]}
+            Welcome, {customName || user.name || user.email.split('@')[0]}
           </h1>
           <p className="text-muted-foreground">Manage your sessions, clients, and business all in one place.</p>
           {!isPremium && (
