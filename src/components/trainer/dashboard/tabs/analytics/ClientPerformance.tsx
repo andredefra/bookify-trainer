@@ -6,163 +6,188 @@ import {
   XAxis, 
   YAxis, 
   CartesianGrid, 
-  Tooltip,
+  Tooltip, 
+  Legend,
+  LineChart,
+  Line,
   PieChart,
   Pie,
   Cell
 } from "recharts";
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 
-// Mock data for client performance analytics
-const goalCompletionData = [
-  { name: 'Weight Loss', achieved: 18, inProgress: 7, total: 25 },
-  { name: 'Strength', achieved: 12, inProgress: 8, total: 20 },
-  { name: 'Endurance', achieved: 10, inProgress: 5, total: 15 },
-  { name: 'Nutrition', achieved: 14, inProgress: 6, total: 20 },
-  { name: 'Flexibility', achieved: 8, inProgress: 7, total: 15 },
+// Mock data for client performance
+const sessionCompletionRate = [
+  { name: 'Jan', completed: 85, canceled: 15 },
+  { name: 'Feb', completed: 88, canceled: 12 },
+  { name: 'Mar', completed: 90, canceled: 10 },
+  { name: 'Apr', completed: 92, canceled: 8 },
+  { name: 'May', completed: 95, canceled: 5 },
+  { name: 'Jun', completed: 93, canceled: 7 },
+];
+
+const clientProgress = [
+  { name: 'Jan', weight: 2, strength: 5, cardio: 3 },
+  { name: 'Feb', weight: 4, strength: 7, cardio: 6 },
+  { name: 'Mar', weight: 5, strength: 8, cardio: 7 },
+  { name: 'Apr', weight: 7, strength: 9, cardio: 8 },
+  { name: 'May', weight: 8, strength: 10, cardio: 8 },
+  { name: 'Jun', weight: 9, strength: 12, cardio: 10 },
 ];
 
 const clientRetention = [
-  { name: 'Retained', value: 85 },
-  { name: 'Churned', value: 15 },
+  { name: 'Active', value: 65 },
+  { name: 'Inactive', value: 20 },
+  { name: 'New', value: 15 },
 ];
 
-const COLORS = ['#10b981', '#ef4444'];
-
-const topPerformingClients = [
-  { 
-    id: 1, 
-    name: 'Sarah Johnson', 
-    goalsCompleted: 8, 
-    attendance: '95%', 
-    progress: 'Excellent', 
-    retention: '12 months' 
-  },
-  { 
-    id: 2, 
-    name: 'Mike Peterson', 
-    goalsCompleted: 7, 
-    attendance: '90%', 
-    progress: 'Good', 
-    retention: '8 months' 
-  },
-  { 
-    id: 3, 
-    name: 'Lisa Garcia', 
-    goalsCompleted: 6, 
-    attendance: '85%', 
-    progress: 'Good', 
-    retention: '6 months' 
-  },
-  { 
-    id: 4, 
-    name: 'David Kim', 
-    goalsCompleted: 5, 
-    attendance: '80%', 
-    progress: 'Moderate', 
-    retention: '4 months' 
-  },
-];
+// Colors for pie chart
+const COLORS = ['#10b981', '#f97316', '#4f46e5'];
 
 export function ClientPerformance() {
-  const calculateAchievementRate = (achieved: number, total: number) => {
-    return ((achieved / total) * 100).toFixed(1);
-  };
-  
-  const getProgressColor = (progress: string) => {
-    switch (progress) {
-      case 'Excellent': return 'bg-green-500/10 text-green-600 hover:bg-green-500/20';
-      case 'Good': return 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20';
-      case 'Moderate': return 'bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20';
-      case 'Poor': return 'bg-red-500/10 text-red-600 hover:bg-red-500/20';
-      default: return '';
-    }
-  };
-  
-  // Calculate overall goal achievement percentage
-  const totalAchieved = goalCompletionData.reduce((sum, goal) => sum + goal.achieved, 0);
-  const totalGoals = goalCompletionData.reduce((sum, goal) => sum + goal.total, 0);
-  const overallAchievementRate = calculateAchievementRate(totalAchieved, totalGoals);
+  // Calculate summary metrics
+  const activeClients = clientRetention.find((segment) => segment.name === 'Active')?.value || 0;
+  const totalClients = clientRetention.reduce((sum, segment) => sum + segment.value, 0);
+  const retentionRate = (activeClients / totalClients) * 100;
+  const avgCompletionRate = sessionCompletionRate.reduce((sum, month) => sum + month.completed, 0) / sessionCompletionRate.length;
   
   return (
     <div className="space-y-4">
       {/* Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <div className="text-sm font-medium text-muted-foreground">Goal Achievement Rate</div>
-          <div className="text-xl font-bold mt-1">{overallAchievementRate}%</div>
-          <div className="text-xs text-muted-foreground mt-1">Overall goal completion</div>
-        </div>
-        
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
           <div className="text-sm font-medium text-muted-foreground">Client Retention</div>
-          <div className="text-xl font-bold mt-1">85%</div>
-          <div className="text-xs text-muted-foreground mt-1">Average retention rate</div>
+          <div className="text-xl font-bold mt-1">{retentionRate.toFixed(1)}%</div>
+          <div className="text-xs text-muted-foreground mt-1">Active clients</div>
         </div>
         
         <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <div className="text-sm font-medium text-muted-foreground">Active Clients</div>
-          <div className="text-xl font-bold mt-1">24</div>
-          <div className="text-xs text-green-600 mt-1">↑ 4 from last month</div>
+          <div className="text-sm font-medium text-muted-foreground">Session Completion</div>
+          <div className="text-xl font-bold mt-1">{avgCompletionRate.toFixed(1)}%</div>
+          <div className="text-xs text-muted-foreground mt-1">Average completion rate</div>
+        </div>
+        
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
+          <div className="text-sm font-medium text-muted-foreground">Client Progress</div>
+          <div className="text-xl font-bold mt-1">+{clientProgress[clientProgress.length - 1].weight}</div>
+          <div className="text-xs text-muted-foreground mt-1">Avg. weight loss (kg)</div>
         </div>
       </div>
       
-      {/* Goal Achievement Chart */}
+      {/* Session Completion Chart */}
       <div className="bg-white p-3 rounded-lg border shadow-sm">
-        <h3 className="text-base font-medium mb-2">Client Goal Achievement by Category</h3>
-        <div className="h-[180px]">
+        <h3 className="text-base font-medium mb-2">Session Completion Rate</h3>
+        <div className="w-full" style={{ height: "200px" }}>
           <ChartContainer
             config={{
-              achieved: {
-                label: "Achieved",
+              completed: {
+                label: "Completed",
                 color: "#10b981"
               },
-              inProgress: {
-                label: "In Progress",
-                color: "#f59e0b"
+              canceled: {
+                label: "Canceled",
+                color: "#f97316"
               }
             }}
           >
-            <BarChart data={goalCompletionData}>
+            <BarChart data={sessionCompletionRate}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
-              <YAxis stroke="#94a3b8" tick={{ fontSize: 10 }} />
+              <YAxis 
+                stroke="#94a3b8" 
+                tick={{ fontSize: 10 }}
+                tickFormatter={(value) => `${value}%`} 
+              />
               <ChartTooltip
                 content={
-                  <ChartTooltipContent />
+                  <ChartTooltipContent
+                    formatter={(value) => [`${value}%`, ""]}
+                  />
                 }
               />
-              <Bar dataKey="achieved" stackId="a" fill="#10b981" radius={[2, 2, 0, 0]} maxBarSize={14} />
-              <Bar dataKey="inProgress" stackId="a" fill="#f59e0b" radius={[2, 2, 0, 0]} maxBarSize={14} />
+              <Legend iconSize={8} fontSize={10} />
+              <Bar dataKey="completed" fill="#10b981" stackId="a" radius={[4, 4, 0, 0]} maxBarSize={20} />
+              <Bar dataKey="canceled" fill="#f97316" stackId="a" radius={[4, 4, 0, 0]} maxBarSize={20} />
             </BarChart>
           </ChartContainer>
         </div>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Client Progress Chart */}
+        <div className="bg-white p-3 rounded-lg border shadow-sm">
+          <h3 className="text-base font-medium mb-2">Client Progress</h3>
+          <div className="w-full" style={{ height: "200px" }}>
+            <ChartContainer
+              config={{
+                weight: {
+                  label: "Weight Loss",
+                  color: "#4f46e5"
+                },
+                strength: {
+                  label: "Strength",
+                  color: "#10b981"
+                },
+                cardio: {
+                  label: "Cardio",
+                  color: "#f97316"
+                }
+              }}
+            >
+              <LineChart data={clientProgress}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#94a3b8" tick={{ fontSize: 10 }} />
+                <ChartTooltip
+                  content={
+                    <ChartTooltipContent />
+                  }
+                />
+                <Legend iconSize={8} fontSize={10} />
+                <Line 
+                  type="monotone" 
+                  dataKey="weight" 
+                  stroke="#4f46e5" 
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 4 }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="strength" 
+                  stroke="#10b981" 
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 4 }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="cardio" 
+                  stroke="#f97316" 
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 4 }}
+                />
+              </LineChart>
+            </ChartContainer>
+          </div>
+        </div>
+        
         {/* Client Retention Chart */}
         <div className="bg-white p-3 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-2">Client Retention</h3>
-          <div className="h-[180px] flex justify-center items-center">
-            <PieChart width={300} height={180}>
+          <div className="flex justify-center items-center" style={{ height: "200px" }}>
+            <PieChart width={200} height={200}>
               <Pie
                 data={clientRetention}
-                cx={150}
-                cy={80}
+                cx={100}
+                cy={100}
                 innerRadius={40}
                 outerRadius={60}
                 startAngle={90}
                 endAngle={-270}
+                paddingAngle={5}
                 dataKey="value"
-                label={({ name, value }) => `${name} ${value}%`}
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 labelLine={false}
                 fontSize={9}
               >
@@ -172,37 +197,6 @@ export function ClientPerformance() {
               </Pie>
               <Tooltip formatter={(value) => [`${value}%`, '']} />
             </PieChart>
-          </div>
-        </div>
-        
-        {/* Top Performing Clients */}
-        <div className="bg-white p-3 rounded-lg border shadow-sm">
-          <h3 className="text-base font-medium mb-2">Top Performing Clients</h3>
-          <div className="overflow-auto max-h-[180px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-xs">Client</TableHead>
-                  <TableHead className="text-xs">Goals</TableHead>
-                  <TableHead className="text-xs">Attendance</TableHead>
-                  <TableHead className="text-xs">Progress</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {topPerformingClients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell className="font-medium text-xs py-1">{client.name}</TableCell>
-                    <TableCell className="text-xs py-1">{client.goalsCompleted}</TableCell>
-                    <TableCell className="text-xs py-1">{client.attendance}</TableCell>
-                    <TableCell className="py-1">
-                      <Badge className={`${getProgressColor(client.progress)} text-xs`} variant="outline">
-                        {client.progress}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
           </div>
         </div>
       </div>

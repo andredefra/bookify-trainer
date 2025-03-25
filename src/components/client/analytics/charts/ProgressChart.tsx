@@ -24,8 +24,13 @@ interface ProgressChartProps {
 
 export function ProgressChart({ progressHistory, progressMetric }: ProgressChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={120}>
-      <LineChart data={progressHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+    <div className="w-full h-[120px]">
+      <LineChart 
+        width={400} 
+        height={120} 
+        data={progressHistory} 
+        margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+      >
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 8 }} />
         <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 8 }} />
@@ -61,6 +66,6 @@ export function ProgressChart({ progressHistory, progressMetric }: ProgressChart
           <Line type="monotone" dataKey={progressMetric} stroke="#4f46e5" strokeWidth={1} dot={{ r: 1 }} />
         )}
       </LineChart>
-    </ResponsiveContainer>
+    </div>
   );
 }

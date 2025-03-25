@@ -80,7 +80,7 @@ export function RevenueAnalytics() {
       {/* Monthly Revenue Chart */}
       <div className="bg-white p-3 rounded-lg border shadow-sm">
         <h3 className="text-base font-medium mb-2">Monthly Revenue</h3>
-        <div className="h-[180px]">
+        <div className="w-full" style={{ height: "200px" }}>
           <ChartContainer
             config={{
               programs: {
@@ -109,8 +109,8 @@ export function RevenueAnalytics() {
                 }
               />
               <Legend iconSize={8} fontSize={10} />
-              <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={10} />
-              <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={10} />
+              <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={20} />
+              <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={20} />
             </BarChart>
           </ChartContainer>
         </div>
@@ -120,12 +120,12 @@ export function RevenueAnalytics() {
         {/* Revenue by Product */}
         <div className="bg-white p-3 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-2">Revenue by Product</h3>
-          <div className="h-[180px] flex justify-center items-center">
-            <PieChart width={300} height={180}>
+          <div className="flex justify-center items-center" style={{ height: "200px" }}>
+            <PieChart width={200} height={200}>
               <Pie
                 data={revenueByProduct}
-                cx={150}
-                cy={80}
+                cx={100}
+                cy={100}
                 innerRadius={40}
                 outerRadius={60}
                 paddingAngle={3}
@@ -146,7 +146,7 @@ export function RevenueAnalytics() {
         {/* Client Growth */}
         <div className="bg-white p-3 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-2">Client Growth</h3>
-          <div className="h-[180px]">
+          <div className="w-full" style={{ height: "200px" }}>
             <ChartContainer
               config={{
                 clients: {
