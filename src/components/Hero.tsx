@@ -33,10 +33,7 @@ const Hero = () => {
   
   return <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden" 
     style={{
-      backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.93)), url("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop")',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
+      background: 'linear-gradient(to right, #ee9ca7, #ffdde1)'
     }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center space-y-8 md:space-y-10">
