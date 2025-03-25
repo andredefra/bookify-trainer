@@ -6,29 +6,63 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UploadCloud } from "lucide-react";
 
 interface ProfileSectionProps {
   user: {
     name?: string;
     email: string;
+    profileImage?: string;
   };
 }
 
 export function ProfileSection({ user }: ProfileSectionProps) {
+  const [name, setName] = useState(user.name || "Demo Trainer");
+  
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Trainer Profile</h3>
         <p className="text-sm text-muted-foreground">This information will be displayed on your public profile page.</p>
+        
+        <div className="flex items-center gap-6 mt-4 mb-6">
+          <div className="relative">
+            <Avatar className="h-20 w-20 border-2 border-primary/20">
+              <AvatarImage src={user.profileImage || "/placeholder.svg"} alt={name} />
+              <AvatarFallback className="bg-primary/10 text-primary text-xl">
+                {name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+            <Button size="sm" variant="outline" className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0">
+              <UploadCloud className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="space-y-1">
+            <h4 className="font-medium">{name}</h4>
+            <p className="text-sm text-muted-foreground">{user.email}</p>
+            <Button variant="link" size="sm" className="p-0 h-auto">Change profile picture</Button>
+          </div>
+        </div>
+        
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="space-y-3">
             <div>
               <Label htmlFor="name">Your Name</Label>
-              <Input id="name" defaultValue={user.name || "Demo Trainer"} className="mt-1" />
+              <Input 
+                id="name" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-1" 
+              />
             </div>
             <div>
               <Label htmlFor="bio">Bio</Label>
-              <textarea id="bio" className="w-full mt-1 px-3 py-2 border border-border rounded-md h-24" placeholder="Tell clients about yourself and your training approach..." />
+              <textarea 
+                id="bio" 
+                className="w-full mt-1 px-3 py-2 border border-border rounded-md h-24" 
+                placeholder="Tell clients about yourself and your training approach..." 
+              />
             </div>
             <div>
               <Label htmlFor="specializations">Specializations</Label>

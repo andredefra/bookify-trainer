@@ -9,25 +9,27 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Circle } from "lucide-react";
+import { Circle, User } from "lucide-react";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface DashboardHeaderProps {
-  name?: string; // Make 'name' optional and add it to the interface
-  customName?: string; // Keep customName for backward compatibility
+  name?: string;
+  customName?: string;
   onMobileMenuClick: () => void;
   user?: {
     name?: string;
     email: string;
     type: string;
     plan?: string;
+    profileImage?: string;
   } | null;
   onLogout?: () => void;
 }
 
 export function DashboardHeader({ name, customName, onMobileMenuClick, user, onLogout }: DashboardHeaderProps) {
   const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
-  const displayName = name || customName || "Trainer";
+  const displayName = user?.name || name || customName || "Trainer";
 
   useEffect(() => {
     // Load status from localStorage if available
@@ -96,7 +98,15 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
                   </SelectContent>
                 </Select>
               </div>
-              <span className="text-sm text-muted-foreground">Demo Mode</span>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.profileImage || "/placeholder.svg"} alt={displayName} />
+                  <AvatarFallback className="bg-primary/10 text-primary">
+                    {displayName.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium">{displayName}</span>
+              </div>
               <Badge variant="secondary" className="bg-primary/10 text-primary">
                 {dummyUser.type === 'trainer' ? 'Trainer' : 'Client'}
               </Badge>

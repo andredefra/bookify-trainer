@@ -7,6 +7,7 @@ interface SettingsTabProps {
     email: string;
     type: string;
     plan?: string;
+    profileImage?: string;
   } | null;
 }
 
