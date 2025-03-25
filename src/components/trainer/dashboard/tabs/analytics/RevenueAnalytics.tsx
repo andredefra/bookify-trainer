@@ -116,30 +116,41 @@ export function RevenueAnalytics() {
         {/* Revenue by Product */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <h3 className="text-base font-medium mb-4">Revenue by Product</h3>
-          <div className="h-[300px] flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={revenueByProduct}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={3}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  labelLine={true}
-                >
-                  {revenueByProduct.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value) => [`€${value}`, 'Revenue']}
-                  contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="flex flex-col items-center h-[300px]">
+            <div className="h-[200px] w-[200px] mx-auto">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={revenueByProduct}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {revenueByProduct.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => [`€${value}`, 'Revenue']}
+                    contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 flex flex-wrap justify-center gap-4">
+              {revenueByProduct.map((entry, index) => (
+                <div key={`legend-${index}`} className="flex items-center">
+                  <div 
+                    className="w-3 h-3 mr-2" 
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  />
+                  <span className="text-xs">{entry.name} (€{entry.value})</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         
