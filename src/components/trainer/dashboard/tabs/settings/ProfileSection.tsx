@@ -1,3 +1,4 @@
+
 import { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,8 +19,11 @@ interface ProfileSectionProps {
 }
 
 export function ProfileSection({ user }: ProfileSectionProps) {
+  // Use a general image of a man as default profile image
+  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+  
   const [name, setName] = useState(user.name || "Demo Trainer");
-  const [profileImage, setProfileImage] = useState<string>(user.profileImage || "/placeholder.svg");
+  const [profileImage, setProfileImage] = useState<string>(user.profileImage || defaultImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const handleImageClick = () => {
@@ -49,6 +53,12 @@ export function ProfileSection({ user }: ProfileSectionProps) {
       };
       reader.readAsDataURL(file);
     }
+  };
+  
+  // Reset image to default
+  const handleResetImage = () => {
+    setProfileImage(defaultImage);
+    toast.success("Profile image reset to default");
   };
   
   return (
@@ -87,14 +97,24 @@ export function ProfileSection({ user }: ProfileSectionProps) {
           <div className="space-y-1">
             <h4 className="font-medium">{name}</h4>
             <p className="text-sm text-muted-foreground">{user.email}</p>
-            <Button 
-              variant="link" 
-              size="sm" 
-              className="p-0 h-auto"
-              onClick={handleImageClick}
-            >
-              Change profile picture
-            </Button>
+            <div className="space-x-2">
+              <Button 
+                variant="link" 
+                size="sm" 
+                className="p-0 h-auto"
+                onClick={handleImageClick}
+              >
+                Change profile picture
+              </Button>
+              <Button 
+                variant="link" 
+                size="sm" 
+                className="p-0 h-auto text-muted-foreground"
+                onClick={handleResetImage}
+              >
+                Reset to default
+              </Button>
+            </div>
           </div>
         </div>
         

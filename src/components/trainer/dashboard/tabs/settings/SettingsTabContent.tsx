@@ -23,6 +23,12 @@ interface SettingsTabContentProps {
 export function SettingsTabContent({ user }: SettingsTabContentProps) {
   if (!user) return null;
   
+  // Set the default profile image
+  const updatedUser = {
+    ...user,
+    profileImage: user.profileImage || "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80"
+  };
+  
   const [selectedTab, setSelectedTab] = useState("profile");
 
   const handleSaveChanges = () => {
@@ -47,7 +53,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
           </TabsList>
           
           <TabsContent value="profile">
-            <ProfileSection user={user} />
+            <ProfileSection user={updatedUser} />
           </TabsContent>
           
           <TabsContent value="availability">
@@ -59,7 +65,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
           </TabsContent>
           
           <TabsContent value="billing">
-            <BillingSection user={user} />
+            <BillingSection user={updatedUser} />
           </TabsContent>
         </Tabs>
       </CardContent>
