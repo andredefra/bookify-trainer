@@ -1,4 +1,3 @@
-
 // Mock trainer data for development and testing
 
 export interface Trainer {
@@ -76,7 +75,7 @@ export const trainerData: Trainer = {
       description: "Led group fitness classes and provided one-on-one training."
     }
   ],
-  profileImage: "/placeholder.svg",
+  profileImage: "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop",
   status: "in-session",
   nextAvailability: "Today at 4:00 PM"
 };
@@ -128,12 +127,23 @@ export const aiConversation: Message[] = [
   }
 ];
 
-// Helper function to get a trainer by ID
 export function getTrainerById(id: string): Trainer | undefined {
-  // In a real app, this would fetch from an API
-  // For now, we just return our mock trainer if IDs match
-  if (trainerData.id === id) {
+  if (id === "t1") {
     return trainerData;
+  } else if (id === "t2") {
+    return {
+      ...trainerData,
+      id: "t2",
+      name: "Michael Thompson",
+      title: "HIIT Specialist",
+      location: "Los Angeles, CA",
+      rating: 4.7,
+      reviews: 98,
+      hourlyRate: 45,
+      profileImage: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop",
+      status: "online",
+      nextAvailability: "Available now"
+    }
   }
   return undefined;
 }
