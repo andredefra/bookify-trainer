@@ -1,10 +1,14 @@
+
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { CalendarCheck, CreditCard, MessageSquare, Bot } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
+
 const Hero = () => {
   const isMobile = useIsMobile();
   const elementRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -25,11 +29,34 @@ const Hero = () => {
   // Log to debug image loading
   useEffect(() => {
     console.log("Attempting to load dashboard image");
-    const img = new Image();
-    img.onload = () => console.log("Dashboard image loaded successfully");
-    img.onerror = e => console.error("Error loading dashboard image:", e);
-    img.src = "/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png";
+    const loadImage = async () => {
+      try {
+        // Create a public URL for the image
+        const { data, error } = await supabase
+          .storage
+          .from('images')
+          .getPublicUrl('trainer-dashboard.png');
+          
+        if (error) {
+          console.error("Error getting public URL:", error);
+          return;
+        }
+        
+        console.log("Dashboard image URL generated:", data.publicUrl);
+        
+        // Test loading the image
+        const img = new Image();
+        img.onload = () => console.log("Dashboard image loaded successfully");
+        img.onerror = e => console.error("Error loading dashboard image:", e);
+        img.src = data.publicUrl;
+      } catch (error) {
+        console.error("General error loading dashboard image:", error);
+      }
+    };
+    
+    loadImage();
   }, []);
+  
   return <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden" style={{
     background: 'radial-gradient(circle at 50% 50%, rgba(245, 245, 247, 0.5) 0%, rgba(250, 250, 252, 0.2) 100%)'
   }}>
@@ -62,13 +89,18 @@ const Hero = () => {
               </div>
             </div>
             <div className="bg-white p-0 m-0">
-              {/* Use a fallback image in case the uploaded one fails */}
-              <img src="/lovable-uploads/05a47375-1c9c-4a71-9db5-192a66cdae3c.png" alt="Trainer dashboard preview" className="w-full h-[400px] md:h-[500px] object-contain" onError={e => {
-              console.error("Image failed to load, using fallback");
-              // If the image fails to load, use a placeholder
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600";
-            }} />
+              {/* Use the image from Supabase storage with a fallback */}
+              <img 
+                src="https://cxclisripwxqathhnjfx.supabase.co/storage/v1/object/public/images/trainer-dashboard.png" 
+                alt="Trainer dashboard preview" 
+                className="w-full h-[400px] md:h-[500px] object-contain"
+                onError={(e) => {
+                  console.error("Image failed to load, using fallback");
+                  // If the image fails to load, use a placeholder
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600";
+                }}
+              />
             </div>
           </div>
         </div>
