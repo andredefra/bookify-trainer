@@ -27,9 +27,9 @@ export function AnalyticsTab() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-4 pb-6">
+      <CardContent className="p-3 pb-5">
         <Tabs defaultValue="revenue">
-          <TabsList className="mb-6">
+          <TabsList className="mb-4">
             <TabsTrigger value="revenue">Revenue</TabsTrigger>
             <TabsTrigger value="clients">Client Performance</TabsTrigger>
           </TabsList>

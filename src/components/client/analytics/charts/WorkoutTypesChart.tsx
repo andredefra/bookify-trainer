@@ -29,11 +29,13 @@ export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
           cx="50%"
           cy="50%"
           labelLine={false}
-          outerRadius={65}
+          outerRadius={50}
           fill="#8884d8"
           dataKey="value"
-          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-          fontSize={11}
+          label={({ name, percent }) => 
+            `${name} ${(percent * 100).toFixed(0)}%`
+          }
+          fontSize={9}
         >
           {workoutTypes.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
@@ -44,9 +46,9 @@ export function WorkoutTypesChart({ workoutTypes }: WorkoutTypesChartProps) {
             if (active && payload && payload.length) {
               const data = payload[0].payload;
               return (
-                <div className="bg-white p-2 shadow-md border rounded">
+                <div className="bg-white p-2 shadow-md border rounded text-xs">
                   <p className="font-medium">{data.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Sessions: <span className="font-medium">{data.value}</span>
                   </p>
                 </div>
