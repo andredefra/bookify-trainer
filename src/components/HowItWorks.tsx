@@ -88,7 +88,12 @@ const HowItWorks = () => {
                   Get Started for Free
                 </button>
               </div>
-              <div className="h-64 md:h-auto bg-[url('/placeholder.svg')] bg-center bg-cover"></div>
+              <div className="h-64 md:h-auto bg-cover bg-center" 
+                style={{
+                  backgroundImage: "url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop')",
+                  backgroundPosition: "center 30%"
+                }}>
+              </div>
             </div>
           </div>
         </div>
