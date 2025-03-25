@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
+import { Badge } from "@/components/ui/badge";
 
 interface SessionItem {
   id: number;
@@ -14,6 +15,12 @@ interface SessionItem {
   date: string;
   participants: number;
   maxParticipants: number;
+  waitingList?: number;
+  paymentStatus?: {
+    paid: number;
+    pending: number;
+    total: number;
+  };
 }
 
 interface SessionsTabProps {
@@ -22,6 +29,17 @@ interface SessionsTabProps {
 
 export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
+  
+  // Add payment status and waiting list to mock data if not available
+  const sessionsWithPaymentInfo = upcomingSessions.map(session => ({
+    ...session,
+    waitingList: session.waitingList || 0,
+    paymentStatus: session.paymentStatus || {
+      paid: Math.floor(Math.random() * session.participants),
+      pending: Math.floor(Math.random() * session.participants),
+      get total() { return this.paid + this.pending; }
+    }
+  }));
   
   return (
     <Card>
@@ -46,12 +64,27 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
           </TabsList>
           <TabsContent value="upcoming">
             <div className="space-y-4">
-              {upcomingSessions.map((session) => (
+              {sessionsWithPaymentInfo.map((session) => (
                 <div key={session.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <div>
                     <h3 className="font-medium">{session.name}</h3>
                     <div className="text-sm text-muted-foreground">
                       {session.date} • {session.time}
+                    </div>
+                    <div className="flex mt-2 gap-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        {session.paymentStatus.paid} paid
+                      </Badge>
+                      {session.paymentStatus.pending > 0 && (
+                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                          {session.paymentStatus.pending} pending
+                        </Badge>
+                      )}
+                      {session.waitingList > 0 && (
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          {session.waitingList} waiting
+                        </Badge>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
