@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 interface AssignProgramDialogProps {
@@ -22,9 +23,16 @@ export function AssignProgramDialog({
   clients, 
   programs 
 }: AssignProgramDialogProps) {
+  const [isPaid, setIsPaid] = useState(false);
+  const [price, setPrice] = useState("");
+
   const handleAssign = () => {
+    const message = isPaid 
+      ? `Program assigned successfully with a price of €${price}`
+      : "Program assigned successfully for free";
+    
     onOpenChange(false);
-    toast.success("Program assigned successfully");
+    toast.success(message);
   };
 
   return (
@@ -73,6 +81,31 @@ export function AssignProgramDialog({
           <div className="space-y-2">
             <Label htmlFor="startDate">Start Date</Label>
             <Input type="date" id="startDate" />
+          </div>
+          
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="isPaid">Paid Program</Label>
+              <Switch 
+                id="isPaid" 
+                checked={isPaid} 
+                onCheckedChange={setIsPaid} 
+              />
+            </div>
+            {isPaid && (
+              <div className="pt-2">
+                <Label htmlFor="price">Price (€)</Label>
+                <Input 
+                  id="price" 
+                  placeholder="29.99" 
+                  type="number" 
+                  min="0"
+                  step="0.01"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </div>
+            )}
           </div>
           
           <div className="space-y-2">

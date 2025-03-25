@@ -1,78 +1,125 @@
 
-import { Calendar, MessageSquare, Settings, Users, Dumbbell, Activity } from "lucide-react";
+import { useMediaQuery } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  Users,
+  Dumbbell,
+  Calendar,
+  MessageSquare,
+  Settings,
+  CreditCard,
+  LineChart
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 interface DashboardSidebarProps {
+  showSidebar: boolean;
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  messageRequests: {
-    id: number;
-    from: string;
-    preview: string;
-    time: string;
-  }[];
 }
 
-export function DashboardSidebar({ activeTab, setActiveTab, messageRequests }: DashboardSidebarProps) {
-  const navItems = [
+export function DashboardSidebar({
+  showSidebar,
+  activeTab,
+  setActiveTab,
+}: DashboardSidebarProps) {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  if (!showSidebar && !isDesktop) {
+    return null;
+  }
+
+  const navigationItems = [
     {
-      name: "overview",
-      label: "Overview",
-      icon: <Activity className="h-5 w-5" />,
+      title: "Overview",
+      icon: LayoutDashboard,
+      href: "overview",
     },
     {
-      name: "sessions",
-      label: "Sessions",
-      icon: <Calendar className="h-5 w-5" />,
+      title: "Clients",
+      icon: Users,
+      href: "clients",
     },
     {
-      name: "clients",
-      label: "Clients",
-      icon: <Users className="h-5 w-5" />,
+      title: "Programs",
+      icon: Dumbbell,
+      href: "programs",
     },
     {
-      name: "programs",
-      label: "Programs",
-      icon: <Dumbbell className="h-5 w-5" />,
+      title: "Sessions",
+      icon: Calendar,
+      href: "sessions",
     },
     {
-      name: "messages",
-      label: "Messages",
-      icon: <MessageSquare className="h-5 w-5" />,
-      notification: messageRequests.length > 0 ? messageRequests.length : undefined,
+      title: "Messages",
+      icon: MessageSquare,
+      href: "messages",
     },
     {
-      name: "settings",
-      label: "Settings",
-      icon: <Settings className="h-5 w-5" />,
+      title: "Transactions",
+      icon: CreditCard,
+      href: "transactions",
+    },
+    {
+      title: "Analytics",
+      icon: LineChart,
+      href: "analytics",
+    },
+    {
+      title: "Settings",
+      icon: Settings,
+      href: "settings",
     },
   ];
 
   return (
-    <div className="col-span-12 lg:col-span-3">
-      <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
-        <nav className="p-4">
-          <ul className="space-y-2">
-            {navItems.map((item) => (
-              <li key={item.name}>
-                <Button
-                  variant={activeTab === item.name ? "default" : "ghost"}
-                  className={`w-full justify-start ${activeTab === item.name ? "" : "text-muted-foreground"}`}
-                  onClick={() => setActiveTab(item.name)}
-                >
-                  {item.icon}
-                  <span className="ml-3">{item.label}</span>
-                  {item.notification && (
-                    <span className="ml-auto bg-primary text-white text-xs rounded-full h-5 min-w-5 flex items-center justify-center px-1">
-                      {item.notification}
-                    </span>
-                  )}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
+    <div
+      className={cn(
+        "pb-12 w-20 md:w-60 flex-shrink-0 bg-white border-r z-20",
+        isDesktop ? "block" : "fixed inset-y-0"
+      )}
+    >
+      <ScrollArea className="py-6 h-full">
+        <div className="flex flex-col flex-1 space-y-1 px-2 md:px-6">
+          {navigationItems.map((item) => (
+            <Button
+              key={item.href}
+              variant={activeTab === item.href ? "default" : "ghost"}
+              className={cn(
+                "justify-start",
+                !isDesktop && "justify-center md:justify-start"
+              )}
+              onClick={() => setActiveTab(item.href)}
+            >
+              <item.icon className="w-5 h-5 md:mr-2" />
+              <span className="hidden md:inline-flex">{item.title}</span>
+            </Button>
+          ))}
+        </div>
+        <Separator className="my-4 md:mb-4 md:mt-6" />
+        <div className="px-2 md:px-6">
+          <div className="text-xs md:text-sm font-medium text-muted-foreground hidden md:block mb-2">
+            Upcoming
+          </div>
+          <div className="md:flex flex-col space-y-1 hidden">
+            <Button variant="ghost" className="justify-start cursor-default">
+              <div className="flex flex-col items-start">
+                <span className="text-xs">Sarah J. Session</span>
+                <span className="text-xs text-muted-foreground">Today, 2:00 PM</span>
+              </div>
+            </Button>
+            <Button variant="ghost" className="justify-start cursor-default">
+              <div className="flex flex-col items-start">
+                <span className="text-xs">Mike P. Session</span>
+                <span className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</span>
+              </div>
+            </Button>
+          </div>
+        </div>
+      </ScrollArea>
     </div>
   );
 }
