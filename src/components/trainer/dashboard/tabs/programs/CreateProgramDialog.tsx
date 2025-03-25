@@ -24,7 +24,7 @@ export function CreateProgramDialog({ open, onOpenChange }: CreateProgramDialogP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Create New Training Program</DialogTitle>
           <DialogDescription>Create a new training program for your clients</DialogDescription>
