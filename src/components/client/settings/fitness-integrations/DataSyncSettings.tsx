@@ -2,14 +2,16 @@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
+interface DataSyncSettings {
+  steps: boolean;
+  heartRate: boolean;
+  sleep: boolean;
+  workouts: boolean;
+}
+
 interface DataSyncSettingsProps {
-  dataSync: {
-    steps: boolean;
-    heartRate: boolean;
-    sleep: boolean;
-    workouts: boolean;
-  };
-  toggleDataSync: (metric: keyof typeof dataSync) => void;
+  dataSync: DataSyncSettings;
+  toggleDataSync: (metric: keyof DataSyncSettings) => void;
 }
 
 export function DataSyncSettings({ dataSync, toggleDataSync }: DataSyncSettingsProps) {
