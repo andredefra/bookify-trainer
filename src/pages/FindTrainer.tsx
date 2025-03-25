@@ -13,7 +13,7 @@ const FindTrainer = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Mock trainer data
+  // Trainer data with real images
   const trainers = [
     {
       id: "t1",
@@ -24,7 +24,7 @@ const FindTrainer = () => {
       reviews: 124,
       price: "€50",
       availability: "Available today",
-      image: "/placeholder.svg"
+      image: "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop"
     },
     {
       id: "t2",
@@ -35,7 +35,7 @@ const FindTrainer = () => {
       reviews: 98,
       price: "€45",
       availability: "Available tomorrow",
-      image: "/placeholder.svg"
+      image: "https://images.unsplash.com/photo-1567013127542-490d757e6349?q=80&w=1374&auto=format&fit=crop"
     },
     {
       id: "t3",
@@ -46,7 +46,7 @@ const FindTrainer = () => {
       reviews: 156,
       price: "€40",
       availability: "Available today",
-      image: "/placeholder.svg"
+      image: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=1470&auto=format&fit=crop"
     },
     {
       id: "t4",
@@ -57,7 +57,7 @@ const FindTrainer = () => {
       reviews: 87,
       price: "€60",
       availability: "Available this week",
-      image: "/placeholder.svg"
+      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop"
     }
   ];
 
@@ -111,7 +111,10 @@ const FindTrainer = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {trainers.map((trainer) => (
               <div key={trainer.id} className="bg-white rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-md transition-shadow">
-                <div className="h-48 bg-cover bg-center" style={{ backgroundImage: `url(${trainer.image})` }}></div>
+                <div 
+                  className="h-48 bg-cover bg-center" 
+                  style={{ backgroundImage: `url(${trainer.image})` }}
+                ></div>
                 <div className="p-6">
                   <h3 className="text-lg font-semibold mb-1">{trainer.name}</h3>
                   <p className="text-muted-foreground text-sm">{trainer.specialty}</p>
