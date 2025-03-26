@@ -51,7 +51,7 @@ export function ClientHeader({ user, onLogout, onMobileMenuClick }: ClientHeader
             
             {isMobile && (
               <Avatar className="h-8 w-8">
-                <AvatarImage src={user?.profileImage || defaultImage} alt={displayName} />
+                <AvatarImage src={defaultImage} alt={displayName} />
                 <AvatarFallback className="bg-primary/10 text-primary">
                   {displayName.charAt(0)}
                 </AvatarFallback>
