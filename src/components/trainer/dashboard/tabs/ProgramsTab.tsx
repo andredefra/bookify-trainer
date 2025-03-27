@@ -7,6 +7,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreateProgramDialog } from "./programs/CreateProgramDialog";
 import { AssignProgramDialog } from "./programs/AssignProgramDialog";
 import { ProgramsTabContent } from "./programs/ProgramsTabContent";
+import { currentProgram } from "@/data/training/mockPrograms/currentProgram";
+import { Exercise } from "@/data/training/types";
 
 export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
@@ -15,7 +17,47 @@ export function ProgramsTab() {
   const [showEditProgram, setShowEditProgram] = useState(false);
   const [activeProgramId, setActiveProgramId] = useState<number | null>(null);
   
-  // Mock programs with extended data
+  // Sample exercises we can use for our programs
+  const sampleExercises: Exercise[] = currentProgram.days[0].exercises.map(ex => ({
+    ...ex,
+    id: Math.random().toString(36).substring(2, 9)
+  }));
+  
+  const cardioExercises: Exercise[] = [
+    {
+      id: "ex-c1",
+      name: "Treadmill Running",
+      sets: 3,
+      reps: "10 minutes",
+      notes: "7-8 RPE intensity"
+    },
+    {
+      id: "ex-c2",
+      name: "Jumping Jacks",
+      sets: 4,
+      reps: "30 seconds",
+      notes: "Full range of motion"
+    }
+  ];
+  
+  const mobilityExercises: Exercise[] = [
+    {
+      id: "ex-m1",
+      name: "Hip Flexor Stretch",
+      sets: 3,
+      reps: "30 seconds each side",
+      notes: "Feel a gentle stretch"
+    },
+    {
+      id: "ex-m2",
+      name: "Shoulder Dislocates",
+      sets: 2,
+      reps: "10 reps",
+      notes: "Use a resistance band"
+    }
+  ];
+  
+  // Mock programs with extended data and exercises
   const programs = [
     { 
       id: 1, 
@@ -26,7 +68,8 @@ export function ProgramsTab() {
       objective: "Build muscle",
       duration: 8,
       isPaid: true,
-      price: 49.99
+      price: 49.99,
+      exercises: sampleExercises
     },
     { 
       id: 2, 
@@ -37,7 +80,8 @@ export function ProgramsTab() {
       objective: "Lose weight",
       duration: 12,
       isPaid: true,
-      price: 69.99
+      price: 69.99,
+      exercises: cardioExercises
     },
     { 
       id: 3, 
@@ -47,7 +91,8 @@ export function ProgramsTab() {
       lastUpdated: "1 week ago",
       objective: "Improve mobility",
       duration: 4,
-      isPaid: false
+      isPaid: false,
+      exercises: mobilityExercises
     },
     { 
       id: 4, 
@@ -57,7 +102,8 @@ export function ProgramsTab() {
       lastUpdated: "3 days ago",
       objective: "Learn basics",
       duration: 6,
-      isPaid: false
+      isPaid: false,
+      exercises: sampleExercises.slice(0, 2)
     },
   ];
   

@@ -1,7 +1,8 @@
 
 import { Button } from "@/components/ui/button";
-import { CalendarDays, Users, DollarSign, Edit, UserPlus } from "lucide-react";
+import { CalendarDays, Users, DollarSign, Edit, UserPlus, Dumbbell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Exercise } from "@/data/training/types";
 
 interface ProgramListItemProps {
   program: {
@@ -14,6 +15,7 @@ interface ProgramListItemProps {
     duration?: number;
     isPaid?: boolean;
     price?: number;
+    exercises?: Exercise[];
   };
   onAssign: () => void;
   onEdit: () => void;
@@ -32,6 +34,14 @@ export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemPr
           
           <Users className="h-3.5 w-3.5" />
           <span>{program.clientCount} client{program.clientCount !== 1 ? 's' : ''}</span>
+
+          {program.exercises && program.exercises.length > 0 && (
+            <>
+              <span className="mx-1">•</span>
+              <Dumbbell className="h-3.5 w-3.5" />
+              <span>{program.exercises.length} exercise{program.exercises.length !== 1 ? 's' : ''}</span>
+            </>
+          )}
         </div>
         
         <div className="flex mt-2 gap-2 flex-wrap">
@@ -45,13 +55,25 @@ export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemPr
             </Badge>
           )}
         </div>
+
+        {program.exercises && program.exercises.length > 0 && (
+          <div className="mt-2 text-sm text-muted-foreground">
+            <span className="font-medium">Top exercises: </span>
+            {program.exercises.slice(0, 2).map((ex, i) => (
+              <span key={ex.id}>
+                {ex.name}{i < Math.min(program.exercises?.length || 0, 2) - 1 ? ', ' : ''}
+              </span>
+            ))}
+            {program.exercises.length > 2 && ` +${program.exercises.length - 2} more`}
+          </div>
+        )}
       </div>
       <div className="flex items-center space-x-2">
         <Button variant="outline" size="sm" onClick={onAssign} className="flex items-center gap-1">
           <UserPlus className="h-4 w-4" />
           <span className="hidden sm:inline">Assign</span>
         </Button>
-        <Button variant="ghost" size="sm" onClick={onEdit} className="flex items-center gap-1">
+        <Button variant="outline" size="sm" onClick={onEdit} className="flex items-center gap-1">
           <Edit className="h-4 w-4" />
           <span className="hidden sm:inline">Edit</span>
         </Button>
