@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -37,6 +36,12 @@ const Navbar = () => {
     
     setMobileMenuOpen(false); // Close mobile menu if open
     
+    if (sectionId === 'hero') {
+      // Scroll to top for hero section
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -60,13 +65,23 @@ const Navbar = () => {
         {!isMobile ? (
           <div className="flex-1 flex justify-center ml-16">
             <div className="flex space-x-8 items-center">
-              <Link 
-                to="/" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
-              >
-                <Home size={16} />
-                Home
-              </Link>
+              {isHomePage ? (
+                <button 
+                  onClick={() => scrollToSection('hero')} 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                >
+                  <Home size={16} />
+                  Home
+                </button>
+              ) : (
+                <Link 
+                  to="/" 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                >
+                  <Home size={16} />
+                  Home
+                </Link>
+              )}
               {isHomePage ? (
                 <button 
                   onClick={() => scrollToSection('features')} 
@@ -145,14 +160,24 @@ const Navbar = () => {
       {isMobile && mobileMenuOpen && (
         <div className="fixed inset-0 top-[60px] glass z-50 animate-fade-in flex flex-col items-center pt-10">
           <div className="flex flex-col items-center space-y-8 w-full px-6">
-            <Link 
-              to="/" 
-              className="w-full py-3 text-lg font-medium text-center text-primary flex items-center justify-center gap-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Home size={20} />
-              Home
-            </Link>
+            {isHomePage ? (
+              <button 
+                onClick={() => scrollToSection('hero')} 
+                className="w-full py-3 text-lg font-medium text-center text-primary flex items-center justify-center gap-2"
+              >
+                <Home size={20} />
+                Home
+              </button>
+            ) : (
+              <Link 
+                to="/" 
+                className="w-full py-3 text-lg font-medium text-center text-primary flex items-center justify-center gap-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Home size={20} />
+                Home
+              </Link>
+            )}
             {isHomePage ? (
               <button 
                 onClick={() => scrollToSection('features')} 
