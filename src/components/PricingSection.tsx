@@ -31,13 +31,14 @@ const PricingSection = () => {
     "Google Calendar Integration",
     "Personal Trainer Page",
     "Client Messaging",
+    "Stripe Integration",
     "Client Management",
   ];
 
   const proFeatures = [
     "Everything in Freemium",
-    "Lower Transaction Fee (2.5%)",
-    "Payment Integration",
+    "Lower Transaction Fee (5%)",
+    "Custom Branding",
     "Priority Support",
     "Advanced Analytics",
     "Waitlist Management",
@@ -93,7 +94,7 @@ const PricingSection = () => {
                 <span className="text-muted-foreground ml-2">/month</span>
               </div>
               <p className="text-muted-foreground">
-                + 5% transaction fee
+                + 7.5% transaction fee
               </p>
             </div>
 
@@ -129,7 +130,7 @@ const PricingSection = () => {
                 <span className="text-muted-foreground ml-2">/month</span>
               </div>
               <p className="text-muted-foreground">
-                + 2.5% transaction fee
+                + 5% transaction fee
               </p>
             </div>
 
@@ -153,7 +154,7 @@ const PricingSection = () => {
 
         <div className="mt-16 text-center">
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            All plans include secure payment processing. Transaction fees are charged only on successful payments. 
+            All plans include secure payment processing via Stripe. Transaction fees are charged only on successful payments. 
             You can upgrade, downgrade, or cancel your subscription at any time.
           </p>
           <p className="text-sm text-primary font-medium mt-4 max-w-2xl mx-auto">
