@@ -3,11 +3,16 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const location = useLocation();
+  
+  // Check if we're on the home page
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +27,21 @@ const Navbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrolled]);
+
+  // Function to handle smooth scrolling to sections
+  const scrollToSection = (sectionId: string) => {
+    if (!isHomePage) {
+      // If not on home page, navigate to home page with hash
+      return;
+    }
+    
+    setMobileMenuOpen(false); // Close mobile menu if open
+    
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <nav
@@ -47,24 +67,51 @@ const Navbar = () => {
                 <Home size={16} />
                 Home
               </Link>
-              <Link 
-                to="/#features" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                Features
-              </Link>
-              <Link 
-                to="/#how-it-works" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                How it works
-              </Link>
-              <Link 
-                to="/#pricing" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                Pricing
-              </Link>
+              {isHomePage ? (
+                <button 
+                  onClick={() => scrollToSection('features')} 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Features
+                </button>
+              ) : (
+                <Link 
+                  to="/#features" 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Features
+                </Link>
+              )}
+              {isHomePage ? (
+                <button 
+                  onClick={() => scrollToSection('how-it-works')} 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  How it works
+                </button>
+              ) : (
+                <Link 
+                  to="/#how-it-works" 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  How it works
+                </Link>
+              )}
+              {isHomePage ? (
+                <button 
+                  onClick={() => scrollToSection('pricing')} 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Pricing
+                </button>
+              ) : (
+                <Link 
+                  to="/#pricing" 
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Pricing
+                </Link>
+              )}
             </div>
           </div>
         ) : (
@@ -106,27 +153,54 @@ const Navbar = () => {
               <Home size={20} />
               Home
             </Link>
-            <Link 
-              to="/#features" 
-              className="w-full py-3 text-lg font-medium text-center text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Features
-            </Link>
-            <Link 
-              to="/#how-it-works" 
-              className="w-full py-3 text-lg font-medium text-center text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              How it works
-            </Link>
-            <Link 
-              to="/#pricing" 
-              className="w-full py-3 text-lg font-medium text-center text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Pricing
-            </Link>
+            {isHomePage ? (
+              <button 
+                onClick={() => scrollToSection('features')} 
+                className="w-full py-3 text-lg font-medium text-center text-primary"
+              >
+                Features
+              </button>
+            ) : (
+              <Link 
+                to="/#features" 
+                className="w-full py-3 text-lg font-medium text-center text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </Link>
+            )}
+            {isHomePage ? (
+              <button 
+                onClick={() => scrollToSection('how-it-works')} 
+                className="w-full py-3 text-lg font-medium text-center text-primary"
+              >
+                How it works
+              </button>
+            ) : (
+              <Link 
+                to="/#how-it-works" 
+                className="w-full py-3 text-lg font-medium text-center text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                How it works
+              </Link>
+            )}
+            {isHomePage ? (
+              <button 
+                onClick={() => scrollToSection('pricing')} 
+                className="w-full py-3 text-lg font-medium text-center text-primary"
+              >
+                Pricing
+              </button>
+            ) : (
+              <Link 
+                to="/#pricing" 
+                className="w-full py-3 text-lg font-medium text-center text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Pricing
+              </Link>
+            )}
             <div className="pt-4 w-full flex flex-col space-y-3">
               <Link 
                 to="/login" 
