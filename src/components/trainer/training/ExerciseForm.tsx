@@ -83,13 +83,13 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
         <div className="md:col-span-1">
           <FormLabel>Video Source</FormLabel>
           <Select
-            value={exercise.videoSource || ""}
+            value={exercise.videoSource || "none"}
             onValueChange={(value) =>
               onUpdate(
                 dayId,
                 exercise.id,
                 "videoSource",
-                value === "" ? undefined : value
+                value === "none" ? undefined : value
               )
             }
           >
@@ -97,7 +97,7 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
               <SelectValue placeholder="Select source" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="none">None</SelectItem>
               <SelectItem value="youtube">YouTube</SelectItem>
               <SelectItem value="vimeo">Vimeo</SelectItem>
             </SelectContent>
