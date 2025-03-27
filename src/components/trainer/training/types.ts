@@ -9,3 +9,21 @@ export interface ProgramFormProps {
   onSend: (program: any) => void;
   isPremium: boolean;
 }
+
+export interface PaymentMethod {
+  id: string;
+  type: 'creditCard' | 'paypal' | 'googlePay';
+  isDefault: boolean;
+  lastFour?: string;
+  expiryDate?: string;
+}
+
+export interface PaymentTransaction {
+  id: string;
+  amount: number;
+  date: string;
+  programId?: string;
+  sessionId?: string;
+  status: 'pending' | 'completed' | 'failed';
+  paymentMethod: string;
+}
