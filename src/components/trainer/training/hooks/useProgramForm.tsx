@@ -8,6 +8,13 @@ export function useProgramForm() {
     title: "Weekly Training Program",
     week: "",
     trainerName: "",
+    // Add the additional properties
+    weekStart: "",
+    duration: 4,
+    objective: "Strength & Conditioning",
+    description: "",
+    isPaid: false,
+    price: 0,
     days: [
       {
         id: "1",
@@ -57,61 +64,80 @@ export function useProgramForm() {
   const [activeDay, setActiveDay] = useState<string>("1");
 
   const handleAddExercise = (dayId: string) => {
-    const updatedDays = program.days.map((day) => {
-      if (day.id === dayId) {
-        return {
-          ...day,
-          exercises: [
-            ...day.exercises,
-            {
-              id: Math.random().toString(36).substring(2, 9),
-              name: "",
-              sets: 3,
-              reps: "8-12",
-            },
-          ],
-        };
-      }
-      return day;
-    });
+    setProgram((prev) => {
+      const updatedDays = prev.days.map((day) => {
+        if (day.id === dayId) {
+          return {
+            ...day,
+            exercises: [
+              ...day.exercises,
+              {
+                id: Math.random().toString(36).substring(2, 9),
+                name: "",
+                sets: 3,
+                reps: "10",
+                weight: 0,
+                notes: "",
+              },
+            ],
+          };
+        }
+        return day;
+      });
 
-    setProgram({ ...program, days: updatedDays });
+      return {
+        ...prev,
+        days: updatedDays,
+      };
+    });
   };
 
   const handleUpdateExercise = (dayId: string, exerciseId: string, field: string, value: any) => {
-    const updatedDays = program.days.map((day) => {
-      if (day.id === dayId) {
-        return {
-          ...day,
-          exercises: day.exercises.map((ex) => {
-            if (ex.id === exerciseId) {
+    setProgram((prev) => {
+      const updatedDays = prev.days.map((day) => {
+        if (day.id === dayId) {
+          const updatedExercises = day.exercises.map((exercise) => {
+            if (exercise.id === exerciseId) {
               return {
-                ...ex,
+                ...exercise,
                 [field]: value,
               };
             }
-            return ex;
-          }),
-        };
-      }
-      return day;
-    });
+            return exercise;
+          });
 
-    setProgram({ ...program, days: updatedDays });
+          return {
+            ...day,
+            exercises: updatedExercises,
+          };
+        }
+        return day;
+      });
+
+      return {
+        ...prev,
+        days: updatedDays,
+      };
+    });
   };
 
   const handleRemoveExercise = (dayId: string, exerciseId: string) => {
-    const updatedDays = program.days.map((day) => {
-      if (day.id === dayId) {
-        return {
-          ...day,
-          exercises: day.exercises.filter((ex) => ex.id !== exerciseId),
-        };
-      }
-      return day;
-    });
+    setProgram((prev) => {
+      const updatedDays = prev.days.map((day) => {
+        if (day.id === dayId) {
+          return {
+            ...day,
+            exercises: day.exercises.filter((exercise) => exercise.id !== exerciseId),
+          };
+        }
+        return day;
+      });
 
-    setProgram({ ...program, days: updatedDays });
+      return {
+        ...prev,
+        days: updatedDays,
+      };
+    });
   };
 
   return {

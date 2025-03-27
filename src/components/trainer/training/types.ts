@@ -1,35 +1,7 @@
 
-export interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  notes?: string;
-  videoUrl?: string;
-  videoSource?: 'youtube' | 'vimeo';
-  weight?: number;
-}
+import { Exercise, WorkoutDay, TrainingProgram } from "@/data/training/types";
 
-export interface WorkoutDay {
-  id: string;
-  day: string;
-  exercises: Exercise[];
-  completed: boolean;
-}
-
-export interface TrainingProgram {
-  title: string;
-  weekStart: string;
-  duration: number;
-  objective: string;
-  description?: string;
-  price?: number;
-  isPaid: boolean;
-  days: WorkoutDay[];
-  id: string;
-  week: string;
-  trainerName: string;
-}
+export type { Exercise, WorkoutDay, TrainingProgram };
 
 export interface ProgramFormProps {
   clientId: string;
