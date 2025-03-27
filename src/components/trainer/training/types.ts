@@ -7,12 +7,14 @@ export interface Exercise {
   notes?: string;
   videoUrl?: string;
   videoSource?: 'youtube' | 'vimeo';
+  weight?: number;
 }
 
 export interface WorkoutDay {
   id: string;
   day: string;
   exercises: Exercise[];
+  completed: boolean;
 }
 
 export interface TrainingProgram {
@@ -24,6 +26,9 @@ export interface TrainingProgram {
   price?: number;
   isPaid: boolean;
   days: WorkoutDay[];
+  id: string;
+  week: string;
+  trainerName: string;
 }
 
 export interface ProgramFormProps {

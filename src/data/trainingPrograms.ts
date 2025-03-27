@@ -19,7 +19,7 @@ export const currentProgram = {
           weight: 75,
           notes: "Focus on depth and keep your chest up",
           videoUrl: "https://www.youtube.com/watch?v=ultWZbUMPL8",
-          videoSource: "youtube"
+          videoSource: "youtube" as "youtube"
         },
         {
           id: "ex-2",
@@ -29,7 +29,7 @@ export const currentProgram = {
           weight: 65,
           notes: "Keep a slight bend in your knees",
           videoUrl: "https://vimeo.com/362756265",
-          videoSource: "vimeo"
+          videoSource: "vimeo" as "vimeo"
         },
         {
           id: "ex-3",
@@ -190,7 +190,7 @@ export const previousProgram = {
           reps: "15",
           notes: "Focus on form",
           videoUrl: "https://www.youtube.com/watch?v=YaXPRqUwItQ",
-          videoSource: "youtube"
+          videoSource: "youtube" as "youtube"
         },
         {
           id: "ex-2-prev",
