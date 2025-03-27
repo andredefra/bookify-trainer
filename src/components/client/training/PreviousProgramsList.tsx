@@ -1,5 +1,5 @@
 
-import { TrainingProgram } from "@/data/trainingPrograms";
+import { TrainingProgram } from "@/data/training";
 import { TrainingProgramCard } from "@/components/client/training/TrainingProgramCard";
 import { Button } from "@/components/ui/button";
 

@@ -1,6 +1,7 @@
 
-// Sample training program data
-export const currentProgram = {
+import { TrainingProgram } from '../types';
+
+export const currentProgram: TrainingProgram = {
   id: "prog-1",
   title: "Strength & Conditioning",
   week: "May 20 - May 26",
@@ -19,7 +20,7 @@ export const currentProgram = {
           weight: 75,
           notes: "Focus on depth and keep your chest up",
           videoUrl: "https://www.youtube.com/watch?v=ultWZbUMPL8",
-          videoSource: "youtube" as "youtube"
+          videoSource: "youtube"
         },
         {
           id: "ex-2",
@@ -29,7 +30,7 @@ export const currentProgram = {
           weight: 65,
           notes: "Keep a slight bend in your knees",
           videoUrl: "https://vimeo.com/362756265",
-          videoSource: "vimeo" as "vimeo"
+          videoSource: "vimeo"
         },
         {
           id: "ex-3",
@@ -171,113 +172,3 @@ export const currentProgram = {
     }
   ]
 };
-
-export const previousProgram = {
-  id: "prog-2",
-  title: "Foundation Building",
-  week: "May 13 - May 19",
-  trainerName: "Sarah Johnson",
-  days: [
-    {
-      id: "day-1-prev",
-      day: "Monday",
-      completed: true,
-      exercises: [
-        {
-          id: "ex-1-prev",
-          name: "Bodyweight Squats",
-          sets: 3,
-          reps: "15",
-          notes: "Focus on form",
-          videoUrl: "https://www.youtube.com/watch?v=YaXPRqUwItQ",
-          videoSource: "youtube" as "youtube"
-        },
-        {
-          id: "ex-2-prev",
-          name: "Push-ups",
-          sets: 3,
-          reps: "10-12",
-          notes: "Knee push-ups if needed"
-        }
-      ]
-    },
-    {
-      id: "day-2-prev",
-      day: "Tuesday",
-      completed: true,
-      exercises: [
-        {
-          id: "ex-4-prev",
-          name: "Treadmill Walking",
-          sets: 1,
-          reps: "30 min",
-          notes: "Moderate pace"
-        }
-      ]
-    },
-    {
-      id: "day-3-prev",
-      day: "Wednesday",
-      completed: true,
-      exercises: [
-        {
-          id: "ex-7-prev",
-          name: "Rest Day",
-          sets: 0,
-          reps: "",
-          notes: "Stay active with light walking or stretching"
-        }
-      ]
-    },
-    {
-      id: "day-4-prev",
-      day: "Thursday",
-      completed: true,
-      exercises: []
-    },
-    {
-      id: "day-5-prev",
-      day: "Friday",
-      completed: true,
-      exercises: []
-    },
-    {
-      id: "day-6-prev",
-      day: "Saturday",
-      completed: true,
-      exercises: []
-    },
-    {
-      id: "day-7-prev",
-      day: "Sunday",
-      completed: true,
-      exercises: []
-    }
-  ]
-};
-
-export interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  weight?: number;
-  notes?: string;
-  videoUrl?: string;
-  videoSource?: 'youtube' | 'vimeo';
-}
-
-export interface WorkoutDay {
-  id: string;
-  day: string;
-  exercises: Exercise[];
-  completed: boolean;
-}
-
-export interface TrainingProgram {
-  id: string;
-  title: string;
-  week: string;
-  trainerName: string;
-  days: WorkoutDay[];
-}

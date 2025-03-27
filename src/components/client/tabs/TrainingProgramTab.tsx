@@ -1,6 +1,6 @@
 
 import { TrainingProgramContent } from "@/components/client/training/TrainingProgramContent";
-import { currentProgram, previousProgram } from "@/data/trainingPrograms";
+import { currentProgram, previousProgram } from "@/data/training";
 
 export function TrainingProgramTab() {
   return (

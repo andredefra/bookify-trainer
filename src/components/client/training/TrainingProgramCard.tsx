@@ -5,31 +5,10 @@ import { CheckCircle } from "lucide-react";
 import { TrainingProgramHeader } from "./TrainingProgramHeader";
 import { DaySelector } from "./DaySelector";
 import { WorkoutDetails } from "./WorkoutDetails";
-
-interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  weight?: number;
-  notes?: string;
-}
-
-interface WorkoutDay {
-  id: string;
-  day: string;
-  exercises: Exercise[];
-  completed: boolean;
-}
+import { TrainingProgram, WorkoutDay, Exercise } from "@/data/training";
 
 interface TrainingProgramProps {
-  program: {
-    id: string;
-    title: string;
-    week: string;
-    trainerName: string;
-    days: WorkoutDay[];
-  };
+  program: TrainingProgram;
 }
 
 export function TrainingProgramCard({ program }: TrainingProgramProps) {

@@ -6,7 +6,7 @@ import { Calendar, Target, Clock, DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TrainingProgramCard } from "./TrainingProgramCard";
 import { PreviousProgramsList } from "./PreviousProgramsList";
-import { TrainingProgram } from "@/data/trainingPrograms";
+import { TrainingProgram } from "@/data/training";
 
 interface TrainingProgramContentProps {
   currentProgram: TrainingProgram;
