@@ -1,5 +1,6 @@
 
 import { Menu, X } from 'lucide-react';
+import { useEffect } from 'react';
 import MobileNavLinks from './MobileNavLinks';
 
 interface MobileMenuProps {
@@ -15,6 +16,23 @@ const MobileMenu = ({
   isHomePage, 
   scrollToSection 
 }: MobileMenuProps) => {
+  
+  // Add effect to prevent scrolling when menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      // Disable scrolling on body
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scrolling when menu closes
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Cleanup function to ensure scroll is re-enabled when component unmounts
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <>
       <button 
