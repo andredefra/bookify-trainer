@@ -1,20 +1,31 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TrainingProgram, WorkoutDay, Exercise } from "@/data/training/types";
 
-export function useProgramForm() {
+interface InitialProgramData {
+  id: string;
+  title: string;
+  weekStart: string;
+  duration: number;
+  objective: string;
+  description: string;
+  isPaid: boolean;
+  price: number;
+}
+
+export function useProgramForm(initialData?: InitialProgramData) {
   const [program, setProgram] = useState<TrainingProgram>({
-    id: Math.random().toString(36).substring(2, 9),
-    title: "Weekly Training Program",
+    id: initialData?.id || Math.random().toString(36).substring(2, 9),
+    title: initialData?.title || "Weekly Training Program",
     week: "",
     trainerName: "",
     // Add the additional properties
-    weekStart: "",
-    duration: 4,
-    objective: "Strength & Conditioning",
-    description: "",
-    isPaid: false,
-    price: 0,
+    weekStart: initialData?.weekStart || "",
+    duration: initialData?.duration || 4,
+    objective: initialData?.objective || "Strength & Conditioning",
+    description: initialData?.description || "",
+    isPaid: initialData?.isPaid || false,
+    price: initialData?.price || 0,
     days: [
       {
         id: "1",

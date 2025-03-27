@@ -11,6 +11,10 @@ interface ProgramsTabContentProps {
     type: string;
     clientCount: number;
     lastUpdated: string;
+    objective?: string;
+    duration?: number;
+    isPaid?: boolean;
+    price?: number;
   }[];
   clients: {
     id: number;
@@ -19,13 +23,17 @@ interface ProgramsTabContentProps {
   }[];
   setShowAssignDialog: (show: boolean) => void;
   setActiveClient: (client: string | null) => void;
+  setShowEditProgram: (show: boolean) => void;
+  setActiveProgramId: (programId: number | null) => void;
 }
 
 export function ProgramsTabContent({ 
   programs, 
   clients, 
   setShowAssignDialog, 
-  setActiveClient 
+  setActiveClient,
+  setShowEditProgram,
+  setActiveProgramId
 }: ProgramsTabContentProps) {
   const handleAssign = () => {
     setActiveClient(null);
@@ -37,6 +45,11 @@ export function ProgramsTabContent({
     setShowAssignDialog(true);
   };
 
+  const handleEdit = (programId: number) => {
+    setActiveProgramId(programId);
+    setShowEditProgram(true);
+  };
+
   return (
     <>
       <TabsContent value="programs">
@@ -46,6 +59,7 @@ export function ProgramsTabContent({
               key={program.id} 
               program={program} 
               onAssign={handleAssign}
+              onEdit={() => handleEdit(program.id)}
             />
           ))}
         </div>

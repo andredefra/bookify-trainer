@@ -12,6 +12,8 @@ export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
   const [activeClient, setActiveClient] = useState<string | null>(null);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
+  const [showEditProgram, setShowEditProgram] = useState(false);
+  const [activeProgramId, setActiveProgramId] = useState<number | null>(null);
   
   // Mock programs with extended data
   const programs = [
@@ -66,6 +68,11 @@ export function ProgramsTab() {
     { id: 3, name: "Lisa Garcia", email: "lisa@example.com" },
     { id: 4, name: "David Kim", email: "david@example.com" },
   ];
+
+  // Find active program
+  const activeProgram = activeProgramId 
+    ? programs.find(p => p.id === activeProgramId) 
+    : null;
   
   return (
     <Card>
@@ -93,6 +100,8 @@ export function ProgramsTab() {
             clients={clients}
             setShowAssignDialog={setShowAssignDialog}
             setActiveClient={setActiveClient}
+            setShowEditProgram={setShowEditProgram}
+            setActiveProgramId={setActiveProgramId}
           />
         </Tabs>
         
@@ -109,6 +118,14 @@ export function ProgramsTab() {
           activeClient={activeClient}
           clients={clients}
           programs={programs}
+        />
+        
+        {/* Edit Program Dialog */}
+        <CreateProgramDialog 
+          open={showEditProgram} 
+          onOpenChange={setShowEditProgram}
+          editMode={true}
+          program={activeProgram}
         />
       </CardContent>
     </Card>

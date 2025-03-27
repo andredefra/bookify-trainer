@@ -16,9 +16,10 @@ interface ProgramListItemProps {
     price?: number;
   };
   onAssign: () => void;
+  onEdit: () => void;
 }
 
-export function ProgramListItem({ program, onAssign }: ProgramListItemProps) {
+export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemProps) {
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
       <div>
@@ -49,7 +50,7 @@ export function ProgramListItem({ program, onAssign }: ProgramListItemProps) {
         <Button variant="outline" size="sm" onClick={onAssign}>
           Assign
         </Button>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" onClick={onEdit}>
           Edit
         </Button>
       </div>

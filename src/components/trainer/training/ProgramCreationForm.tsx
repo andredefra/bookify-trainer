@@ -11,7 +11,26 @@ import { ProgramInfoFields } from "./ProgramInfoFields";
 import { ProgramWorkoutEditor } from "./ProgramWorkoutEditor";
 import { ProgramFormFooter } from "./ProgramFormFooter";
 
-export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }: ProgramFormProps) {
+interface ProgramCreationFormProps extends ProgramFormProps {
+  initialData?: {
+    id: string;
+    title: string;
+    weekStart: string;
+    duration: number;
+    objective: string;
+    description: string;
+    isPaid: boolean;
+    price: number;
+  };
+}
+
+export function ProgramCreationForm({ 
+  clientId, 
+  clientName, 
+  onSend, 
+  isPremium,
+  initialData 
+}: ProgramCreationFormProps) {
   const {
     program,
     setProgram,
@@ -20,7 +39,7 @@ export function ProgramCreationForm({ clientId, clientName, onSend, isPremium }:
     handleAddExercise,
     handleUpdateExercise,
     handleRemoveExercise,
-  } = useProgramForm();
+  } = useProgramForm(initialData);
   
   const form = useForm({
     defaultValues: {
