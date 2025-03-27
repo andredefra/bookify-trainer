@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
+import NavItem from './NavItem';
 
 interface MobileNavLinksProps {
   isHomePage: boolean;
@@ -9,86 +10,63 @@ interface MobileNavLinksProps {
 }
 
 const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: MobileNavLinksProps) => {
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
     <div className="flex flex-col items-center space-y-8 w-full px-6">
-      {isHomePage ? (
-        <button 
-          onClick={() => scrollToSection('hero')} 
-          className="w-full py-3 text-lg font-medium text-center text-primary flex items-center justify-center gap-2"
-        >
-          <Home size={20} />
-          Home
-        </button>
-      ) : (
-        <Link 
-          to="/" 
-          className="w-full py-3 text-lg font-medium text-center text-primary flex items-center justify-center gap-2"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          <Home size={20} />
-          Home
-        </Link>
-      )}
-      {isHomePage ? (
-        <button 
-          onClick={() => scrollToSection('features')} 
-          className="w-full py-3 text-lg font-medium text-center text-primary"
-        >
-          Features
-        </button>
-      ) : (
-        <Link 
-          to="/#features" 
-          className="w-full py-3 text-lg font-medium text-center text-primary"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Features
-        </Link>
-      )}
-      {isHomePage ? (
-        <button 
-          onClick={() => scrollToSection('how-it-works')} 
-          className="w-full py-3 text-lg font-medium text-center text-primary"
-        >
-          How it works
-        </button>
-      ) : (
-        <Link 
-          to="/#how-it-works" 
-          className="w-full py-3 text-lg font-medium text-center text-primary"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          How it works
-        </Link>
-      )}
-      {isHomePage ? (
-        <button 
-          onClick={() => scrollToSection('pricing')} 
-          className="w-full py-3 text-lg font-medium text-center text-primary"
-        >
-          Pricing
-        </button>
-      ) : (
-        <Link 
-          to="/#pricing" 
-          className="w-full py-3 text-lg font-medium text-center text-primary"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Pricing
-        </Link>
-      )}
+      <NavItem
+        to="/"
+        label="Home"
+        sectionId="hero"
+        icon={Home}
+        isHomePage={isHomePage}
+        isMobile={true}
+        scrollToSection={scrollToSection}
+        onClick={closeMobileMenu}
+      />
+      
+      <NavItem
+        to="/#features"
+        label="Features"
+        sectionId="features"
+        isHomePage={isHomePage}
+        isMobile={true}
+        scrollToSection={scrollToSection}
+        onClick={closeMobileMenu}
+      />
+      
+      <NavItem
+        to="/#how-it-works"
+        label="How it works"
+        sectionId="how-it-works"
+        isHomePage={isHomePage}
+        isMobile={true}
+        scrollToSection={scrollToSection}
+        onClick={closeMobileMenu}
+      />
+      
+      <NavItem
+        to="/#pricing"
+        label="Pricing"
+        sectionId="pricing"
+        isHomePage={isHomePage}
+        isMobile={true}
+        scrollToSection={scrollToSection}
+        onClick={closeMobileMenu}
+      />
+      
       <div className="pt-4 w-full flex flex-col space-y-3">
         <Link 
           to="/login" 
           className="w-full py-3 text-center text-primary border border-primary/20 rounded-full"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={closeMobileMenu}
         >
           Demo Login
         </Link>
         <Link 
           to="/register" 
           className="w-full py-3 text-center text-white bg-primary rounded-full"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={closeMobileMenu}
         >
           Try the Demo
         </Link>
