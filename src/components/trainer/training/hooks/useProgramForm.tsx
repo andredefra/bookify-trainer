@@ -1,16 +1,13 @@
 
 import { useState } from "react";
-import { TrainingProgram, WorkoutDay } from "../types";
+import { TrainingProgram, WorkoutDay, Exercise } from "@/data/training/types";
 
 export function useProgramForm() {
   const [program, setProgram] = useState<TrainingProgram>({
+    id: Math.random().toString(36).substring(2, 9),
     title: "Weekly Training Program",
-    weekStart: "",
-    duration: 4,
-    objective: "Strength & Conditioning",
-    description: "",
-    isPaid: false,
-    price: 0,
+    week: "",
+    trainerName: "",
     days: [
       {
         id: "1",
@@ -55,9 +52,6 @@ export function useProgramForm() {
         completed: false,
       },
     ],
-    id: Math.random().toString(36).substring(2, 9),
-    week: "",
-    trainerName: "",
   });
 
   const [activeDay, setActiveDay] = useState<string>("1");

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { ExerciseForm } from "./ExerciseForm";
-import { WorkoutDay } from "./types";
+import { WorkoutDay } from "@/data/training/types";
 
 interface WorkoutDayPanelProps {
   day: WorkoutDay;

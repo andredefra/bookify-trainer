@@ -1,5 +1,5 @@
 
-import { WorkoutDay } from "./types";
+import { WorkoutDay } from "@/data/training/types";
 
 interface DayTabsProps {
   days: WorkoutDay[];

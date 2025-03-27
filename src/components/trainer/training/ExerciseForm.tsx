@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Trash2, Youtube, Video } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Exercise } from "./types";
+import { Exercise } from "@/data/training/types";
 
 interface ExerciseFormProps {
   exercise: Exercise;

@@ -1,5 +1,5 @@
 
-import { WorkoutDay } from "./types";
+import { WorkoutDay } from "@/data/training/types";
 import { DayTabs } from "./DayTabs";
 import { WorkoutDayPanel } from "./WorkoutDayPanel";
 
