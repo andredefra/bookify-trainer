@@ -1,7 +1,7 @@
 
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus } from 'lucide-react';
+import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video } from 'lucide-react';
 
 const Features = () => {
   useEffect(() => {
@@ -97,6 +97,47 @@ const Features = () => {
               <p className="text-sm md:text-base text-muted-foreground">{feature.description}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-16 md:mt-20 max-w-4xl mx-auto">
+          <div className="reveal rounded-xl overflow-hidden border border-border shadow-md">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="bg-primary/5 p-6 md:p-8 flex flex-col justify-center">
+                <div className="flex items-center mb-3">
+                  <Youtube className="h-5 w-5 mr-2 text-red-500" />
+                  <Video className="h-5 w-5 text-blue-500" />
+                </div>
+                <h3 className="text-xl md:text-2xl font-display font-bold tracking-tight text-primary mb-3 md:mb-4">
+                  Video Exercise Demonstrations
+                </h3>
+                <p className="text-base text-muted-foreground mb-4">
+                  Trainers can now add YouTube or Vimeo videos to any exercise in their training programs, 
+                  ensuring clients have perfect visual demonstrations of proper form and technique.
+                </p>
+                <ul className="space-y-2 text-sm md:text-base">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
+                    <span>Easily link YouTube or Vimeo videos to exercises</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
+                    <span>Clients can watch embedded videos directly in their workout plan</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
+                    <span>Improve client form and reduce injury risk with visual guidance</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-white p-4 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/60d8d824-f090-4fbc-8935-e858e4d59547.png" 
+                  alt="Video exercise demonstration" 
+                  className="max-w-full rounded shadow"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-16 md:mt-24 max-w-3xl mx-auto text-center">

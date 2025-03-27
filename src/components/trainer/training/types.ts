@@ -5,6 +5,8 @@ export interface Exercise {
   sets: number;
   reps: string;
   notes?: string;
+  videoUrl?: string;
+  videoSource?: 'youtube' | 'vimeo';
 }
 
 export interface WorkoutDay {

@@ -3,7 +3,8 @@ import { FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Youtube, Video } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Exercise } from "./types";
 
 interface ExerciseFormProps {
@@ -60,7 +61,8 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
           </div>
         </div>
       </div>
-      <div>
+      
+      <div className="mb-3">
         <FormLabel>Notes</FormLabel>
         <Textarea
           value={exercise.notes || ""}
@@ -76,6 +78,55 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
           rows={2}
         />
       </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+        <div className="md:col-span-1">
+          <FormLabel>Video Source</FormLabel>
+          <Select
+            value={exercise.videoSource || ""}
+            onValueChange={(value) =>
+              onUpdate(
+                dayId,
+                exercise.id,
+                "videoSource",
+                value === "" ? undefined : value
+              )
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select source" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">None</SelectItem>
+              <SelectItem value="youtube">YouTube</SelectItem>
+              <SelectItem value="vimeo">Vimeo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        {exercise.videoSource && (
+          <div className="md:col-span-2">
+            <FormLabel>Video URL</FormLabel>
+            <div className="flex items-center space-x-2">
+              {exercise.videoSource === "youtube" && <Youtube className="h-4 w-4 text-red-500" />}
+              {exercise.videoSource === "vimeo" && <Video className="h-4 w-4 text-blue-500" />}
+              <Input
+                value={exercise.videoUrl || ""}
+                onChange={(e) =>
+                  onUpdate(
+                    dayId,
+                    exercise.id,
+                    "videoUrl",
+                    e.target.value
+                  )
+                }
+                placeholder={`Enter ${exercise.videoSource} video URL`}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      
       <div className="flex justify-end mt-3">
         <Button
           type="button"

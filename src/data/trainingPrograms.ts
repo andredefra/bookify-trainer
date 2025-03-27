@@ -17,7 +17,9 @@ export const currentProgram = {
           sets: 4,
           reps: "8-10",
           weight: 75,
-          notes: "Focus on depth and keep your chest up"
+          notes: "Focus on depth and keep your chest up",
+          videoUrl: "https://www.youtube.com/watch?v=ultWZbUMPL8",
+          videoSource: "youtube"
         },
         {
           id: "ex-2",
@@ -25,7 +27,9 @@ export const currentProgram = {
           sets: 3,
           reps: "10-12",
           weight: 65,
-          notes: "Keep a slight bend in your knees"
+          notes: "Keep a slight bend in your knees",
+          videoUrl: "https://vimeo.com/362756265",
+          videoSource: "vimeo"
         },
         {
           id: "ex-3",
@@ -184,7 +188,9 @@ export const previousProgram = {
           name: "Bodyweight Squats",
           sets: 3,
           reps: "15",
-          notes: "Focus on form"
+          notes: "Focus on form",
+          videoUrl: "https://www.youtube.com/watch?v=YaXPRqUwItQ",
+          videoSource: "youtube"
         },
         {
           id: "ex-2-prev",
@@ -257,6 +263,8 @@ export interface Exercise {
   reps: string;
   weight?: number;
   notes?: string;
+  videoUrl?: string;
+  videoSource?: 'youtube' | 'vimeo';
 }
 
 export interface WorkoutDay {
