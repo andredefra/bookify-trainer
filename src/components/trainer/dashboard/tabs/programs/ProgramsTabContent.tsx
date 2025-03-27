@@ -46,36 +46,45 @@ export function ProgramsTabContent({
   };
 
   const handleEdit = (programId: number) => {
+    console.log("Editing program with ID:", programId);
     setActiveProgramId(programId);
     setShowEditProgram(true);
   };
 
   return (
     <>
-      <TabsContent value="programs">
-        <div className="space-y-4">
-          {programs.map((program) => (
+      <TabsContent value="programs" className="space-y-4 mt-2">
+        {programs.length > 0 ? (
+          programs.map((program) => (
             <ProgramListItem 
               key={program.id} 
               program={program} 
               onAssign={handleAssign}
               onEdit={() => handleEdit(program.id)}
             />
-          ))}
-        </div>
+          ))
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-muted-foreground">No programs found. Create your first program.</p>
+          </div>
+        )}
       </TabsContent>
       
-      <TabsContent value="assigned">
-        <div className="space-y-4">
-          {clients.map((client) => (
+      <TabsContent value="assigned" className="space-y-4 mt-2">
+        {clients.length > 0 ? (
+          clients.map((client) => (
             <AssignedProgramItem 
               key={client.id} 
               client={client} 
               currentProgram={client.id % 2 === 0 ? "Strength & Conditioning" : "Weight Loss Program"}
-              onChangeProgram={handleChangeProgram}
+              onChangeProgram={() => handleChangeProgram(client.name)}
             />
-          ))}
-        </div>
+          ))
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-muted-foreground">No clients found. Invite clients to assign programs.</p>
+          </div>
+        )}
       </TabsContent>
     </>
   );

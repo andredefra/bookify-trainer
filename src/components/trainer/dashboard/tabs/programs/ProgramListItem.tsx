@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { CalendarDays, Users, DollarSign } from "lucide-react";
+import { CalendarDays, Users, DollarSign, Edit, UserPlus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface ProgramListItemProps {
@@ -21,7 +21,7 @@ interface ProgramListItemProps {
 
 export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemProps) {
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div>
         <h3 className="font-medium">{program.title}</h3>
         <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
@@ -34,7 +34,7 @@ export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemPr
           <span>{program.clientCount} client{program.clientCount !== 1 ? 's' : ''}</span>
         </div>
         
-        <div className="flex mt-2 gap-2">
+        <div className="flex mt-2 gap-2 flex-wrap">
           <Badge variant="outline">{program.type}</Badge>
           {program.objective && <Badge variant="outline">{program.objective}</Badge>}
           {program.duration && <Badge variant="outline">{program.duration} weeks</Badge>}
@@ -47,11 +47,13 @@ export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemPr
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <Button variant="outline" size="sm" onClick={onAssign}>
-          Assign
+        <Button variant="outline" size="sm" onClick={onAssign} className="flex items-center gap-1">
+          <UserPlus className="h-4 w-4" />
+          <span className="hidden sm:inline">Assign</span>
         </Button>
-        <Button variant="ghost" size="sm" onClick={onEdit}>
-          Edit
+        <Button variant="ghost" size="sm" onClick={onEdit} className="flex items-center gap-1">
+          <Edit className="h-4 w-4" />
+          <span className="hidden sm:inline">Edit</span>
         </Button>
       </div>
     </div>

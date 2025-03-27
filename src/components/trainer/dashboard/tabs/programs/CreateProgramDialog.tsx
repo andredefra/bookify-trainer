@@ -1,5 +1,5 @@
 
-import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from "@/components/ui/dialog";
 import { ProgramCreationForm } from "@/components/trainer/training/ProgramCreationForm";
 
 interface CreateProgramDialogProps {
@@ -36,6 +36,11 @@ export function CreateProgramDialog({
       <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>{editMode ? 'Edit Program' : 'Create New Program'}</DialogTitle>
+          <DialogDescription>
+            {editMode 
+              ? 'Make changes to your existing program and save when done.' 
+              : 'Create a new training program for your clients.'}
+          </DialogDescription>
         </DialogHeader>
         <ProgramCreationForm 
           clientId="mock-client-id" 
