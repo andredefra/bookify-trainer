@@ -16,38 +16,48 @@ export function useProgramForm() {
         id: "1",
         day: "Monday",
         exercises: [],
+        completed: false,
       },
       {
         id: "2",
         day: "Tuesday",
         exercises: [],
+        completed: false,
       },
       {
         id: "3",
         day: "Wednesday",
         exercises: [],
+        completed: false,
       },
       {
         id: "4",
         day: "Thursday",
         exercises: [],
+        completed: false,
       },
       {
         id: "5",
         day: "Friday",
         exercises: [],
+        completed: false,
       },
       {
         id: "6",
         day: "Saturday",
         exercises: [],
+        completed: false,
       },
       {
         id: "7",
         day: "Sunday",
         exercises: [],
+        completed: false,
       },
     ],
+    id: Math.random().toString(36).substring(2, 9),
+    week: "",
+    trainerName: "",
   });
 
   const [activeDay, setActiveDay] = useState<string>("1");
