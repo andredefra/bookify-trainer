@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -26,7 +25,6 @@ const Hero = () => {
     };
   }, []);
 
-  // Log to debug image loading
   useEffect(() => {
     console.log("Attempting to load dashboard image");
   }, []);
@@ -50,13 +48,9 @@ const Hero = () => {
             <Link to="/register" className="w-full sm:w-auto px-6 py-3 md:py-4 bg-primary text-white rounded-full text-base md:text-lg font-medium button-hover">
               Try the Demo
             </Link>
-            <Link to="/find-trainer" className="w-full sm:w-auto px-6 py-3 md:py-4 bg-white text-primary rounded-full text-base md:text-lg font-medium border border-primary/10 button-hover">
-              Looking for a trainer?
-            </Link>
           </div>
         </div>
 
-        {/* Dashboard preview */}
         <div ref={elementRef} className="reveal reveal-delay-3 mt-12 md:mt-24 mb-8 md:mb-16 max-w-5xl mx-auto rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl glass overflow-hidden">
           <div className="relative">
             <div className="p-1 md:p-2 bg-secondary rounded-t-xl md:rounded-t-2xl border-b border-black/5">
@@ -98,7 +92,6 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Feature overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-5xl mx-auto mt-12 md:mt-16">
           <div className="reveal flex flex-col items-center text-center p-4 md:p-6 rounded-lg md:rounded-xl glass">
             <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary/10 mb-3 md:mb-4">

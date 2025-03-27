@@ -1,5 +1,6 @@
 
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus } from 'lucide-react';
 
 const Features = () => {
@@ -124,6 +125,13 @@ const Features = () => {
                 className="w-full h-full object-cover"
               />
             </div>
+          </div>
+          
+          {/* Added Looking for trainer button below the showcase section */}
+          <div className="reveal reveal-delay-3 mt-8 md:mt-10">
+            <Link to="/find-trainer" className="inline-block px-6 py-3 md:py-4 bg-white text-primary rounded-full text-base md:text-lg font-medium border border-primary/10 button-hover">
+              Looking for a trainer?
+            </Link>
           </div>
         </div>
       </div>
