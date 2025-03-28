@@ -40,14 +40,18 @@ export function ClientsTab({ clients }: ClientsTabProps) {
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <CardTitle>Client Management</CardTitle>
               <CardDescription>Manage your client list and track progress</CardDescription>
             </div>
-            <Button className="flex items-center" onClick={() => setShowClientDialog(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Invite Client
+            <Button 
+              className="flex items-center justify-center gap-1.5 whitespace-nowrap self-start" 
+              size="sm"
+              onClick={() => setShowClientDialog(true)}
+            >
+              <Plus className="h-4 w-4" />
+              <span>Invite Client</span>
             </Button>
           </div>
         </CardHeader>
