@@ -7,10 +7,10 @@ import { SidebarNavigation } from "./SidebarNavigation";
 
 interface DesktopSidebarProps {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  handleTabClick: (tab: string) => void;
 }
 
-export function DesktopSidebar({ activeTab, setActiveTab }: DesktopSidebarProps) {
+export function DesktopSidebar({ activeTab, handleTabClick }: DesktopSidebarProps) {
   return (
     <div
       className={cn(
@@ -21,7 +21,7 @@ export function DesktopSidebar({ activeTab, setActiveTab }: DesktopSidebarProps)
         <div className="flex flex-col flex-1 space-y-1 px-2 md:px-6">
           <SidebarNavigation 
             activeTab={activeTab} 
-            handleTabClick={(tab) => setActiveTab(tab)} 
+            handleTabClick={handleTabClick} 
           />
         </div>
         <Separator className="my-4 md:mb-4 md:mt-6" />
