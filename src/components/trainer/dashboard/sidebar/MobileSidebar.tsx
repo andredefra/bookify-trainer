@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { X, Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart } from "lucide-react";
+import { StatusSelector } from "../header/StatusSelector";
 
 interface MobileSidebarProps {
   showSidebar: boolean;
@@ -54,13 +54,12 @@ export function MobileSidebar({
                   </Badge>
                 </div>
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => setShowSidebar(false)}
-              >
-                <X className="h-5 w-5" />
-              </Button>
+              {/* Just use the built-in close button of SheetContent */}
+            </div>
+            
+            {/* Add status selector in mobile sidebar */}
+            <div className="mt-4">
+              <StatusSelector className="w-full" />
             </div>
           </div>
           

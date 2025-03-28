@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Menu, Bell } from "lucide-react";
+import { StatusSelector } from "./header/StatusSelector";
 
 interface DashboardHeaderProps {
   name: string;
@@ -38,6 +39,11 @@ export function DashboardHeader({
           </div>
           
           <div className="flex items-center space-x-4">
+            {/* Status Selector */}
+            <div className="hidden md:block">
+              <StatusSelector />
+            </div>
+            
             <Button variant="ghost" size="icon" className="text-muted-foreground">
               <Bell className="h-5 w-5" />
             </Button>
