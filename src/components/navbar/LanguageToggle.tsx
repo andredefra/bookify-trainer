@@ -34,7 +34,7 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
         <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none border border-border/40 shadow-sm bg-background w-full justify-center">
           <Globe className="h-4 w-4 text-primary" />
           <span className="text-sm font-medium">
-            {language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}
+            {language === 'en' ? '🇬🇧 GB' : '🇮🇹 IT'}
           </span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-36 bg-background">
@@ -43,14 +43,14 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
             onClick={() => handleLanguageChange('en')}
           >
             <span className="text-base mr-1">🇬🇧</span>
-            <span className="text-sm">English</span>
+            <span className="text-sm">GB</span>
           </DropdownMenuItem>
           <DropdownMenuItem 
             className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
             onClick={() => handleLanguageChange('it')}
           >
             <span className="text-base mr-1">🇮🇹</span>
-            <span className="text-sm">Italiano</span>
+            <span className="text-sm">IT</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

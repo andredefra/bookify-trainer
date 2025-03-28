@@ -129,7 +129,7 @@ const MobileMenu = ({
                     >
                       <div className="flex items-center gap-2">
                         <Globe className="h-4 w-4" />
-                        <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
+                        <span>{language === 'en' ? '🇬🇧 GB' : '🇮🇹 IT'}</span>
                       </div>
                     </Button>
                   </DropdownMenuTrigger>
@@ -142,14 +142,14 @@ const MobileMenu = ({
                       onClick={() => handleLanguageChange('en')}
                     >
                       <span className="text-base mr-1">🇬🇧</span>
-                      <span className="text-sm">English</span>
+                      <span className="text-sm">GB</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
                       onClick={() => handleLanguageChange('it')}
                     >
                       <span className="text-base mr-1">🇮🇹</span>
-                      <span className="text-sm">Italiano</span>
+                      <span className="text-sm">IT</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
