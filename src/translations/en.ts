@@ -32,6 +32,24 @@ export const en = {
   'features.profileDesc': 'Share your unique URL (personal.ai/trainername) with potential clients to showcase your services, availability, and client reviews.',
   'features.findTrainer': 'Looking for a trainer?',
   
+  // Additional Feature Translations
+  'features.aiScheduling': 'AI Scheduling',
+  'features.aiSchedulingDesc': 'Intelligent scheduling system that optimizes your calendar and maximizes session availability.',
+  'features.stripeIntegration': 'Stripe Integration',
+  'features.stripeIntegrationDesc': 'Get paid automatically with pre-authorizations and post-session charging. No-show protection included.',
+  'features.groupSessions': 'Private & Group Sessions',
+  'features.groupSessionsDesc': 'Manage individual clients or create group sessions with waitlists and capacity limits.',
+  'features.googleCalendar': 'Google Calendar Sync',
+  'features.googleCalendarDesc': 'Two-way calendar synchronization ensures your schedule is always up to date.',
+  'features.waitlistSystem': 'Waitlist System',
+  'features.waitlistSystemDesc': 'Automatically fill cancellations and manage client requests for popular sessions with confirmation deadlines.',
+  'features.messaging': 'Integrated Messaging',
+  'features.messagingDesc': 'Built-in messaging system allows for direct communication between trainers and clients.',
+  'features.sessionManagement': 'Session Management',
+  'features.sessionManagementDesc': 'Create one-on-one or group sessions with capacity limits and automatic waitlist management.',
+  'features.personalTrainerPage': 'Personal Trainer Page',
+  'features.personalTrainerPageDesc': 'Custom URL and profile to showcase your services and availability to potential clients.',
+  
   // How it works
   'howItWorks.title': 'How It Works',
   'howItWorks.subtitle': 'Getting started is simple. Follow these steps to streamline your training business.',

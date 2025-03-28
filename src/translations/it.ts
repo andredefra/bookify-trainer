@@ -32,6 +32,24 @@ export const it = {
   'features.profileDesc': 'Condividi il tuo URL unico (personal.ai/nometrainer) con potenziali clienti per mostrare i tuoi servizi, disponibilità e recensioni dei clienti.',
   'features.findTrainer': 'Cerchi un trainer?',
   
+  // Additional Feature Translations
+  'features.aiScheduling': 'Programmazione AI',
+  'features.aiSchedulingDesc': 'Sistema di programmazione intelligente che ottimizza il tuo calendario e massimizza la disponibilità delle sessioni.',
+  'features.stripeIntegration': 'Integrazione Stripe',
+  'features.stripeIntegrationDesc': 'Ricevi pagamenti automaticamente con pre-autorizzazioni e addebiti post-sessione. Protezione per mancata presenza inclusa.',
+  'features.groupSessions': 'Sessioni Private e di Gruppo',
+  'features.groupSessionsDesc': 'Gestisci clienti individuali o crea sessioni di gruppo con liste d\'attesa e limiti di capacità.',
+  'features.googleCalendar': 'Sincronizzazione Google Calendar',
+  'features.googleCalendarDesc': 'La sincronizzazione bidirezionale del calendario garantisce che il tuo programma sia sempre aggiornato.',
+  'features.waitlistSystem': 'Sistema di Lista d\'Attesa',
+  'features.waitlistSystemDesc': 'Riempi automaticamente le cancellazioni e gestisci le richieste dei clienti per sessioni popolari con scadenze di conferma.',
+  'features.messaging': 'Messaggistica Integrata',
+  'features.messagingDesc': 'Il sistema di messaggistica integrato consente la comunicazione diretta tra trainer e clienti.',
+  'features.sessionManagement': 'Gestione Sessioni',
+  'features.sessionManagementDesc': 'Crea sessioni individuali o di gruppo con limiti di capacità e gestione automatica delle liste d\'attesa.',
+  'features.personalTrainerPage': 'Pagina Personal Trainer',
+  'features.personalTrainerPageDesc': 'URL e profilo personalizzati per mostrare i tuoi servizi e disponibilità ai potenziali clienti.',
+  
   // How it works
   'howItWorks.title': 'Come Funziona',
   'howItWorks.subtitle': 'Iniziare è semplice. Segui questi passaggi per ottimizzare la tua attività di training.',

@@ -27,51 +27,52 @@ const Features = () => {
     };
   }, []);
 
+  // Updated to use translation keys for each feature
   const features = [
     {
       icon: <Calendar className="h-6 w-6 text-primary" />,
-      title: "AI Scheduling",
-      description: "Intelligent scheduling system that optimizes your calendar and maximizes session availability."
+      title: t('features.aiScheduling'),
+      description: t('features.aiSchedulingDesc')
     },
     {
       icon: <Bot className="h-6 w-6 text-primary" />,
-      title: "AI Client Assistant",
-      description: "Automated chat assistant handles client inquiries when you're unavailable or in a training session."
+      title: t('features.aiAssistant'),
+      description: t('features.aiAssistantDesc')
     },
     {
       icon: <CreditCard className="h-6 w-6 text-primary" />,
-      title: "Stripe Integration",
-      description: "Get paid automatically with pre-authorizations and post-session charging. No-show protection included."
+      title: t('features.stripeIntegration'),
+      description: t('features.stripeIntegrationDesc')
     },
     {
       icon: <Users className="h-6 w-6 text-primary" />,
-      title: "Private & Group Sessions",
-      description: "Manage individual clients or create group sessions with waitlists and capacity limits."
+      title: t('features.groupSessions'),
+      description: t('features.groupSessionsDesc')
     },
     {
       icon: <Clock className="h-6 w-6 text-primary" />,
-      title: "Google Calendar Sync",
-      description: "Two-way calendar synchronization ensures your schedule is always up to date."
+      title: t('features.googleCalendar'),
+      description: t('features.googleCalendarDesc')
     },
     {
       icon: <ListChecks className="h-6 w-6 text-primary" />,
-      title: "Waitlist System",
-      description: "Automatically fill cancellations and manage client requests for popular sessions with confirmation deadlines."
+      title: t('features.waitlistSystem'),
+      description: t('features.waitlistSystemDesc')
     },
     {
       icon: <MessageSquare className="h-6 w-6 text-primary" />,
-      title: "Integrated Messaging",
-      description: "Built-in messaging system allows for direct communication between trainers and clients."
+      title: t('features.messaging'),
+      description: t('features.messagingDesc')
     },
     {
       icon: <UserPlus className="h-6 w-6 text-primary" />,
-      title: "Session Management",
-      description: "Create one-on-one or group sessions with capacity limits and automatic waitlist management."
+      title: t('features.sessionManagement'),
+      description: t('features.sessionManagementDesc')
     },
     {
       icon: <Globe className="h-6 w-6 text-primary" />,
-      title: "Personal Trainer Page",
-      description: "Custom URL and profile to showcase your services and availability to potential clients."
+      title: t('features.personalTrainerPage'),
+      description: t('features.personalTrainerPageDesc')
     }
   ];
 
