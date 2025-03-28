@@ -1,7 +1,12 @@
 
 import { useLanguage } from '@/context/LanguageContext';
-import { Languages } from 'lucide-react';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Globe } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface LanguageToggleProps {
   className?: string;
@@ -12,20 +17,33 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
 
   return (
     <div className={`flex items-center ${className || ''}`}>
-      <ToggleGroup type="single" value={language} onValueChange={(value) => value && setLanguage(value as 'en' | 'it')}>
-        <ToggleGroupItem value="en" aria-label="Toggle English" className="px-2 py-1 h-8">
-          <span className="flex items-center gap-1">
-            <span className="text-xs">🇬🇧</span>
-            <span className="text-xs hidden md:inline">EN</span>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none">
+          <Globe className="h-4 w-4" />
+          <span className="text-sm font-medium hidden md:inline">
+            {language === 'en' ? '🇬🇧 EN' : '🇮🇹 IT'}
           </span>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="it" aria-label="Toggle Italian" className="px-2 py-1 h-8">
-          <span className="flex items-center gap-1">
-            <span className="text-xs">🇮🇹</span>
-            <span className="text-xs hidden md:inline">IT</span>
+          <span className="text-sm font-medium md:hidden">
+            {language === 'en' ? '🇬🇧' : '🇮🇹'}
           </span>
-        </ToggleGroupItem>
-      </ToggleGroup>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem 
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => setLanguage('en')}
+          >
+            <span className="text-sm">🇬🇧</span>
+            <span className="text-sm">English</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem 
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => setLanguage('it')}
+          >
+            <span className="text-sm">🇮🇹</span>
+            <span className="text-sm">Italiano</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

@@ -66,7 +66,7 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
         />
         
         <div className="pt-2">
-          <LanguageToggle />
+          <LanguageToggle className="justify-center" />
         </div>
       </div>
       
