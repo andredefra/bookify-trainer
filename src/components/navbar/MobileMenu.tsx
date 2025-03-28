@@ -129,7 +129,7 @@ const MobileMenu = ({
                     >
                       <div className="flex items-center gap-2">
                         <Globe className="h-4 w-4" />
-                        <span>{language === 'en' ? '🇬🇧 GB' : '🇮🇹 IT'}</span>
+                        <span>{language === 'en' ? 'GB' : 'IT'}</span>
                       </div>
                     </Button>
                   </DropdownMenuTrigger>
@@ -141,14 +141,32 @@ const MobileMenu = ({
                       className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
                       onClick={() => handleLanguageChange('en')}
                     >
-                      <span className="text-base mr-1">🇬🇧</span>
+                      <div className="w-5 h-4 bg-blue-900 flex items-center justify-center relative overflow-hidden rounded-sm">
+                        <div className="absolute inset-0 bg-white">
+                          <div className="absolute left-0 top-0 h-full w-full bg-blue-900">
+                            <div className="absolute left-0 top-0 h-full w-full" style={{
+                              backgroundImage: "conic-gradient(#f00 0deg, #f00 90deg, white 90deg, white 180deg, #f00 180deg, #f00 270deg, white 270deg, white 360deg)",
+                              backgroundSize: "40% 40%",
+                              backgroundPosition: "center",
+                              opacity: 1,
+                              mixBlendMode: "screen"
+                            }}></div>
+                          </div>
+                        </div>
+                      </div>
                       <span className="text-sm">GB</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
                       onClick={() => handleLanguageChange('it')}
                     >
-                      <span className="text-base mr-1">🇮🇹</span>
+                      <div className="w-5 h-4 flex items-center justify-center relative overflow-hidden rounded-sm border-[0.5px] border-gray-300">
+                        <div className="absolute inset-0 grid grid-cols-3">
+                          <div className="bg-green-600"></div>
+                          <div className="bg-white"></div>
+                          <div className="bg-red-600"></div>
+                        </div>
+                      </div>
                       <span className="text-sm">IT</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
