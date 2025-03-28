@@ -8,7 +8,6 @@ import { ProfileSection } from "./ProfileSection";
 import { AvailabilitySection } from "./AvailabilitySection";
 import { MembershipSection } from "./MembershipSection";
 import { BillingSection } from "./BillingSection";
-import { IntegrationsSection } from "./IntegrationsSection";
 
 interface SettingsTabContentProps {
   user: {
@@ -50,8 +49,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
     { id: "profile", label: "Profile", icon: "👤" },
     { id: "availability", label: "Availability", icon: "📅" },
     { id: "membership", label: "Membership", icon: "🌟" },
-    { id: "billing", label: "Billing", icon: "💳" },
-    { id: "integrations", label: "Integrations", icon: "🔌" }
+    { id: "billing", label: "Billing", icon: "💳" }
   ];
 
   return (
@@ -104,7 +102,6 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
             {selectedSection === "availability" && <AvailabilitySection />}
             {selectedSection === "membership" && <MembershipSection user={updatedUser} />}
             {selectedSection === "billing" && <BillingSection user={updatedUser} />}
-            {selectedSection === "integrations" && <IntegrationsSection />}
           </div>
           
           <div className="mt-8 pt-4 border-t">
