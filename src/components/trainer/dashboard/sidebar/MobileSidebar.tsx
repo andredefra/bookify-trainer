@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { X, Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart } from "lucide-react";
+import { Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart } from "lucide-react";
 import { StatusSelector } from "../header/StatusSelector";
 
 interface MobileSidebarProps {
@@ -13,13 +13,17 @@ interface MobileSidebarProps {
   setShowSidebar: (show: boolean) => void;
   activeTab: string;
   handleTabClick: (tab: string) => void;
+  userName?: string;
+  userEmail?: string;
 }
 
 export function MobileSidebar({ 
   showSidebar, 
   setShowSidebar, 
   activeTab, 
-  handleTabClick 
+  handleTabClick,
+  userName = "Trainer",
+  userEmail = "trainer@personal.ai"
 }: MobileSidebarProps) {
   // Default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
@@ -44,11 +48,12 @@ export function MobileSidebar({
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={defaultImage} alt="Trainer" />
-                  <AvatarFallback>T</AvatarFallback>
+                  <AvatarImage src={defaultImage} alt={userName} />
+                  <AvatarFallback>{userName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium text-black">Trainer</p>
+                  <p className="font-medium text-black">{userName}</p>
+                  <p className="text-xs text-muted-foreground">{userEmail}</p>
                   <Badge variant="secondary" className="bg-primary/10 text-primary text-xs h-5 mt-1">
                     Pro
                   </Badge>
@@ -59,7 +64,7 @@ export function MobileSidebar({
             
             {/* Add status selector in mobile sidebar */}
             <div className="mt-4">
-              <StatusSelector className="w-full" />
+              <StatusSelector />
             </div>
           </div>
           

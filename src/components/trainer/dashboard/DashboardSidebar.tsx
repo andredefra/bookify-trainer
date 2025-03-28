@@ -1,49 +1,39 @@
 
-import { useMediaQuery } from "@/hooks/use-mobile";
-import { MobileSidebar } from "./sidebar/MobileSidebar";
 import { DesktopSidebar } from "./sidebar/DesktopSidebar";
+import { MobileSidebar } from "./sidebar/MobileSidebar";
 
 interface DashboardSidebarProps {
   showSidebar: boolean;
   setShowSidebar: (show: boolean) => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  userName?: string;
+  userEmail?: string;
 }
 
-export function DashboardSidebar({
-  showSidebar,
-  setShowSidebar,
-  activeTab,
+export function DashboardSidebar({ 
+  showSidebar, 
+  setShowSidebar, 
+  activeTab, 
   setActiveTab,
+  userName,
+  userEmail
 }: DashboardSidebarProps) {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
-
-  const handleTabClick = (tab: string) => {
-    setActiveTab(tab);
-    
-    // Only close the sidebar on mobile when a tab is clicked
-    if (!isDesktop) {
-      setShowSidebar(false);
-    }
-  };
-
-  // Render appropriate sidebar based on screen size
-  if (!isDesktop) {
-    return (
+  return (
+    <>
+      <DesktopSidebar 
+        activeTab={activeTab} 
+        handleTabClick={setActiveTab} 
+      />
+      
       <MobileSidebar 
         showSidebar={showSidebar} 
-        setShowSidebar={setShowSidebar}
+        setShowSidebar={setShowSidebar} 
         activeTab={activeTab} 
-        handleTabClick={handleTabClick} 
+        handleTabClick={setActiveTab}
+        userName={userName}
+        userEmail={userEmail}
       />
-    );
-  }
-
-  // Desktop sidebar
-  return (
-    <DesktopSidebar 
-      activeTab={activeTab} 
-      setActiveTab={setActiveTab} 
-    />
+    </>
   );
 }
