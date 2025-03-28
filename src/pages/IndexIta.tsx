@@ -19,21 +19,23 @@ const IndexIta = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow">
-        <div id="hero">
-          <Hero />
-        </div>
-        <Features />
-        <HowItWorks />
-        <PricingSection />
-        <RegistrationCTA />
-      </main>
-      
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        
+        <main className="flex-grow">
+          <div id="hero">
+            <Hero />
+          </div>
+          <Features />
+          <HowItWorks />
+          <PricingSection />
+          <RegistrationCTA />
+        </main>
+        
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 };
 
