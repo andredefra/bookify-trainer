@@ -1,9 +1,10 @@
 
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Send } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SendMessageDialog } from "./messages/SendMessageDialog";
 
 interface MessageItem {
   id: number;
@@ -18,6 +19,7 @@ interface MessagesTabProps {
 
 export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [trainerStatus, setTrainerStatus] = useState<string>("online");
+  const [showSendDialog, setShowSendDialog] = useState(false);
   
   // Listen for status changes
   useEffect(() => {
@@ -38,11 +40,29 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
     };
   }, []);
   
+  // Extract client names from messages for the dialog
+  const clients = messageRequests.map(msg => ({
+    id: msg.id,
+    name: msg.from
+  }));
+  
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Messages</CardTitle>
-        <CardDescription>Communication with clients and inquiries</CardDescription>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle>Messages</CardTitle>
+            <CardDescription>Communication with clients and inquiries</CardDescription>
+          </div>
+          <Button 
+            onClick={() => setShowSendDialog(true)}
+            size="sm"
+            className="flex items-center gap-1.5 self-start"
+          >
+            <Send className="h-4 w-4" />
+            <span>Send Message</span>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -77,6 +97,13 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
           ))}
         </div>
       </CardContent>
+      
+      {/* Send Message Dialog */}
+      <SendMessageDialog 
+        open={showSendDialog} 
+        onOpenChange={setShowSendDialog}
+        clients={clients}
+      />
     </Card>
   );
 }
