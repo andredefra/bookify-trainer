@@ -1,27 +1,10 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Shield, Crown } from "lucide-react";
+import { Check, X } from "lucide-react";
+import { Plan } from "./types";
 
-interface PlanFeature {
-  text: string;
-}
-
-interface PlanLimitation {
-  text: string;
-}
-
-interface PlanProps {
-  id: string;
-  name: string;
-  price: string;
-  period: string;
-  description: string;
-  features: string[];
-  limitations: string[];
-  isPopular: boolean;
-  icon: any;
+interface PlanProps extends Plan {
   currentPlan: string;
   onSelectPlan: (planId: string) => void;
 }

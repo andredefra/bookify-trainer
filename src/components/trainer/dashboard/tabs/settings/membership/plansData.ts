@@ -1,17 +1,6 @@
 
 import { Crown, Shield } from "lucide-react";
-
-export interface Plan {
-  id: string;
-  name: string;
-  price: string;
-  period: string;
-  description: string;
-  features: string[];
-  limitations: string[];
-  isPopular: boolean;
-  icon: any;
-}
+import { Plan } from "./types";
 
 export const plans: Plan[] = [
   {
