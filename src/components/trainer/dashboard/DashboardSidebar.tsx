@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { MobileSidebar } from "./sidebar/MobileSidebar";
 import { DesktopSidebar } from "./sidebar/DesktopSidebar";
