@@ -40,10 +40,19 @@ const MobileMenu = ({
     }
   };
 
+  const handleOpenMenu = () => {
+    setMobileMenuOpen(true);
+  };
+
   return (
     <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative" onClick={(e) => e.stopPropagation()}>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="relative" 
+          onClick={handleOpenMenu}
+        >
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
