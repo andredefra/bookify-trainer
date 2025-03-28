@@ -1,9 +1,10 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { CurrentPlanDisplay } from "./membership/CurrentPlanDisplay";
-import { PlanCard } from "./membership/PlanCard";
-import { DeleteAccountSection } from "./membership/DeleteAccountSection";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check, X, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { plans } from "./membership/plansData";
 
 interface MembershipSectionProps {
@@ -30,35 +31,103 @@ export function MembershipSection({ user }: MembershipSectionProps) {
     toast.success("Your account has been scheduled for deletion");
   };
 
+  // Find the current plan details
+  const activePlan = plans.find(plan => plan.id === currentPlan) || plans[0];
+
   return (
     <div className="space-y-6">
-      {/* Current Plan Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-100">
-        <h3 className="text-lg font-medium mb-2">Current Membership</h3>
-        <p className="text-sm text-muted-foreground mb-3">Manage your membership plan and account status.</p>
-        <CurrentPlanDisplay currentPlan={currentPlan} />
-      </div>
-      
-      {/* Available Plans Section */}
-      <div>
-        <h3 className="text-lg font-medium mb-2">Available Plans</h3>
-        <p className="text-sm text-muted-foreground mb-3">Choose the plan that best fits your needs.</p>
+      {/* Current Plan Summary */}
+      <div className="rounded-lg border p-4 bg-gradient-to-r from-blue-50 to-purple-50 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold">Your Current Plan</h3>
+            <p className="text-sm text-muted-foreground">You are currently on the {activePlan.name} plan</p>
+          </div>
+          <Badge className="self-start sm:self-center bg-primary/80 hover:bg-primary px-3 py-1">
+            {activePlan.name}
+          </Badge>
+        </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {plans.map((plan) => (
-            <PlanCard 
-              key={plan.id}
-              {...plan}
-              currentPlan={currentPlan}
-              onSelectPlan={handlePlanChange}
-            />
-          ))}
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Check className="h-4 w-4 mr-2 text-green-500" /> 
+            <span>{activePlan.features[0]}</span>
+          </div>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Check className="h-4 w-4 mr-2 text-green-500" /> 
+            <span>{activePlan.features[1] || "Basic support"}</span>
+          </div>
         </div>
       </div>
       
+      {/* Available Plans */}
+      <h3 className="text-lg font-semibold mt-8">Available Plans</h3>
+      <p className="text-sm text-muted-foreground mb-4">Choose the plan that works best for your training business</p>
+      
+      <div className="grid grid-cols-1 gap-4">
+        {plans.map((plan) => (
+          <Card 
+            key={plan.id}
+            className={`overflow-hidden transition-all ${
+              currentPlan === plan.id 
+                ? "ring-2 ring-primary" 
+                : "hover:border-primary/50"
+            }`}
+          >
+            <div className="p-5">
+              <div className="flex flex-col sm:flex-row justify-between">
+                <div>
+                  <h3 className="font-semibold text-lg">{plan.name}</h3>
+                  <div className="flex items-baseline mt-1">
+                    <span className="text-2xl font-bold">${plan.price}</span>
+                    <span className="text-muted-foreground ml-1 text-sm">/month</span>
+                  </div>
+                </div>
+                
+                <div className="mt-4 sm:mt-0">
+                  {currentPlan === plan.id ? (
+                    <Badge variant="secondary" className="font-medium">Current Plan</Badge>
+                  ) : (
+                    <Button 
+                      onClick={() => handlePlanChange(plan.id)}
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                    >
+                      Switch to {plan.name}
+                    </Button>
+                  )}
+                </div>
+              </div>
+              
+              <div className="mt-4 space-y-2">
+                {plan.features.map((feature, index) => (
+                  <div key={index} className="flex items-start">
+                    <Check className="h-4 w-4 mr-2 text-green-500 mt-0.5" />
+                    <span className="text-sm">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+      
       {/* Delete Account Section */}
-      <div className="mt-8 pt-6 border-t border-gray-200">
-        <DeleteAccountSection onDeleteAccount={handleDeleteAccount} />
+      <div className="mt-10 pt-6 border-t border-gray-200">
+        <h3 className="flex items-center text-lg font-semibold text-destructive">
+          <AlertCircle className="mr-2 h-5 w-5" />
+          Delete Account
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Permanently delete your account and all associated data. This action cannot be undone.
+        </p>
+        <Button 
+          variant="destructive" 
+          className="mt-4"
+          onClick={handleDeleteAccount}
+        >
+          Delete Account
+        </Button>
       </div>
     </div>
   );
