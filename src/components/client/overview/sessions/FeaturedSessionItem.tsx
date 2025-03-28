@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users } from "lucide-react";
+import { Users, CreditCard } from "lucide-react";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 
 interface FeaturedSessionItemProps {
@@ -40,10 +40,11 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
         <Button 
           variant="secondary" 
           size="sm" 
-          className="flex items-center"
+          className="flex items-center" 
           onClick={() => onRegister(featuredSession)}
         >
-          Register Now
+          <CreditCard className="h-3.5 w-3.5 mr-1" />
+          Register
         </Button>
       </div>
     </div>
