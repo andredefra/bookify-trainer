@@ -1,10 +1,11 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Info } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Camera, Info } from "lucide-react";
 import { toast } from "sonner";
 
 interface AccountSectionProps {
@@ -12,20 +13,112 @@ interface AccountSectionProps {
     email: string; 
     type: string; 
     name?: string; 
+    profileImage?: string;
   };
 }
 
 export function AccountSection({ user }: AccountSectionProps) {
+  // Use a general image as default profile image
+  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+  
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email);
+  const [profileImage, setProfileImage] = useState<string>(user.profileImage || defaultImage);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSaveAccount = () => {
     toast.success("Account information saved successfully");
   };
 
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+  
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check if the file is an image
+      if (!file.type.match('image.*')) {
+        toast.error("Please select an image file");
+        return;
+      }
+      
+      // Check if the file size is less than 5MB
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setProfileImage(result);
+        toast.success("Profile image updated");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  // Reset image to default
+  const handleResetImage = () => {
+    setProfileImage(defaultImage);
+    toast.success("Profile image reset to default");
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
+        <div className="flex items-center gap-6 mb-6">
+          <div className="relative">
+            <Avatar 
+              className="h-24 w-24 border-2 border-primary/20 cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={handleImageClick}
+            >
+              <AvatarImage src={profileImage} alt={name} />
+              <AvatarFallback className="bg-primary/10 text-primary text-xl">
+                {name ? name.split(' ').map(n => n[0]).join('') : 'U'}
+              </AvatarFallback>
+            </Avatar>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0"
+              onClick={handleImageClick}
+            >
+              <Camera className="h-4 w-4" />
+            </Button>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
+          <div className="space-y-1">
+            <h4 className="font-medium">{name || 'Client'}</h4>
+            <p className="text-sm text-muted-foreground">{email}</p>
+            <div className="space-x-2">
+              <Button 
+                variant="link" 
+                size="sm" 
+                className="p-0 h-auto"
+                onClick={handleImageClick}
+              >
+                Change profile picture
+              </Button>
+              <Button 
+                variant="link" 
+                size="sm" 
+                className="p-0 h-auto text-muted-foreground"
+                onClick={handleResetImage}
+              >
+                Reset to default
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div>
           <Label htmlFor="name">Full Name</Label>
           <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
