@@ -77,6 +77,10 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
             !isDesktop && "justify-center md:justify-start"
           )}
           onClick={() => handleTabClick(item.href)}
+          type="button" 
+          tabIndex={0}
+          autoComplete="off"
+          data-lpignore="true"
         >
           <item.icon className="w-5 h-5 md:mr-2" />
           <span className="hidden md:inline-flex">{item.title}</span>
