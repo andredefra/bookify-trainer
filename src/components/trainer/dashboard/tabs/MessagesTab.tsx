@@ -2,6 +2,8 @@
 import { MessageSquare } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface MessageItem {
   id: number;
@@ -15,6 +17,27 @@ interface MessagesTabProps {
 }
 
 export function MessagesTab({ messageRequests }: MessagesTabProps) {
+  const [trainerStatus, setTrainerStatus] = useState<string>("online");
+  
+  // Listen for status changes
+  useEffect(() => {
+    const savedStatus = localStorage.getItem('trainer-status');
+    if (savedStatus) {
+      setTrainerStatus(savedStatus);
+    }
+    
+    // Listen for status change events
+    const handleStatusChange = (event: CustomEvent) => {
+      setTrainerStatus(event.detail);
+    };
+    
+    window.addEventListener('trainer-status-change', handleStatusChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('trainer-status-change', handleStatusChange as EventListener);
+    };
+  }, []);
+  
   return (
     <Card>
       <CardHeader>
@@ -29,9 +52,11 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                 <MessageSquare className="h-5 w-5 text-yellow-600" />
               </div>
               <div>
-                <p className="text-yellow-800 font-medium">AI Assistant Functionality</p>
+                <p className="text-yellow-800 font-medium">AI Assistant Status</p>
                 <p className="text-yellow-700 mt-1">
-                  In the full version, your AI assistant can handle client inquiries when you're unavailable or in a session.
+                  {trainerStatus === "online" 
+                    ? "You're currently online. When you set your status to 'In Session' or 'Offline', your AI assistant will automatically handle client inquiries about scheduling sessions and training program questions using OpenAI's scientific knowledge."
+                    : "Your AI assistant is actively handling client inquiries while you're unavailable. It can schedule sessions and answer program questions based on OpenAI's scientific knowledge."}
                 </p>
               </div>
             </div>
