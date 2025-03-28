@@ -41,3 +41,17 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .truncate-mobile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .wrap-mobile {
+    white-space: normal;
+    word-break: break-word;
+  }
+}

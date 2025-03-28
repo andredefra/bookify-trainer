@@ -122,23 +122,24 @@ export function ProgramsTab() {
   
   return (
     <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Training Programs</CardTitle>
-            <CardDescription>Create and manage training programs for your clients</CardDescription>
-          </div>
-          <Button className="flex items-center" onClick={() => setShowProgramForm(true)}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create Program
-          </Button>
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 overflow-visible">
+        <div>
+          <CardTitle>Training Programs</CardTitle>
+          <CardDescription>Create and manage training programs for your clients</CardDescription>
         </div>
+        <Button 
+          className="flex items-center self-start sm:self-auto w-full sm:w-auto"
+          onClick={() => setShowProgramForm(true)}
+        >
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Create Program
+        </Button>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="programs">
-          <TabsList className="mb-6">
-            <TabsTrigger value="programs">My Programs</TabsTrigger>
-            <TabsTrigger value="assigned">Assigned Programs</TabsTrigger>
+        <Tabs defaultValue="programs" className="w-full">
+          <TabsList className="mb-6 w-full sm:w-auto">
+            <TabsTrigger value="programs" className="flex-1 sm:flex-none">My Programs</TabsTrigger>
+            <TabsTrigger value="assigned" className="flex-1 sm:flex-none">Assigned Programs</TabsTrigger>
           </TabsList>
           
           <ProgramsTabContent
