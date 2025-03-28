@@ -9,17 +9,22 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginType, setLoginType] = useState('trainer'); // New state for login type
+  const [name, setName] = useState('Andrea'); // Default name for demo purposes
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempted with:", { email, password, loginType });
+    console.log("Login attempted with:", { email, password, loginType, name });
     
     // Demo mode: Accept any credentials
     if (email && password) {
       toast.success("Demo login successful!");
-      // For demo purposes, store that user is logged in with their type
-      localStorage.setItem('demo-user', JSON.stringify({ email, type: loginType }));
+      // For demo purposes, store that user is logged in with their type and name
+      localStorage.setItem('demo-user', JSON.stringify({ 
+        name, 
+        email, 
+        type: loginType 
+      }));
       
       // Redirect based on user type
       if (loginType === 'client') {
@@ -81,7 +86,7 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  placeholder="your@email.com"
+                  placeholder="andrea@gmail.com"
                   required
                 />
               </div>

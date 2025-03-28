@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClientProfile } from "@/components/ClientProfile";
@@ -58,7 +57,6 @@ const ClientDashboard = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // Check for active tab in location state
     if (location.state) {
       if (location.state.activeTab) {
         setActiveTab(location.state.activeTab);
@@ -95,6 +93,7 @@ const ClientDashboard = () => {
           unreadMessageCount={unreadMessageCount}
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
+          user={user}
         />
         
         <main className="flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8 pb-20 lg:pb-6">

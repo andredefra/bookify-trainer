@@ -13,6 +13,13 @@ interface ClientSidebarProps {
   unreadMessageCount: number;
   showSidebar: boolean;
   setShowSidebar: (show: boolean) => void;
+  user: {
+    name?: string;
+    email: string;
+    type: string;
+    plan?: string;
+    profileImage?: string;
+  } | null;
 }
 
 export function ClientSidebar({ 
@@ -20,9 +27,15 @@ export function ClientSidebar({
   setActiveTab, 
   unreadMessageCount, 
   showSidebar, 
-  setShowSidebar 
+  setShowSidebar,
+  user
 }: ClientSidebarProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  // Default to empty string if user or user.email is undefined
+  const userEmail = user?.email || "";
+  // Get display name from user or fallback 
+  const displayName = user?.name || userEmail.split('@')[0] || "Client";
   
   const sidebarContent = (
     <div className="flex flex-col h-full">
@@ -38,11 +51,12 @@ export function ClientSidebar({
       {isMobile && (
         <div className="p-4 border-b">
           <ClientProfile 
-            name="Demo Client"
-            email="client@example.com"
+            name={displayName}
+            email={userEmail}
             since="March 2023"
             sessions={24}
             goals={["Weight loss", "Muscle tone", "Flexibility"]}
+            image={user?.profileImage}
           />
         </div>
       )}
