@@ -71,6 +71,9 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState("");
   
+  // Debug log to check followedTrainers
+  console.log("Followed trainers:", followedTrainers);
+  
   const handleBookSession = (trainerName: string) => {
     setSelectedTrainer(trainerName);
     setShowBookingDialog(true);
@@ -94,12 +97,18 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
       )
     : filteredTrainers;
   
-  // Filter out trainers that are already followed - this needed fixing
+  // Filter out trainers that are already followed
+  // Debug the filtering process
+  console.log("Followed trainers array:", followedTrainers);
+  
   const nonFollowedTrainers = locationFilteredTrainers.filter(trainer => {
-    // Get the numeric part of the trainer ID to compare with followedTrainers array
+    // Extract the numeric part of the trainer ID and convert to number
     const trainerId = parseInt(trainer.id.replace('t', ''));
+    console.log(`Trainer ${trainer.name} (ID: ${trainer.id}) → numeric ID: ${trainerId}, is followed: ${followedTrainers.includes(trainerId)}`);
     return !followedTrainers.includes(trainerId);
   });
+  
+  console.log("Filtered trainers:", nonFollowedTrainers.map(t => t.name));
   
   return {
     searchQuery,

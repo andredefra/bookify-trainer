@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -41,7 +42,13 @@ export function TrainersTab() {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
   
+  // Added console log to debug
+  console.log("myTrainers in TrainersTab:", myTrainers);
+  
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
+  
+  // Log followed trainers for debugging
+  console.log("followedTrainers in TrainersTab:", followedTrainers);
   
   const handlePayTrainer = (trainer: string, amount: number = 45) => {
     setSelectedTrainer({ name: trainer, amount });

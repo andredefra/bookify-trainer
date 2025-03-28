@@ -12,6 +12,9 @@ interface TrainerMarketplaceProps {
 export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketplaceProps) {
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
   
+  // Log followed trainers for debugging
+  console.log("followedTrainers in TrainerMarketplace:", followedTrainers);
+  
   const {
     searchQuery,
     setSearchQuery,
