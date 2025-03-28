@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,13 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
     // Here you would typically save the changes to a database
     // For this demo, we'll just show a success toast
     toast.success("Settings saved successfully");
+    
+    // Save the updated profile image to localStorage if it was changed
+    const demoUser = JSON.parse(localStorage.getItem('demo-user') || '{}');
+    if (demoUser.email === user.email) {
+      demoUser.profileImage = updatedUser.profileImage;
+      localStorage.setItem('demo-user', JSON.stringify(demoUser));
+    }
   };
 
   return (
