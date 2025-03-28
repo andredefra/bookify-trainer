@@ -43,7 +43,13 @@ const MobileMenu = ({
       </button>
       
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[60px] bg-white z-50 animate-fade-in flex flex-col items-center pt-10" style={{ backgroundColor: 'white' }}>
+        <div 
+          className="fixed inset-0 top-[60px] z-50 flex flex-col items-center pt-10" 
+          style={{ 
+            backgroundColor: '#FFFFFF', 
+            boxShadow: '0 0 0 100vmax rgba(255, 255, 255, 1)'
+          }}
+        >
           <MobileNavLinks
             isHomePage={isHomePage}
             scrollToSection={scrollToSection}
