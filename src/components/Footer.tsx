@@ -38,6 +38,7 @@ const Footer = () => {
               <span className="font-display text-xl font-bold tracking-tight text-primary">Personal.ai</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">The all-in-one platform for personal trainers.</p>
+            <p className="mt-8 text-sm text-muted-foreground">&copy; {currentYear} mypersonalai ltd. All rights reserved.</p>
           </div>
           
           {/* Spacer for alignment */}
@@ -56,12 +57,6 @@ const Footer = () => {
                     >
                       {link.name}
                     </Link>
-                    {/* Display copyright next to the third item */}
-                    {idx === 1 && linkIdx === 2 && (
-                      <p className="absolute right-6 lg:right-8 text-sm text-muted-foreground">
-                        &copy; {currentYear} mypersonalai ltd. All rights reserved.
-                      </p>
-                    )}
                   </li>
                 ))}
               </ul>
