@@ -67,11 +67,6 @@ export function SessionCard({
                 Register to this session
               </Button>
             )}
-            {onRegister && variant === 'featured' && (
-              <Button variant="default" size="sm" onClick={() => onRegister(session)}>
-                Register Now
-              </Button>
-            )}
           </>
         )}
       </div>
