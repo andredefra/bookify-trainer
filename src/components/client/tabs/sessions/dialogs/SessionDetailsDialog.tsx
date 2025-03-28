@@ -36,9 +36,6 @@ export function SessionDetailsDialog({
               <Calendar className="h-5 w-5 mr-2 text-muted-foreground" />
               <span>{session.date}, {session.time}</span>
             </div>
-            <Badge variant={session.id === 999 ? "default" : "outline"}>
-              {session.id === 999 ? "Premium" : "Standard"}
-            </Badge>
           </div>
           
           <div>

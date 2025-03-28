@@ -21,7 +21,7 @@ export function SessionCard({
   onCancel,
   variant = 'default' 
 }: SessionCardProps) {
-  const bgColor = variant === 'featured' ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50';
+  const bgColor = variant === 'featured' ? 'bg-gray-50 border border-gray-100' : 'bg-gray-50';
   
   return (
     <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
@@ -97,10 +97,6 @@ export function SessionCard({
           </>
         ) : (
           <>
-            <Badge variant={variant === 'featured' ? "default" : "outline"} 
-                  className={variant === 'featured' ? "bg-blue-50 text-blue-700 border-blue-200" : ""}>
-              {variant === 'featured' ? "Premium" : "Available"}
-            </Badge>
             {onViewDetails && (
               <Button 
                 variant="outline" 

@@ -22,7 +22,7 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
   };
   
   return (
-    <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-lg">
       <div>
         <h3 className="font-medium">{featuredSession.name}</h3>
         <div className="text-sm text-muted-foreground">
@@ -37,9 +37,6 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-          Premium
-        </Badge>
         <Button 
           variant="default" 
           size="sm" 
