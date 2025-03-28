@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaQuery } from "@/hooks/use-mobile";
 
@@ -75,7 +75,7 @@ export function ClientHeader({ user, onLogout, onMobileMenuClick }: ClientHeader
             </div>
             
             <Button variant="outline" size="sm" onClick={handleLogout}>
-              Log out
+              {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
             </Button>
           </div>
         </div>

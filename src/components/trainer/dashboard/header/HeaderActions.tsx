@@ -4,6 +4,7 @@ import { StatusSelector } from "./StatusSelector";
 import { UserProfile } from "./UserProfile";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 interface HeaderActionsProps {
   displayName: string;
@@ -47,7 +48,7 @@ export function HeaderActions({ displayName, status, user, onLogout }: HeaderAct
         <UserProfile user={user} displayName={displayName} status={status} isMobile={true} />
       ) : null}
       <Button variant="outline" size="sm" onClick={handleLogout}>
-        Log out
+        {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
       </Button>
     </div>
   );
