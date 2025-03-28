@@ -39,7 +39,7 @@ export const it = {
   // Additional Feature Translations
   'features.aiScheduling': 'Programmazione AI',
   'features.aiSchedulingDesc': 'Sistema di programmazione intelligente che ottimizza il tuo calendario e massimizza la disponibilità delle sessioni.',
-  'features.stripeIntegration': 'Integrazione Stripe',
+  'features.stripeIntegration': 'Integrazione Pagamenti',
   'features.stripeIntegrationDesc': 'Ricevi pagamenti automaticamente con pre-autorizzazioni e addebiti post-sessione. Protezione per mancata presenza inclusa.',
   'features.groupSessions': 'Sessioni Private e di Gruppo',
   'features.groupSessionsDesc': 'Gestisci clienti individuali o crea sessioni di gruppo con liste d\'attesa e limiti di capacità.',
