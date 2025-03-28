@@ -21,6 +21,9 @@ export function ClientProfile({
   goals,
   image
 }: ClientProfileProps) {
+  // Use a general image as default profile image if none is provided
+  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+  
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 p-4">
@@ -33,7 +36,7 @@ export function ClientProfile({
         <div className="flex items-center gap-4">
           <div className="relative">
             <Avatar className="h-16 w-16 border-2 border-primary/20">
-              <AvatarImage src={image} alt={name} />
+              <AvatarImage src={image || defaultImage} alt={name} />
               <AvatarFallback className="bg-primary/10 text-primary">{name?.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="absolute -bottom-1 -right-1 bg-green-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">

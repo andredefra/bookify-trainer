@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface ClientHeaderProps {
-  user: {name?: string, email: string, type: string, plan?: string} | null;
+  user: {name?: string, email: string, type: string, plan?: string, profileImage?: string} | null;
   onLogout: () => void;
   onMobileMenuClick?: () => void;
 }
@@ -63,7 +63,7 @@ export function ClientHeader({ user, onLogout, onMobileMenuClick }: ClientHeader
             
             <div className="flex items-center space-x-3">
               <Avatar className="h-9 w-9 border border-primary/10">
-                <AvatarImage src={defaultImage} alt={displayName} />
+                <AvatarImage src={user?.profileImage || defaultImage} alt={displayName} />
                 <AvatarFallback className="bg-primary/10 text-primary">
                   {displayName.charAt(0)}
                 </AvatarFallback>

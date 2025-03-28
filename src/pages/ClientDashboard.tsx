@@ -18,7 +18,13 @@ import { SessionItem, SessionStatus } from "@/types/sessions";
 const ClientDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState<{name?: string, email: string, type: string, plan?: string} | null>(null);
+  const [user, setUser] = useState<{
+    name?: string, 
+    email: string, 
+    type: string, 
+    plan?: string,
+    profileImage?: string
+  } | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeSettingsSection, setActiveSettingsSection] = useState<string | undefined>(undefined);
