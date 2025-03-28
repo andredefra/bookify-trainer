@@ -1,18 +1,17 @@
 
 import { useEffect } from 'react';
 import { Menu, Globe } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
 import { useLanguage } from '@/context/LanguageContext';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface MobileMenuProps {
   mobileMenuOpen: boolean;
@@ -28,6 +27,7 @@ const MobileMenu = ({
   scrollToSection,
 }: MobileMenuProps) => {
   const { t, language, setLanguage } = useLanguage();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleClickOutside = () => {
@@ -40,8 +40,15 @@ const MobileMenu = ({
     return () => document.removeEventListener('click', handleClickOutside);
   }, [mobileMenuOpen, setMobileMenuOpen]);
 
-  const handleLanguageChange = (value: string) => {
-    setLanguage(value as 'en' | 'it');
+  const handleLanguageChange = (lang: 'en' | 'it') => {
+    setLanguage(lang);
+    
+    // Navigate to the appropriate route
+    if (lang === 'en') {
+      navigate('/');
+    } else {
+      navigate('/it');
+    }
   };
 
   return (
@@ -78,32 +85,50 @@ const MobileMenu = ({
           
           <div className="bg-accent/30 py-2 px-2 rounded-lg border border-border/40 mb-5">
             <div className="flex flex-col space-y-2">
-              <span className="text-sm font-medium">{t('nav.language')}:</span>
-              <Select 
-                value={language}
-                onValueChange={handleLanguageChange}
-              >
-                <SelectTrigger className="w-full bg-background">
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
-                    <SelectValue>
-                      {language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}
-                    </SelectValue>
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en" className="flex items-center gap-2">
-                    <span className="flex items-center gap-2">
-                      <span className="text-base">🇬🇧</span> English
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="it" className="flex items-center gap-2">
-                    <span className="flex items-center gap-2">
-                      <span className="text-base">🇮🇹</span> Italiano
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <span className="text-sm font-medium">{t('nav.selectLanguage') || 'Select language'}:</span>
+              <DropdownMenu>
+                <DropdownMenuTrigger 
+                  asChild
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-between bg-background"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="center"
+                  className="w-[200px] bg-background"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <DropdownMenuItem 
+                    className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLanguageChange('en');
+                    }}
+                  >
+                    <span className="text-base mr-1">🇬🇧</span>
+                    <span className="text-sm">English</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLanguageChange('it');
+                    }}
+                  >
+                    <span className="text-base mr-1">🇮🇹</span>
+                    <span className="text-sm">Italiano</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           
