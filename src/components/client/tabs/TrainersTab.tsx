@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
@@ -42,13 +42,20 @@ export function TrainersTab() {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
   
-  // Added console log to debug
-  console.log("myTrainers in TrainersTab:", myTrainers);
-  
+  // Force myTrainers to be included in the default trainers
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
   
-  // Log followed trainers for debugging
+  // Add explicit logs for debugging
+  console.log("myTrainers in TrainersTab:", myTrainers.map(t => `${t.id} - ${t.name}`));
   console.log("followedTrainers in TrainersTab:", followedTrainers);
+  
+  // Force initialization of followedTrainers with myTrainers on component mount
+  useEffect(() => {
+    if (followedTrainers.length === 0) {
+      const trainerIds = myTrainers.map(trainer => trainer.id);
+      localStorage.setItem('followedTrainers', JSON.stringify(trainerIds));
+    }
+  }, [followedTrainers]);
   
   const handlePayTrainer = (trainer: string, amount: number = 45) => {
     setSelectedTrainer({ name: trainer, amount });

@@ -12,8 +12,8 @@ interface TrainerMarketplaceProps {
 export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketplaceProps) {
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
   
-  // Log followed trainers for debugging
-  console.log("followedTrainers in TrainerMarketplace:", followedTrainers);
+  // Adding explicit debug log to check followed trainers
+  console.log("Followed trainers in TrainerMarketplace:", followedTrainers);
   
   const {
     searchQuery,
@@ -27,6 +27,9 @@ export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketpl
     handleBookSession,
     handleBookingSubmit
   } = useTrainerMarketplace(followedTrainers);
+  
+  // Add explicit debug log to check filtered trainers
+  console.log("Filtered trainers in marketplace:", trainers.map(t => `${t.id} - ${t.name}`));
   
   return (
     <div className="space-y-6">

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { bookingSchema } from "@/components/trainer/BookingForm";
@@ -71,6 +71,9 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState("");
   
+  // Debug logs
+  console.log("useTrainerMarketplace received followedTrainers:", followedTrainers);
+  
   const handleBookSession = (trainerName: string) => {
     setSelectedTrainer(trainerName);
     setShowBookingDialog(true);
@@ -94,12 +97,22 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
       )
     : filteredTrainers;
   
-  // Filter out trainers that are already followed
+  // Debug all trainers before filtering
+  console.log("Trainers before filtering:", locationFilteredTrainers.map(t => `${t.id} (${parseInt(t.id.replace(/\D/g, ''))}) - ${t.name}`));
+  
+  // Debug followedTrainers for comparison
+  console.log("Looking to filter out trainers with IDs:", followedTrainers);
+  
+  // Filter out trainers that are already followed - with explicit mapping for debugging
   const nonFollowedTrainers = locationFilteredTrainers.filter(trainer => {
     // Extract the numeric part of the trainer ID
     const trainerId = parseInt(trainer.id.replace(/\D/g, ''));
-    return !followedTrainers.includes(trainerId);
+    const isFollowed = followedTrainers.includes(trainerId);
+    console.log(`Checking trainer ${trainer.name} with ID ${trainerId}: ${isFollowed ? 'is followed' : 'not followed'}`);
+    return !isFollowed;
   });
+  
+  console.log("Trainers after filtering:", nonFollowedTrainers.map(t => t.name));
   
   return {
     searchQuery,
