@@ -9,6 +9,8 @@ interface ProfileSectionProps {
   user: {
     name?: string;
     email: string;
+    type: string;
+    plan?: string;
     profileImage?: string;
   };
 }
@@ -43,7 +45,7 @@ export function ProfileSection({ user }: ProfileSectionProps) {
           onImageChange={setProfileImage}
         />
         
-        <PersonalInfoForm initialName={name} />
+        <PersonalInfoForm initialName={name} userEmail={user.email} />
       </div>
       
       <div className="space-y-2">
