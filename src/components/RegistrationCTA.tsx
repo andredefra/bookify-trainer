@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import React from 'react';
 
 const RegistrationCTA = () => {
   return (
@@ -11,12 +11,14 @@ const RegistrationCTA = () => {
         <p className="text-lg text-muted-foreground mb-8 reveal reveal-delay-1">
           Register for the demo today and get a special discounted price when we officially launch.
         </p>
-        <Link
-          to="/register"
+        <a
+          href="https://forms.gle/23JCufSRADPg7HRRA"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-block px-8 py-3 bg-primary text-white rounded-full text-lg font-medium button-hover reveal reveal-delay-2"
         >
-          Register for Early Access
-        </Link>
+          Fill the Form to get Early Access
+        </a>
       </div>
     </section>
   );
