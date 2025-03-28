@@ -8,7 +8,7 @@ export const plans: Plan[] = [
     name: "Freemium",
     price: "€0",
     period: "per month",
-    description: "Free tier with basic features",
+    description: "Free tier with basic features. Includes 5% transaction fee.",
     features: [
       "Unlimited Sessions",
       "Google Calendar Integration",
@@ -16,9 +16,7 @@ export const plans: Plan[] = [
       "Client Messaging",
       "Client Management"
     ],
-    limitations: [
-      "5% transaction fee"
-    ],
+    limitations: [],
     isPopular: false,
     icon: Users
   },
@@ -27,10 +25,9 @@ export const plans: Plan[] = [
     name: "Pro",
     price: "€29",
     period: "per month",
-    description: "Premium features for serious trainers",
+    description: "Premium features for serious trainers. Lower transaction fee (2.5%).",
     features: [
       "Everything in Freemium",
-      "Lower Transaction Fee (2.5%)",
       "Payment Integration",
       "Priority Support",
       "Advanced Analytics",
