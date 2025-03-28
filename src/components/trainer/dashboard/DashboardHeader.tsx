@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Menu, Bell, LogOut } from "lucide-react";
+import { Menu, Bell } from "lucide-react";
 import { StatusSelector } from "./header/StatusSelector";
 
 interface DashboardHeaderProps {
@@ -23,42 +23,41 @@ export function DashboardHeader({
 
   return (
     <header className="bg-white border-b border-border shadow-sm">
-      <div className="px-2 sm:px-4 lg:px-6">
-        <div className="flex items-center justify-between h-14">
-          <div className="flex items-center gap-2">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center gap-4">
             {showMobileMenuButton && (
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-8 w-8"
                 onClick={onMobileMenuClick}
               >
-                <Menu className="h-4 w-4" />
+                <Menu className="h-5 w-5" />
               </Button>
             )}
-            <span className="font-display text-lg font-bold text-primary truncate">Personal.ai</span>
+            <span className="font-display text-xl font-bold text-primary">Personal.ai</span>
           </div>
           
-          <div className="flex items-center space-x-2">
-            {/* Status Selector - hidden on small screens */}
+          <div className="flex items-center space-x-4">
+            {/* Status Selector */}
             <div className="hidden md:block">
               <StatusSelector />
             </div>
             
-            <Button variant="ghost" size="icon" className="text-muted-foreground h-8 w-8 md:h-9 md:w-9">
-              <Bell className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="text-muted-foreground">
+              <Bell className="h-5 w-5" />
             </Button>
             
-            <div className="hidden md:flex items-center">
-              <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
+            <div className="hidden md:flex items-center space-x-2">
+              <Badge variant="secondary" className="bg-primary/10 text-primary">
                 Trainer
               </Badge>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <Avatar className="h-7 w-7 md:h-8 md:w-8 border border-primary/10">
+            <div className="flex items-center space-x-3">
+              <Avatar className="h-8 w-8 border border-primary/10">
                 <AvatarImage src={defaultImage} alt={name} />
-                <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                <AvatarFallback className="bg-primary/10 text-primary">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -68,9 +67,8 @@ export function DashboardHeader({
               </div>
             </div>
             
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onLogout}>
-              <LogOut className="h-4 w-4" />
-              <span className="sr-only">Log out</span>
+            <Button variant="outline" size="sm" onClick={onLogout}>
+              Log out
             </Button>
           </div>
         </div>
