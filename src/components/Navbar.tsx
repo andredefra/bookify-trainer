@@ -35,12 +35,14 @@ const Navbar = () => {
             <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
           </div>
         ) : (
-          <MobileMenu 
-            mobileMenuOpen={mobileMenuOpen}
-            setMobileMenuOpen={setMobileMenuOpen}
-            isHomePage={isHomePage}
-            scrollToSection={scrollToSection}
-          />
+          <div className="ml-auto">
+            <MobileMenu 
+              mobileMenuOpen={mobileMenuOpen}
+              setMobileMenuOpen={setMobileMenuOpen}
+              isHomePage={isHomePage}
+              scrollToSection={scrollToSection}
+            />
+          </div>
         )}
         
         {!isMobile && <AuthButtons />}

@@ -38,16 +38,16 @@ const MobileMenu = ({
       <button 
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         className="p-2 text-primary rounded-full"
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
       >
         {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
       
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 top-[60px] z-50 flex flex-col items-center pt-10" 
+          className="fixed inset-0 top-[60px] bg-white z-50 flex flex-col items-center pt-10" 
           style={{ 
-            backgroundColor: '#FFFFFF', 
-            boxShadow: '0 0 0 100vmax rgba(255, 255, 255, 1)'
+            backgroundColor: '#FFFFFF',
           }}
         >
           <MobileNavLinks
