@@ -45,10 +45,8 @@ const MobileMenu = ({
       </button>
       
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 top-[60px] z-50 bg-white"
-        >
-          <div className="container mx-auto px-6 py-8">
+        <div className="fixed inset-0 top-[60px] z-50 bg-background">
+          <div className="h-full overflow-y-auto">
             <MobileNavLinks
               isHomePage={isHomePage}
               scrollToSection={scrollToSection}
