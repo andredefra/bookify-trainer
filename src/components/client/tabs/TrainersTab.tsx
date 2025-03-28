@@ -1,20 +1,13 @@
 
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Star, CreditCard, DollarSign, ArrowLeft } from "lucide-react";
-import { useState } from "react";
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
+import { PlusCircle, Star, CreditCard, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
 import { TrainerMarketplace } from "@/components/client/trainers/TrainerMarketplace";
+import { TrainersGrid } from "@/components/client/trainers/TrainersGrid";
+import { PaymentsTable } from "@/components/client/trainers/PaymentsTable";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -23,8 +16,27 @@ const paymentHistory = [
   { id: 3, trainer: "Alex Thompson", amount: 120, date: "2023-06-01", type: "Program" },
 ];
 
+// Mock data for trainers
+const myTrainers = [
+  { 
+    id: 1, 
+    name: "Sarah Johnson", 
+    specialty: "Personal Trainer", 
+    rating: 4.9, 
+    reviews: 48,
+    image: "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop"
+  },
+  { 
+    id: 2, 
+    name: "Alex Thompson", 
+    specialty: "HIIT Specialist", 
+    rating: 4.7, 
+    reviews: 32,
+    image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop"
+  }
+];
+
 export function TrainersTab() {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
@@ -98,105 +110,9 @@ export function TrainersTab() {
         {activeTab === "marketplace" ? (
           <TrainerMarketplace />
         ) : activeTab === "trainers" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border rounded-lg overflow-hidden">
-              <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                <img 
-                  src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop" 
-                  alt="Sarah Johnson"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-medium text-lg">Sarah Johnson</h3>
-                <p className="text-sm text-muted-foreground">Personal Trainer</p>
-                <div className="flex items-center mt-1">
-                  <Star className="h-4 w-4 text-amber-500" />
-                  <span className="ml-1 text-sm font-medium">4.9</span>
-                  <span className="ml-1 text-xs text-muted-foreground">(48 reviews)</span>
-                </div>
-                <div className="mt-4 flex space-x-2">
-                  <Button size="sm" onClick={() => navigate('/trainer/1')}>View Profile</Button>
-                  <Button variant="outline" size="sm">Message</Button>
-                  <Button 
-                    variant="secondary" 
-                    size="sm"
-                    onClick={() => handlePayTrainer("Sarah Johnson", 45)}
-                  >
-                    <DollarSign className="h-3.5 w-3.5 mr-1" />
-                    Pay
-                  </Button>
-                </div>
-              </div>
-            </div>
-            
-            <div className="border rounded-lg overflow-hidden">
-              <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                <img 
-                  src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop" 
-                  alt="Alex Thompson"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-medium text-lg">Alex Thompson</h3>
-                <p className="text-sm text-muted-foreground">HIIT Specialist</p>
-                <div className="flex items-center mt-1">
-                  <Star className="h-4 w-4 text-amber-500" />
-                  <span className="ml-1 text-sm font-medium">4.7</span>
-                  <span className="ml-1 text-xs text-muted-foreground">(32 reviews)</span>
-                </div>
-                <div className="mt-4 flex space-x-2">
-                  <Button size="sm" onClick={() => navigate('/trainer/2')}>View Profile</Button>
-                  <Button variant="outline" size="sm">Message</Button>
-                  <Button 
-                    variant="secondary" 
-                    size="sm" 
-                    onClick={() => handlePayTrainer("Alex Thompson", 50)}
-                  >
-                    <DollarSign className="h-3.5 w-3.5 mr-1" />
-                    Pay
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TrainersGrid trainers={myTrainers} onPayClick={handlePayTrainer} />
         ) : (
-          <div className="space-y-6">
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Trainer</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paymentHistory.map((payment) => (
-                    <TableRow key={payment.id}>
-                      <TableCell>{payment.date}</TableCell>
-                      <TableCell>{payment.trainer}</TableCell>
-                      <TableCell>{payment.type}</TableCell>
-                      <TableCell>€{payment.amount}</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm">Receipt</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            <div className="flex justify-end">
-              <Button variant="outline">
-                <CreditCard className="mr-2 h-4 w-4" />
-                Manage Payment Methods
-              </Button>
-            </div>
-          </div>
+          <PaymentsTable payments={paymentHistory} />
         )}
       </CardContent>
       
