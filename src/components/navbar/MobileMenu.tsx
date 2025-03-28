@@ -61,18 +61,18 @@ const MobileMenu = ({
             />
           </div>
           
-          {/* Language toggle in mobile menu */}
-          <div className="mt-4 mb-6">
-            <LanguageToggle className="w-full" />
-          </div>
-          
-          <div className="mt-auto flex flex-col gap-3">
-            <Link to="/login" className="w-full">
+          {/* Language toggle positioned between navigation and auth buttons */}
+          <div className="mt-auto mb-6">
+            <div className="mb-4 w-full">
+              <LanguageToggle className="w-full" />
+            </div>
+            
+            <Link to="/login" className="w-full mb-3 block">
               <Button variant="outline" className="w-full" size="lg">
                 {t('auth.login')}
               </Button>
             </Link>
-            <Link to="/register" className="w-full">
+            <Link to="/register" className="w-full block">
               <Button className="w-full" size="lg">
                 {t('auth.register')}
               </Button>
