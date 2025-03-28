@@ -7,7 +7,7 @@ const BrandLogo = () => {
       to="/" 
       className="flex items-center space-x-2 text-primary"
     >
-      <span className="font-display text-2xl font-bold tracking-tight">Personal.ai</span>
+      <span className="font-display text-2xl font-bold tracking-tight">MyPersonal.ai</span>
     </Link>
   );
 };
