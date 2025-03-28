@@ -1,8 +1,12 @@
+
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video, CheckCircle } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Features = () => {
+  const { t } = useLanguage();
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -76,10 +80,10 @@ const Features = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
           <h2 className="reveal text-2xl md:text-4xl font-display font-bold tracking-tight text-primary mb-4 md:mb-6">
-            Everything You Need to Run Your Training Business
+            {t('features.title')}
           </h2>
           <p className="reveal reveal-delay-1 text-base md:text-lg text-muted-foreground">
-            Powerful tools that work together to streamline your workflow and enhance your client experience.
+            {t('features.subtitle')}
           </p>
         </div>
 
@@ -107,24 +111,23 @@ const Features = () => {
                   <Video className="h-5 w-5 text-blue-500" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-display font-bold tracking-tight text-primary mb-3 md:mb-4">
-                  Video Exercise Demonstrations
+                  {t('features.videoTitle')}
                 </h3>
                 <p className="text-base text-muted-foreground mb-4">
-                  Trainers can now add YouTube or Vimeo videos to any exercise in their training programs, 
-                  ensuring clients have perfect visual demonstrations of proper form and technique.
+                  {t('features.videoDesc')}
                 </p>
                 <ul className="space-y-2 text-sm md:text-base">
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
-                    <span>Easily link YouTube or Vimeo videos to exercises</span>
+                    <span>{t('features.videoFeature1')}</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
-                    <span>Clients can watch embedded videos directly in their workout plan</span>
+                    <span>{t('features.videoFeature2')}</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
-                    <span>Improve client form and reduce injury risk with visual guidance</span>
+                    <span>{t('features.videoFeature3')}</span>
                   </li>
                 </ul>
               </div>
@@ -141,10 +144,10 @@ const Features = () => {
 
         <div className="mt-16 md:mt-24 max-w-3xl mx-auto text-center">
           <h3 className="reveal text-xl md:text-3xl font-display font-bold tracking-tight text-primary mb-4 md:mb-6">
-            Showcase your brand with your personal trainer page
+            {t('features.profileTitle')}
           </h3>
           <p className="reveal reveal-delay-1 text-base md:text-lg text-muted-foreground mb-6 md:mb-8">
-            Share your unique URL (personal.ai/trainername) with potential clients to showcase your services, availability, and client reviews.
+            {t('features.profileDesc')}
           </p>
           
           <div className="reveal reveal-delay-2 p-3 md:p-4 bg-secondary/50 rounded-xl md:rounded-2xl border border-border shadow-sm">
@@ -169,7 +172,7 @@ const Features = () => {
           
           <div className="reveal reveal-delay-3 mt-8 md:mt-10">
             <Link to="/find-trainer" className="inline-block px-6 py-3 md:py-4 bg-primary text-white rounded-full text-base md:text-lg font-medium border border-primary/10 button-hover">
-              Looking for a trainer?
+              {t('features.findTrainer')}
             </Link>
           </div>
         </div>

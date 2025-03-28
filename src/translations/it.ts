@@ -17,6 +17,20 @@ export const it = {
   // Features
   'features.title': 'Tutto ciò di cui hai bisogno per far crescere la tua attività',
   'features.subtitle': 'Personal.ai semplifica le tue operazioni così puoi concentrarti su ciò che conta di più: i tuoi clienti.',
+  'features.smartScheduling': 'Programmazione Intelligente',
+  'features.smartSchedulingDesc': 'Sincronizza con Google Calendar e permetti ai clienti di prenotare direttamente in base alla tua disponibilità.',
+  'features.automatedPayments': 'Pagamenti Automatizzati',
+  'features.automatedPaymentsDesc': 'Collega il tuo account Stripe e ricevi pagamenti automaticamente quando le sessioni sono completate.',
+  'features.aiAssistant': 'Assistente AI',
+  'features.aiAssistantDesc': 'Lascia che l\'AI gestisca le richieste dei clienti quando non sei disponibile o sei in sessione di allenamento.',
+  'features.videoTitle': 'Dimostrazioni Video degli Esercizi',
+  'features.videoDesc': 'Gli allenatori possono ora aggiungere video di YouTube o Vimeo a qualsiasi esercizio nei loro programmi di allenamento, garantendo ai clienti perfette dimostrazioni visive della corretta forma e tecnica.',
+  'features.videoFeature1': 'Collega facilmente video di YouTube o Vimeo agli esercizi',
+  'features.videoFeature2': 'I clienti possono guardare i video incorporati direttamente nel loro piano di allenamento',
+  'features.videoFeature3': 'Migliora la forma del cliente e riduci il rischio di infortuni con guida visiva',
+  'features.profileTitle': 'Mostra il tuo brand con la tua pagina da personal trainer',
+  'features.profileDesc': 'Condividi il tuo URL unico (personal.ai/nometrainer) con potenziali clienti per mostrare i tuoi servizi, disponibilità e recensioni dei clienti.',
+  'features.findTrainer': 'Cerchi un trainer?',
   
   // How it works
   'howItWorks.title': 'Come Funziona',
@@ -62,7 +76,7 @@ export const it = {
   'pricing.features.advancedAnalytics': 'Analisi Avanzate',
   'pricing.features.waitlistManagement': 'Gestione Liste d\'Attesa',
   'pricing.features.customPrograms': 'Programmi Personalizzati',
-  'pricing.features.fitnessTracking': 'Monitoraggio Progressi Fitness',
+  'features.fitnessTracking': 'Monitoraggio Progressi Fitness',
   'pricing.disclaimer1': 'Tutti i piani includono elaborazione sicura dei pagamenti. Le commissioni sulle transazioni vengono addebitate solo sui pagamenti riusciti. Puoi aggiornare, declassare o annullare il tuo abbonamento in qualsiasi momento.',
   'pricing.disclaimer2': 'I tuoi clienti non pagano mai per l\'app — ottengono accesso alle funzionalità premium tramite il tuo abbonamento',
   

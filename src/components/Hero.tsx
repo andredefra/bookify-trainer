@@ -1,12 +1,15 @@
+
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { CalendarCheck, CreditCard, MessageSquare, Bot } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from '@/context/LanguageContext';
 
 const Hero = () => {
   const isMobile = useIsMobile();
   const elementRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
@@ -38,15 +41,15 @@ const Hero = () => {
     }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-6 md:space-y-10">
-          <h1 className="reveal text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight text-primary mx-auto max-w-4xl md:leading-tight text-balance">The All-in-One Platform for Personal Trainers</h1>
+          <h1 className="reveal text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight text-primary mx-auto max-w-4xl md:leading-tight text-balance">{t('hero.title')}</h1>
           
           <p className="reveal reveal-delay-1 mx-auto max-w-2xl text-base md:text-xl text-muted-foreground leading-relaxed text-balance">
-            Simplify your calendar, fill your sessions, and get paid automatically — with AI support for client management and scheduling.
+            {t('hero.subtitle')}
           </p>
           
           <div className="reveal reveal-delay-2 flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link to="/register" className="w-full sm:w-auto px-6 py-3 md:py-4 bg-primary text-white rounded-full text-base md:text-lg font-medium button-hover">
-              Try the Demo
+              {t('hero.cta')}
             </Link>
           </div>
         </div>
@@ -97,24 +100,24 @@ const Hero = () => {
             <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary/10 mb-3 md:mb-4">
               <CalendarCheck className="h-5 w-5 md:h-6 md:w-6 text-primary" />
             </div>
-            <h3 className="text-base md:text-lg font-semibold mb-2">Smart Scheduling</h3>
-            <p className="text-sm md:text-base text-muted-foreground">Sync with Google Calendar and let clients book directly based on your availability.</p>
+            <h3 className="text-base md:text-lg font-semibold mb-2">{t('features.smartScheduling')}</h3>
+            <p className="text-sm md:text-base text-muted-foreground">{t('features.smartSchedulingDesc')}</p>
           </div>
           
           <div className="reveal reveal-delay-1 flex flex-col items-center text-center p-4 md:p-6 rounded-lg md:rounded-xl glass">
             <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary/10 mb-3 md:mb-4">
               <CreditCard className="h-5 w-5 md:h-6 md:w-6 text-primary" />
             </div>
-            <h3 className="text-base md:text-lg font-semibold mb-2">Automated Payments</h3>
-            <p className="text-sm md:text-base text-muted-foreground">Connect your Stripe account and get paid automatically when sessions are completed.</p>
+            <h3 className="text-base md:text-lg font-semibold mb-2">{t('features.automatedPayments')}</h3>
+            <p className="text-sm md:text-base text-muted-foreground">{t('features.automatedPaymentsDesc')}</p>
           </div>
           
           <div className="reveal reveal-delay-2 flex flex-col items-center text-center p-4 md:p-6 rounded-lg md:rounded-xl glass">
             <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary/10 mb-3 md:mb-4">
               <Bot className="h-5 w-5 md:h-6 md:w-6 text-primary" />
             </div>
-            <h3 className="text-base md:text-lg font-semibold mb-2">AI Assistant</h3>
-            <p className="text-sm md:text-base text-muted-foreground">Let AI handle client inquiries when you're unavailable or in a training session.</p>
+            <h3 className="text-base md:text-lg font-semibold mb-2">{t('features.aiAssistant')}</h3>
+            <p className="text-sm md:text-base text-muted-foreground">{t('features.aiAssistantDesc')}</p>
           </div>
         </div>
       </div>

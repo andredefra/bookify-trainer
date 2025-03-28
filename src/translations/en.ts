@@ -17,6 +17,20 @@ export const en = {
   // Features
   'features.title': 'Everything You Need to Grow Your Training Business',
   'features.subtitle': 'Personal.ai streamlines your operations so you can focus on what matters most: your clients.',
+  'features.smartScheduling': 'Smart Scheduling',
+  'features.smartSchedulingDesc': 'Sync with Google Calendar and let clients book directly based on your availability.',
+  'features.automatedPayments': 'Automated Payments',
+  'features.automatedPaymentsDesc': 'Connect your Stripe account and get paid automatically when sessions are completed.',
+  'features.aiAssistant': 'AI Assistant',
+  'features.aiAssistantDesc': 'Let AI handle client inquiries when you're unavailable or in a training session.',
+  'features.videoTitle': 'Video Exercise Demonstrations',
+  'features.videoDesc': 'Trainers can now add YouTube or Vimeo videos to any exercise in their training programs, ensuring clients have perfect visual demonstrations of proper form and technique.',
+  'features.videoFeature1': 'Easily link YouTube or Vimeo videos to exercises',
+  'features.videoFeature2': 'Clients can watch embedded videos directly in their workout plan',
+  'features.videoFeature3': 'Improve client form and reduce injury risk with visual guidance',
+  'features.profileTitle': 'Showcase your brand with your personal trainer page',
+  'features.profileDesc': 'Share your unique URL (personal.ai/trainername) with potential clients to showcase your services, availability, and client reviews.',
+  'features.findTrainer': 'Looking for a trainer?',
   
   // How it works
   'howItWorks.title': 'How It Works',
