@@ -32,17 +32,19 @@ export function MembershipSection({ user }: MembershipSectionProps) {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <h3 className="text-lg font-medium">Current Membership</h3>
-        <p className="text-sm text-muted-foreground">Manage your membership plan and account status.</p>
+      {/* Current Plan Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-100">
+        <h3 className="text-lg font-medium mb-2">Current Membership</h3>
+        <p className="text-sm text-muted-foreground mb-3">Manage your membership plan and account status.</p>
         <CurrentPlanDisplay currentPlan={currentPlan} />
       </div>
       
-      <div className="space-y-2">
-        <h3 className="text-lg font-medium">Available Plans</h3>
-        <p className="text-sm text-muted-foreground">Choose the plan that best fits your needs.</p>
+      {/* Available Plans Section */}
+      <div>
+        <h3 className="text-lg font-medium mb-2">Available Plans</h3>
+        <p className="text-sm text-muted-foreground mb-3">Choose the plan that best fits your needs.</p>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {plans.map((plan) => (
             <PlanCard 
               key={plan.id}
@@ -54,7 +56,10 @@ export function MembershipSection({ user }: MembershipSectionProps) {
         </div>
       </div>
       
-      <DeleteAccountSection onDeleteAccount={handleDeleteAccount} />
+      {/* Delete Account Section */}
+      <div className="mt-8 pt-6 border-t border-gray-200">
+        <DeleteAccountSection onDeleteAccount={handleDeleteAccount} />
+      </div>
     </div>
   );
 }

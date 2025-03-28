@@ -50,38 +50,39 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
         <CardTitle>Account Settings</CardTitle>
         <CardDescription>Manage your profile and preferences</CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
-        <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab}>
-          <div className="border-b sticky top-0 bg-card z-10">
-            <div className="px-4 py-2">
-              <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 gap-1">
-                <TabsTrigger value="profile" className="text-xs sm:text-sm px-1 py-1.5">Profile</TabsTrigger>
-                <TabsTrigger value="availability" className="text-xs sm:text-sm px-1 py-1.5">Availability</TabsTrigger>
-                <TabsTrigger value="membership" className="text-xs sm:text-sm px-1 py-1.5">Membership</TabsTrigger>
-                <TabsTrigger value="billing" className="text-xs sm:text-sm px-1 py-1.5">Billing</TabsTrigger>
-              </TabsList>
-            </div>
+      
+      <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+        {/* Sticky tab header for better mobile navigation */}
+        <div className="border-b sticky top-0 bg-card z-10">
+          <div className="px-4 py-2">
+            <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <TabsTrigger value="profile" className="text-xs sm:text-sm">Profile</TabsTrigger>
+              <TabsTrigger value="availability" className="text-xs sm:text-sm">Availability</TabsTrigger>
+              <TabsTrigger value="membership" className="text-xs sm:text-sm">Membership</TabsTrigger>
+              <TabsTrigger value="billing" className="text-xs sm:text-sm">Billing</TabsTrigger>
+            </TabsList>
           </div>
+        </div>
+        
+        <CardContent className="p-4 sm:p-6">
+          <TabsContent value="profile" className="mt-0">
+            <ProfileSection user={updatedUser} />
+          </TabsContent>
           
-          <div className="p-4 pb-6">
-            <TabsContent value="profile" className="mt-0">
-              <ProfileSection user={updatedUser} />
-            </TabsContent>
-            
-            <TabsContent value="availability" className="mt-0">
-              <AvailabilitySection />
-            </TabsContent>
-            
-            <TabsContent value="membership" className="mt-0">
-              <MembershipSection user={updatedUser} />
-            </TabsContent>
-            
-            <TabsContent value="billing" className="mt-0">
-              <BillingSection user={updatedUser} />
-            </TabsContent>
-          </div>
-        </Tabs>
-      </CardContent>
+          <TabsContent value="availability" className="mt-0">
+            <AvailabilitySection />
+          </TabsContent>
+          
+          <TabsContent value="membership" className="mt-0">
+            <MembershipSection user={updatedUser} />
+          </TabsContent>
+          
+          <TabsContent value="billing" className="mt-0">
+            <BillingSection user={updatedUser} />
+          </TabsContent>
+        </CardContent>
+      </Tabs>
+      
       <CardFooter className="border-t flex justify-end pt-6">
         <Button onClick={handleSaveChanges}>Save Changes</Button>
       </CardFooter>
