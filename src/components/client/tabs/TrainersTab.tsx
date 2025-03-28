@@ -12,6 +12,8 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import { toast } from "sonner";
+import { PaymentDialog } from "@/components/shared/PaymentDialog";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -23,6 +25,20 @@ const paymentHistory = [
 export function TrainersTab() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments">("trainers");
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
+  
+  const handlePayTrainer = (trainer: string, amount: number = 45) => {
+    setSelectedTrainer({ name: trainer, amount });
+    setShowPaymentDialog(true);
+  };
+
+  const handlePaymentComplete = () => {
+    if (selectedTrainer) {
+      toast.success(`Payment to ${selectedTrainer.name} completed successfully`);
+    }
+    setShowPaymentDialog(false);
+  };
   
   return (
     <Card>
@@ -64,9 +80,11 @@ export function TrainersTab() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="border rounded-lg overflow-hidden">
               <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xl font-medium">
-                  SJ
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop" 
+                  alt="Sarah Johnson"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-4">
                 <h3 className="font-medium text-lg">Sarah Johnson</h3>
@@ -79,7 +97,11 @@ export function TrainersTab() {
                 <div className="mt-4 flex space-x-2">
                   <Button size="sm" onClick={() => navigate('/trainer/1')}>View Profile</Button>
                   <Button variant="outline" size="sm">Message</Button>
-                  <Button variant="secondary" size="sm">
+                  <Button 
+                    variant="secondary" 
+                    size="sm"
+                    onClick={() => handlePayTrainer("Sarah Johnson", 45)}
+                  >
                     <DollarSign className="h-3.5 w-3.5 mr-1" />
                     Pay
                   </Button>
@@ -89,9 +111,11 @@ export function TrainersTab() {
             
             <div className="border rounded-lg overflow-hidden">
               <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xl font-medium">
-                  AT
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop" 
+                  alt="Alex Thompson"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-4">
                 <h3 className="font-medium text-lg">Alex Thompson</h3>
@@ -104,7 +128,11 @@ export function TrainersTab() {
                 <div className="mt-4 flex space-x-2">
                   <Button size="sm" onClick={() => navigate('/trainer/2')}>View Profile</Button>
                   <Button variant="outline" size="sm">Message</Button>
-                  <Button variant="secondary" size="sm">
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    onClick={() => handlePayTrainer("Alex Thompson", 50)}
+                  >
                     <DollarSign className="h-3.5 w-3.5 mr-1" />
                     Pay
                   </Button>
@@ -150,6 +178,23 @@ export function TrainersTab() {
           </div>
         )}
       </CardContent>
+      
+      {/* Payment Dialog */}
+      {selectedTrainer && (
+        <PaymentDialog
+          open={showPaymentDialog}
+          onOpenChange={setShowPaymentDialog}
+          item={{
+            id: `trainer-payment-${Date.now()}`,
+            name: `Training Session with ${selectedTrainer.name}`,
+            price: selectedTrainer.amount,
+            description: "Personal training session payment"
+          }}
+          onPaymentComplete={handlePaymentComplete}
+          title={`Pay ${selectedTrainer.name}`}
+          description="Complete payment for personal training services"
+        />
+      )}
     </Card>
   );
 }

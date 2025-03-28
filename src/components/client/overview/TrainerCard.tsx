@@ -8,10 +8,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { BookingForm, bookingSchema } from "@/components/trainer/BookingForm";
 import { z } from "zod";
 import { toast } from "sonner";
+import { PaymentDialog } from "@/components/shared/PaymentDialog";
 
 export function TrainerCard() {
   const navigate = useNavigate();
   const [showBookingDialog, setShowBookingDialog] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState("");
   
   const handleBookSession = (trainerName: string) => {
@@ -19,19 +21,24 @@ export function TrainerCard() {
     setShowBookingDialog(true);
   };
   
+  const handlePayTrainer = (trainerName: string) => {
+    setSelectedTrainer(trainerName);
+    setShowPaymentDialog(true);
+  };
+  
   const handleBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
     toast.success(`Session booked successfully with ${selectedTrainer} for ${data.date.toLocaleDateString()} at ${data.time}`);
     setShowBookingDialog(false);
   };
   
+  const handlePaymentComplete = () => {
+    toast.success(`Payment to ${selectedTrainer} completed successfully`);
+    setShowPaymentDialog(false);
+  };
+  
   const handleMessageTrainer = (trainerName: string) => {
     navigate('/client-dashboard?tab=messages');
     toast.success(`Opening chat with ${trainerName}`);
-  };
-  
-  const handlePayTrainer = (trainerName: string) => {
-    navigate('/client-dashboard?tab=trainers&view=payments');
-    toast.success(`Opening payment options for ${trainerName}`);
   };
   
   return (
@@ -42,8 +49,12 @@ export function TrainerCard() {
       <CardContent>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
-              SJ
+            <div className="h-10 w-10 rounded-full overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop" 
+                alt="Sarah Johnson" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="font-medium">Sarah Johnson</div>
@@ -74,8 +85,12 @@ export function TrainerCard() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
-              AT
+            <div className="h-10 w-10 rounded-full overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop" 
+                alt="Alex Thompson"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="font-medium">Alex Thompson</div>
@@ -138,6 +153,21 @@ export function TrainerCard() {
           />
         </DialogContent>
       </Dialog>
+      
+      {/* Payment Dialog */}
+      <PaymentDialog
+        open={showPaymentDialog}
+        onOpenChange={setShowPaymentDialog}
+        item={{
+          id: `trainer-payment-${Date.now()}`,
+          name: `Training Session with ${selectedTrainer}`,
+          price: 45,
+          description: "Personal training session payment"
+        }}
+        onPaymentComplete={handlePaymentComplete}
+        title={`Pay ${selectedTrainer}`}
+        description="Complete payment for personal training services"
+      />
     </Card>
   );
 }
