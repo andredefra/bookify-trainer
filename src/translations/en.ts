@@ -39,7 +39,7 @@ export const en = {
   // Additional Feature Translations
   'features.aiScheduling': 'AI Scheduling',
   'features.aiSchedulingDesc': 'Intelligent scheduling system that optimizes your calendar and maximizes session availability.',
-  'features.stripeIntegration': 'Stripe Integration',
+  'features.stripeIntegration': 'Payment Integration',
   'features.stripeIntegrationDesc': 'Get paid automatically with pre-authorizations and post-session charging. No-show protection included.',
   'features.groupSessions': 'Private & Group Sessions',
   'features.groupSessionsDesc': 'Manage individual clients or create group sessions with waitlists and capacity limits.',
