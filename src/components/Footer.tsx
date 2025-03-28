@@ -16,18 +16,6 @@ const Footer = () => {
       href: '/#how-it-works'
     }]
   }, {
-    title: 'Company',
-    links: [{
-      name: 'About',
-      href: '/about'
-    }, {
-      name: 'Contact',
-      href: '/contact'
-    }, {
-      name: 'Careers',
-      href: '/careers'
-    }]
-  }, {
     title: 'Legal',
     links: [{
       name: 'Privacy',
@@ -43,7 +31,7 @@ const Footer = () => {
 
   return <footer className="bg-white border-t border-border">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           <div className="col-span-2 lg:col-span-1">
             <Link to="/" className="inline-block">
               <span className="font-display text-xl font-bold tracking-tight text-primary">Personal.ai</span>
