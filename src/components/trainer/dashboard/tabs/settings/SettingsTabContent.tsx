@@ -52,11 +52,11 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="mb-6">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="availability">Availability</TabsTrigger>
-            <TabsTrigger value="membership">Membership</TabsTrigger>
-            <TabsTrigger value="billing">Billing & Payments</TabsTrigger>
+          <TabsList className="mb-6 flex w-full flex-wrap overflow-x-auto">
+            <TabsTrigger value="profile" className="flex-grow">Profile</TabsTrigger>
+            <TabsTrigger value="availability" className="flex-grow">Availability</TabsTrigger>
+            <TabsTrigger value="membership" className="flex-grow">Membership</TabsTrigger>
+            <TabsTrigger value="billing" className="flex-grow">Billing</TabsTrigger>
           </TabsList>
           
           <TabsContent value="profile">

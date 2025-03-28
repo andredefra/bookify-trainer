@@ -146,37 +146,6 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
     profileImage: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80"
   };
 
-  const renderActiveTabContent = () => {
-    switch (activeTab) {
-      case "overview":
-        return <OverviewTab 
-          upcomingSessions={mockUpcomingSessions} 
-          clients={mockClients} 
-          messageRequests={mockMessageRequests} 
-        />;
-      case "clients":
-        return <ClientsTab clients={mockClients} />;
-      case "programs":
-        return <ProgramsTab />;
-      case "sessions":
-        return <SessionsTab upcomingSessions={mockUpcomingSessions} />;
-      case "messages":
-        return <MessagesTab messageRequests={mockMessageRequests} />;
-      case "transactions":
-        return <TransactionsTab />;
-      case "analytics":
-        return <AnalyticsTab />;
-      case "settings":
-        return <SettingsTab user={mockUserData} />;
-      default:
-        return <OverviewTab 
-          upcomingSessions={mockUpcomingSessions} 
-          clients={mockClients} 
-          messageRequests={mockMessageRequests} 
-        />;
-    }
-  };
-
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       <DashboardSidebar
@@ -196,10 +165,15 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
           showMobileMenuButton={!isDesktop}
         />
 
-        <main className="flex-1 overflow-y-auto pb-10 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            {renderActiveTabContent()}
-          </div>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-10 px-4 sm:px-6 lg:px-8">
+          {activeTab === "overview" && <OverviewTab sessions={mockUpcomingSessions} clients={mockClients} />}
+          {activeTab === "clients" && <ClientsTab clients={mockClients} />}
+          {activeTab === "sessions" && <SessionsTab upcomingSessions={mockUpcomingSessions} />}
+          {activeTab === "programs" && <ProgramsTab />}
+          {activeTab === "messages" && <MessagesTab messageRequests={mockMessageRequests} />}
+          {activeTab === "transactions" && <TransactionsTab />}
+          {activeTab === "analytics" && <AnalyticsTab />}
+          {activeTab === "settings" && <SettingsTab user={mockUserData} />}
         </main>
       </div>
     </div>
