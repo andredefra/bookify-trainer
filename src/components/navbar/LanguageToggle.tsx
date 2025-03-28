@@ -31,7 +31,7 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
   return (
     <div className={`flex items-center ${className || ''}`}>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none border border-border/40 shadow-sm bg-background/95">
+        <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none border border-border/40 shadow-sm bg-primary/5">
           <Globe className="h-4 w-4 text-primary" />
           <span className="text-sm font-medium">
             {language === 'en' ? '🇬🇧' : '🇮🇹'}
