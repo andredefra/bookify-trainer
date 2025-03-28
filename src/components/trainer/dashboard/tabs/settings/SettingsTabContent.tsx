@@ -50,18 +50,20 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
         <CardTitle>Account Settings</CardTitle>
         <CardDescription>Manage your profile and preferences</CardDescription>
       </CardHeader>
-      <CardContent className="p-0 sm:p-6">
+      <CardContent className="p-0">
         <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab}>
-          <div className="px-4 sm:px-0 mb-6">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full gap-1">
-              <TabsTrigger value="profile" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Profile</TabsTrigger>
-              <TabsTrigger value="availability" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Availability</TabsTrigger>
-              <TabsTrigger value="membership" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Membership</TabsTrigger>
-              <TabsTrigger value="billing" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Billing</TabsTrigger>
-            </TabsList>
+          <div className="border-b sticky top-0 bg-card z-10">
+            <div className="px-4 py-2">
+              <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 gap-1">
+                <TabsTrigger value="profile" className="text-xs sm:text-sm px-1 py-1.5">Profile</TabsTrigger>
+                <TabsTrigger value="availability" className="text-xs sm:text-sm px-1 py-1.5">Availability</TabsTrigger>
+                <TabsTrigger value="membership" className="text-xs sm:text-sm px-1 py-1.5">Membership</TabsTrigger>
+                <TabsTrigger value="billing" className="text-xs sm:text-sm px-1 py-1.5">Billing</TabsTrigger>
+              </TabsList>
+            </div>
           </div>
           
-          <div className="px-4 sm:px-0 pb-6">
+          <div className="p-4 pb-6">
             <TabsContent value="profile" className="mt-0">
               <ProfileSection user={updatedUser} />
             </TabsContent>

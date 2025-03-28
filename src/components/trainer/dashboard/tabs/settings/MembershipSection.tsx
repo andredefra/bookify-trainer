@@ -31,7 +31,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
   };
 
   return (
-    <div className="space-y-6 max-w-full">
+    <div className="space-y-6">
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Current Membership</h3>
         <p className="text-sm text-muted-foreground">Manage your membership plan and account status.</p>
@@ -42,7 +42,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
         <h3 className="text-lg font-medium">Available Plans</h3>
         <p className="text-sm text-muted-foreground">Choose the plan that best fits your needs.</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {plans.map((plan) => (
             <PlanCard 
               key={plan.id}
