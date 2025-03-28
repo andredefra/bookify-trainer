@@ -1,6 +1,6 @@
 
 import { useLanguage } from '@/context/LanguageContext';
-import { Globe } from 'lucide-react';
+import { Globe, Flag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -34,7 +34,7 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
         <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none border border-border/40 shadow-sm bg-background w-full justify-center">
           <Globe className="h-4 w-4 text-primary" />
           <span className="text-sm font-medium">
-            {language === 'en' ? 'GB' : 'IT'}
+            {language === 'en' ? 'UK' : 'IT'}
           </span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-36 bg-background">
@@ -42,20 +42,10 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
             className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
             onClick={() => handleLanguageChange('en')}
           >
-            <div className="w-5 h-4 bg-blue-900 flex items-center justify-center relative overflow-hidden rounded-sm">
-              <div className="absolute inset-0 bg-white">
-                <div className="absolute left-0 top-0 h-full w-full bg-blue-900">
-                  <div className="absolute left-0 top-0 h-full w-full" style={{
-                    backgroundImage: "conic-gradient(#f00 0deg, #f00 90deg, white 90deg, white 180deg, #f00 180deg, #f00 270deg, white 270deg, white 360deg)",
-                    backgroundSize: "40% 40%",
-                    backgroundPosition: "center",
-                    opacity: 1,
-                    mixBlendMode: "screen"
-                  }}></div>
-                </div>
-              </div>
+            <div className="w-5 h-4 flex items-center justify-center relative overflow-hidden rounded-sm">
+              <Flag className="h-4 w-4 text-blue-800" />
             </div>
-            <span className="text-sm">GB</span>
+            <span className="text-sm">UK</span>
           </DropdownMenuItem>
           <DropdownMenuItem 
             className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}

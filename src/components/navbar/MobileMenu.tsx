@@ -1,6 +1,5 @@
-
 import { useEffect, useRef } from 'react';
-import { Menu, Globe, X } from 'lucide-react';
+import { Menu, Globe, X, Flag } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetClose } from '@/components/ui/sheet';
@@ -30,15 +29,9 @@ const MobileMenu = ({
   const navigate = useNavigate();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   
-  // Handle the language change
   const handleLanguageChange = (lang: 'en' | 'it') => {
-    // First close the mobile menu
     setMobileMenuOpen(false);
-    
-    // Set the language
     setLanguage(lang);
-    
-    // Then navigate to the appropriate route
     setTimeout(() => {
       if (lang === 'en') {
         navigate('/');
@@ -48,18 +41,15 @@ const MobileMenu = ({
     }, 100);
   };
 
-  // Handle menu opening manually
   const handleOpenMenu = () => {
     setMobileMenuOpen(true);
   };
   
-  // Reset menu state when route changes
   useEffect(() => {
     const resetMenu = () => {
       setMobileMenuOpen(false);
     };
     
-    // Add global event listeners for route changes and unmounts
     window.addEventListener('popstate', resetMenu);
     
     return () => {
@@ -69,7 +59,6 @@ const MobileMenu = ({
 
   return (
     <>
-      {/* The menu button is outside the Sheet component to prevent issues */}
       <Button 
         ref={menuButtonRef}
         variant="ghost" 
@@ -81,7 +70,6 @@ const MobileMenu = ({
         <Menu className="h-5 w-5" />
       </Button>
       
-      {/* The Sheet component for the mobile menu */}
       <Sheet 
         open={mobileMenuOpen} 
         onOpenChange={setMobileMenuOpen}
@@ -129,7 +117,7 @@ const MobileMenu = ({
                     >
                       <div className="flex items-center gap-2">
                         <Globe className="h-4 w-4" />
-                        <span>{language === 'en' ? 'GB' : 'IT'}</span>
+                        <span>{language === 'en' ? 'UK' : 'IT'}</span>
                       </div>
                     </Button>
                   </DropdownMenuTrigger>
@@ -141,20 +129,10 @@ const MobileMenu = ({
                       className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
                       onClick={() => handleLanguageChange('en')}
                     >
-                      <div className="w-5 h-4 bg-blue-900 flex items-center justify-center relative overflow-hidden rounded-sm">
-                        <div className="absolute inset-0 bg-white">
-                          <div className="absolute left-0 top-0 h-full w-full bg-blue-900">
-                            <div className="absolute left-0 top-0 h-full w-full" style={{
-                              backgroundImage: "conic-gradient(#f00 0deg, #f00 90deg, white 90deg, white 180deg, #f00 180deg, #f00 270deg, white 270deg, white 360deg)",
-                              backgroundSize: "40% 40%",
-                              backgroundPosition: "center",
-                              opacity: 1,
-                              mixBlendMode: "screen"
-                            }}></div>
-                          </div>
-                        </div>
+                      <div className="w-5 h-4 flex items-center justify-center relative overflow-hidden rounded-sm">
+                        <Flag className="h-4 w-4 text-blue-800" />
                       </div>
-                      <span className="text-sm">GB</span>
+                      <span className="text-sm">UK</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
