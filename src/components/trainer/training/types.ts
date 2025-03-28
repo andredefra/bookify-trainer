@@ -38,3 +38,17 @@ export interface PaymentTransaction {
   status: 'pending' | 'completed' | 'failed';
   paymentMethod: string;
 }
+
+export interface BusinessInfo {
+  type: 'individual' | 'business';
+  businessName?: string;
+  vatNumber?: string;
+  taxId?: string;
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+}
