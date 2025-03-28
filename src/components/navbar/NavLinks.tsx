@@ -12,7 +12,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
   const { t } = useLanguage();
   
   return (
-    <div className="flex items-center justify-center w-full mx-auto">
+    <div className="flex items-center absolute left-1/2 transform -translate-x-1/2">
       <div className="flex items-center">
         <NavItem
           to="/"

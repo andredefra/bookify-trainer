@@ -28,15 +28,13 @@ const Navbar = () => {
         scrolled ? 'py-3 glass' : 'py-5 bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center">
+      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
         <div className="flex-none">
           <BrandLogo />
         </div>
         
         {!isMobile ? (
-          <div className="flex-1 flex justify-center">
-            <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
-          </div>
+          <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
         ) : null}
         
         <div className="flex-none flex items-center gap-3">
