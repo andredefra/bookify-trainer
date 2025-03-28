@@ -34,7 +34,11 @@ const Navbar = () => {
           <div className="flex-1 flex justify-center ml-16">
             <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
           </div>
-        ) : (
+        ) : null}
+        
+        {!isMobile && <AuthButtons />}
+        
+        {isMobile && (
           <div className="ml-auto">
             <MobileMenu 
               mobileMenuOpen={mobileMenuOpen}
@@ -44,8 +48,6 @@ const Navbar = () => {
             />
           </div>
         )}
-        
-        {!isMobile && <AuthButtons />}
       </div>
     </nav>
   );
