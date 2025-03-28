@@ -1,10 +1,10 @@
-
 export const en = {
   // Navigation
   'nav.home': 'Home',
   'nav.features': 'Features',
   'nav.howItWorks': 'How it works',
   'nav.pricing': 'Pricing',
+  'nav.language': 'Language',
   'auth.login': 'Login',
   'auth.register': 'Try the Demo',
   

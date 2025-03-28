@@ -1,10 +1,10 @@
-
 export const it = {
   // Navigation
   'nav.home': 'Home',
   'nav.features': 'Funzionalità',
   'nav.howItWorks': 'Come funziona',
   'nav.pricing': 'Prezzi',
+  'nav.language': 'Lingua',
   'auth.login': 'Login',
   'auth.register': 'Prova la Demo',
   
