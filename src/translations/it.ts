@@ -1,0 +1,79 @@
+
+export const it = {
+  // Navigation
+  'nav.home': 'Home',
+  'nav.features': 'Funzionalità',
+  'nav.howItWorks': 'Come funziona',
+  'nav.pricing': 'Prezzi',
+  'auth.login': 'Demo Login',
+  'auth.register': 'Prova la Demo',
+  
+  // Hero
+  'hero.title': 'La piattaforma all-in-one per personal trainer',
+  'hero.subtitle': 'Semplifica programmazione, pagamenti e gestione dei clienti in un\'unica piattaforma.',
+  'hero.cta': 'Prova la Demo',
+  'hero.secondaryCta': 'Scopri Come Funziona',
+  
+  // Features
+  'features.title': 'Tutto ciò di cui hai bisogno per far crescere la tua attività',
+  'features.subtitle': 'Personal.ai semplifica le tue operazioni così puoi concentrarti su ciò che conta di più: i tuoi clienti.',
+  
+  // How it works
+  'howItWorks.title': 'Come Funziona',
+  'howItWorks.subtitle': 'Iniziare è semplice. Segui questi passaggi per ottimizzare la tua attività di training.',
+  'howItWorks.step1.title': 'Crea il tuo profilo e sincronizza Google Calendar',
+  'howItWorks.step1.description': 'Configura il tuo profilo con i tuoi servizi, prezzi e disponibilità. Connetti il tuo Google Calendar per sincronizzare il tuo programma esistente.',
+  'howItWorks.step2.title': 'Condividi la tua pagina personale e imposta le regole',
+  'howItWorks.step2.description': 'Condividi il tuo URL personalizzato con i clienti. Imposta i tuoi orari di lavoro, tipi di sessione e regole di prenotazione.',
+  'howItWorks.step3.title': 'Ricevi prenotazioni e pagamenti automatici tramite Stripe',
+  'howItWorks.step3.description': 'I clienti prenotano gli slot disponibili e pre-autorizzano il pagamento. Ricevi i pagamenti automaticamente dopo il completamento delle sessioni.',
+  'howItWorks.cta.title': 'Pronto a trasformare la tua attività di training?',
+  'howItWorks.cta.description': 'Unisciti a migliaia di personal trainer che hanno semplificato la loro programmazione e aumentato le entrate.',
+  'howItWorks.cta.button': 'Inizia Gratuitamente',
+  
+  // Pricing
+  'pricing.title': 'Prezzi Semplici e Trasparenti',
+  'pricing.subtitle': 'Scegli il piano più adatto alla tua attività. Nessuna commissione nascosta o impegno a lungo termine.',
+  'pricing.clientsAccess': 'Sempre gratuito per i clienti — accedono alle funzionalità premium tramite il tuo abbonamento',
+  'pricing.monthly': 'Mensile',
+  'pricing.annual': 'Annuale',
+  'pricing.save': 'Risparmia 15%',
+  'pricing.freemium.title': 'Freemium',
+  'pricing.freemium.price': '€0',
+  'pricing.freemium.period': '/mese',
+  'pricing.freemium.fee': '+ 5% commissione sulle transazioni',
+  'pricing.freemium.cta': 'Inizia Gratis',
+  'pricing.pro.title': 'Pro',
+  'pricing.pro.price': '€29',
+  'pricing.pro.priceAnnual': '€24',
+  'pricing.pro.period': '/mese',
+  'pricing.pro.fee': '+ 2.5% commissione sulle transazioni',
+  'pricing.pro.cta': 'Passa a Pro',
+  'pricing.pro.recommended': 'CONSIGLIATO',
+  'pricing.features.unlimitedSessions': 'Sessioni Illimitate',
+  'pricing.features.googleCalendar': 'Integrazione Google Calendar',
+  'pricing.features.personalTrainerPage': 'Pagina Personal Trainer',
+  'pricing.features.clientMessaging': 'Messaggistica Cliente',
+  'pricing.features.clientManagement': 'Gestione Clienti',
+  'pricing.features.everythingFreemium': 'Tutto di Freemium',
+  'pricing.features.lowerFee': 'Commissione Ridotta (2.5%)',
+  'pricing.features.paymentIntegration': 'Integrazione Pagamenti',
+  'pricing.features.prioritySupport': 'Supporto Prioritario',
+  'pricing.features.advancedAnalytics': 'Analisi Avanzate',
+  'pricing.features.waitlistManagement': 'Gestione Liste d\'Attesa',
+  'pricing.features.customPrograms': 'Programmi Personalizzati',
+  'pricing.features.fitnessTracking': 'Monitoraggio Progressi Fitness',
+  'pricing.disclaimer1': 'Tutti i piani includono elaborazione sicura dei pagamenti. Le commissioni sulle transazioni vengono addebitate solo sui pagamenti riusciti. Puoi aggiornare, declassare o annullare il tuo abbonamento in qualsiasi momento.',
+  'pricing.disclaimer2': 'I tuoi clienti non pagano mai per l\'app — ottengono accesso alle funzionalità premium tramite il tuo abbonamento',
+  
+  // Registration CTA
+  'cta.title': 'Sii il Primo a Sapere Quando Lanciamo',
+  'cta.description': 'Registrati per la demo oggi e ottieni un prezzo scontato speciale quando lanciamo ufficialmente.',
+  'cta.button': 'Compila il Modulo per Accesso Anticipato',
+  
+  // Footer
+  'footer.description': 'La piattaforma all-in-one per personal trainer.',
+  'footer.copyright': '© {year} mypersonalai ltd. Tutti i diritti riservati.',
+  'footer.product': 'Prodotto',
+  'footer.legal': 'Legale'
+};
