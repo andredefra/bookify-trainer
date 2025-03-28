@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, CalendarCheck, CreditCard } from "lucide-react";
@@ -56,32 +57,6 @@ export function SessionCard({
               >
                 <CalendarCheck className="h-3.5 w-3.5 mr-1" />
                 Add to Calendar
-              </Button>
-            )}
-            {onCancel && (
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => onCancel(session)}
-              >
-                Cancel
-              </Button>
-            )}
-          </>
-        ) : session.status === 'pending' ? (
-          <>
-            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-              Payment Required
-            </Badge>
-            {onRegister && (
-              <Button 
-                variant="secondary" 
-                size="sm" 
-                className="flex items-center" 
-                onClick={() => onRegister(session)}
-              >
-                <CreditCard className="h-3.5 w-3.5 mr-1" />
-                Complete Registration
               </Button>
             )}
             {onCancel && (
