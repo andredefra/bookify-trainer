@@ -47,6 +47,11 @@ export function TrainersTab() {
     const storedFollowedTrainers = localStorage.getItem('followedTrainers');
     if (storedFollowedTrainers) {
       setFollowedTrainers(JSON.parse(storedFollowedTrainers));
+    } else {
+      // If no followed trainers in localStorage, automatically follow my trainers
+      const myTrainerIds = myTrainers.map(trainer => trainer.id);
+      setFollowedTrainers(myTrainerIds);
+      localStorage.setItem('followedTrainers', JSON.stringify(myTrainerIds));
     }
   }, []);
 
