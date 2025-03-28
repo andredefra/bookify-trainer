@@ -1,63 +1,45 @@
 
-import { Crown, Shield } from "lucide-react";
+import { CheckCircle2, Users } from "lucide-react";
 import { Plan } from "./types";
 
 export const plans: Plan[] = [
   {
-    id: "free",
-    name: "Free",
+    id: "freemium",
+    name: "Freemium",
     price: "€0",
-    period: "forever",
-    description: "Basic features for individual trainers",
+    period: "per month",
+    description: "Free tier with basic features",
     features: [
-      "Up to 5 clients",
-      "Basic workout templates",
-      "Session scheduling",
-      "Basic analytics"
+      "Unlimited Sessions",
+      "Google Calendar Integration",
+      "Personal Trainer Page",
+      "Client Messaging",
+      "Client Management"
     ],
     limitations: [
-      "No custom branding",
-      "Limited program creation",
-      "No payment processing"
+      "5% transaction fee"
     ],
     isPopular: false,
-    icon: Shield
+    icon: Users
   },
   {
     id: "pro",
     name: "Pro",
     price: "€29",
     period: "per month",
-    description: "Advanced features for growing trainers",
+    description: "Premium features for serious trainers",
     features: [
-      "Unlimited clients",
-      "Advanced program builder",
-      "Client performance tracking",
-      "Payment processing",
-      "Marketing tools",
-      "Email notifications"
+      "Everything in Freemium",
+      "Lower Transaction Fee (2.5%)",
+      "Payment Integration",
+      "Priority Support",
+      "Advanced Analytics",
+      "Waitlist Management",
+      "Custom Training Programs",
+      "Fitness Progress Tracking"
     ],
     limitations: [],
     isPopular: true,
-    icon: Crown
-  },
-  {
-    id: "business",
-    name: "Business",
-    price: "€79",
-    period: "per month",
-    description: "Complete solution for training businesses",
-    features: [
-      "Multiple trainer accounts",
-      "Team management",
-      "Custom branding",
-      "Advanced analytics",
-      "API access",
-      "Priority support",
-      "Client app white-labeling"
-    ],
-    limitations: [],
-    isPopular: false,
-    icon: Shield
+    icon: CheckCircle2
   }
 ];

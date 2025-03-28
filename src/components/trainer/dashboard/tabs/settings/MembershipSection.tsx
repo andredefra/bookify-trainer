@@ -15,7 +15,7 @@ interface MembershipSectionProps {
 }
 
 export function MembershipSection({ user }: MembershipSectionProps) {
-  const [currentPlan, setCurrentPlan] = useState<string>(user.plan || "free");
+  const [currentPlan, setCurrentPlan] = useState<string>(user.plan || "freemium");
 
   const handlePlanChange = (planId: string) => {
     if (planId === currentPlan) return;
