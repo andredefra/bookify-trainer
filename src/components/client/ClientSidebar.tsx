@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Dumbbell, Activity, X } from "lucide-react";
+import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Dumbbell, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ClientProfile } from "@/components/ClientProfile";
 import { Badge } from "@/components/ui/badge";
@@ -42,9 +41,6 @@ export function ClientSidebar({
       {isMobile && (
         <div className="flex justify-between items-center p-4 border-b">
           <div className="font-semibold">Menu</div>
-          <Button variant="ghost" size="icon" onClick={() => setShowSidebar(false)}>
-            <X className="h-5 w-5" />
-          </Button>
         </div>
       )}
       
