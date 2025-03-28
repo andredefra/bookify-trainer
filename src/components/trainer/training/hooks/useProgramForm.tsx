@@ -11,9 +11,55 @@ interface InitialProgramData {
   description: string;
   isPaid: boolean;
   price: number;
+  days?: WorkoutDay[];
 }
 
 export function useProgramForm(initialData?: InitialProgramData) {
+  const defaultDays = [
+    {
+      id: "1",
+      day: "Monday",
+      exercises: [],
+      completed: false,
+    },
+    {
+      id: "2",
+      day: "Tuesday",
+      exercises: [],
+      completed: false,
+    },
+    {
+      id: "3",
+      day: "Wednesday",
+      exercises: [],
+      completed: false,
+    },
+    {
+      id: "4",
+      day: "Thursday",
+      exercises: [],
+      completed: false,
+    },
+    {
+      id: "5",
+      day: "Friday",
+      exercises: [],
+      completed: false,
+    },
+    {
+      id: "6",
+      day: "Saturday",
+      exercises: [],
+      completed: false,
+    },
+    {
+      id: "7",
+      day: "Sunday",
+      exercises: [],
+      completed: false,
+    },
+  ];
+
   const [program, setProgram] = useState<TrainingProgram>({
     id: initialData?.id || Math.random().toString(36).substring(2, 9),
     title: initialData?.title || "Weekly Training Program",
@@ -26,50 +72,7 @@ export function useProgramForm(initialData?: InitialProgramData) {
     description: initialData?.description || "",
     isPaid: initialData?.isPaid || false,
     price: initialData?.price || 0,
-    days: [
-      {
-        id: "1",
-        day: "Monday",
-        exercises: [],
-        completed: false,
-      },
-      {
-        id: "2",
-        day: "Tuesday",
-        exercises: [],
-        completed: false,
-      },
-      {
-        id: "3",
-        day: "Wednesday",
-        exercises: [],
-        completed: false,
-      },
-      {
-        id: "4",
-        day: "Thursday",
-        exercises: [],
-        completed: false,
-      },
-      {
-        id: "5",
-        day: "Friday",
-        exercises: [],
-        completed: false,
-      },
-      {
-        id: "6",
-        day: "Saturday",
-        exercises: [],
-        completed: false,
-      },
-      {
-        id: "7",
-        day: "Sunday",
-        exercises: [],
-        completed: false,
-      },
-    ],
+    days: initialData?.days || defaultDays,
   });
 
   const [activeDay, setActiveDay] = useState<string>("1");

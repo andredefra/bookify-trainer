@@ -2,7 +2,7 @@
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { ProgramCreationForm } from "@/components/trainer/training/ProgramCreationForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Exercise } from "@/data/training/types";
+import { Exercise, WorkoutDay } from "@/data/training/types";
 
 interface CreateProgramDialogProps {
   open: boolean;
@@ -35,7 +35,7 @@ export function CreateProgramDialog({
   };
 
   // Create the exercises data structure for the program form
-  const generateInitialDaysWithExercises = () => {
+  const generateInitialDaysWithExercises = (): WorkoutDay[] => {
     // If we have existing exercises, add them to Monday
     const days = Array.from({ length: 7 }, (_, i) => ({
       id: String(i + 1),

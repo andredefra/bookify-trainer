@@ -11,26 +11,13 @@ import { ProgramInfoFields } from "./ProgramInfoFields";
 import { ProgramWorkoutEditor } from "./ProgramWorkoutEditor";
 import { ProgramFormFooter } from "./ProgramFormFooter";
 
-interface ProgramCreationFormProps extends ProgramFormProps {
-  initialData?: {
-    id: string;
-    title: string;
-    weekStart: string;
-    duration: number;
-    objective: string;
-    description: string;
-    isPaid: boolean;
-    price: number;
-  };
-}
-
 export function ProgramCreationForm({ 
   clientId, 
   clientName, 
   onSend, 
   isPremium,
   initialData 
-}: ProgramCreationFormProps) {
+}: ProgramFormProps) {
   const {
     program,
     setProgram,

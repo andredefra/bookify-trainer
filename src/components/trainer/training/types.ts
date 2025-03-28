@@ -8,6 +8,17 @@ export interface ProgramFormProps {
   clientName: string;
   onSend: (program: any) => void;
   isPremium: boolean;
+  initialData?: {
+    id: string;
+    title: string;
+    weekStart: string;
+    duration: number;
+    objective: string;
+    description: string;
+    isPaid: boolean;
+    price: number;
+    days?: WorkoutDay[];
+  };
 }
 
 export interface PaymentMethod {
