@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 
@@ -61,7 +62,7 @@ export function IntegrationsSection() {
       </div>
       
       <div className="space-y-2">
-        <h3 className="text-lg font-medium">Integrazione dei Pagamenti</h3>
+        <h3 className="text-lg font-medium">Payment Integration</h3>
         <p className="text-sm text-muted-foreground">Connect payment providers to get paid automatically.</p>
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="flex items-center justify-between p-3 border rounded-md">
