@@ -117,7 +117,6 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
             <TabsContent value="upcoming">
               <MySessionsTab
                 upcomingSessions={upcomingSessions}
-                featuredSession={featuredSession}
                 onViewDetails={handleViewSessionDetails}
                 onRegister={handleRegisterForSession}
                 onAddToCalendar={handleAddToCalendar}
@@ -128,6 +127,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
             <TabsContent value="discover">
               <SessionDiscoveryTab
                 availableSessions={availableSessions}
+                featuredSession={featuredSession}
                 onViewDetails={handleViewSessionDetails}
                 onRegister={handleRegisterForSession}
               />

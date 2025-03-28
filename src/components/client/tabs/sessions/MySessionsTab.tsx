@@ -4,7 +4,6 @@ import { SessionItem } from "@/types/sessions";
 
 interface MySessionsTabProps {
   upcomingSessions: SessionItem[];
-  featuredSession: SessionItem;
   onViewDetails: (session: SessionItem) => void;
   onRegister: (session: SessionItem) => void;
   onAddToCalendar: (session: SessionItem) => void;
@@ -13,7 +12,6 @@ interface MySessionsTabProps {
 
 export function MySessionsTab({
   upcomingSessions,
-  featuredSession,
   onViewDetails,
   onRegister,
   onAddToCalendar,
@@ -31,13 +29,6 @@ export function MySessionsTab({
           onCancel={onCancel}
         />
       ))}
-
-      {/* Featured session that can be joined */}
-      <SessionCard
-        session={featuredSession}
-        onViewDetails={onViewDetails}
-        variant="featured"
-      />
     </div>
   );
 }

@@ -7,12 +7,14 @@ import { SessionItem } from "@/types/sessions";
 
 interface SessionDiscoveryTabProps {
   availableSessions: SessionItem[];
+  featuredSession: SessionItem;
   onViewDetails: (session: SessionItem) => void;
   onRegister: (session: SessionItem) => void;
 }
 
 export function SessionDiscoveryTab({
   availableSessions,
+  featuredSession,
   onViewDetails,
   onRegister
 }: SessionDiscoveryTabProps) {
@@ -39,6 +41,14 @@ export function SessionDiscoveryTab({
       </div>
       
       <div className="space-y-4">
+        {/* Featured session at the top */}
+        <SessionCard
+          session={featuredSession}
+          onViewDetails={onViewDetails}
+          onRegister={onRegister}
+          variant="featured"
+        />
+        
         {filteredSessions.map((session) => (
           <SessionCard
             key={session.id}
