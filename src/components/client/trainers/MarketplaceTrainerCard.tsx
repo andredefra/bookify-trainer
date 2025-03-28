@@ -1,3 +1,4 @@
+
 import { Star, Calendar, MapPin, UserPlus, UserMinus, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,8 +43,8 @@ export function MarketplaceTrainerCard({
           className="h-48 bg-cover bg-center relative" 
           style={{ backgroundImage: `url(${trainer.image})` }}
         >
-          <Badge variant="outline" className="absolute top-3 right-3 bg-primary/10 font-medium">
-            Price: {trainer.price} per session
+          <Badge variant="outline" className="absolute top-3 right-3 bg-primary/10">
+            {trainer.price}/session
           </Badge>
         </div>
         <div className="p-4 flex-grow">
