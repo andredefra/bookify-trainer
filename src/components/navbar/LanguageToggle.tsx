@@ -1,6 +1,7 @@
 
 import { useLanguage } from '@/context/LanguageContext';
 import { Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,17 +31,19 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem 
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => setLanguage('en')}
           >
-            <span className="text-sm">🇬🇧</span>
-            <span className="text-sm">English</span>
+            <Link to="/" className="flex items-center gap-2 w-full" onClick={() => setLanguage('en')}>
+              <span className="text-sm">🇬🇧</span>
+              <span className="text-sm">English</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem 
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => setLanguage('it')}
           >
-            <span className="text-sm">🇮🇹</span>
-            <span className="text-sm">Italiano</span>
+            <Link to="/it" className="flex items-center gap-2 w-full" onClick={() => setLanguage('it')}>
+              <span className="text-sm">🇮🇹</span>
+              <span className="text-sm">Italiano</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

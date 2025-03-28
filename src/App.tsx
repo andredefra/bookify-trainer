@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
 import Index from "./pages/Index";
+import IndexIta from "./pages/IndexIta";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import FindTrainer from "./pages/FindTrainer";
@@ -68,6 +69,7 @@ const App = () => {
             <RevealObserver />
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/it" element={<IndexIta />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/find-trainer" element={<FindTrainer />} />
