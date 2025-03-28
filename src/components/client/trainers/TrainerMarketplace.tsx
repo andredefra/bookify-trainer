@@ -1,15 +1,11 @@
 
 import { useState } from "react";
-import { Search, MapPin, Star, Calendar, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { BookingForm, bookingSchema } from "@/components/trainer/BookingForm";
-import { z } from "zod";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { z } from "zod";
+import { bookingSchema } from "@/components/trainer/BookingForm";
+import { SearchBar } from "./SearchBar";
+import { TrainerList } from "./TrainerList";
+import { BookingDialog } from "./BookingDialog";
 
 // Trainer data with real images
 const trainers = [
@@ -75,6 +71,7 @@ export function TrainerMarketplace() {
     setShowBookingDialog(false);
   };
   
+  // Filter trainers based on search query
   const filteredTrainers = trainers.filter(trainer => 
     trainer.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     trainer.specialty.toLowerCase().includes(searchQuery.toLowerCase())
@@ -90,111 +87,27 @@ export function TrainerMarketplace() {
   return (
     <div className="space-y-6">
       {/* Search and filter */}
-      <Card className="p-4">
-        <CardContent className="p-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-muted-foreground" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Search for trainers or specialties"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MapPin className="h-5 w-5 text-muted-foreground" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <SearchBar 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        location={location}
+        setLocation={setLocation}
+      />
       
       {/* Trainer cards */}
-      <ScrollArea className="h-[calc(100vh-350px)] pr-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
-          {locationFilteredTrainers.map((trainer) => (
-            <div key={trainer.id} className="bg-background rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
-              <div className="flex flex-col h-full">
-                <div 
-                  className="h-48 bg-cover bg-center" 
-                  style={{ backgroundImage: `url(${trainer.image})` }}
-                ></div>
-                <div className="p-4 flex-grow">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-lg font-medium">{trainer.name}</h3>
-                      <p className="text-sm text-muted-foreground">{trainer.specialty}</p>
-                    </div>
-                    <Badge variant="outline" className="bg-primary/10">
-                      {trainer.price}/session
-                    </Badge>
-                  </div>
-                  
-                  <div className="flex items-center mt-2 text-sm">
-                    <MapPin className="h-4 w-4 mr-1 text-muted-foreground" />
-                    <span className="text-muted-foreground">{trainer.location}</span>
-                  </div>
-                  
-                  <div className="flex items-center mt-2 text-sm">
-                    <Star className="h-4 w-4 mr-1 text-amber-500" />
-                    <span>{trainer.rating}</span>
-                    <span className="text-muted-foreground ml-1">({trainer.reviews} reviews)</span>
-                  </div>
-                  
-                  <div className="mt-2 flex items-center text-sm text-emerald-600">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    <span>{trainer.availability}</span>
-                  </div>
-                  
-                  <div className="mt-4 flex space-x-2">
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="flex-1"
-                      onClick={() => handleBookSession(trainer.name)}
-                    >
-                      Book Session
-                    </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
-                      View Profile
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
+      <TrainerList 
+        trainers={locationFilteredTrainers} 
+        onBookSession={handleBookSession} 
+      />
       
       {/* Session Booking Dialog */}
-      <Dialog open={showBookingDialog} onOpenChange={setShowBookingDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Book a Session with {selectedTrainer}</DialogTitle>
-            <DialogDescription>
-              Select a date and time for your session
-            </DialogDescription>
-          </DialogHeader>
-          <BookingForm 
-            trainerName={selectedTrainer}
-            onSubmit={handleBookingSubmit}
-            onCancel={() => setShowBookingDialog(false)}
-          />
-        </DialogContent>
-      </Dialog>
+      <BookingDialog 
+        open={showBookingDialog}
+        onOpenChange={setShowBookingDialog}
+        selectedTrainer={selectedTrainer}
+        onSubmit={handleBookingSubmit}
+        onCancel={() => setShowBookingDialog(false)}
+      />
     </div>
   );
 }
