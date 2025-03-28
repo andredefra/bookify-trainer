@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Menu, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -22,7 +21,6 @@ const MobileMenu = ({
 }: MobileMenuProps) => {
   const { t, language, setLanguage } = useLanguage();
   
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
       if (mobileMenuOpen) {
@@ -48,22 +46,20 @@ const MobileMenu = ({
       </SheetTrigger>
       <SheetContent side="right" className="p-0 w-full max-w-xs">
         <div className="p-6 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-5">
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
           </div>
           
-          <div className="mb-4">
-            <MobileNavLinks 
-              isHomePage={isHomePage} 
-              scrollToSection={scrollToSection} 
-              setMobileMenuOpen={setMobileMenuOpen} 
-            />
-          </div>
+          <MobileNavLinks 
+            isHomePage={isHomePage} 
+            scrollToSection={scrollToSection} 
+            setMobileMenuOpen={setMobileMenuOpen} 
+            className="mb-4"
+          />
           
-          {/* Language toggle as a horizontal banner */}
-          <div className="mb-5 bg-accent/30 py-3 px-2 rounded-lg border border-border/40">
+          <div className="bg-accent/30 py-2 px-2 rounded-lg border border-border/40 mb-5">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{t('nav.language')}:</span>
               <Button 

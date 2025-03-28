@@ -8,14 +8,15 @@ interface MobileNavLinksProps {
   isHomePage: boolean;
   scrollToSection: (sectionId: string) => void;
   setMobileMenuOpen: (isOpen: boolean) => void;
+  className?: string;
 }
 
-const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: MobileNavLinksProps) => {
+const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen, className = '' }: MobileNavLinksProps) => {
   const closeMobileMenu = () => setMobileMenuOpen(false);
   const { t } = useLanguage();
 
   return (
-    <div className="flex flex-col items-center p-6 space-y-4 w-full h-full overflow-y-auto">
+    <div className={`flex flex-col w-full ${className}`}>
       <div className="flex justify-center w-full">
         <NavItem
           to="/"
@@ -63,23 +64,6 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
           onClick={closeMobileMenu}
           className="justify-center"
         />
-      </div>
-      
-      <div className="pt-6 w-full flex flex-col space-y-4">
-        <Link 
-          to="/login" 
-          className="w-full py-3 text-center text-primary font-medium border border-primary/20 rounded-full"
-          onClick={closeMobileMenu}
-        >
-          {t('auth.login')}
-        </Link>
-        <Link 
-          to="/register" 
-          className="w-full py-3 text-center text-white font-medium bg-primary rounded-full"
-          onClick={closeMobileMenu}
-        >
-          {t('auth.register')}
-        </Link>
       </div>
     </div>
   );
