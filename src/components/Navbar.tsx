@@ -38,7 +38,7 @@ const Navbar = () => {
         ) : null}
         
         <div className="flex-none flex items-center gap-3">
-          <LanguageToggle />
+          {!isMobile && <LanguageToggle />}
           {!isMobile && <AuthButtons />}
         </div>
         
