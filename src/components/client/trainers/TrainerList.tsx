@@ -1,21 +1,10 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MarketplaceTrainerCard } from "./MarketplaceTrainerCard";
-
-interface Trainer {
-  id: string;
-  name: string;
-  specialty: string;
-  location: string;
-  rating: number;
-  reviews: number;
-  price: string;
-  availability: string;
-  image: string;
-}
+import { MarketplaceTrainer } from "./hooks/useTrainerMarketplace";
 
 interface TrainerListProps {
-  trainers: Trainer[];
+  trainers: MarketplaceTrainer[];
   onBookSession: (trainerName: string) => void;
 }
 

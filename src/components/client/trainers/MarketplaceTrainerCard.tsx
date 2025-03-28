@@ -2,19 +2,10 @@
 import { Star, Calendar, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { MarketplaceTrainer } from "./hooks/useTrainerMarketplace";
 
 interface TrainerCardProps {
-  trainer: {
-    id: string;
-    name: string;
-    specialty: string;
-    location: string;
-    rating: number;
-    reviews: number;
-    price: string;
-    availability: string;
-    image: string;
-  };
+  trainer: MarketplaceTrainer;
   onBookSession: (trainerName: string) => void;
 }
 
