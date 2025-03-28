@@ -1,5 +1,5 @@
 
-import { Star, Calendar } from "lucide-react";
+import { Star, Calendar, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
