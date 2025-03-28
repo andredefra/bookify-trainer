@@ -1,8 +1,16 @@
 
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 export function IntegrationsSection() {
+  const handleConnect = (integration: string) => {
+    toast({
+      title: "Connection initiated",
+      description: `Connecting to ${integration}...`,
+    });
+  };
+  
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -24,7 +32,13 @@ export function IntegrationsSection() {
                   <p className="text-xs text-muted-foreground">Connect to access client activity data</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm">Connect</Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => handleConnect("Google Fit")}
+              >
+                Connect
+              </Button>
             </div>
             
             <div className="flex items-center justify-between p-3 border rounded-md">
@@ -40,7 +54,13 @@ export function IntegrationsSection() {
                   <p className="text-xs text-muted-foreground">Connect to access client health data</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm">Connect</Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => handleConnect("Apple Health")}
+              >
+                Connect
+              </Button>
             </div>
             
             <div className="flex items-center justify-between p-3 border rounded-md">
@@ -55,7 +75,13 @@ export function IntegrationsSection() {
                   <p className="text-xs text-muted-foreground">Connect to track client's runs and rides</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm">Connect</Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => handleConnect("Strava")}
+              >
+                Connect
+              </Button>
             </div>
           </div>
         </div>
@@ -77,7 +103,13 @@ export function IntegrationsSection() {
                 <p className="text-xs text-muted-foreground">Connect to accept payments from clients</p>
               </div>
             </div>
-            <Button variant="outline" size="sm">Connect</Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => handleConnect("Payment System")}
+            >
+              Connect
+            </Button>
           </div>
         </div>
       </div>
