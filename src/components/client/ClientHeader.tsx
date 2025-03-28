@@ -61,14 +61,18 @@ export function ClientHeader({ user, onLogout, onMobileMenuClick }: ClientHeader
               )}
             </div>
             
-            {isMobile && (
-              <Avatar className="h-8 w-8">
+            <div className="flex items-center space-x-3">
+              <Avatar className="h-9 w-9 border border-primary/10">
                 <AvatarImage src={defaultImage} alt={displayName} />
                 <AvatarFallback className="bg-primary/10 text-primary">
                   {displayName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-            )}
+              <div className="hidden md:block">
+                <p className="text-sm font-medium leading-none">{displayName}</p>
+                <p className="text-xs text-muted-foreground">{user?.email}</p>
+              </div>
+            </div>
             
             <Button variant="outline" size="sm" onClick={handleLogout}>
               Log out
