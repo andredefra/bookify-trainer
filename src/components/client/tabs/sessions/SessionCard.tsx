@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, CalendarCheck, CreditCard } from "lucide-react";
@@ -46,7 +47,9 @@ export function SessionCard({
                 Cancel
               </Button>}
           </> : <>
-            {onViewDetails && <Button variant="outline" size="sm" onClick={() => onViewDetails(session)}>Register for this session</Button>}
+            {onViewDetails && <Button variant="outline" size="sm" onClick={() => onViewDetails(session)}>
+                Register to this session
+              </Button>}
             {onRegister && variant === 'featured' && <Button variant="default" size="sm" onClick={() => onRegister(session)}>
                 Register Now
               </Button>}
