@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 
 interface Trainer {
   id: number;
@@ -62,13 +62,21 @@ export function useFollowedTrainers(defaultTrainers: Array<{ id: number }> = [])
       const newFollowedTrainers = followedTrainers.filter(id => id !== trainerId);
       console.log("New followedTrainers after unfollow:", newFollowedTrainers);
       setFollowedTrainers(newFollowedTrainers);
-      toast.success(`You have unfollowed ${trainerName}`);
+      toast({
+        title: "Trainer Unfollowed",
+        description: `You have unfollowed ${trainerName}`,
+        variant: "default",
+      });
     } else {
       // Follow
       const newFollowedTrainers = [...followedTrainers, trainerId];
       console.log("New followedTrainers after follow:", newFollowedTrainers);
       setFollowedTrainers(newFollowedTrainers);
-      toast.success(`You are now following ${trainerName}. You'll receive their programs and session invitations.`);
+      toast({
+        title: "Trainer Followed",
+        description: `You are now following ${trainerName}. You'll receive their programs and session invitations.`,
+        variant: "default",
+      });
     }
   };
 

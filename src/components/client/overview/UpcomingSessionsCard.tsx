@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { bookingSchema } from "@/components/trainer/BookingForm";
 import { SessionItem, SessionStatus } from "@/types/sessions";
@@ -31,7 +31,11 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
   };
   
   const handleBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
-    toast.success(`Session booked successfully for ${data.date.toLocaleDateString()} at ${data.time}`);
+    toast({
+      title: "Session Booked",
+      description: `Session booked successfully for ${data.date.toLocaleDateString()} at ${data.time}`,
+      variant: "default",
+    });
     setShowBookingDialog(false);
     
     // Automatically show payment dialog after booking
@@ -56,7 +60,11 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
   };
   
   const handlePaymentSubmit = () => {
-    toast.success("Payment successful! You're now registered for the session.");
+    toast({
+      title: "Payment Successful",
+      description: "You're now registered for the session.",
+      variant: "default",
+    });
     setShowPaymentDialog(false);
     // In a real app, this would update the session status in the database
   };

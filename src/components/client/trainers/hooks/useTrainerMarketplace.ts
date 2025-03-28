@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { z } from "zod";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { bookingSchema } from "@/components/trainer/BookingForm";
 
 // Define Trainer type for better type safety
@@ -80,7 +80,11 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
   };
   
   const handleBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
-    toast.success(`Session booked successfully with ${selectedTrainer} for ${data.date.toLocaleDateString()} at ${data.time}`);
+    toast({
+      title: "Session Booked",
+      description: `Session booked successfully with ${selectedTrainer} for ${data.date.toLocaleDateString()} at ${data.time}`,
+      variant: "default",
+    });
     setShowBookingDialog(false);
   };
   

@@ -1,6 +1,6 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { bookingSchema } from "@/components/trainer/BookingForm";
 import { SessionItem, SessionStatus } from "@/types/sessions";
@@ -52,7 +52,11 @@ export const SessionProvider = ({ children, upcomingSessions }: SessionProviderP
   };
   
   const handleBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
-    toast.success(`Session booked successfully for ${data.date.toLocaleDateString()} at ${data.time}`);
+    toast({
+      title: "Session Booked",
+      description: `Session booked successfully for ${data.date.toLocaleDateString()} at ${data.time}`,
+      variant: "default",
+    });
     setShowBookingDialog(false);
     
     // Automatically show payment dialog after booking
@@ -83,17 +87,29 @@ export const SessionProvider = ({ children, upcomingSessions }: SessionProviderP
   };
   
   const handlePaymentSubmit = () => {
-    toast.success("Payment successful! You're now registered for the session.");
+    toast({
+      title: "Payment Successful",
+      description: "You're now registered for the session.",
+      variant: "default",
+    });
     setShowPaymentDialog(false);
     // In a real app, this would update the session status in the database
   };
 
   const handleAddToCalendar = (session: SessionItem) => {
-    toast.success(`Added ${session.name} to your calendar`);
+    toast({
+      title: "Added to Calendar",
+      description: `Added ${session.name} to your calendar`,
+      variant: "default",
+    });
   };
 
   const handleCancelSession = (session: SessionItem) => {
-    toast.success(`Cancelled ${session.name} session`);
+    toast({
+      title: "Session Cancelled",
+      description: `Cancelled ${session.name} session`,
+      variant: "default",
+    });
   };
   
   const value = {
