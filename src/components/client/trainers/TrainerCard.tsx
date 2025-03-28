@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Star, DollarSign, UserPlus, UserMinus, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface TrainerCardProps {
   id: number;
@@ -34,11 +35,11 @@ export function TrainerCard({
   const getStatusColor = (status: string) => {
     switch(status) {
       case "online":
-        return "text-emerald-500 fill-emerald-500";
+        return "bg-emerald-500";
       case "in-session":
-        return "text-amber-500 fill-amber-500";
+        return "bg-amber-500";
       default:
-        return "text-slate-500 fill-slate-500";
+        return "bg-slate-500";
     }
   };
 
@@ -55,23 +56,26 @@ export function TrainerCard({
 
   return (
     <Card className="overflow-hidden">
-      <div className="aspect-video bg-gray-100 flex items-center justify-center">
+      <div className="aspect-video bg-gray-100 flex items-center justify-center relative">
         <img 
           src={image}
           alt={name}
           className="w-full h-full object-cover"
         />
+        <div className="absolute top-2 right-2">
+          <Badge 
+            variant="secondary" 
+            className={`flex items-center gap-1.5 px-2 py-1 ${getStatusColor(status)} text-white`}
+          >
+            <Circle className="h-2 w-2 fill-white text-white" />
+            <span className="text-xs font-medium">{getStatusText(status)}</span>
+          </Badge>
+        </div>
       </div>
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-medium text-lg">{name}</h3>
-              <div className="flex items-center">
-                <Circle className={`h-3 w-3 ${getStatusColor(status)}`} />
-                <span className="ml-1 text-xs text-muted-foreground">{getStatusText(status)}</span>
-              </div>
-            </div>
+            <h3 className="font-medium text-lg">{name}</h3>
             <p className="text-sm text-muted-foreground">{specialty}</p>
             <div className="flex items-center mt-1">
               <Star className="h-4 w-4 text-amber-500" />
