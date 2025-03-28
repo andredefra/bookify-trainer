@@ -2,7 +2,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Users, Calendar, Check } from "lucide-react";
-import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -61,9 +60,7 @@ export function PaymentDialog({
             <div className="border rounded-md p-4">
               <div className="flex justify-between mb-2">
                 <div className="font-medium">{item.name}</div>
-                {item.price !== undefined && item.price > 0 && (
-                  <div className="font-bold">€{item.price}</div>
-                )}
+                <div className="text-green-600 font-medium">Free</div>
               </div>
               
               {item.description && (
