@@ -58,22 +58,22 @@ const MobileMenu = ({
             />
           </div>
           
-          {/* Language toggle positioned between navigation and auth buttons */}
-          <div className="flex flex-col space-y-6 mt-auto">
+          {/* Language toggle clearly positioned between navigation and auth buttons */}
+          <div className="my-6 w-full">
             <LanguageToggle className="w-full" />
-            
-            <div className="flex flex-col space-y-3">
-              <Link to="/login" className="w-full block">
-                <Button variant="outline" className="w-full" size="lg">
-                  {t('auth.login')}
-                </Button>
-              </Link>
-              <Link to="/register" className="w-full block">
-                <Button className="w-full" size="lg">
-                  {t('auth.register')}
-                </Button>
-              </Link>
-            </div>
+          </div>
+          
+          <div className="flex flex-col space-y-3 mt-auto">
+            <Link to="/login" className="w-full block">
+              <Button variant="outline" className="w-full" size="lg">
+                {t('auth.login')}
+              </Button>
+            </Link>
+            <Link to="/register" className="w-full block">
+              <Button className="w-full" size="lg">
+                {t('auth.register')}
+              </Button>
+            </Link>
           </div>
         </div>
       </SheetContent>
