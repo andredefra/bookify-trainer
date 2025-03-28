@@ -51,8 +51,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   const selectedDateSessions = getSessionsForDate(selectedDate);
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-8">
-      <Card className="md:col-span-5 lg:col-span-4">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12">
+      <Card className="md:col-span-6 lg:col-span-7">
         <CardContent className="p-2 sm:p-4">
           <Calendar
             mode="single"
@@ -91,8 +91,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
         </CardContent>
       </Card>
       
-      <Card className="md:col-span-7 lg:col-span-8">
-        <CardContent className="p-4">
+      <Card className="md:col-span-6 lg:col-span-5">
+        <CardContent className="p-3">
           <div className="flex items-center gap-2 mb-4">
             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
             <h3 className="text-lg font-medium">
@@ -100,7 +100,7 @@ export function CalendarView({ sessions }: CalendarViewProps) {
             </h3>
           </div>
           
-          <div className="h-[calc(100vh-22rem)] min-h-[300px]">
+          <div className="h-[calc(100vh-26rem)] min-h-[250px]">
             {selectedDateSessions.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No sessions scheduled for this date
