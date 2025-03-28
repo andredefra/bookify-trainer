@@ -13,7 +13,7 @@ interface MobileMenuProps {
 const MobileMenu = ({ 
   mobileMenuOpen, 
   setMobileMenuOpen, 
-  isHomePage, 
+  isHomePage,
   scrollToSection 
 }: MobileMenuProps) => {
   
@@ -43,7 +43,7 @@ const MobileMenu = ({
       </button>
       
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[60px] bg-white shadow-md z-50 animate-fade-in flex flex-col items-center pt-10">
+        <div className="fixed inset-0 top-[60px] bg-white z-50 animate-fade-in flex flex-col items-center pt-10">
           <MobileNavLinks
             isHomePage={isHomePage}
             scrollToSection={scrollToSection}
