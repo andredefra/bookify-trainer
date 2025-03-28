@@ -24,7 +24,7 @@ const NavItem = ({
 }: NavItemProps) => {
   // Common styles
   const baseClasses = isMobile
-    ? "w-full py-3 text-lg font-medium text-center"
+    ? "w-full py-3 text-xl font-medium text-primary text-center"
     : "text-sm font-medium text-muted-foreground hover:text-primary transition-colors";
   
   const iconClasses = isMobile 
@@ -39,7 +39,7 @@ const NavItem = ({
           scrollToSection(sectionId);
           if (onClick) onClick();
         }}
-        className={`${baseClasses} ${Icon ? iconClasses : ''} ${isMobile ? 'text-primary' : ''}`}
+        className={`${baseClasses} ${Icon ? iconClasses : ''}`}
       >
         {Icon && <Icon size={isMobile ? 20 : 16} />}
         {label}
@@ -51,7 +51,7 @@ const NavItem = ({
   return (
     <Link
       to={to}
-      className={`${baseClasses} ${Icon ? iconClasses : ''} ${isMobile ? 'text-primary' : ''}`}
+      className={`${baseClasses} ${Icon ? iconClasses : ''}`}
       onClick={onClick}
     >
       {Icon && <Icon size={isMobile ? 20 : 16} />}

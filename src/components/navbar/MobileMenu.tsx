@@ -46,12 +46,9 @@ const MobileMenu = ({
       
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 top-[60px] z-50 flex flex-col items-center" 
-          style={{ 
-            backgroundColor: '#FFFFFF',
-          }}
+          className="fixed inset-0 top-[60px] z-50 bg-white"
         >
-          <div className="w-full p-6 bg-white">
+          <div className="container mx-auto px-6 py-8">
             <MobileNavLinks
               isHomePage={isHomePage}
               scrollToSection={scrollToSection}

@@ -55,17 +55,17 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
         onClick={closeMobileMenu}
       />
       
-      <div className="pt-4 w-full flex flex-col space-y-3">
+      <div className="pt-8 w-full flex flex-col space-y-4">
         <Link 
           to="/login" 
-          className="w-full py-3 text-center text-primary border border-primary/20 rounded-full"
+          className="w-full py-3 text-center text-primary font-medium border border-primary/20 rounded-full"
           onClick={closeMobileMenu}
         >
           Demo Login
         </Link>
         <Link 
           to="/register" 
-          className="w-full py-3 text-center text-white bg-primary rounded-full"
+          className="w-full py-3 text-center text-white font-medium bg-primary rounded-full"
           onClick={closeMobileMenu}
         >
           Try the Demo
