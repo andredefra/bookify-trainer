@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
-import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface MobileMenuProps {
@@ -49,13 +48,21 @@ const MobileMenu = ({
       </SheetTrigger>
       <SheetContent side="right" className="p-0 w-full max-w-xs">
         <div className="p-6 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-6">
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
           </div>
           
-          {/* Language toggle as a prominent horizontal banner */}
+          <div className="mb-4">
+            <MobileNavLinks 
+              isHomePage={isHomePage} 
+              scrollToSection={scrollToSection} 
+              setMobileMenuOpen={setMobileMenuOpen} 
+            />
+          </div>
+          
+          {/* Language toggle as a horizontal banner */}
           <div className="mb-5 bg-accent/30 py-3 px-2 rounded-lg border border-border/40">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{t('nav.language')}:</span>
@@ -69,14 +76,6 @@ const MobileMenu = ({
                 <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
               </Button>
             </div>
-          </div>
-          
-          <div className="mb-6">
-            <MobileNavLinks 
-              isHomePage={isHomePage} 
-              scrollToSection={scrollToSection} 
-              setMobileMenuOpen={setMobileMenuOpen} 
-            />
           </div>
           
           <div className="flex flex-col space-y-3 mt-auto">
