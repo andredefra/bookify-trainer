@@ -166,7 +166,7 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
         />
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden pb-10 px-4 sm:px-6 lg:px-8">
-          {activeTab === "overview" && <OverviewTab sessions={mockUpcomingSessions} clients={mockClients} />}
+          {activeTab === "overview" && <OverviewTab upcomingSessions={mockUpcomingSessions} clients={mockClients} messageRequests={mockMessageRequests} />}
           {activeTab === "clients" && <ClientsTab clients={mockClients} />}
           {activeTab === "sessions" && <SessionsTab upcomingSessions={mockUpcomingSessions} />}
           {activeTab === "programs" && <ProgramsTab />}
