@@ -1,22 +1,24 @@
 
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Footer = () => {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
   const footerLinks = [{
-    title: 'Product',
+    title: t('footer.product'),
     links: [{
-      name: 'Features',
+      name: t('nav.features'),
       href: '/#features'
     }, {
-      name: 'Pricing',
+      name: t('nav.pricing'),
       href: '/#pricing'
     }, {
-      name: 'How It Works',
+      name: t('nav.howItWorks'),
       href: '/#how-it-works'
     }]
   }, {
-    title: 'Legal',
+    title: t('footer.legal'),
     links: [{
       name: 'Privacy',
       href: '/privacy'
@@ -37,8 +39,8 @@ const Footer = () => {
             <Link to="/" className="inline-block">
               <span className="font-display text-xl font-bold tracking-tight text-primary">Personal.ai</span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground">The all-in-one platform for personal trainers.</p>
-            <p className="mt-12 text-sm text-muted-foreground">&copy; {currentYear} mypersonalai ltd. All rights reserved.</p>
+            <p className="mt-4 text-sm text-muted-foreground">{t('footer.description')}</p>
+            <p className="mt-12 text-sm text-muted-foreground">{t('footer.copyright')}</p>
           </div>
           
           {/* Spacer for alignment */}

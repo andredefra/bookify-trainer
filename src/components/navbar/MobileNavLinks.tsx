@@ -1,6 +1,9 @@
+
 import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import NavItem from './NavItem';
+import LanguageToggle from './LanguageToggle';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MobileNavLinksProps {
   isHomePage: boolean;
@@ -10,13 +13,14 @@ interface MobileNavLinksProps {
 
 const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: MobileNavLinksProps) => {
   const closeMobileMenu = () => setMobileMenuOpen(false);
+  const { t } = useLanguage();
 
   return (
     <div className="flex flex-col items-center p-6 space-y-4 w-full h-full overflow-y-auto">
       <div className="flex justify-center w-full">
         <NavItem
           to="/"
-          label="Home"
+          label={t('nav.home')}
           sectionId="hero"
           icon={Home}
           isHomePage={isHomePage}
@@ -30,7 +34,7 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
       <div className="w-full flex flex-col items-center space-y-4 mt-2">
         <NavItem
           to="/#features"
-          label="Features"
+          label={t('nav.features')}
           sectionId="features"
           isHomePage={isHomePage}
           isMobile={true}
@@ -41,7 +45,7 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
         
         <NavItem
           to="/#how-it-works"
-          label="How it works"
+          label={t('nav.howItWorks')}
           sectionId="how-it-works"
           isHomePage={isHomePage}
           isMobile={true}
@@ -52,7 +56,7 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
         
         <NavItem
           to="/#pricing"
-          label="Pricing"
+          label={t('nav.pricing')}
           sectionId="pricing"
           isHomePage={isHomePage}
           isMobile={true}
@@ -60,6 +64,10 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
           onClick={closeMobileMenu}
           className="justify-center"
         />
+        
+        <div className="pt-2">
+          <LanguageToggle />
+        </div>
       </div>
       
       <div className="pt-6 w-full flex flex-col space-y-4">
@@ -68,14 +76,14 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
           className="w-full py-3 text-center text-primary font-medium border border-primary/20 rounded-full"
           onClick={closeMobileMenu}
         >
-          Demo Login
+          {t('auth.login')}
         </Link>
         <Link 
           to="/register" 
           className="w-full py-3 text-center text-white font-medium bg-primary rounded-full"
           onClick={closeMobileMenu}
         >
-          Try the Demo
+          {t('auth.register')}
         </Link>
       </div>
     </div>

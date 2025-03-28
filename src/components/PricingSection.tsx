@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/context/LanguageContext';
 
 const PricingSection = () => {
   const [annual, setAnnual] = useState(false);
+  const { t } = useLanguage();
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,22 +29,22 @@ const PricingSection = () => {
   }, []);
 
   const freemiumFeatures = [
-    "Unlimited Sessions",
-    "Google Calendar Integration",
-    "Personal Trainer Page",
-    "Client Messaging",
-    "Client Management",
+    t('pricing.features.unlimitedSessions'),
+    t('pricing.features.googleCalendar'),
+    t('pricing.features.personalTrainerPage'),
+    t('pricing.features.clientMessaging'),
+    t('pricing.features.clientManagement'),
   ];
 
   const proFeatures = [
-    "Everything in Freemium",
-    "Lower Transaction Fee (2.5%)",
-    "Payment Integration",
-    "Priority Support",
-    "Advanced Analytics",
-    "Waitlist Management",
-    "Custom Training Programs",
-    "Fitness Progress Tracking",
+    t('pricing.features.everythingFreemium'),
+    t('pricing.features.lowerFee'),
+    t('pricing.features.paymentIntegration'),
+    t('pricing.features.prioritySupport'),
+    t('pricing.features.advancedAnalytics'),
+    t('pricing.features.waitlistManagement'),
+    t('pricing.features.customPrograms'),
+    t('pricing.features.fitnessTracking'),
   ];
 
   return (
@@ -50,16 +52,16 @@ const PricingSection = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="reveal text-3xl md:text-4xl font-display font-bold tracking-tight text-primary mb-6">
-            Simple, Transparent Pricing
+            {t('pricing.title')}
           </h2>
           <p className="reveal reveal-delay-1 text-lg text-muted-foreground mb-5">
-            Choose the plan that works best for your business. No hidden fees or long-term commitments.
+            {t('pricing.subtitle')}
           </p>
           
           <div className="reveal reveal-delay-2 flex items-center justify-center gap-2 mb-6">
             <Users className="h-5 w-5 text-emerald-600" />
             <p className="text-emerald-700 font-medium">
-              Always free for clients — they access premium features through your subscription
+              {t('pricing.clientsAccess')}
             </p>
           </div>
           
@@ -70,7 +72,7 @@ const PricingSection = () => {
                 !annual ? 'bg-white shadow-sm text-primary' : 'text-muted-foreground'
               }`}
             >
-              Monthly
+              {t('pricing.monthly')}
             </button>
             <button
               onClick={() => setAnnual(true)}
@@ -78,7 +80,7 @@ const PricingSection = () => {
                 annual ? 'bg-white shadow-sm text-primary' : 'text-muted-foreground'
               }`}
             >
-              Annual <span className="text-xs font-normal text-emerald-600 ml-1">Save 15%</span>
+              {t('pricing.annual')} <span className="text-xs font-normal text-emerald-600 ml-1">{t('pricing.save')}</span>
             </button>
           </div>
         </div>
@@ -87,13 +89,13 @@ const PricingSection = () => {
           {/* Freemium Plan */}
           <div className="reveal flex flex-col p-8 rounded-2xl border border-border bg-white shadow-sm">
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-primary mb-2">Freemium</h3>
+              <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.freemium.title')}</h3>
               <div className="flex items-baseline mb-1">
-                <span className="text-4xl font-display font-bold">€0</span>
-                <span className="text-muted-foreground ml-2">/month</span>
+                <span className="text-4xl font-display font-bold">{t('pricing.freemium.price')}</span>
+                <span className="text-muted-foreground ml-2">{t('pricing.freemium.period')}</span>
               </div>
               <p className="text-muted-foreground">
-                + 5% transaction fee
+                {t('pricing.freemium.fee')}
               </p>
             </div>
 
@@ -110,26 +112,26 @@ const PricingSection = () => {
               to="/register" 
               className="w-full px-6 py-3 bg-white text-primary border border-primary/20 rounded-full text-center font-medium button-hover"
             >
-              Start for Free
+              {t('pricing.freemium.cta')}
             </Link>
           </div>
 
           {/* Pro Plan */}
           <div className="reveal reveal-delay-1 flex flex-col p-8 rounded-2xl border-2 border-primary bg-white shadow-xl relative">
             <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs font-medium py-1 px-3 rounded-full">
-              RECOMMENDED
+              {t('pricing.pro.recommended')}
             </div>
             
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-primary mb-2">Pro</h3>
+              <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.pro.title')}</h3>
               <div className="flex items-baseline mb-1">
                 <span className="text-4xl font-display font-bold">
-                  {annual ? '€24' : '€29'}
+                  {annual ? t('pricing.pro.priceAnnual') : t('pricing.pro.price')}
                 </span>
-                <span className="text-muted-foreground ml-2">/month</span>
+                <span className="text-muted-foreground ml-2">{t('pricing.pro.period')}</span>
               </div>
               <p className="text-muted-foreground">
-                + 2.5% transaction fee
+                {t('pricing.pro.fee')}
               </p>
             </div>
 
@@ -146,18 +148,17 @@ const PricingSection = () => {
               to="/register?plan=pro" 
               className="w-full px-6 py-3 bg-primary text-white rounded-full text-center font-medium button-hover"
             >
-              Upgrade to Pro
+              {t('pricing.pro.cta')}
             </Link>
           </div>
         </div>
 
         <div className="mt-16 text-center">
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            All plans include secure payment processing. Transaction fees are charged only on successful payments. 
-            You can upgrade, downgrade, or cancel your subscription at any time.
+            {t('pricing.disclaimer1')}
           </p>
           <p className="text-sm text-primary font-medium mt-4 max-w-2xl mx-auto">
-            Your clients never pay for the app — they get access to premium features through your subscription
+            {t('pricing.disclaimer2')}
           </p>
         </div>
       </div>

@@ -1,6 +1,8 @@
 
 import { Home } from 'lucide-react';
 import NavItem from './NavItem';
+import LanguageToggle from './LanguageToggle';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface NavLinksProps {
   isHomePage: boolean;
@@ -8,12 +10,14 @@ interface NavLinksProps {
 }
 
 const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
+  const { t } = useLanguage();
+  
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center">
         <NavItem
           to="/"
-          label="Home"
+          label={t('nav.home')}
           sectionId="hero"
           icon={Home}
           isHomePage={isHomePage}
@@ -24,7 +28,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
       <div className="flex space-x-8 items-center ml-8">
         <NavItem
           to="/#features"
-          label="Features"
+          label={t('nav.features')}
           sectionId="features"
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
@@ -32,7 +36,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         
         <NavItem
           to="/#how-it-works"
-          label="How it works"
+          label={t('nav.howItWorks')}
           sectionId="how-it-works"
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
@@ -40,11 +44,13 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         
         <NavItem
           to="/#pricing"
-          label="Pricing"
+          label={t('nav.pricing')}
           sectionId="pricing"
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
         />
+        
+        <LanguageToggle />
       </div>
     </div>
   );
