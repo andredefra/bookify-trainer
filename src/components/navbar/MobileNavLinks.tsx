@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import NavItem from './NavItem';
@@ -13,49 +12,57 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
-    <div className="flex flex-col items-start p-6 space-y-8 w-full h-full overflow-y-auto">
-      <NavItem
-        to="/"
-        label="Home"
-        sectionId="hero"
-        icon={Home}
-        isHomePage={isHomePage}
-        isMobile={true}
-        scrollToSection={scrollToSection}
-        onClick={closeMobileMenu}
-      />
+    <div className="flex flex-col items-center p-6 space-y-4 w-full h-full overflow-y-auto">
+      <div className="flex justify-center w-full">
+        <NavItem
+          to="/"
+          label="Home"
+          sectionId="hero"
+          icon={Home}
+          isHomePage={isHomePage}
+          isMobile={true}
+          scrollToSection={scrollToSection}
+          onClick={closeMobileMenu}
+          className="justify-center"
+        />
+      </div>
       
-      <NavItem
-        to="/#features"
-        label="Features"
-        sectionId="features"
-        isHomePage={isHomePage}
-        isMobile={true}
-        scrollToSection={scrollToSection}
-        onClick={closeMobileMenu}
-      />
+      <div className="w-full flex flex-col items-center space-y-4 mt-2">
+        <NavItem
+          to="/#features"
+          label="Features"
+          sectionId="features"
+          isHomePage={isHomePage}
+          isMobile={true}
+          scrollToSection={scrollToSection}
+          onClick={closeMobileMenu}
+          className="justify-center"
+        />
+        
+        <NavItem
+          to="/#how-it-works"
+          label="How it works"
+          sectionId="how-it-works"
+          isHomePage={isHomePage}
+          isMobile={true}
+          scrollToSection={scrollToSection}
+          onClick={closeMobileMenu}
+          className="justify-center"
+        />
+        
+        <NavItem
+          to="/#pricing"
+          label="Pricing"
+          sectionId="pricing"
+          isHomePage={isHomePage}
+          isMobile={true}
+          scrollToSection={scrollToSection}
+          onClick={closeMobileMenu}
+          className="justify-center"
+        />
+      </div>
       
-      <NavItem
-        to="/#how-it-works"
-        label="How it works"
-        sectionId="how-it-works"
-        isHomePage={isHomePage}
-        isMobile={true}
-        scrollToSection={scrollToSection}
-        onClick={closeMobileMenu}
-      />
-      
-      <NavItem
-        to="/#pricing"
-        label="Pricing"
-        sectionId="pricing"
-        isHomePage={isHomePage}
-        isMobile={true}
-        scrollToSection={scrollToSection}
-        onClick={closeMobileMenu}
-      />
-      
-      <div className="pt-8 w-full flex flex-col space-y-4">
+      <div className="pt-6 w-full flex flex-col space-y-4">
         <Link 
           to="/login" 
           className="w-full py-3 text-center text-primary font-medium border border-primary/20 rounded-full"
