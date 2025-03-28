@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,11 +31,9 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
   const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
   const displayName = user?.name || name || customName || "Trainer";
   const isMobile = useMediaQuery("(max-width: 768px)");
-  // Use the same default image as in ProfileSection
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
 
   useEffect(() => {
-    // Load status from localStorage if available
     const savedStatus = localStorage.getItem('trainer-status');
     if (savedStatus && ["online", "in-session", "offline"].includes(savedStatus)) {
       setStatus(savedStatus as "online" | "in-session" | "offline");
@@ -45,10 +42,8 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
 
   const handleStatusChange = (newStatus: "online" | "in-session" | "offline") => {
     setStatus(newStatus);
-    // Save status to localStorage
     localStorage.setItem('trainer-status', newStatus);
     
-    // Show toast notification
     const statusMessages = {
       "online": "You're now shown as available to clients",
       "in-session": "You're now shown as in a session",
@@ -58,7 +53,6 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
     toast.success(statusMessages[newStatus]);
   };
 
-  // Create a dummy user if none provided for backward compatibility
   const dummyUser = user || {
     name: displayName,
     email: "trainer@example.com",
@@ -81,7 +75,7 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
                 <span className="sr-only">Toggle sidebar</span>
               </Button>
             )}
-            <span className="font-display text-xl font-bold text-primary pl-6 lg:pl-6">Personal.ai</span>
+            <span className="font-display text-xl font-bold text-primary pl-4 lg:pl-4">Personal.ai</span>
           </div>
           <div className="flex items-center space-x-4">
             {!isMobile && (
