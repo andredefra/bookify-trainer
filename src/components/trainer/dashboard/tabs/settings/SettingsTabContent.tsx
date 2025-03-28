@@ -32,7 +32,11 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
   const [selectedSection, setSelectedSection] = useState("profile");
 
   const handleSaveChanges = () => {
-    toast.success("Settings saved successfully");
+    toast({
+      title: "Success",
+      description: "Settings saved successfully",
+      variant: "default",
+    });
     
     // Save the updated profile image to localStorage if it was changed
     const demoUser = JSON.parse(localStorage.getItem('demo-user') || '{}');
