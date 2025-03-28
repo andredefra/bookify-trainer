@@ -9,7 +9,7 @@ interface NavLinksProps {
 
 const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
   return (
-    <div className="flex space-x-8 items-center">
+    <div className="flex space-x-8 items-center justify-center">
       <NavItem
         to="/"
         label="Home"
@@ -17,6 +17,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         icon={Home}
         isHomePage={isHomePage}
         scrollToSection={scrollToSection}
+        className="mx-auto"
       />
       
       <NavItem

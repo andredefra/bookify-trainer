@@ -11,6 +11,7 @@ interface NavItemProps {
   isMobile?: boolean;
   scrollToSection: (sectionId: string) => void;
   onClick?: () => void;
+  className?: string;
 }
 
 const NavItem = ({ 
@@ -21,7 +22,8 @@ const NavItem = ({
   isHomePage, 
   isMobile = false,
   scrollToSection, 
-  onClick 
+  onClick,
+  className
 }: NavItemProps) => {
   // Common styles
   const baseClasses = isMobile
@@ -32,6 +34,9 @@ const NavItem = ({
     ? "flex items-center gap-4" 
     : "flex items-center gap-1";
 
+  // Center the Home item
+  const combinedClasses = `${baseClasses} ${Icon ? iconClasses : ''} ${className || ''}`;
+
   // If we're on the homepage and this item has a sectionId, use a button to scroll
   if (isHomePage && sectionId) {
     return (
@@ -40,7 +45,7 @@ const NavItem = ({
           scrollToSection(sectionId);
           if (onClick) onClick();
         }}
-        className={`${baseClasses} ${Icon ? iconClasses : ''}`}
+        className={combinedClasses}
       >
         {Icon && <Icon size={isMobile ? 24 : 16} />}
         {label}
@@ -52,7 +57,7 @@ const NavItem = ({
   return (
     <Link
       to={to}
-      className={`${baseClasses} ${Icon ? iconClasses : ''}`}
+      className={combinedClasses}
       onClick={onClick}
     >
       {Icon && <Icon size={isMobile ? 24 : 16} />}
