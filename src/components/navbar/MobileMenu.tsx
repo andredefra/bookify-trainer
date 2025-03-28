@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -21,7 +21,7 @@ const MobileMenu = ({
   isHomePage,
   scrollToSection,
 }: MobileMenuProps) => {
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -34,6 +34,11 @@ const MobileMenu = ({
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [mobileMenuOpen, setMobileMenuOpen]);
+
+  const handleLanguageChange = () => {
+    const newLanguage = language === 'en' ? 'it' : 'en';
+    setLanguage(newLanguage);
+  };
 
   return (
     <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -48,6 +53,17 @@ const MobileMenu = ({
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
+            
+            {/* Language toggle button directly in the header */}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center gap-2 px-3" 
+              onClick={handleLanguageChange}
+            >
+              <Globe className="h-4 w-4" />
+              <span>{language === 'en' ? '🇬🇧' : '🇮🇹'}</span>
+            </Button>
           </div>
           
           <div className="mb-6">
@@ -56,12 +72,6 @@ const MobileMenu = ({
               scrollToSection={scrollToSection} 
               setMobileMenuOpen={setMobileMenuOpen} 
             />
-          </div>
-          
-          {/* Language toggle with clear styling to make it visible */}
-          <div className="my-6 border-y border-border py-6">
-            <h3 className="text-sm font-medium mb-3 text-foreground">Language</h3>
-            <LanguageToggle className="w-full" />
           </div>
           
           <div className="flex flex-col space-y-3 mt-auto">
