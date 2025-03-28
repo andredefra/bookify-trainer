@@ -13,7 +13,7 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
-    <div className="flex flex-col items-center p-6 space-y-6 w-full">
+    <div className="flex flex-col items-start p-6 space-y-8 w-full h-full overflow-y-auto">
       <NavItem
         to="/"
         label="Home"

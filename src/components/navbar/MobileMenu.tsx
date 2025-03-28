@@ -2,7 +2,6 @@
 import { Menu, X } from 'lucide-react';
 import { useEffect } from 'react';
 import MobileNavLinks from './MobileNavLinks';
-import BrandLogo from './BrandLogo';
 
 interface MobileMenuProps {
   mobileMenuOpen: boolean;
@@ -45,14 +44,12 @@ const MobileMenu = ({
       </button>
       
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[60px] z-50 bg-background">
-          <div className="h-full overflow-y-auto">
-            <MobileNavLinks
-              isHomePage={isHomePage}
-              scrollToSection={scrollToSection}
-              setMobileMenuOpen={setMobileMenuOpen}
-            />
-          </div>
+        <div className="fixed inset-0 top-[60px] z-50 bg-white shadow-lg">
+          <MobileNavLinks
+            isHomePage={isHomePage}
+            scrollToSection={scrollToSection}
+            setMobileMenuOpen={setMobileMenuOpen}
+          />
         </div>
       )}
     </>

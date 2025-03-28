@@ -25,11 +25,11 @@ const NavItem = ({
 }: NavItemProps) => {
   // Common styles
   const baseClasses = isMobile
-    ? "w-full py-4 text-lg font-semibold text-primary"
+    ? "w-full py-4 text-xl font-bold text-primary"
     : "text-sm font-medium text-muted-foreground hover:text-primary transition-colors";
   
   const iconClasses = isMobile 
-    ? "flex items-center justify-center gap-3" 
+    ? "flex items-center gap-4" 
     : "flex items-center gap-1";
 
   // If we're on the homepage and this item has a sectionId, use a button to scroll
