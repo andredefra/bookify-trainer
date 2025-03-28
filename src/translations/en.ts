@@ -1,3 +1,4 @@
+
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -5,6 +6,9 @@ export const en = {
   'nav.howItWorks': 'How it works',
   'nav.pricing': 'Pricing',
   'nav.language': 'Language',
+  'nav.selectLanguage': 'Select language',
+  'nav.openMenu': 'Open menu',
+  'nav.closeMenu': 'Close menu',
   'auth.login': 'Login',
   'auth.register': 'Try the Demo',
   

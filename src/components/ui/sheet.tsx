@@ -61,15 +61,7 @@ const SheetContent = React.forwardRef<
       ref={ref}
       className={cn(sheetVariants({ side }), className)}
       {...props}
-      aria-describedby={props['aria-describedby'] || "sheet-description"}
     >
-      {/* Add an invisible but accessible title for screen readers */}
-      <SheetPrimitive.Title className="sr-only" id="sheet-title">
-        Navigation Menu
-      </SheetPrimitive.Title>
-      <div id="sheet-description" className="sr-only">
-        Navigation menu for mobile devices
-      </div>
       {children}
     </SheetPrimitive.Content>
   </SheetPortal>

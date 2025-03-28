@@ -1,9 +1,9 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Menu, Globe, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetClose } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -28,141 +28,158 @@ const MobileMenu = ({
 }: MobileMenuProps) => {
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
-  const [menuKey, setMenuKey] = useState(Date.now()); // Force remount when needed
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   
   // Handle the language change
   const handleLanguageChange = (lang: 'en' | 'it') => {
-    // Close mobile menu first
+    // First close the mobile menu
     setMobileMenuOpen(false);
     
     // Set the language
     setLanguage(lang);
     
-    // Navigate to appropriate route
-    if (lang === 'en') {
-      navigate('/');
-    } else {
-      navigate('/it');
-    }
-    
-    // Force remount of the menu after navigation
+    // Then navigate to the appropriate route
     setTimeout(() => {
-      setMenuKey(Date.now());
+      if (lang === 'en') {
+        navigate('/');
+      } else {
+        navigate('/it');
+      }
     }, 100);
   };
 
-  // Manually handle opening the menu
+  // Handle menu opening manually
   const handleOpenMenu = () => {
     setMobileMenuOpen(true);
   };
   
-  // When the route changes, reset the menu
+  // Reset menu state when route changes
   useEffect(() => {
-    // Force remount the menu when route changes
-    setMenuKey(Date.now());
-    // Close the menu
-    setMobileMenuOpen(false);
-  }, [navigate, setMobileMenuOpen]);
+    const resetMenu = () => {
+      setMobileMenuOpen(false);
+    };
+    
+    // Add global event listeners for route changes and unmounts
+    window.addEventListener('popstate', resetMenu);
+    
+    return () => {
+      window.removeEventListener('popstate', resetMenu);
+    };
+  }, [setMobileMenuOpen]);
 
   return (
-    <Sheet 
-      key={menuKey} 
-      open={mobileMenuOpen} 
-      onOpenChange={setMobileMenuOpen}
-    >
+    <>
+      {/* The menu button is outside the Sheet component to prevent issues */}
       <Button 
+        ref={menuButtonRef}
         variant="ghost" 
         size="icon" 
-        className="relative z-50" 
+        className="fixed relative z-50" 
         onClick={handleOpenMenu}
-        aria-label="Open menu"
+        aria-label={t('nav.openMenu') || "Open menu"}
       >
         <Menu className="h-5 w-5" />
       </Button>
-      <SheetContent 
-        side="right" 
-        className="p-0 w-full max-w-xs"
-        aria-label="Mobile navigation menu"
+      
+      {/* The Sheet component for the mobile menu */}
+      <Sheet 
+        open={mobileMenuOpen} 
+        onOpenChange={setMobileMenuOpen}
       >
-        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-        <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
-        <div className="p-6 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-5">
-            <Link to="/" className="font-display text-xl font-bold text-primary">
-              Personal.ai
-            </Link>
-            <SheetClose asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8" 
-                aria-label="Close menu"
+        <SheetContent 
+          side="right" 
+          className="p-0 w-full max-w-xs overflow-y-auto"
+        >
+          <div className="p-6 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-5">
+              <Link 
+                to="/" 
+                className="font-display text-xl font-bold text-primary"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                <X className="h-4 w-4" />
-              </Button>
-            </SheetClose>
-          </div>
-          
-          <MobileNavLinks 
-            isHomePage={isHomePage} 
-            scrollToSection={scrollToSection} 
-            setMobileMenuOpen={setMobileMenuOpen} 
-            className="mb-4"
-          />
-          
-          <div className="bg-accent/30 py-2 px-2 rounded-lg border border-border/40 mb-5">
-            <div className="flex flex-col space-y-2">
-              <span className="text-sm font-medium">{t('nav.selectLanguage') || 'Select language'}:</span>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-between bg-background"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4" />
-                      <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="center"
-                  className="w-[200px] bg-background"
+                Personal.ai
+              </Link>
+              <SheetClose asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8" 
+                  aria-label={t('nav.closeMenu') || "Close menu"}
                 >
-                  <DropdownMenuItem 
-                    className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
-                    onClick={() => handleLanguageChange('en')}
+                  <X className="h-4 w-4" />
+                </Button>
+              </SheetClose>
+            </div>
+            
+            <MobileNavLinks 
+              isHomePage={isHomePage} 
+              scrollToSection={scrollToSection} 
+              setMobileMenuOpen={setMobileMenuOpen} 
+              className="mb-4"
+            />
+            
+            <div className="bg-accent/30 py-2 px-2 rounded-lg border border-border/40 mb-5">
+              <div className="flex flex-col space-y-2">
+                <span className="text-sm font-medium">{t('nav.selectLanguage') || 'Select language'}:</span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-between bg-background"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Globe className="h-4 w-4" />
+                        <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="center"
+                    className="w-[200px] bg-background"
                   >
-                    <span className="text-base mr-1">🇬🇧</span>
-                    <span className="text-sm">English</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
-                    onClick={() => handleLanguageChange('it')}
-                  >
-                    <span className="text-base mr-1">🇮🇹</span>
-                    <span className="text-sm">Italiano</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem 
+                      className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
+                      onClick={() => handleLanguageChange('en')}
+                    >
+                      <span className="text-base mr-1">🇬🇧</span>
+                      <span className="text-sm">English</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
+                      onClick={() => handleLanguageChange('it')}
+                    >
+                      <span className="text-base mr-1">🇮🇹</span>
+                      <span className="text-sm">Italiano</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+            
+            <div className="flex flex-col space-y-3 mt-auto">
+              <Link 
+                to="/login" 
+                className="w-full block"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Button variant="outline" className="w-full" size="lg">
+                  {t('auth.login')}
+                </Button>
+              </Link>
+              <Link 
+                to="/register" 
+                className="w-full block"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Button className="w-full" size="lg">
+                  {t('auth.register')}
+                </Button>
+              </Link>
             </div>
           </div>
-          
-          <div className="flex flex-col space-y-3 mt-auto">
-            <Link to="/login" className="w-full block">
-              <Button variant="outline" className="w-full" size="lg">
-                {t('auth.login')}
-              </Button>
-            </Link>
-            <Link to="/register" className="w-full block">
-              <Button className="w-full" size="lg">
-                {t('auth.register')}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </SheetContent>
-    </Sheet>
+        </SheetContent>
+      </Sheet>
+    </>
   );
 };
 

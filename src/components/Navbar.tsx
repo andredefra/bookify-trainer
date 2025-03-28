@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import BrandLogo from './navbar/BrandLogo';
@@ -22,9 +22,14 @@ const Navbar = () => {
   // Get scroll to section function
   const scrollToSection = useSectionScroll(isHomePage, setMobileMenuOpen);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 px-6 lg:px-10 ${
+      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 px-6 lg:px-10 ${
         scrolled ? 'py-3 glass' : 'py-5 bg-transparent'
       }`}
     >
