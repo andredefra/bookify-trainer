@@ -48,11 +48,11 @@ const RevealObserver = () => {
   return null;
 };
 
-// Move the queryClient inside the component to ensure it's created properly
+// Create the QueryClient instance outside of the component
+// This ensures it's only created once and not on every render
+const queryClient = new QueryClient();
+
 const App = () => {
-  // Create a new QueryClient instance inside the component
-  const queryClient = new QueryClient();
-  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
