@@ -1,7 +1,6 @@
 
 import { Home } from 'lucide-react';
 import NavItem from './NavItem';
-import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface NavLinksProps {
@@ -49,8 +48,6 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
         />
-        
-        <LanguageToggle />
       </div>
     </div>
   );
