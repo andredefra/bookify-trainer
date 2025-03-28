@@ -1,6 +1,9 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge"; 
+import { Circle } from "lucide-react";
+import { getTrainerById } from "@/data/trainerMockData";
 
 interface MessageItem {
   id: number;
@@ -8,6 +11,7 @@ interface MessageItem {
   preview: string;
   time: string;
   read: boolean;
+  trainerId?: string; // Add trainerId to fetch status
 }
 
 interface MessagesTabProps {
@@ -15,6 +19,30 @@ interface MessagesTabProps {
 }
 
 export function MessagesTab({ messages }: MessagesTabProps) {
+  // Function to get trainer status color
+  const getStatusColor = (status: string) => {
+    switch(status) {
+      case "online":
+        return "bg-emerald-500";
+      case "in-session":
+        return "bg-amber-500";
+      default:
+        return "bg-slate-500";
+    }
+  };
+
+  // Function to get trainer status text
+  const getStatusText = (status: string) => {
+    switch(status) {
+      case "online":
+        return "Available";
+      case "in-session":
+        return "In Session";
+      default:
+        return "Offline";
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -23,26 +51,53 @@ export function MessagesTab({ messages }: MessagesTabProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {messages.map((message) => (
-            <div key={message.id} className={`border rounded-lg p-4 ${!message.read ? 'bg-primary/5 border-primary/20' : ''}`}>
-              <div className="flex justify-between items-start mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
-                    {message.from.charAt(0)}
+          {messages.map((message) => {
+            // Get trainer status based on the name
+            let trainerStatus = "offline";
+            if (message.trainerId) {
+              const trainerData = getTrainerById(message.trainerId);
+              trainerStatus = trainerData?.status || "offline";
+            } else {
+              // Fallback to match by name for demo purposes
+              if (message.from === "Sarah Johnson") {
+                trainerStatus = "in-session";
+              } else if (message.from === "Alex Thompson") {
+                trainerStatus = "online";
+              }
+            }
+            
+            return (
+              <div key={message.id} className={`border rounded-lg p-4 ${!message.read ? 'bg-primary/5 border-primary/20' : ''}`}>
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
+                      {message.from.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="font-medium">{message.from}</h3>
+                      <Badge 
+                        variant="secondary" 
+                        className={`flex items-center gap-1.5 px-2 py-0.5 mt-1 ${getStatusColor(trainerStatus)} text-white text-xs`}
+                      >
+                        <Circle className="h-2 w-2 fill-white text-white" />
+                        <span className="text-xs font-medium">{getStatusText(trainerStatus)}</span>
+                      </Badge>
+                    </div>
                   </div>
-                  <h3 className="font-medium">{message.from}</h3>
+                  <span className="text-xs text-muted-foreground">{message.time}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">{message.time}</span>
+                <p className="text-sm mb-3">{message.preview}</p>
+                <div className="flex space-x-2">
+                  <Button size="sm">
+                    {trainerStatus === "in-session" ? "Message AI Assistant" : "Reply"}
+                  </Button>
+                  {!message.read && (
+                    <Button variant="outline" size="sm">Mark as Read</Button>
+                  )}
+                </div>
               </div>
-              <p className="text-sm mb-3">{message.preview}</p>
-              <div className="flex space-x-2">
-                <Button size="sm">Reply</Button>
-                {!message.read && (
-                  <Button variant="outline" size="sm">Mark as Read</Button>
-                )}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </CardContent>
     </Card>
