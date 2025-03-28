@@ -1,9 +1,9 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, Globe, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -28,50 +28,79 @@ const MobileMenu = ({
 }: MobileMenuProps) => {
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
+  const [menuKey, setMenuKey] = useState(Date.now()); // Force remount when needed
   
+  // Handle the language change
   const handleLanguageChange = (lang: 'en' | 'it') => {
-    setLanguage(lang);
+    // Close mobile menu first
     setMobileMenuOpen(false);
     
-    // Navigate to the appropriate route
+    // Set the language
+    setLanguage(lang);
+    
+    // Navigate to appropriate route
     if (lang === 'en') {
       navigate('/');
     } else {
       navigate('/it');
     }
+    
+    // Force remount of the menu after navigation
+    setTimeout(() => {
+      setMenuKey(Date.now());
+    }, 100);
   };
 
+  // Manually handle opening the menu
   const handleOpenMenu = () => {
     setMobileMenuOpen(true);
   };
+  
+  // When the route changes, reset the menu
+  useEffect(() => {
+    // Force remount the menu when route changes
+    setMenuKey(Date.now());
+    // Close the menu
+    setMobileMenuOpen(false);
+  }, [navigate, setMobileMenuOpen]);
 
   return (
-    <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-      <SheetTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="relative z-50" 
-          onClick={handleOpenMenu}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="right" className="p-0 w-full max-w-xs">
+    <Sheet 
+      key={menuKey} 
+      open={mobileMenuOpen} 
+      onOpenChange={setMobileMenuOpen}
+    >
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="relative z-50" 
+        onClick={handleOpenMenu}
+        aria-label="Open menu"
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+      <SheetContent 
+        side="right" 
+        className="p-0 w-full max-w-xs"
+        aria-label="Mobile navigation menu"
+      >
+        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+        <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-5">
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-8 w-8" 
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span className="sr-only">Close</span>
-              <X className="h-4 w-4" />
-            </Button>
+            <SheetClose asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8" 
+                aria-label="Close menu"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </SheetClose>
           </div>
           
           <MobileNavLinks 
@@ -85,9 +114,7 @@ const MobileMenu = ({
             <div className="flex flex-col space-y-2">
               <span className="text-sm font-medium">{t('nav.selectLanguage') || 'Select language'}:</span>
               <DropdownMenu>
-                <DropdownMenuTrigger 
-                  asChild
-                >
+                <DropdownMenuTrigger asChild>
                   <Button 
                     variant="outline" 
                     className="w-full justify-between bg-background"
