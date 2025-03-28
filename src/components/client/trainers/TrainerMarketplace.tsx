@@ -10,6 +10,8 @@ interface TrainerMarketplaceProps {
 }
 
 export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketplaceProps) {
+  const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
+  
   const {
     searchQuery,
     setSearchQuery,
@@ -21,9 +23,7 @@ export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketpl
     selectedTrainer,
     handleBookSession,
     handleBookingSubmit
-  } = useTrainerMarketplace();
-  
-  const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
+  } = useTrainerMarketplace(followedTrainers);
   
   return (
     <div className="space-y-6">
@@ -35,14 +35,21 @@ export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketpl
         setLocation={setLocation}
       />
       
-      {/* Trainer cards */}
-      <TrainerList 
-        trainers={trainers} 
-        onBookSession={handleBookSession} 
-        followedTrainers={followedTrainers}
-        onFollowToggle={handleFollowToggle}
-        isMyTrainersView={isMyTrainersView}
-      />
+      {trainers.length === 0 ? (
+        <div className="text-center py-10 bg-background rounded-md border">
+          <p className="text-muted-foreground">No trainers match your search criteria or all trainers are already being followed.</p>
+          <p className="text-sm mt-2">Try adjusting your filters or check your followed trainers.</p>
+        </div>
+      ) : (
+        /* Trainer cards */
+        <TrainerList 
+          trainers={trainers} 
+          onBookSession={handleBookSession} 
+          followedTrainers={followedTrainers}
+          onFollowToggle={handleFollowToggle}
+          isMyTrainersView={isMyTrainersView}
+        />
+      )}
       
       {/* Session Booking Dialog */}
       <BookingDialog 
