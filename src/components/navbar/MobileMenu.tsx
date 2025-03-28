@@ -6,6 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
 import { useLanguage } from '@/context/LanguageContext';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface MobileMenuProps {
   mobileMenuOpen: boolean;
@@ -33,9 +40,8 @@ const MobileMenu = ({
     return () => document.removeEventListener('click', handleClickOutside);
   }, [mobileMenuOpen, setMobileMenuOpen]);
 
-  const handleLanguageChange = () => {
-    const newLanguage = language === 'en' ? 'it' : 'en';
-    setLanguage(newLanguage);
+  const handleLanguageChange = (value: string) => {
+    setLanguage(value as 'en' | 'it');
   };
 
   return (
@@ -71,17 +77,33 @@ const MobileMenu = ({
           />
           
           <div className="bg-accent/30 py-2 px-2 rounded-lg border border-border/40 mb-5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col space-y-2">
               <span className="text-sm font-medium">{t('nav.language')}:</span>
-              <Button 
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2 bg-background" 
-                onClick={handleLanguageChange}
+              <Select 
+                value={language}
+                onValueChange={handleLanguageChange}
               >
-                <Globe className="h-4 w-4" />
-                <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
-              </Button>
+                <SelectTrigger className="w-full bg-background">
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    <SelectValue>
+                      {language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}
+                    </SelectValue>
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en" className="flex items-center gap-2">
+                    <span className="flex items-center gap-2">
+                      <span className="text-base">🇬🇧</span> English
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="it" className="flex items-center gap-2">
+                    <span className="flex items-center gap-2">
+                      <span className="text-base">🇮🇹</span> Italiano
+                    </span>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
