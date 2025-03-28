@@ -5,7 +5,7 @@ export const en = {
   'nav.features': 'Features',
   'nav.howItWorks': 'How it works',
   'nav.pricing': 'Pricing',
-  'auth.login': 'Demo Login',
+  'auth.login': 'Login',
   'auth.register': 'Try the Demo',
   
   // Hero
