@@ -20,41 +20,44 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
         </div>
         <Button className="flex items-center" onClick={onNewSession}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          New Session
+          <span className="hidden sm:inline">New Session</span>
+          <span className="sm:hidden">New</span>
         </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {sessions.map((session) => (
-            <div key={session.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div>
-                <h3 className="font-medium">{session.name}</h3>
-                <div className="text-sm text-muted-foreground">
-                  {session.date} • {session.time}
-                </div>
-                <div className="flex mt-2 gap-2">
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    {session.paymentStatus?.paid || 0} paid
-                  </Badge>
-                  {(session.paymentStatus?.pending || 0) > 0 && (
-                    <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                      {session.paymentStatus?.pending || 0} pending
+            <div key={session.id} className="flex flex-col p-4 bg-gray-50 rounded-lg">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h3 className="font-medium">{session.name}</h3>
+                  <div className="text-sm text-muted-foreground">
+                    {session.date} • {session.time}
+                  </div>
+                  <div className="flex flex-wrap mt-2 gap-2">
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      {session.paymentStatus?.paid || 0} paid
                     </Badge>
-                  )}
-                  {(session.waitingList || 0) > 0 && (
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                      {session.waitingList || 0} waiting
-                    </Badge>
-                  )}
+                    {(session.paymentStatus?.pending || 0) > 0 && (
+                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                        {session.paymentStatus?.pending || 0} pending
+                      </Badge>
+                    )}
+                    {(session.waitingList || 0) > 0 && (
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                        {session.waitingList || 0} waiting
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center">
-                <div className="mr-4 text-sm">
-                  <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
+                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3">
+                  <div className="text-sm">
+                    <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
+                  </div>
+                  <Button variant="outline" size="sm">
+                    Details
+                  </Button>
                 </div>
-                <Button variant="outline" size="sm">
-                  Details
-                </Button>
               </div>
             </div>
           ))}
