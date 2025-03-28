@@ -2,7 +2,6 @@
 import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import NavItem from './NavItem';
-import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface MobileNavLinksProps {
@@ -64,10 +63,6 @@ const MobileNavLinks = ({ isHomePage, scrollToSection, setMobileMenuOpen }: Mobi
           onClick={closeMobileMenu}
           className="justify-center"
         />
-        
-        <div className="pt-2">
-          <LanguageToggle className="justify-center" />
-        </div>
       </div>
       
       <div className="pt-6 w-full flex flex-col space-y-4">
