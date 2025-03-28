@@ -45,34 +45,36 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
   };
 
   return (
-    <Card>
+    <Card className="mx-auto max-w-6xl">
       <CardHeader>
         <CardTitle>Account Settings</CardTitle>
         <CardDescription>Manage your profile and preferences</CardDescription>
       </CardHeader>
-      <CardContent className="overflow-hidden p-0 sm:p-6">
+      <CardContent className="p-0 sm:p-6">
         <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="mb-6 grid grid-cols-2 sm:grid-cols-4 w-full">
-            <TabsTrigger value="profile" className="text-xs sm:text-sm">Profile</TabsTrigger>
-            <TabsTrigger value="availability" className="text-xs sm:text-sm">Availability</TabsTrigger>
-            <TabsTrigger value="membership" className="text-xs sm:text-sm">Membership</TabsTrigger>
-            <TabsTrigger value="billing" className="text-xs sm:text-sm">Billing</TabsTrigger>
-          </TabsList>
+          <div className="px-4 sm:px-0 mb-6">
+            <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full gap-1">
+              <TabsTrigger value="profile" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Profile</TabsTrigger>
+              <TabsTrigger value="availability" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Availability</TabsTrigger>
+              <TabsTrigger value="membership" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Membership</TabsTrigger>
+              <TabsTrigger value="billing" className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-1.5">Billing</TabsTrigger>
+            </TabsList>
+          </div>
           
-          <div className="px-4 sm:px-0 overflow-x-hidden">
-            <TabsContent value="profile">
+          <div className="px-4 sm:px-0 pb-6">
+            <TabsContent value="profile" className="mt-0">
               <ProfileSection user={updatedUser} />
             </TabsContent>
             
-            <TabsContent value="availability">
+            <TabsContent value="availability" className="mt-0">
               <AvailabilitySection />
             </TabsContent>
             
-            <TabsContent value="membership">
+            <TabsContent value="membership" className="mt-0">
               <MembershipSection user={updatedUser} />
             </TabsContent>
             
-            <TabsContent value="billing">
+            <TabsContent value="billing" className="mt-0">
               <BillingSection user={updatedUser} />
             </TabsContent>
           </div>
