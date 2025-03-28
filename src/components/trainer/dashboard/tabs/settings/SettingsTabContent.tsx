@@ -50,16 +50,16 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
         <CardTitle>Account Settings</CardTitle>
         <CardDescription>Manage your profile and preferences</CardDescription>
       </CardHeader>
-      <CardContent className="overflow-hidden">
+      <CardContent className="overflow-hidden p-0 sm:p-6">
         <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="mb-6 w-full flex flex-wrap overflow-x-auto">
-            <TabsTrigger value="profile" className="flex-1 min-w-0 text-sm px-2 md:px-4">Profile</TabsTrigger>
-            <TabsTrigger value="availability" className="flex-1 min-w-0 text-sm px-2 md:px-4">Availability</TabsTrigger>
-            <TabsTrigger value="membership" className="flex-1 min-w-0 text-sm px-2 md:px-4">Membership</TabsTrigger>
-            <TabsTrigger value="billing" className="flex-1 min-w-0 text-sm px-2 md:px-4">Billing</TabsTrigger>
+          <TabsList className="mb-6 grid grid-cols-2 sm:grid-cols-4 w-full">
+            <TabsTrigger value="profile" className="text-xs sm:text-sm">Profile</TabsTrigger>
+            <TabsTrigger value="availability" className="text-xs sm:text-sm">Availability</TabsTrigger>
+            <TabsTrigger value="membership" className="text-xs sm:text-sm">Membership</TabsTrigger>
+            <TabsTrigger value="billing" className="text-xs sm:text-sm">Billing</TabsTrigger>
           </TabsList>
           
-          <div className="overflow-x-hidden">
+          <div className="px-4 sm:px-0 overflow-x-hidden">
             <TabsContent value="profile">
               <ProfileSection user={updatedUser} />
             </TabsContent>

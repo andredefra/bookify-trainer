@@ -31,7 +31,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
   };
 
   return (
-    <div className="space-y-6 max-w-full overflow-hidden">
+    <div className="space-y-6 max-w-full">
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Current Membership</h3>
         <p className="text-sm text-muted-foreground">Manage your membership plan and account status.</p>

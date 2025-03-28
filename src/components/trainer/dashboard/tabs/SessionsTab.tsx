@@ -70,17 +70,17 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
           <CalendarView sessions={sessionsWithPaymentInfo} />
         ) : (
           <Tabs defaultValue="upcoming">
-            <TabsList className="mb-6 w-full overflow-x-auto flex">
-              <TabsTrigger value="upcoming" className="flex-1 min-w-0 px-2 sm:px-4">Upcoming</TabsTrigger>
-              <TabsTrigger value="past" className="flex-1 min-w-0 px-2 sm:px-4">Past</TabsTrigger>
-              <TabsTrigger value="recurring" className="flex-1 min-w-0 px-2 sm:px-4">Recurring</TabsTrigger>
+            <TabsList className="mb-6 grid grid-cols-3 w-full">
+              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+              <TabsTrigger value="past">Past</TabsTrigger>
+              <TabsTrigger value="recurring">Recurring</TabsTrigger>
             </TabsList>
             <TabsContent value="upcoming">
               <div className="space-y-4">
                 {sessionsWithPaymentInfo.map((session) => (
-                  <div key={session.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <h3 className="font-medium break-words">{session.name}</h3>
+                  <div key={session.id} className="flex flex-col p-3 bg-gray-50 rounded-lg">
+                    <div className="space-y-2">
+                      <h3 className="font-medium line-clamp-1">{session.name}</h3>
                       <div className="text-sm text-muted-foreground">
                         {session.date} • {session.time}
                       </div>
@@ -100,17 +100,19 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center mt-3 sm:mt-0 space-x-2">
+                    <div className="flex items-center justify-between mt-3">
                       <div className="text-sm">
                         <span className="font-medium">{session.participants}/{session.maxParticipants}</span>
                       </div>
-                      <Button variant="outline" size="sm" className="h-8 px-3">
-                        Edit
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-8 px-3">
-                        <span className="hidden sm:inline">Cancel</span>
-                        <span className="sm:hidden">X</span>
-                      </Button>
+                      <div className="flex space-x-2">
+                        <Button variant="outline" size="sm" className="h-8 px-3">
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-8 px-3">
+                          <span className="hidden sm:inline">Cancel</span>
+                          <span className="sm:hidden">X</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}

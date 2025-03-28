@@ -24,13 +24,13 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
           <span className="sm:hidden">New</span>
         </Button>
       </CardHeader>
-      <CardContent className="overflow-x-hidden">
+      <CardContent>
         <div className="space-y-4">
           {sessions.map((session) => (
             <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
               <div className="flex flex-col gap-3">
-                <div>
-                  <h3 className="font-medium text-base break-words">{session.name}</h3>
+                <div className="space-y-2">
+                  <h3 className="font-medium text-base line-clamp-1">{session.name}</h3>
                   <div className="text-sm text-muted-foreground">
                     {session.date} • {session.time}
                   </div>
