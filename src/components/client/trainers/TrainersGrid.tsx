@@ -13,9 +13,11 @@ interface Trainer {
 interface TrainersGridProps {
   trainers: Trainer[];
   onPayClick: (trainer: string, amount: number) => void;
+  followedTrainers: number[];
+  onFollowToggle: (id: number, name: string) => void;
 }
 
-export function TrainersGrid({ trainers, onPayClick }: TrainersGridProps) {
+export function TrainersGrid({ trainers, onPayClick, followedTrainers, onFollowToggle }: TrainersGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {trainers.map((trainer) => (
@@ -28,6 +30,8 @@ export function TrainersGrid({ trainers, onPayClick }: TrainersGridProps) {
           reviews={trainer.reviews}
           image={trainer.image}
           onPayClick={onPayClick}
+          isFollowing={followedTrainers.includes(trainer.id)}
+          onFollowToggle={onFollowToggle}
         />
       ))}
     </div>

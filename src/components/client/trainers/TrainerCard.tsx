@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom";
-import { Star, DollarSign } from "lucide-react";
+import { Star, DollarSign, UserPlus, UserMinus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface TrainerCardProps {
@@ -11,6 +11,8 @@ interface TrainerCardProps {
   reviews: number;
   image: string;
   onPayClick: (trainer: string, amount: number) => void;
+  isFollowing: boolean;
+  onFollowToggle: (id: number, name: string) => void;
 }
 
 export function TrainerCard({ 
@@ -20,7 +22,9 @@ export function TrainerCard({
   rating, 
   reviews, 
   image, 
-  onPayClick 
+  onPayClick,
+  isFollowing,
+  onFollowToggle
 }: TrainerCardProps) {
   const navigate = useNavigate();
 
@@ -41,8 +45,25 @@ export function TrainerCard({
           <span className="ml-1 text-sm font-medium">{rating}</span>
           <span className="ml-1 text-xs text-muted-foreground">({reviews} reviews)</span>
         </div>
-        <div className="mt-4 flex space-x-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           <Button size="sm" onClick={() => navigate(`/trainer/${id}`)}>View Profile</Button>
+          <Button 
+            variant={isFollowing ? "secondary" : "outline"} 
+            size="sm"
+            onClick={() => onFollowToggle(id, name)}
+          >
+            {isFollowing ? (
+              <>
+                <UserMinus className="h-3.5 w-3.5 mr-1" />
+                Unfollow
+              </>
+            ) : (
+              <>
+                <UserPlus className="h-3.5 w-3.5 mr-1" />
+                Follow
+              </>
+            )}
+          </Button>
           <Button variant="outline" size="sm">Message</Button>
           <Button 
             variant="secondary" 
