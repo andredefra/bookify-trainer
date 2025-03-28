@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ClientProfile } from "@/components/ClientProfile";
 import { ClientHeader } from "@/components/client/ClientHeader";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
@@ -16,9 +17,11 @@ import { SessionItem, SessionStatus } from "@/types/sessions";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState<{name?: string, email: string, type: string, plan?: string} | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
+  const [activeSettingsSection, setActiveSettingsSection] = useState<string | undefined>(undefined);
   
   const upcomingSessions: SessionItem[] = [
     { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" as SessionStatus, price: 45 },
@@ -47,6 +50,18 @@ const ClientDashboard = () => {
       navigate('/login');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    // Check for active tab in location state
+    if (location.state) {
+      if (location.state.activeTab) {
+        setActiveTab(location.state.activeTab);
+      }
+      if (location.state.settingsSection) {
+        setActiveSettingsSection(location.state.settingsSection);
+      }
+    }
+  }, [location.state]);
 
   const handleLogout = () => {
     localStorage.removeItem('demo-user');
@@ -112,11 +127,9 @@ const ClientDashboard = () => {
               </TabsContent>
 
               <TabsContent value="settings" className="mt-0">
-                <SettingsTab user={user} goals={goals} />
+                <SettingsTab user={user} goals={goals} activeSection={activeSettingsSection} />
               </TabsContent>
             </Tabs>
-            
-            {/* Client Profile section moved to the sidebar */}
           </div>
         </main>
       </div>

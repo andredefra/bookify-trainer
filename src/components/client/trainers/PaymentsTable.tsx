@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Payment {
   id: number;
@@ -23,6 +24,13 @@ interface PaymentsTableProps {
 }
 
 export function PaymentsTable({ payments }: PaymentsTableProps) {
+  const navigate = useNavigate();
+
+  const handleNavigateToPaymentSettings = () => {
+    // Navigate to client dashboard settings tab with payments section active
+    navigate('/client-dashboard', { state: { activeTab: 'settings', settingsSection: 'payments' } });
+  };
+
   return (
     <div className="space-y-6">
       <div className="rounded-md border">
@@ -53,7 +61,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
       </div>
       
       <div className="flex justify-end">
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleNavigateToPaymentSettings}>
           <CreditCard className="mr-2 h-4 w-4" />
           Manage Payment Methods
         </Button>

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -17,10 +17,17 @@ interface SettingsTabContentProps {
     plan?: string; 
   };
   goals: string[];
+  activeSection?: string;
 }
 
-export function SettingsTabContent({ user, goals }: SettingsTabContentProps) {
+export function SettingsTabContent({ user, goals, activeSection }: SettingsTabContentProps) {
   const [activeTab, setActiveTab] = useState("account");
+
+  useEffect(() => {
+    if (activeSection) {
+      setActiveTab(activeSection);
+    }
+  }, [activeSection]);
 
   return (
     <Card>
