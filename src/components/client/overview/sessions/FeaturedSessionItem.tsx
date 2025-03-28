@@ -11,7 +11,7 @@ interface FeaturedSessionItemProps {
 export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
   const featuredSession: SessionItem = {
     id: 999,
-    name: "HIIT Workout (Featured)",
+    name: "HIIT Workout",
     trainer: "Sarah Johnson",
     time: "10:00 - 11:00",
     date: "Tomorrow",
