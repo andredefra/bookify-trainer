@@ -1,5 +1,5 @@
 
-import { Globe, Flag } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -58,8 +58,30 @@ const MobileLanguageSelector = ({ onLanguageChange }: MobileLanguageSelectorProp
               className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
               onClick={() => handleLanguageChange('en')}
             >
-              <div className="w-5 h-4 flex items-center justify-center relative overflow-hidden rounded-sm">
-                <Flag className="h-4 w-4 text-blue-800" />
+              <div className="w-5 h-4 flex items-center justify-center relative overflow-hidden rounded-sm border-[0.5px] border-gray-300">
+                <div className="absolute inset-0 bg-blue-700">
+                  <div className="absolute inset-0">
+                    {/* UK flag - Union Jack */}
+                    <div className="absolute inset-0 bg-blue-700"></div>
+                    <div className="absolute inset-0">
+                      {/* White diagonal crosses */}
+                      <div className="absolute h-[2px] w-[200%] bg-white top-0 left-[-50%] origin-center rotate-45 transform translate-y-[8px]"></div>
+                      <div className="absolute h-[2px] w-[200%] bg-white top-0 left-[-50%] origin-center -rotate-45 transform translate-y-[8px]"></div>
+                      
+                      {/* Red diagonal crosses */}
+                      <div className="absolute h-[1px] w-[200%] bg-red-600 top-0 left-[-50%] origin-center rotate-45 transform translate-y-[8px]"></div>
+                      <div className="absolute h-[1px] w-[200%] bg-red-600 top-0 left-[-50%] origin-center -rotate-45 transform translate-y-[8px]"></div>
+                      
+                      {/* White cross */}
+                      <div className="absolute h-[40%] w-[8%] bg-white left-[46%] top-0"></div>
+                      <div className="absolute h-[8%] w-[40%] bg-white left-[30%] top-[46%]"></div>
+                      
+                      {/* Red cross */}
+                      <div className="absolute h-[20%] w-[5%] bg-red-600 left-[47.5%] top-0"></div>
+                      <div className="absolute h-[5%] w-[20%] bg-red-600 left-[40%] top-[47.5%]"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <span className="text-sm">UK</span>
             </DropdownMenuItem>
