@@ -56,6 +56,21 @@
   font-weight: normal !important;
 }
 
+/* Additional fixes for bold text in dropdowns */
+[data-radix-popper-content] * {
+  font-weight: normal !important;
+}
+
+.SelectContent,
+.SelectItem,
+.SelectTrigger,
+[data-state="open"] .SelectTrigger,
+[data-state="closed"] .SelectTrigger,
+[data-radix-select-trigger],
+[data-radix-select-viewport] * {
+  font-weight: normal !important;
+}
+
 /* Mobile optimizations */
 @media (max-width: 640px) {
   .truncate-mobile {

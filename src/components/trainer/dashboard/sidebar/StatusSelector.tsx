@@ -45,7 +45,7 @@ export function StatusSelector({ className, defaultStatus = "online" }: StatusSe
 
   return (
     <Select value={status} onValueChange={(value) => handleStatusChange(value as "online" | "in-session" | "offline")}>
-      <SelectTrigger className={cn("w-full h-9", className)}>
+      <SelectTrigger className={cn("w-full h-9 font-normal", className)}>
         <div className="flex items-center space-x-2">
           <Circle className={cn("h-3 w-3 fill-current", {
             "text-emerald-500": status === "online",
@@ -58,20 +58,20 @@ export function StatusSelector({ className, defaultStatus = "online" }: StatusSe
           </span>
         </div>
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="online">
+      <SelectContent className="font-normal">
+        <SelectItem value="online" className="font-normal">
           <div className="flex items-center">
             <Circle className="h-3 w-3 mr-2 text-emerald-500 fill-emerald-500" />
             <span>Available</span>
           </div>
         </SelectItem>
-        <SelectItem value="in-session">
+        <SelectItem value="in-session" className="font-normal">
           <div className="flex items-center">
             <Circle className="h-3 w-3 mr-2 text-amber-500 fill-amber-500" />
             <span>In Session</span>
           </div>
         </SelectItem>
-        <SelectItem value="offline">
+        <SelectItem value="offline" className="font-normal">
           <div className="flex items-center">
             <Circle className="h-3 w-3 mr-2 text-slate-500 fill-slate-500" />
             <span>Offline</span>
