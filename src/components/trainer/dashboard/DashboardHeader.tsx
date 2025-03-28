@@ -2,8 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, Circle } from "lucide-react";
 import { StatusSelector } from "./header/StatusSelector";
+import { useState, useEffect } from "react";
 
 interface DashboardHeaderProps {
   name: string;
@@ -20,6 +21,29 @@ export function DashboardHeader({
 }: DashboardHeaderProps) {
   // Default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+  
+  // State to track current status
+  const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
+
+  // Load status from localStorage on component mount
+  useEffect(() => {
+    const savedStatus = localStorage.getItem('trainer-status');
+    if (savedStatus && ["online", "in-session", "offline"].includes(savedStatus)) {
+      setStatus(savedStatus as "online" | "in-session" | "offline");
+    }
+  }, []);
+
+  // Get status color for the indicator
+  const getStatusColor = () => {
+    switch(status) {
+      case "online":
+        return "text-emerald-500 fill-emerald-500";
+      case "in-session":
+        return "text-amber-500 fill-amber-500";
+      case "offline":
+        return "text-slate-500 fill-slate-500";
+    }
+  };
 
   return (
     <header className="bg-white border-b border-border shadow-sm">
@@ -41,7 +65,7 @@ export function DashboardHeader({
           <div className="flex items-center space-x-4">
             {/* Status Selector */}
             <div className="hidden md:block">
-              <StatusSelector />
+              <StatusSelector initialStatus={status} />
             </div>
             
             <Button variant="ghost" size="icon" className="text-muted-foreground">
@@ -55,12 +79,16 @@ export function DashboardHeader({
             </div>
             
             <div className="flex items-center space-x-3">
-              <Avatar className="h-8 w-8 border border-primary/10">
-                <AvatarImage src={defaultImage} alt={name} />
-                <AvatarFallback className="bg-primary/10 text-primary">
-                  {name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative">
+                <Avatar className="h-8 w-8 border border-primary/10">
+                  <AvatarImage src={defaultImage} alt={name} />
+                  <AvatarFallback className="bg-primary/10 text-primary">
+                    {name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                {/* Status indicator circle */}
+                <Circle className={`absolute -bottom-1 -right-1 h-3 w-3 ${getStatusColor()} border-2 border-white rounded-full`} />
+              </div>
               <div className="hidden md:block">
                 <p className="text-sm font-medium leading-none">{name}</p>
                 <p className="text-xs text-muted-foreground">Pro Account</p>

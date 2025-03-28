@@ -24,6 +24,13 @@ export function StatusSelector({ initialStatus = "online" }: StatusSelectorProps
     }
   }, []);
 
+  useEffect(() => {
+    // Sync with any external status changes
+    if (initialStatus !== status) {
+      setStatus(initialStatus);
+    }
+  }, [initialStatus]);
+
   const handleStatusChange = (newStatus: "online" | "in-session" | "offline") => {
     setStatus(newStatus);
     localStorage.setItem('trainer-status', newStatus);
@@ -35,6 +42,9 @@ export function StatusSelector({ initialStatus = "online" }: StatusSelectorProps
     };
     
     toast.success(statusMessages[newStatus]);
+    
+    // Dispatch a custom event for components to listen to status changes
+    window.dispatchEvent(new CustomEvent('trainer-status-change', { detail: newStatus }));
   };
 
   return (
