@@ -51,6 +51,16 @@ const MobileMenu = ({
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
+            {/* Custom close button that replaces the default one */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span className="sr-only">Close</span>
+              <Menu className="h-4 w-4 rotate-45" />
+            </Button>
           </div>
           
           <MobileNavLinks 
