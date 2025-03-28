@@ -1,7 +1,7 @@
 
 import { useLanguage } from '@/context/LanguageContext';
 import { Globe } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +19,10 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
 
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
+    // Navigate to the appropriate route
     if (lang === 'en') {
       navigate('/');
-    } else if (lang === 'it') {
+    } else {
       navigate('/it');
     }
   };

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
-import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface MobileMenuProps {
@@ -59,10 +58,6 @@ const MobileMenu = ({
               scrollToSection={scrollToSection} 
               setMobileMenuOpen={setMobileMenuOpen} 
             />
-          </div>
-          
-          <div className="mt-3 mb-8 flex justify-between items-center">
-            <LanguageToggle className="self-start" />
           </div>
           
           <div className="mt-auto flex flex-col gap-3">
