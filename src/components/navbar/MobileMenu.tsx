@@ -58,8 +58,9 @@ const MobileMenu = ({
             />
           </div>
           
-          {/* Language toggle clearly positioned between navigation and auth buttons */}
-          <div className="my-6 w-full">
+          {/* Language toggle with clear styling to make it visible */}
+          <div className="my-6 border-y border-border py-6">
+            <h3 className="text-sm font-medium mb-3 text-foreground">Language</h3>
             <LanguageToggle className="w-full" />
           </div>
           
