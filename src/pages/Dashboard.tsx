@@ -9,7 +9,7 @@ const Dashboard = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>Trainer Dashboard</title>
       </Helmet>
-      <div className="overflow-hidden">
+      <div className="min-h-screen bg-gray-50">
         <DashboardContainer customName="Trainer" />
       </div>
     </>

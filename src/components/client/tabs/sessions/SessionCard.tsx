@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, CalendarCheck, CreditCard } from "lucide-react";
 import { SessionItem, SessionStatus } from "@/types/sessions";
+
 interface SessionCardProps {
   session: SessionItem;
   onViewDetails?: (session: SessionItem) => void;
@@ -11,6 +12,7 @@ interface SessionCardProps {
   onCancel?: (session: SessionItem) => void;
   variant?: 'default' | 'featured';
 }
+
 export function SessionCard({
   session,
   onViewDetails,
@@ -19,41 +21,64 @@ export function SessionCard({
   onCancel,
   variant = 'default'
 }: SessionCardProps) {
-  const bgColor = variant === 'featured' ? 'bg-gray-50 border border-gray-100' : 'bg-gray-50';
-  return <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
-      <div>
-        <h3 className="font-medium">{session.name}</h3>
-        <div className="text-sm text-muted-foreground">
+  const bgColor = variant === 'featured' ? 'bg-white border shadow-sm' : 'bg-white border shadow-sm';
+  
+  return (
+    <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 ${bgColor} rounded-lg`}>
+      <div className="mb-2 sm:mb-0">
+        <h3 className="font-medium text-sm sm:text-base">{session.name}</h3>
+        <div className="text-xs sm:text-sm text-muted-foreground">
           With {session.trainer} • {session.date} • {session.time}
         </div>
-        {session.price && <div className="text-sm font-medium mt-1">
+        {session.price && (
+          <div className="text-xs sm:text-sm font-medium mt-1">
             €{session.price}
-          </div>}
-        {session.attendees !== undefined && session.maxAttendees && <div className="flex items-center mt-1 text-sm text-muted-foreground">
-            <Users className="h-3.5 w-3.5 mr-1" />
+          </div>
+        )}
+        {session.attendees !== undefined && session.maxAttendees && (
+          <div className="flex items-center mt-1 text-xs text-muted-foreground">
+            <Users className="h-3 w-3 mr-1" />
             <span>{session.attendees}/{session.maxAttendees} attending</span>
-          </div>}
+          </div>
+        )}
       </div>
-      <div className="flex items-center space-x-2">
-        {session.status === 'registered' || session.status === 'confirmed' ? <>
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+      
+      <div className="flex flex-wrap gap-2">
+        {session.status === 'registered' || session.status === 'confirmed' ? (
+          <>
+            <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
               Registered
             </Badge>
-            {onAddToCalendar && <Button variant="outline" size="sm" className="flex items-center" onClick={() => onAddToCalendar(session)}>
-                <CalendarCheck className="h-3.5 w-3.5 mr-1" />
-                Add to Calendar
-              </Button>}
-            {onCancel && <Button variant="ghost" size="sm" onClick={() => onCancel(session)}>
+            {onAddToCalendar && (
+              <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => onAddToCalendar(session)}>
+                <CalendarCheck className="h-3 w-3 mr-1" />
+                <span className="hidden sm:inline">Add to Calendar</span>
+                <span className="sm:hidden">Calendar</span>
+              </Button>
+            )}
+            {onCancel && (
+              <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => onCancel(session)}>
                 Cancel
-              </Button>}
-          </> : <>
-            {onViewDetails && <Button variant="outline" size="sm" onClick={() => onViewDetails(session)}>
-                Register to this session
-              </Button>}
-            {onRegister && variant === 'featured' && <Button variant="default" size="sm" onClick={() => onRegister(session)}>
-                Register Now
-              </Button>}
-          </>}
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            {onViewDetails && (
+              <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => onViewDetails(session)}>
+                <span className="hidden sm:inline">Register to this session</span>
+                <span className="sm:hidden">Register</span>
+              </Button>
+            )}
+            {onRegister && variant === 'featured' && (
+              <Button variant="default" size="sm" className="h-7 text-xs" onClick={() => onRegister(session)}>
+                <span className="hidden sm:inline">Register Now</span>
+                <span className="sm:hidden">Register</span>
+              </Button>
+            )}
+          </>
+        )}
       </div>
-    </div>;
+    </div>
+  );
 }
