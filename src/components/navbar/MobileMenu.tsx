@@ -1,58 +1,85 @@
 
-import { Menu, X } from 'lucide-react';
 import { useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
+import LanguageToggle from './LanguageToggle';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MobileMenuProps {
   mobileMenuOpen: boolean;
-  setMobileMenuOpen: (isOpen: boolean) => void;
+  setMobileMenuOpen: (open: boolean) => void;
   isHomePage: boolean;
-  scrollToSection: (sectionId: string) => void;
+  scrollToSection: (section: string) => void;
 }
 
-const MobileMenu = ({ 
-  mobileMenuOpen, 
-  setMobileMenuOpen, 
+const MobileMenu = ({
+  mobileMenuOpen,
+  setMobileMenuOpen,
   isHomePage,
-  scrollToSection 
+  scrollToSection,
 }: MobileMenuProps) => {
+  const { t } = useLanguage();
   
-  // Add effect to prevent scrolling when menu is open
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    if (mobileMenuOpen) {
-      // Disable scrolling on body
-      document.body.style.overflow = 'hidden';
-    } else {
-      // Re-enable scrolling when menu closes
-      document.body.style.overflow = 'auto';
-    }
-    
-    // Cleanup function to ensure scroll is re-enabled when component unmounts
-    return () => {
-      document.body.style.overflow = 'auto';
+    const handleClickOutside = () => {
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
     };
-  }, [mobileMenuOpen]);
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [mobileMenuOpen, setMobileMenuOpen]);
 
   return (
-    <>
-      <button 
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="p-2 text-primary rounded-full"
-        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-      >
-        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-      
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[60px] z-50 bg-white shadow-lg">
-          <MobileNavLinks
-            isHomePage={isHomePage}
-            scrollToSection={scrollToSection}
-            setMobileMenuOpen={setMobileMenuOpen}
-          />
+    <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+      <SheetTrigger asChild onClick={(e) => e.stopPropagation()}>
+        <Button variant="ghost" size="icon" className="relative">
+          {!mobileMenuOpen ? <Menu className="h-5 w-5" /> : <X className="h-5 w-5" />}
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="p-0 w-full max-w-xs">
+        <div className="p-6 flex flex-col h-full">
+          <div className="flex items-center justify-between mb-8">
+            <Link to="/" className="font-display text-xl font-bold text-primary">
+              Personal.ai
+            </Link>
+            <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          <div className="mb-6">
+            <MobileNavLinks 
+              isHomePage={isHomePage} 
+              scrollToSection={scrollToSection} 
+              setMobileMenuOpen={setMobileMenuOpen} 
+            />
+          </div>
+          
+          <div className="mt-3 mb-8 flex justify-between items-center">
+            <LanguageToggle className="self-start" />
+          </div>
+          
+          <div className="mt-auto flex flex-col gap-3">
+            <Link to="/login" className="w-full">
+              <Button variant="outline" className="w-full" size="lg">
+                {t('auth.login')}
+              </Button>
+            </Link>
+            <Link to="/register" className="w-full">
+              <Button className="w-full" size="lg">
+                {t('auth.register')}
+              </Button>
+            </Link>
+          </div>
         </div>
-      )}
-    </>
+      </SheetContent>
+    </Sheet>
   );
 };
 

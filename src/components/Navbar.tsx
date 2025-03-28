@@ -6,6 +6,7 @@ import BrandLogo from './navbar/BrandLogo';
 import NavLinks from './navbar/NavLinks';
 import AuthButtons from './navbar/AuthButtons';
 import MobileMenu from './navbar/MobileMenu';
+import LanguageToggle from './navbar/LanguageToggle';
 import { useScrollHandler } from './navbar/useScrollHandler';
 import { useSectionScroll } from './navbar/useSectionScroll';
 
@@ -16,7 +17,7 @@ const Navbar = () => {
   const scrolled = useScrollHandler();
   
   // Check if we're on the home page
-  const isHomePage = location.pathname === '/';
+  const isHomePage = location.pathname === '/' || location.pathname === '/it';
   
   // Get scroll to section function
   const scrollToSection = useSectionScroll(isHomePage, setMobileMenuOpen);
@@ -36,7 +37,10 @@ const Navbar = () => {
           </div>
         ) : null}
         
-        {!isMobile && <AuthButtons />}
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
+          {!isMobile && <AuthButtons />}
+        </div>
         
         {isMobile && (
           <div className="ml-auto">

@@ -1,7 +1,7 @@
 
 import { useLanguage } from '@/context/LanguageContext';
 import { Globe } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,35 +15,40 @@ interface LanguageToggleProps {
 
 const LanguageToggle = ({ className }: LanguageToggleProps) => {
   const { language, setLanguage } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleLanguageChange = (lang: 'en' | 'it') => {
+    setLanguage(lang);
+    if (lang === 'en') {
+      navigate('/');
+    } else if (lang === 'it') {
+      navigate('/it');
+    }
+  };
 
   return (
     <div className={`flex items-center ${className || ''}`}>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none">
-          <Globe className="h-4 w-4" />
-          <span className="text-sm font-medium hidden md:inline">
-            {language === 'en' ? '🇬🇧 EN' : '🇮🇹 IT'}
-          </span>
-          <span className="text-sm font-medium md:hidden">
+        <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent/50 transition-colors duration-200 focus:outline-none border border-border/40 shadow-sm">
+          <Globe className="h-4 w-4 mr-0.5 text-primary" />
+          <span className="text-sm font-medium">
             {language === 'en' ? '🇬🇧' : '🇮🇹'}
           </span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
+        <DropdownMenuContent align="end" className="w-36">
           <DropdownMenuItem 
-            className="flex items-center gap-2 cursor-pointer"
+            className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
+            onClick={() => handleLanguageChange('en')}
           >
-            <Link to="/" className="flex items-center gap-2 w-full" onClick={() => setLanguage('en')}>
-              <span className="text-sm">🇬🇧</span>
-              <span className="text-sm">English</span>
-            </Link>
+            <span className="text-base mr-1">🇬🇧</span>
+            <span className="text-sm">English</span>
           </DropdownMenuItem>
           <DropdownMenuItem 
-            className="flex items-center gap-2 cursor-pointer"
+            className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
+            onClick={() => handleLanguageChange('it')}
           >
-            <Link to="/it" className="flex items-center gap-2 w-full" onClick={() => setLanguage('it')}>
-              <span className="text-sm">🇮🇹</span>
-              <span className="text-sm">Italiano</span>
-            </Link>
+            <span className="text-base mr-1">🇮🇹</span>
+            <span className="text-sm">Italiano</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
