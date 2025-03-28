@@ -53,17 +53,6 @@ const MobileMenu = ({
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
-            
-            {/* Language toggle button directly in the header */}
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="flex items-center gap-2 px-3" 
-              onClick={handleLanguageChange}
-            >
-              <Globe className="h-4 w-4" />
-              <span>{language === 'en' ? '🇬🇧' : '🇮🇹'}</span>
-            </Button>
           </div>
           
           <div className="mb-6">
@@ -72,6 +61,19 @@ const MobileMenu = ({
               scrollToSection={scrollToSection} 
               setMobileMenuOpen={setMobileMenuOpen} 
             />
+          </div>
+          
+          {/* Language toggle centered between nav links and auth buttons */}
+          <div className="mb-6 flex justify-center">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center gap-2 px-4 py-2" 
+              onClick={handleLanguageChange}
+            >
+              <Globe className="h-4 w-4" />
+              <span>{language === 'en' ? '🇬🇧 English' : '🇮🇹 Italiano'}</span>
+            </Button>
           </div>
           
           <div className="flex flex-col space-y-3 mt-auto">
