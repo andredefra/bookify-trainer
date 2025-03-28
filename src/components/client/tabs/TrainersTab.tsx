@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
 import { TrainerMarketplace } from "@/components/client/trainers/TrainerMarketplace";
 import { TrainersGrid } from "@/components/client/trainers/TrainersGrid";
@@ -64,7 +64,11 @@ export function TrainersTab() {
 
   const handlePaymentComplete = () => {
     if (selectedTrainer) {
-      toast.success(`Payment to ${selectedTrainer.name} completed successfully`);
+      toast({
+        title: "Payment Complete",
+        description: `Payment to ${selectedTrainer.name} completed successfully`,
+        variant: "default",
+      });
     }
     setShowPaymentDialog(false);
   };

@@ -4,14 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Info, CreditCard, Wallet } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 
 export function PaymentsSection() {
   const [paymentMethod, setPaymentMethod] = useState<string>("none");
 
   const handleSavePaymentMethod = (method: string) => {
     setPaymentMethod(method);
-    toast.success(`${method} set as your default payment method`);
+    toast({
+      title: `Payment Method Updated`,
+      description: `${method} set as your default payment method`,
+      variant: "default",
+    });
   };
 
   return (

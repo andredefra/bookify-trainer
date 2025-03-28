@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface PaymentItem {
@@ -40,7 +40,11 @@ export function PaymentDialog({
   if (!item) return null;
   
   const handleComplete = () => {
-    toast.success(`Payment completed using ${selectedMethod}`);
+    toast({
+      title: "Payment Completed",
+      description: `Payment completed using ${selectedMethod}`,
+      variant: "default"
+    });
     onPaymentComplete();
   };
   
