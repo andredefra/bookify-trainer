@@ -1,10 +1,10 @@
-
 import { MessageSquare, Send, Reply } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { SendMessageDialog } from "./messages/SendMessageDialog";
 import { ClientChatDialog } from "./messages/ClientChatDialog";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface MessageItem {
   id: number;
@@ -22,6 +22,7 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
   
   // Listen for status changes
   useEffect(() => {
@@ -106,6 +107,7 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                   className="gap-1"
                 >
                   <Reply className="h-4 w-4" />
+                  {!isMobile && <span>Reply</span>}
                 </Button>
                 <Button variant="outline" size="sm">Mark as Read</Button>
               </div>
