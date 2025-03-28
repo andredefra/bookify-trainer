@@ -51,23 +51,23 @@ export function StatusSelector({ initialStatus = "online" }: StatusSelectorProps
     <div className="flex items-center space-x-2">
       <span className="text-sm text-muted-foreground">Status:</span>
       <Select value={status} onValueChange={(value) => handleStatusChange(value as "online" | "in-session" | "offline")}>
-        <SelectTrigger className="w-[140px] h-8">
+        <SelectTrigger className="w-[140px] h-8 font-normal">
           <SelectValue placeholder="Set your status" />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="online" className="flex items-center">
+        <SelectContent className="font-normal">
+          <SelectItem value="online" className="flex items-center font-normal">
             <div className="flex items-center">
               <Circle className="h-3 w-3 mr-2 text-emerald-500 fill-emerald-500" />
               <span>Available</span>
             </div>
           </SelectItem>
-          <SelectItem value="in-session">
+          <SelectItem value="in-session" className="font-normal">
             <div className="flex items-center">
               <Circle className="h-3 w-3 mr-2 text-amber-500 fill-amber-500" />
               <span>In Session</span>
             </div>
           </SelectItem>
-          <SelectItem value="offline">
+          <SelectItem value="offline" className="font-normal">
             <div className="flex items-center">
               <Circle className="h-3 w-3 mr-2 text-slate-500 fill-slate-500" />
               <span>Offline</span>

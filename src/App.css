@@ -1,3 +1,4 @@
+
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -39,6 +40,20 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Dropdown styling fixes */
+[data-radix-select-item] {
+  font-weight: normal !important;
+  border-radius: 4px;
+}
+
+[data-radix-select-content] {
+  font-weight: normal !important;
+}
+
+[data-radix-menu-content] {
+  font-weight: normal !important;
 }
 
 /* Mobile optimizations */
