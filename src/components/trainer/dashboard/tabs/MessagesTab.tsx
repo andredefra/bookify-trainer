@@ -3,8 +3,8 @@ import { MessageSquare, Send } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SendMessageDialog } from "./messages/SendMessageDialog";
+import { ClientChatDialog } from "./messages/ClientChatDialog";
 
 interface MessageItem {
   id: number;
@@ -20,6 +20,7 @@ interface MessagesTabProps {
 export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [trainerStatus, setTrainerStatus] = useState<string>("online");
   const [showSendDialog, setShowSendDialog] = useState(false);
+  const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
   
   // Listen for status changes
@@ -47,9 +48,9 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
     name: msg.from
   }));
   
-  const handleReply = (client: { id: number; name: string }) => {
+  const handleOpenChat = (client: { id: number; name: string }) => {
     setSelectedClient(client);
-    setShowSendDialog(true);
+    setShowChatDialog(true);
   };
   
   return (
@@ -101,7 +102,7 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
               <div className="flex space-x-2">
                 <Button 
                   size="sm" 
-                  onClick={() => handleReply({ id: message.id, name: message.from })}
+                  onClick={() => handleOpenChat({ id: message.id, name: message.from })}
                 >
                   Reply
                 </Button>
@@ -118,6 +119,13 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
         onOpenChange={setShowSendDialog}
         clients={clients}
         preselectedClient={selectedClient}
+      />
+      
+      {/* Chat Dialog */}
+      <ClientChatDialog
+        open={showChatDialog}
+        onOpenChange={setShowChatDialog}
+        client={selectedClient}
       />
     </Card>
   );
