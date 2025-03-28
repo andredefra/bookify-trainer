@@ -48,7 +48,9 @@ const MobileMenu = ({
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
-            {/* Removed duplicate X button here */}
+            <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
+              <X className="h-5 w-5" />
+            </Button>
           </div>
           
           <div className="mb-6">
@@ -59,7 +61,7 @@ const MobileMenu = ({
             />
           </div>
           
-          {/* Language toggle in mobile menu with improved visibility */}
+          {/* Language toggle in mobile menu */}
           <div className="mt-4 mb-6">
             <LanguageToggle className="w-full" />
           </div>
