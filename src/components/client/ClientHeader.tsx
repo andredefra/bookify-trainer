@@ -14,8 +14,20 @@ interface ClientHeaderProps {
 
 export function ClientHeader({ user, onLogout, onMobileMenuClick }: ClientHeaderProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const navigate = useNavigate();
   const displayName = user?.name || user?.email?.split('@')[0] || "Client";
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+
+  const handleLogout = () => {
+    // Clear any user data from localStorage
+    localStorage.removeItem('demo-user');
+    
+    // Execute the passed onLogout function
+    onLogout();
+    
+    // Navigate to the landing page
+    navigate('/');
+  };
 
   return (
     <header className="bg-white border-b border-border shadow-sm">
@@ -58,7 +70,7 @@ export function ClientHeader({ user, onLogout, onMobileMenuClick }: ClientHeader
               </Avatar>
             )}
             
-            <Button variant="outline" size="sm" onClick={onLogout}>
+            <Button variant="outline" size="sm" onClick={handleLogout}>
               Log out
             </Button>
           </div>
