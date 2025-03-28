@@ -19,6 +19,7 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
 
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
+    
     // Navigate to the appropriate route
     if (lang === 'en') {
       navigate('/');
