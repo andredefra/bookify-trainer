@@ -9,40 +9,43 @@ interface NavLinksProps {
 
 const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
   return (
-    <div className="flex space-x-8 items-center justify-center">
-      <NavItem
-        to="/"
-        label="Home"
-        sectionId="hero"
-        icon={Home}
-        isHomePage={isHomePage}
-        scrollToSection={scrollToSection}
-        className="mx-auto"
-      />
+    <div className="flex items-center justify-center">
+      <div className="flex items-center">
+        <NavItem
+          to="/"
+          label="Home"
+          sectionId="hero"
+          icon={Home}
+          isHomePage={isHomePage}
+          scrollToSection={scrollToSection}
+        />
+      </div>
       
-      <NavItem
-        to="/#features"
-        label="Features"
-        sectionId="features"
-        isHomePage={isHomePage}
-        scrollToSection={scrollToSection}
-      />
-      
-      <NavItem
-        to="/#how-it-works"
-        label="How it works"
-        sectionId="how-it-works"
-        isHomePage={isHomePage}
-        scrollToSection={scrollToSection}
-      />
-      
-      <NavItem
-        to="/#pricing"
-        label="Pricing"
-        sectionId="pricing"
-        isHomePage={isHomePage}
-        scrollToSection={scrollToSection}
-      />
+      <div className="flex space-x-8 items-center ml-8">
+        <NavItem
+          to="/#features"
+          label="Features"
+          sectionId="features"
+          isHomePage={isHomePage}
+          scrollToSection={scrollToSection}
+        />
+        
+        <NavItem
+          to="/#how-it-works"
+          label="How it works"
+          sectionId="how-it-works"
+          isHomePage={isHomePage}
+          scrollToSection={scrollToSection}
+        />
+        
+        <NavItem
+          to="/#pricing"
+          label="Pricing"
+          sectionId="pricing"
+          isHomePage={isHomePage}
+          scrollToSection={scrollToSection}
+        />
+      </div>
     </div>
   );
 };
