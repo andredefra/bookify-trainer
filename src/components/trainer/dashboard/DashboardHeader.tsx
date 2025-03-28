@@ -81,7 +81,7 @@ export function DashboardHeader({ name, customName, onMobileMenuClick, user, onL
                 <span className="sr-only">Toggle sidebar</span>
               </Button>
             )}
-            <span className="font-display text-xl font-bold text-primary">Personal.ai</span>
+            <span className="font-display text-xl font-bold text-primary pl-6 lg:pl-6">Personal.ai</span>
           </div>
           <div className="flex items-center space-x-4">
             {!isMobile && (
