@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,11 +12,24 @@ interface SendMessageDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   clients?: { id: number; name: string }[];
+  preselectedClient?: { id: number; name: string } | null;
 }
 
-export function SendMessageDialog({ open, onOpenChange, clients = [] }: SendMessageDialogProps) {
+export function SendMessageDialog({ 
+  open, 
+  onOpenChange, 
+  clients = [],
+  preselectedClient = null
+}: SendMessageDialogProps) {
   const [selectedClient, setSelectedClient] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  
+  // Set preselected client when dialog opens
+  useEffect(() => {
+    if (open && preselectedClient) {
+      setSelectedClient(preselectedClient.id.toString());
+    }
+  }, [open, preselectedClient]);
   
   const handleSend = () => {
     if (!selectedClient) {

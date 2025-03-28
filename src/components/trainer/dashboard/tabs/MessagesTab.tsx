@@ -20,6 +20,7 @@ interface MessagesTabProps {
 export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [trainerStatus, setTrainerStatus] = useState<string>("online");
   const [showSendDialog, setShowSendDialog] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
   
   // Listen for status changes
   useEffect(() => {
@@ -46,6 +47,11 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
     name: msg.from
   }));
   
+  const handleReply = (client: { id: number; name: string }) => {
+    setSelectedClient(client);
+    setShowSendDialog(true);
+  };
+  
   return (
     <Card>
       <CardHeader>
@@ -55,7 +61,10 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
             <CardDescription>Communication with clients and inquiries</CardDescription>
           </div>
           <Button 
-            onClick={() => setShowSendDialog(true)}
+            onClick={() => {
+              setSelectedClient(null);
+              setShowSendDialog(true);
+            }}
             size="sm"
             className="flex items-center gap-1.5 self-start"
           >
@@ -90,7 +99,12 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
               </div>
               <p className="text-sm mb-3">{message.preview}</p>
               <div className="flex space-x-2">
-                <Button size="sm">Reply</Button>
+                <Button 
+                  size="sm" 
+                  onClick={() => handleReply({ id: message.id, name: message.from })}
+                >
+                  Reply
+                </Button>
                 <Button variant="outline" size="sm">Mark as Read</Button>
               </div>
             </div>
@@ -103,6 +117,7 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
         open={showSendDialog} 
         onOpenChange={setShowSendDialog}
         clients={clients}
+        preselectedClient={selectedClient}
       />
     </Card>
   );
