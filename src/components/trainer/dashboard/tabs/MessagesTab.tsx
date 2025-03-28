@@ -1,5 +1,5 @@
 
-import { MessageSquare, Send } from "lucide-react";
+import { MessageSquare, Send, Reply } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -103,8 +103,9 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                 <Button 
                   size="sm" 
                   onClick={() => handleOpenChat({ id: message.id, name: message.from })}
+                  className="gap-1"
                 >
-                  Reply
+                  <Reply className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="sm">Mark as Read</Button>
               </div>
