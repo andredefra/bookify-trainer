@@ -51,14 +51,14 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   const selectedDateSessions = getSessionsForDate(selectedDate);
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-      <Card className="md:col-span-1">
-        <CardContent className="p-3 md:pt-6">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <Card className="md:col-span-5 lg:col-span-4">
+        <CardContent className="p-2 sm:p-4">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
-            className="p-0 pointer-events-auto"
+            className="w-full mx-auto"
             modifiers={{
               booked: (date) => {
                 const dateString = date.toDateString();
@@ -91,8 +91,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
         </CardContent>
       </Card>
       
-      <Card className="md:col-span-2">
-        <CardContent className="p-4 md:pt-6">
+      <Card className="md:col-span-7 lg:col-span-8">
+        <CardContent className="p-4">
           <div className="flex items-center gap-2 mb-4">
             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
             <h3 className="text-lg font-medium">
@@ -105,32 +105,40 @@ export function CalendarView({ sessions }: CalendarViewProps) {
               No sessions scheduled for this date
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-[calc(100vh-16rem)] overflow-y-auto pr-1">
               {selectedDateSessions.map((session) => (
-                <div key={session.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <h3 className="font-medium">{session.name}</h3>
-                    <div className="text-sm text-muted-foreground">
-                      {session.time}
+                <div key={session.id} className="flex flex-col p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-2">
+                    <div>
+                      <h3 className="font-medium">{session.name}</h3>
+                      <div className="text-sm text-muted-foreground">
+                        {session.time}
+                      </div>
                     </div>
-                    <div className="flex mt-2 gap-2 flex-wrap">
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                        {session.paymentStatus?.paid || 0} paid
+                    <div className="flex items-center">
+                      <div className="mr-3 text-sm">
+                        <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
+                      </div>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-800">
+                        {session.time}
                       </Badge>
-                      {(session.paymentStatus?.pending || 0) > 0 && (
-                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                          {session.paymentStatus?.pending || 0} pending
-                        </Badge>
-                      )}
                     </div>
                   </div>
-                  <div className="flex items-center mt-2 sm:mt-0">
-                    <div className="mr-4 text-sm">
-                      <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
-                    </div>
-                    <Badge variant="outline">
-                      {session.time}
+                  
+                  <div className="flex mt-2 gap-2 flex-wrap">
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-800">
+                      {session.paymentStatus?.paid || 0} paid
                     </Badge>
+                    {(session.paymentStatus?.pending || 0) > 0 && (
+                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800">
+                        {session.paymentStatus?.pending || 0} pending
+                      </Badge>
+                    )}
+                    {(session.waitingList || 0) > 0 && (
+                      <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900 dark:text-purple-200 dark:border-purple-800">
+                        {session.waitingList} waiting
+                      </Badge>
+                    )}
                   </div>
                 </div>
               ))}
