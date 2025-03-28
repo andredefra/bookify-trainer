@@ -2,9 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Menu, Bell, Circle } from "lucide-react";
+import { Menu, Bell, Circle, LogOut } from "lucide-react";
 import { StatusSelector } from "./header/StatusSelector";
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface DashboardHeaderProps {
   name: string;
@@ -24,6 +25,7 @@ export function DashboardHeader({
   
   // State to track current status
   const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Load status from localStorage on component mount
   useEffect(() => {
@@ -96,7 +98,7 @@ export function DashboardHeader({
             </div>
             
             <Button variant="outline" size="sm" onClick={onLogout}>
-              Log out
+              {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
             </Button>
           </div>
         </div>
