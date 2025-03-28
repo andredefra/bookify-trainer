@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientProfile } from "@/components/ClientProfile";
@@ -24,7 +23,7 @@ const ClientDashboard = () => {
   const upcomingSessions: SessionItem[] = [
     { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" as SessionStatus, price: 45 },
     { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "pending" as SessionStatus, price: 60 },
-    { id: 3, name: "Yoga Basics", trainer: "Michael Chen", time: "17:30 - 18:30", date: "Thursday", status: "confirmed" as SessionStatus, price: 35 },
+    { id: 3, name: "Yoga Basics", trainer: "Sarah Johnson", time: "17:30 - 18:30", date: "Thursday", status: "confirmed" as SessionStatus, price: 35 },
   ];
   
   const trainerMessages = [
