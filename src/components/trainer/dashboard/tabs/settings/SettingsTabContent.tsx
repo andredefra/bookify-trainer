@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { ProfileSection } from "./ProfileSection";
 import { AvailabilitySection } from "./AvailabilitySection";
+import { MembershipSection } from "./MembershipSection";
 import { BillingSection } from "./BillingSection";
 
 interface SettingsTabContentProps {
@@ -47,6 +48,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
           <TabsList className="mb-6">
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="availability">Availability</TabsTrigger>
+            <TabsTrigger value="membership">Membership</TabsTrigger>
             <TabsTrigger value="billing">Billing & Payments</TabsTrigger>
           </TabsList>
           
@@ -56,6 +58,10 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
           
           <TabsContent value="availability">
             <AvailabilitySection />
+          </TabsContent>
+          
+          <TabsContent value="membership">
+            <MembershipSection user={updatedUser} />
           </TabsContent>
           
           <TabsContent value="billing">

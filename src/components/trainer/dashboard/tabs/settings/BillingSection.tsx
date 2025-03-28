@@ -149,19 +149,6 @@ export function BillingSection({ user }: BillingSectionProps) {
               </div>
             </div>
           </div>
-          
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-2">Current Plan</h3>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">{user.plan || "Free Plan"}</p>
-                <p className="text-sm text-muted-foreground">
-                  {user.plan === "pro" ? "You are on the Pro plan with all features" : "Upgrade to unlock all features"}
-                </p>
-              </div>
-              {user.plan !== "pro" && <Button>Upgrade</Button>}
-            </div>
-          </div>
         </TabsContent>
         
         <TabsContent value="business-info" className="space-y-4">
