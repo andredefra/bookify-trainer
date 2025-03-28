@@ -31,6 +31,7 @@ const MobileMenu = ({
   
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
+    setMobileMenuOpen(false);
     
     // Navigate to the appropriate route
     if (lang === 'en') {
@@ -50,7 +51,7 @@ const MobileMenu = ({
         <Button 
           variant="ghost" 
           size="icon" 
-          className="relative" 
+          className="relative z-50" 
           onClick={handleOpenMenu}
         >
           <Menu className="h-5 w-5" />
@@ -90,7 +91,6 @@ const MobileMenu = ({
                   <Button 
                     variant="outline" 
                     className="w-full justify-between bg-background"
-                    onClick={(e) => e.stopPropagation()}
                   >
                     <div className="flex items-center gap-2">
                       <Globe className="h-4 w-4" />
@@ -104,20 +104,14 @@ const MobileMenu = ({
                 >
                   <DropdownMenuItem 
                     className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLanguageChange('en');
-                    }}
+                    onClick={() => handleLanguageChange('en')}
                   >
                     <span className="text-base mr-1">🇬🇧</span>
                     <span className="text-sm">English</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem 
                     className={`flex items-center gap-2 cursor-pointer ${language === 'it' ? 'bg-accent/30' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLanguageChange('it');
-                    }}
+                    onClick={() => handleLanguageChange('it')}
                   >
                     <span className="text-base mr-1">🇮🇹</span>
                     <span className="text-sm">Italiano</span>
