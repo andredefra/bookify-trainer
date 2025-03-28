@@ -79,7 +79,6 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
           onClick={() => handleTabClick(item.href)}
           type="button" 
           tabIndex={0}
-          autoComplete="off"
           data-lpignore="true"
         >
           <item.icon className="w-5 h-5 md:mr-2" />
