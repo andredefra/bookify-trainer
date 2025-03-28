@@ -22,7 +22,7 @@ export const en = {
   'features.automatedPayments': 'Automated Payments',
   'features.automatedPaymentsDesc': 'Connect your Stripe account and get paid automatically when sessions are completed.',
   'features.aiAssistant': 'AI Assistant',
-  'features.aiAssistantDesc': 'Let AI handle client inquiries when you're unavailable or in a training session.',
+  'features.aiAssistantDesc': "Let AI handle client inquiries when you're unavailable or in a training session.",
   'features.videoTitle': 'Video Exercise Demonstrations',
   'features.videoDesc': 'Trainers can now add YouTube or Vimeo videos to any exercise in their training programs, ensuring clients have perfect visual demonstrations of proper form and technique.',
   'features.videoFeature1': 'Easily link YouTube or Vimeo videos to exercises',

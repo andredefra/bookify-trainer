@@ -22,7 +22,7 @@ export const it = {
   'features.automatedPayments': 'Pagamenti Automatizzati',
   'features.automatedPaymentsDesc': 'Collega il tuo account Stripe e ricevi pagamenti automaticamente quando le sessioni sono completate.',
   'features.aiAssistant': 'Assistente AI',
-  'features.aiAssistantDesc': 'Lascia che l\'AI gestisca le richieste dei clienti quando non sei disponibile o sei in sessione di allenamento.',
+  'features.aiAssistantDesc': "Lascia che l'AI gestisca le richieste dei clienti quando non sei disponibile o sei in sessione di allenamento.",
   'features.videoTitle': 'Dimostrazioni Video degli Esercizi',
   'features.videoDesc': 'Gli allenatori possono ora aggiungere video di YouTube o Vimeo a qualsiasi esercizio nei loro programmi di allenamento, garantendo ai clienti perfette dimostrazioni visive della corretta forma e tecnica.',
   'features.videoFeature1': 'Collega facilmente video di YouTube o Vimeo agli esercizi',
