@@ -94,10 +94,12 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
       )
     : filteredTrainers;
   
-  // Filter out trainers that are already followed
-  const nonFollowedTrainers = locationFilteredTrainers.filter(trainer => 
-    !followedTrainers.includes(Number(trainer.id.replace('t', '')))
-  );
+  // Filter out trainers that are already followed - this needed fixing
+  const nonFollowedTrainers = locationFilteredTrainers.filter(trainer => {
+    // Get the numeric part of the trainer ID to compare with followedTrainers array
+    const trainerId = parseInt(trainer.id.replace('t', ''));
+    return !followedTrainers.includes(trainerId);
+  });
   
   return {
     searchQuery,
