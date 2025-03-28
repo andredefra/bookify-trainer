@@ -40,7 +40,6 @@ const Footer = () => {
               <span className="font-display text-xl font-bold tracking-tight text-primary">Personal.ai</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">{t('footer.description')}</p>
-            <p className="mt-12 text-sm text-muted-foreground">{t('footer.copyright')}</p>
           </div>
           
           {/* Spacer for alignment */}
@@ -64,6 +63,11 @@ const Footer = () => {
               </ul>
             </div>
           ))}
+        </div>
+        
+        {/* Copyright section - moved to bottom */}
+        <div className="mt-12 pt-6 border-t border-border">
+          <p className="text-sm text-muted-foreground text-center">{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>;
