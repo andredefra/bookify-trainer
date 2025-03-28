@@ -39,7 +39,7 @@ const trainersData: MarketplaceTrainer[] = [
     reviews: 98,
     price: "€45",
     availability: "Available tomorrow",
-    image: "https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=1374&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop"
   },
   {
     id: "t3",
@@ -96,7 +96,7 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
   
   // Filter out trainers that are already followed
   const nonFollowedTrainers = locationFilteredTrainers.filter(trainer => 
-    !followedTrainers.includes(Number(trainer.id))
+    !followedTrainers.includes(Number(trainer.id.replace('t', '')))
   );
   
   return {

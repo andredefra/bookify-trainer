@@ -43,9 +43,6 @@ export function MarketplaceTrainerCard({
           className="h-48 bg-cover bg-center relative" 
           style={{ backgroundImage: `url(${trainer.image})` }}
         >
-          <Badge variant="outline" className="absolute top-3 right-3 bg-primary/10">
-            {trainer.price}/session
-          </Badge>
         </div>
         <div className="p-4 flex-grow">
           <div className="flex justify-between items-start">
@@ -53,6 +50,9 @@ export function MarketplaceTrainerCard({
               <h3 className="text-lg font-medium">{trainer.name}</h3>
               <p className="text-sm text-muted-foreground">{trainer.specialty}</p>
             </div>
+            <Badge variant="outline" className="bg-primary/10">
+              {trainer.price}/session
+            </Badge>
           </div>
           
           <div className="flex items-center mt-2 text-sm">
