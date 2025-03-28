@@ -32,7 +32,7 @@ const Navbar = () => {
         <BrandLogo />
         
         {!isMobile ? (
-          <div className="flex-1 flex justify-center ml-16">
+          <div className="flex-1 flex justify-center">
             <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
           </div>
         ) : null}
