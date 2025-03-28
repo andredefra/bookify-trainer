@@ -32,6 +32,7 @@ const formSchema = z.object({
   duration: z.string().min(1, {
     message: "Duration is required",
   }),
+  isFree: z.boolean().default(false),
   price: z.string().refine((val) => {
     return !isNaN(Number(val)) && Number(val) >= 0;
   }, {
@@ -65,6 +66,8 @@ export function CreateSessionDialog({
   onOpenChange, 
   onSubmit 
 }: CreateSessionDialogProps) {
+  const [isFree, setIsFree] = useState(false);
+  
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,6 +75,7 @@ export function CreateSessionDialog({
       date: new Date(),
       time: "18:00",
       duration: "60",
+      isFree: false,
       price: "50",
       isPrivate: false,
       maxParticipants: "10",
@@ -82,11 +86,17 @@ export function CreateSessionDialog({
   });
 
   const handleSubmit = (values: FormValues) => {
+    // If session is free, ensure price is set to 0
+    const finalValues = {
+      ...values,
+      price: values.isFree ? "0" : values.price
+    };
+    
     if (onSubmit) {
-      onSubmit(values);
+      onSubmit(finalValues);
     } else {
       // Default handling if no onSubmit is provided
-      console.log("Form values:", values);
+      console.log("Form values:", finalValues);
       toast.success("Session created successfully!");
       onOpenChange(false);
     }
@@ -191,6 +201,31 @@ export function CreateSessionDialog({
                 )}
               />
 
+              {/* Free Session Checkbox */}
+              <FormField
+                control={form.control}
+                name="isFree"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center space-x-2">
+                    <FormControl>
+                      <Checkbox 
+                        checked={field.value} 
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          setIsFree(!!checked);
+                        }} 
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Free Session</FormLabel>
+                      <FormDescription>
+                        Mark this session as free for clients
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
               {/* Price */}
               <FormField
                 control={form.control}
@@ -201,7 +236,14 @@ export function CreateSessionDialog({
                     <FormControl>
                       <div className="flex items-center">
                         <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
-                        <Input type="number" min="0" step="0.01" {...field} />
+                        <Input 
+                          type="number" 
+                          min="0" 
+                          step="0.01" 
+                          {...field} 
+                          disabled={form.watch("isFree")}
+                          value={form.watch("isFree") ? "0" : field.value}
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -256,7 +298,7 @@ export function CreateSessionDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Payment Collection</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={form.watch("isFree")}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select when to collect payment" />
