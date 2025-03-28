@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Star, CreditCard, DollarSign } from "lucide-react";
+import { PlusCircle, Star, CreditCard, DollarSign, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { 
   Table,
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
+import { TrainerMarketplace } from "@/components/client/trainers/TrainerMarketplace";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -24,7 +25,7 @@ const paymentHistory = [
 
 export function TrainersTab() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"trainers" | "payments">("trainers");
+  const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
   
@@ -45,38 +46,58 @@ export function TrainersTab() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>My Trainers</CardTitle>
-            <CardDescription>Your personal training team</CardDescription>
+            <CardTitle>
+              {activeTab === "marketplace" ? "Find New Trainer" : "My Trainers"}
+            </CardTitle>
+            <CardDescription>
+              {activeTab === "marketplace" 
+                ? "Browse trainers and book sessions" 
+                : "Your personal training team"}
+            </CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              onClick={() => setActiveTab(activeTab === "trainers" ? "payments" : "trainers")}
-            >
-              {activeTab === "trainers" ? (
-                <>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  View Payments
-                </>
-              ) : (
-                <>
-                  <Star className="mr-2 h-4 w-4" />
-                  View Trainers
-                </>
-              )}
-            </Button>
-            <Button 
-              className="flex items-center"
-              onClick={() => navigate('/find-trainer')}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Find New Trainer
-            </Button>
+            {activeTab === "marketplace" ? (
+              <Button 
+                variant="outline" 
+                onClick={() => setActiveTab("trainers")}
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to My Trainers
+              </Button>
+            ) : (
+              <>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setActiveTab(activeTab === "trainers" ? "payments" : "trainers")}
+                >
+                  {activeTab === "trainers" ? (
+                    <>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      View Payments
+                    </>
+                  ) : (
+                    <>
+                      <Star className="mr-2 h-4 w-4" />
+                      View Trainers
+                    </>
+                  )}
+                </Button>
+                <Button 
+                  className="flex items-center"
+                  onClick={() => setActiveTab("marketplace")}
+                >
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Find New Trainer
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        {activeTab === "trainers" ? (
+        {activeTab === "marketplace" ? (
+          <TrainerMarketplace />
+        ) : activeTab === "trainers" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="border rounded-lg overflow-hidden">
               <div className="aspect-video bg-gray-100 flex items-center justify-center">
