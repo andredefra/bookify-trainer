@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { Menu, Globe } from 'lucide-react';
+import { Menu, Globe, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -29,17 +29,6 @@ const MobileMenu = ({
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
   
-  useEffect(() => {
-    const handleClickOutside = () => {
-      if (mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [mobileMenuOpen, setMobileMenuOpen]);
-
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
     
@@ -53,8 +42,8 @@ const MobileMenu = ({
 
   return (
     <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-      <SheetTrigger asChild onClick={(e) => e.stopPropagation()}>
-        <Button variant="ghost" size="icon" className="relative">
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative" onClick={(e) => e.stopPropagation()}>
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
@@ -64,7 +53,6 @@ const MobileMenu = ({
             <Link to="/" className="font-display text-xl font-bold text-primary">
               Personal.ai
             </Link>
-            {/* Custom close button that replaces the default one */}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -72,7 +60,7 @@ const MobileMenu = ({
               onClick={() => setMobileMenuOpen(false)}
             >
               <span className="sr-only">Close</span>
-              <Menu className="h-4 w-4 rotate-45" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
           
@@ -89,7 +77,6 @@ const MobileMenu = ({
               <DropdownMenu>
                 <DropdownMenuTrigger 
                   asChild
-                  onClick={(e) => e.stopPropagation()}
                 >
                   <Button 
                     variant="outline" 
@@ -105,7 +92,6 @@ const MobileMenu = ({
                 <DropdownMenuContent
                   align="center"
                   className="w-[200px] bg-background"
-                  onClick={(e) => e.stopPropagation()}
                 >
                   <DropdownMenuItem 
                     className={`flex items-center gap-2 cursor-pointer ${language === 'en' ? 'bg-accent/30' : ''}`}
