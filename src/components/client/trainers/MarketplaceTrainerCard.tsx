@@ -21,14 +21,15 @@ export function MarketplaceTrainerCard({
   isMyTrainersView = false
 }: TrainerCardProps) {
   const navigate = useNavigate();
-  const isFollowing = followedTrainers.includes(Number(trainer.id));
+  const trainerId = parseInt(trainer.id.replace(/\D/g, ''));
+  const isFollowing = followedTrainers.includes(trainerId);
   
   // In "My Trainers" view, we always want to show Unfollow because they're already followed
   const showUnfollow = isMyTrainersView || isFollowing;
   
   const handleFollowToggle = () => {
     if (onFollowToggle) {
-      onFollowToggle(Number(trainer.id), trainer.name);
+      onFollowToggle(trainerId, trainer.name);
     }
   };
 
@@ -40,8 +41,11 @@ export function MarketplaceTrainerCard({
     <div className="bg-background rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex flex-col h-full">
         <div 
-          className="h-48 bg-cover bg-center relative" 
-          style={{ backgroundImage: `url(${trainer.image})` }}
+          className="h-48 bg-cover bg-center relative will-change-transform" 
+          style={{ 
+            backgroundImage: `url(${trainer.image})`,
+            transform: 'translateZ(0)'
+          }}
         >
         </div>
         <div className="p-4 flex-grow">

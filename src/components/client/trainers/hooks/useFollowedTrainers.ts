@@ -15,21 +15,20 @@ export function useFollowedTrainers(defaultTrainers: Array<{ id: number }> = [])
     const storedFollowedTrainers = localStorage.getItem('followedTrainers');
     if (storedFollowedTrainers) {
       const parsedTrainers = JSON.parse(storedFollowedTrainers);
-      console.log("Loaded followed trainers from storage:", parsedTrainers);
       setFollowedTrainers(parsedTrainers);
     } else {
       // If no followed trainers in localStorage, automatically follow default trainers
       const trainerIds = defaultTrainers.map(trainer => trainer.id);
-      console.log("Setting default followed trainers:", trainerIds);
       setFollowedTrainers(trainerIds);
       localStorage.setItem('followedTrainers', JSON.stringify(trainerIds));
     }
-  }, [defaultTrainers]);
+  }, []);
 
   // Save followed trainers to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('followedTrainers', JSON.stringify(followedTrainers));
-    console.log("Saved followed trainers:", followedTrainers);
+    if (followedTrainers.length > 0) {
+      localStorage.setItem('followedTrainers', JSON.stringify(followedTrainers));
+    }
   }, [followedTrainers]);
 
   const handleFollowToggle = (trainerId: number, trainerName: string) => {
