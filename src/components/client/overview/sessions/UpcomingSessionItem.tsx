@@ -47,16 +47,13 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
           </>
         ) : (
           <>
-            <Badge variant="outline" className={featured 
-              ? "bg-blue-50 text-blue-700 border-blue-200" 
-              : session.status === 'pending' 
-                ? "bg-amber-50 text-amber-700 border-amber-200"
-                : ""
-            }>
-              {session.status === 'pending' ? 'Payment Required' : featured ? 'Premium' : 'Available'}
-            </Badge>
+            {featured && (
+              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                Premium
+              </Badge>
+            )}
             <Button 
-              variant={featured ? "default" : "secondary"}
+              variant="secondary"
               size="sm" 
               className="flex items-center" 
               onClick={() => onRegister(session)}

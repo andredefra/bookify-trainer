@@ -38,7 +38,7 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
       </div>
       <div className="flex items-center gap-2">
         <Button 
-          variant="default" 
+          variant="secondary" 
           size="sm" 
           className="flex items-center"
           onClick={() => onRegister(featuredSession)}
