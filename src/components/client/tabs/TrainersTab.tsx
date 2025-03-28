@@ -1,13 +1,13 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { PlusCircle, Star, CreditCard, ArrowLeft, UsersRound } from "lucide-react";
 import { toast } from "sonner";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
 import { TrainerMarketplace } from "@/components/client/trainers/TrainerMarketplace";
 import { TrainersGrid } from "@/components/client/trainers/TrainersGrid";
 import { PaymentsTable } from "@/components/client/trainers/PaymentsTable";
+import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollowedTrainers";
+import { FollowedTrainersSection } from "@/components/client/trainers/FollowedTrainersSection";
+import { NavigationButtons } from "@/components/client/trainers/NavigationButtons";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -40,25 +40,8 @@ export function TrainersTab() {
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
-  const [followedTrainers, setFollowedTrainers] = useState<number[]>([]);
   
-  // Load followed trainers from localStorage on component mount
-  useEffect(() => {
-    const storedFollowedTrainers = localStorage.getItem('followedTrainers');
-    if (storedFollowedTrainers) {
-      setFollowedTrainers(JSON.parse(storedFollowedTrainers));
-    } else {
-      // If no followed trainers in localStorage, automatically follow my trainers
-      const myTrainerIds = myTrainers.map(trainer => trainer.id);
-      setFollowedTrainers(myTrainerIds);
-      localStorage.setItem('followedTrainers', JSON.stringify(myTrainerIds));
-    }
-  }, []);
-
-  // Save followed trainers to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('followedTrainers', JSON.stringify(followedTrainers));
-  }, [followedTrainers]);
+  const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
   
   const handlePayTrainer = (trainer: string, amount: number = 45) => {
     setSelectedTrainer({ name: trainer, amount });
@@ -72,18 +55,6 @@ export function TrainersTab() {
     setShowPaymentDialog(false);
   };
 
-  const handleFollowToggle = (trainerId: number, trainerName: string) => {
-    if (followedTrainers.includes(trainerId)) {
-      // Unfollow
-      setFollowedTrainers(followedTrainers.filter(id => id !== trainerId));
-      toast.success(`You have unfollowed ${trainerName}`);
-    } else {
-      // Follow
-      setFollowedTrainers([...followedTrainers, trainerId]);
-      toast.success(`You are now following ${trainerName}. You'll see their group events in your feed.`);
-    }
-  };
-  
   return (
     <Card>
       <CardHeader>
@@ -102,54 +73,10 @@ export function TrainersTab() {
                 : "Your personal training team"}
             </CardDescription>
           </div>
-          <div className="flex gap-2">
-            {activeTab === "marketplace" || activeTab === "followed" ? (
-              <Button 
-                variant="outline" 
-                onClick={() => setActiveTab("trainers")}
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to My Trainers
-              </Button>
-            ) : (
-              <>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setActiveTab(
-                    activeTab === "trainers" 
-                      ? "payments" 
-                      : activeTab === "payments"
-                      ? "followed"
-                      : "trainers"
-                  )}
-                >
-                  {activeTab === "trainers" ? (
-                    <>
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      View Payments
-                    </>
-                  ) : activeTab === "payments" ? (
-                    <>
-                      <UsersRound className="mr-2 h-4 w-4" />
-                      Followed Trainers
-                    </>
-                  ) : (
-                    <>
-                      <Star className="mr-2 h-4 w-4" />
-                      View Trainers
-                    </>
-                  )}
-                </Button>
-                <Button 
-                  className="flex items-center"
-                  onClick={() => setActiveTab("marketplace")}
-                >
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Find New Trainer
-                </Button>
-              </>
-            )}
-          </div>
+          <NavigationButtons 
+            activeTab={activeTab} 
+            onTabChange={setActiveTab}
+          />
         </div>
       </CardHeader>
       <CardContent>
@@ -163,35 +90,13 @@ export function TrainersTab() {
             onFollowToggle={handleFollowToggle}
           />
         ) : activeTab === "followed" ? (
-          <div className="space-y-4">
-            <div className="p-4 bg-muted rounded-lg">
-              <h3 className="font-medium mb-2">What does following a trainer do?</h3>
-              <p className="text-sm text-muted-foreground">
-                When you follow trainers, you'll see their group events and promotions in your feed even if you're not directly 
-                invited. This helps you discover new training opportunities and stay connected with trainers you're interested in.
-              </p>
-            </div>
-            
-            {followedTrainers.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 border border-dashed rounded-lg">
-                <UsersRound className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="font-medium text-center">You're not following any trainers yet</h3>
-                <p className="text-sm text-muted-foreground text-center mt-1 mb-4">
-                  Follow trainers to see their group events and sessions
-                </p>
-                <Button onClick={() => setActiveTab("marketplace")}>
-                  Browse Trainers
-                </Button>
-              </div>
-            ) : (
-              <TrainersGrid 
-                trainers={myTrainers.filter(trainer => followedTrainers.includes(trainer.id))} 
-                onPayClick={handlePayTrainer}
-                followedTrainers={followedTrainers}
-                onFollowToggle={handleFollowToggle}
-              />
-            )}
-          </div>
+          <FollowedTrainersSection 
+            followedTrainers={followedTrainers}
+            allTrainers={myTrainers}
+            onPayClick={handlePayTrainer}
+            onFollowToggle={handleFollowToggle}
+            onBrowseTrainers={() => setActiveTab("marketplace")}
+          />
         ) : (
           <PaymentsTable payments={paymentHistory} />
         )}
