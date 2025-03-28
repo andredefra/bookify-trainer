@@ -3,6 +3,7 @@ import { SearchBar } from "./SearchBar";
 import { TrainerList } from "./TrainerList";
 import { BookingDialog } from "./BookingDialog";
 import { useTrainerMarketplace } from "./hooks/useTrainerMarketplace";
+import { useFollowedTrainers } from "./hooks/useFollowedTrainers";
 
 export function TrainerMarketplace() {
   const {
@@ -18,6 +19,8 @@ export function TrainerMarketplace() {
     handleBookingSubmit
   } = useTrainerMarketplace();
   
+  const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
+  
   return (
     <div className="space-y-6">
       {/* Search and filter */}
@@ -32,6 +35,8 @@ export function TrainerMarketplace() {
       <TrainerList 
         trainers={trainers} 
         onBookSession={handleBookSession} 
+        followedTrainers={followedTrainers}
+        onFollowToggle={handleFollowToggle}
       />
       
       {/* Session Booking Dialog */}

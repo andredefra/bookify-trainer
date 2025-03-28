@@ -21,7 +21,7 @@ export function useFollowedTrainers(defaultTrainers: Array<{ id: number }> = [])
       setFollowedTrainers(trainerIds);
       localStorage.setItem('followedTrainers', JSON.stringify(trainerIds));
     }
-  }, []);
+  }, [defaultTrainers]);
 
   // Save followed trainers to localStorage whenever it changes
   useEffect(() => {
@@ -36,7 +36,7 @@ export function useFollowedTrainers(defaultTrainers: Array<{ id: number }> = [])
     } else {
       // Follow
       setFollowedTrainers([...followedTrainers, trainerId]);
-      toast.success(`You are now following ${trainerName}. You'll see their group events in your feed.`);
+      toast.success(`You are now following ${trainerName}. You'll receive their programs and session invitations.`);
     }
   };
 

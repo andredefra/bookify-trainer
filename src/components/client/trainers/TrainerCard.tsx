@@ -53,7 +53,6 @@ export function TrainerCard({
             variant={isFollowing ? "secondary" : "outline"} 
             size="sm"
             onClick={() => onFollowToggle(id, name)}
-            className="ml-2"
           >
             {isFollowing ? (
               <>

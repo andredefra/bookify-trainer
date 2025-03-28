@@ -1,15 +1,31 @@
 
-import { Star, Calendar, MapPin } from "lucide-react";
+import { Star, Calendar, MapPin, UserPlus, UserMinus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MarketplaceTrainer } from "./hooks/useTrainerMarketplace";
+import { useFollowedTrainers } from "./hooks/useFollowedTrainers";
 
 interface TrainerCardProps {
   trainer: MarketplaceTrainer;
   onBookSession: (trainerName: string) => void;
+  followedTrainers?: number[];
+  onFollowToggle?: (id: number, name: string) => void;
 }
 
-export function MarketplaceTrainerCard({ trainer, onBookSession }: TrainerCardProps) {
+export function MarketplaceTrainerCard({ 
+  trainer, 
+  onBookSession,
+  followedTrainers = [],
+  onFollowToggle 
+}: TrainerCardProps) {
+  const isFollowing = followedTrainers.includes(Number(trainer.id));
+  
+  const handleFollowToggle = () => {
+    if (onFollowToggle) {
+      onFollowToggle(Number(trainer.id), trainer.name);
+    }
+  };
+
   return (
     <div className="bg-background rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex flex-col h-full">
@@ -53,9 +69,26 @@ export function MarketplaceTrainerCard({ trainer, onBookSession }: TrainerCardPr
             >
               Book Session
             </Button>
-            <Button variant="outline" size="sm" className="flex-1">
-              View Profile
-            </Button>
+            {onFollowToggle && (
+              <Button 
+                variant={isFollowing ? "secondary" : "outline"} 
+                size="sm" 
+                className="flex-1"
+                onClick={handleFollowToggle}
+              >
+                {isFollowing ? (
+                  <>
+                    <UserMinus className="h-3.5 w-3.5 mr-1" />
+                    Unfollow
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-3.5 w-3.5 mr-1" />
+                    Follow
+                  </>
+                )}
+              </Button>
+            )}
           </div>
         </div>
       </div>
