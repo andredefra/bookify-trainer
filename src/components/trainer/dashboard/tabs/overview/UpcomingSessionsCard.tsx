@@ -12,25 +12,25 @@ interface UpcomingSessionsCardProps {
 
 export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSessionsCardProps) {
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle>Upcoming Sessions</CardTitle>
           <CardDescription>Your scheduled training sessions</CardDescription>
         </div>
-        <Button className="flex items-center" onClick={onNewSession}>
+        <Button className="flex items-center whitespace-nowrap" onClick={onNewSession}>
           <PlusCircle className="mr-2 h-4 w-4" />
           <span className="hidden sm:inline">New Session</span>
           <span className="sm:hidden">New</span>
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-hidden">
         <div className="space-y-4">
           {sessions.map((session) => (
-            <div key={session.id} className="flex flex-col p-4 bg-gray-50 rounded-lg">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
+              <div className="flex flex-col gap-3">
                 <div>
-                  <h3 className="font-medium">{session.name}</h3>
+                  <h3 className="font-medium text-base break-words">{session.name}</h3>
                   <div className="text-sm text-muted-foreground">
                     {session.date} • {session.time}
                   </div>
@@ -50,12 +50,13 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
                     )}
                   </div>
                 </div>
-                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3">
+                <div className="flex items-center justify-between gap-2">
                   <div className="text-sm">
                     <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                   </div>
-                  <Button variant="outline" size="sm">
-                    Details
+                  <Button variant="outline" size="sm" className="h-8 px-2 sm:px-4">
+                    <span className="hidden sm:inline">Details</span>
+                    <span className="sm:hidden">View</span>
                   </Button>
                 </div>
               </div>

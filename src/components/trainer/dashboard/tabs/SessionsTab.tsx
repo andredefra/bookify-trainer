@@ -30,9 +30,9 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
   }));
   
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <CardTitle>Training Sessions</CardTitle>
             <CardDescription>Create and manage your training sessions</CardDescription>
@@ -42,49 +42,49 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
               <Button 
                 variant={viewMode === "list" ? "default" : "ghost"}
                 size="sm" 
-                className="rounded-none"
+                className="rounded-none px-2 sm:px-3"
                 onClick={() => setViewMode("list")}
               >
                 <List className="h-4 w-4 mr-1" />
-                List
+                <span className="hidden sm:inline">List</span>
               </Button>
               <Button 
                 variant={viewMode === "calendar" ? "default" : "ghost"}
                 size="sm" 
-                className="rounded-none"
+                className="rounded-none px-2 sm:px-3"
                 onClick={() => setViewMode("calendar")}
               >
                 <CalendarIcon className="h-4 w-4 mr-1" />
-                Calendar
+                <span className="hidden sm:inline">Calendar</span>
               </Button>
             </div>
             <Button className="flex items-center" onClick={() => setShowCreateSessionDialog(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Session
+              <Plus className="sm:mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Create Session</span>
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-hidden">
         {viewMode === "calendar" ? (
           <CalendarView sessions={sessionsWithPaymentInfo} />
         ) : (
           <Tabs defaultValue="upcoming">
-            <TabsList className="mb-6">
-              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-              <TabsTrigger value="past">Past</TabsTrigger>
-              <TabsTrigger value="recurring">Recurring</TabsTrigger>
+            <TabsList className="mb-6 w-full overflow-x-auto flex">
+              <TabsTrigger value="upcoming" className="flex-1 min-w-0 px-2 sm:px-4">Upcoming</TabsTrigger>
+              <TabsTrigger value="past" className="flex-1 min-w-0 px-2 sm:px-4">Past</TabsTrigger>
+              <TabsTrigger value="recurring" className="flex-1 min-w-0 px-2 sm:px-4">Recurring</TabsTrigger>
             </TabsList>
             <TabsContent value="upcoming">
               <div className="space-y-4">
                 {sessionsWithPaymentInfo.map((session) => (
-                  <div key={session.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={session.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 bg-gray-50 rounded-lg">
                     <div>
-                      <h3 className="font-medium">{session.name}</h3>
+                      <h3 className="font-medium break-words">{session.name}</h3>
                       <div className="text-sm text-muted-foreground">
                         {session.date} • {session.time}
                       </div>
-                      <div className="flex mt-2 gap-2">
+                      <div className="flex flex-wrap mt-2 gap-2">
                         <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                           {session.paymentStatus?.paid || 0} paid
                         </Badge>
@@ -100,15 +100,16 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center mt-3 sm:mt-0 space-x-2">
                       <div className="text-sm">
                         <span className="font-medium">{session.participants}/{session.maxParticipants}</span>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="h-8 px-3">
                         Edit
                       </Button>
-                      <Button variant="ghost" size="sm">
-                        Cancel
+                      <Button variant="ghost" size="sm" className="h-8 px-3">
+                        <span className="hidden sm:inline">Cancel</span>
+                        <span className="sm:hidden">X</span>
                       </Button>
                     </div>
                   </div>

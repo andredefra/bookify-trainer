@@ -50,30 +50,32 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
         <CardTitle>Account Settings</CardTitle>
         <CardDescription>Manage your profile and preferences</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-hidden">
         <Tabs defaultValue="profile" value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="mb-6 flex w-full flex-wrap overflow-x-auto">
-            <TabsTrigger value="profile" className="flex-grow">Profile</TabsTrigger>
-            <TabsTrigger value="availability" className="flex-grow">Availability</TabsTrigger>
-            <TabsTrigger value="membership" className="flex-grow">Membership</TabsTrigger>
-            <TabsTrigger value="billing" className="flex-grow">Billing</TabsTrigger>
+          <TabsList className="mb-6 w-full flex flex-wrap overflow-x-auto">
+            <TabsTrigger value="profile" className="flex-1 min-w-0 text-sm px-2 md:px-4">Profile</TabsTrigger>
+            <TabsTrigger value="availability" className="flex-1 min-w-0 text-sm px-2 md:px-4">Availability</TabsTrigger>
+            <TabsTrigger value="membership" className="flex-1 min-w-0 text-sm px-2 md:px-4">Membership</TabsTrigger>
+            <TabsTrigger value="billing" className="flex-1 min-w-0 text-sm px-2 md:px-4">Billing</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="profile">
-            <ProfileSection user={updatedUser} />
-          </TabsContent>
-          
-          <TabsContent value="availability">
-            <AvailabilitySection />
-          </TabsContent>
-          
-          <TabsContent value="membership">
-            <MembershipSection user={updatedUser} />
-          </TabsContent>
-          
-          <TabsContent value="billing">
-            <BillingSection user={updatedUser} />
-          </TabsContent>
+          <div className="overflow-x-hidden">
+            <TabsContent value="profile">
+              <ProfileSection user={updatedUser} />
+            </TabsContent>
+            
+            <TabsContent value="availability">
+              <AvailabilitySection />
+            </TabsContent>
+            
+            <TabsContent value="membership">
+              <MembershipSection user={updatedUser} />
+            </TabsContent>
+            
+            <TabsContent value="billing">
+              <BillingSection user={updatedUser} />
+            </TabsContent>
+          </div>
         </Tabs>
       </CardContent>
       <CardFooter className="border-t flex justify-end pt-6">

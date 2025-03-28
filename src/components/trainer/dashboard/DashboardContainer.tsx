@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
@@ -165,7 +166,7 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
           showMobileMenuButton={!isDesktop}
         />
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-10 px-4 sm:px-6 lg:px-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-10 px-2 sm:px-4 lg:px-6">
           {activeTab === "overview" && <OverviewTab upcomingSessions={mockUpcomingSessions} clients={mockClients} messageRequests={mockMessageRequests} />}
           {activeTab === "clients" && <ClientsTab clients={mockClients} />}
           {activeTab === "sessions" && <SessionsTab upcomingSessions={mockUpcomingSessions} />}
