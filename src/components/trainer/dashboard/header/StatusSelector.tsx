@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Circle } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -41,7 +41,11 @@ export function StatusSelector({ initialStatus = "online" }: StatusSelectorProps
       "offline": "You're now shown as offline to clients"
     };
     
-    toast.success(statusMessages[newStatus]);
+    toast({
+      title: "Status Updated",
+      description: statusMessages[newStatus],
+      variant: "default",
+    });
     
     // Dispatch a custom event for components to listen to status changes
     window.dispatchEvent(new CustomEvent('trainer-status-change', { detail: newStatus }));
