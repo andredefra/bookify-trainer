@@ -5,7 +5,11 @@ import { BookingDialog } from "./BookingDialog";
 import { useTrainerMarketplace } from "./hooks/useTrainerMarketplace";
 import { useFollowedTrainers } from "./hooks/useFollowedTrainers";
 
-export function TrainerMarketplace() {
+interface TrainerMarketplaceProps {
+  isMyTrainersView?: boolean;
+}
+
+export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketplaceProps) {
   const {
     searchQuery,
     setSearchQuery,
@@ -37,6 +41,7 @@ export function TrainerMarketplace() {
         onBookSession={handleBookSession} 
         followedTrainers={followedTrainers}
         onFollowToggle={handleFollowToggle}
+        isMyTrainersView={isMyTrainersView}
       />
       
       {/* Session Booking Dialog */}

@@ -3,22 +3,26 @@ import { Star, Calendar, MapPin, UserPlus, UserMinus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MarketplaceTrainer } from "./hooks/useTrainerMarketplace";
-import { useFollowedTrainers } from "./hooks/useFollowedTrainers";
 
 interface TrainerCardProps {
   trainer: MarketplaceTrainer;
   onBookSession: (trainerName: string) => void;
   followedTrainers?: number[];
   onFollowToggle?: (id: number, name: string) => void;
+  isMyTrainersView?: boolean;
 }
 
 export function MarketplaceTrainerCard({ 
   trainer, 
   onBookSession,
   followedTrainers = [],
-  onFollowToggle 
+  onFollowToggle,
+  isMyTrainersView = false
 }: TrainerCardProps) {
   const isFollowing = followedTrainers.includes(Number(trainer.id));
+  
+  // In "My Trainers" view, we always want to show Unfollow because they're already followed
+  const showUnfollow = isMyTrainersView || isFollowing;
   
   const handleFollowToggle = () => {
     if (onFollowToggle) {
@@ -71,12 +75,12 @@ export function MarketplaceTrainerCard({
             </Button>
             {onFollowToggle && (
               <Button 
-                variant={isFollowing ? "secondary" : "outline"} 
+                variant={showUnfollow ? "secondary" : "outline"} 
                 size="sm" 
                 className="flex-1"
                 onClick={handleFollowToggle}
               >
-                {isFollowing ? (
+                {showUnfollow ? (
                   <>
                     <UserMinus className="h-3.5 w-3.5 mr-1" />
                     Unfollow

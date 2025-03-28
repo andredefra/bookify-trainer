@@ -50,21 +50,12 @@ export function TrainerCard({
             </div>
           </div>
           <Button 
-            variant={isFollowing ? "secondary" : "outline"} 
+            variant="secondary" 
             size="sm"
             onClick={() => onFollowToggle(id, name)}
           >
-            {isFollowing ? (
-              <>
-                <UserMinus className="h-3.5 w-3.5 mr-1" />
-                Unfollow
-              </>
-            ) : (
-              <>
-                <UserPlus className="h-3.5 w-3.5 mr-1" />
-                Follow
-              </>
-            )}
+            <UserMinus className="h-3.5 w-3.5 mr-1" />
+            Unfollow
           </Button>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
