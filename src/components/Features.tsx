@@ -114,7 +114,7 @@ const Features = () => {
                   {t('features.videoTitle')}
                 </h3>
                 <p className="text-base text-muted-foreground mb-4">
-                  {t('features.videoDesc')}
+                  Trainers can add videos to any exercise in their training programs, ensuring clients have perfect visual demonstrations of proper form and technique.
                 </p>
                 <ul className="space-y-2 text-sm md:text-base">
                   <li className="flex items-start">
