@@ -39,7 +39,7 @@ export function SalesColumn({
           {contacts.length}
         </span>
       </div>
-      <div className="flex-1 max-h-[calc(100vh-350px)] overflow-y-auto">
+      <div className="flex-1 overflow-y-auto">
         <div className="flex flex-col gap-2 p-2">
           {contacts.map(contact => (
             <SalesCard 
