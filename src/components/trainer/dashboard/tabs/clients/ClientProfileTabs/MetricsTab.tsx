@@ -14,6 +14,8 @@ interface MetricsTabProps {
 }
 
 export function MetricsTab({ searchQuery = "", clientMetrics }: MetricsTabProps) {
+  console.log("MetricsTab search query:", searchQuery); // Logging per debug
+  
   return (
     <Card>
       <CardContent className="pt-6">
