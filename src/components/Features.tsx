@@ -114,7 +114,7 @@ const Features = () => {
                   {t('features.videoTitle')}
                 </h3>
                 <p className="text-base text-muted-foreground mb-4">
-                  Trainers can add videos to any exercise in their programs, ensuring clients have perfect visual demonstrations of proper form and technique.
+                  Gli allenatori possono aggiungere video a qualsiasi esercizio nei loro programmi, garantendo ai clienti perfette dimostrazioni visive della corretta forma e tecnica.
                 </p>
                 <ul className="space-y-2 text-xs md:text-sm">
                   <li className="flex items-start">
