@@ -9,7 +9,7 @@ const AuthButtons = () => {
     <div className="flex items-center space-x-4">
       <Link
         to="/login"
-        className="px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/5 rounded-full"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent transition-colors duration-200 focus:outline-none border border-border/40 shadow-sm bg-background text-sm font-medium"
       >
         {t('auth.login')}
       </Link>
