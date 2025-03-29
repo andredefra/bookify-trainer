@@ -1,5 +1,5 @@
 
-import { HighlightText } from "../shared/HighlightText";
+import { HighlightText } from "./shared/HighlightText";
 
 interface UpcomingSessionsProps {
   sessions: string[];
