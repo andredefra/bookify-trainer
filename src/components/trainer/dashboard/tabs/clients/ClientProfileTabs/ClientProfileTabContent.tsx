@@ -7,6 +7,7 @@ import { MetricsTab } from "./MetricsTab";
 import { ProgramsTab } from "./ProgramsTab";
 import { NotesTab } from "./NotesTab";
 import { ClientProfileTabList } from "./tabs/ClientProfileTabList";
+import { useTabSearchResults } from "./hooks/useTabSearchResults";
 
 interface ClientProfileTabContentProps {
   client: {
@@ -37,87 +38,20 @@ export function ClientProfileTabContent({
   searchQuery = ""
 }: ClientProfileTabContentProps) {
   const [activeTab, setActiveTab] = useState("overview");
-  const [matchCounts, setMatchCounts] = useState<Record<string, number>>({
-    overview: 0,
-    goals: 0,
-    metrics: 0,
-    programs: 0,
-    notes: 0
+  
+  // Use our custom hook to handle search functionality
+  const { matchCounts, firstMatchTab } = useTabSearchResults({
+    searchQuery,
+    clientDetails: mockClientDetails,
+    activeTab
   });
-
-  // Calculate search matches in each tab
+  
+  // If there's a first match tab and it's different from active tab, switch to it
   useEffect(() => {
-    if (!searchQuery || searchQuery.trim() === "") {
-      setMatchCounts({
-        overview: 0,
-        goals: 0,
-        metrics: 0,
-        programs: 0,
-        notes: 0
-      });
-      return;
+    if (firstMatchTab && firstMatchTab !== activeTab) {
+      setActiveTab(firstMatchTab);
     }
-    
-    const query = searchQuery.toLowerCase();
-    const counts: Record<string, number> = {
-      overview: 0,
-      goals: 0,
-      metrics: 0,
-      programs: 0,
-      notes: 0
-    };
-    
-    // Overview tab matches
-    if (
-      mockClientDetails.lastActivity.toLowerCase().includes(query) || 
-      mockClientDetails.upcomingSessions.some(s => s.toLowerCase().includes(query)) ||
-      mockClientDetails.weight.toLowerCase().includes(query) ||
-      mockClientDetails.height.toLowerCase().includes(query) ||
-      mockClientDetails.bodyFat.toLowerCase().includes(query)
-    ) {
-      counts.overview++;
-    }
-    
-    // Goals tab matches
-    const goalMatches = mockClientDetails.goals.filter(g => 
-      g.toLowerCase().includes(query)
-    ).length;
-    counts.goals = goalMatches;
-    
-    // Metrics tab matches (check weight, height, bodyFat)
-    if (
-      mockClientDetails.weight.toLowerCase().includes(query) || 
-      mockClientDetails.height.toLowerCase().includes(query) ||
-      mockClientDetails.bodyFat.toLowerCase().includes(query)
-    ) {
-      counts.metrics++;
-    }
-    
-    // Programs tab has mock content, but we'll search for basic terms
-    if (
-      "strength conditioning flexibility recovery".includes(query)
-    ) {
-      counts.programs++;
-    }
-    
-    // Notes tab matches
-    if (mockClientDetails.notes.toLowerCase().includes(query)) {
-      counts.notes++;
-    }
-    
-    setMatchCounts(counts);
-    
-    // If there are no matches in the current tab but matches in other tabs,
-    // automatically switch to the first tab with matches
-    const totalMatches = Object.values(counts).reduce((acc, val) => acc + val, 0);
-    if (totalMatches > 0 && counts[activeTab] === 0) {
-      const firstMatchTab = Object.entries(counts)
-        .find(([_, count]) => count > 0)?.[0];
-      if (firstMatchTab) {
-        setActiveTab(firstMatchTab);
-      }
-    }
-  }, [searchQuery, mockClientDetails, activeTab]);
+  }, [firstMatchTab]);
 
   // Pass the search query to each tab component
   return (
