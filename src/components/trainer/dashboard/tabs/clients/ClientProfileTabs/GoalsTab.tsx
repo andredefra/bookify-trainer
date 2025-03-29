@@ -2,14 +2,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { HighlightText } from "./shared/HighlightText";
 
 interface GoalsTabProps {
   mockClientDetails: {
     goals: string[];
   };
+  searchQuery?: string;
 }
 
-export function GoalsTab({ mockClientDetails }: GoalsTabProps) {
+export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps) {
   return (
     <Card>
       <CardContent className="pt-6 space-y-4">
@@ -21,7 +23,9 @@ export function GoalsTab({ mockClientDetails }: GoalsTabProps) {
         {mockClientDetails.goals.map((goal, i) => (
           <div key={i} className="flex justify-between items-center p-3 bg-gray-50 rounded">
             <div>
-              <div className="font-medium">{goal}</div>
+              <div className="font-medium">
+                <HighlightText text={goal} highlight={searchQuery} />
+              </div>
               <div className="text-xs text-muted-foreground">Target date: Aug 30, 2023</div>
             </div>
             <div className="flex items-center space-x-2">

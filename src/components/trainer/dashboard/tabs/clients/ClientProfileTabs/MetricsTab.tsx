@@ -4,7 +4,16 @@ import { Button } from "@/components/ui/button";
 import { MetricsChart } from "./metrics/MetricsChart";
 import { RecentMeasurements } from "./metrics/RecentMeasurements";
 
-export function MetricsTab() {
+interface MetricsTabProps {
+  searchQuery?: string;
+  clientMetrics?: {
+    weight: string;
+    height: string;
+    bodyFat: string;
+  };
+}
+
+export function MetricsTab({ searchQuery = "", clientMetrics }: MetricsTabProps) {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -14,7 +23,10 @@ export function MetricsTab() {
         </div>
         
         <MetricsChart />
-        <RecentMeasurements />
+        <RecentMeasurements 
+          searchQuery={searchQuery}
+          clientMetrics={clientMetrics}
+        />
       </CardContent>
     </Card>
   );

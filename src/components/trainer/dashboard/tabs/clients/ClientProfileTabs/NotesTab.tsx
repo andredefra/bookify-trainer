@@ -1,14 +1,16 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { HighlightText } from "./shared/HighlightText";
 
 interface NotesTabProps {
   mockClientDetails: {
     notes: string;
   };
+  searchQuery?: string;
 }
 
-export function NotesTab({ mockClientDetails }: NotesTabProps) {
+export function NotesTab({ mockClientDetails, searchQuery = "" }: NotesTabProps) {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -32,7 +34,10 @@ export function NotesTab({ mockClientDetails }: NotesTabProps) {
               <span className="text-xs text-muted-foreground">3 days ago</span>
             </div>
             <p className="text-sm mt-1">
-              Client reported feeling stronger during squat exercises. Increased weight by 5kg.
+              <HighlightText 
+                text="Client reported feeling stronger during squat exercises. Increased weight by 5kg."
+                highlight={searchQuery}
+              />
             </p>
           </div>
           
@@ -42,7 +47,10 @@ export function NotesTab({ mockClientDetails }: NotesTabProps) {
               <span className="text-xs text-muted-foreground">10 days ago</span>
             </div>
             <p className="text-sm mt-1">
-              Focused on form for deadlifts. Client needs to work on keeping back straight.
+              <HighlightText 
+                text="Focused on form for deadlifts. Client needs to work on keeping back straight."
+                highlight={searchQuery}
+              />
             </p>
           </div>
         </div>

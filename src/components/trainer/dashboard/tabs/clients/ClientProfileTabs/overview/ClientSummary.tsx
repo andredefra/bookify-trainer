@@ -1,26 +1,28 @@
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Dumbbell } from "lucide-react";
+import { HighlightText } from "../shared/HighlightText";
 
 interface ClientSummaryProps {
   lastActivity: string;
   totalSessions: number;
+  searchQuery?: string;
 }
 
-export function ClientSummary({ lastActivity, totalSessions }: ClientSummaryProps) {
+export function ClientSummary({ lastActivity, totalSessions, searchQuery = "" }: ClientSummaryProps) {
   return (
-    <>
-      <h3 className="text-sm font-medium">Client Summary</h3>
-      <div className="grid grid-cols-2 gap-2">
-        <div className="flex items-center text-sm">
-          <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-          <span>Last activity: {lastActivity}</span>
+    <div>
+      <h3 className="text-sm font-medium">Activity Summary</h3>
+      <div className="grid grid-cols-2 gap-2 mt-2">
+        <div className="p-2 bg-gray-50 rounded">
+          <div className="text-xs text-muted-foreground">Last Activity</div>
+          <div className="font-medium">
+            <HighlightText text={lastActivity} highlight={searchQuery} />
+          </div>
         </div>
-        <div className="flex items-center text-sm">
-          <Dumbbell className="h-4 w-4 mr-2 text-muted-foreground" />
-          <span>Total sessions: {totalSessions}</span>
+        <div className="p-2 bg-gray-50 rounded">
+          <div className="text-xs text-muted-foreground">Total Sessions</div>
+          <div className="font-medium">{totalSessions}</div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

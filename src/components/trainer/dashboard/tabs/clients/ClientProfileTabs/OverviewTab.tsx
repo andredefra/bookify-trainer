@@ -13,23 +13,29 @@ interface OverviewTabProps {
     bodyFat: string;
   };
   clientSessions: number;
+  searchQuery?: string;
 }
 
-export function OverviewTab({ mockClientDetails, clientSessions }: OverviewTabProps) {
+export function OverviewTab({ mockClientDetails, clientSessions, searchQuery = "" }: OverviewTabProps) {
   return (
     <Card>
       <CardContent className="pt-6 space-y-4">
         <ClientSummary 
           lastActivity={mockClientDetails.lastActivity} 
-          totalSessions={clientSessions} 
+          totalSessions={clientSessions}
+          searchQuery={searchQuery}
         />
         
-        <UpcomingSessions sessions={mockClientDetails.upcomingSessions} />
+        <UpcomingSessions 
+          sessions={mockClientDetails.upcomingSessions}
+          searchQuery={searchQuery}
+        />
         
         <BasicMeasurements 
           weight={mockClientDetails.weight} 
           height={mockClientDetails.height} 
-          bodyFat={mockClientDetails.bodyFat} 
+          bodyFat={mockClientDetails.bodyFat}
+          searchQuery={searchQuery}
         />
       </CardContent>
     </Card>

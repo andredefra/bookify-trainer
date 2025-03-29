@@ -2,8 +2,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { HighlightText } from "./shared/HighlightText";
 
-export function ProgramsTab() {
+interface ProgramsTabProps {
+  searchQuery?: string;
+}
+
+export function ProgramsTab({ searchQuery = "" }: ProgramsTabProps) {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -15,7 +20,9 @@ export function ProgramsTab() {
         <div className="p-4 bg-gray-50 rounded mb-3">
           <div className="flex justify-between items-start">
             <div>
-              <h4 className="font-medium">Strength & Conditioning</h4>
+              <h4 className="font-medium">
+                <HighlightText text="Strength & Conditioning" highlight={searchQuery} />
+              </h4>
               <p className="text-xs text-muted-foreground">Assigned on Jul 10, 2023</p>
             </div>
             <Badge variant="secondary">Current</Badge>
@@ -37,7 +44,9 @@ export function ProgramsTab() {
         
         <h3 className="text-sm font-medium mt-4 mb-2">Previous Programs</h3>
         <div className="p-3 bg-gray-50 rounded">
-          <h4 className="font-medium">Flexibility & Recovery</h4>
+          <h4 className="font-medium">
+            <HighlightText text="Flexibility & Recovery" highlight={searchQuery} />
+          </h4>
           <div className="text-xs text-muted-foreground">Completed on Jun 15, 2023</div>
         </div>
       </CardContent>

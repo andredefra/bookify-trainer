@@ -3,6 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { ClientProfile } from "@/components/ClientProfile";
 import { ClientProfileTabContent } from "./ClientProfileTabs/ClientProfileTabContent";
 import { ProfileDialogFooter } from "./ClientProfileTabs/ProfileDialogFooter";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 // Mock client details for demonstration
 const mockClientDetails = {
@@ -31,6 +34,8 @@ interface ClientProfileDialogProps {
 }
 
 export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfileDialogProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  
   if (!client) return null;
   
   return (
@@ -38,6 +43,16 @@ export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfil
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle className="text-xl">Client Profile</DialogTitle>
+          <div className="relative mt-2">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search client information..." 
+              className="w-full pl-9 bg-muted/30"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </DialogHeader>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -57,6 +72,7 @@ export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfil
             <ClientProfileTabContent 
               client={client}
               mockClientDetails={mockClientDetails}
+              searchQuery={searchQuery}
             />
           </div>
         </div>
