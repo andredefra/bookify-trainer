@@ -21,10 +21,11 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
           icon={Home}
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
+          className="px-3"
         />
       </div>
       
-      <div className="flex items-center ml-6">
+      <div className="flex items-center">
         <NavItem
           to="/#features"
           label={t('nav.features')}
