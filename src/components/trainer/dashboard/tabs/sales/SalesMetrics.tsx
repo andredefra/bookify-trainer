@@ -2,7 +2,7 @@
 import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SalesContact } from "./types";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, differenceInDays } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Users, TrendingUp, Calendar, Euro } from "lucide-react";
 
