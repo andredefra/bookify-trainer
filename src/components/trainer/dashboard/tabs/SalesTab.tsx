@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -181,6 +182,7 @@ export function SalesTab() {
     ]);
     
     setShowAddLeadDialog(false);
+    toast.success(`Contact added: ${newContact.name}`);
   };
 
   const clientContacts = contacts.filter(contact => contact.status === 'client');
@@ -190,15 +192,15 @@ export function SalesTab() {
       <Card>
         <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <CardTitle>Gestione Vendite</CardTitle>
-            <CardDescription>Gestisci i tuoi lead, prospects e clienti in un unico posto</CardDescription>
+            <CardTitle>Sales Management</CardTitle>
+            <CardDescription>Manage your leads, prospects and clients in one place</CardDescription>
           </div>
           <Button 
             className="self-start sm:self-center mt-2 sm:mt-0" 
             onClick={() => setShowAddLeadDialog(true)}
           >
             <Plus className="mr-2 h-4 w-4" />
-            Nuovo Lead
+            New Lead
           </Button>
         </CardHeader>
         <CardContent>

@@ -30,7 +30,7 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
       href: "overview",
     },
     {
-      title: "Vendite",
+      title: "Sales",
       icon: FolderKanban,
       href: "sales",
     },

@@ -54,14 +54,14 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesK
             onUpdateContact={onUpdateContact}
           />
           <SalesColumn 
-            title="Persi" 
+            title="Lost" 
             contacts={columns.lost} 
             status="lost"
             onMoveContact={onMoveContact}
             onUpdateContact={onUpdateContact}
           />
           <SalesColumn 
-            title="Terminati" 
+            title="Terminated" 
             contacts={columns.terminated} 
             status="terminated"
             onMoveContact={onMoveContact}

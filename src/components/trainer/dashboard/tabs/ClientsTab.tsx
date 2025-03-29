@@ -7,6 +7,7 @@ import { ClientInviteDialog } from "./clients/ClientInviteDialog";
 import { ClientGoalsDialog } from "./clients/ClientGoalsDialog";
 import { ClientCard } from "./clients/ClientCard";
 import { ClientProfileDialog } from "./clients/ClientProfileDialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ClientItem {
   id: number;
@@ -56,16 +57,18 @@ export function ClientsTab({ clients }: ClientsTabProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4 w-full">
-            {clients.map((client) => (
-              <ClientCard 
-                key={client.id}
-                client={client}
-                onSetGoals={handleSetGoals}
-                onViewProfile={handleViewProfile}
-              />
-            ))}
-          </div>
+          <ScrollArea className="h-[70vh] pr-4">
+            <div className="space-y-4 w-full">
+              {clients.map((client) => (
+                <ClientCard 
+                  key={client.id}
+                  client={client}
+                  onSetGoals={handleSetGoals}
+                  onViewProfile={handleViewProfile}
+                />
+              ))}
+            </div>
+          </ScrollArea>
         </CardContent>
       </Card>
       

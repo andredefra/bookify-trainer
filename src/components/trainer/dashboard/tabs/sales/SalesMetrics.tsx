@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SalesContact } from "../SalesTab";
 import { differenceInDays, formatDistanceToNow } from "date-fns";
-import { it } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { Users, TrendingUp, Calendar, DollarSign } from "lucide-react";
 
 interface SalesMetricsProps {
@@ -44,9 +44,13 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
       }
     });
 
+    // Calculate potential value (e.g., assume 20% more than current)
+    const prospectiveValue = Math.round(totalValue * 1.2);
+
     return {
       totalClients,
       totalValue,
+      prospectiveValue,
       avgRetentionDays,
       longestClient,
       maxDays
@@ -61,8 +65,8 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
             <Users className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Totale Clienti</p>
-            <h4 className="text-2xl font-semibold">{metrics.totalClients}</h4>
+            <p className="text-sm text-muted-foreground">Prospective Value</p>
+            <h4 className="text-2xl font-semibold">${metrics.prospectiveValue.toLocaleString()}</h4>
           </div>
         </CardContent>
       </Card>
@@ -73,8 +77,8 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
             <DollarSign className="h-5 w-5 text-green-700" />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Valore Totale</p>
-            <h4 className="text-2xl font-semibold">{metrics.totalValue.toLocaleString()}€</h4>
+            <p className="text-sm text-muted-foreground">Total Value</p>
+            <h4 className="text-2xl font-semibold">${metrics.totalValue.toLocaleString()}</h4>
           </div>
         </CardContent>
       </Card>
@@ -85,8 +89,8 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
             <Calendar className="h-5 w-5 text-amber-700" />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Durata Media</p>
-            <h4 className="text-2xl font-semibold">{metrics.avgRetentionDays} giorni</h4>
+            <p className="text-sm text-muted-foreground">Average Duration</p>
+            <h4 className="text-2xl font-semibold">{metrics.avgRetentionDays} days</h4>
           </div>
         </CardContent>
       </Card>
@@ -97,14 +101,14 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
             <TrendingUp className="h-5 w-5 text-purple-700" />
           </div>
           <div className="w-full">
-            <p className="text-sm text-muted-foreground">Cliente più Longevo</p>
+            <p className="text-sm text-muted-foreground">Longest Client</p>
             {metrics.longestClient ? (
               <div>
                 <h4 className="text-sm font-medium truncate">{metrics.longestClient.name}</h4>
                 <p className="text-xs text-muted-foreground">
                   {formatDistanceToNow(
                     new Date(metrics.longestClient.clientSince!), 
-                    { locale: it }
+                    { locale: enUS }
                   )}
                 </p>
               </div>
