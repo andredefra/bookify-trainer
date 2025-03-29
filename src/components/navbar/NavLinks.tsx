@@ -12,7 +12,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
   const { t } = useLanguage();
   
   return (
-    <div className="flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
+    <div className="flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
       <NavItem
         to="/"
         label={t('nav.home')}
@@ -20,7 +20,6 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         icon={Home}
         isHomePage={isHomePage}
         scrollToSection={scrollToSection}
-        className="px-3"
       />
       
       <NavItem
@@ -29,7 +28,6 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         sectionId="features"
         isHomePage={isHomePage}
         scrollToSection={scrollToSection}
-        className="px-3"
       />
       
       <NavItem
@@ -38,7 +36,6 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         sectionId="how-it-works"
         isHomePage={isHomePage}
         scrollToSection={scrollToSection}
-        className="px-3"
       />
       
       <NavItem
@@ -47,7 +44,6 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         sectionId="pricing"
         isHomePage={isHomePage}
         scrollToSection={scrollToSection}
-        className="px-3"
       />
     </div>
   );
