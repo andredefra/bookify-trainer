@@ -93,7 +93,7 @@ const HowItWorks = () => {
               </div>
               <div className="h-64 md:h-auto bg-cover bg-center" 
                 style={{
-                  backgroundImage: `url("/lovable-uploads/4e20e356-df8f-4cf2-8164-2764176ffad9.png")`,
+                  backgroundImage: `url("/lovable-uploads/467225b2-f7b7-4740-9e7b-0bfd385f4ef9.png")`,
                   backgroundSize: "cover",
                   backgroundPosition: "center"
                 }}>
