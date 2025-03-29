@@ -133,9 +133,9 @@ const Features = () => {
               </div>
               <div className="bg-white p-4 flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/66e06f64-e5e8-4ff1-814e-b919c087ddd0.png" 
-                  alt="Barbell Squat exercise demonstration" 
-                  className="w-full h-auto object-contain max-h-[350px]"
+                  src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                  alt="Trainer laughing with happiness" 
+                  className="w-full h-auto object-cover max-h-[350px]"
                 />
               </div>
             </div>
