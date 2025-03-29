@@ -24,13 +24,14 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
         />
       </div>
       
-      <div className="flex space-x-4 items-center ml-8">
+      <div className="flex items-center ml-6">
         <NavItem
           to="/#features"
           label={t('nav.features')}
           sectionId="features"
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
+          className="px-3"
         />
         
         <NavItem
@@ -39,6 +40,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
           sectionId="how-it-works"
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
+          className="px-3"
         />
         
         <NavItem
@@ -47,6 +49,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
           sectionId="pricing"
           isHomePage={isHomePage}
           scrollToSection={scrollToSection}
+          className="px-3"
         />
       </div>
     </div>
