@@ -53,8 +53,8 @@
     @apply border-border;
   }
   
-  html {
-    @apply scroll-smooth;
+  html, body {
+    @apply scroll-smooth overflow-x-hidden max-w-full;
   }
 
   body {
