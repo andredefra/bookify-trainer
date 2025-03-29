@@ -3,7 +3,7 @@ import { useDrag } from "react-dnd";
 import { useState } from "react";
 import { format, formatDistanceToNow } from "date-fns";
 import { it } from "date-fns/locale";
-import { SalesContact } from "../SalesTab";
+import { SalesContact } from "./types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, Calendar, Euro, Edit } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -81,9 +81,9 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
                 <Badge className={statusColors[contact.status]}>
                   {contact.status === 'lead' && 'Lead'}
                   {contact.status === 'prospect' && 'Prospect'}
-                  {contact.status === 'client' && 'Cliente'}
-                  {contact.status === 'lost' && 'Perso'}
-                  {contact.status === 'terminated' && 'Terminato'}
+                  {contact.status === 'client' && 'Client'}
+                  {contact.status === 'lost' && 'Lost'}
+                  {contact.status === 'terminated' && 'Terminated'}
                 </Badge>
               </div>
             </div>
@@ -123,13 +123,13 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
 
             {contact.clientSince && contact.status === 'client' && (
               <div className="text-xs mt-1 pt-1 border-t border-muted">
-                <span className="text-green-600 font-medium">Cliente da: {getClientSinceText()}</span>
+                <span className="text-green-600 font-medium">Client since: {getClientSinceText()}</span>
               </div>
             )}
 
             {contact.source && (
               <div className="text-xs text-muted-foreground mt-1">
-                Fonte: {contact.source}
+                Source: {contact.source}
               </div>
             )}
             

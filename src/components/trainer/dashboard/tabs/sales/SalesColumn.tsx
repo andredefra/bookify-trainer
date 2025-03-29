@@ -1,6 +1,6 @@
 
 import { useDrop } from "react-dnd";
-import { SalesContact } from "../SalesTab";
+import { SalesContact } from "./types";
 import { SalesCard } from "./SalesCard";
 
 interface SalesColumnProps {

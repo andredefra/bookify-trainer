@@ -1,6 +1,6 @@
 
 import { useMemo } from "react";
-import { SalesContact } from "../SalesTab";
+import { SalesContact } from "./types";
 import { SalesColumn } from "./SalesColumn";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

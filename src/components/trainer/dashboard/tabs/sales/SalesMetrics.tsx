@@ -1,7 +1,7 @@
 
 import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { SalesContact } from "../SalesTab";
+import { SalesContact } from "./types";
 import { differenceInDays, formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Users, TrendingUp, Calendar, DollarSign } from "lucide-react";

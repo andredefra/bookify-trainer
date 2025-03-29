@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { SalesContact } from "../SalesTab";
+import { SalesContact } from "./types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 
@@ -51,13 +51,13 @@ export function EditableContactDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Modifica Contatto</DialogTitle>
+          <DialogTitle>Edit Contact</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nome</Label>
+              <Label htmlFor="name">Name</Label>
               <Input 
                 id="name"
                 value={formData.name} 
@@ -67,20 +67,20 @@ export function EditableContactDialog({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="status">Stato</Label>
+              <Label htmlFor="status">Status</Label>
               <Select 
                 value={formData.status}
                 onValueChange={(value: SalesContact['status']) => handleChange('status', value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Seleziona stato" />
+                  <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="lead">Lead</SelectItem>
                   <SelectItem value="prospect">Prospect</SelectItem>
-                  <SelectItem value="client">Cliente</SelectItem>
-                  <SelectItem value="lost">Perso</SelectItem>
-                  <SelectItem value="terminated">Terminato</SelectItem>
+                  <SelectItem value="client">Client</SelectItem>
+                  <SelectItem value="lost">Lost</SelectItem>
+                  <SelectItem value="terminated">Terminated</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -99,7 +99,7 @@ export function EditableContactDialog({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="phone">Telefono</Label>
+              <Label htmlFor="phone">Phone</Label>
               <Input 
                 id="phone" 
                 value={formData.phone || ''} 
@@ -110,7 +110,7 @@ export function EditableContactDialog({
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="company">Azienda</Label>
+              <Label htmlFor="company">Company</Label>
               <Input 
                 id="company" 
                 value={formData.company || ''} 
@@ -119,7 +119,7 @@ export function EditableContactDialog({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="source">Fonte</Label>
+              <Label htmlFor="source">Source</Label>
               <Input 
                 id="source" 
                 value={formData.source || ''} 
@@ -130,7 +130,7 @@ export function EditableContactDialog({
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="value">Valore (€)</Label>
+              <Label htmlFor="value">Value ($)</Label>
               <Input 
                 id="value" 
                 type="number" 
@@ -142,7 +142,7 @@ export function EditableContactDialog({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="nextActionDate">Data prossima azione</Label>
+              <Label htmlFor="nextActionDate">Next Action Date</Label>
               <Input 
                 id="nextActionDate" 
                 type="date" 
@@ -153,7 +153,7 @@ export function EditableContactDialog({
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="nextAction">Prossima azione</Label>
+            <Label htmlFor="nextAction">Next Action</Label>
             <Input 
               id="nextAction" 
               value={formData.nextAction || ''} 
@@ -162,7 +162,7 @@ export function EditableContactDialog({
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="notes">Note</Label>
+            <Label htmlFor="notes">Notes</Label>
             <Textarea 
               id="notes" 
               value={formData.notes || ''} 
@@ -173,9 +173,9 @@ export function EditableContactDialog({
           
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annulla
+              Cancel
             </Button>
-            <Button type="submit">Salva</Button>
+            <Button type="submit">Save</Button>
           </DialogFooter>
         </form>
       </DialogContent>

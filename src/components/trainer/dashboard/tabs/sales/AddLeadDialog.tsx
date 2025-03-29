@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { SalesContact } from "../SalesTab";
+import { SalesContact } from "./types";
 
 interface AddLeadDialogProps {
   open: boolean;
@@ -65,9 +65,9 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Aggiungi Nuovo Lead</DialogTitle>
+          <DialogTitle>Add New Lead</DialogTitle>
           <DialogDescription>
-            Inserisci i dettagli del nuovo potenziale cliente.
+            Enter the details of the new potential client.
           </DialogDescription>
         </DialogHeader>
         
@@ -75,7 +75,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Nome *
+                Name *
               </Label>
               <Input
                 id="name"
@@ -104,7 +104,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
             
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="phone" className="text-right">
-                Telefono
+                Phone
               </Label>
               <Input
                 id="phone"
@@ -117,7 +117,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
             
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="company" className="text-right">
-                Azienda
+                Company
               </Label>
               <Input
                 id="company"
@@ -130,7 +130,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
             
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="source" className="text-right">
-                Fonte
+                Source
               </Label>
               <Input
                 id="source"
@@ -138,13 +138,13 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
                 value={formData.source}
                 onChange={handleChange}
                 className="col-span-3"
-                placeholder="Es. Sito Web, Referral, Social Media"
+                placeholder="E.g. Website, Referral, Social Media"
               />
             </div>
             
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="value" className="text-right">
-                Valore (€)
+                Value ($)
               </Label>
               <Input
                 id="value"
@@ -160,7 +160,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
             
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="nextAction" className="text-right">
-                Prossima Azione
+                Next Action
               </Label>
               <Input
                 id="nextAction"
@@ -168,13 +168,13 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
                 value={formData.nextAction}
                 onChange={handleChange}
                 className="col-span-3"
-                placeholder="Es. Chiamata, Inviare preventivo"
+                placeholder="E.g. Call, Send proposal"
               />
             </div>
             
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="nextActionDate" className="text-right">
-                Data
+                Date
               </Label>
               <Input
                 id="nextActionDate"
@@ -188,7 +188,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
             
             <div className="grid grid-cols-4 items-start gap-4">
               <Label htmlFor="notes" className="text-right">
-                Note
+                Notes
               </Label>
               <Textarea
                 id="notes"
@@ -202,7 +202,7 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
           </div>
           
           <DialogFooter>
-            <Button type="submit">Aggiungi Lead</Button>
+            <Button type="submit">Add Lead</Button>
           </DialogFooter>
         </form>
       </DialogContent>
