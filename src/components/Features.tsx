@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video, CheckCircle } from 'lucide-react';
@@ -130,11 +131,11 @@ const Features = () => {
                   </li>
                 </ul>
               </div>
-              <div className="bg-white p-0 flex items-center justify-center">
+              <div className="bg-white p-4 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/66e06f64-e5e8-4ff1-814e-b919c087ddd0.png" 
                   alt="Barbell Squat exercise demonstration" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain max-h-[350px]"
                 />
               </div>
             </div>
