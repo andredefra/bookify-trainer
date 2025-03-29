@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video, CheckCircle } from 'lucide-react';
@@ -115,17 +116,17 @@ const Features = () => {
                 <p className="text-base text-muted-foreground mb-4">
                   Trainers can add videos to any exercise in their programs, ensuring clients have perfect visual demonstrations of proper form and technique.
                 </p>
-                <ul className="space-y-2 text-sm md:text-base">
+                <ul className="space-y-2 text-xs md:text-sm">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
+                    <CheckCircle className="h-4 w-4 text-primary shrink-0 mr-2 mt-0.5" />
                     <span>{t('features.videoFeature1')}</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
+                    <CheckCircle className="h-4 w-4 text-primary shrink-0 mr-2 mt-0.5" />
                     <span>{t('features.videoFeature2')}</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mr-2 mt-0.5" />
+                    <CheckCircle className="h-4 w-4 text-primary shrink-0 mr-2 mt-0.5" />
                     <span>{t('features.videoFeature3')}</span>
                   </li>
                 </ul>
