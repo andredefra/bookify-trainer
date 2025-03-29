@@ -54,7 +54,7 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
   }, [clients]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <Card>
         <CardContent className="p-4 flex items-center">
           <div className="bg-blue-100 p-3 rounded-full mr-4">
@@ -96,7 +96,7 @@ export function SalesMetrics({ clients }: SalesMetricsProps) {
           <div className="bg-purple-100 p-3 rounded-full mr-4">
             <TrendingUp className="h-5 w-5 text-purple-700" />
           </div>
-          <div>
+          <div className="w-full">
             <p className="text-sm text-muted-foreground">Cliente più Longevo</p>
             {metrics.longestClient ? (
               <div>

@@ -18,10 +18,10 @@ interface ClientCardProps {
 
 export function ClientCard({ client, onSetGoals, onViewProfile }: ClientCardProps) {
   return (
-    <div className="p-4 bg-gray-50 rounded-lg">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-        <div>
-          <h3 className="font-medium">{client.name}</h3>
+    <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-medium truncate">{client.name}</h3>
           <div className="text-sm text-muted-foreground">
             {client.sessions} sessions • Last: {client.lastSession}
           </div>
@@ -48,14 +48,15 @@ export function ClientCard({ client, onSetGoals, onViewProfile }: ClientCardProp
             )}
           </div>
         </div>
-        <div className="flex items-center space-x-2 mt-3 sm:mt-0">
+        <div className="flex items-center space-x-2 mt-2 sm:mt-0">
           <Button 
             variant="outline" 
             size="sm" 
             onClick={() => onSetGoals(client.name)}
           >
             <Target className="mr-1 h-4 w-4" />
-            Set Goals
+            <span className="hidden sm:inline">Set Goals</span>
+            <span className="sm:hidden">Goals</span>
           </Button>
           <Button 
             variant="ghost" 
@@ -63,7 +64,8 @@ export function ClientCard({ client, onSetGoals, onViewProfile }: ClientCardProp
             onClick={() => onViewProfile(client)}
           >
             <Eye className="mr-1 h-4 w-4" />
-            View Profile
+            <span className="hidden sm:inline">View Profile</span>
+            <span className="sm:hidden">View</span>
           </Button>
         </div>
       </div>

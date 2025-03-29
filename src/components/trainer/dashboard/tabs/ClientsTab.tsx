@@ -38,7 +38,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   
   return (
     <>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -56,7 +56,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             {clients.map((client) => (
               <ClientCard 
                 key={client.id}
