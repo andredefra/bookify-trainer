@@ -134,8 +134,8 @@ const Features = () => {
               </div>
               <div className="bg-white p-4 flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/60d8d824-f090-4fbc-8935-e858e4d59547.png" 
-                  alt="Video exercise demonstration" 
+                  src="/lovable-uploads/66e06f64-e5e8-4ff1-814e-b919c087ddd0.png" 
+                  alt="Barbell Squat exercise demonstration" 
                   className="max-w-full rounded shadow"
                 />
               </div>
