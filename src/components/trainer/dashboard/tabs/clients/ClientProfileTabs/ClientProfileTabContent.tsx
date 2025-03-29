@@ -7,6 +7,7 @@ import { MetricsTab } from "./MetricsTab";
 import { ProgramsTab } from "./ProgramsTab";
 import { NotesTab } from "./NotesTab";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ClientProfileTabContentProps {
   client: {
@@ -122,48 +123,50 @@ export function ClientProfileTabContent({
   // Pass the search query to each tab component
   return (
     <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="mb-4">
-        <TabsTrigger value="overview" className="relative">
-          Overview
-          {matchCounts.overview > 0 && (
-            <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-              {matchCounts.overview}
-            </Badge>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="goals" className="relative">
-          Goals
-          {matchCounts.goals > 0 && (
-            <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-              {matchCounts.goals}
-            </Badge>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="metrics" className="relative">
-          Metrics
-          {matchCounts.metrics > 0 && (
-            <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-              {matchCounts.metrics}
-            </Badge>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="programs" className="relative">
-          Programs
-          {matchCounts.programs > 0 && (
-            <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-              {matchCounts.programs}
-            </Badge>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="notes" className="relative">
-          Notes
-          {matchCounts.notes > 0 && (
-            <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
-              {matchCounts.notes}
-            </Badge>
-          )}
-        </TabsTrigger>
-      </TabsList>
+      <ScrollArea className="w-full pb-1">
+        <TabsList className="mb-4 w-max">
+          <TabsTrigger value="overview" className="relative">
+            Overview
+            {matchCounts.overview > 0 && (
+              <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                {matchCounts.overview}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="goals" className="relative">
+            Goals
+            {matchCounts.goals > 0 && (
+              <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                {matchCounts.goals}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="metrics" className="relative">
+            Metrics
+            {matchCounts.metrics > 0 && (
+              <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                {matchCounts.metrics}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="programs" className="relative">
+            Programs
+            {matchCounts.programs > 0 && (
+              <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                {matchCounts.programs}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="notes" className="relative">
+            Notes
+            {matchCounts.notes > 0 && (
+              <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px] rounded-full">
+                {matchCounts.notes}
+              </Badge>
+            )}
+          </TabsTrigger>
+        </TabsList>
+      </ScrollArea>
       
       <TabsContent value="overview">
         <OverviewTab 
