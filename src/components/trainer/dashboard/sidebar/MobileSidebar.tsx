@@ -1,11 +1,10 @@
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart } from "lucide-react";
+import { Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart, FolderKanban } from "lucide-react";
 import { StatusSelector } from "../header/StatusSelector";
 
 interface MobileSidebarProps {
@@ -30,6 +29,7 @@ export function MobileSidebar({
 
   const navigationItems = [
     { title: "Overview", icon: Home, href: "overview" },
+    { title: "Vendite", icon: FolderKanban, href: "sales" },
     { title: "Clients", icon: Users, href: "clients" },
     { title: "Programs", icon: Dumbbell, href: "programs" },
     { title: "Sessions", icon: Calendar, href: "sessions" },

@@ -10,6 +10,7 @@ import { MessagesTab } from "./tabs/MessagesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
+import { SalesTab } from "./tabs/SalesTab";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { TrainerSessionItem } from "@/types/sessions";
 
@@ -168,6 +169,7 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden pb-6 px-2 sm:px-4 lg:px-6">
           {activeTab === "overview" && <OverviewTab upcomingSessions={mockUpcomingSessions} clients={mockClients} messageRequests={mockMessageRequests} />}
+          {activeTab === "sales" && <SalesTab />}
           {activeTab === "clients" && <ClientsTab clients={mockClients} />}
           {activeTab === "sessions" && <SessionsTab upcomingSessions={mockUpcomingSessions} />}
           {activeTab === "programs" && <ProgramsTab />}

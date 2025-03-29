@@ -9,7 +9,8 @@ import {
   MessageSquare,
   Settings,
   CreditCard,
-  LineChart
+  LineChart,
+  FolderKanban
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -27,6 +28,11 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
       title: "Overview",
       icon: LayoutDashboard,
       href: "overview",
+    },
+    {
+      title: "Vendite",
+      icon: FolderKanban,
+      href: "sales",
     },
     {
       title: "Clients",
