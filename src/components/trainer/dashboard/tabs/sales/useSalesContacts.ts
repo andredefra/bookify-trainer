@@ -1,6 +1,8 @@
+
 import { useState } from "react";
 import { SalesContact } from "./types";
 import { toast } from "sonner";
+import { differenceInDays } from "date-fns";
 
 // Sample data
 const INITIAL_CONTACTS: SalesContact[] = [
@@ -158,10 +160,12 @@ export const useSalesContacts = () => {
   };
 
   const clientContacts = contacts.filter(contact => contact.status === 'client');
+  const prospectContacts = contacts.filter(contact => contact.status === 'prospect');
 
   return {
     contacts,
     clientContacts,
+    prospectContacts,
     handleMoveContact,
     handleUpdateContact,
     handleAddContact

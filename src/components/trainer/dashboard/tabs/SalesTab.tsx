@@ -13,20 +13,21 @@ export function SalesTab() {
   const [showAddLeadDialog, setShowAddLeadDialog] = useState(false);
   const { 
     contacts, 
-    clientContacts, 
+    clientContacts,
+    prospectContacts,
     handleMoveContact, 
     handleUpdateContact, 
     handleAddContact 
   } = useSalesContacts();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Card>
         <SalesHeader onAddLead={() => setShowAddLeadDialog(true)} />
         <CardContent>
-          {clientContacts.length > 0 && (
-            <div className="mb-6">
-              <SalesMetrics clients={clientContacts} />
+          {(clientContacts.length > 0 || prospectContacts.length > 0) && (
+            <div className="mb-4">
+              <SalesMetrics clients={clientContacts} prospects={prospectContacts} />
             </div>
           )}
           
