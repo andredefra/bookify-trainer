@@ -29,8 +29,8 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesK
   }, [contacts]);
 
   return (
-    <div className="w-full h-[calc(100vh-300px)] overflow-hidden">
-      <ScrollArea orientation="horizontal" className="w-full h-full">
+    <div className="w-full h-[calc(100vh-300px)] flex flex-col overflow-hidden">
+      <ScrollArea className="w-full h-full" orientation="both">
         <div className="flex gap-3 p-1 min-w-max h-full">
           <SalesColumn 
             title="Lead" 
