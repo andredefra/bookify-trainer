@@ -1,0 +1,36 @@
+
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { TransactionHistory } from "../TransactionHistory";
+import { TransactionsByClient } from "../TransactionsByClient";
+import { useTransactions } from "../context/TransactionsContext";
+import { RevenueCards } from "./RevenueCards";
+
+export function TransactionsTabsContent() {
+  const { filteredTransactions, filteredClients, transactions, handleConfirmCashPayment } = useTransactions();
+  
+  return (
+    <Tabs defaultValue="all">
+      <TabsList className="mb-6">
+        <TabsTrigger value="all">All Transactions</TabsTrigger>
+        <TabsTrigger value="by-client">By Client</TabsTrigger>
+      </TabsList>
+      
+      <TabsContent value="all">
+        <div className="space-y-6">
+          <RevenueCards />
+          <TransactionHistory 
+            transactions={filteredTransactions} 
+            onConfirmCashPayment={handleConfirmCashPayment}
+          />
+        </div>
+      </TabsContent>
+      
+      <TabsContent value="by-client">
+        <TransactionsByClient 
+          clients={filteredClients} 
+          transactions={transactions}
+        />
+      </TabsContent>
+    </Tabs>
+  );
+}
