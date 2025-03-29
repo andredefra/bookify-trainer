@@ -8,9 +8,16 @@ interface SalesColumnProps {
   contacts: SalesContact[];
   status: SalesContact['status'];
   onMoveContact: (id: string, status: SalesContact['status']) => void;
+  onUpdateContact: (updatedContact: SalesContact) => void;
 }
 
-export function SalesColumn({ title, contacts, status, onMoveContact }: SalesColumnProps) {
+export function SalesColumn({ 
+  title, 
+  contacts, 
+  status, 
+  onMoveContact,
+  onUpdateContact
+}: SalesColumnProps) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'contact',
     drop: (item: { id: string }) => {
@@ -34,7 +41,11 @@ export function SalesColumn({ title, contacts, status, onMoveContact }: SalesCol
       </div>
       <div className="flex flex-col gap-2 p-2 h-full overflow-y-auto">
         {contacts.map(contact => (
-          <SalesCard key={contact.id} contact={contact} />
+          <SalesCard 
+            key={contact.id} 
+            contact={contact} 
+            onUpdateContact={onUpdateContact}
+          />
         ))}
       </div>
     </div>

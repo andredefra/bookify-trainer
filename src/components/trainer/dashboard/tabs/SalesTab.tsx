@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -8,6 +7,7 @@ import { Plus } from "lucide-react";
 import { SalesKanban } from "./sales/SalesKanban";
 import { SalesMetrics } from "./sales/SalesMetrics";
 import { AddLeadDialog } from "./sales/AddLeadDialog";
+import { toast } from "sonner";
 
 export interface SalesContact {
   id: string;
@@ -134,6 +134,38 @@ export function SalesTab() {
     );
   };
 
+  const handleUpdateContact = (updatedContact: SalesContact) => {
+    setContacts(prevContacts => 
+      prevContacts.map(contact => {
+        if (contact.id === updatedContact.id) {
+          const now = new Date().toISOString();
+          
+          // Handle clientSince logic when status changes to client
+          const wasClient = contact.status === 'client';
+          const isNowClient = updatedContact.status === 'client';
+          
+          let clientSince = contact.clientSince;
+          
+          if (!wasClient && isNowClient) {
+            // Status changed to client, set clientSince if not already set
+            clientSince = clientSince || now;
+          } else if (!isNowClient) {
+            // Not a client anymore, keep clientSince for historical data
+          }
+          
+          toast.success(`Contatto aggiornato: ${updatedContact.name}`);
+          
+          return { 
+            ...updatedContact, 
+            lastUpdated: now,
+            clientSince
+          };
+        }
+        return contact;
+      })
+    );
+  };
+
   const handleAddContact = (newContact: Omit<SalesContact, 'id' | 'createdAt' | 'lastUpdated'>) => {
     const now = new Date().toISOString();
     const id = `${contacts.length + 1}`;
@@ -179,7 +211,8 @@ export function SalesTab() {
           <DndProvider backend={HTML5Backend}>
             <SalesKanban 
               contacts={contacts} 
-              onMoveContact={handleMoveContact} 
+              onMoveContact={handleMoveContact}
+              onUpdateContact={handleUpdateContact} 
             />
           </DndProvider>
         </CardContent>
