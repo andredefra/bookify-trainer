@@ -31,16 +31,17 @@ export function SalesColumn({
   return (
     <div 
       ref={drop} 
-      className={`w-[260px] sm:w-[280px] md:w-[300px] rounded-md flex flex-col ${isOver ? 'bg-muted/50' : 'bg-muted/20'}`}
+      className={`w-[300px] flex flex-col rounded-md ${isOver ? 'bg-muted/80' : 'bg-muted/30'}`}
     >
-      <div className="p-3 font-medium text-sm border-b bg-muted/30 flex justify-between items-center sticky top-0 z-10">
-        <span>{title}</span>
-        <span className="text-xs font-normal px-2 py-1 bg-muted rounded-full">
+      <div className="p-3 font-medium border-b bg-muted/50 sticky top-0 z-10 rounded-t-md flex justify-between items-center">
+        <span className="text-sm font-semibold">{title}</span>
+        <span className="text-xs font-normal px-2 py-1 bg-background rounded-full">
           {contacts.length}
         </span>
       </div>
-      <div className="flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-2 p-2">
+      
+      <div className="flex-1 p-2">
+        <div className="flex flex-col gap-3">
           {contacts.map(contact => (
             <SalesCard 
               key={contact.id} 
@@ -48,6 +49,12 @@ export function SalesColumn({
               onUpdateContact={onUpdateContact}
             />
           ))}
+          
+          {contacts.length === 0 && (
+            <div className="flex items-center justify-center h-24 text-muted-foreground text-sm border border-dashed rounded-md">
+              Drag contacts here
+            </div>
+          )}
         </div>
       </div>
     </div>

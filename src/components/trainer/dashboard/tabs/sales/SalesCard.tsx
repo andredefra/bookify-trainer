@@ -5,7 +5,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { it } from "date-fns/locale";
 import { SalesContact } from "./types";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, Phone, Calendar, Euro, Edit } from "lucide-react";
+import { Mail, Phone, Calendar, Euro, Edit, Building } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EditableContactDialog } from "./EditableContactDialog";
@@ -59,14 +59,14 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
     <>
       <Card 
         ref={drag} 
-        className={`shadow-sm cursor-grab ${isDragging ? 'opacity-40' : 'opacity-100'}`}
+        className={`shadow-sm cursor-grab ${isDragging ? 'opacity-40' : 'opacity-100'} hover:shadow-md transition-shadow bg-card`}
         style={{ opacity: isDragging ? 0.5 : 1 }}
       >
-        <CardContent className="p-3">
-          <div className="flex flex-col space-y-2">
+        <CardContent className="p-4">
+          <div className="flex flex-col space-y-3">
             <div className="flex justify-between items-start">
-              <h3 className="font-medium text-sm truncate">{contact.name}</h3>
-              <div className="flex items-center gap-1">
+              <h3 className="font-medium text-sm">{contact.name}</h3>
+              <div className="flex items-center gap-2">
                 <Button 
                   variant="ghost" 
                   size="sm" 
@@ -89,53 +89,58 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
             </div>
             
             {contact.company && (
-              <p className="text-xs text-muted-foreground">{contact.company}</p>
+              <div className="flex items-center text-xs text-muted-foreground">
+                <Building className="h-3 w-3 mr-1.5 flex-shrink-0" />
+                <span className="truncate">{contact.company}</span>
+              </div>
             )}
             
             <div className="flex items-center text-xs text-muted-foreground">
-              <Mail className="h-3 w-3 mr-1 flex-shrink-0" />
+              <Mail className="h-3 w-3 mr-1.5 flex-shrink-0" />
               <span className="truncate">{contact.email}</span>
             </div>
             
             {contact.phone && (
               <div className="flex items-center text-xs text-muted-foreground">
-                <Phone className="h-3 w-3 mr-1 flex-shrink-0" />
+                <Phone className="h-3 w-3 mr-1.5 flex-shrink-0" />
                 <span>{contact.phone}</span>
               </div>
             )}
             
             {contact.nextActionDate && (
-              <div className="flex items-center text-xs">
-                <Calendar className="h-3 w-3 mr-1 flex-shrink-0 text-muted-foreground" />
-                <span className="text-muted-foreground">{formatDate(contact.nextActionDate)}</span>
-                {contact.nextAction && (
-                  <span className="ml-1 text-xs truncate">- {contact.nextAction}</span>
-                )}
+              <div className="flex items-start text-xs">
+                <Calendar className="h-3 w-3 mr-1.5 flex-shrink-0 text-muted-foreground mt-0.5" />
+                <div>
+                  <span className="text-muted-foreground">{formatDate(contact.nextActionDate)}</span>
+                  {contact.nextAction && (
+                    <p className="text-xs mt-0.5">{contact.nextAction}</p>
+                  )}
+                </div>
               </div>
             )}
             
             {contact.value && (
               <div className="flex items-center text-xs text-muted-foreground">
-                <Euro className="h-3 w-3 mr-1 flex-shrink-0" />
+                <Euro className="h-3 w-3 mr-1.5 flex-shrink-0" />
                 <span>{contact.value}€</span>
               </div>
             )}
 
             {contact.clientSince && contact.status === 'client' && (
-              <div className="text-xs mt-1 pt-1 border-t border-muted">
+              <div className="text-xs mt-1 pt-2 border-t border-muted">
                 <span className="text-green-600 font-medium">Client since: {getClientSinceText()}</span>
               </div>
             )}
 
             {contact.source && (
               <div className="text-xs text-muted-foreground mt-1">
-                Source: {contact.source}
+                <span className="font-medium">Source:</span> {contact.source}
               </div>
             )}
             
             {contact.notes && (
-              <div className="text-xs text-muted-foreground mt-1 pt-1 border-t border-muted line-clamp-2">
-                {contact.notes}
+              <div className="text-xs mt-1 pt-2 border-t border-muted">
+                <p className="line-clamp-2 text-muted-foreground">{contact.notes}</p>
               </div>
             )}
           </div>
