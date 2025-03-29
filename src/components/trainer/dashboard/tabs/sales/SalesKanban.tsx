@@ -1,6 +1,5 @@
 
 import { useMemo } from "react";
-import { useDrop } from "react-dnd";
 import { SalesContact } from "../SalesTab";
 import { SalesColumn } from "./SalesColumn";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -30,7 +29,7 @@ export function SalesKanban({ contacts, onMoveContact }: SalesKanbanProps) {
 
   return (
     <div className="overflow-x-auto">
-      <ScrollArea orientation="horizontal" className="w-full">
+      <ScrollArea className="w-full">
         <div className="flex gap-4 min-w-max pb-4">
           <SalesColumn 
             title="Lead" 
