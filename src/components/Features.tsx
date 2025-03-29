@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video, CheckCircle } from 'lucide-react';
@@ -114,7 +113,7 @@ const Features = () => {
                   {t('features.videoTitle')}
                 </h3>
                 <p className="text-base text-muted-foreground mb-4">
-                  Trainers can add videos to any exercise in their training programs, ensuring clients have perfect visual demonstrations of proper form and technique.
+                  Trainers can add videos to any exercise in their programs, ensuring clients have perfect visual demonstrations of proper form and technique.
                 </p>
                 <ul className="space-y-2 text-sm md:text-base">
                   <li className="flex items-start">
