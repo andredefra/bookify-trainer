@@ -17,14 +17,9 @@ export function MySessionsTab({
   onAddToCalendar,
   onCancel
 }: MySessionsTabProps) {
-  // Determina quale sessione dovrebbe essere mostrata come featured (la prima con status 'registered')
-  const featuredSessionIndex = upcomingSessions.findIndex(session => 
-    session.status === 'registered' || session.status === 'confirmed'
-  );
-
   return (
     <div className="space-y-4">
-      {upcomingSessions.map((session, index) => (
+      {upcomingSessions.map((session) => (
         <SessionCard
           key={session.id}
           session={session}
@@ -32,7 +27,6 @@ export function MySessionsTab({
           onRegister={onRegister}
           onAddToCalendar={onAddToCalendar}
           onCancel={onCancel}
-          variant={index === featuredSessionIndex ? 'featured' : 'default'}
         />
       ))}
     </div>
