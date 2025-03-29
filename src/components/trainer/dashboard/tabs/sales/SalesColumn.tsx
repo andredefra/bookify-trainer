@@ -2,7 +2,6 @@
 import { useDrop } from "react-dnd";
 import { SalesContact } from "./types";
 import { SalesCard } from "./SalesCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SalesColumnProps {
   title: string;
@@ -40,7 +39,7 @@ export function SalesColumn({
           {contacts.length}
         </span>
       </div>
-      <ScrollArea className="flex-1 h-[calc(100vh-350px)]">
+      <div className="flex-1 max-h-[calc(100vh-350px)] overflow-y-auto">
         <div className="flex flex-col gap-2 p-2">
           {contacts.map(contact => (
             <SalesCard 
@@ -50,7 +49,7 @@ export function SalesColumn({
             />
           ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 }
