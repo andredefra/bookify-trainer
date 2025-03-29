@@ -4,12 +4,35 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, FileDown, Calendar, DollarSign } from "lucide-react";
+import { Search, FileDown, Calendar, DollarSign, Plus } from "lucide-react";
 import { TransactionHistory } from "./transactions/TransactionHistory";
 import { TransactionsByClient } from "./transactions/TransactionsByClient";
+import { AddTransactionDialog } from "./transactions/AddTransactionDialog";
+import { toast } from "sonner";
+
+// Transaction type
+interface Transaction {
+  id: number;
+  client: string;
+  type: string;
+  name: string;
+  amount: number;
+  date: string;
+  status: 'paid' | 'pending' | 'failed';
+}
+
+// Client summary type
+interface ClientSummary {
+  id: number;
+  name: string;
+  totalSpent: number;
+  lastPayment: string;
+  sessions: number;
+  programs: number;
+}
 
 // Mock transaction data for demonstration
-const mockTransactions = [
+const initialTransactions = [
   { id: 1, client: "Sarah Johnson", type: "Program", name: "Strength & Conditioning", amount: 49.99, date: "2023-06-15", status: "paid" as const },
   { id: 2, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 35, date: "2023-06-12", status: "paid" as const },
   { id: 3, client: "Lisa Garcia", type: "Program", name: "Weight Loss Program", amount: 79.99, date: "2023-06-10", status: "paid" as const },
@@ -19,17 +42,78 @@ const mockTransactions = [
   { id: 7, client: "Lisa Garcia", type: "Session", name: "Assessment", amount: 25, date: "2023-06-01", status: "paid" as const },
 ];
 
-// Client summary for the by-client view
-const clientSummary = [
-  { id: 1, name: "Sarah Johnson", totalSpent: 84.99, lastPayment: "2023-06-15", sessions: 2, programs: 1 },
-  { id: 2, name: "Mike Peterson", totalSpent: 74.99, lastPayment: "2023-06-12", sessions: 1, programs: 1 },
-  { id: 3, name: "Lisa Garcia", totalSpent: 104.99, lastPayment: "2023-06-10", sessions: 1, programs: 1 },
-  { id: 4, name: "David Kim", totalSpent: 20, lastPayment: "2023-06-08", sessions: 1, programs: 0 },
+// Client data
+const clientList = [
+  { id: 1, name: "Sarah Johnson" },
+  { id: 2, name: "Mike Peterson" },
+  { id: 3, name: "Lisa Garcia" },
+  { id: 4, name: "David Kim" },
 ];
 
 export function TransactionsTab() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
+  const [showAddDialog, setShowAddDialog] = useState(false);
   
+  // Calculate client summary based on transactions
+  const generateClientSummary = (): ClientSummary[] => {
+    const summary: Record<string, ClientSummary> = {};
+    
+    transactions.forEach(transaction => {
+      if (!summary[transaction.client]) {
+        summary[transaction.client] = {
+          id: Math.random(), // In a real app, this would be a proper id
+          name: transaction.client,
+          totalSpent: 0,
+          lastPayment: "",
+          sessions: 0,
+          programs: 0
+        };
+      }
+      
+      // Only add paid transactions to total spent
+      if (transaction.status === 'paid') {
+        summary[transaction.client].totalSpent += transaction.amount;
+      }
+      
+      // Update sessions/programs count
+      if (transaction.type === 'Session') {
+        summary[transaction.client].sessions += 1;
+      } else if (transaction.type === 'Program') {
+        summary[transaction.client].programs += 1;
+      }
+      
+      // Update last payment date if newer
+      if (!summary[transaction.client].lastPayment || 
+          new Date(transaction.date) > new Date(summary[transaction.client].lastPayment)) {
+        summary[transaction.client].lastPayment = transaction.date;
+      }
+    });
+    
+    return Object.values(summary);
+  };
+  
+  const clientSummary = generateClientSummary();
+  
+  const handleAddTransaction = (newTransaction: Omit<Transaction, 'id'>) => {
+    const transaction: Transaction = {
+      ...newTransaction,
+      id: transactions.length + 1, // Simple id generation
+    };
+    
+    setTransactions([transaction, ...transactions]);
+  };
+  
+  const filteredTransactions = transactions.filter(t => 
+    t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+  const filteredClients = clientSummary.filter(c => 
+    c.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Card>
       <CardHeader>
@@ -43,9 +127,13 @@ export function TransactionsTab() {
               <Calendar className="mr-2 h-4 w-4" />
               Date Range
             </Button>
-            <Button size="sm">
+            <Button variant="outline" size="sm">
               <FileDown className="mr-2 h-4 w-4" />
               Export
+            </Button>
+            <Button size="sm" onClick={() => setShowAddDialog(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Transaction
             </Button>
           </div>
         </div>
@@ -70,25 +158,24 @@ export function TransactionsTab() {
           </TabsList>
           
           <TabsContent value="all">
-            <TransactionHistory 
-              transactions={mockTransactions.filter(t => 
-                t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.name.toLowerCase().includes(searchQuery.toLowerCase())
-              )} 
-            />
+            <TransactionHistory transactions={filteredTransactions} />
           </TabsContent>
           
           <TabsContent value="by-client">
             <TransactionsByClient 
-              clients={clientSummary.filter(c => 
-                c.name.toLowerCase().includes(searchQuery.toLowerCase())
-              )} 
-              transactions={mockTransactions}
+              clients={filteredClients} 
+              transactions={transactions}
             />
           </TabsContent>
         </Tabs>
       </CardContent>
+      
+      <AddTransactionDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onAdd={handleAddTransaction}
+        clients={clientList}
+      />
     </Card>
   );
 }

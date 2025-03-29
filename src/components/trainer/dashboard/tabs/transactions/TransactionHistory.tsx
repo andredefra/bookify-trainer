@@ -8,7 +8,7 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Euro } from "lucide-react";
 
 interface Transaction {
   id: number;
@@ -49,7 +49,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
         <div className="bg-green-50 p-4 rounded-lg">
           <div className="flex items-center space-x-2">
             <div className="bg-green-100 p-2 rounded-full">
-              <DollarSign className="h-5 w-5 text-green-600" />
+              <Euro className="h-5 w-5 text-green-600" />
             </div>
             <div>
               <div className="text-sm font-medium text-green-600">Total Revenue</div>
@@ -61,7 +61,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
         <div className="bg-yellow-50 p-4 rounded-lg">
           <div className="flex items-center space-x-2">
             <div className="bg-yellow-100 p-2 rounded-full">
-              <DollarSign className="h-5 w-5 text-yellow-600" />
+              <Euro className="h-5 w-5 text-yellow-600" />
             </div>
             <div>
               <div className="text-sm font-medium text-yellow-600">Pending Payments</div>
