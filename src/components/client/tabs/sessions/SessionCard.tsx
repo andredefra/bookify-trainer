@@ -66,7 +66,7 @@ export function SessionCard({
             <img 
               src="/lovable-uploads/afc8debd-b51f-4a71-befe-09f7edecb81e.png" 
               alt="Barbell Squat demonstration" 
-              className="w-full"
+              className="w-full h-48 object-cover"
             />
           </div>
         </div>
