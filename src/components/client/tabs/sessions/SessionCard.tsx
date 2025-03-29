@@ -56,17 +56,24 @@ export function SessionCard({
       {variant === 'featured' && (
         <div className="mt-2 mb-3 border rounded-lg overflow-hidden">
           <div className="p-4 pb-2">
-            <h4 className="font-medium">Featured Exercise: Barbell Squat</h4>
-            <div className="text-sm text-muted-foreground mb-2">4 sets × 8-10</div>
+            <div className="flex justify-between items-start">
+              <div>
+                <h4 className="font-medium">Barbell Squat</h4>
+                <div className="text-sm text-muted-foreground mb-2">4 sets × 8-10</div>
+              </div>
+              <div className="bg-gray-100 text-black rounded-full px-3 py-1 text-sm font-medium">
+                75 kg
+              </div>
+            </div>
             <div className="bg-muted/30 p-2 rounded text-sm mb-3">
               Focus on depth and keep your chest up
             </div>
           </div>
-          <div className="border-t">
+          <div>
             <img 
-              src="/lovable-uploads/afc8debd-b51f-4a71-befe-09f7edecb81e.png" 
+              src="/lovable-uploads/ed7badab-bbcf-4f77-8dbf-ba11be2b73df.png" 
               alt="Barbell Squat demonstration" 
-              className="w-full h-48 object-cover"
+              className="w-full"
             />
           </div>
         </div>
