@@ -25,7 +25,7 @@ export const plans: Plan[] = [
     name: "Pro",
     price: "€29",
     period: "per month",
-    description: "Premium features for serious trainers. Lower transaction fee (1.5%).",
+    description: "Premium features for serious trainers.",
     features: [
       "Everything in Basic",
       "Google Calendar Integration",

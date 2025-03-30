@@ -38,7 +38,6 @@ const PricingSection = () => {
   const proFeatures = [
     t('pricing.features.everythingFreemium'),
     t('pricing.features.googleCalendar'),
-    t('pricing.features.lowerFee'),
     t('pricing.features.paymentIntegration'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
