@@ -28,7 +28,7 @@ const editSessionSchema = z.object({
   name: z.string().min(3, { message: "Session name must be at least 3 characters" }),
   date: z.date(),
   time: z.string(),
-  maxParticipants: z.string().transform(val => parseInt(val)),
+  maxParticipants: z.coerce.number().int().positive(), // Using coerce.number() to convert string to number
   description: z.string().optional(),
 });
 
@@ -68,7 +68,7 @@ export function EditSessionDialog({
       name: session.name,
       date: getInitialDate(),
       time: session.time,
-      maxParticipants: String(session.maxParticipants),
+      maxParticipants: Number(session.maxParticipants), // Ensure this is a number
       description: session.description || "",
     }
   });

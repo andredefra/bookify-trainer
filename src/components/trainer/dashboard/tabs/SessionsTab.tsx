@@ -20,6 +20,8 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
   const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
+  
+  // Transform the upcoming sessions to ensure all have waitingList and paymentStatus
   const [sessions, setSessions] = useState(upcomingSessions.map(session => ({
     ...session,
     waitingList: session.waitingList || 0,
@@ -44,7 +46,7 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
           name: data.name,
           date: data.date.toLocaleDateString(),
           time: data.time,
-          maxParticipants: data.maxParticipants,
+          maxParticipants: Number(data.maxParticipants), // Convert to number
           description: data.description
         };
       }
@@ -164,13 +166,13 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
           onOpenChange={setShowCreateSessionDialog}
           onSubmit={(data) => {
             // Add the new session to the state
-            const newSession: TrainerSessionItem = {
+            const newSession = {
               id: Math.floor(Math.random() * 1000),
               name: data.name,
               date: data.date.toLocaleDateString(),
               time: data.time,
               participants: 0,
-              maxParticipants: data.maxParticipants,
+              maxParticipants: Number(data.maxParticipants), // Convert to number
               paymentStatus: {
                 paid: 0,
                 pending: 0,
