@@ -46,7 +46,11 @@ export function ClientChatDialog({ open, onOpenChange, client }: ClientChatDialo
       content: "Check out my progress photo!",
       timestamp: "10:40 AM",
       attachments: [
-        { name: "progress.jpg", type: "image/jpeg" }
+        { 
+          name: "progress.jpg", 
+          type: "image/jpeg", 
+          url: "/lovable-uploads/368261f4-bf4e-430f-9556-dfe2c0a73c98.png" 
+        }
       ]
     }
   ]);
