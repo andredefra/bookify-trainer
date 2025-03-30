@@ -13,8 +13,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Check if there's a language preference in localStorage
   const getSavedLanguage = (): Language => {
-    const saved = localStorage.getItem('language');
-    return (saved === 'en' || saved === 'it') ? saved as Language : 'en';
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('language');
+      return (saved === 'en' || saved === 'it') ? saved as Language : 'en';
+    }
+    return 'en';
   };
 
   const [language, setLanguage] = useState<Language>(getSavedLanguage);
@@ -25,6 +28,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, [language]);
 
   const t = (key: string): string => {
+    if (!translations[language]) {
+      console.warn(`Missing translations for language: ${language}`);
+      return key;
+    }
+    
     const translation = translations[language][key as keyof typeof translations[typeof language]];
     if (key === 'footer.copyright') {
       return translation?.replace('{year}', new Date().getFullYear().toString()) || key;
@@ -32,8 +40,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return translation || key;
   };
 
+  const value = {
+    language,
+    setLanguage,
+    t
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );
