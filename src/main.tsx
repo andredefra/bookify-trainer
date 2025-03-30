@@ -7,4 +7,5 @@ import './index.css'
 document.documentElement.style.overflowX = 'hidden';
 document.body.style.overflowX = 'hidden';
 
+// Render the App with LanguageProvider
 createRoot(document.getElementById("root")!).render(<App />);

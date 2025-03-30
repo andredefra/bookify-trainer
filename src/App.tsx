@@ -54,7 +54,6 @@ const RevealObserver = () => {
 };
 
 // Create the QueryClient instance outside of the component
-// This ensures it's only created once and not on every render
 const queryClient = new QueryClient();
 
 const App = () => {
