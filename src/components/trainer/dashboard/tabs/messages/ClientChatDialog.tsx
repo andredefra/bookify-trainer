@@ -49,7 +49,7 @@ export function ClientChatDialog({ open, onOpenChange, client }: ClientChatDialo
         { 
           name: "progress.jpg", 
           type: "image/jpeg", 
-          url: "/lovable-uploads/368261f4-bf4e-430f-9556-dfe2c0a73c98.png" 
+          url: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80" 
         }
       ]
     }
