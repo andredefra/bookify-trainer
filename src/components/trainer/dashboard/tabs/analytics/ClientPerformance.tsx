@@ -11,15 +11,39 @@ import { PerformanceLineChart } from "./charts/PerformanceLineChart";
 import { RetentionPieChart } from "./charts/RetentionPieChart";
 import { GoalAchievementChart } from "./charts/GoalAchievementChart";
 
+// Sample client list for the filter
+const clients = [
+  { id: "all", name: "All Clients" },
+  { id: "client1", name: "Sarah Johnson" },
+  { id: "client2", name: "Mike Peterson" },
+  { id: "client3", name: "Lisa Garcia" },
+  { id: "client4", name: "David Kim" },
+  { id: "client5", name: "Emma Thompson" },
+];
+
 export function ClientPerformance() {
   const [timeframe, setTimeframe] = useState("weekly");
+  const [selectedClient, setSelectedClient] = useState("all");
   
   return (
     <div className="space-y-6">
       {/* Filter controls */}
-      <div className="flex justify-end">
+      <div className="flex flex-col md:flex-row justify-between gap-2">
+        <Select value={selectedClient} onValueChange={setSelectedClient}>
+          <SelectTrigger className="w-full md:w-[200px]">
+            <SelectValue placeholder="Select Client" />
+          </SelectTrigger>
+          <SelectContent>
+            {clients.map((client) => (
+              <SelectItem key={client.id} value={client.id}>
+                {client.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        
         <Select value={timeframe} onValueChange={setTimeframe}>
-          <SelectTrigger className="w-[150px]">
+          <SelectTrigger className="w-full md:w-[150px]">
             <SelectValue placeholder="Timeframe" />
           </SelectTrigger>
           <SelectContent>
