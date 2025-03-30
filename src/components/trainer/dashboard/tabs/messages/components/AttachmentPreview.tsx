@@ -1,8 +1,9 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X, Image, FileText, Video } from "lucide-react";
+import { X } from "lucide-react";
 import { MessageAttachment } from "./MessageItem";
+import { getFileIcon } from "../utils/fileUtils";
 
 interface AttachmentPreviewProps {
   attachments: File[];
@@ -12,12 +13,6 @@ interface AttachmentPreviewProps {
 export function AttachmentPreview({ attachments, onRemoveAttachment }: AttachmentPreviewProps) {
   if (attachments.length === 0) return null;
   
-  const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith("image/")) return <Image className="h-4 w-4" />;
-    if (fileType.startsWith("video/")) return <Video className="h-4 w-4" />;
-    return <FileText className="h-4 w-4" />;
-  };
-
   return (
     <div className="pt-2 border-t flex flex-wrap gap-2">
       {attachments.map((file, index) => (

@@ -1,6 +1,6 @@
 
 import { Badge } from "@/components/ui/badge";
-import { Image, FileText, Video } from "lucide-react";
+import { getFileIcon } from "../utils/fileUtils";
 
 export interface MessageAttachment {
   name: string;
@@ -14,12 +14,6 @@ export interface MessageItemProps {
   timestamp: string;
   attachments?: MessageAttachment[];
 }
-
-const getFileIcon = (fileType: string) => {
-  if (fileType.startsWith("image/")) return <Image className="h-4 w-4" />;
-  if (fileType.startsWith("video/")) return <Video className="h-4 w-4" />;
-  return <FileText className="h-4 w-4" />;
-};
 
 export function MessageItem({ content, sender, timestamp, attachments }: MessageItemProps) {
   return (
