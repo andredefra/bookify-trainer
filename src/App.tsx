@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
 import Index from "./pages/Index";
@@ -57,6 +57,17 @@ const RevealObserver = () => {
 // This ensures it's only created once and not on every render
 const queryClient = new QueryClient();
 
+// Protected route component to check for authentication
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('demo-user') !== null;
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
+};
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -74,8 +85,22 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/find-trainer" element={<FindTrainer />} />
               <Route path="/trainer/:id" element={<TrainerProfile />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/client-dashboard" element={<ClientDashboard />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/client-dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <ClientDashboard />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/cookies" element={<Cookies />} />
