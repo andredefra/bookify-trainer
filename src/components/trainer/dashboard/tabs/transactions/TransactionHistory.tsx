@@ -17,7 +17,9 @@ export function TransactionHistory({ transactions, onConfirmCashPayment }: Trans
     if (onConfirmCashPayment) {
       onConfirmCashPayment(transactionId);
     } else {
-      toast.error("Payment confirmation functionality is not available");
+      toast.error("Payment confirmation functionality is not available", {
+        duration: 3000 // Auto-dismiss after 3 seconds
+      });
     }
   };
 

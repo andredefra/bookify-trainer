@@ -56,7 +56,9 @@ export function AddTransactionDialog({ open, onOpenChange, onAdd, clients }: Add
     
     form.reset();
     onOpenChange(false);
-    toast.success("Transaction added successfully");
+    toast.success("Transaction added successfully", {
+      duration: 3000 // Auto-dismiss after 3 seconds
+    });
   };
 
   return (

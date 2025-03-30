@@ -1,4 +1,3 @@
-
 import { createContext, useState, useContext, ReactNode } from "react";
 import { TransactionType } from "../types/transactionTypes";
 import { ClientSummary, ClientData } from "../types/TransactionsTabTypes";
@@ -9,11 +8,15 @@ const initialTransactions = [
   { id: 1, client: "Sarah Johnson", type: "Program", name: "Strength & Conditioning", amount: 49.99, date: "2023-06-15", status: "paid" as const, paymentMethod: "card" as const },
   { id: 2, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 35, date: "2023-06-12", status: "paid" as const, paymentMethod: "card" as const },
   { id: 3, client: "Lisa Garcia", type: "Program", name: "Weight Loss Program", amount: 79.99, date: "2023-06-10", status: "paid" as const, paymentMethod: "card" as const },
-  { id: 4, client: "David Kim", type: "Session", name: "Group Session", amount: 20, date: "2023-06-08", status: "pending" as const, paymentMethod: "card" as const },
+  { id: 4, client: "David Kim", type: "Session", name: "Group Session", amount: 20, date: "2023-06-08", status: "pending" as const, paymentMethod: "cash" as const },
   { id: 5, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 35, date: "2023-06-05", status: "paid" as const, paymentMethod: "card" as const },
-  { id: 6, client: "Mike Peterson", type: "Program", name: "Mobility & Recovery", amount: 39.99, date: "2023-06-03", status: "paid" as const, paymentMethod: "card" as const },
-  { id: 7, client: "Lisa Garcia", type: "Session", name: "Assessment", amount: 25, date: "2023-06-01", status: "paid" as const, paymentMethod: "card" as const },
+  { id: 6, client: "Mike Peterson", type: "Program", name: "Mobility & Recovery", amount: 39.99, date: "2023-06-03", status: "paid" as const, paymentMethod: "cash" as const },
+  { id: 7, client: "Lisa Garcia", type: "Session", name: "Assessment", amount: 25, date: "2023-06-01", status: "paid" as const, paymentMethod: "cash" as const },
   { id: 8, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2023-06-18", status: "pending" as const, paymentMethod: "cash" as const },
+  { id: 9, client: "Emma Thompson", type: "Session", name: "Private Yoga", amount: 40, date: "2023-06-17", status: "pending" as const, paymentMethod: "cash" as const },
+  { id: 10, client: "Ryan Murphy", type: "Program", name: "Fat Loss Program", amount: 89.99, date: "2023-06-14", status: "pending" as const, paymentMethod: "cash" as const },
+  { id: 11, client: "Olivia Chen", type: "Session", name: "Nutrition Consultation", amount: 55, date: "2023-06-09", status: "pending" as const, paymentMethod: "cash" as const },
+  { id: 12, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2023-06-07", status: "paid" as const, paymentMethod: "cash" as const },
 ];
 
 // Client data
@@ -23,6 +26,10 @@ const clientList: ClientData[] = [
   { id: 3, name: "Lisa Garcia" },
   { id: 4, name: "David Kim" },
   { id: 5, name: "James Wilson" },
+  { id: 6, name: "Emma Thompson" },
+  { id: 7, name: "Ryan Murphy" },
+  { id: 8, name: "Olivia Chen" },
+  { id: 9, name: "Daniel Lee" },
 ];
 
 interface TransactionsContextType {
@@ -46,7 +53,6 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   
-  // Calculate client summary based on transactions
   const generateClientSummary = (): ClientSummary[] => {
     const summary: Record<string, ClientSummary> = {};
     
@@ -62,19 +68,16 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
         };
       }
       
-      // Only add paid transactions to total spent
       if (transaction.status === 'paid') {
         summary[transaction.client].totalSpent += transaction.amount;
       }
       
-      // Update sessions/programs count
       if (transaction.type === 'Session') {
         summary[transaction.client].sessions += 1;
       } else if (transaction.type === 'Program') {
         summary[transaction.client].programs += 1;
       }
       
-      // Update last payment date if newer
       if (!summary[transaction.client].lastPayment || 
           new Date(transaction.date) > new Date(summary[transaction.client].lastPayment)) {
         summary[transaction.client].lastPayment = transaction.date;
@@ -94,11 +97,14 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     
     setTransactions([transaction, ...transactions]);
     
-    // Show toast with appropriate message based on payment method
     if (transaction.paymentMethod === 'cash') {
-      toast.success("Cash transaction added. Remember to confirm receipt when paid.");
+      toast.success("Cash transaction added. Remember to confirm receipt when paid.", {
+        duration: 3000 // Auto-dismiss after 3 seconds
+      });
     } else {
-      toast.success("Transaction added successfully");
+      toast.success("Transaction added successfully", {
+        duration: 3000 // Auto-dismiss after 3 seconds
+      });
     }
   };
   
@@ -109,7 +115,9 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
         : transaction
     ));
     
-    toast.success("Cash payment confirmed");
+    toast.success("Cash payment confirmed", {
+      duration: 3000 // Auto-dismiss after 3 seconds
+    });
   };
   
   const filteredTransactions = transactions.filter(t => 
