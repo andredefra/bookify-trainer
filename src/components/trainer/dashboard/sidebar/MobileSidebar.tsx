@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,13 +30,13 @@ export function MobileSidebar({
 
   const navigationItems = [
     { title: "Overview", icon: Home, href: "overview" },
-    { title: "Vendite", icon: FolderKanban, href: "sales" },
+    { title: "Sales", icon: FolderKanban, href: "sales" },
     { title: "Clients", icon: Users, href: "clients" },
     { title: "Programs", icon: Dumbbell, href: "programs" },
     { title: "Sessions", icon: Calendar, href: "sessions" },
     { title: "Messages", icon: MessageSquare, href: "messages", badge: 3 },
     { title: "Transactions", icon: CreditCard, href: "transactions" },
-    { title: "Analytics", icon: LineChart, href: "analytics" },
+    { title: "Business Data", icon: LineChart, href: "analytics" },
     { title: "Settings", icon: Settings, href: "settings" }
   ];
 

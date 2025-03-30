@@ -61,7 +61,7 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
       href: "transactions",
     },
     {
-      title: "Business Analytics",
+      title: "Business Data",
       icon: LineChart,
       href: "analytics",
     },
