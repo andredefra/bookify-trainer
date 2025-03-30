@@ -21,16 +21,12 @@ const Login = () => {
     });
 
     if (email && password) {
-      const userData = {
+      toast.success("Demo login successful!");
+      localStorage.setItem('demo-user', JSON.stringify({
         name,
         email,
         type: loginType
-      };
-      
-      localStorage.setItem('demo-user', JSON.stringify(userData));
-      console.log("User data saved to localStorage:", userData);
-      
-      toast.success("Demo login successful!");
+      }));
 
       if (loginType === 'client') {
         navigate('/client-dashboard');
@@ -42,8 +38,7 @@ const Login = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow flex items-center justify-center py-20 px-6">
@@ -101,8 +96,7 @@ const Login = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
 
 export default Login;
