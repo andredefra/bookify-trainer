@@ -17,7 +17,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return (saved === 'en' || saved === 'it') ? saved as Language : 'en';
   };
 
-  const [language, setLanguage] = useState<Language>(getSavedLanguage);
+  const [language, setLanguage] = useState<Language>(getSavedLanguage());
 
   // Save language preference to localStorage when it changes
   useEffect(() => {
@@ -25,15 +25,32 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, [language]);
 
   const t = (key: string): string => {
-    const translation = translations[language][key as keyof typeof translations[typeof language]];
-    if (key === 'footer.copyright') {
-      return translation?.replace('{year}', new Date().getFullYear().toString()) || key;
+    const keys = key.split('.');
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      if (value && typeof value === 'object' && k in value) {
+        value = value[k];
+      } else {
+        return key; // Return the key if translation not found
+      }
     }
-    return translation || key;
+    
+    if (key === 'footer.copyright') {
+      return (value as string)?.replace('{year}', new Date().getFullYear().toString()) || key;
+    }
+    
+    return value as string || key;
+  };
+
+  const contextValue = {
+    language,
+    setLanguage,
+    t
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
