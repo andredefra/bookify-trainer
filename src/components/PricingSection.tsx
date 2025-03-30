@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -87,7 +86,7 @@ const PricingSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Freemium Plan */}
+          {/* Basic Plan (formerly Freemium) */}
           <div className="reveal flex flex-col p-8 rounded-2xl border border-border bg-white shadow-sm">
             <div className="mb-6">
               <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.freemium.title')}</h3>

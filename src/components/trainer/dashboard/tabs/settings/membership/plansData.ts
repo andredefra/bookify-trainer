@@ -5,7 +5,7 @@ import { Plan } from "./types";
 export const plans: Plan[] = [
   {
     id: "freemium",
-    name: "Freemium",
+    name: "Basic",
     price: "€9",
     period: "per month",
     description: "Basic tier with essential features for new trainers.",
@@ -27,7 +27,7 @@ export const plans: Plan[] = [
     period: "per month",
     description: "Premium features for serious trainers. Lower transaction fee (1.5%).",
     features: [
-      "Everything in Freemium",
+      "Everything in Basic",
       "Google Calendar Integration",
       "Payment Integration",
       "Priority Support",

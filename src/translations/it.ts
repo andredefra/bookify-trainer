@@ -1,4 +1,3 @@
-
 export const it = {
   // Navigation
   'nav.home': 'Home',
@@ -74,10 +73,10 @@ export const it = {
   'pricing.monthly': 'Mensile',
   'pricing.annual': 'Annuale',
   'pricing.save': 'Risparmia 15%',
-  'pricing.freemium.title': 'Freemium',
+  'pricing.freemium.title': 'Basic',
   'pricing.freemium.price': '€9',
   'pricing.freemium.period': '/mese',
-  'pricing.freemium.fee': '',
+  'pricing.freemium.fee': 'Nessuna commissione sulle transazioni',
   'pricing.freemium.cta': 'Inizia Gratis',
   'pricing.pro.title': 'Pro',
   'pricing.pro.price': '€29',
@@ -92,7 +91,7 @@ export const it = {
   'pricing.features.clientMessaging': 'Messaggistica Cliente',
   'pricing.features.clientManagement': 'Gestione Clienti',
   'pricing.features.digitalCashPayments': 'Pagamenti Digitali e in Contanti',
-  'pricing.features.everythingFreemium': 'Tutto di Freemium',
+  'pricing.features.everythingFreemium': 'Tutto di Basic',
   'pricing.features.lowerFee': 'Commissione Ridotta (1.5%)',
   'pricing.features.paymentIntegration': 'Integrazione Pagamenti',
   'pricing.features.prioritySupport': 'Supporto Prioritario',
