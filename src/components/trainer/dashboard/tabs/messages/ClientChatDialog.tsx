@@ -42,9 +42,9 @@ export function ClientChatDialog({ open, onOpenChange, client }: ClientChatDialo
       timestamp: "10:40 AM",
       attachments: [
         { 
-          name: "workout.jpg", 
+          name: "gym-workout.jpg", 
           type: "image/jpeg", 
-          url: "/lovable-uploads/60b9f4d1-45d1-4edb-a115-9c2a83d8df7c.png" 
+          url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1470&auto=format&fit=crop" 
         }
       ]
     }
