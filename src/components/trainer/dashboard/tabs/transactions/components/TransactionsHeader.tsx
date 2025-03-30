@@ -13,7 +13,7 @@ export function TransactionsHeader() {
         <CardTitle>Transactions & Payments</CardTitle>
         <CardDescription>Manage your revenue and client payments</CardDescription>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
         <Button variant="outline" size="sm">
           <Calendar className="mr-2 h-4 w-4" />
           Date Range
