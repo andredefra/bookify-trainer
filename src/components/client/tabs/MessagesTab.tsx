@@ -2,8 +2,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge"; 
-import { Circle } from "lucide-react";
+import { Circle, Paperclip } from "lucide-react";
 import { getTrainerById } from "@/data/trainerMockData";
+import { useState } from "react";
+import { ChatDialog } from "@/components/trainer/ChatDialog";
 
 interface MessageItem {
   id: number;
@@ -12,6 +14,7 @@ interface MessageItem {
   time: string;
   read: boolean;
   trainerId?: string; // Add trainerId to fetch status
+  hasAttachments?: boolean;
 }
 
 interface MessagesTabProps {
@@ -19,6 +22,9 @@ interface MessagesTabProps {
 }
 
 export function MessagesTab({ messages }: MessagesTabProps) {
+  const [showChatDialog, setShowChatDialog] = useState(false);
+  const [selectedTrainer, setSelectedTrainer] = useState<string>("");
+
   // Function to get trainer status color
   const getStatusColor = (status: string) => {
     switch(status) {
@@ -40,6 +46,27 @@ export function MessagesTab({ messages }: MessagesTabProps) {
         return "In Session";
       default:
         return "Offline";
+    }
+  };
+
+  // Mock conversation for the AI chat dialog
+  const mockConversation = [
+    { 
+      sender: "client", 
+      message: "Hi Sarah, is our session still scheduled for tomorrow?",
+      time: "10:30 AM"
+    },
+    {
+      sender: "trainer",
+      message: "Hello! This is Sarah's AI assistant. Sarah is currently in a training session. Yes, your session is confirmed for tomorrow at 3:00 PM. Is there anything else I can help with?",
+      time: "10:32 AM"
+    }
+  ];
+
+  const handleOpenChat = (trainerName: string, trainerStatus: string) => {
+    if (trainerStatus === "in-session") {
+      setSelectedTrainer(trainerName);
+      setShowChatDialog(true);
     }
   };
 
@@ -86,9 +113,20 @@ export function MessagesTab({ messages }: MessagesTabProps) {
                   </div>
                   <span className="text-xs text-muted-foreground">{message.time}</span>
                 </div>
-                <p className="text-sm mb-3">{message.preview}</p>
+                <p className="text-sm mb-3">
+                  {message.preview}
+                  {message.hasAttachments && (
+                    <Badge variant="outline" className="ml-2 flex items-center gap-1 text-xs">
+                      <Paperclip className="h-3 w-3" />
+                      Attachments
+                    </Badge>
+                  )}
+                </p>
                 <div className="flex space-x-2">
-                  <Button size="sm">
+                  <Button 
+                    size="sm"
+                    onClick={() => handleOpenChat(message.from, trainerStatus)}
+                  >
                     {trainerStatus === "in-session" ? "Message AI Assistant" : "Reply"}
                   </Button>
                   {!message.read && (
@@ -100,6 +138,14 @@ export function MessagesTab({ messages }: MessagesTabProps) {
           })}
         </div>
       </CardContent>
+
+      {/* AI Chat Dialog */}
+      <ChatDialog
+        open={showChatDialog}
+        onOpenChange={setShowChatDialog}
+        trainerName={selectedTrainer}
+        conversation={mockConversation}
+      />
     </Card>
   );
 }
