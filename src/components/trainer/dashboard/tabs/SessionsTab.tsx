@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
+import { EditSessionDialog } from "./sessions/EditSessionDialog";
 import { Badge } from "@/components/ui/badge";
 import { TrainerSessionItem } from "@/types/sessions";
 import { CalendarView } from "./sessions/CalendarView";
@@ -16,10 +17,10 @@ interface SessionsTabProps {
 
 export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
+  const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
-  
-  // Add payment status and waiting list to mock data if not available
-  const sessionsWithPaymentInfo = upcomingSessions.map(session => ({
+  const [sessions, setSessions] = useState(upcomingSessions.map(session => ({
     ...session,
     waitingList: session.waitingList || 0,
     paymentStatus: session.paymentStatus || {
@@ -27,7 +28,29 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
       pending: Math.floor(Math.random() * session.participants),
       get total() { return this.paid + this.pending; }
     }
-  }));
+  })));
+  
+  const handleEditSession = (session: TrainerSessionItem) => {
+    setSelectedSession(session);
+    setShowEditSessionDialog(true);
+  };
+
+  const handleUpdateSession = (data: any, sessionId: number) => {
+    // Update the sessions array with edited data
+    setSessions(sessions.map(session => {
+      if (session.id === sessionId) {
+        return {
+          ...session,
+          name: data.name,
+          date: data.date.toLocaleDateString(),
+          time: data.time,
+          maxParticipants: data.maxParticipants,
+          description: data.description
+        };
+      }
+      return session;
+    }));
+  };
   
   return (
     <Card className="overflow-hidden">
@@ -67,7 +90,7 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
       </CardHeader>
       <CardContent className="overflow-x-hidden">
         {viewMode === "calendar" ? (
-          <CalendarView sessions={sessionsWithPaymentInfo} />
+          <CalendarView sessions={sessions} />
         ) : (
           <Tabs defaultValue="upcoming">
             <TabsList className="mb-6 grid grid-cols-3 w-full">
@@ -77,7 +100,7 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
             </TabsList>
             <TabsContent value="upcoming">
               <div className="space-y-4">
-                {sessionsWithPaymentInfo.map((session) => (
+                {sessions.map((session) => (
                   <div key={session.id} className="flex flex-col p-3 bg-gray-50 rounded-lg">
                     <div className="space-y-2">
                       <h3 className="font-medium line-clamp-1">{session.name}</h3>
@@ -105,7 +128,12 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
                         <span className="font-medium">{session.participants}/{session.maxParticipants}</span>
                       </div>
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" className="h-8 px-3">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-8 px-3"
+                          onClick={() => handleEditSession(session)}
+                        >
                           Edit
                         </Button>
                         <Button variant="ghost" size="sm" className="h-8 px-3">
@@ -135,11 +163,34 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
           open={showCreateSessionDialog} 
           onOpenChange={setShowCreateSessionDialog}
           onSubmit={(data) => {
-            // Here you would typically save the session to your database
-            console.log("New session data:", data);
+            // Add the new session to the state
+            const newSession: TrainerSessionItem = {
+              id: Math.floor(Math.random() * 1000),
+              name: data.name,
+              date: data.date.toLocaleDateString(),
+              time: data.time,
+              participants: 0,
+              maxParticipants: data.maxParticipants,
+              paymentStatus: {
+                paid: 0,
+                pending: 0,
+                get total() { return this.paid + this.pending; }
+              },
+              waitingList: 0,
+              description: data.description
+            };
+            
+            setSessions([...sessions, newSession]);
             toast.success("Session created successfully!");
             setShowCreateSessionDialog(false);
           }}
+        />
+        
+        <EditSessionDialog
+          open={showEditSessionDialog}
+          onOpenChange={setShowEditSessionDialog}
+          session={selectedSession}
+          onSubmit={handleUpdateSession}
         />
       </CardContent>
     </Card>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +15,6 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   
   // Create a map of dates to session counts for highlighting dates with sessions
   const sessionDates = sessions.reduce((acc, session) => {
-    const date = new Date(session.date);
     // Handle 'Today' and 'Tomorrow' strings
     const sessionDate = session.date === 'Today' 
       ? new Date() 
