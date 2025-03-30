@@ -43,13 +43,13 @@ export function ClientChatDialog({ open, onOpenChange, client }: ClientChatDialo
     {
       id: 3,
       sender: "client",
-      content: "Check out my progress photo!",
+      content: "Check out my workout from today!",
       timestamp: "10:40 AM",
       attachments: [
         { 
-          name: "progress.jpg", 
+          name: "workout.jpg", 
           type: "image/jpeg", 
-          url: "/lovable-uploads/368261f4-bf4e-430f-9556-dfe2c0a73c98.png" 
+          url: "/lovable-uploads/60b9f4d1-45d1-4edb-a115-9c2a83d8df7c.png" 
         }
       ]
     }
