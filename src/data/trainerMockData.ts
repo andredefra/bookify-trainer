@@ -1,3 +1,4 @@
+
 // Mock trainer data for development and testing
 
 export interface Trainer {
@@ -35,9 +36,14 @@ export interface Testimonial {
 }
 
 export interface Message {
-  sender: "client" | "ai";
+  sender: "client" | "ai" | "trainer";
   message: string;
   time: string;
+  attachments?: {
+    name: string;
+    type: string;
+    url?: string;
+  }[];
 }
 
 export const trainerData: Trainer = {

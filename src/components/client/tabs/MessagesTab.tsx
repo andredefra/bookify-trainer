@@ -52,12 +52,12 @@ export function MessagesTab({ messages }: MessagesTabProps) {
   // Mock conversation for the AI chat dialog
   const mockConversation = [
     { 
-      sender: "client", 
+      sender: "client" as const, 
       message: "Hi Sarah, is our session still scheduled for tomorrow?",
       time: "10:30 AM"
     },
     {
-      sender: "trainer",
+      sender: "ai" as const,
       message: "Hello! This is Sarah's AI assistant. Sarah is currently in a training session. Yes, your session is confirmed for tomorrow at 3:00 PM. Is there anything else I can help with?",
       time: "10:32 AM"
     }
