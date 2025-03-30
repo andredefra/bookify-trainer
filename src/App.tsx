@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
 import Index from "./pages/Index";
@@ -19,20 +19,16 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 
-// Create the QueryClient instance outside of the component
-// This ensures it's only created once and not on every render
-const queryClient = new QueryClient();
-
-// ScrollToTop component as a function component
 const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [pathname]);
 
   return null;
 };
 
-// RevealObserver component as a function component
 const RevealObserver = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,6 +52,10 @@ const RevealObserver = () => {
 
   return null;
 };
+
+// Create the QueryClient instance outside of the component
+// This ensures it's only created once and not on every render
+const queryClient = new QueryClient();
 
 const App = () => {
   return (

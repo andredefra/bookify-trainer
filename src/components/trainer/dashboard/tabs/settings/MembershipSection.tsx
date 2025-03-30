@@ -79,7 +79,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
                 <div>
                   <h3 className="font-semibold text-lg">{plan.name}</h3>
                   <div className="flex items-baseline mt-1">
-                    <span className="text-2xl font-bold">{plan.price}</span>
+                    <span className="text-2xl font-bold">${plan.price}</span>
                     <span className="text-muted-foreground ml-1 text-sm">/month</span>
                   </div>
                 </div>

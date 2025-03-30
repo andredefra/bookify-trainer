@@ -30,6 +30,7 @@ const PricingSection = () => {
 
   const freemiumFeatures = [
     t('pricing.features.unlimitedSessions'),
+    t('pricing.features.googleCalendar'),
     t('pricing.features.personalTrainerPage'),
     t('pricing.features.clientMessaging'),
     t('pricing.features.clientManagement'),
@@ -37,7 +38,6 @@ const PricingSection = () => {
 
   const proFeatures = [
     t('pricing.features.everythingFreemium'),
-    t('pricing.features.googleCalendar'),
     t('pricing.features.lowerFee'),
     t('pricing.features.paymentIntegration'),
     t('pricing.features.prioritySupport'),
@@ -91,11 +91,11 @@ const PricingSection = () => {
             <div className="mb-6">
               <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.freemium.title')}</h3>
               <div className="flex items-baseline mb-1">
-                <span className="text-4xl font-display font-bold">€9</span>
+                <span className="text-4xl font-display font-bold">{t('pricing.freemium.price')}</span>
                 <span className="text-muted-foreground ml-2">{t('pricing.freemium.period')}</span>
               </div>
               <p className="text-muted-foreground">
-                {t('pricing.freemium.noFee')}
+                {t('pricing.freemium.fee')}
               </p>
             </div>
 
@@ -131,7 +131,7 @@ const PricingSection = () => {
                 <span className="text-muted-foreground ml-2">{t('pricing.pro.period')}</span>
               </div>
               <p className="text-muted-foreground">
-                + 1.5% transaction fee
+                {t('pricing.pro.fee')}
               </p>
             </div>
 
