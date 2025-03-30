@@ -40,9 +40,9 @@ export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfil
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle className="text-xl">Client Profile</DialogTitle>
+      <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-3xl p-4 md:p-6 overflow-y-auto max-h-[90vh]">
+        <DialogHeader className="mb-2 md:mb-4">
+          <DialogTitle className="text-lg md:text-xl">Client Profile</DialogTitle>
           <div className="relative mt-2">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -55,9 +55,9 @@ export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfil
           </div>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left sidebar with client profile summary */}
-          <div>
+        <div className="grid grid-cols-1 gap-4 md:gap-6">
+          {/* Client profile summary - shows at the top on mobile */}
+          <div className="md:hidden">
             <ClientProfile 
               name={client.name}
               email={mockClientDetails.email}
@@ -67,13 +67,26 @@ export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfil
             />
           </div>
           
-          {/* Main content area */}
-          <div className="md:col-span-2">
-            <ClientProfileTabContent 
-              client={client}
-              mockClientDetails={mockClientDetails}
-              searchQuery={searchQuery}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {/* Left sidebar with client profile summary - hidden on mobile as it's moved to the top */}
+            <div className="hidden md:block">
+              <ClientProfile 
+                name={client.name}
+                email={mockClientDetails.email}
+                since={mockClientDetails.since}
+                sessions={client.sessions}
+                goals={mockClientDetails.goals}
+              />
+            </div>
+            
+            {/* Main content area */}
+            <div className="md:col-span-2">
+              <ClientProfileTabContent 
+                client={client}
+                mockClientDetails={mockClientDetails}
+                searchQuery={searchQuery}
+              />
+            </div>
           </div>
         </div>
         
