@@ -30,14 +30,15 @@ const PricingSection = () => {
 
   const freemiumFeatures = [
     t('pricing.features.unlimitedSessions'),
-    t('pricing.features.googleCalendar'),
     t('pricing.features.personalTrainerPage'),
     t('pricing.features.clientMessaging'),
     t('pricing.features.clientManagement'),
+    t('pricing.features.digitalCashPayments'),
   ];
 
   const proFeatures = [
     t('pricing.features.everythingFreemium'),
+    t('pricing.features.googleCalendar'),
     t('pricing.features.lowerFee'),
     t('pricing.features.paymentIntegration'),
     t('pricing.features.prioritySupport'),

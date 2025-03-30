@@ -13,7 +13,8 @@ export const plans: Plan[] = [
       "Unlimited Sessions",
       "Personal Trainer Page",
       "Client Messaging",
-      "Client Management"
+      "Client Management",
+      "Digital & Cash Payments"
     ],
     limitations: [],
     isPopular: false,
