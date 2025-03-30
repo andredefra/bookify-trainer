@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -95,7 +94,9 @@ const PricingSection = () => {
                 <span className="text-4xl font-display font-bold">{t('pricing.freemium.price')}</span>
                 <span className="text-muted-foreground ml-2">{t('pricing.freemium.period')}</span>
               </div>
-              {/* Removed the redundant fee information line */}
+              <p className="text-muted-foreground">
+                {t('pricing.freemium.fee')}
+              </p>
             </div>
 
             <ul className="space-y-3 mb-8 flex-grow">
