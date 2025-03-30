@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { MessageAttachment } from "./MessageItem";
-import { getFileIcon } from "../utils/fileUtils";
+import { getFileIcon, formatFileSize } from "../utils/fileUtils";
 
 interface AttachmentPreviewProps {
   attachments: File[];
@@ -19,6 +19,7 @@ export function AttachmentPreview({ attachments, onRemoveAttachment }: Attachmen
         <Badge key={index} variant="secondary" className="flex items-center gap-1 py-1 pl-2">
           {getFileIcon(file.type)}
           <span className="truncate max-w-[120px]">{file.name}</span>
+          <span className="text-xs text-muted-foreground ml-1">({formatFileSize(file.size)})</span>
           <Button 
             variant="ghost" 
             size="sm" 
