@@ -6,12 +6,15 @@ import { Menu, Bell, Circle, LogOut } from "lucide-react";
 import { StatusSelector } from "./header/StatusSelector";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { HeaderActions } from "./header/HeaderActions";
+
 interface DashboardHeaderProps {
   name: string;
   onLogout: () => void;
   onMobileMenuClick: () => void;
   showMobileMenuButton: boolean;
 }
+
 export function DashboardHeader({
   name,
   onLogout,
@@ -33,6 +36,22 @@ export function DashboardHeader({
     }
   }, []);
 
+  // Listen for status changes from other components
+  useEffect(() => {
+    const handleStatusChange = (event: CustomEvent) => {
+      const newStatus = event.detail;
+      if (newStatus && ["online", "in-session", "offline"].includes(newStatus)) {
+        setStatus(newStatus as "online" | "in-session" | "offline");
+      }
+    };
+
+    window.addEventListener('trainer-status-change', handleStatusChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('trainer-status-change', handleStatusChange as EventListener);
+    };
+  }, []);
+
   // Get status color for the indicator
   const getStatusColor = () => {
     switch (status) {
@@ -44,13 +63,17 @@ export function DashboardHeader({
         return "text-slate-500 fill-slate-500";
     }
   };
-  return <header className="bg-white border-b border-border shadow-sm">
+
+  return (
+    <header className="bg-white border-b border-border shadow-sm">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
-            {showMobileMenuButton && <Button variant="ghost" size="icon" onClick={onMobileMenuClick}>
+            {showMobileMenuButton && (
+              <Button variant="ghost" size="icon" onClick={onMobileMenuClick}>
                 <Menu className="h-5 w-5" />
-              </Button>}
+              </Button>
+            )}
             <span className="font-display text-xl font-bold text-primary">MyPersonal.ai</span>
           </div>
           
@@ -93,5 +116,6 @@ export function DashboardHeader({
           </div>
         </div>
       </div>
-    </header>;
+    </header>
+  );
 }
