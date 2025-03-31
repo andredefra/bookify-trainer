@@ -1,9 +1,9 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { TrainerSessionItem } from "@/types/sessions";
 import { SessionForm } from "../../dialogs/session/SessionForm";
 import { SessionFormValues } from "../../dialogs/session/SessionFormSchema";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface EditSessionDialogProps {
   open: boolean;
@@ -12,16 +12,11 @@ interface EditSessionDialogProps {
   onSubmit?: (data: SessionFormValues, sessionId: number) => void;
 }
 
-export function EditSessionDialog({
-  open,
-  onOpenChange,
-  session,
-  onSubmit,
-}: EditSessionDialogProps) {
+export function EditSessionDialog({ open, onOpenChange, session, onSubmit }: EditSessionDialogProps) {
   if (!session) return null;
 
   // Convert session data to form values format
-  const sessionToFormValues = (session: TrainerSessionItem): Partial<SessionFormValues> => {
+  const sessionToFormValues = (session: TrainerSessionItem): SessionFormValues => {
     // Parse date from string to Date object
     let sessionDate: Date;
     try {
@@ -31,19 +26,25 @@ export function EditSessionDialog({
       
       // Check if valid date was created
       if (isNaN(sessionDate.getTime())) {
-        // Fallback to current date
-        sessionDate = new Date();
+        // Fallback to trying to parse as a direct date string
+        sessionDate = new Date(session.date);
+        
+        // If still invalid, fallback to current date
+        if (isNaN(sessionDate.getTime())) {
+          sessionDate = new Date();
+        }
       }
     } catch (error) {
       // If parsing fails, use current date
+      console.error("Error parsing date:", error);
       sessionDate = new Date();
     }
-
+    
     return {
       name: session.name,
       date: sessionDate,
       time: session.time,
-      duration: "60", // Default since it might not be available in the original data
+      duration: "60",
       maxParticipants: session.maxParticipants.toString(),
       description: session.description || "",
       // Set other defaults
@@ -51,7 +52,7 @@ export function EditSessionDialog({
       price: "50",
       isPrivate: false,
       paymentTime: "before",
-      cancellationHours: "2",
+      cancellationHours: "2"
     };
   };
 
@@ -75,7 +76,7 @@ export function EditSessionDialog({
             Update the details of your training session.
           </DialogDescription>
         </DialogHeader>
-
+        
         <SessionForm
           defaultValues={sessionToFormValues(session)}
           onSubmit={handleSubmit}
