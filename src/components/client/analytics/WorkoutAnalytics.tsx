@@ -29,7 +29,7 @@ export function WorkoutAnalytics({
 
   return (
     <Card className="col-span-12 border shadow-sm">
-      <CardHeader className="pb-1 pt-4 px-4">
+      <CardHeader className={`pb-0 ${isMobile ? 'pt-3 px-3' : 'pt-4 px-4'}`}>
         <ChartHeader 
           title="Workout Analytics"
           description="Track your workout patterns and progress"
@@ -39,23 +39,23 @@ export function WorkoutAnalytics({
           onChartTypeChange={setChartType}
         />
       </CardHeader>
-      <CardContent className={`${isMobile ? 'p-2' : 'p-4'}`}>
-        <Tabs defaultValue="activity" className="space-y-4">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-50/80 p-1 rounded-md w-full border">
-            <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-2">
-              <BarChart2 className="h-4 w-4 mr-1" />
+      <CardContent className={`${isMobile ? 'p-2 pt-1' : 'p-4 pt-2'}`}>
+        <Tabs defaultValue="activity" className="space-y-2 sm:space-y-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1 sm:gap-2 bg-slate-50/80 p-1 rounded-md w-full border">
+            <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-xs sm:text-sm">
+              <BarChart2 className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-1`} />
               <span>{isMobile ? "Activity" : "Activity"}</span>
             </TabsTrigger>
-            <TabsTrigger value="types" className="flex items-center justify-center gap-1 py-2">
-              <PieChartIcon className="h-4 w-4 mr-1" />
+            <TabsTrigger value="types" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-xs sm:text-sm">
+              <PieChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-1`} />
               <span>{isMobile ? "Types" : "Workout Types"}</span>
             </TabsTrigger>
-            <TabsTrigger value="goals" className="flex items-center justify-center gap-1 py-2">
-              <AreaChartIcon className="h-4 w-4 mr-1" />
+            <TabsTrigger value="goals" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-xs sm:text-sm">
+              <AreaChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-1`} />
               <span>{isMobile ? "Goals" : "Monthly Goals"}</span>
             </TabsTrigger>
-            <TabsTrigger value="progress" className="flex items-center justify-center gap-1 py-2">
-              <LineChartIcon className="h-4 w-4 mr-1" />
+            <TabsTrigger value="progress" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-xs sm:text-sm">
+              <LineChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-1`} />
               <span>{isMobile ? "Progress" : "Progress"}</span>
             </TabsTrigger>
           </TabsList>
@@ -73,9 +73,9 @@ export function WorkoutAnalytics({
           </TabsContent>
           
           <TabsContent value="progress" className="mt-0">
-            <div className="flex justify-end mb-2">
+            <div className="flex justify-end mb-1 sm:mb-2">
               <Select value={progressMetric} onValueChange={setProgressMetric}>
-                <SelectTrigger className={`${isMobile ? 'w-[120px] h-7 text-xs' : 'w-[140px] h-8'}`}>
+                <SelectTrigger className={`${isMobile ? 'w-[95px] h-7 text-xs px-2' : 'w-[140px] h-8'}`}>
                   <SelectValue placeholder="Metric" />
                 </SelectTrigger>
                 <SelectContent>

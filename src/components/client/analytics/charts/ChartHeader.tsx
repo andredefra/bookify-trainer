@@ -26,14 +26,14 @@ export function ChartHeader({
   const isMobile = useIsMobile();
   
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2 sm:mb-4">
       <div>
         <CardTitle className={`${isMobile ? 'text-sm' : 'text-base'}`}>{title}</CardTitle>
-        <CardDescription className={`${isMobile ? 'text-xs' : 'text-sm'}`}>{description}</CardDescription>
+        <CardDescription className={`${isMobile ? 'text-xs' : 'text-sm'} mt-1`}>{description}</CardDescription>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1 sm:gap-2 mt-1 sm:mt-0 w-full sm:w-auto justify-end">
         <Select value={timeframe} onValueChange={onTimeframeChange}>
-          <SelectTrigger className={`${isMobile ? 'w-[100px] h-7 text-xs' : 'w-[120px] h-8'}`}>
+          <SelectTrigger className={`${isMobile ? 'w-[90px] h-7 text-xs px-2' : 'w-[120px] h-8'}`}>
             <SelectValue placeholder="Timeframe" />
           </SelectTrigger>
           <SelectContent>
@@ -45,7 +45,7 @@ export function ChartHeader({
         
         {showChartTypeSelector && (
           <Select value={chartType} onValueChange={onChartTypeChange}>
-            <SelectTrigger className={`${isMobile ? 'w-[100px] h-7 text-xs' : 'w-[120px] h-8'}`}>
+            <SelectTrigger className={`${isMobile ? 'w-[90px] h-7 text-xs px-2' : 'w-[120px] h-8'}`}>
               <SelectValue placeholder="Chart Type" />
             </SelectTrigger>
             <SelectContent>

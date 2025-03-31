@@ -26,13 +26,28 @@ interface MonthlyGoalsChartProps {
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   const isMobile = useIsMobile();
   
-  // Further adjusted margins based on device size
+  // Significantly adjusted margins for mobile
   const chartMargins = isMobile 
-    ? { top: 5, right: 30, left: 50, bottom: 5 }
+    ? { top: 5, right: 30, left: 5, bottom: 5 }
     : { top: 5, right: 30, left: 120, bottom: 5 };
 
+  // Calculate max length of labels
+  const maxLabelLength = Math.max(...monthlyData.map(item => item.type.length));
+  const yAxisWidth = isMobile 
+    ? Math.min(maxLabelLength * 4, 70) // Limit width on mobile
+    : 120;
+
+  // Truncate labels function
+  const truncateLabel = (label: string) => {
+    if (!isMobile) return label;
+    
+    const maxLength = 8;
+    if (label.length <= maxLength) return label;
+    return `${label.slice(0, maxLength)}...`;
+  };
+
   return (
-    <div className="w-full h-[300px]">
+    <div className="w-full h-[300px] sm:h-[320px] pb-4">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           layout="vertical"
@@ -45,16 +60,24 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             axisLine={false} 
             tickLine={false} 
             domain={[0, 'dataMax']}
-            tick={{ fontSize: isMobile ? 10 : 12 }} 
+            tick={{ fontSize: isMobile ? 9 : 12 }} 
+            height={20}
+            tickCount={isMobile ? 3 : 5}
           />
           <YAxis 
             dataKey="type" 
             type="category" 
             axisLine={false} 
             tickLine={false}
-            width={isMobile ? 50 : 100}
-            tick={{ fontSize: isMobile ? 9 : 12 }}
-            tickFormatter={(value) => isMobile && value.length > 10 ? `${value.slice(0, 10)}...` : value}
+            width={yAxisWidth}
+            tick={{ 
+              fontSize: isMobile ? 8 : 12,
+              textAnchor: isMobile ? 'start' : 'end',
+              fill: "#6b7280" 
+            }}
+            tickFormatter={truncateLabel}
+            tickMargin={isMobile ? 2 : 5}
+            padding={{ top: 15, bottom: 15 }}
           />
           <Tooltip 
             content={({ active, payload }) => {
@@ -79,7 +102,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             dataKey="current" 
             fill="#4f46e5" 
             radius={[3, 3, 3, 3]}
-            barSize={isMobile ? 14 : 20}
+            barSize={isMobile ? 12 : 20}
           >
             {monthlyData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.current >= entry.target ? "#10b981" : "#4f46e5"} />
@@ -88,15 +111,21 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
               dataKey="current" 
               position="right" 
               formatter={(value, entry) => {
-                // Safely check if entry and entry.payload exist before accessing target
-                if (entry && entry.payload && typeof entry.payload.target !== 'undefined') {
-                  // For mobile, use more compact display
-                  return isMobile ? `${value}/${entry.payload.target}` : `${value}/${entry.payload.target}`;
+                if (entry && entry.payload && entry.payload.target !== undefined) {
+                  return isMobile 
+                    ? `${value}/${entry.payload.target}`
+                    : `${value} / ${entry.payload.target}`;
                 }
-                // Fallback if target is not available
                 return `${value}`;
               }}
-              style={{ fill: "#6b7280", fontSize: isMobile ? 9 : 12 }}
+              style={{ 
+                fill: "#6b7280", 
+                fontSize: isMobile ? 8 : 12,
+                fontWeight: "normal",
+                textAnchor: "start",
+                dy: 3
+              }}
+              offset={isMobile ? 2 : 5}
             />
           </Bar>
         </BarChart>
