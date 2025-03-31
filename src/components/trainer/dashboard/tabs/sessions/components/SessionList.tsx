@@ -3,13 +3,15 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrainerSessionItem } from "@/types/sessions";
+import { X, Edit } from "lucide-react";
 
 interface SessionListProps {
   sessions: TrainerSessionItem[];
   onEditSession: (session: TrainerSessionItem) => void;
+  onCancelSession: (session: TrainerSessionItem) => void;
 }
 
-export function SessionList({ sessions, onEditSession }: SessionListProps) {
+export function SessionList({ sessions, onEditSession, onCancelSession }: SessionListProps) {
   console.log("SessionList received sessions:", sessions);
   
   return (
@@ -56,11 +58,17 @@ export function SessionList({ sessions, onEditSession }: SessionListProps) {
                       className="h-8 px-3"
                       onClick={() => onEditSession(session)}
                     >
-                      Edit
+                      <Edit className="h-4 w-4 mr-1" />
+                      <span className="hidden sm:inline">Edit</span>
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-8 px-3">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => onCancelSession(session)}
+                    >
+                      <X className="h-4 w-4 mr-1" />
                       <span className="hidden sm:inline">Cancel</span>
-                      <span className="sm:hidden">X</span>
                     </Button>
                   </div>
                 </div>

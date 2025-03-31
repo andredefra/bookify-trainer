@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { TrainerSessionItem } from "@/types/sessions";
 import { SessionsTabContent } from "./sessions/SessionsTabContent";
+import { toast } from "sonner";
 
 interface SessionsTabProps {
   upcomingSessions?: TrainerSessionItem[];
@@ -68,7 +69,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   // Use provided sessions or fallback to mock data
   const sessionsToDisplay = upcomingSessions && upcomingSessions.length > 0 ? upcomingSessions : mockSessions;
   
-  console.log("Sessions to display:", sessionsToDisplay);
+  console.log("Sessions to display in SessionsTab:", sessionsToDisplay);
   
   return <SessionsTabContent upcomingSessions={sessionsToDisplay} />;
 }

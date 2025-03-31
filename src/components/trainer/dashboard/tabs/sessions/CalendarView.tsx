@@ -18,28 +18,36 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   
   // Create a more robust date parser to handle various date formats
   const parseSessionDate = (dateString: string): Date => {
-    if (dateString === 'Today') {
-      return new Date();
-    } else if (dateString === 'Tomorrow') {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      return tomorrow;
-    } else {
-      // Try to parse the date string
-      const parsedDate = new Date(dateString);
-      if (!isNaN(parsedDate.getTime())) {
-        return parsedDate;
+    // First check if it's MM/DD/YYYY format
+    if (/\d{1,2}\/\d{1,2}\/\d{4}/.test(dateString)) {
+      const [month, day, year] = dateString.split('/').map(Number);
+      const date = new Date(year, month - 1, day);
+      // Validate the parsed date
+      if (!isNaN(date.getTime())) {
+        return date;
       }
-      // Fallback to current date if parsing fails
-      return new Date();
     }
+    
+    // Try other formats
+    const possibleDate = new Date(dateString);
+    if (!isNaN(possibleDate.getTime())) {
+      return possibleDate;
+    }
+    
+    // Fallback to current date if all parsing fails
+    console.log("Failed to parse date:", dateString);
+    return new Date();
   };
   
   // Create a map of dates to session counts for highlighting dates with sessions
   const sessionDates = sessions.reduce((acc, session) => {
-    const sessionDate = parseSessionDate(session.date);
-    const dateString = sessionDate.toDateString();
-    acc[dateString] = (acc[dateString] || 0) + 1;
+    try {
+      const sessionDate = parseSessionDate(session.date);
+      const dateString = sessionDate.toDateString();
+      acc[dateString] = (acc[dateString] || 0) + 1;
+    } catch (error) {
+      console.error("Error processing session date:", error);
+    }
     return acc;
   }, {} as Record<string, number>);
   
@@ -49,8 +57,13 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     const dateString = date.toDateString();
     
     return sessions.filter(session => {
-      const sessionDate = parseSessionDate(session.date);
-      return sessionDate.toDateString() === dateString;
+      try {
+        const sessionDate = parseSessionDate(session.date);
+        return sessionDate.toDateString() === dateString;
+      } catch (error) {
+        console.error("Error filtering sessions by date:", error);
+        return false;
+      }
     });
   };
   

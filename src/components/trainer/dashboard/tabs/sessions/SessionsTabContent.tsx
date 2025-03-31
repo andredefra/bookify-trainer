@@ -4,6 +4,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../../dialogs/CreateSessionDialog";
 import { EditSessionDialog } from "./EditSessionDialog";
+import { CancelSessionDialog } from "./components/CancelSessionDialog";
 import { TrainerSessionItem } from "@/types/sessions";
 import { CalendarView } from "./CalendarView";
 import { SessionHeader } from "./components/SessionHeader";
@@ -17,6 +18,7 @@ interface SessionsTabContentProps {
 export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps) {
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
   const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
+  const [showCancelSessionDialog, setShowCancelSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   
@@ -25,21 +27,10 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   
   // Initialize sessions when component mounts or upcomingSessions changes
   useEffect(() => {
-    console.log("Upcoming sessions received:", upcomingSessions);
+    console.log("Upcoming sessions received in TabContent:", upcomingSessions);
     if (upcomingSessions && upcomingSessions.length > 0) {
-      // Ensure each session has required properties and consistent date format
-      const enhancedSessions = upcomingSessions.map(session => ({
-        ...session,
-        date: session.date || new Date().toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}),
-        waitingList: session.waitingList || 0,
-        paymentStatus: session.paymentStatus || {
-          paid: Math.floor(Math.random() * session.participants),
-          pending: Math.floor(Math.random() * session.participants),
-          get total() { return this.paid + this.pending; }
-        }
-      }));
-      setSessions(enhancedSessions);
-      console.log("Sessions initialized from props:", enhancedSessions);
+      setSessions(upcomingSessions);
+      console.log("Sessions initialized from props:", upcomingSessions);
     } else {
       // Add some mock data if no sessions provided
       const mockSessions = [
@@ -104,6 +95,17 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
     setShowEditSessionDialog(false);
   };
 
+  const handleCancelSession = (session: TrainerSessionItem) => {
+    setSelectedSession(session);
+    setShowCancelSessionDialog(true);
+  };
+
+  const confirmCancelSession = () => {
+    if (selectedSession) {
+      setSessions(sessions.filter(session => session.id !== selectedSession.id));
+    }
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -117,7 +119,11 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         {viewMode === "calendar" ? (
           <CalendarView sessions={sessions} />
         ) : (
-          <SessionList sessions={sessions} onEditSession={handleEditSession} />
+          <SessionList 
+            sessions={sessions} 
+            onEditSession={handleEditSession} 
+            onCancelSession={handleCancelSession}
+          />
         )}
         
         <CreateSessionDialog 
@@ -152,6 +158,13 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
           onOpenChange={setShowEditSessionDialog}
           session={selectedSession}
           onSubmit={handleUpdateSession}
+        />
+
+        <CancelSessionDialog
+          open={showCancelSessionDialog}
+          onOpenChange={setShowCancelSessionDialog}
+          sessionName={selectedSession?.name || ""}
+          onConfirm={confirmCancelSession}
         />
       </CardContent>
     </Card>
