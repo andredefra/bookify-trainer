@@ -1,21 +1,19 @@
 
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircle, CalendarDays, List } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
 
-import { SessionDetailsDialog } from "./dialogs/SessionDetailsDialog";
-import { PaymentDialog } from "./dialogs/PaymentDialog";
-import { BookingDialog } from "./dialogs/BookingDialog";
 import { MySessionsTab } from "./MySessionsTab";
 import { SessionDiscoveryTab } from "./SessionDiscoveryTab";
 import { PastSessionsTab } from "./PastSessionsTab";
 import { CalendarSessionView } from "./CalendarSessionView";
 import { SessionProvider, useSessionContext } from "./SessionContext";
 import { availableTrainers, availableSessions, featuredSession, pastSessions } from "./sessionData";
+import { SessionsHeader } from "./components/SessionsHeader";
+import { ViewToggle } from "./components/ViewToggle";
+import { SessionDialogs } from "./components/SessionDialogs";
 
 interface SessionsTabContentProps {
   upcomingSessions: SessionItem[];
@@ -70,40 +68,11 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Training Sessions</CardTitle>
-            <CardDescription>Discover and register for live training sessions</CardDescription>
-          </div>
-          <div className="flex gap-2">
-            {/* View toggle buttons */}
-            <div className="hidden sm:flex mr-2 bg-muted rounded-md p-1">
-              <Button 
-                variant={viewMode === 'list' ? 'default' : 'ghost'} 
-                size="sm" 
-                onClick={() => setViewMode('list')}
-                className="px-3"
-              >
-                <List className="h-4 w-4 mr-1" /> List
-              </Button>
-              <Button 
-                variant={viewMode === 'calendar' ? 'default' : 'ghost'} 
-                size="sm" 
-                onClick={() => setViewMode('calendar')}
-                className="px-3"
-              >
-                <CalendarDays className="h-4 w-4 mr-1" /> Calendar
-              </Button>
-            </div>
-            <Button 
-              className="flex items-center"
-              onClick={handleBookSession}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Book Private Session
-            </Button>
-          </div>
-        </div>
+        <SessionsHeader 
+          viewMode={viewMode} 
+          setViewMode={setViewMode} 
+          onBookSession={handleBookSession}
+        />
       </CardHeader>
       <CardContent>
         {viewMode === 'calendar' ? (
@@ -146,45 +115,27 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
         )}
         
         {/* Small screen view toggle */}
-        <div className="sm:hidden flex mt-4 bg-muted rounded-md p-1 w-full">
-          <Button 
-            variant={viewMode === 'list' ? 'default' : 'ghost'} 
-            onClick={() => setViewMode('list')}
-            className="flex-1"
-          >
-            <List className="h-4 w-4 mr-1" /> List
-          </Button>
-          <Button 
-            variant={viewMode === 'calendar' ? 'default' : 'ghost'} 
-            onClick={() => setViewMode('calendar')}
-            className="flex-1"
-          >
-            <CalendarDays className="h-4 w-4 mr-1" /> Calendar
-          </Button>
-        </div>
+        <ViewToggle 
+          viewMode={viewMode} 
+          setViewMode={setViewMode} 
+          isMobile={true} 
+        />
         
         {/* Dialogs */}
-        <BookingDialog 
-          open={showBookingDialog}
-          onOpenChange={setShowBookingDialog}
+        <SessionDialogs 
+          showBookingDialog={showBookingDialog}
+          setShowBookingDialog={setShowBookingDialog}
+          showPaymentDialog={showPaymentDialog}
+          setShowPaymentDialog={setShowPaymentDialog}
+          showSessionDetailsDialog={showSessionDetailsDialog}
+          setShowSessionDetailsDialog={setShowSessionDetailsDialog}
           selectedTrainer={selectedTrainer}
           setSelectedTrainer={setSelectedTrainer}
+          selectedSession={selectedSession}
           availableTrainers={availableTrainers}
-          onSubmit={handleBookingSubmit}
-        />
-        
-        <SessionDetailsDialog
-          open={showSessionDetailsDialog}
-          onOpenChange={setShowSessionDetailsDialog}
-          session={selectedSession}
-          onRegister={handleRegisterForSession}
-        />
-        
-        <PaymentDialog
-          open={showPaymentDialog}
-          onOpenChange={setShowPaymentDialog}
-          session={selectedSession}
+          onBookingSubmit={handleBookingSubmit}
           onPaymentComplete={handlePaymentSubmit}
+          onRegister={handleRegisterForSession}
         />
       </CardContent>
     </Card>
