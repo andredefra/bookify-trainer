@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { TrainerSessionItem } from "@/types/sessions";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { SessionHeader } from "./sessions/components/SessionHeader";
 import { SessionList } from "./sessions/components/SessionList";
+import { CalendarView } from "./sessions/components/CalendarView";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { EditSessionDialog } from "./sessions/EditSessionDialog";
 import { CancelSessionDialog } from "./sessions/components/CancelSessionDialog";
@@ -48,6 +48,7 @@ interface SessionsTabProps {
 }
 
 export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
+  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
   const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
   const [showCancelSessionDialog, setShowCancelSessionDialog] = useState(false);
@@ -86,23 +87,26 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   return (
     <Card className="overflow-hidden">
       <CardHeader>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold leading-none tracking-tight">Training Sessions</h2>
-            <p className="text-sm text-muted-foreground">Create and manage your training sessions</p>
-          </div>
-          <Button className="flex items-center" onClick={() => setShowCreateSessionDialog(true)}>
-            <Plus className="sm:mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Create Session</span>
-          </Button>
-        </div>
+        <SessionHeader 
+          viewMode={viewMode} 
+          setViewMode={setViewMode} 
+          onCreateSession={() => setShowCreateSessionDialog(true)} 
+        />
       </CardHeader>
       <CardContent className="overflow-x-hidden">
-        <SessionList 
-          sessions={sessionsToDisplay} 
-          onEditSession={handleEditSession} 
-          onCancelSession={handleCancelSession}
-        />
+        {viewMode === "calendar" ? (
+          <CalendarView 
+            sessions={sessionsToDisplay}
+            onEditSession={handleEditSession}
+            onCancelSession={handleCancelSession}
+          />
+        ) : (
+          <SessionList 
+            sessions={sessionsToDisplay} 
+            onEditSession={handleEditSession} 
+            onCancelSession={handleCancelSession}
+          />
+        )}
         
         <CreateSessionDialog 
           open={showCreateSessionDialog} 
