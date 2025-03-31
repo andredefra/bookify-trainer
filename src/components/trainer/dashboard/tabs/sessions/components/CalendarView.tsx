@@ -46,6 +46,13 @@ export function CalendarView({ sessions, onEditSession, onCancelSession }: Calen
     }
   }).filter(item => item !== null) as { session: TrainerSessionItem, parsedDate: Date, formattedDate: string }[];
 
+  // Log the dates for debugging
+  console.log("Parsed session dates:", sessionDatesMap.map(item => ({
+    sessionName: item.session.name,
+    originalDate: item.session.date,
+    parsedDate: item.parsedDate.toISOString()
+  })));
+
   // Get all valid dates for calendar highlighting
   const sessionDates = sessionDatesMap.map(item => item.parsedDate);
 

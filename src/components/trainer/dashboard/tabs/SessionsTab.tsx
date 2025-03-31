@@ -17,7 +17,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 1,
     name: "Morning HIIT",
     time: "09:00 - 10:00",
-    date: "06/01/2023",
+    date: "06/01/2025",
     participants: 5,
     maxParticipants: 10,
     paymentStatus: { paid: 4, pending: 1, total: 5 }
@@ -26,7 +26,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 2,
     name: "Personal Training",
     time: "13:00 - 14:00",
-    date: "06/02/2023",
+    date: "06/02/2025",
     participants: 1,
     maxParticipants: 1,
     paymentStatus: { paid: 1, pending: 0, total: 1 }
@@ -35,7 +35,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 3,
     name: "Yoga Basics",
     time: "17:30 - 18:30",
-    date: "06/03/2023",
+    date: "06/03/2025",
     participants: 8,
     maxParticipants: 12,
     paymentStatus: { paid: 6, pending: 2, total: 8 },
