@@ -16,7 +16,7 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
     : "bg-gray-50";
   
   return (
-    <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 ${bgClass} rounded-lg gap-3`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 p-4 ${bgClass} rounded-lg`}>
       <div>
         <h3 className="font-medium">{session.name}</h3>
         <div className="text-sm text-muted-foreground">
@@ -34,7 +34,7 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
           </div>
         )}
       </div>
-      <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+      <div className="flex flex-wrap items-center gap-2">
         {session.status === 'registered' ? (
           <>
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">

@@ -79,8 +79,9 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
           </div>
           <Button 
             onClick={() => navigate('/client-dashboard?tab=sessions')}
-            className="flex items-center justify-center self-start sm:self-auto"
+            variant="default"
             size="sm"
+            className="w-fit"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">Find Sessions</span>
