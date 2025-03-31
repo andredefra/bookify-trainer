@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,20 +14,18 @@ export function TrainingLogTab() {
   return (
     <div className="space-y-6">
       <Card className="border-primary/10">
-        <CardHeader className={isMobile ? "pb-1 pt-4 px-4" : "pb-1 pt-4"}>
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center">
-                <ClipboardList className="h-5 w-5 text-primary mr-2" />
-                <CardTitle>Training Log</CardTitle>
-              </div>
-              <CardDescription className="mt-1">
-                Record and track your workouts
-              </CardDescription>
+        <CardHeader className={isMobile ? "pb-2 pt-4 px-4" : "pb-2 pt-4"}>
+          <div>
+            <div className="flex items-center">
+              <ClipboardList className="h-5 w-5 text-primary mr-2" />
+              <CardTitle>Training Log</CardTitle>
             </div>
+            <CardDescription className="mt-1 mb-3">
+              Record and track your workouts
+            </CardDescription>
             {!isLoggingWorkout && (
               <Button 
-                className="flex items-center"
+                className="flex items-center mt-2"
                 onClick={() => setIsLoggingWorkout(true)}
                 size={isMobile ? "sm" : "default"}
               >
