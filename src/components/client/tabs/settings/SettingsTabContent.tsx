@@ -1,8 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useMediaQuery } from "@/hooks/use-mobile";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { AccountSection } from "./AccountSection";
@@ -24,7 +21,6 @@ interface SettingsTabContentProps {
 
 export function SettingsTabContent({ user, goals, activeSection }: SettingsTabContentProps) {
   const [activeTab, setActiveTab] = useState("account");
-  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     if (activeSection) {
