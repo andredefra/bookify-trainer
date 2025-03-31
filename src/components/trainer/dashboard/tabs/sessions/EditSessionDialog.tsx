@@ -23,12 +23,18 @@ export function EditSessionDialog({ open, onOpenChange, session, onSubmit }: Edi
       console.log("Parsing date:", session.date);
       
       // Try to parse MM/DD/YYYY format
-      if (session.date.includes('/')) {
+      if (typeof session.date === 'string' && session.date.includes('/')) {
         const [month, day, year] = session.date.split('/').map(Number);
         sessionDate = new Date(year, month - 1, day);
-      } else {
+      } else if (typeof session.date === 'string') {
         // Try parsing as a direct date string
         sessionDate = new Date(session.date);
+      } else if (session.date instanceof Date) {
+        // Already a Date object
+        sessionDate = session.date;
+      } else {
+        // Fallback
+        sessionDate = new Date();
       }
       
       // Check if valid date was created

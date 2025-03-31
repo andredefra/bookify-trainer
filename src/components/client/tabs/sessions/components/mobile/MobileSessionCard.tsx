@@ -30,6 +30,11 @@ export function MobileSessionCard({
     return 'bg-gray-50 border-gray-100';
   };
   
+  // Format date if it's a Date object
+  const formattedDate = session.date instanceof Date 
+    ? session.date.toLocaleDateString() 
+    : session.date;
+  
   return (
     <div className={`rounded-lg border p-3 ${getBgColor()}`}>
       {/* Session header */}
@@ -46,7 +51,7 @@ export function MobileSessionCard({
       <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-sm mb-3">
         <div className="flex items-center text-muted-foreground">
           <Calendar className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
-          {session.date}
+          {formattedDate}
         </div>
         <div className="flex items-center text-muted-foreground">
           <Clock className="h-3.5 w-3.5 mr-1 flex-shrink-0" />

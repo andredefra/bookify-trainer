@@ -27,12 +27,17 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
     onRegister(featuredSession);
   };
   
+  // Format date if it's a Date object
+  const formattedDate = featuredSession.date instanceof Date 
+    ? featuredSession.date.toLocaleDateString() 
+    : featuredSession.date;
+  
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-lg">
       <div>
         <h3 className="font-medium">{featuredSession.name}</h3>
         <div className="text-sm text-muted-foreground">
-          With {featuredSession.trainer} • {featuredSession.date} • {featuredSession.time}
+          With {featuredSession.trainer} • {formattedDate} • {featuredSession.time}
         </div>
         <div className="text-sm font-medium mt-1">
           €{featuredSession.price}

@@ -106,12 +106,19 @@ export function MobileSidebar({
               </h4>
               <div className="space-y-3">
                 {nextSessions.length > 0 ? (
-                  nextSessions.map((session) => (
-                    <div key={session.id} className="bg-gray-50 p-3 rounded-md">
-                      <p className="text-sm font-medium text-gray-900">{session.name}</p>
-                      <p className="text-xs text-gray-500">{session.date}, {session.time.split(' - ')[0]}</p>
-                    </div>
-                  ))
+                  nextSessions.map((session) => {
+                    // Format date if it's a Date object
+                    const formattedDate = session.date instanceof Date 
+                      ? session.date.toLocaleDateString() 
+                      : session.date;
+                    
+                    return (
+                      <div key={session.id} className="bg-gray-50 p-3 rounded-md">
+                        <p className="text-sm font-medium text-gray-900">{session.name}</p>
+                        <p className="text-xs text-gray-500">{formattedDate}, {session.time.split(' - ')[0]}</p>
+                      </div>
+                    );
+                  })
                 ) : (
                   <div className="bg-gray-50 p-3 rounded-md">
                     <p className="text-sm font-medium text-gray-900">No upcoming sessions</p>

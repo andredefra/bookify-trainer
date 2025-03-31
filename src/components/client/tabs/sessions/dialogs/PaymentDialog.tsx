@@ -41,12 +41,17 @@ export function PaymentDialog({
     onOpenChange(false);
   };
   
+  // Format date to string if it's a Date object
+  const formattedDate = session.date instanceof Date 
+    ? session.date.toLocaleDateString() 
+    : session.date;
+  
   const paymentItem = {
     id: session.id,
     name: session.name,
     price: session.price || 50,
     description: `Training session with ${session.trainer}`,
-    date: session.date,
+    date: formattedDate,
     time: session.time,
     trainer: session.trainer,
     attendees: session.attendees,

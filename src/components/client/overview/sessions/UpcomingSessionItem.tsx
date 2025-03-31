@@ -21,13 +21,18 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
     onRegister(session);
   };
   
+  // Format date if it's a Date object
+  const formattedDate = session.date instanceof Date 
+    ? session.date.toLocaleDateString() 
+    : session.date;
+  
   return (
     <div className={`p-4 ${bgClass} rounded-lg`}>
       <div className="flex flex-col sm:flex-row justify-between gap-3">
         <div className="space-y-1">
           <h3 className="font-medium">{session.name}</h3>
           <div className="text-sm text-muted-foreground">
-            With {session.trainer} • {session.date} • {session.time}
+            With {session.trainer} • {formattedDate} • {session.time}
           </div>
           {session.price && (
             <div className="text-sm font-medium">

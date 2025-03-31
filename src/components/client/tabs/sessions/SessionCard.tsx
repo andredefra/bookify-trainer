@@ -23,12 +23,17 @@ export function SessionCard({
 }: SessionCardProps) {
   const bgColor = variant === 'featured' ? 'bg-gray-50 border border-gray-100' : 'bg-gray-50';
   
+  // Format date if it's a Date object
+  const formattedDate = session.date instanceof Date 
+    ? session.date.toLocaleDateString() 
+    : session.date;
+  
   return (
     <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
       <div>
         <h3 className="font-medium">{session.name}</h3>
         <div className="text-sm text-muted-foreground">
-          With {session.trainer} • {session.date} • {session.time}
+          With {session.trainer} • {formattedDate} • {session.time}
         </div>
         {session.price && (
           <div className="text-sm font-medium mt-1">

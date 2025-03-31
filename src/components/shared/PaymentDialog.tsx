@@ -16,7 +16,7 @@ interface PaymentItem {
   name: string;
   price: number;
   description?: string;
-  date?: string;
+  date?: string | Date;
   time?: string;
   trainer?: string;
   attendees?: number;

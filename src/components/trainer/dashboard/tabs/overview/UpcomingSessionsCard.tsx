@@ -29,42 +29,49 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {nextSessions.map((session) => (
-            <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
-              <div className="flex flex-col gap-3">
-                <div className="space-y-2">
-                  <h3 className="font-medium text-base line-clamp-1">{session.name}</h3>
-                  <div className="text-sm text-muted-foreground">
-                    {session.date} • {session.time}
-                  </div>
-                  <div className="flex flex-wrap mt-2 gap-2">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      {session.paymentStatus?.paid || 0} paid
-                    </Badge>
-                    {(session.paymentStatus?.pending || 0) > 0 && (
-                      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                        {session.paymentStatus?.pending || 0} pending
+          {nextSessions.map((session) => {
+            // Format date if it's a Date object
+            const formattedDate = session.date instanceof Date 
+              ? session.date.toLocaleDateString() 
+              : session.date;
+              
+            return (
+              <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="space-y-2">
+                    <h3 className="font-medium text-base line-clamp-1">{session.name}</h3>
+                    <div className="text-sm text-muted-foreground">
+                      {formattedDate} • {session.time}
+                    </div>
+                    <div className="flex flex-wrap mt-2 gap-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        {session.paymentStatus?.paid || 0} paid
                       </Badge>
-                    )}
-                    {(session.waitingList || 0) > 0 && (
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                        {session.waitingList || 0} waiting
-                      </Badge>
-                    )}
+                      {(session.paymentStatus?.pending || 0) > 0 && (
+                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                          {session.paymentStatus?.pending || 0} pending
+                        </Badge>
+                      )}
+                      {(session.waitingList || 0) > 0 && (
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          {session.waitingList || 0} waiting
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <div className="text-sm">
-                    <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="text-sm">
+                      <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
+                    </div>
+                    <Button variant="outline" size="sm" className="h-8 px-2 sm:px-4">
+                      <span className="hidden sm:inline">Details</span>
+                      <span className="sm:hidden">View</span>
+                    </Button>
                   </div>
-                  <Button variant="outline" size="sm" className="h-8 px-2 sm:px-4">
-                    <span className="hidden sm:inline">Details</span>
-                    <span className="sm:hidden">View</span>
-                  </Button>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </CardContent>
       <CardFooter className="border-t flex justify-center py-4">

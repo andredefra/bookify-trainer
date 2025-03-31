@@ -27,6 +27,11 @@ export function SessionDetailsDialog({
     onOpenChange(false);
   };
   
+  // Format date if it's a Date object
+  const formattedDate = session.date instanceof Date 
+    ? session.date.toLocaleDateString() 
+    : session.date;
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={isMobile ? "sm:max-w-[425px] p-4 sm:p-6" : "sm:max-w-[500px]"}>
@@ -41,7 +46,7 @@ export function SessionDetailsDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center">
               <Calendar className="h-5 w-5 mr-2 text-muted-foreground" />
-              <span>{session.date}</span>
+              <span>{formattedDate}</span>
             </div>
             <div className="flex items-center">
               <Clock className="h-5 w-5 mr-2 text-muted-foreground" />
