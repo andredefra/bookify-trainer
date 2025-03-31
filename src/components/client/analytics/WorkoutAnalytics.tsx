@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BarChart2, PieChart as PieChartIcon, AreaChart as AreaChartIcon, LineChart as LineChartIcon } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Import our types
 import { WorkoutAnalyticsProps } from "./types";
@@ -24,6 +25,7 @@ export function WorkoutAnalytics({
   const [timeframe, setTimeframe] = useState("weekly");
   const [chartType, setChartType] = useState("bar");
   const [progressMetric, setProgressMetric] = useState("weight");
+  const isMobile = useIsMobile();
 
   return (
     <Card className="col-span-12 border shadow-sm">
@@ -37,7 +39,7 @@ export function WorkoutAnalytics({
           onChartTypeChange={setChartType}
         />
       </CardHeader>
-      <CardContent className="p-4">
+      <CardContent className={`${isMobile ? 'p-2' : 'p-4'}`}>
         <Tabs defaultValue="activity" className="space-y-4">
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-50/80 p-1 rounded-md w-full border">
             <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-2">

@@ -11,6 +11,7 @@ import {
   LabelList,
   ResponsiveContainer
 } from "recharts";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MonthlyGoal {
   type: string;
@@ -23,13 +24,20 @@ interface MonthlyGoalsChartProps {
 }
 
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
+  const isMobile = useIsMobile();
+  
+  // Adjust margins based on device size
+  const chartMargins = isMobile 
+    ? { top: 5, right: 40, left: 70, bottom: 5 }
+    : { top: 5, right: 30, left: 120, bottom: 5 };
+
   return (
     <div className="w-full h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           layout="vertical"
           data={monthlyData}
-          margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
+          margin={chartMargins}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
           <XAxis 
@@ -43,7 +51,8 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             type="category" 
             axisLine={false} 
             tickLine={false}
-            width={100}
+            width={isMobile ? 65 : 100}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
           />
           <Tooltip 
             content={({ active, payload }) => {
@@ -64,7 +73,12 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
               return null;
             }}
           />
-          <Bar dataKey="current" fill="#4f46e5" radius={[3, 3, 3, 3]}>
+          <Bar 
+            dataKey="current" 
+            fill="#4f46e5" 
+            radius={[3, 3, 3, 3]}
+            barSize={isMobile ? 15 : 20}
+          >
             {monthlyData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.current >= entry.target ? "#10b981" : "#4f46e5"} />
             ))}
@@ -79,7 +93,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
                 // Fallback if target is not available
                 return `${value}`;
               }}
-              style={{ fill: "#6b7280" }}
+              style={{ fill: "#6b7280", fontSize: isMobile ? 10 : 12 }}
             />
           </Bar>
         </BarChart>
