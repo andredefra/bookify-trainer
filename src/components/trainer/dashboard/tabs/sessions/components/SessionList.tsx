@@ -17,10 +17,9 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
 
   return (
     <Tabs defaultValue="upcoming">
-      <TabsList className="mb-6 grid grid-cols-3 w-full">
+      <TabsList className="mb-6 grid grid-cols-2 w-full">
         <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
         <TabsTrigger value="past">Past</TabsTrigger>
-        <TabsTrigger value="recurring">Recurring</TabsTrigger>
       </TabsList>
       <TabsContent value="upcoming">
         <div className="space-y-4">
@@ -85,11 +84,6 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
       <TabsContent value="past">
         <div className="text-center py-8 text-muted-foreground">
           Past sessions will appear here
-        </div>
-      </TabsContent>
-      <TabsContent value="recurring">
-        <div className="text-center py-8 text-muted-foreground">
-          Recurring sessions will appear here
         </div>
       </TabsContent>
     </Tabs>
