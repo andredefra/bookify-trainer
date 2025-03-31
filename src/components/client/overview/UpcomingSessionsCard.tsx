@@ -71,18 +71,22 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
   
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <div>
-          <CardTitle>Upcoming Sessions</CardTitle>
-          <CardDescription>Live training sessions you can join</CardDescription>
+      <CardHeader className="pb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
+          <div>
+            <CardTitle>Upcoming Sessions</CardTitle>
+            <CardDescription>Live training sessions you can join</CardDescription>
+          </div>
+          <Button 
+            onClick={() => navigate('/client-dashboard?tab=sessions')}
+            className="flex items-center justify-center self-start sm:self-auto"
+            size="sm"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Find Sessions</span>
+            <span className="sm:hidden">Find</span>
+          </Button>
         </div>
-        <Button 
-          onClick={() => navigate('/client-dashboard?tab=sessions')}
-          className="flex items-center mr-2"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Find Sessions
-        </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

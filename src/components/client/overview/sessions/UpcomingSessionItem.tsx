@@ -16,7 +16,7 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
     : "bg-gray-50";
   
   return (
-    <div className={`flex items-center justify-between p-4 ${bgClass} rounded-lg`}>
+    <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 ${bgClass} rounded-lg gap-3`}>
       <div>
         <h3 className="font-medium">{session.name}</h3>
         <div className="text-sm text-muted-foreground">
@@ -34,7 +34,7 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
           </div>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
         {session.status === 'registered' ? (
           <>
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
@@ -42,7 +42,8 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
             </Badge>
             <Button variant="outline" size="sm" className="flex items-center">
               <CalendarCheck className="h-3.5 w-3.5 mr-1" />
-              Add to Calendar
+              <span className="hidden sm:inline">Add to Calendar</span>
+              <span className="sm:hidden">Calendar</span>
             </Button>
           </>
         ) : (
@@ -59,7 +60,8 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
               onClick={() => onRegister(session)}
             >
               <CreditCard className="h-3.5 w-3.5 mr-1" />
-              Register
+              <span className="hidden sm:inline">Register</span>
+              <span className="sm:hidden">Register</span>
             </Button>
           </>
         )}
