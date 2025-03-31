@@ -23,17 +23,17 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
         <CardDescription>Client's active and completed goals</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Action buttons at the top - fixed mobile layout */}
-        <div className="button-container flex flex-col sm:flex-row gap-2">
+        {/* Action buttons with mobile-friendly layout */}
+        <div className="flex flex-col sm:flex-row gap-2">
           <Button 
-            className="flex items-center justify-center"
+            className="w-full sm:w-auto flex items-center justify-center"
           >
             <Plus className="h-4 w-4 mr-1.5" />
             Add Goal
           </Button>
           <Button 
             variant="outline"
-            className="flex items-center justify-center"
+            className="w-full sm:w-auto flex items-center justify-center"
           >
             <Target className="h-4 w-4 mr-1.5" />
             View Progress
@@ -57,12 +57,12 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
                     <div className="text-xs text-muted-foreground mt-1">Target date: Aug 30, 2023</div>
                   </div>
                   
-                  <div className="goal-actions flex flex-row items-center justify-between mt-1 gap-2">
+                  <div className="goal-actions flex flex-col sm:flex-row items-start sm:items-center sm:justify-between mt-1 gap-2">
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 py-1 text-xs flex items-center">
                       <Calendar className="h-3 w-3 mr-1" /> In progress
                     </Badge>
                     
-                    <Button variant="ghost" size="sm" className="h-8 px-2 ml-auto flex items-center">
+                    <Button variant="ghost" size="sm" className="h-8 px-2 flex items-center">
                       <Edit className="h-3.5 w-3.5 mr-1.5" />
                       Edit
                     </Button>

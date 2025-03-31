@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProgressItem {
   id?: string;
@@ -40,6 +41,7 @@ export function FitnessProgressCard({
   const [openLogDialog, setOpenLogDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
+  const isMobile = useIsMobile();
   
   // Get current date in ISO format for tracking updates
   const getCurrentDate = () => new Date().toISOString();
@@ -194,22 +196,28 @@ export function FitnessProgressCard({
   return (
     <>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <div>
-            <CardTitle>Fitness Progress</CardTitle>
-            <CardDescription>Track your journey toward your goals</CardDescription>
+        <CardHeader className="flex flex-col space-y-2 pb-2">
+          <div className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Fitness Progress</CardTitle>
+              <CardDescription>Track your journey toward your goals</CardDescription>
+            </div>
           </div>
-          <div className="flex gap-2">
+          
+          {/* Action buttons with responsive layout */}
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-2 pt-2">
             <Button 
               variant="outline" 
-              className="flex items-center"
+              size={isMobile ? "sm" : "default"}
+              className="w-full sm:w-auto"
               onClick={() => setOpenLogDialog(true)}
             >
               Log Activity
             </Button>
             <Button 
               variant="outline" 
-              className="flex items-center"
+              size={isMobile ? "sm" : "default"}
+              className="w-full sm:w-auto"
               onClick={() => setOpenDialog(true)}
             >
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -217,6 +225,7 @@ export function FitnessProgressCard({
             </Button>
           </div>
         </CardHeader>
+        
         <CardContent>
           <div className="space-y-6">
             {progressData.length === 0 ? (
@@ -227,35 +236,37 @@ export function FitnessProgressCard({
             ) : (
               progressData.map((item) => (
                 <div key={item.id || item.goal} className="space-y-2">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                     <span className="font-medium">{item.goal}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground mr-2">
+                    <div className="flex flex-row items-center justify-between sm:justify-end gap-2">
+                      <span className="text-sm text-muted-foreground">
                         {item.current} / {item.target} {item.unit}
                       </span>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => handleEditGoal(item)}
-                        className="h-7 w-7"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => handleDeletePrompt(item)}
-                        className="h-7 w-7 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleEditGoal(item)}
+                          className="h-7 w-7"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleDeletePrompt(item)}
+                          className="h-7 w-7 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   <Progress value={item.progress} className="h-2" />
-                  <div className="flex justify-between text-xs text-muted-foreground">
+                  <div className="flex flex-col sm:flex-row sm:justify-between text-xs text-muted-foreground gap-1">
                     <span>{item.progress}% complete</span>
                     {item.lastUpdated && (
-                      <span>Last updated: {new Date(item.lastUpdated).toLocaleDateString()}</span>
+                      <span className="text-right sm:text-left">Last updated: {new Date(item.lastUpdated).toLocaleDateString()}</span>
                     )}
                   </div>
                 </div>
