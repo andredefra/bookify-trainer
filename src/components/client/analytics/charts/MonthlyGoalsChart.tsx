@@ -71,7 +71,14 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             <LabelList 
               dataKey="current" 
               position="right" 
-              formatter={(value: number, entry: any) => `${value}/${entry.target}`} 
+              formatter={(value, entry) => {
+                // Safely check if entry and entry.payload exist before accessing target
+                if (entry && entry.payload && typeof entry.payload.target !== 'undefined') {
+                  return `${value}/${entry.payload.target}`;
+                }
+                // Fallback if target is not available
+                return `${value}`;
+              }}
               style={{ fill: "#6b7280" }}
             />
           </Bar>
