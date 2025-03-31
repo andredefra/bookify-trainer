@@ -25,6 +25,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   
   // Initialize sessions when component mounts or upcomingSessions changes
   useEffect(() => {
+    console.log("Upcoming sessions received:", upcomingSessions);
     if (upcomingSessions && upcomingSessions.length > 0) {
       // Ensure each session has required properties
       const enhancedSessions = upcomingSessions.map(session => ({
@@ -37,9 +38,10 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         }
       }));
       setSessions(enhancedSessions);
+      console.log("Sessions initialized from props:", enhancedSessions);
     } else {
       // Add some mock data if no sessions provided
-      setSessions([
+      const mockSessions = [
         {
           id: 1,
           name: "Morning Workout",
@@ -70,7 +72,9 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
             get total() { return this.paid + this.pending; }
           }
         }
-      ]);
+      ];
+      setSessions(mockSessions);
+      console.log("Sessions initialized with mock data:", mockSessions);
     }
   }, [upcomingSessions]);
   

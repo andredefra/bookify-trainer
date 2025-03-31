@@ -14,6 +14,8 @@ interface CalendarViewProps {
 export function CalendarView({ sessions }: CalendarViewProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
+  console.log("Calendar View received sessions:", sessions);
+  
   // Create a more robust date parser to handle various date formats
   const parseSessionDate = (dateString: string): Date => {
     if (dateString === 'Today') {
@@ -53,6 +55,7 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   };
   
   const selectedDateSessions = getSessionsForDate(selectedDate);
+  console.log("Selected date sessions:", selectedDateSessions);
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12">
