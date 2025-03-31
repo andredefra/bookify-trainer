@@ -122,8 +122,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
                 fill: "#6b7280", 
                 fontSize: isMobile ? 8 : 12,
                 fontWeight: "normal",
-                textAnchor: "start",
-                dy: 3
+                textAnchor: "start"
               }}
               offset={isMobile ? 2 : 5}
             />
