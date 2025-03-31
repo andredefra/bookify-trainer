@@ -24,6 +24,10 @@ export function PaymentDialog({
   isMobile = false
 }: PaymentDialogProps) {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
   
   if (!session) return null;
   
@@ -72,7 +76,16 @@ export function PaymentDialog({
             
             <div className="border-t pt-4">
               {paymentMethod === 'card' ? (
-                <CardPaymentForm />
+                <CardPaymentForm
+                  cardNumber={cardNumber}
+                  setCardNumber={setCardNumber}
+                  cardHolder={cardHolder}
+                  setCardHolder={setCardHolder}
+                  expiryDate={expiryDate}
+                  setExpiryDate={setExpiryDate}
+                  cvv={cvv}
+                  setCvv={setCvv}
+                />
               ) : (
                 <CashPaymentNotice />
               )}
