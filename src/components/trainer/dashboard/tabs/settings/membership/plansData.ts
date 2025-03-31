@@ -13,8 +13,7 @@ export const plans: Plan[] = [
       "Unlimited Sessions",
       "Personal Trainer Page",
       "Client Messaging",
-      "Client Management",
-      "Digital & Cash Payments"
+      "Client Management"
     ],
     limitations: [],
     isPopular: false,
@@ -29,12 +28,10 @@ export const plans: Plan[] = [
     features: [
       "Everything in Basic",
       "Google Calendar Integration",
-      "Payment Integration",
+      "Digital & Cash Payments",
       "Priority Support",
       "Advanced Analytics",
-      "Waitlist Management",
-      "Custom Training Programs",
-      "Fitness Progress Tracking"
+      "Custom Training Programs"
     ],
     limitations: [],
     isPopular: true,

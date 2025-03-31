@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { CheckCircle2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -32,18 +33,15 @@ const PricingSection = () => {
     t('pricing.features.personalTrainerPage'),
     t('pricing.features.clientMessaging'),
     t('pricing.features.clientManagement'),
-    t('pricing.features.digitalCashPayments'),
   ];
 
   const proFeatures = [
     t('pricing.features.everythingFreemium'),
     t('pricing.features.googleCalendar'),
-    t('pricing.features.paymentIntegration'),
+    t('pricing.features.digitalCashPayments'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
-    t('pricing.features.waitlistManagement'),
     t('pricing.features.customPrograms'),
-    t('pricing.features.fitnessTracking'),
   ];
 
   return (
