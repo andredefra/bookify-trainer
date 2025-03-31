@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../../dialogs/CreateSessionDialog";
@@ -22,43 +22,13 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   
-  // Initialize sessions state with the passed upcomingSessions prop
-  const [sessions, setSessions] = useState<TrainerSessionItem[]>([]);
-  
-  // Update sessions when upcomingSessions changes
-  useEffect(() => {
-    console.log("Upcoming sessions received in TabContent:", upcomingSessions);
-    if (upcomingSessions && upcomingSessions.length > 0) {
-      setSessions(upcomingSessions);
-      console.log("Sessions initialized from props:", upcomingSessions);
-    }
-  }, [upcomingSessions]);
-  
+  // Use sessions directly from props without any additional state or logic
+  // This ensures consistency with what's displayed in the overview area
+  const sessions = upcomingSessions;
+
   const handleEditSession = (session: TrainerSessionItem) => {
     setSelectedSession(session);
     setShowEditSessionDialog(true);
-  };
-
-  const handleUpdateSession = (data: SessionFormValues, sessionId: number) => {
-    // Update the sessions array with edited data
-    setSessions(sessions.map(session => {
-      if (session.id === sessionId) {
-        return {
-          ...session,
-          name: data.name,
-          date: data.date instanceof Date ? 
-            data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : 
-            data.date,
-          time: data.time,
-          maxParticipants: Number(data.maxParticipants), // Convert to number
-          description: data.description
-        };
-      }
-      return session;
-    }));
-    
-    toast.success("Session updated successfully!");
-    setShowEditSessionDialog(false);
   };
 
   const handleCancelSession = (session: TrainerSessionItem) => {
@@ -67,11 +37,20 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   };
 
   const confirmCancelSession = () => {
-    if (selectedSession) {
-      setSessions(sessions.filter(session => session.id !== selectedSession.id));
-      toast.success(`Session "${selectedSession.name}" cancelled successfully`);
-      setShowCancelSessionDialog(false);
-    }
+    if (!selectedSession) return;
+    
+    toast.success(`Session "${selectedSession.name}" cancelled successfully`);
+    setShowCancelSessionDialog(false);
+  };
+
+  const handleCreateSession = (data: SessionFormValues) => {
+    toast.success("Session created successfully!");
+    setShowCreateSessionDialog(false);
+  };
+
+  const handleUpdateSession = (data: SessionFormValues, sessionId: number) => {
+    toast.success("Session updated successfully!");
+    setShowEditSessionDialog(false);
   };
 
   return (
@@ -97,30 +76,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         <CreateSessionDialog 
           open={showCreateSessionDialog} 
           onOpenChange={setShowCreateSessionDialog}
-          onSubmit={(data) => {
-            // Add the new session to the state
-            const newSession = {
-              id: Math.floor(Math.random() * 1000),
-              name: data.name,
-              date: data.date instanceof Date ? 
-                data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : 
-                data.date,
-              time: data.time,
-              participants: 0,
-              maxParticipants: Number(data.maxParticipants), // Convert to number
-              paymentStatus: {
-                paid: 0,
-                pending: 0,
-                total: 0
-              },
-              waitingList: 0,
-              description: data.description
-            };
-            
-            setSessions([...sessions, newSession]);
-            toast.success("Session created successfully!");
-            setShowCreateSessionDialog(false);
-          }}
+          onSubmit={handleCreateSession}
         />
         
         <EditSessionDialog

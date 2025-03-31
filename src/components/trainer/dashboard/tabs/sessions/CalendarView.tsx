@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { format, parse, isValid } from "date-fns";
+import { format } from "date-fns";
 import { TrainerSessionItem } from "@/types/sessions";
 
 interface CalendarViewProps {
@@ -12,107 +12,64 @@ interface CalendarViewProps {
 }
 
 export function CalendarView({ sessions }: CalendarViewProps) {
-  console.log("Calendar View received sessions:", sessions);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
-  // Helper function to parse date string to Date object
-  const parseDate = (dateStr: string | Date): Date | null => {
+  // Function to convert any date format to a Date object
+  const parseSessionDate = (dateString: string | Date): Date | null => {
     // If it's already a Date object
-    if (dateStr instanceof Date) {
-      return dateStr;
+    if (dateString instanceof Date) {
+      return dateString;
     }
     
-    // If it's a string
-    if (typeof dateStr === 'string') {
-      // Try specifically MM/DD/YYYY format (which our mock data uses)
-      if (dateStr.includes('/')) {
-        const [month, day, year] = dateStr.split('/').map(Number);
-        if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
-          // Ensure we're using correct year for 2-digit years
-          const fullYear = year < 100 ? 2000 + year : year;
-          return new Date(fullYear, month - 1, day);
-        }
-      }
-      
-      // Try other common date formats as fallback
-      const formats = ["yyyy-MM-dd", "MMMM d, yyyy"];
-      for (const formatStr of formats) {
-        try {
-          const parsedDate = parse(dateStr, formatStr, new Date());
-          if (isValid(parsedDate)) {
-            return parsedDate;
-          }
-        } catch (error) {
-          continue;
-        }
-      }
-      
-      // If none of the formats work, try direct Date parsing as a fallback
-      const directParsed = new Date(dateStr);
-      if (isValid(directParsed)) {
-        return directParsed;
+    // Handle MM/DD/YYYY format (which our mock data uses)
+    if (typeof dateString === 'string' && dateString.includes('/')) {
+      const [month, day, year] = dateString.split('/').map(Number);
+      if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+        return new Date(year, month - 1, day);
       }
     }
     
-    console.warn(`Could not parse date: ${dateStr}`);
+    // Try direct Date parsing as a fallback
+    const parsedDate = new Date(dateString);
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate;
+    }
+    
+    console.warn(`Could not parse date: ${dateString}`);
     return null;
   };
 
-  // Function to get sessions for the selected date
-  const getSessionsForDate = (date: Date | undefined): TrainerSessionItem[] => {
-    if (!date || !sessions || sessions.length === 0) return [];
+  // Get all session dates for highlighting in the calendar
+  const getSessionDates = (): Date[] => {
+    const dates: Date[] = [];
     
-    const formattedSelectedDate = format(date, "MM/dd/yyyy");
-    console.log("Looking for sessions on date:", formattedSelectedDate);
+    sessions.forEach(session => {
+      const sessionDate = parseSessionDate(session.date);
+      if (sessionDate) {
+        dates.push(sessionDate);
+      }
+    });
+    
+    return dates;
+  };
+
+  // Get sessions for the selected date
+  const getSessionsForSelectedDate = (): TrainerSessionItem[] => {
+    if (!selectedDate) return [];
+    
+    const selectedDateStr = format(selectedDate, "MM/dd/yyyy");
     
     return sessions.filter(session => {
-      // Parse the session date
-      const sessionDate = parseDate(session.date);
+      const sessionDate = parseSessionDate(session.date);
+      if (!sessionDate) return false;
       
-      if (!sessionDate) {
-        console.warn(`Failed to parse date for session: ${session.name}, date: ${session.date}`);
-        return false;
-      }
-      
-      const formattedSessionDate = format(sessionDate, "MM/dd/yyyy");
-      const match = formattedSessionDate === formattedSelectedDate;
-      
-      if (match) {
-        console.log("Found matching session:", session.name, "on date", formattedSessionDate);
-      }
-      
-      return match;
+      const sessionDateStr = format(sessionDate, "MM/dd/yyyy");
+      return sessionDateStr === selectedDateStr;
     });
   };
 
-  // Get sessions for the currently selected date
-  const sessionsOnSelectedDate = selectedDate ? getSessionsForDate(selectedDate) : [];
-
-  // Function to highlight dates with sessions
-  const highlightedDates = () => {
-    if (!sessions || sessions.length === 0) {
-      console.log("No sessions to highlight");
-      return [];
-    }
-    
-    console.log("Processing sessions for highlights:", sessions);
-    
-    const dates = sessions.reduce((accumulator: Date[], session) => {
-      const sessionDate = parseDate(session.date);
-      
-      if (sessionDate) {
-        console.log(`Adding highlight for ${session.name} on ${format(sessionDate, "MM/dd/yyyy")}`);
-        accumulator.push(sessionDate);
-      } else {
-        console.warn(`Could not parse date for session: ${session.name}, date: ${session.date}`);
-      }
-      
-      return accumulator;
-    }, []);
-    
-    console.log("Highlighted dates:", dates);
-    return dates;
-  };
+  const sessionsOnSelectedDate = getSessionsForSelectedDate();
+  const highlightedDates = getSessionDates();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
@@ -123,7 +80,7 @@ export function CalendarView({ sessions }: CalendarViewProps) {
           onSelect={setSelectedDate}
           className="border rounded-md p-3"
           modifiers={{
-            highlighted: highlightedDates()
+            highlighted: highlightedDates
           }}
           modifiersStyles={{
             highlighted: {
