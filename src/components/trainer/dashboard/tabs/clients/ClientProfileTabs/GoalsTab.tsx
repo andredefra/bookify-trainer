@@ -20,12 +20,12 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
     <Card className="mb-8">
       <CardContent className="pt-6 space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h3 className="text-sm font-medium mb-2 sm:mb-0">{isMobile ? "Goals" : "Active Goals"}</h3>
+          <h3 className="text-sm font-medium mb-0">{isMobile ? "Goals" : "Active Goals"}</h3>
           <Button 
             size="sm" 
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto flex items-center justify-center"
           >
-            {isMobile && <Plus className="mr-1 h-4 w-4" />}
+            <Plus className="h-4 w-4 mr-1.5" />
             Add Goal
           </Button>
         </div>
@@ -34,15 +34,15 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
           {mockClientDetails.goals.map((goal, i) => (
             <div key={i} className="flex flex-col p-4 bg-gray-50 rounded-md">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-3">
-                <div>
+                <div className="flex-1">
                   <div className="font-medium">
                     <HighlightText text={goal} highlight={searchQuery} />
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">Target date: Aug 30, 2023</div>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-3 sm:mt-0">
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-2 sm:mt-0 w-full sm:w-auto">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 w-full sm:w-auto text-center sm:text-left">
                     In progress
                   </Badge>
                   <Button variant="ghost" size="sm" className="w-full sm:w-auto px-4">
@@ -58,12 +58,12 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
           <h3 className="text-sm font-medium mb-4">Completed Goals</h3>
           <div className="flex flex-col p-4 bg-gray-50 rounded-md">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-3">
-              <div>
+              <div className="flex-1">
                 <div className="font-medium">Attend 10 sessions</div>
                 <div className="text-xs text-muted-foreground mt-1">Completed on Jul 15, 2023</div>
               </div>
               
-              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 mt-3 sm:mt-0">
+              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 mt-2 sm:mt-0 w-full sm:w-auto text-center sm:text-left">
                 Completed
               </Badge>
             </div>
