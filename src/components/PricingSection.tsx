@@ -152,7 +152,7 @@ const PricingSection = () => {
 
         <div className="mt-16 text-center">
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            {t('pricing.disclaimer1')}
+            {t('pricing.disclaimer1').replace('All plans', 'Pro plan')}
           </p>
           <p className="text-sm text-primary font-medium mt-4 max-w-2xl mx-auto">
             {t('pricing.disclaimer2')}
