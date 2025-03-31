@@ -66,7 +66,7 @@ export function MobileSessionCard({
         {/* Status badges */}
         <div className="flex flex-wrap gap-2">
           {session.status === 'registered' || session.status === 'confirmed' ? (
-            <Badge variant="outline" className="bg-accent/20 text-accent-foreground border-accent/30">
+            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
               Registered
             </Badge>
           ) : isPast ? (
