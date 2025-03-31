@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, ClipboardList } from "lucide-react";
-import { WorkoutLogForm } from "@/components/client/training/WorkoutLogForm";
+import { WorkoutLogForm } from "@/components/client/training/workout-form/WorkoutLogForm";
 import { PastWorkoutsLog } from "@/components/client/training/PastWorkoutsLog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
