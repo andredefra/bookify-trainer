@@ -55,6 +55,7 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
   };
   
   const handleRegisterForSession = (session: SessionItem) => {
+    console.log("Registering for session:", session.id);
     setSelectedSession(session);
     setShowPaymentDialog(true);
   };

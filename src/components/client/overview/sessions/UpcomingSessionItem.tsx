@@ -15,6 +15,12 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
     ? "bg-blue-50 border border-blue-100" 
     : "bg-gray-50";
   
+  const handleRegisterClick = () => {
+    // Explicitly call onRegister with the session
+    console.log("Register button clicked for session:", session.id);
+    onRegister(session);
+  };
+  
   return (
     <div className={`p-4 ${bgClass} rounded-lg`}>
       <div className="flex flex-col sm:flex-row justify-between gap-3">
@@ -58,7 +64,7 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
                 variant="secondary"
                 size="sm" 
                 className="flex items-center" 
-                onClick={() => onRegister(session)}
+                onClick={handleRegisterClick}
               >
                 <CreditCard className="h-3.5 w-3.5 mr-1" />
                 Register

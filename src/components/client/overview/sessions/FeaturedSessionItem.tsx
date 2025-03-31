@@ -21,6 +21,12 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
     maxAttendees: 20
   };
   
+  const handleRegisterClick = () => {
+    // Explicitly call onRegister with the session
+    console.log("Register button clicked for featured session");
+    onRegister(featuredSession);
+  };
+  
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-lg">
       <div>
@@ -41,7 +47,7 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
           variant="secondary" 
           size="sm" 
           className="flex items-center" 
-          onClick={() => onRegister(featuredSession)}
+          onClick={handleRegisterClick}
         >
           <CreditCard className="h-3.5 w-3.5 mr-1" />
           Register
