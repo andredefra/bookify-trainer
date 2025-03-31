@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
@@ -35,7 +36,7 @@ const mockUpcomingSessions: TrainerSessionItem[] = [
   {
     id: 1,
     name: "Group HIIT Class",
-    date: "May 10, 2023",
+    date: "05/10/2023",
     time: "10:00 AM - 11:00 AM",
     participants: 8,
     maxParticipants: 12,
@@ -49,7 +50,7 @@ const mockUpcomingSessions: TrainerSessionItem[] = [
   {
     id: 2,
     name: "Personal Training - John",
-    date: "May 11, 2023",
+    date: "05/11/2023",
     time: "2:00 PM - 3:00 PM",
     participants: 1,
     maxParticipants: 1,
@@ -63,7 +64,7 @@ const mockUpcomingSessions: TrainerSessionItem[] = [
   {
     id: 3,
     name: "Yoga Fundamentals",
-    date: "May 12, 2023",
+    date: "05/12/2023",
     time: "9:00 AM - 10:00 AM",
     participants: 10,
     maxParticipants: 15,

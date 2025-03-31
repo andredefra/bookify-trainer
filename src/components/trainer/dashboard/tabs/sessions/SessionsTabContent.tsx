@@ -25,7 +25,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   // Initialize sessions state with the passed upcomingSessions prop
   const [sessions, setSessions] = useState<TrainerSessionItem[]>([]);
   
-  // Initialize sessions when component mounts or upcomingSessions changes
+  // Update sessions when upcomingSessions changes
   useEffect(() => {
     console.log("Upcoming sessions received in TabContent:", upcomingSessions);
     if (upcomingSessions && upcomingSessions.length > 0) {
@@ -82,7 +82,9 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         return {
           ...session,
           name: data.name,
-          date: data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}),
+          date: data.date instanceof Date ? 
+            data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : 
+            data.date,
           time: data.time,
           maxParticipants: Number(data.maxParticipants), // Convert to number
           description: data.description
@@ -103,6 +105,8 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   const confirmCancelSession = () => {
     if (selectedSession) {
       setSessions(sessions.filter(session => session.id !== selectedSession.id));
+      toast.success(`Session "${selectedSession.name}" cancelled successfully`);
+      setShowCancelSessionDialog(false);
     }
   };
 
@@ -134,7 +138,9 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
             const newSession = {
               id: Math.floor(Math.random() * 1000),
               name: data.name,
-              date: data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}),
+              date: data.date instanceof Date ? 
+                data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : 
+                data.date,
               time: data.time,
               participants: 0,
               maxParticipants: Number(data.maxParticipants), // Convert to number

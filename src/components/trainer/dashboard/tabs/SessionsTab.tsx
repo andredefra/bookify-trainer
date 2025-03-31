@@ -13,7 +13,9 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   const [mockSessions, setMockSessions] = useState<TrainerSessionItem[]>([]);
   
   useEffect(() => {
-    if (!upcomingSessions || upcomingSessions.length === 0) {
+    if (upcomingSessions && upcomingSessions.length > 0) {
+      console.log("Using provided upcoming sessions:", upcomingSessions);
+    } else {
       console.log("No upcoming sessions provided, generating mock data");
       // Create some sample sessions if none provided
       setMockSessions([
@@ -67,7 +69,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   }, [upcomingSessions]);
   
   // Use provided sessions or fallback to mock data
-  const sessionsToDisplay = upcomingSessions && upcomingSessions.length > 0 ? upcomingSessions : mockSessions;
+  const sessionsToDisplay = upcomingSessions.length > 0 ? upcomingSessions : mockSessions;
   
   console.log("Sessions to display in SessionsTab:", sessionsToDisplay);
   

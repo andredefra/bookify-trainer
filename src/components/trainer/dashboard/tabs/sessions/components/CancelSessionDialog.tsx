@@ -1,6 +1,5 @@
 
-import { useState } from "react";
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -10,7 +9,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
 
 interface CancelSessionDialogProps {
   open: boolean;
@@ -19,44 +17,29 @@ interface CancelSessionDialogProps {
   onConfirm: () => void;
 }
 
-export function CancelSessionDialog({ 
-  open, 
-  onOpenChange, 
-  sessionName, 
-  onConfirm 
+export function CancelSessionDialog({
+  open,
+  onOpenChange,
+  sessionName,
+  onConfirm,
 }: CancelSessionDialogProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const handleConfirm = () => {
-    setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      onConfirm();
-      setIsLoading(false);
-      onOpenChange(false);
-      toast.success("Session cancelled successfully");
-    }, 500);
-  };
-  
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Cancel Session</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to cancel <strong>"{sessionName}"</strong>? This action cannot be undone.
-            All participants will be notified about this cancellation.
+            Are you sure you want to cancel <span className="font-medium">{sessionName}</span>? This action cannot be undone.
+            All registered participants will be notified.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Keep Session</AlertDialogCancel>
-          <AlertDialogAction 
-            onClick={handleConfirm}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            disabled={isLoading}
+          <AlertDialogCancel>Go Back</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={onConfirm}
+            className="bg-destructive hover:bg-destructive/90"
           >
-            {isLoading ? "Cancelling..." : "Yes, Cancel Session"}
+            Cancel Session
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
