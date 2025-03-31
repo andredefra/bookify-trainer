@@ -10,6 +10,7 @@ import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollo
 import { FollowedTrainersSection } from "@/components/client/trainers/FollowedTrainersSection";
 import { NavigationButtons } from "@/components/client/trainers/NavigationButtons";
 import { useLocation } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -40,6 +41,7 @@ const myTrainers = [
 
 export function TrainersTab() {
   const location = useLocation();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
@@ -85,11 +87,12 @@ export function TrainersTab() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-between'}`}>
           <div>
             <CardTitle>
               {activeTab === "marketplace" ? "Find New Trainer" : 
                activeTab === "followed" ? "Followed Trainers" : 
+               activeTab === "payments" ? "Payment History" :
                "My Trainers"}
             </CardTitle>
             <CardDescription>
@@ -97,16 +100,19 @@ export function TrainersTab() {
                 ? "Browse trainers and book sessions" 
                 : activeTab === "followed"
                 ? "Trainers you follow and their group events"
+                : activeTab === "payments"
+                ? "View your past payments to trainers"
                 : "Your personal training team"}
             </CardDescription>
           </div>
           <NavigationButtons 
             activeTab={activeTab} 
             onTabChange={setActiveTab}
+            isMobile={isMobile}
           />
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className={isMobile ? "px-3 sm:px-6" : undefined}>
         {activeTab === "marketplace" ? (
           <TrainerMarketplace />
         ) : activeTab === "trainers" ? (
