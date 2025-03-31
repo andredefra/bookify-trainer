@@ -15,9 +15,8 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
   // Add console logs to debug
   console.log("SessionList received sessions:", sessions);
   
-  // Display all upcoming sessions without filtering by date
-  // The original date filtering was causing issues as it wasn't handling different date formats correctly
-  const upcomingSessions = sessions;
+  // Display all sessions without filtering
+  const upcomingSessions = sessions; 
   
   console.log("Sessions to display:", upcomingSessions);
   

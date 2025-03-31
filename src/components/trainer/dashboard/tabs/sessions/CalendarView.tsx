@@ -24,11 +24,13 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     
     // If it's a string
     if (typeof dateStr === 'string') {
-      // Try specifically MM/DD/YYYY format first (which our mock data uses)
+      // Try specifically MM/DD/YYYY format (which our mock data uses)
       if (dateStr.includes('/')) {
         const [month, day, year] = dateStr.split('/').map(Number);
         if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
-          const parsedDate = new Date(year, month - 1, day);
+          // Ensure we're using correct year for 2-digit years
+          const fullYear = year < 100 ? 2000 + year : year;
+          const parsedDate = new Date(fullYear, month - 1, day);
           if (isValid(parsedDate)) {
             return parsedDate;
           }
@@ -89,6 +91,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
 
   // Function to highlight dates with sessions
   const highlightedDates = () => {
+    if (!sessions || sessions.length === 0) return [];
+    
     const dates = sessions.reduce((dates: Date[], session) => {
       const sessionDate = parseDate(session.date);
       
