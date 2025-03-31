@@ -8,6 +8,7 @@ import { TrainerSessionItem } from "@/types/sessions";
 import { CalendarView } from "./CalendarView";
 import { SessionHeader } from "./components/SessionHeader";
 import { SessionList } from "./components/SessionList";
+import { SessionFormValues } from "../../dialogs/session/SessionFormSchema";
 
 interface SessionsTabContentProps {
   upcomingSessions: TrainerSessionItem[];
@@ -35,7 +36,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
     setShowEditSessionDialog(true);
   };
 
-  const handleUpdateSession = (data: any, sessionId: number) => {
+  const handleUpdateSession = (data: SessionFormValues, sessionId: number) => {
     // Update the sessions array with edited data
     setSessions(sessions.map(session => {
       if (session.id === sessionId) {
@@ -50,6 +51,9 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
       }
       return session;
     }));
+    
+    toast.success("Session updated successfully!");
+    setShowEditSessionDialog(false);
   };
 
   return (

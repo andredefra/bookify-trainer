@@ -2,8 +2,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { TrainerSessionItem } from "@/types/sessions";
-import { SessionForm } from "../dialogs/session/SessionForm";
-import { SessionFormValues } from "../dialogs/session/SessionFormSchema";
+import { SessionForm } from "../../dialogs/session/SessionForm";
+import { SessionFormValues } from "../../dialogs/session/SessionFormSchema";
 
 interface EditSessionDialogProps {
   open: boolean;
