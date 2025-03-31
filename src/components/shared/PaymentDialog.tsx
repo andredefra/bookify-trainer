@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Euro, CreditCard, Coins } from "lucide-react";
 import { toast } from "sonner";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface PaymentItem {
   id: string | number;
@@ -43,6 +44,7 @@ export function PaymentDialog({
   const [cardHolder, setCardHolder] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
+  const isMobile = useMediaQuery("(max-width: 640px)");
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,14 +82,14 @@ export function PaymentDialog({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+      <DialogContent className={`${isMobile ? 'w-[95%] p-4' : 'sm:max-w-[425px]'} max-h-[90vh] overflow-y-auto`}>
+        <DialogHeader className={isMobile ? "space-y-1" : ""}>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
+          <div className={`grid gap-${isMobile ? '3' : '4'} py-${isMobile ? '3' : '4'}`}>
             <div className="space-y-2">
               <h3 className="font-medium text-sm">{item.name}</h3>
               {item.description && <p className="text-sm text-muted-foreground">{item.description}</p>}
@@ -106,7 +108,7 @@ export function PaymentDialog({
               <Label>Payment Method</Label>
               <RadioGroup 
                 defaultValue="card" 
-                className="flex gap-4" 
+                className="flex flex-col sm:flex-row gap-2 sm:gap-4" 
                 onValueChange={(value) => setPaymentMethod(value as 'card' | 'cash')}
               >
                 <div className="flex items-center space-x-2 border rounded-md p-2 w-full">
@@ -148,7 +150,7 @@ export function PaymentDialog({
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2 sm:gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="expiry">Expiry Date</Label>
                     <Input 
@@ -178,8 +180,20 @@ export function PaymentDialog({
             )}
           </div>
           
-          <DialogFooter>
-            <Button type="submit" disabled={loading}>
+          <DialogFooter className={isMobile ? "mt-4 flex-col gap-2" : ""}>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+              className={isMobile ? "w-full" : ""}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={loading}
+              className={isMobile ? "w-full" : ""}
+            >
               {loading ? "Processing..." : paymentMethod === 'card' ? "Pay Now" : "Confirm Cash Payment"}
             </Button>
           </DialogFooter>
