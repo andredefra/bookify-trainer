@@ -24,7 +24,7 @@ interface SettingsTabContentProps {
 
 export function SettingsTabContent({ user, goals, activeSection }: SettingsTabContentProps) {
   const [activeTab, setActiveTab] = useState("account");
-  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     if (activeSection) {
@@ -33,44 +33,48 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
   }, [activeSection]);
 
   return (
-    <Card>
+    <Card className="border shadow-sm">
       <CardHeader>
-        <CardTitle>Settings</CardTitle>
+        <CardTitle className="text-xl">Settings</CardTitle>
         <CardDescription>
           Manage your account settings and preferences
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <ScrollArea className="w-full">
-            <TabsList className="mb-6 w-full flex flex-wrap justify-start">
-              <TabsTrigger value="account" className="flex-shrink-0">Account</TabsTrigger>
-              <TabsTrigger value="payments" className="flex-shrink-0">Payments</TabsTrigger>
-              <TabsTrigger value="preferences" className="flex-shrink-0">Preferences</TabsTrigger>
-              <TabsTrigger value="integrations" className="flex-shrink-0">Integrations</TabsTrigger>
-              <TabsTrigger value="notifications" className="flex-shrink-0">Notifications</TabsTrigger>
-            </TabsList>
-          </ScrollArea>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="relative">
+            <ScrollArea className="w-full pb-4 max-w-full">
+              <TabsList className="inline-flex h-10 w-auto max-w-full flex-nowrap overflow-x-auto">
+                <TabsTrigger value="account" className="flex-shrink-0">Account</TabsTrigger>
+                <TabsTrigger value="payments" className="flex-shrink-0">Payments</TabsTrigger>
+                <TabsTrigger value="preferences" className="flex-shrink-0">Preferences</TabsTrigger>
+                <TabsTrigger value="integrations" className="flex-shrink-0">Integrations</TabsTrigger>
+                <TabsTrigger value="notifications" className="flex-shrink-0">Notifications</TabsTrigger>
+              </TabsList>
+            </ScrollArea>
+          </div>
           
-          <TabsContent value="account">
-            <AccountSection user={user} />
-          </TabsContent>
-          
-          <TabsContent value="payments">
-            <PaymentsSection />
-          </TabsContent>
-          
-          <TabsContent value="preferences">
-            <PreferencesSection goals={goals} />
-          </TabsContent>
-          
-          <TabsContent value="integrations">
-            <IntegrationsSection user={user} />
-          </TabsContent>
-          
-          <TabsContent value="notifications">
-            <NotificationsSection />
-          </TabsContent>
+          <div className="mt-6">
+            <TabsContent value="account">
+              <AccountSection user={user} />
+            </TabsContent>
+            
+            <TabsContent value="payments">
+              <PaymentsSection />
+            </TabsContent>
+            
+            <TabsContent value="preferences">
+              <PreferencesSection goals={goals} />
+            </TabsContent>
+            
+            <TabsContent value="integrations">
+              <IntegrationsSection user={user} />
+            </TabsContent>
+            
+            <TabsContent value="notifications">
+              <NotificationsSection />
+            </TabsContent>
+          </div>
         </Tabs>
       </CardContent>
     </Card>
