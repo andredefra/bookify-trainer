@@ -17,17 +17,16 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
   const isMobile = useIsMobile();
 
   return (
-    <Card className="goals-tab-card mb-8" style={{ borderWidth: '3px', borderColor: 'red' }}>
+    <Card className="mb-8">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg">Fitness Program</CardTitle>
         <CardDescription>Client's active and completed goals</CardDescription>
       </CardHeader>
-      <CardContent className="goals-tab-content space-y-4">
+      <CardContent className="space-y-4">
         {/* Action buttons at the top */}
         <div className="button-container flex flex-wrap gap-2">
           <Button 
             className="w-full sm:w-auto flex items-center justify-center"
-            style={{ backgroundColor: 'green' }}
           >
             <Plus className="h-4 w-4 mr-1.5" />
             Add Goal

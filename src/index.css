@@ -122,17 +122,3 @@
   transform: translateY(-10px);
   transition: opacity 0.3s, transform 0.3s;
 }
-
-/* Debug CSS to see if our changes are applied */
-.dashboard-main {
-  border: 5px solid purple !important;
-}
-
-.goals-tab-card {
-  border: 5px solid orange !important;
-}
-
-.goals-tab-content {
-  background-color: pink !important;
-}
-
