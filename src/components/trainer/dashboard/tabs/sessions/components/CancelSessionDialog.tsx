@@ -23,9 +23,6 @@ export function CancelSessionDialog({
   sessionName,
   onConfirm,
 }: CancelSessionDialogProps) {
-  // Log when the dialog is opened
-  console.log("Cancel session dialog opened for:", sessionName);
-  
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -39,10 +36,7 @@ export function CancelSessionDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Go Back</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => {
-              console.log("Confirming cancellation of session:", sessionName);
-              onConfirm();
-            }}
+            onClick={onConfirm}
             className="bg-destructive hover:bg-destructive/90"
           >
             Cancel Session

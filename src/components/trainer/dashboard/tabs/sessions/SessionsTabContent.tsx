@@ -21,10 +21,6 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   const [showCancelSessionDialog, setShowCancelSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
-  
-  // Use sessions directly from props without any additional state or logic
-  // This ensures consistency with what's displayed in the overview area
-  const sessions = upcomingSessions;
 
   const handleEditSession = (session: TrainerSessionItem) => {
     setSelectedSession(session);
@@ -64,10 +60,10 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
       </CardHeader>
       <CardContent className="overflow-x-hidden">
         {viewMode === "calendar" ? (
-          <CalendarView sessions={sessions} />
+          <CalendarView sessions={upcomingSessions} />
         ) : (
           <SessionList 
-            sessions={sessions} 
+            sessions={upcomingSessions} 
             onEditSession={handleEditSession} 
             onCancelSession={handleCancelSession}
           />

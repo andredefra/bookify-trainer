@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrainerSessionItem } from "@/types/sessions";
-import { X, Edit } from "lucide-react";
+import { Edit, X } from "lucide-react";
 
 interface SessionListProps {
   sessions: TrainerSessionItem[];

@@ -14,62 +14,43 @@ interface CalendarViewProps {
 export function CalendarView({ sessions }: CalendarViewProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
-  // Function to convert any date format to a Date object
-  const parseSessionDate = (dateString: string | Date): Date | null => {
-    // If it's already a Date object
-    if (dateString instanceof Date) {
-      return dateString;
-    }
-    
-    // Handle MM/DD/YYYY format (which our mock data uses)
-    if (typeof dateString === 'string' && dateString.includes('/')) {
-      const [month, day, year] = dateString.split('/').map(Number);
-      if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+  // Parse any session date to a Date object
+  const parseDate = (dateInput: string | Date): Date | null => {
+    try {
+      // Handle Date objects
+      if (dateInput instanceof Date) {
+        return dateInput;
+      }
+      
+      // Handle MM/DD/YYYY format
+      if (typeof dateInput === 'string' && dateInput.includes('/')) {
+        const [month, day, year] = dateInput.split('/').map(Number);
         return new Date(year, month - 1, day);
       }
+      
+      // Try standard date parsing
+      const date = new Date(dateInput);
+      return isNaN(date.getTime()) ? null : date;
+    } catch (error) {
+      console.error("Error parsing date:", dateInput, error);
+      return null;
     }
-    
-    // Try direct Date parsing as a fallback
-    const parsedDate = new Date(dateString);
-    if (!isNaN(parsedDate.getTime())) {
-      return parsedDate;
-    }
-    
-    console.warn(`Could not parse date: ${dateString}`);
-    return null;
   };
 
   // Get all session dates for highlighting in the calendar
-  const getSessionDates = (): Date[] => {
-    const dates: Date[] = [];
-    
-    sessions.forEach(session => {
-      const sessionDate = parseSessionDate(session.date);
-      if (sessionDate) {
-        dates.push(sessionDate);
-      }
-    });
-    
-    return dates;
-  };
+  const sessionDates = sessions
+    .map(session => parseDate(session.date))
+    .filter((date): date is Date => date !== null);
 
   // Get sessions for the selected date
-  const getSessionsForSelectedDate = (): TrainerSessionItem[] => {
-    if (!selectedDate) return [];
-    
-    const selectedDateStr = format(selectedDate, "MM/dd/yyyy");
-    
-    return sessions.filter(session => {
-      const sessionDate = parseSessionDate(session.date);
-      if (!sessionDate) return false;
-      
-      const sessionDateStr = format(sessionDate, "MM/dd/yyyy");
-      return sessionDateStr === selectedDateStr;
-    });
-  };
-
-  const sessionsOnSelectedDate = getSessionsForSelectedDate();
-  const highlightedDates = getSessionDates();
+  const sessionsOnSelectedDate = selectedDate 
+    ? sessions.filter(session => {
+        const sessionDate = parseDate(session.date);
+        if (!sessionDate) return false;
+        
+        return format(sessionDate, "MM/dd/yyyy") === format(selectedDate, "MM/dd/yyyy");
+      })
+    : [];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
@@ -80,7 +61,7 @@ export function CalendarView({ sessions }: CalendarViewProps) {
           onSelect={setSelectedDate}
           className="border rounded-md p-3"
           modifiers={{
-            highlighted: highlightedDates
+            highlighted: sessionDates
           }}
           modifiersStyles={{
             highlighted: {
@@ -111,9 +92,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
                         <div>
                           <h4 className="font-medium">{session.name}</h4>
                           <p className="text-sm text-muted-foreground">{session.time}</p>
-                          <div className="flex items-center mt-2 text-sm">
-                            <span className="font-medium">{session.participants}/{session.maxParticipants}</span>
-                            <span className="mx-2">•</span>
+                          <div className="flex flex-wrap items-center mt-2 text-sm">
+                            <span className="font-medium mr-2">{session.participants}/{session.maxParticipants}</span>
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                               {session.paymentStatus?.paid || 0} paid
                             </Badge>
