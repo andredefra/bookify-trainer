@@ -23,17 +23,17 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
         <CardDescription>Client's active and completed goals</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Action buttons at the top */}
-        <div className="button-container flex flex-wrap gap-2">
+        {/* Action buttons at the top - fixed mobile layout */}
+        <div className="button-container flex flex-col sm:flex-row gap-2">
           <Button 
-            className="w-full sm:w-auto flex items-center justify-center"
+            className="flex items-center justify-center"
           >
             <Plus className="h-4 w-4 mr-1.5" />
             Add Goal
           </Button>
           <Button 
             variant="outline"
-            className="w-full sm:w-auto flex items-center justify-center"
+            className="flex items-center justify-center"
           >
             <Target className="h-4 w-4 mr-1.5" />
             View Progress
