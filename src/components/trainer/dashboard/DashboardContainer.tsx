@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
@@ -157,6 +156,7 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
         setActiveTab={setActiveTab}
         userName={name}
         userEmail={email}
+        upcomingSessions={mockUpcomingSessions}
       />
 
       <div className="flex flex-col flex-1 overflow-hidden">

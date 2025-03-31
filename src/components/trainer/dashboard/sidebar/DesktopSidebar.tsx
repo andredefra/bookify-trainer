@@ -4,13 +4,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { SidebarNavigation } from "./SidebarNavigation";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface DesktopSidebarProps {
   activeTab: string;
   handleTabClick: (tab: string) => void;
+  upcomingSessions?: TrainerSessionItem[];
 }
 
-export function DesktopSidebar({ activeTab, handleTabClick }: DesktopSidebarProps) {
+export function DesktopSidebar({ activeTab, handleTabClick, upcomingSessions = [] }: DesktopSidebarProps) {
+  // Get the first two upcoming sessions to display in sidebar
+  const nextSessions = upcomingSessions.slice(0, 2);
+  
   return (
     <div
       className={cn(
@@ -30,18 +35,22 @@ export function DesktopSidebar({ activeTab, handleTabClick }: DesktopSidebarProp
             Upcoming
           </div>
           <div className="md:flex flex-col space-y-1 hidden">
-            <Button variant="ghost" className="justify-start cursor-default">
-              <div className="flex flex-col items-start">
-                <span className="text-xs">Sarah J. Session</span>
-                <span className="text-xs text-muted-foreground">Today, 2:00 PM</span>
-              </div>
-            </Button>
-            <Button variant="ghost" className="justify-start cursor-default">
-              <div className="flex flex-col items-start">
-                <span className="text-xs">Mike P. Session</span>
-                <span className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</span>
-              </div>
-            </Button>
+            {nextSessions.length > 0 ? (
+              nextSessions.map((session, index) => (
+                <Button key={session.id} variant="ghost" className="justify-start cursor-default">
+                  <div className="flex flex-col items-start">
+                    <span className="text-xs">{session.name}</span>
+                    <span className="text-xs text-muted-foreground">{session.date}, {session.time.split(' - ')[0]}</span>
+                  </div>
+                </Button>
+              ))
+            ) : (
+              <Button variant="ghost" className="justify-start cursor-default">
+                <div className="flex flex-col items-start">
+                  <span className="text-xs">No upcoming sessions</span>
+                </div>
+              </Button>
+            )}
           </div>
         </div>
       </ScrollArea>

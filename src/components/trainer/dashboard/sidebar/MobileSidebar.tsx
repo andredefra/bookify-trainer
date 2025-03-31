@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart, FolderKanban } from "lucide-react";
 import { StatusSelector } from "../header/StatusSelector";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface MobileSidebarProps {
   showSidebar: boolean;
@@ -15,6 +16,7 @@ interface MobileSidebarProps {
   handleTabClick: (tab: string) => void;
   userName?: string;
   userEmail?: string;
+  upcomingSessions?: TrainerSessionItem[];
 }
 
 export function MobileSidebar({ 
@@ -23,7 +25,8 @@ export function MobileSidebar({
   activeTab, 
   handleTabClick,
   userName = "Trainer",
-  userEmail = "trainer@personal.ai"
+  userEmail = "trainer@personal.ai",
+  upcomingSessions = []
 }: MobileSidebarProps) {
   // Default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
@@ -39,6 +42,9 @@ export function MobileSidebar({
     { title: "Business Data", icon: LineChart, href: "analytics" },
     { title: "Settings", icon: Settings, href: "settings" }
   ];
+
+  // Get the first two upcoming sessions
+  const nextSessions = upcomingSessions.slice(0, 2);
 
   return (
     <Sheet open={showSidebar} onOpenChange={setShowSidebar}>
@@ -99,14 +105,18 @@ export function MobileSidebar({
                 Upcoming Sessions
               </h4>
               <div className="space-y-3">
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <p className="text-sm font-medium text-gray-900">Sarah Johnson</p>
-                  <p className="text-xs text-gray-500">Today, 2:00 PM</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <p className="text-sm font-medium text-gray-900">Mike Peterson</p>
-                  <p className="text-xs text-gray-500">Tomorrow, 10:00 AM</p>
-                </div>
+                {nextSessions.length > 0 ? (
+                  nextSessions.map((session) => (
+                    <div key={session.id} className="bg-gray-50 p-3 rounded-md">
+                      <p className="text-sm font-medium text-gray-900">{session.name}</p>
+                      <p className="text-xs text-gray-500">{session.date}, {session.time.split(' - ')[0]}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <p className="text-sm font-medium text-gray-900">No upcoming sessions</p>
+                  </div>
+                )}
               </div>
             </div>
           </ScrollArea>

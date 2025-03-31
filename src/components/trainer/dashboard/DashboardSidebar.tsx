@@ -1,6 +1,7 @@
 
 import { DesktopSidebar } from "./sidebar/DesktopSidebar";
 import { MobileSidebar } from "./sidebar/MobileSidebar";
+import { TrainerSessionItem } from "@/types/sessions";
 
 interface DashboardSidebarProps {
   showSidebar: boolean;
@@ -9,6 +10,7 @@ interface DashboardSidebarProps {
   setActiveTab: (tab: string) => void;
   userName?: string;
   userEmail?: string;
+  upcomingSessions?: TrainerSessionItem[];
 }
 
 export function DashboardSidebar({ 
@@ -17,13 +19,15 @@ export function DashboardSidebar({
   activeTab, 
   setActiveTab,
   userName,
-  userEmail
+  userEmail,
+  upcomingSessions
 }: DashboardSidebarProps) {
   return (
     <>
       <DesktopSidebar 
         activeTab={activeTab} 
         handleTabClick={setActiveTab} 
+        upcomingSessions={upcomingSessions}
       />
       
       <MobileSidebar 
@@ -33,6 +37,7 @@ export function DashboardSidebar({
         handleTabClick={setActiveTab}
         userName={userName}
         userEmail={userEmail}
+        upcomingSessions={upcomingSessions}
       />
     </>
   );
