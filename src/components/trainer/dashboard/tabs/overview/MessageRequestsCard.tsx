@@ -28,16 +28,16 @@ export function MessageRequestsCard({ messages }: MessageRequestsCardProps) {
         <div className="space-y-3">
           {messages.map((message) => (
             <div key={message.id} className="flex items-center justify-between">
-              <div>
+              <div className="flex-1 min-w-0 mr-2">
                 <div className="font-medium">{message.from}</div>
-                <div className="text-xs text-muted-foreground truncate max-w-[220px]">
+                <div className="text-xs text-muted-foreground truncate max-w-full">
                   {message.preview}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   {message.time}
                 </div>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="shrink-0">
                 Reply
               </Button>
             </div>

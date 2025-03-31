@@ -6,6 +6,7 @@ import { Circle, Paperclip } from "lucide-react";
 import { getTrainerById } from "@/data/trainerMockData";
 import { useState } from "react";
 import { ChatDialog } from "@/components/trainer/ChatDialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MessageItem {
   id: number;
@@ -24,6 +25,7 @@ interface MessagesTabProps {
 export function MessagesTab({ messages }: MessagesTabProps) {
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<string>("");
+  const isMobile = useIsMobile();
 
   // Function to get trainer status color
   const getStatusColor = (status: string) => {
@@ -122,7 +124,7 @@ export function MessagesTab({ messages }: MessagesTabProps) {
                     </Badge>
                   )}
                 </p>
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap gap-2">
                   <Button 
                     size="sm"
                     onClick={() => handleOpenChat(message.from, trainerStatus)}

@@ -1,3 +1,4 @@
+
 import { MessageSquare, Send, Reply } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -100,7 +101,7 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                 <span className="text-xs text-muted-foreground">{message.time}</span>
               </div>
               <p className="text-sm mb-3">{message.preview}</p>
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
                 <Button 
                   size="sm" 
                   onClick={() => handleOpenChat({ id: message.id, name: message.from })}
