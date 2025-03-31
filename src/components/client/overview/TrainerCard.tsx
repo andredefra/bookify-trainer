@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -125,7 +124,11 @@ export function TrainerCard() {
       <CardFooter className="border-t flex justify-between py-4">
         <Button 
           variant="outline"
-          onClick={() => navigate('/client-dashboard?tab=trainers')}
+          onClick={() => navigate('/client-dashboard', { 
+            state: { 
+              activeTab: "trainers"
+            } 
+          })}
         >
           View All Trainers
         </Button>
