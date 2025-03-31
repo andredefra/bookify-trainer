@@ -25,6 +25,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const sessionId = searchParams.get('session');
+  const [activeTab, setActiveTab] = useState('upcoming');
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
   
   const {
@@ -56,7 +57,12 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
         setShowSessionDetailsDialog(true);
       }
     }
-  }, [sessionId, upcomingSessions, setSelectedSession, setShowSessionDetailsDialog]);
+    
+    // Check if navigated with state to show discover tab
+    if (location.state?.activeTab === 'sessions' && location.state?.discoverActive) {
+      setActiveTab('discover');
+    }
+  }, [sessionId, upcomingSessions, setSelectedSession, setShowSessionDetailsDialog, location.state]);
   
   // Combine upcoming sessions with available sessions for the calendar view
   const allSessions = [...upcomingSessions, ...availableSessions];
@@ -107,7 +113,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
             onRegister={handleRegisterForSession}
           />
         ) : (
-          <Tabs defaultValue="upcoming">
+          <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-6">
               <TabsTrigger value="upcoming">My Sessions</TabsTrigger>
               <TabsTrigger value="discover">Discover</TabsTrigger>

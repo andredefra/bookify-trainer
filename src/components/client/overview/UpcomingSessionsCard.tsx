@@ -70,6 +70,16 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
     // In a real app, this would update the session status in the database
   };
   
+  const handleFindSessions = () => {
+    // Navigate to the sessions tab with discover subtab active
+    navigate('/client-dashboard', { 
+      state: { 
+        activeTab: 'sessions',
+        discoverActive: true 
+      } 
+    });
+  };
+  
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -79,7 +89,7 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
             <CardDescription>Live training sessions you can join</CardDescription>
           </div>
           <Button 
-            onClick={() => navigate('/client-dashboard?tab=sessions')}
+            onClick={handleFindSessions}
             variant="default"
             size="sm"
             className="w-full sm:w-auto"
