@@ -2,21 +2,16 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExerciseLogItem } from "./ExerciseLogItem";
-import { ExerciseLog } from "./types";
+import { useWorkoutLogForm } from "./WorkoutLogFormContext";
 
-interface ExercisesListProps {
-  exercises: ExerciseLog[];
-  onAddExercise: () => void;
-  onRemoveExercise: (id: string) => void;
-  onExerciseChange: (id: string, field: keyof ExerciseLog, value: string | number) => void;
-}
+export function ExercisesList() {
+  const { 
+    exercises, 
+    handleAddExercise, 
+    handleRemoveExercise, 
+    handleExerciseChange 
+  } = useWorkoutLogForm();
 
-export function ExercisesList({ 
-  exercises, 
-  onAddExercise, 
-  onRemoveExercise, 
-  onExerciseChange 
-}: ExercisesListProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -25,7 +20,7 @@ export function ExercisesList({
           type="button" 
           variant="outline" 
           size="sm" 
-          onClick={onAddExercise}
+          onClick={handleAddExercise}
         >
           <Plus className="h-4 w-4 mr-1" /> Add Exercise
         </Button>
@@ -35,8 +30,8 @@ export function ExercisesList({
         <ExerciseLogItem
           key={exercise.id}
           exercise={exercise}
-          onRemove={onRemoveExercise}
-          onChange={onExerciseChange}
+          onRemove={handleRemoveExercise}
+          onChange={handleExerciseChange}
           isRemoveDisabled={exercises.length === 1}
         />
       ))}

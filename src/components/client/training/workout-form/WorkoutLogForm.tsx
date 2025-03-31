@@ -1,50 +1,17 @@
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { DateSelector } from "./DateSelector";
 import { ExercisesList } from "./ExercisesList";
-import { ExerciseLog } from "./types";
+import { WorkoutFormHeader } from "./WorkoutFormHeader";
+import { WorkoutFormButtons } from "./WorkoutFormButtons";
+import { WorkoutLogFormProvider, useWorkoutLogForm } from "./WorkoutLogFormContext";
 
 interface WorkoutLogFormProps {
   onComplete: () => void;
 }
 
-export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
+function WorkoutLogFormContent({ onComplete }: WorkoutLogFormProps) {
   const { toast } = useToast();
-  const isMobile = useIsMobile();
-  const [date, setDate] = useState<Date>(new Date());
-  const [workoutName, setWorkoutName] = useState("");
-  const [exercises, setExercises] = useState<ExerciseLog[]>([
-    { id: "1", name: "", sets: 3, reps: 10, weight: 0 }
-  ]);
-  
-  const handleAddExercise = () => {
-    setExercises([
-      ...exercises,
-      { 
-        id: Math.random().toString(36).substring(7), 
-        name: "", 
-        sets: 3, 
-        reps: 10, 
-        weight: 0 
-      }
-    ]);
-  };
-  
-  const handleRemoveExercise = (id: string) => {
-    if (exercises.length > 1) {
-      setExercises(exercises.filter(ex => ex.id !== id));
-    }
-  };
-  
-  const handleExerciseChange = (id: string, field: keyof ExerciseLog, value: string | number) => {
-    setExercises(exercises.map(ex => 
-      ex.id === id ? { ...ex, [field]: value } : ex
-    ));
-  };
+  const { date, workoutName, exercises, duration } = useWorkoutLogForm();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +23,8 @@ export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
       id: Date.now().toString(),
       date: date.toISOString(),
       name: workoutName || "Workout",
-      exercises: exercises.filter(ex => ex.name.trim() !== "")
+      exercises: exercises.filter(ex => ex.name.trim() !== ""),
+      duration: duration || undefined
     };
     
     workoutLogs.push(newWorkout);
@@ -73,36 +41,19 @@ export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Workout Name</label>
-            <Input
-              value={workoutName}
-              onChange={(e) => setWorkoutName(e.target.value)}
-              placeholder="e.g., Leg Day, Upper Body, etc."
-              className="w-full"
-            />
-          </div>
-          
-          <DateSelector date={date} onDateChange={setDate} />
-        </div>
-
-        <ExercisesList 
-          exercises={exercises}
-          onAddExercise={handleAddExercise}
-          onRemoveExercise={handleRemoveExercise}
-          onExerciseChange={handleExerciseChange}
-        />
+        <WorkoutFormHeader />
+        <ExercisesList />
       </div>
       
-      <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline" onClick={onComplete}>
-          Cancel
-        </Button>
-        <Button type="submit">
-          Save Workout
-        </Button>
-      </div>
+      <WorkoutFormButtons onCancel={onComplete} />
     </form>
+  );
+}
+
+export function WorkoutLogForm(props: WorkoutLogFormProps) {
+  return (
+    <WorkoutLogFormProvider>
+      <WorkoutLogFormContent {...props} />
+    </WorkoutLogFormProvider>
   );
 }
