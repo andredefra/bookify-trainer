@@ -24,9 +24,19 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     
     // If it's a string
     if (typeof dateStr === 'string') {
-      // Try different date formats
-      const formats = ["MM/dd/yyyy", "yyyy-MM-dd", "MMMM d, yyyy"];
+      // Try specifically MM/DD/YYYY format first (which our mock data uses)
+      if (dateStr.includes('/')) {
+        const [month, day, year] = dateStr.split('/').map(Number);
+        if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
+          const parsedDate = new Date(year, month - 1, day);
+          if (isValid(parsedDate)) {
+            return parsedDate;
+          }
+        }
+      }
       
+      // Try other date formats as fallback
+      const formats = ["yyyy-MM-dd", "MMMM d, yyyy"];
       for (const formatStr of formats) {
         try {
           const parsedDate = parse(dateStr, formatStr, new Date());
