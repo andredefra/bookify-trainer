@@ -19,7 +19,7 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
   const currentDate = new Date();
   const upcomingSessions = sessions.filter(session => {
     // Handle different date formats
-    let sessionDate;
+    let sessionDate: Date | null = null;
     
     if (typeof session.date === 'string') {
       const dateParts = session.date.split('/');
@@ -38,7 +38,7 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
       sessionDate = session.date;
     }
     
-    return sessionDate >= currentDate;
+    return sessionDate !== null && sessionDate >= currentDate;
   });
   
   console.log("Filtered upcoming sessions:", upcomingSessions);

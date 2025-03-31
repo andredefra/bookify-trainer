@@ -16,24 +16,27 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
   // Helper function to parse date string to Date object
-  const parseDate = (dateStr: string): Date | null => {
-    // Try different date formats
-    const formats = ["MM/dd/yyyy", "yyyy-MM-dd", "MMMM d, yyyy"];
-    
-    for (const formatStr of formats) {
-      try {
-        const parsedDate = parse(dateStr, formatStr, new Date());
-        if (isValid(parsedDate)) {
-          return parsedDate;
-        }
-      } catch (error) {
-        continue;
-      }
+  const parseDate = (dateStr: string | Date): Date | null => {
+    // If it's already a Date object
+    if (dateStr instanceof Date) {
+      return dateStr;
     }
     
-    // Try to handle date as direct Date object (sometimes it's already a date)
-    if (dateStr instanceof Date || (typeof dateStr === 'object' && dateStr !== null)) {
-      return new Date(dateStr);
+    // If it's a string
+    if (typeof dateStr === 'string') {
+      // Try different date formats
+      const formats = ["MM/dd/yyyy", "yyyy-MM-dd", "MMMM d, yyyy"];
+      
+      for (const formatStr of formats) {
+        try {
+          const parsedDate = parse(dateStr, formatStr, new Date());
+          if (isValid(parsedDate)) {
+            return parsedDate;
+          }
+        } catch (error) {
+          continue;
+        }
+      }
     }
     
     console.warn(`Could not parse date: ${dateStr}`);
@@ -48,13 +51,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     console.log("Looking for sessions on date:", formattedSelectedDate);
     
     const sessionsOnDate = sessions.filter(session => {
-      // Convert session.date to Date if it's not already
-      let sessionDate;
-      if (typeof session.date === 'string') {
-        sessionDate = parseDate(session.date);
-      } else if (session.date instanceof Date) {
-        sessionDate = session.date;
-      }
+      // Parse the session date
+      const sessionDate = parseDate(session.date);
       
       if (!sessionDate) return false;
       
@@ -76,12 +74,7 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   // Function to highlight dates with sessions
   const highlightedDates = () => {
     const dates = sessions.reduce((dates: Date[], session) => {
-      let sessionDate;
-      if (typeof session.date === 'string') {
-        sessionDate = parseDate(session.date);
-      } else if (session.date instanceof Date) {
-        sessionDate = session.date;
-      }
+      const sessionDate = parseDate(session.date);
       
       if (sessionDate) {
         console.log(`Adding highlight for ${session.name} on ${format(sessionDate, "MM/dd/yyyy")}`);

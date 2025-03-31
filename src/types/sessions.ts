@@ -10,7 +10,7 @@ export interface SessionBase {
   id: number;
   name: string;
   time: string;
-  date: string;
+  date: string | Date;
   description?: string;
 }
 
