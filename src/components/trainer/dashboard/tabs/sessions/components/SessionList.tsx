@@ -18,9 +18,30 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
   // Filter sessions for each tab
   const currentDate = new Date();
   const upcomingSessions = sessions.filter(session => {
-    const sessionDate = new Date(session.date);
+    // Handle different date formats
+    let sessionDate;
+    
+    if (typeof session.date === 'string') {
+      const dateParts = session.date.split('/');
+      if (dateParts.length === 3) {
+        // MM/DD/YYYY format
+        sessionDate = new Date(
+          parseInt(dateParts[2]), 
+          parseInt(dateParts[0]) - 1, 
+          parseInt(dateParts[1])
+        );
+      } else {
+        // Try direct parsing
+        sessionDate = new Date(session.date);
+      }
+    } else if (session.date instanceof Date) {
+      sessionDate = session.date;
+    }
+    
     return sessionDate >= currentDate;
   });
+  
+  console.log("Filtered upcoming sessions:", upcomingSessions);
   
   return (
     <Tabs defaultValue="upcoming">

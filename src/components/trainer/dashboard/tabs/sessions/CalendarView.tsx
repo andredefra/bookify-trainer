@@ -31,6 +31,11 @@ export function CalendarView({ sessions }: CalendarViewProps) {
       }
     }
     
+    // Try to handle date as direct Date object (sometimes it's already a date)
+    if (dateStr instanceof Date || (typeof dateStr === 'object' && dateStr !== null)) {
+      return new Date(dateStr);
+    }
+    
     console.warn(`Could not parse date: ${dateStr}`);
     return null;
   };
@@ -43,7 +48,14 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     console.log("Looking for sessions on date:", formattedSelectedDate);
     
     const sessionsOnDate = sessions.filter(session => {
-      const sessionDate = parseDate(session.date);
+      // Convert session.date to Date if it's not already
+      let sessionDate;
+      if (typeof session.date === 'string') {
+        sessionDate = parseDate(session.date);
+      } else if (session.date instanceof Date) {
+        sessionDate = session.date;
+      }
+      
       if (!sessionDate) return false;
       
       const formattedSessionDate = format(sessionDate, "MM/dd/yyyy");
@@ -64,7 +76,13 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   // Function to highlight dates with sessions
   const highlightedDates = () => {
     const dates = sessions.reduce((dates: Date[], session) => {
-      const sessionDate = parseDate(session.date);
+      let sessionDate;
+      if (typeof session.date === 'string') {
+        sessionDate = parseDate(session.date);
+      } else if (session.date instanceof Date) {
+        sessionDate = session.date;
+      }
+      
       if (sessionDate) {
         console.log(`Adding highlight for ${session.name} on ${format(sessionDate, "MM/dd/yyyy")}`);
         dates.push(sessionDate);
