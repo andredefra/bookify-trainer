@@ -2,34 +2,42 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, ClipboardList } from "lucide-react";
 import { WorkoutLogForm } from "@/components/client/training/WorkoutLogForm";
 import { PastWorkoutsLog } from "@/components/client/training/PastWorkoutsLog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function TrainingLogTab() {
   const [isLoggingWorkout, setIsLoggingWorkout] = useState(false);
+  const isMobile = useIsMobile();
   
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+        <CardHeader className={isMobile ? "pb-1 pt-4 px-4" : "pb-1 pt-4"}>
+          <div className="flex items-start justify-between">
             <div>
-              <CardTitle>Training Log</CardTitle>
-              <CardDescription>
+              <div className="flex items-center">
+                <ClipboardList className="h-5 w-5 text-primary mr-2" />
+                <CardTitle>Training Log</CardTitle>
+              </div>
+              <CardDescription className="mt-1">
                 Record and track your workouts
               </CardDescription>
             </div>
-            <Button 
-              className="flex items-center"
-              onClick={() => setIsLoggingWorkout(true)}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Log Workout
-            </Button>
+            {!isLoggingWorkout && (
+              <Button 
+                className="flex items-center"
+                onClick={() => setIsLoggingWorkout(true)}
+                size={isMobile ? "sm" : "default"}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Log Workout
+              </Button>
+            )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className={isMobile ? "p-4" : ""}>
           {isLoggingWorkout ? (
             <WorkoutLogForm onComplete={() => setIsLoggingWorkout(false)} />
           ) : (

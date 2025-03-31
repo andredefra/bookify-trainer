@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Plus, Trash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ExerciseLog {
   id: string;
@@ -22,6 +23,7 @@ interface WorkoutLogFormProps {
 
 export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [date, setDate] = useState<Date>(new Date());
   const [workoutName, setWorkoutName] = useState("");
   const [exercises, setExercises] = useState<ExerciseLog[]>([
@@ -87,6 +89,7 @@ export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
               value={workoutName}
               onChange={(e) => setWorkoutName(e.target.value)}
               placeholder="e.g., Leg Day, Upper Body, etc."
+              className="w-full"
             />
           </div>
           
@@ -102,7 +105,7 @@ export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
                   {format(date, "PPP")}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align={isMobile ? "center" : "start"}>
                 <Calendar
                   mode="single"
                   selected={date}
@@ -128,42 +131,50 @@ export function WorkoutLogForm({ onComplete }: WorkoutLogFormProps) {
           </div>
           
           {exercises.map((exercise, index) => (
-            <div key={exercise.id} className="grid grid-cols-12 gap-2 items-center border p-3 rounded-md">
-              <div className="col-span-12 md:col-span-4">
+            <div key={exercise.id} className="p-3 border rounded-md space-y-3">
+              <div className="w-full">
                 <Input
                   value={exercise.name}
                   onChange={(e) => handleExerciseChange(exercise.id, "name", e.target.value)}
                   placeholder="Exercise name"
+                  className="w-full"
                 />
               </div>
-              <div className="col-span-4 md:col-span-2">
-                <Input
-                  type="number"
-                  value={exercise.sets}
-                  onChange={(e) => handleExerciseChange(exercise.id, "sets", parseInt(e.target.value))}
-                  placeholder="Sets"
-                />
-              </div>
-              <div className="col-span-4 md:col-span-2">
-                <Input
-                  type="number"
-                  value={exercise.reps}
-                  onChange={(e) => handleExerciseChange(exercise.id, "reps", parseInt(e.target.value))}
-                  placeholder="Reps"
-                />
-              </div>
-              <div className="col-span-4 md:col-span-3">
-                <div className="flex items-center">
+              
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Sets</label>
+                  <Input
+                    type="number"
+                    value={exercise.sets}
+                    onChange={(e) => handleExerciseChange(exercise.id, "sets", parseInt(e.target.value))}
+                    placeholder="Sets"
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Reps</label>
+                  <Input
+                    type="number"
+                    value={exercise.reps}
+                    onChange={(e) => handleExerciseChange(exercise.id, "reps", parseInt(e.target.value))}
+                    placeholder="Reps"
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Weight (kg)</label>
                   <Input
                     type="number"
                     value={exercise.weight}
                     onChange={(e) => handleExerciseChange(exercise.id, "weight", parseFloat(e.target.value))}
                     placeholder="Weight"
+                    className="w-full"
                   />
-                  <span className="ml-2">kg</span>
                 </div>
               </div>
-              <div className="col-span-8 md:col-span-1 flex justify-end">
+              
+              <div className="flex justify-end">
                 <Button
                   type="button"
                   variant="ghost"
