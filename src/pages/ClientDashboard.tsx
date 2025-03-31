@@ -100,8 +100,8 @@ const ClientDashboard = () => {
           user={user}
         />
         
-        <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
-          <div className="mx-auto max-w-6xl">
+        <main className="dashboard-main flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
+          <div className="dashboard-container mx-auto max-w-6xl">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsContent value="overview" className="mt-0">
                 <Overview 
