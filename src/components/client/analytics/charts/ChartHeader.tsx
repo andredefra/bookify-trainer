@@ -2,6 +2,7 @@
 import React from "react";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChartHeaderProps {
   title: string;
@@ -22,15 +23,17 @@ export function ChartHeader({
   onChartTypeChange, 
   showChartTypeSelector = true 
 }: ChartHeaderProps) {
+  const isMobile = useIsMobile();
+  
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
       <div>
-        <CardTitle className="text-base">{title}</CardTitle>
-        <CardDescription className="text-sm">{description}</CardDescription>
+        <CardTitle className={`${isMobile ? 'text-sm' : 'text-base'}`}>{title}</CardTitle>
+        <CardDescription className={`${isMobile ? 'text-xs' : 'text-sm'}`}>{description}</CardDescription>
       </div>
       <div className="flex flex-wrap gap-2">
         <Select value={timeframe} onValueChange={onTimeframeChange}>
-          <SelectTrigger className="w-[120px] h-8">
+          <SelectTrigger className={`${isMobile ? 'w-[100px] h-7 text-xs' : 'w-[120px] h-8'}`}>
             <SelectValue placeholder="Timeframe" />
           </SelectTrigger>
           <SelectContent>
@@ -42,7 +45,7 @@ export function ChartHeader({
         
         {showChartTypeSelector && (
           <Select value={chartType} onValueChange={onChartTypeChange}>
-            <SelectTrigger className="w-[120px] h-8">
+            <SelectTrigger className={`${isMobile ? 'w-[100px] h-7 text-xs' : 'w-[120px] h-8'}`}>
               <SelectValue placeholder="Chart Type" />
             </SelectTrigger>
             <SelectContent>

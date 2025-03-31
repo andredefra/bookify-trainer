@@ -26,9 +26,9 @@ interface MonthlyGoalsChartProps {
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   const isMobile = useIsMobile();
   
-  // Adjust margins based on device size
+  // Further adjusted margins based on device size
   const chartMargins = isMobile 
-    ? { top: 5, right: 40, left: 70, bottom: 5 }
+    ? { top: 5, right: 30, left: 50, bottom: 5 }
     : { top: 5, right: 30, left: 120, bottom: 5 };
 
   return (
@@ -44,15 +44,17 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             type="number" 
             axisLine={false} 
             tickLine={false} 
-            domain={[0, 'dataMax']} 
+            domain={[0, 'dataMax']}
+            tick={{ fontSize: isMobile ? 10 : 12 }} 
           />
           <YAxis 
             dataKey="type" 
             type="category" 
             axisLine={false} 
             tickLine={false}
-            width={isMobile ? 65 : 100}
-            tick={{ fontSize: isMobile ? 10 : 12 }}
+            width={isMobile ? 50 : 100}
+            tick={{ fontSize: isMobile ? 9 : 12 }}
+            tickFormatter={(value) => isMobile && value.length > 10 ? `${value.slice(0, 10)}...` : value}
           />
           <Tooltip 
             content={({ active, payload }) => {
@@ -77,7 +79,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             dataKey="current" 
             fill="#4f46e5" 
             radius={[3, 3, 3, 3]}
-            barSize={isMobile ? 15 : 20}
+            barSize={isMobile ? 14 : 20}
           >
             {monthlyData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.current >= entry.target ? "#10b981" : "#4f46e5"} />
@@ -88,12 +90,13 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
               formatter={(value, entry) => {
                 // Safely check if entry and entry.payload exist before accessing target
                 if (entry && entry.payload && typeof entry.payload.target !== 'undefined') {
-                  return `${value}/${entry.payload.target}`;
+                  // For mobile, use more compact display
+                  return isMobile ? `${value}/${entry.payload.target}` : `${value}/${entry.payload.target}`;
                 }
                 // Fallback if target is not available
                 return `${value}`;
               }}
-              style={{ fill: "#6b7280", fontSize: isMobile ? 10 : 12 }}
+              style={{ fill: "#6b7280", fontSize: isMobile ? 9 : 12 }}
             />
           </Bar>
         </BarChart>

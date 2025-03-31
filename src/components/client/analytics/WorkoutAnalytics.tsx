@@ -44,19 +44,19 @@ export function WorkoutAnalytics({
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-50/80 p-1 rounded-md w-full border">
             <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-2">
               <BarChart2 className="h-4 w-4 mr-1" />
-              <span>Activity</span>
+              <span>{isMobile ? "Activity" : "Activity"}</span>
             </TabsTrigger>
             <TabsTrigger value="types" className="flex items-center justify-center gap-1 py-2">
               <PieChartIcon className="h-4 w-4 mr-1" />
-              <span>Workout Types</span>
+              <span>{isMobile ? "Types" : "Workout Types"}</span>
             </TabsTrigger>
             <TabsTrigger value="goals" className="flex items-center justify-center gap-1 py-2">
               <AreaChartIcon className="h-4 w-4 mr-1" />
-              <span>Monthly Goals</span>
+              <span>{isMobile ? "Goals" : "Monthly Goals"}</span>
             </TabsTrigger>
             <TabsTrigger value="progress" className="flex items-center justify-center gap-1 py-2">
               <LineChartIcon className="h-4 w-4 mr-1" />
-              <span>Progress</span>
+              <span>{isMobile ? "Progress" : "Progress"}</span>
             </TabsTrigger>
           </TabsList>
           
@@ -75,7 +75,7 @@ export function WorkoutAnalytics({
           <TabsContent value="progress" className="mt-0">
             <div className="flex justify-end mb-2">
               <Select value={progressMetric} onValueChange={setProgressMetric}>
-                <SelectTrigger className="w-[140px] h-8">
+                <SelectTrigger className={`${isMobile ? 'w-[120px] h-7 text-xs' : 'w-[140px] h-8'}`}>
                   <SelectValue placeholder="Metric" />
                 </SelectTrigger>
                 <SelectContent>
