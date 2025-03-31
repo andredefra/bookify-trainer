@@ -13,7 +13,7 @@ export function TrainingLogTab() {
   
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border-primary/10">
         <CardHeader className={isMobile ? "pb-1 pt-4 px-4" : "pb-1 pt-4"}>
           <div className="flex items-start justify-between">
             <div>

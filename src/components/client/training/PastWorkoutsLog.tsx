@@ -10,8 +10,9 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { ChevronLeft, Dumbbell, CalendarDays } from "lucide-react";
+import { ChevronLeft, Dumbbell, CalendarDays, Clock, ChevronRight } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Badge } from "@/components/ui/badge";
 
 interface ExerciseLog {
   id: string;
@@ -26,6 +27,7 @@ interface WorkoutLog {
   date: string;
   name: string;
   exercises: ExerciseLog[];
+  duration?: string;
 }
 
 export function PastWorkoutsLog() {
@@ -37,12 +39,13 @@ export function PastWorkoutsLog() {
     // In a real app, this would fetch from a database
     let logs = JSON.parse(localStorage.getItem("workoutLogs") || "[]");
     
-    // If no logs exist, add a sample log
+    // If no logs exist, add sample logs
     if (logs.length === 0) {
       const sampleLog = {
         id: "sample-1",
         date: new Date().toISOString(),
         name: "Upper Body Workout",
+        duration: "45 min",
         exercises: [
           { id: "ex-1", name: "Bench Press", sets: 4, reps: 8, weight: 60 },
           { id: "ex-2", name: "Pull-ups", sets: 3, reps: 10, weight: 0 },
@@ -54,6 +57,7 @@ export function PastWorkoutsLog() {
         id: "sample-2",
         date: new Date(Date.now() - 86400000).toISOString(),
         name: "Leg Day",
+        duration: "50 min",
         exercises: [
           { id: "ex-4", name: "Squats", sets: 4, reps: 10, weight: 80 },
           { id: "ex-5", name: "Lunges", sets: 3, reps: 12, weight: 20 },
@@ -61,7 +65,19 @@ export function PastWorkoutsLog() {
         ]
       };
       
-      logs = [sampleLog, yesterdayLog];
+      const oldLog = {
+        id: "sample-3",
+        date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+        name: "Full Body Workout",
+        duration: "60 min",
+        exercises: [
+          { id: "ex-7", name: "Deadlift", sets: 4, reps: 6, weight: 100 },
+          { id: "ex-8", name: "Push-ups", sets: 3, reps: 15, weight: 0 },
+          { id: "ex-9", name: "Bent-over Rows", sets: 3, reps: 10, weight: 40 }
+        ]
+      };
+      
+      logs = [sampleLog, yesterdayLog, oldLog];
       localStorage.setItem("workoutLogs", JSON.stringify(logs));
     }
     
@@ -96,27 +112,42 @@ export function PastWorkoutsLog() {
             <ChevronLeft className="mr-1 h-4 w-4" />
             Back
           </Button>
-          <div className="text-sm text-muted-foreground">
-            {format(parseISO(selectedWorkout.date), "PPP")}
+          <div className="flex items-center gap-2">
+            <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              {format(parseISO(selectedWorkout.date), "PPP")}
+            </span>
+            {selectedWorkout.duration && (
+              <>
+                <Clock className="h-3.5 w-3.5 ml-2 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">{selectedWorkout.duration}</span>
+              </>
+            )}
           </div>
         </div>
 
-        <h3 className="text-lg font-medium">{selectedWorkout.name}</h3>
+        <h3 className="text-lg font-medium flex items-center">
+          <Dumbbell className="h-4 w-4 mr-2 text-primary" />
+          {selectedWorkout.name}
+        </h3>
         
         {isMobile ? (
           <div className="space-y-3 mt-4">
             {selectedWorkout.exercises.map((exercise) => (
-              <div key={exercise.id} className="border rounded-md p-3">
+              <div key={exercise.id} className="border rounded-md p-3 bg-card hover:bg-accent/50 transition-colors">
                 <div className="font-medium">{exercise.name}</div>
                 <div className="grid grid-cols-3 gap-2 mt-2 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Sets:</span> {exercise.sets}
+                  <div className="bg-muted/30 rounded px-2 py-1 text-center">
+                    <span className="block text-xs text-muted-foreground">Sets</span>
+                    <span className="font-medium">{exercise.sets}</span>
                   </div>
-                  <div>
-                    <span className="text-muted-foreground">Reps:</span> {exercise.reps}
+                  <div className="bg-muted/30 rounded px-2 py-1 text-center">
+                    <span className="block text-xs text-muted-foreground">Reps</span>
+                    <span className="font-medium">{exercise.reps}</span>
                   </div>
-                  <div>
-                    <span className="text-muted-foreground">Weight:</span> {exercise.weight} kg
+                  <div className="bg-muted/30 rounded px-2 py-1 text-center">
+                    <span className="block text-xs text-muted-foreground">Weight</span>
+                    <span className="font-medium">{exercise.weight} kg</span>
                   </div>
                 </div>
               </div>
@@ -150,12 +181,12 @@ export function PastWorkoutsLog() {
 
   return (
     <div className="space-y-4">
-      <h3 className="font-medium">Recent Workouts</h3>
-      <div className="space-y-2">
+      <h3 className="font-medium mb-3">Recent Workouts</h3>
+      <div className="space-y-3">
         {workoutLogs.map((workout) => (
           <div 
             key={workout.id} 
-            className="flex justify-between items-center p-3 border rounded-md hover:bg-accent/50 cursor-pointer"
+            className="flex justify-between items-center p-3 border rounded-md hover:bg-accent/50 bg-card/50 cursor-pointer transition-colors"
             onClick={() => setSelectedWorkout(workout)}
           >
             <div className="flex items-center">
@@ -164,14 +195,25 @@ export function PastWorkoutsLog() {
               </div>
               <div>
                 <h4 className="font-medium">{workout.name}</h4>
-                <p className="text-xs text-muted-foreground flex items-center mt-1">
-                  <CalendarDays className="h-3 w-3 mr-1" />
-                  {format(parseISO(workout.date), "PPP")}
-                </p>
+                <div className="flex items-center mt-1 space-x-2">
+                  <span className="text-xs text-muted-foreground flex items-center">
+                    <CalendarDays className="h-3 w-3 mr-1" />
+                    {format(parseISO(workout.date), "PPP")}
+                  </span>
+                  {workout.duration && (
+                    <span className="text-xs text-muted-foreground flex items-center">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {workout.duration}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="text-sm text-muted-foreground">
-              {workout.exercises.length} exercise{workout.exercises.length !== 1 ? 's' : ''}
+            <div className="flex items-center">
+              <Badge variant="outline" className="mr-2 bg-primary/5">
+                {workout.exercises.length} exercise{workout.exercises.length !== 1 ? 's' : ''}
+              </Badge>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
         ))}
