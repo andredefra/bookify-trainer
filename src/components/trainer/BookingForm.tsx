@@ -1,167 +1,152 @@
 
-import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar } from "@/components/ui/calendar";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { CalendarCheck, Clock, Check } from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 export const bookingSchema = z.object({
-  date: z.date({
-    required_error: "Please select a date",
-  }),
-  time: z.string().min(1, "Please select a time"),
-  notes: z.string().optional()
+  date: z.date().min(new Date(), { message: "Select a date in the future" }),
+  time: z.string().min(1, { message: "Please select a time" }),
+  notes: z.string().optional(),
 });
+
+type BookingFormValues = z.infer<typeof bookingSchema>;
 
 interface BookingFormProps {
   trainerName: string;
-  onSubmit: (data: z.infer<typeof bookingSchema>) => void;
+  onSubmit: (values: BookingFormValues) => void;
   onCancel: () => void;
+  isMobile?: boolean;
 }
 
-export const BookingForm = ({ trainerName, onSubmit, onCancel }: BookingFormProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [formData, setFormData] = useState<z.infer<typeof bookingSchema> | null>(null);
-  
-  const form = useForm<z.infer<typeof bookingSchema>>({
+// Create an array of time options from 8am to 9pm in 30 minutes intervals
+const timeOptions = Array.from({ length: 26 }, (_, i) => {
+  const hour = Math.floor(i / 2) + 8;
+  const minutes = i % 2 === 0 ? "00" : "30";
+  return `${hour.toString().padStart(2, '0')}:${minutes}`;
+});
+
+export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false }: BookingFormProps) {
+  const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      date: new Date(),
+      date: undefined,
       time: "",
-      notes: ""
-    }
+      notes: "",
+    },
   });
 
-  const handleSubmit = (data: z.infer<typeof bookingSchema>) => {
-    setFormData(data);
-    setShowConfirmation(true);
-  };
-
-  const confirmBooking = () => {
-    if (formData) {
-      onSubmit(formData);
-    }
-    setShowConfirmation(false);
-  };
-
-  // Available time slots for demo
-  const timeSlots = [
-    { time: "10:00 AM", available: true },
-    { time: "11:00 AM", available: true },
-    { time: "12:00 PM", available: false },
-    { time: "1:00 PM", available: false },
-    { time: "2:00 PM", available: true },
-    { time: "3:00 PM", available: true },
-    { time: "4:00 PM", available: true },
-    { time: "5:00 PM", available: true },
-  ];
-
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-          <div className="mb-4">
-            <FormLabel className="flex items-center gap-2">
-              <CalendarCheck className="h-4 w-4" />
-              Select a date
-            </FormLabel>
-            <div className="border rounded-md p-3 mt-2">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={(date) => {
-                  setSelectedDate(date);
-                  form.setValue('date', date as Date);
-                }}
-                className="mx-auto pointer-events-auto"
-                disabled={(date) => {
-                  const day = date.getDay();
-                  return day === 0 || date < new Date(new Date().setHours(0, 0, 0, 0));
-                }}
-                initialFocus
-              />
-            </div>
-          </div>
-          
-          <FormField
-            control={form.control}
-            name="time"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  Select a time
-                </FormLabel>
-                <FormControl>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
-                    {timeSlots.map((slot) => (
-                      <Button
-                        key={slot.time}
-                        type="button"
-                        variant={field.value === slot.time ? "default" : "outline"}
-                        className={`flex justify-between items-center ${!slot.available ? "opacity-50 cursor-not-allowed" : ""}`}
-                        disabled={!slot.available}
-                        onClick={() => field.onChange(slot.time)}
-                      >
-                        <span>{slot.time}</span>
-                        {field.value === slot.time && <Check className="ml-2 h-4 w-4" />}
-                      </Button>
-                    ))}
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="notes"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Notes (optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Any specific goals or concerns for this session?"
-                    {...field}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
+                    initialFocus
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <div className="flex justify-end gap-3 pt-3">
-            <Button type="button" variant="outline" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="submit">Book Session</Button>
-          </div>
-        </form>
-      </Form>
+                </PopoverContent>
+              </Popover>
+            </FormItem>
+          )}
+        />
 
-      <AlertDialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirm your booking</AlertDialogTitle>
-            <AlertDialogDescription>
-              You're about to book a session with {trainerName} on{" "}
-              {formData?.date?.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} at{" "}
-              {formData?.time}.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmBooking}>Confirm Booking</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+        <FormField
+          control={form.control}
+          name="time"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Time</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a time slot" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {timeOptions.map((time) => (
+                    <SelectItem key={time} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Special Requests (Optional)</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder={`Any specific goals or needs for your session with ${trainerName}?`}
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <div className={`flex ${isMobile ? "flex-col space-y-2" : "justify-end space-x-2"} pt-4`}>
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onCancel}
+            className={isMobile ? "w-full" : ""}
+          >
+            Cancel
+          </Button>
+          <Button 
+            type="submit"
+            className={isMobile ? "w-full" : ""}
+          >
+            Book Session
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
-};
+}

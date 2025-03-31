@@ -10,12 +10,12 @@ interface ViewToggleProps {
 
 export function ViewToggle({ viewMode, setViewMode, isMobile = false }: ViewToggleProps) {
   return (
-    <div className={`${isMobile ? 'flex mt-4' : 'hidden sm:flex mr-2'} bg-muted rounded-md p-1 ${isMobile ? 'w-full' : ''}`}>
+    <div className={`flex bg-muted rounded-md p-1 ${isMobile ? 'w-full' : ''}`}>
       <Button 
         variant={viewMode === 'list' ? 'default' : 'ghost'} 
         size="sm" 
         onClick={() => setViewMode('list')}
-        className={isMobile ? "flex-1" : "px-3"}
+        className={`${isMobile ? "flex-1 text-xs h-9" : "px-3"}`}
       >
         <List className="h-4 w-4 mr-1" /> {!isMobile && "List"}
       </Button>
@@ -23,7 +23,7 @@ export function ViewToggle({ viewMode, setViewMode, isMobile = false }: ViewTogg
         variant={viewMode === 'calendar' ? 'default' : 'ghost'} 
         size="sm" 
         onClick={() => setViewMode('calendar')}
-        className={isMobile ? "flex-1" : "px-3"}
+        className={`${isMobile ? "flex-1 text-xs h-9" : "px-3"}`}
       >
         <CalendarDays className="h-4 w-4 mr-1" /> {!isMobile && "Calendar"}
       </Button>

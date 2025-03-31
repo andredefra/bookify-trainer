@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SessionItem } from "@/types/sessions";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 import { MySessionsTab } from "./MySessionsTab";
 import { SessionDiscoveryTab } from "./SessionDiscoveryTab";
@@ -14,6 +15,7 @@ import { availableTrainers, availableSessions, featuredSession, pastSessions } f
 import { SessionsHeader } from "./components/SessionsHeader";
 import { ViewToggle } from "./components/ViewToggle";
 import { SessionDialogs } from "./components/SessionDialogs";
+import { MobileTabsView } from "./components/mobile/MobileTabsView";
 
 interface SessionsTabContentProps {
   upcomingSessions: SessionItem[];
@@ -25,6 +27,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
   const sessionId = searchParams.get('session');
   const [activeTab, setActiveTab] = useState('upcoming');
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
+  const isMobile = useMediaQuery("(max-width: 640px)");
   
   const {
     showBookingDialog,
@@ -67,19 +70,33 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
   
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="pb-0 sm:pb-5">
         <SessionsHeader 
           viewMode={viewMode} 
           setViewMode={setViewMode} 
           onBookSession={handleBookSession}
+          isMobile={isMobile}
         />
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-4 sm:pt-6">
         {viewMode === 'calendar' ? (
           <CalendarSessionView 
             sessions={allSessions} 
             onViewDetails={handleViewSessionDetails}
             onRegister={handleRegisterForSession}
+          />
+        ) : isMobile ? (
+          <MobileTabsView
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            upcomingSessions={upcomingSessions}
+            availableSessions={availableSessions}
+            pastSessions={pastSessions}
+            featuredSession={featuredSession}
+            onViewDetails={handleViewSessionDetails}
+            onRegister={handleRegisterForSession}
+            onAddToCalendar={handleAddToCalendar}
+            onCancel={handleCancelSession}
           />
         ) : (
           <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab}>
@@ -115,11 +132,13 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
         )}
         
         {/* Small screen view toggle */}
-        <ViewToggle 
-          viewMode={viewMode} 
-          setViewMode={setViewMode} 
-          isMobile={true} 
-        />
+        {!isMobile && (
+          <ViewToggle 
+            viewMode={viewMode} 
+            setViewMode={setViewMode} 
+            isMobile={true} 
+          />
+        )}
         
         {/* Dialogs */}
         <SessionDialogs 

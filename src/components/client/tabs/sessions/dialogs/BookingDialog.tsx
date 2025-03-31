@@ -1,71 +1,78 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { BookingForm, bookingSchema } from "@/components/trainer/BookingForm";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { z } from "zod";
-
-interface TrainerProfile {
-  id: number;
-  name: string;
-  speciality: string;
-}
+import { BookingForm, bookingSchema } from "@/components/trainer/BookingForm";
+import { useEffect } from "react";
+import { Label } from "@/components/ui/label";
 
 interface BookingDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   selectedTrainer: string;
   setSelectedTrainer: (trainer: string) => void;
-  availableTrainers: TrainerProfile[];
+  availableTrainers: { id: number; name: string }[];
   onSubmit: (data: z.infer<typeof bookingSchema>) => void;
+  isMobile?: boolean;
 }
 
-export function BookingDialog({
-  open,
-  onOpenChange,
-  selectedTrainer,
-  setSelectedTrainer,
-  availableTrainers,
-  onSubmit
+export function BookingDialog({ 
+  open, 
+  onOpenChange, 
+  selectedTrainer, 
+  setSelectedTrainer, 
+  availableTrainers, 
+  onSubmit,
+  isMobile = false
 }: BookingDialogProps) {
+  // Set default trainer if none selected
+  useEffect(() => {
+    if (open && !selectedTrainer && availableTrainers.length > 0) {
+      setSelectedTrainer(availableTrainers[0].name);
+    }
+  }, [open, selectedTrainer, availableTrainers, setSelectedTrainer]);
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={isMobile ? "sm:max-w-[425px] p-4 sm:p-6" : "sm:max-w-[500px]"}>
         <DialogHeader>
-          <DialogTitle>Book a Private Session</DialogTitle>
+          <DialogTitle>Book a Training Session</DialogTitle>
           <DialogDescription>
-            Select a trainer, date and time for your session
+            Select a trainer and set up your private training session
           </DialogDescription>
         </DialogHeader>
         
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Select Trainer</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {availableTrainers.map(trainer => (
-              <Button 
-                key={trainer.id}
-                variant={selectedTrainer === trainer.name ? "default" : "outline"}
-                className="justify-start h-auto py-3"
-                onClick={() => setSelectedTrainer(trainer.name)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
-                    {trainer.name.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div className="text-left">
-                    <div className="font-medium">{trainer.name}</div>
-                    <div className="text-xs text-muted-foreground">{trainer.speciality}</div>
-                  </div>
-                </div>
-              </Button>
-            ))}
-          </div>
+        {/* Trainer selector */}
+        <div className="mb-6">
+          <Label htmlFor="trainer-select">Choose a Trainer</Label>
+          <Select 
+            value={selectedTrainer} 
+            onValueChange={setSelectedTrainer}
+            defaultValue={availableTrainers[0]?.name}
+          >
+            <SelectTrigger id="trainer-select" className="w-full">
+              <SelectValue placeholder="Select a trainer" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableTrainers.map(trainer => (
+                <SelectItem key={trainer.id} value={trainer.name}>
+                  {trainer.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         
-        <BookingForm 
-          trainerName={selectedTrainer}
-          onSubmit={onSubmit}
-          onCancel={() => onOpenChange(false)}
-        />
+        {/* Booking form */}
+        {selectedTrainer && (
+          <BookingForm 
+            trainerName={selectedTrainer}
+            onSubmit={onSubmit}
+            onCancel={() => onOpenChange(false)}
+            isMobile={isMobile}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

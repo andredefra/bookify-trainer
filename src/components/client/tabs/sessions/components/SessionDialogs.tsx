@@ -1,10 +1,11 @@
 
 import { SessionItem } from "@/types/sessions";
 import { BookingDialog } from "../dialogs/BookingDialog";
-import { SessionDetailsDialog } from "../dialogs/SessionDetailsDialog";
 import { PaymentDialog } from "../dialogs/PaymentDialog";
-import { z } from "zod";
+import { SessionDetailsDialog } from "../dialogs/SessionDetailsDialog";
 import { bookingSchema } from "@/components/trainer/BookingForm";
+import { z } from "zod";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface SessionDialogsProps {
   showBookingDialog: boolean;
@@ -16,7 +17,7 @@ interface SessionDialogsProps {
   selectedTrainer: string;
   setSelectedTrainer: (trainer: string) => void;
   selectedSession: SessionItem | null;
-  availableTrainers: any[];
+  availableTrainers: { id: number; name: string }[];
   onBookingSubmit: (data: z.infer<typeof bookingSchema>) => void;
   onPaymentComplete: () => void;
   onRegister: (session: SessionItem) => void;
@@ -37,22 +38,18 @@ export function SessionDialogs({
   onPaymentComplete,
   onRegister
 }: SessionDialogsProps) {
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  
   return (
     <>
-      <BookingDialog 
+      <BookingDialog
         open={showBookingDialog}
         onOpenChange={setShowBookingDialog}
         selectedTrainer={selectedTrainer}
         setSelectedTrainer={setSelectedTrainer}
         availableTrainers={availableTrainers}
         onSubmit={onBookingSubmit}
-      />
-      
-      <SessionDetailsDialog
-        open={showSessionDetailsDialog}
-        onOpenChange={setShowSessionDetailsDialog}
-        session={selectedSession}
-        onRegister={onRegister}
+        isMobile={isMobile}
       />
       
       <PaymentDialog
@@ -60,6 +57,15 @@ export function SessionDialogs({
         onOpenChange={setShowPaymentDialog}
         session={selectedSession}
         onPaymentComplete={onPaymentComplete}
+        isMobile={isMobile}
+      />
+      
+      <SessionDetailsDialog
+        open={showSessionDetailsDialog}
+        onOpenChange={setShowSessionDetailsDialog}
+        session={selectedSession}
+        onRegister={onRegister}
+        isMobile={isMobile}
       />
     </>
   );
