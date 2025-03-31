@@ -9,6 +9,7 @@ import { PaymentsTable } from "@/components/client/trainers/PaymentsTable";
 import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollowedTrainers";
 import { FollowedTrainersSection } from "@/components/client/trainers/FollowedTrainersSection";
 import { NavigationButtons } from "@/components/client/trainers/NavigationButtons";
+import { useLocation } from "react-router-dom";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -38,12 +39,20 @@ const myTrainers = [
 ];
 
 export function TrainersTab() {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
   
   // Force myTrainers to be included in the default trainers
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
+  
+  // Check if we should show the marketplace tab based on navigation state
+  useEffect(() => {
+    if (location.state?.discoverTrainers) {
+      setActiveTab("marketplace");
+    }
+  }, [location.state]);
   
   // Add explicit logs for debugging
   console.log("myTrainers in TrainersTab:", myTrainers.map(t => `${t.id} - ${t.name}`));

@@ -131,7 +131,12 @@ export function TrainerCard() {
         </Button>
         <Button 
           variant="link" 
-          onClick={() => navigate('/find-trainer')}
+          onClick={() => navigate('/client-dashboard', { 
+            state: { 
+              activeTab: "trainers", 
+              discoverTrainers: true 
+            } 
+          })}
         >
           Find more trainers
         </Button>
