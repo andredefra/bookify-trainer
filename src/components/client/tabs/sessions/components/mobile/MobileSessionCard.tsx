@@ -26,7 +26,7 @@ export function MobileSessionCard({
   const getBgColor = () => {
     if (featured) return 'bg-blue-50 border-blue-100';
     if (isPast) return 'bg-gray-50 border-gray-200';
-    if (session.status === 'registered' || session.status === 'confirmed') return 'bg-green-50 border-green-100';
+    if (session.status === 'registered' || session.status === 'confirmed') return 'bg-accent/40 border-accent/30';
     return 'bg-gray-50 border-gray-100';
   };
   
@@ -66,7 +66,7 @@ export function MobileSessionCard({
         {/* Status badges */}
         <div className="flex flex-wrap gap-2">
           {session.status === 'registered' || session.status === 'confirmed' ? (
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+            <Badge variant="outline" className="bg-accent/20 text-accent-foreground border-accent/30">
               Registered
             </Badge>
           ) : isPast ? (
