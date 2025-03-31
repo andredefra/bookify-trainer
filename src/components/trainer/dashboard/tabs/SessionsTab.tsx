@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { TrainerSessionItem } from "@/types/sessions";
 import { SessionsTabContent } from "./sessions/SessionsTabContent";
-import { toast } from "sonner";
 
 interface SessionsTabProps {
   upcomingSessions?: TrainerSessionItem[];
@@ -62,6 +61,21 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             paid: 5,
             pending: 2,
             total: 7
+          }
+        },
+        {
+          id: 4,
+          name: "Current Day Session",
+          date: new Date().toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}), // Today's date
+          time: "12:00 PM",
+          participants: 4,
+          maxParticipants: 10,
+          description: "Session on current day for testing calendar view",
+          waitingList: 0,
+          paymentStatus: {
+            paid: 3,
+            pending: 1,
+            total: 4
           }
         }
       ]);

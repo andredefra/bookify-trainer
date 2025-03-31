@@ -47,7 +47,11 @@ export function CalendarView({ sessions }: CalendarViewProps) {
       if (!sessionDate) return false;
       
       const formattedSessionDate = format(sessionDate, "MM/dd/yyyy");
-      return formattedSessionDate === formattedSelectedDate;
+      const match = formattedSessionDate === formattedSelectedDate;
+      if (match) {
+        console.log("Found matching session:", session.name, "on date", formattedSessionDate);
+      }
+      return match;
     });
     
     console.log("Selected date sessions:", sessionsOnDate);
@@ -61,7 +65,10 @@ export function CalendarView({ sessions }: CalendarViewProps) {
   const highlightedDates = () => {
     const dates = sessions.reduce((dates: Date[], session) => {
       const sessionDate = parseDate(session.date);
-      if (sessionDate) dates.push(sessionDate);
+      if (sessionDate) {
+        console.log(`Adding highlight for ${session.name} on ${format(sessionDate, "MM/dd/yyyy")}`);
+        dates.push(sessionDate);
+      }
       return dates;
     }, []);
     

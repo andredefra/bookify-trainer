@@ -15,6 +15,13 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
   // Add console logs to debug
   console.log("SessionList received sessions:", sessions);
   
+  // Filter sessions for each tab
+  const currentDate = new Date();
+  const upcomingSessions = sessions.filter(session => {
+    const sessionDate = new Date(session.date);
+    return sessionDate >= currentDate;
+  });
+  
   return (
     <Tabs defaultValue="upcoming">
       <TabsList className="mb-6 grid grid-cols-3 w-full">
@@ -24,8 +31,8 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
       </TabsList>
       <TabsContent value="upcoming">
         <div className="space-y-4">
-          {sessions && sessions.length > 0 ? (
-            sessions.map((session) => (
+          {upcomingSessions && upcomingSessions.length > 0 ? (
+            upcomingSessions.map((session) => (
               <div key={session.id} className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-sm">
                 <div className="space-y-2">
                   <h3 className="font-medium line-clamp-1">{session.name}</h3>
