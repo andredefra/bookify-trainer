@@ -49,6 +49,9 @@ export function TrainersTab() {
   // Force myTrainers to be included in the default trainers
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
   
+  // Mock user plan - in a real app, this would come from your user context or state
+  const userPlan = localStorage.getItem('user-plan') || "freemium";
+  
   // Check if we should show the marketplace tab based on navigation state
   useEffect(() => {
     if (location.state?.discoverTrainers) {
@@ -142,13 +145,16 @@ export function TrainersTab() {
           onOpenChange={setShowPaymentDialog}
           item={{
             id: `trainer-payment-${Date.now()}`,
-            name: `Training Session with ${selectedTrainer.name}`,
+            name: `Payment to ${selectedTrainer.name}`,
             price: selectedTrainer.amount,
-            description: "Personal training session payment"
+            description: "Direct payment for trainer services",
+            reference: "Direct Payment"
           }}
           onPaymentComplete={handlePaymentComplete}
           title={`Pay ${selectedTrainer.name}`}
-          description="Complete payment for personal training services"
+          description="Complete payment for trainer services"
+          isPremiumFeature={true}
+          userPlan={userPlan}
         />
       )}
     </Card>

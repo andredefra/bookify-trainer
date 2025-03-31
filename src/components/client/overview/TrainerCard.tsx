@@ -24,6 +24,9 @@ export function TrainerCard() {
   const [selectedTrainer, setSelectedTrainer] = useState("");
   const isMobile = useMediaQuery("(max-width: 640px)");
   
+  // Mock user plan - in a real app, this would come from your user context or state
+  const userPlan = localStorage.getItem('user-plan') || "freemium";
+  
   const handleBookSession = (trainerName: string) => {
     setSelectedTrainer(trainerName);
     setShowBookingDialog(true);
@@ -224,13 +227,16 @@ export function TrainerCard() {
         onOpenChange={setShowPaymentDialog}
         item={{
           id: `trainer-payment-${Date.now()}`,
-          name: `Training Session with ${selectedTrainer}`,
+          name: `Payment to ${selectedTrainer}`,
           price: 45,
-          description: "Personal training session payment"
+          description: "Direct payment for trainer services",
+          reference: "Direct Payment"
         }}
         onPaymentComplete={handlePaymentComplete}
         title={`Pay ${selectedTrainer}`}
-        description="Complete payment for personal training services"
+        description="Complete payment for trainer services"
+        isPremiumFeature={true}
+        userPlan={userPlan}
       />
     </Card>
   );
