@@ -4,6 +4,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Edit, X } from "lucide-react";
 import { format } from "date-fns";
 import { TrainerSessionItem } from "@/types/sessions";
 
@@ -104,21 +106,32 @@ export function CalendarView({ sessions, onEditSession, onCancelSession }: Calen
                                 {session.paymentStatus?.pending || 0} pending
                               </Badge>
                             )}
+                            {(session.waitingList || 0) > 0 && (
+                              <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200">
+                                {session.waitingList || 0} waiting
+                              </Badge>
+                            )}
                           </div>
                         </div>
                         <div className="flex space-x-2">
-                          <button 
-                            className="text-blue-600 hover:text-blue-800 text-sm"
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-8 px-3"
                             onClick={() => onEditSession(session)}
                           >
-                            Edit
-                          </button>
-                          <button 
-                            className="text-red-600 hover:text-red-800 text-sm"
+                            <Edit className="h-4 w-4 mr-1" />
+                            <span className="hidden sm:inline">Edit</span>
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
                             onClick={() => onCancelSession(session)}
                           >
-                            Cancel
-                          </button>
+                            <X className="h-4 w-4 mr-1" />
+                            <span className="hidden sm:inline">Cancel</span>
+                          </Button>
                         </div>
                       </div>
                     </div>
