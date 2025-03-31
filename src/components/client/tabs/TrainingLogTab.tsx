@@ -18,14 +18,14 @@ export function TrainingLogTab() {
           <div>
             <div className="flex items-center">
               <ClipboardList className="h-5 w-5 text-primary mr-2" />
-              <CardTitle>Training Log</CardTitle>
+              <CardTitle className={isMobile ? "text-xl" : ""}>Training Log</CardTitle>
             </div>
             <CardDescription className="mt-1 mb-3">
               Record and track your workouts
             </CardDescription>
             {!isLoggingWorkout && (
               <Button 
-                className="flex items-center mt-2"
+                className="flex items-center mt-2 w-full sm:w-auto"
                 onClick={() => setIsLoggingWorkout(true)}
                 size={isMobile ? "sm" : "default"}
               >
@@ -35,7 +35,7 @@ export function TrainingLogTab() {
             )}
           </div>
         </CardHeader>
-        <CardContent className={isMobile ? "p-4" : ""}>
+        <CardContent className={isMobile ? "p-3 pt-1" : ""}>
           {isLoggingWorkout ? (
             <WorkoutLogForm onComplete={() => setIsLoggingWorkout(false)} />
           ) : (

@@ -3,6 +3,7 @@ import { format, parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Dumbbell, CalendarDays, Clock, ChevronRight } from "lucide-react";
 import { WorkoutLog } from "./types";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface WorkoutListItemProps {
   workout: WorkoutLog;
@@ -10,6 +11,8 @@ interface WorkoutListItemProps {
 }
 
 export function WorkoutListItem({ workout, onClick }: WorkoutListItemProps) {
+  const isMobile = useIsMobile();
+  
   return (
     <div 
       key={workout.id} 
@@ -22,10 +25,10 @@ export function WorkoutListItem({ workout, onClick }: WorkoutListItemProps) {
         </div>
         <div>
           <h4 className="font-medium">{workout.name}</h4>
-          <div className="flex items-center mt-1 space-x-2">
+          <div className="flex flex-wrap items-center mt-1 gap-2">
             <span className="text-xs text-muted-foreground flex items-center">
               <CalendarDays className="h-3 w-3 mr-1" />
-              {format(parseISO(workout.date), "PPP")}
+              {isMobile ? format(parseISO(workout.date), "MMM d") : format(parseISO(workout.date), "PPP")}
             </span>
             {workout.duration && (
               <span className="text-xs text-muted-foreground flex items-center">
@@ -36,11 +39,11 @@ export function WorkoutListItem({ workout, onClick }: WorkoutListItemProps) {
           </div>
         </div>
       </div>
-      <div className="flex items-center">
-        <Badge variant="outline" className="mr-2 bg-primary/5">
-          {workout.exercises.length} exercise{workout.exercises.length !== 1 ? 's' : ''}
+      <div className="flex items-center ml-2">
+        <Badge variant="outline" className={`${isMobile ? 'px-1.5 text-xs' : 'mr-2'} bg-primary/5`}>
+          {workout.exercises.length} {isMobile ? 'ex' : workout.exercises.length !== 1 ? 'exercises' : 'exercise'}
         </Badge>
-        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        <ChevronRight className="h-4 w-4 text-muted-foreground ml-1" />
       </div>
     </div>
   );
