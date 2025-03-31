@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { CreateSessionDialog } from "../../dialogs/CreateSessionDialog";
@@ -21,15 +21,58 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   
   // Initialize sessions state with the passed upcomingSessions prop
-  const [sessions, setSessions] = useState(upcomingSessions.map(session => ({
-    ...session,
-    waitingList: session.waitingList || 0,
-    paymentStatus: session.paymentStatus || {
-      paid: Math.floor(Math.random() * session.participants),
-      pending: Math.floor(Math.random() * session.participants),
-      get total() { return this.paid + this.pending; }
+  const [sessions, setSessions] = useState<TrainerSessionItem[]>([]);
+  
+  // Initialize sessions when component mounts or upcomingSessions changes
+  useEffect(() => {
+    if (upcomingSessions && upcomingSessions.length > 0) {
+      // Ensure each session has required properties
+      const enhancedSessions = upcomingSessions.map(session => ({
+        ...session,
+        waitingList: session.waitingList || 0,
+        paymentStatus: session.paymentStatus || {
+          paid: Math.floor(Math.random() * session.participants),
+          pending: Math.floor(Math.random() * session.participants),
+          get total() { return this.paid + this.pending; }
+        }
+      }));
+      setSessions(enhancedSessions);
+    } else {
+      // Add some mock data if no sessions provided
+      setSessions([
+        {
+          id: 1,
+          name: "Morning Workout",
+          date: new Date().toLocaleDateString(),
+          time: "08:00 AM",
+          participants: 4,
+          maxParticipants: 10,
+          description: "Start your day with energy",
+          waitingList: 0,
+          paymentStatus: {
+            paid: 3,
+            pending: 1,
+            get total() { return this.paid + this.pending; }
+          }
+        },
+        {
+          id: 2,
+          name: "Evening Yoga",
+          date: new Date(Date.now() + 86400000).toLocaleDateString(), // Tomorrow
+          time: "06:00 PM",
+          participants: 6,
+          maxParticipants: 8,
+          description: "Relax after work",
+          waitingList: 2,
+          paymentStatus: {
+            paid: 4,
+            pending: 2,
+            get total() { return this.paid + this.pending; }
+          }
+        }
+      ]);
     }
-  })));
+  }, [upcomingSessions]);
   
   const handleEditSession = (session: TrainerSessionItem) => {
     setSelectedSession(session);
