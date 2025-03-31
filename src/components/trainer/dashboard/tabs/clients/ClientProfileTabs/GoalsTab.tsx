@@ -15,9 +15,9 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
   return (
     <Card>
       <CardContent className="pt-6 space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 pb-2">
           <h3 className="text-sm font-medium">Active Goals</h3>
-          <Button size="sm" variant="outline">Add Goal</Button>
+          <Button size="sm" variant="outline" className="w-full sm:w-auto">Add Goal</Button>
         </div>
         
         {mockClientDetails.goals.map((goal, i) => (
