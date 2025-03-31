@@ -31,7 +31,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
           paymentStatus: {
             paid: 3,
             pending: 2,
-            get total() { return this.paid + this.pending; }
+            total: 5
           }
         },
         {
@@ -46,7 +46,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
           paymentStatus: {
             paid: 6,
             pending: 2,
-            get total() { return this.paid + this.pending; }
+            total: 8
           }
         },
         {
@@ -61,7 +61,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
           paymentStatus: {
             paid: 5,
             pending: 2,
-            get total() { return this.paid + this.pending; }
+            total: 7
           }
         }
       ]);
@@ -69,7 +69,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   }, [upcomingSessions]);
   
   // Use provided sessions or fallback to mock data
-  const sessionsToDisplay = upcomingSessions.length > 0 ? upcomingSessions : mockSessions;
+  const sessionsToDisplay = upcomingSessions && upcomingSessions.length > 0 ? upcomingSessions : mockSessions;
   
   console.log("Sessions to display in SessionsTab:", sessionsToDisplay);
   

@@ -31,42 +31,6 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
     if (upcomingSessions && upcomingSessions.length > 0) {
       setSessions(upcomingSessions);
       console.log("Sessions initialized from props:", upcomingSessions);
-    } else {
-      // Add some mock data if no sessions provided
-      const mockSessions = [
-        {
-          id: 1,
-          name: "Morning Workout",
-          date: "05/15/2023",
-          time: "08:00 AM",
-          participants: 4,
-          maxParticipants: 10,
-          description: "Start your day with energy",
-          waitingList: 0,
-          paymentStatus: {
-            paid: 3,
-            pending: 1,
-            get total() { return this.paid + this.pending; }
-          }
-        },
-        {
-          id: 2,
-          name: "Evening Yoga",
-          date: "05/16/2023",
-          time: "06:00 PM",
-          participants: 6,
-          maxParticipants: 8,
-          description: "Relax after work",
-          waitingList: 2,
-          paymentStatus: {
-            paid: 4,
-            pending: 2,
-            get total() { return this.paid + this.pending; }
-          }
-        }
-      ];
-      setSessions(mockSessions);
-      console.log("Sessions initialized with mock data:", mockSessions);
     }
   }, [upcomingSessions]);
   

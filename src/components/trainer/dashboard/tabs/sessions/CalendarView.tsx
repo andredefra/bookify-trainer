@@ -58,11 +58,14 @@ export function CalendarView({ sessions }: CalendarViewProps) {
 
   // Function to highlight dates with sessions
   const highlightedDates = () => {
-    return sessions.reduce((dates: Date[], session) => {
+    const dates = sessions.reduce((dates: Date[], session) => {
       const sessionDate = parseDate(session.date);
       if (sessionDate) dates.push(sessionDate);
       return dates;
     }, []);
+    
+    console.log("Highlighted dates:", dates);
+    return dates;
   };
 
   return (

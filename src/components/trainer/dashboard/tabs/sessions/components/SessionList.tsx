@@ -12,6 +12,7 @@ interface SessionListProps {
 }
 
 export function SessionList({ sessions, onEditSession, onCancelSession }: SessionListProps) {
+  // Add console logs to debug
   console.log("SessionList received sessions:", sessions);
   
   return (
