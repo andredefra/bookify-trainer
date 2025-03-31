@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClientProfile } from "@/components/ClientProfile";
@@ -97,7 +96,7 @@ const ClientDashboard = () => {
           user={user}
         />
         
-        <main className="flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8 pb-24 lg:pb-6">
+        <main className="flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8 pb-32 lg:pb-6">
           <div className="mx-auto max-w-6xl">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsContent value="overview" className="mt-0">
