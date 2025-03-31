@@ -20,19 +20,23 @@ export function EditSessionDialog({ open, onOpenChange, session, onSubmit }: Edi
     // Parse date from string to Date object
     let sessionDate: Date;
     try {
+      console.log("Parsing date:", session.date);
+      
       // Try to parse MM/DD/YYYY format
-      const [month, day, year] = session.date.split('/').map(Number);
-      sessionDate = new Date(year, month - 1, day);
+      if (session.date.includes('/')) {
+        const [month, day, year] = session.date.split('/').map(Number);
+        sessionDate = new Date(year, month - 1, day);
+      } else {
+        // Try parsing as a direct date string
+        sessionDate = new Date(session.date);
+      }
       
       // Check if valid date was created
       if (isNaN(sessionDate.getTime())) {
-        // Fallback to trying to parse as a direct date string
-        sessionDate = new Date(session.date);
-        
-        // If still invalid, fallback to current date
-        if (isNaN(sessionDate.getTime())) {
-          sessionDate = new Date();
-        }
+        console.log("Invalid date, using current date");
+        sessionDate = new Date();
+      } else {
+        console.log("Parsed date successfully:", sessionDate);
       }
     } catch (error) {
       // If parsing fails, use current date

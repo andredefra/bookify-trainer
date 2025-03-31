@@ -19,7 +19,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
         {
           id: 1,
           name: "Morning HIIT",
-          date: new Date().toLocaleDateString(),
+          date: "05/15/2023", // Use a consistent date format MM/DD/YYYY
           time: "07:30 AM",
           participants: 5,
           maxParticipants: 12,
@@ -34,7 +34,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
         {
           id: 2,
           name: "Afternoon Strength",
-          date: new Date().toLocaleDateString(),
+          date: "05/15/2023", // Use a consistent date format MM/DD/YYYY
           time: "04:00 PM",
           participants: 8,
           maxParticipants: 10,
@@ -49,7 +49,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
         {
           id: 3,
           name: "Evening Yoga",
-          date: new Date(Date.now() + 86400000).toLocaleDateString(), // Tomorrow
+          date: "05/16/2023", // Tomorrow with consistent format MM/DD/YYYY
           time: "06:30 PM",
           participants: 7,
           maxParticipants: 15,

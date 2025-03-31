@@ -27,9 +27,10 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
   useEffect(() => {
     console.log("Upcoming sessions received:", upcomingSessions);
     if (upcomingSessions && upcomingSessions.length > 0) {
-      // Ensure each session has required properties
+      // Ensure each session has required properties and consistent date format
       const enhancedSessions = upcomingSessions.map(session => ({
         ...session,
+        date: session.date || new Date().toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}),
         waitingList: session.waitingList || 0,
         paymentStatus: session.paymentStatus || {
           paid: Math.floor(Math.random() * session.participants),
@@ -45,7 +46,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         {
           id: 1,
           name: "Morning Workout",
-          date: new Date().toLocaleDateString(),
+          date: "05/15/2023",
           time: "08:00 AM",
           participants: 4,
           maxParticipants: 10,
@@ -60,7 +61,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         {
           id: 2,
           name: "Evening Yoga",
-          date: new Date(Date.now() + 86400000).toLocaleDateString(), // Tomorrow
+          date: "05/16/2023",
           time: "06:00 PM",
           participants: 6,
           maxParticipants: 8,
@@ -90,7 +91,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
         return {
           ...session,
           name: data.name,
-          date: data.date.toLocaleDateString(),
+          date: data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}),
           time: data.time,
           maxParticipants: Number(data.maxParticipants), // Convert to number
           description: data.description
@@ -127,7 +128,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
             const newSession = {
               id: Math.floor(Math.random() * 1000),
               name: data.name,
-              date: data.date.toLocaleDateString(),
+              date: data.date.toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}),
               time: data.time,
               participants: 0,
               maxParticipants: Number(data.maxParticipants), // Convert to number
