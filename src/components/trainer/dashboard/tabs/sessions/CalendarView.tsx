@@ -30,14 +30,11 @@ export function CalendarView({ sessions }: CalendarViewProps) {
         if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
           // Ensure we're using correct year for 2-digit years
           const fullYear = year < 100 ? 2000 + year : year;
-          const parsedDate = new Date(fullYear, month - 1, day);
-          if (isValid(parsedDate)) {
-            return parsedDate;
-          }
+          return new Date(fullYear, month - 1, day);
         }
       }
       
-      // Try other date formats as fallback
+      // Try other common date formats as fallback
       const formats = ["yyyy-MM-dd", "MMMM d, yyyy"];
       for (const formatStr of formats) {
         try {
@@ -68,22 +65,24 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     const formattedSelectedDate = format(date, "MM/dd/yyyy");
     console.log("Looking for sessions on date:", formattedSelectedDate);
     
-    const sessionsOnDate = sessions.filter(session => {
+    return sessions.filter(session => {
       // Parse the session date
       const sessionDate = parseDate(session.date);
       
-      if (!sessionDate) return false;
+      if (!sessionDate) {
+        console.warn(`Failed to parse date for session: ${session.name}, date: ${session.date}`);
+        return false;
+      }
       
       const formattedSessionDate = format(sessionDate, "MM/dd/yyyy");
       const match = formattedSessionDate === formattedSelectedDate;
+      
       if (match) {
         console.log("Found matching session:", session.name, "on date", formattedSessionDate);
       }
+      
       return match;
     });
-    
-    console.log("Selected date sessions:", sessionsOnDate);
-    return sessionsOnDate;
   };
 
   // Get sessions for the currently selected date
@@ -91,16 +90,24 @@ export function CalendarView({ sessions }: CalendarViewProps) {
 
   // Function to highlight dates with sessions
   const highlightedDates = () => {
-    if (!sessions || sessions.length === 0) return [];
+    if (!sessions || sessions.length === 0) {
+      console.log("No sessions to highlight");
+      return [];
+    }
     
-    const dates = sessions.reduce((dates: Date[], session) => {
+    console.log("Processing sessions for highlights:", sessions);
+    
+    const dates = sessions.reduce((accumulator: Date[], session) => {
       const sessionDate = parseDate(session.date);
       
       if (sessionDate) {
         console.log(`Adding highlight for ${session.name} on ${format(sessionDate, "MM/dd/yyyy")}`);
-        dates.push(sessionDate);
+        accumulator.push(sessionDate);
+      } else {
+        console.warn(`Could not parse date for session: ${session.name}, date: ${session.date}`);
       }
-      return dates;
+      
+      return accumulator;
     }, []);
     
     console.log("Highlighted dates:", dates);
