@@ -11,6 +11,7 @@ import { CashPaymentNotice } from "./payment/CashPaymentNotice";
 import { PaymentItemDetails } from "./payment/PaymentItemDetails";
 import { PremiumFeatureCard } from "@/components/trainer/training/PremiumFeatureCard";
 
+// Updated to accept Date objects for consistency across the application
 interface PaymentItem {
   id: string | number;
   name: string;

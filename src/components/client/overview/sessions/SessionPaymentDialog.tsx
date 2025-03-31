@@ -26,7 +26,7 @@ export function SessionPaymentDialog({
     id: session.id,
     name: session.name,
     price: session.price || 50,
-    date: formattedDate,
+    date: session.date, // Pass the original date (string or Date)
     time: session.time,
     trainer: session.trainer,
     attendees: session.attendees,

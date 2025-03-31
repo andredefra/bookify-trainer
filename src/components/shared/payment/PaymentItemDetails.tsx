@@ -6,7 +6,7 @@ interface PaymentItem {
   name: string;
   price: number;
   description?: string;
-  date?: string;
+  date?: string | Date;
   time?: string;
   trainer?: string;
   attendees?: number;
@@ -18,11 +18,16 @@ interface PaymentItemDetailsProps {
 }
 
 export function PaymentItemDetails({ item }: PaymentItemDetailsProps) {
+  // Format date if it's a Date object
+  const formattedDate = item.date instanceof Date 
+    ? item.date.toLocaleDateString() 
+    : item.date;
+    
   return (
     <div className="space-y-2">
       <h3 className="font-medium text-sm">{item.name}</h3>
       {item.description && <p className="text-sm text-muted-foreground">{item.description}</p>}
-      {item.date && <p className="text-sm">Date: {item.date} {item.time && `at ${item.time}`}</p>}
+      {item.date && <p className="text-sm">Date: {formattedDate} {item.time && `at ${item.time}`}</p>}
       {item.trainer && <p className="text-sm">Trainer: {item.trainer}</p>}
       {item.attendees !== undefined && item.maxAttendees !== undefined && (
         <p className="text-sm">{item.attendees}/{item.maxAttendees} participants</p>

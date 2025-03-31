@@ -22,7 +22,7 @@ export function ProgramPaymentDialog({
     name: program.title,
     price: program.price || 0,
     description: program.description || `${program.week} training program by ${program.trainerName}`,
-    date: program.weekStart
+    date: program.weekStart // Pass the original date
   };
   
   return (
