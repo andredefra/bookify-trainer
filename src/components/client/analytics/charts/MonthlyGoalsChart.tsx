@@ -26,22 +26,22 @@ interface MonthlyGoalsChartProps {
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   const isMobile = useIsMobile();
   
-  // Adjusted margins to better center the chart
+  // Optimized margins to better utilize space, especially on the left
   const chartMargins = isMobile 
-    ? { top: 20, right: 30, left: 60, bottom: 5 }
-    : { top: 5, right: 60, left: 120, bottom: 5 };
+    ? { top: 20, right: 30, left: 20, bottom: 5 } // Reduced left margin on mobile
+    : { top: 5, right: 60, left: 70, bottom: 5 }; // Reduced left margin on desktop too
 
   // Calculate max length of labels
   const maxLabelLength = Math.max(...monthlyData.map(item => item.type.length));
   const yAxisWidth = isMobile 
-    ? Math.min(maxLabelLength * 6, 95) // Increased width for better text display
-    : 120;
+    ? Math.min(maxLabelLength * 6, 80) // Reduced width to free up space
+    : 100; // Reduced width on desktop as well
 
   // Truncate labels function
   const truncateLabel = (label: string) => {
     if (!isMobile) return label;
     
-    const maxLength = 12; // Increased max length for better readability
+    const maxLength = 14; // Increased max length for better readability
     if (label.length <= maxLength) return label;
     return `${label.slice(0, maxLength)}...`;
   };
@@ -109,7 +109,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             ))}
             <LabelList 
               dataKey="current" 
-              position={isMobile ? "right" : "right"}
+              position="right"
               formatter={(value, entry) => {
                 if (entry && entry.payload && entry.payload.target !== undefined) {
                   return `${value}/${entry.payload.target}`;
