@@ -12,6 +12,9 @@ interface SessionListProps {
 }
 
 export function SessionList({ sessions, onEditSession, onCancelSession }: SessionListProps) {
+  // Make sure we display some notice if no sessions exist
+  const hasUpcomingSessions = sessions && sessions.length > 0;
+
   return (
     <Tabs defaultValue="upcoming">
       <TabsList className="mb-6 grid grid-cols-3 w-full">
@@ -21,7 +24,7 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
       </TabsList>
       <TabsContent value="upcoming">
         <div className="space-y-4">
-          {sessions && sessions.length > 0 ? (
+          {hasUpcomingSessions ? (
             sessions.map((session) => (
               <div key={session.id} className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-sm">
                 <div className="space-y-2">
@@ -47,7 +50,7 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
                 </div>
                 <div className="flex items-center justify-between mt-3">
                   <div className="text-sm">
-                    <span className="font-medium">{session.participants}/{session.maxParticipants}</span>
+                    <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                   </div>
                   <div className="flex space-x-2">
                     <Button 

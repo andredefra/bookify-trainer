@@ -14,42 +14,42 @@ interface CalendarViewProps {
 export function CalendarView({ sessions }: CalendarViewProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
-  // Parse any session date to a Date object
-  const parseDate = (dateInput: string | Date): Date | null => {
-    try {
-      // Handle Date objects
-      if (dateInput instanceof Date) {
-        return dateInput;
-      }
-      
-      // Handle MM/DD/YYYY format
-      if (typeof dateInput === 'string' && dateInput.includes('/')) {
-        const [month, day, year] = dateInput.split('/').map(Number);
-        return new Date(year, month - 1, day);
-      }
-      
-      // Try standard date parsing
-      const date = new Date(dateInput);
-      return isNaN(date.getTime()) ? null : date;
-    } catch (error) {
-      console.error("Error parsing date:", dateInput, error);
-      return null;
+  const parseSessionDate = (dateStr: string | Date): Date => {
+    if (dateStr instanceof Date) return dateStr;
+    
+    // Handle MM/DD/YYYY format
+    if (typeof dateStr === 'string' && dateStr.includes('/')) {
+      const [month, day, year] = dateStr.split('/').map(Number);
+      return new Date(year, month - 1, day);
     }
+    
+    // Fall back to standard date parsing
+    return new Date(dateStr);
   };
 
-  // Get all session dates for highlighting in the calendar
-  const sessionDates = sessions
-    .map(session => parseDate(session.date))
-    .filter((date): date is Date => date !== null);
+  // Parse all session dates once
+  const sessionDatesMap = sessions.map(session => {
+    try {
+      const date = parseSessionDate(session.date);
+      return {
+        session,
+        parsedDate: date,
+        formattedDate: format(date, "MM/dd/yyyy")
+      };
+    } catch (error) {
+      console.error("Error parsing date for session:", session, error);
+      return null;
+    }
+  }).filter(item => item !== null) as { session: TrainerSessionItem, parsedDate: Date, formattedDate: string }[];
+
+  // Get all valid dates for calendar highlighting
+  const sessionDates = sessionDatesMap.map(item => item.parsedDate);
 
   // Get sessions for the selected date
   const sessionsOnSelectedDate = selectedDate 
-    ? sessions.filter(session => {
-        const sessionDate = parseDate(session.date);
-        if (!sessionDate) return false;
-        
-        return format(sessionDate, "MM/dd/yyyy") === format(selectedDate, "MM/dd/yyyy");
-      })
+    ? sessionDatesMap.filter(item => 
+        format(item.parsedDate, "MM/dd/yyyy") === format(selectedDate, "MM/dd/yyyy")
+      ).map(item => item.session)
     : [];
 
   return (
