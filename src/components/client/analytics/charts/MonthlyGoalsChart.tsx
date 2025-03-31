@@ -28,20 +28,20 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   
   // Adjusted margins to ensure labels are visible
   const chartMargins = isMobile 
-    ? { top: 20, right: 10, left: 5, bottom: 5 }
+    ? { top: 20, right: 10, left: 50, bottom: 5 }
     : { top: 5, right: 50, left: 120, bottom: 5 };
 
   // Calculate max length of labels
   const maxLabelLength = Math.max(...monthlyData.map(item => item.type.length));
   const yAxisWidth = isMobile 
-    ? Math.min(maxLabelLength * 4, 70) // Limit width on mobile
+    ? Math.min(maxLabelLength * 5, 90) // Increased width on mobile
     : 120;
 
   // Truncate labels function
   const truncateLabel = (label: string) => {
     if (!isMobile) return label;
     
-    const maxLength = 8;
+    const maxLength = 10; // Increased max length for mobile
     if (label.length <= maxLength) return label;
     return `${label.slice(0, maxLength)}...`;
   };
@@ -71,12 +71,12 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             tickLine={false}
             width={yAxisWidth}
             tick={{ 
-              fontSize: isMobile ? 8 : 12,
-              textAnchor: isMobile ? 'start' : 'end',
+              fontSize: isMobile ? 9 : 12,
+              textAnchor: "end",
               fill: "#6b7280" 
             }}
             tickFormatter={truncateLabel}
-            tickMargin={isMobile ? 2 : 5}
+            tickMargin={isMobile ? 4 : 5}
             padding={{ top: 15, bottom: 15 }}
           />
           <Tooltip 
