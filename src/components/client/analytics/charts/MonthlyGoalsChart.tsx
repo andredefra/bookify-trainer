@@ -28,7 +28,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   
   // Adjusted margins to ensure labels are visible
   const chartMargins = isMobile 
-    ? { top: 5, right: 40, left: 5, bottom: 5 }
+    ? { top: 20, right: 10, left: 5, bottom: 5 }
     : { top: 5, right: 50, left: 120, bottom: 5 };
 
   // Calculate max length of labels
@@ -109,7 +109,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             ))}
             <LabelList 
               dataKey="current" 
-              position="right" 
+              position={isMobile ? "top" : "right"}
               formatter={(value, entry) => {
                 if (entry && entry.payload && entry.payload.target !== undefined) {
                   return isMobile 
@@ -122,9 +122,9 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
                 fill: "#6b7280", 
                 fontSize: isMobile ? 8 : 12,
                 fontWeight: "normal",
-                textAnchor: "start"
+                textAnchor: isMobile ? "middle" : "start"
               }}
-              offset={10}
+              offset={isMobile ? 5 : 10}
             />
           </Bar>
         </BarChart>
