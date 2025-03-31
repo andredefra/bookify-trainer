@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { HighlightText } from "./shared/HighlightText";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface GoalsTabProps {
   mockClientDetails: {
@@ -12,12 +13,20 @@ interface GoalsTabProps {
 }
 
 export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps) {
+  const isMobile = useIsMobile();
+
   return (
     <Card>
       <CardContent className="pt-6 space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 pb-2">
-          <h3 className="text-sm font-medium">Active Goals</h3>
-          <Button size="sm" variant="outline" className="w-full sm:w-auto">Add Goal</Button>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 pb-4">
+          <h3 className="text-sm font-medium">{isMobile ? "Goals" : "Active Goals"}</h3>
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="w-full sm:w-auto"
+          >
+            Add Goal
+          </Button>
         </div>
         
         {mockClientDetails.goals.map((goal, i) => (
