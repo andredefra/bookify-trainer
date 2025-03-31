@@ -43,20 +43,20 @@ export function WorkoutAnalytics({
         <Tabs defaultValue="activity" className="space-y-2 sm:space-y-4">
           <TabsList className="grid grid-cols-4 bg-slate-50/80 p-1 rounded-md w-full border">
             <TabsTrigger value="activity" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-[10px] sm:text-sm">
-              <BarChart2 className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? '' : 'mr-1'}`} />
-              <span className={`${isMobile ? 'hidden sm:inline' : ''}`}>Activity</span>
+              <BarChart2 className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? 'mr-0.5' : 'mr-1'}`} />
+              <span className={`${isMobile ? 'inline text-[9px]' : ''}`}>Act</span>
             </TabsTrigger>
             <TabsTrigger value="types" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-[10px] sm:text-sm">
-              <PieChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? '' : 'mr-1'}`} />
-              <span className={`${isMobile ? 'hidden sm:inline' : ''}`}>Types</span>
+              <PieChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? 'mr-0.5' : 'mr-1'}`} />
+              <span className={`${isMobile ? 'inline text-[9px]' : ''}`}>Type</span>
             </TabsTrigger>
             <TabsTrigger value="goals" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-[10px] sm:text-sm">
-              <AreaChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? '' : 'mr-1'}`} />
-              <span className={`${isMobile ? 'hidden sm:inline' : ''}`}>Goals</span>
+              <AreaChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? 'mr-0.5' : 'mr-1'}`} />
+              <span className={`${isMobile ? 'inline text-[9px]' : ''}`}>Goal</span>
             </TabsTrigger>
             <TabsTrigger value="progress" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-[10px] sm:text-sm">
-              <LineChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? '' : 'mr-1'}`} />
-              <span className={`${isMobile ? 'hidden sm:inline' : ''}`}>Progress</span>
+              <LineChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? 'mr-0.5' : 'mr-1'}`} />
+              <span className={`${isMobile ? 'inline text-[9px]' : ''}`}>Prog</span>
             </TabsTrigger>
           </TabsList>
           

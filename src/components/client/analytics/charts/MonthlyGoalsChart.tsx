@@ -26,10 +26,10 @@ interface MonthlyGoalsChartProps {
 export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
   const isMobile = useIsMobile();
   
-  // Significantly adjusted margins for mobile
+  // Adjusted margins to ensure labels are visible
   const chartMargins = isMobile 
-    ? { top: 5, right: 30, left: 5, bottom: 5 }
-    : { top: 5, right: 30, left: 120, bottom: 5 };
+    ? { top: 5, right: 40, left: 5, bottom: 5 }
+    : { top: 5, right: 50, left: 120, bottom: 5 };
 
   // Calculate max length of labels
   const maxLabelLength = Math.max(...monthlyData.map(item => item.type.length));
@@ -124,7 +124,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
                 fontWeight: "normal",
                 textAnchor: "start"
               }}
-              offset={isMobile ? 2 : 5}
+              offset={10}
             />
           </Bar>
         </BarChart>
