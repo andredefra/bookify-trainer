@@ -127,6 +127,12 @@
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
+  
+  /* Ensure day selector fits properly on small screens */
+  .grid-cols-7 > button {
+    min-width: 0;
+    max-width: 100%;
+  }
 }
 
 /* Make sure all mobile containers don't overflow */
