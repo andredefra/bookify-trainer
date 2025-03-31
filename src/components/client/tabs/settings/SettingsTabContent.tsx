@@ -40,38 +40,38 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
           Manage your account settings and preferences
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0 sm:p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="relative">
-            <ScrollArea className="w-full pb-4 max-w-full">
-              <TabsList className="inline-flex h-10 w-auto max-w-full flex-nowrap overflow-x-auto">
-                <TabsTrigger value="account" className="flex-shrink-0">Account</TabsTrigger>
-                <TabsTrigger value="payments" className="flex-shrink-0">Payments</TabsTrigger>
-                <TabsTrigger value="preferences" className="flex-shrink-0">Preferences</TabsTrigger>
-                <TabsTrigger value="integrations" className="flex-shrink-0">Integrations</TabsTrigger>
-                <TabsTrigger value="notifications" className="flex-shrink-0">Notifications</TabsTrigger>
+          <div className="border-b px-4 py-2 sm:px-0 sm:py-0 sm:border-0">
+            <ScrollArea className="w-full max-w-full">
+              <TabsList className="h-auto flex flex-nowrap justify-start w-full sm:w-auto sm:inline-flex sm:h-10 bg-transparent sm:bg-muted p-0 sm:p-1 space-x-2 overflow-x-auto">
+                <TabsTrigger value="account" className="flex-shrink-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:data-[state=active]:bg-background sm:data-[state=active]:text-foreground">Account</TabsTrigger>
+                <TabsTrigger value="payments" className="flex-shrink-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:data-[state=active]:bg-background sm:data-[state=active]:text-foreground">Payments</TabsTrigger>
+                <TabsTrigger value="preferences" className="flex-shrink-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:data-[state=active]:bg-background sm:data-[state=active]:text-foreground">Preferences</TabsTrigger>
+                <TabsTrigger value="integrations" className="flex-shrink-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:data-[state=active]:bg-background sm:data-[state=active]:text-foreground">Integrations</TabsTrigger>
+                <TabsTrigger value="notifications" className="flex-shrink-0 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground sm:data-[state=active]:bg-background sm:data-[state=active]:text-foreground">Notifications</TabsTrigger>
               </TabsList>
             </ScrollArea>
           </div>
           
-          <div className="mt-6">
-            <TabsContent value="account">
+          <div className="p-4 sm:p-0 sm:mt-6">
+            <TabsContent value="account" className="m-0">
               <AccountSection user={user} />
             </TabsContent>
             
-            <TabsContent value="payments">
+            <TabsContent value="payments" className="m-0">
               <PaymentsSection />
             </TabsContent>
             
-            <TabsContent value="preferences">
+            <TabsContent value="preferences" className="m-0">
               <PreferencesSection goals={goals} />
             </TabsContent>
             
-            <TabsContent value="integrations">
+            <TabsContent value="integrations" className="m-0">
               <IntegrationsSection user={user} />
             </TabsContent>
             
-            <TabsContent value="notifications">
+            <TabsContent value="notifications" className="m-0">
               <NotificationsSection />
             </TabsContent>
           </div>
