@@ -36,7 +36,7 @@ export function DesktopSidebar({ activeTab, handleTabClick, upcomingSessions = [
           </div>
           <div className="md:flex flex-col space-y-1 hidden">
             {nextSessions.length > 0 ? (
-              nextSessions.map((session, index) => (
+              nextSessions.map((session) => (
                 <Button key={session.id} variant="ghost" className="justify-start cursor-default">
                   <div className="flex flex-col items-start">
                     <span className="text-xs">{session.name}</span>

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,15 +14,28 @@ interface CalendarViewProps {
 export function CalendarView({ sessions }: CalendarViewProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
+  // Create a more robust date parser to handle various date formats
+  const parseSessionDate = (dateString: string): Date => {
+    if (dateString === 'Today') {
+      return new Date();
+    } else if (dateString === 'Tomorrow') {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      return tomorrow;
+    } else {
+      // Try to parse the date string
+      const parsedDate = new Date(dateString);
+      if (!isNaN(parsedDate.getTime())) {
+        return parsedDate;
+      }
+      // Fallback to current date if parsing fails
+      return new Date();
+    }
+  };
+  
   // Create a map of dates to session counts for highlighting dates with sessions
   const sessionDates = sessions.reduce((acc, session) => {
-    // Handle 'Today' and 'Tomorrow' strings
-    const sessionDate = session.date === 'Today' 
-      ? new Date() 
-      : session.date === 'Tomorrow'
-      ? new Date(new Date().setDate(new Date().getDate() + 1))
-      : new Date(session.date);
-    
+    const sessionDate = parseSessionDate(session.date);
     const dateString = sessionDate.toDateString();
     acc[dateString] = (acc[dateString] || 0) + 1;
     return acc;
@@ -33,16 +47,8 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     const dateString = date.toDateString();
     
     return sessions.filter(session => {
-      if (session.date === 'Today') {
-        return new Date().toDateString() === dateString;
-      } else if (session.date === 'Tomorrow') {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        return tomorrow.toDateString() === dateString;
-      } else {
-        const sessionDate = new Date(session.date);
-        return sessionDate.toDateString() === dateString;
-      }
+      const sessionDate = parseSessionDate(session.date);
+      return sessionDate.toDateString() === dateString;
     });
   };
   

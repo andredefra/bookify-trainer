@@ -11,6 +11,9 @@ interface UpcomingSessionsCardProps {
 }
 
 export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSessionsCardProps) {
+  // Get the first three upcoming sessions to display in the overview
+  const nextSessions = sessions.slice(0, 3);
+  
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -26,7 +29,7 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {sessions.map((session) => (
+          {nextSessions.map((session) => (
             <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
               <div className="flex flex-col gap-3">
                 <div className="space-y-2">

@@ -21,7 +21,7 @@ export function SessionsTab({ upcomingSessions }: SessionsTabProps) {
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   
-  // Transform the upcoming sessions to ensure all have waitingList and paymentStatus
+  // Initialize sessions state with the passed upcomingSessions prop
   const [sessions, setSessions] = useState(upcomingSessions.map(session => ({
     ...session,
     waitingList: session.waitingList || 0,
