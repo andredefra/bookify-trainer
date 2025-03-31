@@ -26,7 +26,7 @@ export function SessionList({ sessions, onEditSession, onCancelSession }: Sessio
         <div className="space-y-4">
           {sessions && sessions.length > 0 ? (
             sessions.map((session) => (
-              <div key={session.id} className="flex flex-col p-3 bg-gray-50 rounded-lg">
+              <div key={session.id} className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-sm">
                 <div className="space-y-2">
                   <h3 className="font-medium line-clamp-1">{session.name}</h3>
                   <div className="text-sm text-muted-foreground">

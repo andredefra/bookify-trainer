@@ -111,7 +111,7 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
               paymentStatus: {
                 paid: 0,
                 pending: 0,
-                get total() { return this.paid + this.pending; }
+                total: 0
               },
               waitingList: 0,
               description: data.description

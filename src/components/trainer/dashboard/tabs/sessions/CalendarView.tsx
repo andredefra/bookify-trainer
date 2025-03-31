@@ -40,6 +40,7 @@ export function CalendarView({ sessions }: CalendarViewProps) {
     if (!date || !sessions || sessions.length === 0) return [];
     
     const formattedSelectedDate = format(date, "MM/dd/yyyy");
+    console.log("Looking for sessions on date:", formattedSelectedDate);
     
     const sessionsOnDate = sessions.filter(session => {
       const sessionDate = parseDate(session.date);
@@ -114,6 +115,11 @@ export function CalendarView({ sessions }: CalendarViewProps) {
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                               {session.paymentStatus?.paid || 0} paid
                             </Badge>
+                            {(session.paymentStatus?.pending || 0) > 0 && (
+                              <Badge variant="outline" className="ml-2 bg-yellow-50 text-yellow-700 border-yellow-200">
+                                {session.paymentStatus?.pending || 0} pending
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </div>
