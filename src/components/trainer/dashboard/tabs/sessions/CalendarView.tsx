@@ -37,6 +37,12 @@ export function CalendarView({ sessions }: CalendarViewProps) {
           continue;
         }
       }
+      
+      // If none of the formats work, try direct Date parsing as a fallback
+      const directParsed = new Date(dateStr);
+      if (isValid(directParsed)) {
+        return directParsed;
+      }
     }
     
     console.warn(`Could not parse date: ${dateStr}`);
