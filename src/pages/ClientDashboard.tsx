@@ -100,7 +100,7 @@ const ClientDashboard = () => {
           user={user}
         />
         
-        <main className={`flex-1 overflow-y-auto bg-muted/20 py-6 px-4 md:px-8 ${isMobile ? 'pb-40' : 'pb-32 md:pb-24 lg:pb-6'}`}>
+        <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-6xl">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsContent value="overview" className="mt-0">
