@@ -38,11 +38,11 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             Manage your account settings
           </p>
         </div>
-        <ScrollArea className="h-full max-h-[calc(100vh-14rem)]">
-          <div className="flex md:flex-col divide-x md:divide-x-0 md:divide-y overflow-x-auto md:overflow-x-visible">
+        <div className="h-full max-h-[calc(100vh-14rem)]">
+          <div className="flex flex-row md:flex-col p-2 md:p-0 overflow-x-auto md:overflow-x-visible">
             <button
               onClick={() => setActiveTab("account")}
-              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+              className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
                 activeTab === "account" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
               } md:border-l-2 md:border-transparent whitespace-nowrap`}
             >
@@ -50,7 +50,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             </button>
             <button
               onClick={() => setActiveTab("payments")}
-              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+              className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
                 activeTab === "payments" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
               } md:border-l-2 md:border-transparent whitespace-nowrap`}
             >
@@ -58,7 +58,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             </button>
             <button
               onClick={() => setActiveTab("preferences")}
-              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+              className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
                 activeTab === "preferences" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
               } md:border-l-2 md:border-transparent whitespace-nowrap`}
             >
@@ -66,7 +66,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             </button>
             <button
               onClick={() => setActiveTab("integrations")}
-              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+              className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
                 activeTab === "integrations" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
               } md:border-l-2 md:border-transparent whitespace-nowrap`}
             >
@@ -74,14 +74,14 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             </button>
             <button
               onClick={() => setActiveTab("notifications")}
-              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+              className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
                 activeTab === "notifications" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
               } md:border-l-2 md:border-transparent whitespace-nowrap`}
             >
               <span className="flex-1">Notifications</span>
             </button>
           </div>
-        </ScrollArea>
+        </div>
       </div>
       
       {/* Content area */}
