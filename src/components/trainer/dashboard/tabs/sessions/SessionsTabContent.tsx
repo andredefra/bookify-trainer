@@ -6,7 +6,7 @@ import { CreateSessionDialog } from "../../dialogs/CreateSessionDialog";
 import { EditSessionDialog } from "./EditSessionDialog";
 import { CancelSessionDialog } from "./components/CancelSessionDialog";
 import { TrainerSessionItem } from "@/types/sessions";
-import { CalendarView } from "./CalendarView";
+import { CalendarView } from "./components/CalendarView";
 import { SessionHeader } from "./components/SessionHeader";
 import { SessionList } from "./components/SessionList";
 import { SessionFormValues } from "../../dialogs/session/SessionFormSchema";
@@ -60,7 +60,11 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
       </CardHeader>
       <CardContent className="overflow-x-hidden">
         {viewMode === "calendar" ? (
-          <CalendarView sessions={upcomingSessions} />
+          <CalendarView 
+            sessions={upcomingSessions}
+            onEditSession={handleEditSession}
+            onCancelSession={handleCancelSession}
+          />
         ) : (
           <SessionList 
             sessions={upcomingSessions} 
