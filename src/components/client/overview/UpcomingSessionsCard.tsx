@@ -81,7 +81,7 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
             onClick={() => navigate('/client-dashboard?tab=sessions')}
             variant="default"
             size="sm"
-            className="w-fit"
+            className="w-full sm:w-auto"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">Find Sessions</span>

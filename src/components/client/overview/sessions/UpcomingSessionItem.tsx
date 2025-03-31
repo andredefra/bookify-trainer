@@ -16,55 +16,56 @@ export function UpcomingSessionItem({ session, onRegister, featured = false }: U
     : "bg-gray-50";
   
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 p-4 ${bgClass} rounded-lg`}>
-      <div>
-        <h3 className="font-medium">{session.name}</h3>
-        <div className="text-sm text-muted-foreground">
-          With {session.trainer} • {session.date} • {session.time}
+    <div className={`p-4 ${bgClass} rounded-lg`}>
+      <div className="flex flex-col sm:flex-row justify-between gap-3">
+        <div className="space-y-1">
+          <h3 className="font-medium">{session.name}</h3>
+          <div className="text-sm text-muted-foreground">
+            With {session.trainer} • {session.date} • {session.time}
+          </div>
+          {session.price && (
+            <div className="text-sm font-medium">
+              €{session.price}
+            </div>
+          )}
+          {session.attendees !== undefined && session.maxAttendees && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Users className="h-3.5 w-3.5 mr-1" />
+              <span>{session.attendees}/{session.maxAttendees} attending</span>
+            </div>
+          )}
         </div>
-        {session.price && (
-          <div className="text-sm font-medium mt-1">
-            €{session.price}
-          </div>
-        )}
-        {session.attendees !== undefined && session.maxAttendees && (
-          <div className="flex items-center mt-1 text-sm text-muted-foreground">
-            <Users className="h-3.5 w-3.5 mr-1" />
-            <span>{session.attendees}/{session.maxAttendees} attending</span>
-          </div>
-        )}
-      </div>
-      <div className="flex flex-wrap items-center gap-2">
-        {session.status === 'registered' ? (
-          <>
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-              Registered
-            </Badge>
-            <Button variant="outline" size="sm" className="flex items-center">
-              <CalendarCheck className="h-3.5 w-3.5 mr-1" />
-              <span className="hidden sm:inline">Add to Calendar</span>
-              <span className="sm:hidden">Calendar</span>
-            </Button>
-          </>
-        ) : (
-          <>
-            {featured && (
-              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                Premium
+        <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+          {session.status === 'registered' ? (
+            <>
+              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                Registered
               </Badge>
-            )}
-            <Button 
-              variant="secondary"
-              size="sm" 
-              className="flex items-center" 
-              onClick={() => onRegister(session)}
-            >
-              <CreditCard className="h-3.5 w-3.5 mr-1" />
-              <span className="hidden sm:inline">Register</span>
-              <span className="sm:hidden">Register</span>
-            </Button>
-          </>
-        )}
+              <Button variant="outline" size="sm" className="flex items-center">
+                <CalendarCheck className="h-3.5 w-3.5 mr-1" />
+                <span className="hidden sm:inline">Add to Calendar</span>
+                <span className="sm:hidden">Calendar</span>
+              </Button>
+            </>
+          ) : (
+            <>
+              {featured && (
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  Premium
+                </Badge>
+              )}
+              <Button 
+                variant="secondary"
+                size="sm" 
+                className="flex items-center" 
+                onClick={() => onRegister(session)}
+              >
+                <CreditCard className="h-3.5 w-3.5 mr-1" />
+                Register
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
