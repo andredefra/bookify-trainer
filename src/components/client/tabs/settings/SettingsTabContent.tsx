@@ -33,60 +33,88 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
   }, [activeSection]);
 
   return (
-    <Card className="border shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Settings</CardTitle>
-        <CardDescription>
-          Manage your account settings and preferences
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="border-b mb-6">
-            <ScrollArea className="pb-2">
-              <TabsList className="h-auto inline-flex flex-wrap gap-2 bg-transparent p-0">
-                <TabsTrigger value="account" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  Account
-                </TabsTrigger>
-                <TabsTrigger value="payments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  Payments
-                </TabsTrigger>
-                <TabsTrigger value="preferences" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  Preferences
-                </TabsTrigger>
-                <TabsTrigger value="integrations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  Integrations
-                </TabsTrigger>
-                <TabsTrigger value="notifications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                  Notifications
-                </TabsTrigger>
-              </TabsList>
-            </ScrollArea>
+    <div className="flex flex-col md:flex-row md:gap-6 bg-white rounded-lg border shadow-sm">
+      {/* Sidebar navigation */}
+      <div className="w-full md:w-64 border-b md:border-b-0 md:border-r md:min-h-[70vh]">
+        <div className="p-4 md:p-6 border-b">
+          <h2 className="text-xl font-semibold">Settings</h2>
+          <p className="text-sm text-muted-foreground">
+            Manage your account settings
+          </p>
+        </div>
+        <ScrollArea className="h-full max-h-[calc(100vh-14rem)]">
+          <div className="flex md:flex-col divide-x md:divide-x-0 md:divide-y overflow-x-auto md:overflow-x-visible">
+            <button
+              onClick={() => setActiveTab("account")}
+              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+                activeTab === "account" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
+              } md:border-l-2 md:border-transparent whitespace-nowrap`}
+            >
+              <span className="flex-1">Account</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("payments")}
+              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+                activeTab === "payments" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
+              } md:border-l-2 md:border-transparent whitespace-nowrap`}
+            >
+              <span className="flex-1">Payments</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("preferences")}
+              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+                activeTab === "preferences" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
+              } md:border-l-2 md:border-transparent whitespace-nowrap`}
+            >
+              <span className="flex-1">Preferences</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("integrations")}
+              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+                activeTab === "integrations" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
+              } md:border-l-2 md:border-transparent whitespace-nowrap`}
+            >
+              <span className="flex-1">Integrations</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("notifications")}
+              className={`flex items-center p-4 hover:bg-muted/50 transition-colors ${
+                activeTab === "notifications" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
+              } md:border-l-2 md:border-transparent whitespace-nowrap`}
+            >
+              <span className="flex-1">Notifications</span>
+            </button>
           </div>
-          
-          <div>
-            <TabsContent value="account" className="mt-0">
-              <AccountSection user={user} />
-            </TabsContent>
-            
-            <TabsContent value="payments" className="mt-0">
-              <PaymentsSection />
-            </TabsContent>
-            
-            <TabsContent value="preferences" className="mt-0">
-              <PreferencesSection goals={goals} />
-            </TabsContent>
-            
-            <TabsContent value="integrations" className="mt-0">
-              <IntegrationsSection user={user} />
-            </TabsContent>
-            
-            <TabsContent value="notifications" className="mt-0">
-              <NotificationsSection />
-            </TabsContent>
-          </div>
-        </Tabs>
-      </CardContent>
-    </Card>
+        </ScrollArea>
+      </div>
+      
+      {/* Content area */}
+      <div className="flex-1 p-4 md:p-6 overflow-auto">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold">
+            {activeTab === "account" && "Account Settings"}
+            {activeTab === "payments" && "Payment Settings"}
+            {activeTab === "preferences" && "Preferences"}
+            {activeTab === "integrations" && "App Integrations"}
+            {activeTab === "notifications" && "Notification Settings"}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {activeTab === "account" && "Manage your personal information"}
+            {activeTab === "payments" && "Manage your payment methods"}
+            {activeTab === "preferences" && "Customize your fitness goals and preferences"}
+            {activeTab === "integrations" && "Connect with your favorite fitness apps"}
+            {activeTab === "notifications" && "Choose which notifications you want to receive"}
+          </p>
+        </div>
+        
+        <div className="space-y-6">
+          {activeTab === "account" && <AccountSection user={user} />}
+          {activeTab === "payments" && <PaymentsSection />}
+          {activeTab === "preferences" && <PreferencesSection goals={goals} />}
+          {activeTab === "integrations" && <IntegrationsSection user={user} />}
+          {activeTab === "notifications" && <NotificationsSection />}
+        </div>
+      </div>
+    </div>
   );
 }

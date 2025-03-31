@@ -14,6 +14,8 @@ interface SettingsTabProps {
 
 export function SettingsTab({ user, goals, activeSection }: SettingsTabProps) {
   return (
-    <SettingsTabContent user={user} goals={goals} activeSection={activeSection} />
+    <div className="space-y-4">
+      <SettingsTabContent user={user} goals={goals} activeSection={activeSection} />
+    </div>
   );
 }

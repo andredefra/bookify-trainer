@@ -5,13 +5,15 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Bell, Mail, Calendar, MessageSquare, Tag } from "lucide-react";
 
 export function NotificationsSection() {
   const [notifications, setNotifications] = useState({
     email: true,
     session: true,
     workout: true,
-    marketing: false
+    marketing: false,
+    messages: true
   });
 
   const handleToggle = (key: keyof typeof notifications) => {
@@ -27,69 +29,99 @@ export function NotificationsSection() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h3 className="text-lg font-medium">Notification Preferences</h3>
-        <p className="text-sm text-muted-foreground">
-          Choose which notifications you'd like to receive
-        </p>
-      </div>
-      
-      <Card className="border shadow-sm">
-        <div className="p-4 space-y-4">
-          <div className="flex flex-col space-y-4">
-            <div className="flex items-start justify-between space-y-0">
-              <div className="space-y-0.5">
-                <Label className="text-base" htmlFor="email-notifications">Email Notifications</Label>
-                <p className="text-sm text-muted-foreground">Receive emails about your account</p>
-              </div>
-              <Switch 
-                id="email-notifications" 
-                checked={notifications.email}
-                onCheckedChange={() => handleToggle('email')}
-              />
+      <Card className="border shadow-sm overflow-hidden">
+        <div className="divide-y">
+          <div className="p-5 flex items-start space-x-4">
+            <div className="bg-primary/10 p-2 rounded-full">
+              <Mail className="h-5 w-5 text-primary" />
             </div>
-            
-            <div className="flex items-start justify-between space-y-0">
-              <div className="space-y-0.5">
-                <Label className="text-base" htmlFor="session-reminders">Session Reminders</Label>
-                <p className="text-sm text-muted-foreground">Get reminded about upcoming sessions</p>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium" htmlFor="email-notifications">Email Notifications</Label>
+                <Switch 
+                  id="email-notifications" 
+                  checked={notifications.email}
+                  onCheckedChange={() => handleToggle('email')}
+                />
               </div>
-              <Switch 
-                id="session-reminders" 
-                checked={notifications.session}
-                onCheckedChange={() => handleToggle('session')}
-              />
+              <p className="text-sm text-muted-foreground">Receive emails about your account activity</p>
             </div>
-            
-            <div className="flex items-start justify-between space-y-0">
-              <div className="space-y-0.5">
-                <Label className="text-base" htmlFor="workout-notifications">Workout Notifications</Label>
-                <p className="text-sm text-muted-foreground">Daily workout reminders</p>
-              </div>
-              <Switch 
-                id="workout-notifications" 
-                checked={notifications.workout}
-                onCheckedChange={() => handleToggle('workout')}
-              />
+          </div>
+          
+          <div className="p-5 flex items-start space-x-4">
+            <div className="bg-primary/10 p-2 rounded-full">
+              <Calendar className="h-5 w-5 text-primary" />
             </div>
-            
-            <div className="flex items-start justify-between space-y-0">
-              <div className="space-y-0.5">
-                <Label className="text-base" htmlFor="marketing-notifications">Marketing</Label>
-                <p className="text-sm text-muted-foreground">Receive promotions and news</p>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium" htmlFor="session-reminders">Session Reminders</Label>
+                <Switch 
+                  id="session-reminders" 
+                  checked={notifications.session}
+                  onCheckedChange={() => handleToggle('session')}
+                />
               </div>
-              <Switch 
-                id="marketing-notifications" 
-                checked={notifications.marketing}
-                onCheckedChange={() => handleToggle('marketing')}
-              />
+              <p className="text-sm text-muted-foreground">Get reminded about upcoming training sessions</p>
+            </div>
+          </div>
+          
+          <div className="p-5 flex items-start space-x-4">
+            <div className="bg-primary/10 p-2 rounded-full">
+              <Bell className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium" htmlFor="workout-notifications">Workout Reminders</Label>
+                <Switch 
+                  id="workout-notifications" 
+                  checked={notifications.workout}
+                  onCheckedChange={() => handleToggle('workout')}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">Daily reminders to complete your workout plan</p>
+            </div>
+          </div>
+          
+          <div className="p-5 flex items-start space-x-4">
+            <div className="bg-primary/10 p-2 rounded-full">
+              <MessageSquare className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium" htmlFor="message-notifications">Message Alerts</Label>
+                <Switch 
+                  id="message-notifications" 
+                  checked={notifications.messages}
+                  onCheckedChange={() => handleToggle('messages')}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">Get notified when you receive new messages</p>
+            </div>
+          </div>
+          
+          <div className="p-5 flex items-start space-x-4">
+            <div className="bg-primary/10 p-2 rounded-full">
+              <Tag className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium" htmlFor="marketing-notifications">Marketing</Label>
+                <Switch 
+                  id="marketing-notifications" 
+                  checked={notifications.marketing}
+                  onCheckedChange={() => handleToggle('marketing')}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">Receive promotions, news and updates</p>
             </div>
           </div>
         </div>
       </Card>
       
-      <div className="flex justify-start">
-        <Button onClick={handleSaveNotifications}>Save Preferences</Button>
+      <div className="flex justify-end">
+        <Button onClick={handleSaveNotifications} className="px-6">
+          Save Preferences
+        </Button>
       </div>
     </div>
   );
