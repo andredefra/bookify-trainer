@@ -35,7 +35,7 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
   const [showVideoSessionDialog, setShowVideoSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   
-  // Add payment status and waiting list to mock data if not available
+  // Enhanced mock data with a clearly visible video session
   const sessionsWithPaymentInfo = upcomingSessions.map(session => ({
     ...session,
     waitingList: session.waitingList || 0,
@@ -44,9 +44,9 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
       pending: Math.floor(Math.random() * session.participants),
       get total() { return this.paid + this.pending; }
     },
-    // Ensure at least one video session
-    mode: session.id === 5 ? 'video' : (session.mode || 'in-person'),
-    status: session.id === 5 ? 'scheduled' : (session.status || 'scheduled')
+    // Ensure we have a video session that's highly visible (putting it first in the list)
+    mode: session.id === 1 ? 'video' : (session.mode || 'in-person'),
+    status: session.id === 1 ? 'scheduled' : (session.status || 'scheduled')
   }));
   
   const handleViewSessionDetails = (session: TrainerSessionItem) => {
