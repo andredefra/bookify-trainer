@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Users } from 'lucide-react';
+import { CheckCircle2, Users, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -28,6 +28,12 @@ const PricingSection = () => {
     };
   }, []);
 
+  const standardFeatures = [
+    t('pricing.features.personalTrainerPage'),
+    t('pricing.features.clientMessaging'),
+    t('pricing.features.clientManagement'),
+  ];
+  
   const freemiumFeatures = [
     t('pricing.features.unlimitedSessions'),
     t('pricing.features.personalTrainerPage'),
@@ -82,7 +88,37 @@ const PricingSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {/* Standard Plan */}
+          <div className="reveal flex flex-col p-8 rounded-2xl border border-border bg-white shadow-sm">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-primary mb-2">Standard</h3>
+              <div className="flex items-baseline mb-1">
+                <span className="text-4xl font-display font-bold">€5</span>
+                <span className="text-muted-foreground ml-2">{t('pricing.freemium.period')}</span>
+              </div>
+              <p className="text-muted-foreground">
+                {t('pricing.freemium.fee')}
+              </p>
+            </div>
+
+            <ul className="space-y-3 mb-8 flex-grow">
+              {standardFeatures.map((feature, index) => (
+                <li key={index} className="flex items-start">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Link 
+              to="/register?plan=standard" 
+              className="w-full px-6 py-3 bg-white text-primary border border-primary/20 rounded-full text-center font-medium button-hover"
+            >
+              {t('pricing.freemium.cta')}
+            </Link>
+          </div>
+          
           {/* Basic Plan (formerly Freemium) */}
           <div className="reveal flex flex-col p-8 rounded-2xl border border-border bg-white shadow-sm">
             <div className="mb-6">

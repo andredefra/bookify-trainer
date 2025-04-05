@@ -1,8 +1,23 @@
 
-import { CheckCircle2, Users } from "lucide-react";
+import { CheckCircle2, Users, Briefcase } from "lucide-react";
 import { Plan } from "./types";
 
 export const plans: Plan[] = [
+  {
+    id: "standard",
+    name: "Standard",
+    price: "€5",
+    period: "per month",
+    description: "Essential features for beginners without sessions.",
+    features: [
+      "Personal Trainer Page",
+      "Client Messaging",
+      "Client Management"
+    ],
+    limitations: [],
+    isPopular: false,
+    icon: Briefcase
+  },
   {
     id: "freemium",
     name: "Basic",

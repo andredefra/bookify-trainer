@@ -1,3 +1,4 @@
+
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -73,6 +74,11 @@ export const en = {
   'pricing.monthly': 'Monthly',
   'pricing.annual': 'Annual',
   'pricing.save': 'Save 15%',
+  'pricing.standard.title': 'Standard',
+  'pricing.standard.price': '€5',
+  'pricing.standard.period': '/month',
+  'pricing.standard.fee': 'No transaction fees',
+  'pricing.standard.cta': 'Start with Standard',
   'pricing.freemium.title': 'Basic',
   'pricing.freemium.price': '€9',
   'pricing.freemium.period': '/month',
