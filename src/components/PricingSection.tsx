@@ -153,7 +153,7 @@ const PricingSection = () => {
         </div>
         
         {/* Gym Plan - Separate section with different styling */}
-        <div className="mt-20 pt-12 border-t border-gray-100">
+        <div id="gym-pricing" className="mt-20 pt-12 border-t border-gray-100">
           <h3 className="text-2xl font-display font-bold text-center mb-6 reveal">
             {t('pricing.forGyms')}
           </h3>
