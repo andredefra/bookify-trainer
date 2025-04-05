@@ -15,6 +15,7 @@ import TrainerProfile from "./pages/TrainerProfile";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import ClientDashboard from "./pages/ClientDashboard";
+import GymDashboard from "./pages/GymDashboard";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
@@ -75,6 +76,7 @@ const App = () => {
               <Route path="/trainer/:id" element={<TrainerProfile />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/client-dashboard" element={<ClientDashboard />} />
+              <Route path="/gym-dashboard" element={<GymDashboard />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/cookies" element={<Cookies />} />

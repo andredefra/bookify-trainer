@@ -1,0 +1,65 @@
+
+import { useState, useEffect } from "react";
+import { GymHeader } from "./GymHeader";
+import { GymSidebar } from "./GymSidebar";
+import { OverviewTab } from "./tabs/OverviewTab";
+import { TrainersTab } from "./tabs/TrainersTab";
+import { MembersTab } from "./tabs/MembersTab";
+import { AnalyticsTab } from "./tabs/AnalyticsTab";
+import { SettingsTab } from "./tabs/SettingsTab";
+
+export function GymDashboardContainer() {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [user, setUser] = useState<{
+    name?: string;
+    email: string;
+    type: string;
+    plan?: string;
+    profileImage?: string;
+    gymName?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('demo-user');
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      // For demo purpose, add a gym name if not present
+      if (!parsedUser.gymName) {
+        parsedUser.gymName = "FitLife Gym";
+      }
+      setUser(parsedUser);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // Logout handled by GymHeader component
+  };
+
+  return (
+    <div className="flex flex-col h-screen bg-background">
+      <GymHeader 
+        user={user} 
+        onLogout={handleLogout}
+        onMobileMenuClick={() => setShowSidebar(true)} 
+      />
+      
+      <div className="flex-1 flex overflow-hidden">
+        <GymSidebar 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
+        />
+        
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
+          {activeTab === "overview" && <OverviewTab user={user} />}
+          {activeTab === "trainers" && <TrainersTab />}
+          {activeTab === "members" && <MembersTab />}
+          {activeTab === "analytics" && <AnalyticsTab />}
+          {activeTab === "settings" && <SettingsTab user={user} />}
+        </main>
+      </div>
+    </div>
+  );
+}
