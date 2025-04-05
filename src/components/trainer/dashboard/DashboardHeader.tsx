@@ -91,7 +91,7 @@ export function DashboardHeader({
                 <Menu className="h-5 w-5" />
               </Button>
             )}
-            <span className="font-display text-xl font-bold text-primary">MyPersonal.ai</span>
+            <span className="font-display text-xl font-bold text-primary">MyPersonal.fit</span>
           </div>
           
           <HeaderActions
@@ -110,3 +110,4 @@ export function DashboardHeader({
     </header>
   );
 }
+
