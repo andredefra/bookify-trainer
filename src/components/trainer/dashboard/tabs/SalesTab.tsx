@@ -5,6 +5,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { Card, CardContent } from "@/components/ui/card";
 import { SalesKanban } from "./sales/SalesKanban";
 import { SalesMetrics } from "./sales/SalesMetrics";
+import { SalesTimeAnalytics } from "./sales/SalesTimeAnalytics";
 import { AddLeadDialog } from "./sales/AddLeadDialog";
 import { SalesHeader } from "./sales/SalesHeader";
 import { useSalesContacts } from "./sales/useSalesContacts";
@@ -25,6 +26,12 @@ export function SalesTab() {
       <Card>
         <SalesHeader onAddLead={() => setShowAddLeadDialog(true)} />
         <CardContent>
+          {/* Time-based Analytics */}
+          <div className="mb-6">
+            <SalesTimeAnalytics contacts={contacts} />
+          </div>
+          
+          {/* Client and Prospect Metrics */}
           {(clientContacts.length > 0 || prospectContacts.length > 0) && (
             <div className="mb-4">
               <SalesMetrics clients={clientContacts} prospects={prospectContacts} />
