@@ -19,7 +19,9 @@ const ScrollArea = React.forwardRef<
       {children}
     </ScrollAreaPrimitive.Viewport>
     {orientation === "vertical" || orientation === "both" ? <ScrollBar /> : null}
-    {orientation === "horizontal" || orientation === "both" ? <ScrollBar orientation="horizontal" /> : null}
+    {orientation === "horizontal" || orientation === "both" ? (
+      <ScrollBar orientation="horizontal" />
+    ) : null}
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
 ))
@@ -37,7 +39,7 @@ const ScrollBar = React.forwardRef<
       orientation === "vertical" &&
         "h-full w-2.5 border-l border-l-transparent p-[1px]",
       orientation === "horizontal" &&
-        "h-2.5 border-t border-t-transparent p-[1px]",
+        "h-3 border-t border-t-transparent p-[1px] mt-1", // Increased height and added margin top
       className
     )}
     {...props}
@@ -45,7 +47,7 @@ const ScrollBar = React.forwardRef<
     <ScrollAreaPrimitive.ScrollAreaThumb 
       className={cn(
         "relative flex-1 rounded-full bg-border",
-        orientation === "horizontal" && "h-1.5"  // Makes horizontal scrollbar more visible
+        orientation === "horizontal" && "h-1.5" 
       )} 
     />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>

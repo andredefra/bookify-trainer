@@ -106,7 +106,7 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     const data = mockTimeSeriesData[timeFrame];
     
     return (
-      <BarChart data={data} margin={{ right: 10, left: 0 }}>
+      <BarChart data={data} margin={{ right: 10, left: 0, bottom: 10 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis 
           dataKey="name" 
@@ -142,8 +142,8 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   return (
     <div className="w-full h-[500px] mt-4">
       {isMobile ? (
-        <ScrollArea className="h-full w-full overflow-visible" orientation="horizontal">
-          <div className="h-full min-w-[800px]">
+        <ScrollArea className="h-full w-full overflow-visible pb-4" orientation="horizontal">
+          <div className="h-[94%] min-w-[800px]">
             {chartContent}
           </div>
         </ScrollArea>
