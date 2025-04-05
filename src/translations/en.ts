@@ -67,6 +67,25 @@ export const en = {
   'howItWorks.cta.description': 'Join thousands of personal trainers who have simplified their scheduling and increased their revenue.',
   'howItWorks.cta.button': 'Get Started for Free',
   
+  // Gym Section
+  'gym.title': 'A Complete Solution for Gyms',
+  'gym.subtitle': 'Empower your fitness center with a comprehensive management platform',
+  'gym.mainFeature': 'Seamless Integration for Your Entire Facility',
+  'gym.mainDescription': 'Our gym solution provides centralized management for all your trainers, clients, and services. Increase operational efficiency while providing a premium experience to your members.',
+  'gym.feature1.title': 'Multiple Trainer Management',
+  'gym.feature1.description': 'Manage all your trainers from a single administrative dashboard with simplified reporting.',
+  'gym.feature2.title': 'Performance Analytics',
+  'gym.feature2.description': 'Get detailed insights on class attendance, trainer performance, and member engagement.',
+  'gym.feature3.title': 'Equipment Tracking',
+  'gym.feature3.description': 'Monitor equipment usage, maintenance schedules, and member preferences.',
+  'gym.benefit1.title': 'Increase Revenue',
+  'gym.benefit1.description': 'Boost session bookings, improve trainer utilization, and enhance membership value.',
+  'gym.benefit2.title': 'Staff Development',
+  'gym.benefit2.description': 'Track trainer certifications, client satisfaction scores, and growth opportunities.',
+  'gym.benefit3.title': 'Member Retention',
+  'gym.benefit3.description': 'Improve the client experience with personalized programs and seamless communication.',
+  'gym.cta': 'See Gym Pricing Plan',
+
   // Pricing
   'pricing.title': 'Simple, Transparent Pricing',
   'pricing.subtitle': 'Choose the plan that works best for your business. No hidden fees or long-term commitments.',

@@ -66,6 +66,25 @@ export const it = {
   'howItWorks.cta.title': 'Pronto a trasformare la tua attività di training?',
   'howItWorks.cta.description': 'Unisciti a migliaia di personal trainer che hanno semplificato la loro programmazione e aumentato le entrate.',
   'howItWorks.cta.button': 'Inizia Gratuitamente',
+
+  // Gym Section
+  'gym.title': 'Una Soluzione Completa per le Palestre',
+  'gym.subtitle': 'Potenzia il tuo centro fitness con una piattaforma di gestione completa',
+  'gym.mainFeature': 'Integrazione Perfetta per Tutta la Tua Struttura',
+  'gym.mainDescription': 'La nostra soluzione per palestre offre una gestione centralizzata per tutti i tuoi trainer, clienti e servizi. Aumenta l\'efficienza operativa offrendo un\'esperienza premium ai tuoi membri.',
+  'gym.feature1.title': 'Gestione di Più Trainer',
+  'gym.feature1.description': 'Gestisci tutti i tuoi trainer da un\'unica dashboard amministrativa con reportistica semplificata.',
+  'gym.feature2.title': 'Analisi delle Prestazioni',
+  'gym.feature2.description': 'Ottieni informazioni dettagliate sulla partecipazione ai corsi, le prestazioni dei trainer e il coinvolgimento dei membri.',
+  'gym.feature3.title': 'Monitoraggio Attrezzature',
+  'gym.feature3.description': 'Monitora l\'utilizzo delle attrezzature, i programmi di manutenzione e le preferenze dei membri.',
+  'gym.benefit1.title': 'Aumenta i Ricavi',
+  'gym.benefit1.description': 'Incrementa le prenotazioni di sessioni, migliora l\'utilizzo dei trainer e valorizza l\'abbonamento.',
+  'gym.benefit2.title': 'Sviluppo del Personale',
+  'gym.benefit2.description': 'Monitora le certificazioni dei trainer, i punteggi di soddisfazione dei clienti e le opportunità di crescita.',
+  'gym.benefit3.title': 'Fidelizzazione dei Membri',
+  'gym.benefit3.description': 'Migliora l\'esperienza del cliente con programmi personalizzati e comunicazione semplice.',
+  'gym.cta': 'Vedi Piano Prezzi per Palestre',
   
   // Pricing
   'pricing.title': 'Prezzi Semplici e Trasparenti',
