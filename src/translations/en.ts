@@ -1,4 +1,3 @@
-
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -71,6 +70,7 @@ export const en = {
   'gym.title': 'We Also Have a Solution for Gyms',
   'gym.subtitle': 'Empower your trainers with a complete platform that allows you to track all your trainers\' performance, reduce costs and time to manage them and collect their data while providing a better experience to your clients',
   'gym.mainFeature': 'Seamless Integration for Your Entire Facility',
+  'gym.clientConnection': 'Gyms can invite their clients to connect directly with personal trainers, facilitating valuable relationships that enhance member experience and retention while generating additional revenue streams.',
   'gym.mainDescription': 'Our gym solution provides centralized management for all your trainers, clients, and services. Increase operational efficiency while providing a premium experience to your members.',
   'gym.feature1.title': 'Multiple Trainer Management',
   'gym.feature1.description': 'Manage all your trainers from a single administrative dashboard with simplified reporting.',

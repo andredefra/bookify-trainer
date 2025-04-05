@@ -33,7 +33,7 @@ const GymSection = () => {
           <h2 className="reveal text-3xl md:text-4xl font-display font-bold tracking-tight text-gray-800 mb-6">
             {t('gym.title')}
           </h2>
-          <p className="reveal reveal-delay-1 text-lg text-muted-foreground">
+          <p className="reveal reveal-delay-1 text-muted-foreground">
             {t('gym.subtitle')}
           </p>
         </div>
@@ -52,7 +52,7 @@ const GymSection = () => {
           </div>
           <div className="flex flex-col justify-center">
             <h3 className="reveal text-2xl font-semibold text-gray-800 mb-4">{t('gym.mainFeature')}</h3>
-            <p className="reveal reveal-delay-1 text-muted-foreground mb-6">{t('gym.mainDescription')}</p>
+            <p className="reveal reveal-delay-1 text-muted-foreground mb-6">{t('gym.clientConnection')}</p>
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
                 <div key={i} className={`reveal reveal-delay-${i} flex items-start`}>

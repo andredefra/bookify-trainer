@@ -1,4 +1,3 @@
-
 export const it = {
   // Navigation
   'nav.home': 'Home',
@@ -71,6 +70,7 @@ export const it = {
   'gym.title': 'Abbiamo una Soluzione anche per le Palestre',
   'gym.subtitle': 'Potenzia i tuoi trainer con una piattaforma completa che ti permette di tenere traccia di tutte le performance dei tuoi trainer, riduce i costi e il tempo per gestirli e prendere loro i dati e dà una esperienza migliore ai tuoi clienti',
   'gym.mainFeature': 'Integrazione Perfetta per Tutta la Tua Struttura',
+  'gym.clientConnection': 'Le palestre possono invitare i propri clienti a mettersi in contatto direttamente con i personal trainer, facilitando relazioni preziose che migliorano l\'esperienza e la fidelizzazione dei membri, generando ulteriori flussi di entrate.',
   'gym.mainDescription': 'La nostra soluzione per palestre offre una gestione centralizzata per tutti i tuoi trainer, clienti e servizi. Aumenta l\'efficienza operativa offrendo un\'esperienza premium ai tuoi membri.',
   'gym.feature1.title': 'Gestione di Più Trainer',
   'gym.feature1.description': 'Gestisci tutti i tuoi trainer da un\'unica dashboard amministrativa con reportistica semplificata.',
