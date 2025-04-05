@@ -7,6 +7,8 @@ import { StatusSelector } from "./header/StatusSelector";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { HeaderActions } from "./header/HeaderActions";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface DashboardHeaderProps {
   name: string;
@@ -27,6 +29,7 @@ export function DashboardHeader({
   // State to track current status
   const [status, setStatus] = useState<"online" | "in-session" | "offline">("online");
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const navigate = useNavigate();
 
   // Load status from localStorage on component mount
   useEffect(() => {
@@ -64,6 +67,20 @@ export function DashboardHeader({
     }
   };
 
+  const handleLogout = () => {
+    // Clear user data
+    localStorage.removeItem('demo-user');
+    
+    // Show success toast
+    toast.success("Logged out successfully!");
+    
+    // Execute the passed onLogout function
+    onLogout();
+    
+    // Navigate to the landing page
+    navigate('/');
+  };
+
   return (
     <header className="bg-white border-b border-border shadow-sm">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -77,43 +94,17 @@ export function DashboardHeader({
             <span className="font-display text-xl font-bold text-primary">MyPersonal.ai</span>
           </div>
           
-          <div className="flex items-center space-x-4">
-            {/* Status Selector */}
-            <div className="hidden md:block">
-              <StatusSelector initialStatus={status} />
-            </div>
-            
-            <Button variant="ghost" size="icon" className="text-muted-foreground">
-              <Bell className="h-5 w-5" />
-            </Button>
-            
-            <div className="hidden md:flex items-center space-x-2">
-              <Badge variant="secondary" className="bg-primary/10 text-primary">
-                Trainer
-              </Badge>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <Avatar className="h-8 w-8 border border-primary/10">
-                  <AvatarImage src={defaultImage} alt={name} />
-                  <AvatarFallback className="bg-primary/10 text-primary">
-                    {name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                {/* Status indicator circle */}
-                <Circle className={`absolute -bottom-1 -right-1 h-3 w-3 ${getStatusColor()} border-2 border-white rounded-full`} />
-              </div>
-              <div className="hidden md:block">
-                <p className="text-sm font-medium leading-none">{name}</p>
-                <p className="text-xs text-muted-foreground">Pro Account</p>
-              </div>
-            </div>
-            
-            <Button variant="outline" size="sm" onClick={onLogout}>
-              {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
-            </Button>
-          </div>
+          <HeaderActions
+            displayName={name}
+            status={status}
+            onLogout={handleLogout}
+            user={{
+              name,
+              email: `${name.toLowerCase()}@example.com`,
+              type: "trainer",
+              plan: "pro"
+            }}
+          />
         </div>
       </div>
     </header>

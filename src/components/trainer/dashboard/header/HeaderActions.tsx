@@ -5,6 +5,7 @@ import { UserProfile } from "./UserProfile";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
+import { toast } from "sonner";
 
 interface HeaderActionsProps {
   displayName: string;
@@ -26,6 +27,9 @@ export function HeaderActions({ displayName, status, user, onLogout }: HeaderAct
   const handleLogout = () => {
     // Clear any user data from localStorage if present
     localStorage.removeItem('demo-user');
+    
+    // Show success toast
+    toast.success("Logged out successfully!");
     
     // Execute the passed onLogout function if available
     if (onLogout) {
