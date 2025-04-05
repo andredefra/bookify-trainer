@@ -2,6 +2,7 @@
 import { useDrop } from "react-dnd";
 import { SalesContact } from "./types";
 import { SalesCard } from "./SalesCard";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface SalesColumnProps {
   title: string;
@@ -18,6 +19,8 @@ export function SalesColumn({
   onMoveContact,
   onUpdateContact
 }: SalesColumnProps) {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'contact',
     drop: (item: { id: string }) => {
@@ -31,17 +34,17 @@ export function SalesColumn({
   return (
     <div 
       ref={drop} 
-      className={`w-[300px] flex flex-col rounded-md ${isOver ? 'bg-muted/80' : 'bg-muted/30'}`}
+      className={`${isMobile ? 'w-[240px]' : 'w-[300px]'} flex flex-col rounded-md ${isOver ? 'bg-muted/80' : 'bg-muted/30'}`}
     >
       <div className="p-3 font-medium border-b bg-muted/50 sticky top-0 z-10 rounded-t-md flex justify-between items-center">
-        <span className="text-sm font-semibold">{title}</span>
+        <span className={`text-sm font-semibold ${isMobile ? 'text-xs' : 'text-sm'}`}>{title}</span>
         <span className="text-xs font-normal px-2 py-1 bg-background rounded-full">
           {contacts.length}
         </span>
       </div>
       
-      <div className="flex-1 p-2">
-        <div className="flex flex-col gap-3">
+      <div className={`flex-1 ${isMobile ? 'p-1.5' : 'p-2'}`}>
+        <div className={`flex flex-col ${isMobile ? 'gap-2' : 'gap-3'}`}>
           {contacts.map(contact => (
             <SalesCard 
               key={contact.id} 

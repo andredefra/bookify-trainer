@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { SalesContact } from "./types";
 import { SalesColumn } from "./SalesColumn";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface SalesKanbanProps {
   contacts: SalesContact[];
@@ -11,6 +12,8 @@ interface SalesKanbanProps {
 }
 
 export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesKanbanProps) {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
   // Organize contacts by status
   const grouped: Record<SalesContact['status'], SalesContact[]> = {
     lead: [],
@@ -27,7 +30,7 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesK
   return (
     <div className="w-full h-[calc(100vh-200px)] flex flex-col overflow-hidden bg-background/50 rounded-md border">
       <ScrollArea className="w-full h-full" orientation="both">
-        <div className="flex gap-4 p-3 min-w-max h-full">
+        <div className={`flex gap-3 p-3 min-w-max h-full ${isMobile ? 'gap-2 p-2' : 'gap-4 p-3'}`}>
           <SalesColumn 
             title="Lead" 
             contacts={grouped.lead} 
