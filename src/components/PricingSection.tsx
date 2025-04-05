@@ -67,8 +67,8 @@ const PricingSection = () => {
     t('pricing.features.gymIntegration'),
   ];
 
-  // Plans configuration
-  const pricingPlans = [
+  // Plans configuration for personal trainers
+  const trainerPricingPlans = [
     {
       name: t('pricing.standard.title'),
       price: t('pricing.standard.price'),
@@ -103,19 +103,21 @@ const PricingSection = () => {
       ctaLink: '/register?plan=pro',
       isPopular: true,
       isGymPlan: false
-    },
-    {
-      name: t('pricing.gym.title'),
-      price: annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price'),
-      period: t('pricing.gym.period'),
-      fee: t('pricing.gym.fee'),
-      features: gymFeatures,
-      ctaText: t('pricing.gym.cta'),
-      ctaLink: '/register?plan=gym',
-      isPopular: false,
-      isGymPlan: true
     }
   ];
+
+  // Gym plan configuration (separate)
+  const gymPlan = {
+    name: t('pricing.gym.title'),
+    price: annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price'),
+    period: t('pricing.gym.period'),
+    fee: t('pricing.gym.fee'),
+    features: gymFeatures,
+    ctaText: t('pricing.gym.cta'),
+    ctaLink: '/register?plan=gym',
+    isPopular: false,
+    isGymPlan: true
+  };
 
   return (
     <section id="pricing" className="py-24 bg-white">
@@ -130,8 +132,9 @@ const PricingSection = () => {
           onBillingChange={handleBillingChange}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {pricingPlans.map((plan, index) => (
+        {/* Personal Trainer Plans */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {trainerPricingPlans.map((plan, index) => (
             <PlanCard
               key={index}
               name={plan.name}
@@ -147,6 +150,31 @@ const PricingSection = () => {
               Icon={index < plans.length ? plans[index].icon : undefined}
             />
           ))}
+        </div>
+        
+        {/* Gym Plan - Separate section with different styling */}
+        <div className="mt-20 pt-12 border-t border-gray-100">
+          <h3 className="text-2xl font-display font-bold text-center mb-6 reveal">
+            {t('pricing.forGyms')}
+          </h3>
+          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10 reveal reveal-delay-1">
+            {t('pricing.gymPlanDescription')}
+          </p>
+          <div className="max-w-lg mx-auto">
+            <PlanCard
+              name={gymPlan.name}
+              price={gymPlan.price}
+              period={gymPlan.period}
+              fee={gymPlan.fee}
+              features={gymPlan.features}
+              ctaText={gymPlan.ctaText}
+              ctaLink={gymPlan.ctaLink}
+              isPopular={false}
+              isGymPlan={true}
+              isDelayed={false}
+              Icon={plans[3].icon}
+            />
+          </div>
         </div>
 
         <PricingFooter

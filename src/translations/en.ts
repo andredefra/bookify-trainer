@@ -1,3 +1,4 @@
+
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -96,6 +97,8 @@ export const en = {
   'pricing.gym.period': '/month',
   'pricing.gym.fee': '+ 2% transaction fee',
   'pricing.gym.cta': 'Contact for Gym Plan',
+  'pricing.forGyms': 'For Gyms',
+  'pricing.gymPlanDescription': 'Complete solution for gyms with multiple trainers, centralized management and custom branding',
   'pricing.features.unlimitedSessions': 'Unlimited Sessions',
   'pricing.features.googleCalendar': 'Google Calendar Integration',
   'pricing.features.personalTrainerPage': 'Personal Trainer Page',
@@ -109,7 +112,6 @@ export const en = {
   'pricing.features.advancedAnalytics': 'Advanced Analytics',
   'pricing.features.waitlistManagement': 'Waitlist Management',
   'pricing.features.customPrograms': 'Custom Training Programs',
-  'pricing.features.fitnessTracking': 'Fitness Progress Tracking',
   'pricing.features.whiteLabel': 'White Label Platform',
   'pricing.features.unlimitedTrainers': 'Unlimited Trainers',
   'pricing.features.unlimitedClients': 'Unlimited Clients',
