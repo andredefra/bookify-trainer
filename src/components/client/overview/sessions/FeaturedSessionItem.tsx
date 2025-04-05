@@ -37,7 +37,7 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
   const isVideoSession = featuredSession.mode === 'video';
   
   return (
-    <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-lg">
       <div>
         <h3 className="font-medium">
           {featuredSession.name}
