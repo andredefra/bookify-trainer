@@ -84,7 +84,7 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
   const handleJoinSession = (session: SessionItem) => {
     toast({
       title: "Joining Session",
-      description: `Joining ${session.name} with ${session.trainer}`,
+      description: `Joining ${session.name} session with ${session.trainer}`,
       variant: "default",
     });
     
@@ -123,7 +123,7 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
             />
           ))}
 
-          {/* Demo upcoming session that can be joined */}
+          {/* Featured session that is not registered yet and is a video session */}
           <FeaturedSessionItem onRegister={handleRegisterForSession} />
         </div>
         

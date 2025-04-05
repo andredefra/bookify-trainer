@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, CreditCard } from "lucide-react";
+import { Users, CreditCard, Video } from "lucide-react";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 
 interface FeaturedSessionItemProps {
@@ -18,7 +18,8 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
     status: "available",
     price: 35,
     attendees: 12,
-    maxAttendees: 20
+    maxAttendees: 20,
+    mode: "video" // Adding the video mode
   };
   
   const handleRegisterClick = () => {
@@ -32,10 +33,20 @@ export function FeaturedSessionItem({ onRegister }: FeaturedSessionItemProps) {
     ? featuredSession.date.toLocaleDateString() 
     : featuredSession.date;
   
+  // Check if this is a video session
+  const isVideoSession = featuredSession.mode === 'video';
+  
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-lg">
       <div>
-        <h3 className="font-medium">{featuredSession.name}</h3>
+        <h3 className="font-medium">
+          {featuredSession.name}
+          {isVideoSession && (
+            <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-700 border-blue-200">
+              <Video className="h-3 w-3 mr-1" /> Video
+            </Badge>
+          )}
+        </h3>
         <div className="text-sm text-muted-foreground">
           With {featuredSession.trainer} • {formattedDate} • {featuredSession.time}
         </div>
