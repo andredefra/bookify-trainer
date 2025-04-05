@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, CalendarCheck, CreditCard } from "lucide-react";
+import { Users, CalendarCheck, CreditCard, Video } from "lucide-react";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 
 interface SessionCardProps {
@@ -28,10 +28,21 @@ export function SessionCard({
     ? session.date.toLocaleDateString() 
     : session.date;
   
+  // Check if this is a video session
+  const isVideoSession = session.mode === 'video' || 
+    (session.name && session.name.toLowerCase().includes('hiit'));
+  
   return (
     <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
       <div>
-        <h3 className="font-medium">{session.name}</h3>
+        <h3 className="font-medium">
+          {session.name}
+          {isVideoSession && (
+            <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-700 border-blue-200">
+              <Video className="h-3 w-3 mr-1" /> Video
+            </Badge>
+          )}
+        </h3>
         <div className="text-sm text-muted-foreground">
           With {session.trainer} • {formattedDate} • {session.time}
         </div>

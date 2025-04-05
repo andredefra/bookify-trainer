@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, CalendarCheck, CreditCard, Clock, Calendar } from "lucide-react";
+import { Users, CalendarCheck, CreditCard, Clock, Calendar, Video } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
 
 interface MobileSessionCardProps {
@@ -34,12 +34,23 @@ export function MobileSessionCard({
   const formattedDate = session.date instanceof Date 
     ? session.date.toLocaleDateString() 
     : session.date;
+    
+  // Check if this is a video session
+  const isVideoSession = session.mode === 'video' || 
+    (session.name && session.name.toLowerCase().includes('hiit'));
   
   return (
     <div className={`rounded-lg border p-3 ${getBgColor()}`}>
       {/* Session header */}
       <div className="flex justify-between items-start mb-2">
-        <h3 className="font-medium text-base">{session.name}</h3>
+        <div>
+          <h3 className="font-medium text-base">{session.name}</h3>
+          {isVideoSession && (
+            <Badge variant="outline" className="mt-1 bg-blue-100 text-blue-700 border-blue-200">
+              <Video className="h-3 w-3 mr-1" /> Video
+            </Badge>
+          )}
+        </div>
         {session.price && (
           <div className="text-sm font-medium">
             €{session.price}
