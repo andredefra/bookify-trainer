@@ -1,5 +1,5 @@
 
-import { GraduationCap, Users, PieChart, BarChart4, Dumbbell } from 'lucide-react';
+import { GraduationCap, Users, PieChart, BarChart4, Star } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useEffect } from 'react';
 
@@ -59,7 +59,7 @@ const GymSection = () => {
                   <div className="mr-4 bg-gray-100 p-2 rounded-full">
                     {i === 1 ? <Users className="h-5 w-5 text-gray-700" /> : 
                      i === 2 ? <BarChart4 className="h-5 w-5 text-gray-700" /> : 
-                     <Dumbbell className="h-5 w-5 text-gray-700" />}
+                     <Star className="h-5 w-5 text-gray-700" />}
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-800">{t(`gym.feature${i}.title`)}</h4>
