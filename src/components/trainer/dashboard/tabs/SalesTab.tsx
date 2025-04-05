@@ -38,6 +38,11 @@ export function SalesTab() {
             </div>
           )}
           
+          {/* Sales Funnel Title */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Sales Funnel</h3>
+          </div>
+          
           <DndProvider backend={HTML5Backend}>
             <SalesKanban 
               contacts={contacts} 
