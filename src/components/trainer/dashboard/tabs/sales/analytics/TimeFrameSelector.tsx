@@ -12,9 +12,9 @@ export function TimeFrameSelector({
 }: TimeFrameSelectorProps) {
   return (
     <>
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
         <h3 className="text-lg font-semibold">Sales Performance</h3>
-        <TabsList>
+        <TabsList className="flex-wrap justify-center sm:justify-end">
           <TabsTrigger value="day" onClick={() => onTimeFrameChange("day")}>Daily</TabsTrigger>
           <TabsTrigger value="week" onClick={() => onTimeFrameChange("week")}>Weekly</TabsTrigger>
           <TabsTrigger value="month" onClick={() => onTimeFrameChange("month")}>Monthly</TabsTrigger>
@@ -25,7 +25,7 @@ export function TimeFrameSelector({
       </div>
       
       {timeFrame === "custom" && (
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
           <Button 
             variant="outline" 
             size="sm" 
