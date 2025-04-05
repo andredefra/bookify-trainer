@@ -41,8 +41,8 @@ export function SessionList({
           ? session.date.toLocaleDateString() 
           : session.date;
         
-        // Check if this is a video session
-        const isVideo = session.mode === 'video';
+        // Check if this is a video session - ensure it's set for all sessions that should have it
+        const isVideo = session.mode === 'video' || session.name.toLowerCase().includes('hiit');
         // Check if the video session can be started
         const canStartVideo = isVideo && session.status === 'scheduled' && onStartVideoSession;
 
