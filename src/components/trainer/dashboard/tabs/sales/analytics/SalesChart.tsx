@@ -13,6 +13,8 @@ import {
   Cell
 } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 const mockTimeSeriesData = {
   day: [
@@ -73,6 +75,8 @@ const mockTimeSeriesData = {
 };
 
 export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
   const chartConfig = {
     leads: {
       label: "Leads",
@@ -102,7 +106,7 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     const data = mockTimeSeriesData[timeFrame];
     
     return (
-      <BarChart data={data}>
+      <BarChart data={data} margin={{ right: 10, left: 0 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis 
           dataKey="name" 
@@ -127,13 +131,25 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     );
   };
 
+  const chartContent = (
+    <ChartContainer className="h-full" config={chartConfig}>
+      <ResponsiveContainer width="100%" height="100%">
+        {renderTimeframeChart()}
+      </ResponsiveContainer>
+    </ChartContainer>
+  );
+
   return (
     <div className="w-full h-[500px] mt-4">
-      <ChartContainer className="h-full" config={chartConfig}>
-        <ResponsiveContainer width="100%" height="100%">
-          {renderTimeframeChart()}
-        </ResponsiveContainer>
-      </ChartContainer>
+      {isMobile ? (
+        <ScrollArea className="h-full w-full" orientation="horizontal">
+          <div className="h-full" style={{ minWidth: "900px" }}>
+            {chartContent}
+          </div>
+        </ScrollArea>
+      ) : (
+        chartContent
+      )}
     </div>
   );
 }
