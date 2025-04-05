@@ -24,7 +24,7 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
           onCustomPeriodChange={setCustomPeriod}
         />
 
-        <MetricsCards analytics={analytics} />
+        <MetricsCards analytics={analytics} timeFrame={timeFrame} />
 
         <TabsContent value={timeFrame}>
           <SalesChart analytics={analytics} timeFrame={timeFrame} />
