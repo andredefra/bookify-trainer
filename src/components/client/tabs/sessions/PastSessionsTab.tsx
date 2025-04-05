@@ -8,6 +8,14 @@ interface PastSessionsTabProps {
 }
 
 export function PastSessionsTab({ pastSessions }: PastSessionsTabProps) {
+  // Function to format date to string if it's a Date object
+  const formatDate = (date: string | Date): string => {
+    if (date instanceof Date) {
+      return date.toLocaleDateString();
+    }
+    return date;
+  };
+
   return (
     <div className="space-y-4">
       {pastSessions.map((session) => (
@@ -15,7 +23,7 @@ export function PastSessionsTab({ pastSessions }: PastSessionsTabProps) {
           <div>
             <h3 className="font-medium">{session.name}</h3>
             <div className="text-sm text-muted-foreground">
-              With {session.trainer} • {session.date} • {session.time}
+              With {session.trainer} • {formatDate(session.date)} • {session.time}
             </div>
           </div>
           <div className="flex items-center space-x-2">
