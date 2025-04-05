@@ -142,8 +142,8 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   return (
     <div className="w-full h-[500px] mt-4">
       {isMobile ? (
-        <ScrollArea className="h-full w-full" orientation="horizontal">
-          <div className="h-full" style={{ minWidth: "900px" }}>
+        <ScrollArea className="h-full w-full overflow-visible" orientation="horizontal">
+          <div className="h-full min-w-[800px]">
             {chartContent}
           </div>
         </ScrollArea>
