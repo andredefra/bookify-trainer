@@ -31,6 +31,7 @@ export interface TrainerSessionItem extends SessionBase {
   participants: number;
   maxParticipants: number;
   waitingList?: number;
+  status?: SessionStatus;
   paymentStatus?: {
     paid: number;
     pending: number;

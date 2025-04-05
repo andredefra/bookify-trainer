@@ -51,6 +51,17 @@ const sampleSessions: TrainerSessionItem[] = [
     paymentStatus: { paid: 12, pending: 3, total: 15 },
     mode: "video", 
     status: "scheduled" // Added to indicate this session needs to be started
+  },
+  {
+    id: 5,
+    name: "Mindfulness Yoga Session",
+    time: "10:30 - 11:30",
+    date: new Date().toLocaleDateString(), // Today's date
+    participants: 6,
+    maxParticipants: 20,
+    paymentStatus: { paid: 5, pending: 1, total: 6 },
+    mode: "video",
+    status: "scheduled"
   }
 ];
 
@@ -96,8 +107,8 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   };
 
   const handleStartVideoSession = (session: TrainerSessionItem) => {
-    toast.success(`Video session "${session.name}" started!`);
-    // In a real application, this would navigate to a video session page or launch the video interface
+    toast.success(`Video session "${session.name}" prepared - you can start it now`);
+    // The actual launching of the video interface is handled by the SessionList component
   };
 
   return (

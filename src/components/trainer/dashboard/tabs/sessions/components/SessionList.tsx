@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Video, Users } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { useState } from "react";
+import { VideoSessionDialog } from "./VideoSessionDialog";
 
 interface SessionListProps {
   sessions: TrainerSessionItem[];
@@ -20,6 +22,16 @@ export function SessionList({
   onStartVideoSession
 }: SessionListProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [showVideoDialog, setShowVideoDialog] = useState(false);
+  const [selectedVideoSession, setSelectedVideoSession] = useState<TrainerSessionItem | null>(null);
+
+  const handleStartVideo = (session: TrainerSessionItem) => {
+    setSelectedVideoSession(session);
+    setShowVideoDialog(true);
+    if (onStartVideoSession) {
+      onStartVideoSession(session);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -82,7 +94,7 @@ export function SessionList({
                     variant="secondary"
                     size="sm"
                     className="whitespace-nowrap"
-                    onClick={() => onStartVideoSession(session)}
+                    onClick={() => handleStartVideo(session)}
                   >
                     <Video className="h-4 w-4 mr-2" /> Start Video
                   </Button>
@@ -115,6 +127,12 @@ export function SessionList({
           <p className="text-muted-foreground">No sessions scheduled</p>
         </div>
       )}
+
+      <VideoSessionDialog 
+        open={showVideoDialog} 
+        onOpenChange={setShowVideoDialog} 
+        session={selectedVideoSession} 
+      />
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { TrainerSessionItem } from "@/types/sessions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Video } from "lucide-react";
+import { useState } from "react";
+import { VideoSessionDialog } from "./VideoSessionDialog";
 
 interface CalendarViewProps {
   sessions: TrainerSessionItem[];
@@ -17,8 +19,8 @@ export function CalendarView({
   onCancelSession,
   onStartVideoSession
 }: CalendarViewProps) {
-  // This component would typically have a full calendar implementation
-  // For simplicity, we're just showing a list of sessions grouped by date
+  const [showVideoDialog, setShowVideoDialog] = useState(false);
+  const [selectedVideoSession, setSelectedVideoSession] = useState<TrainerSessionItem | null>(null);
   
   // Group sessions by date
   const groupedSessions: Record<string, TrainerSessionItem[]> = {};
@@ -39,6 +41,14 @@ export function CalendarView({
     const dateB = new Date(b);
     return dateA.getTime() - dateB.getTime();
   });
+
+  const handleStartVideo = (session: TrainerSessionItem) => {
+    setSelectedVideoSession(session);
+    setShowVideoDialog(true);
+    if (onStartVideoSession) {
+      onStartVideoSession(session);
+    }
+  };
   
   return (
     <div className="space-y-8">
@@ -74,7 +84,7 @@ export function CalendarView({
                       size="sm" 
                       variant="secondary"
                       className="flex-1"
-                      onClick={() => onStartVideoSession(session)}
+                      onClick={() => handleStartVideo(session)}
                     >
                       <Video className="h-4 w-4 mr-2" /> Start Video
                     </Button>
@@ -108,6 +118,12 @@ export function CalendarView({
           <p className="text-muted-foreground">No sessions scheduled</p>
         </div>
       )}
+
+      <VideoSessionDialog 
+        open={showVideoDialog} 
+        onOpenChange={setShowVideoDialog} 
+        session={selectedVideoSession} 
+      />
     </div>
   );
 }
