@@ -1,17 +1,13 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 import { ProgressItem, FitnessProgressCardProps } from "./types";
 import { GoalsList } from "./GoalsList";
-import { AddGoalDialog } from "./AddGoalDialog";
-import { UpdateGoalDialog } from "./UpdateGoalDialog";
-import { LogActivityDialog } from "./LogActivityDialog";
-import { DeleteGoalDialog } from "./DeleteGoalDialog";
+import { CardActions } from "./CardActions";
+import { ConnectionStatus } from "./ConnectionStatus";
+import { FitnessDialogs } from "./FitnessDialogs";
 import { calculateProgress, getCurrentDate } from "./utils";
 
 export function FitnessProgressCard({ 
@@ -24,7 +20,6 @@ export function FitnessProgressCard({
   const [openLogDialog, setOpenLogDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
-  const isMobile = useIsMobile();
   
   // Add a new goal
   const onSubmit = (data: any) => {
@@ -108,7 +103,7 @@ export function FitnessProgressCard({
   const handleDeleteGoal = () => {
     if (!selectedGoal) return;
     
-    // Fix: Only filter out the specific goal that matches the selectedGoal's ID
+    // Filter out the specific goal that matches the selectedGoal's ID
     const filteredProgressData = progressData.filter(item => {
       // If the goal has an ID, compare IDs
       if (selectedGoal.id && item.id) {
@@ -147,26 +142,10 @@ export function FitnessProgressCard({
             </div>
           </div>
           
-          {/* Action buttons with responsive layout */}
-          <div className="flex flex-col sm:flex-row sm:justify-end gap-2 pt-2">
-            <Button 
-              variant="outline" 
-              size={isMobile ? "sm" : "default"}
-              className="w-full sm:w-auto"
-              onClick={() => setOpenLogDialog(true)}
-            >
-              Log Activity
-            </Button>
-            <Button 
-              variant="outline" 
-              size={isMobile ? "sm" : "default"}
-              className="w-full sm:w-auto"
-              onClick={() => setOpenDialog(true)}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Goal
-            </Button>
-          </div>
+          <CardActions 
+            onAddGoal={() => setOpenDialog(true)}
+            onLogActivity={() => setOpenLogDialog(true)}
+          />
         </CardHeader>
         
         <CardContent>
@@ -176,42 +155,27 @@ export function FitnessProgressCard({
             onDeletePrompt={handleDeletePrompt}
           />
           
-          {/* Show app connection status if no fitness apps are connected */}
-          {progressData.length > 0 && !connectedApps.googleFit && !connectedApps.appleHealth && (
-            <div className="mt-4 pt-4 border-t text-sm text-muted-foreground">
-              <p className="flex items-center gap-1">
-                <span>⚠️</span> Connect a fitness app in Settings to automatically update your progress.
-              </p>
-            </div>
-          )}
+          <ConnectionStatus 
+            progressDataExists={progressData.length > 0}
+            connectedApps={connectedApps}
+          />
         </CardContent>
       </Card>
 
-      {/* Dialogs */}
-      <AddGoalDialog 
-        open={openDialog}
-        onOpenChange={setOpenDialog}
+      <FitnessDialogs 
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        openUpdateDialog={openUpdateDialog}
+        setOpenUpdateDialog={setOpenUpdateDialog}
+        openLogDialog={openLogDialog}
+        setOpenLogDialog={setOpenLogDialog}
+        openDeleteDialog={openDeleteDialog}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+        selectedGoal={selectedGoal}
         onSubmit={onSubmit}
-      />
-      
-      <UpdateGoalDialog 
-        open={openUpdateDialog}
-        onOpenChange={setOpenUpdateDialog}
-        onSubmit={onUpdateSubmit}
-        selectedGoal={selectedGoal}
-      />
-      
-      <LogActivityDialog 
-        open={openLogDialog}
-        onOpenChange={setOpenLogDialog}
-        onSubmit={onLogSubmit}
-      />
-      
-      <DeleteGoalDialog 
-        open={openDeleteDialog}
-        onOpenChange={setOpenDeleteDialog}
-        onDelete={handleDeleteGoal}
-        selectedGoal={selectedGoal}
+        onUpdateSubmit={onUpdateSubmit}
+        onLogSubmit={onLogSubmit}
+        onDeleteGoal={handleDeleteGoal}
       />
     </>
   );
