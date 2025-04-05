@@ -1,23 +1,20 @@
 
-import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SessionItem } from "@/types/sessions";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { MobileSessionCard } from "./MobileSessionCard";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 
 interface MobileTabsViewProps {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  setActiveTab: (value: string) => void;
   upcomingSessions: SessionItem[];
   availableSessions: SessionItem[];
-  pastSessions: any[];
+  pastSessions: SessionItem[];
   featuredSession: SessionItem;
   onViewDetails: (session: SessionItem) => void;
   onRegister: (session: SessionItem) => void;
   onAddToCalendar: (session: SessionItem) => void;
   onCancel: (session: SessionItem) => void;
+  onJoinSession?: (session: SessionItem) => void;
 }
 
 export function MobileTabsView({
@@ -30,125 +27,67 @@ export function MobileTabsView({
   onViewDetails,
   onRegister,
   onAddToCalendar,
-  onCancel
+  onCancel,
+  onJoinSession
 }: MobileTabsViewProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  
-  const filteredAvailableSessions = availableSessions.filter(session => 
-    session.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    session.trainer.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
   return (
-    <div className="space-y-4">
-      {/* Custom mobile tab selector */}
-      <div className="flex w-full border rounded-md p-1 bg-muted/30 mb-4 sticky top-0 z-10">
-        <Button
-          variant={activeTab === "upcoming" ? "default" : "ghost"}
-          className="flex-1 rounded-sm text-xs h-9"
-          onClick={() => setActiveTab("upcoming")}
-        >
-          My Sessions
-        </Button>
-        <Button
-          variant={activeTab === "discover" ? "default" : "ghost"}
-          className="flex-1 rounded-sm text-xs h-9"
-          onClick={() => setActiveTab("discover")}
-        >
-          Discover
-        </Button>
-        <Button
-          variant={activeTab === "past" ? "default" : "ghost"}
-          className="flex-1 rounded-sm text-xs h-9"
-          onClick={() => setActiveTab("past")}
-        >
-          Past
-        </Button>
-      </div>
+    <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <TabsList className="grid grid-cols-3 mb-4">
+        <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+        <TabsTrigger value="discover">Discover</TabsTrigger>
+        <TabsTrigger value="past">Past</TabsTrigger>
+      </TabsList>
       
-      {/* Search bar for discover tab */}
-      {activeTab === "discover" && (
-        <div className="mb-4 sticky top-14 z-10 bg-background pb-2">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search sessions or trainers..."
-              className="pl-9"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+      <TabsContent value="upcoming" className="mt-0 space-y-3">
+        {upcomingSessions.map((session) => (
+          <MobileSessionCard
+            key={session.id}
+            session={session}
+            onViewDetails={onViewDetails}
+            onRegister={onRegister}
+            onAddToCalendar={onAddToCalendar}
+            onCancel={onCancel}
+            onJoinSession={onJoinSession}
+          />
+        ))}
+        {upcomingSessions.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            No upcoming sessions. Discover new sessions to join!
           </div>
-        </div>
-      )}
+        )}
+      </TabsContent>
       
-      <ScrollArea className="pr-2">
-        <div className="space-y-3 pb-20">
-          {activeTab === "upcoming" && (
-            upcomingSessions.length > 0 ? (
-              upcomingSessions.map((session) => (
-                <MobileSessionCard
-                  key={session.id}
-                  session={session}
-                  onViewDetails={onViewDetails}
-                  onRegister={onRegister}
-                  onAddToCalendar={onAddToCalendar}
-                  onCancel={onCancel}
-                />
-              ))
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                You have no upcoming sessions
-              </div>
-            )
-          )}
-          
-          {activeTab === "discover" && (
-            <>
-              <MobileSessionCard
-                session={featuredSession}
-                onViewDetails={onViewDetails}
-                onRegister={onRegister}
-                featured={true}
-              />
-              
-              {filteredAvailableSessions.length > 0 ? (
-                filteredAvailableSessions.map((session) => (
-                  <MobileSessionCard
-                    key={session.id}
-                    session={session}
-                    onViewDetails={onViewDetails}
-                    onRegister={onRegister}
-                  />
-                ))
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  No sessions found matching your search
-                </div>
-              )}
-            </>
-          )}
-          
-          {activeTab === "past" && (
-            pastSessions.length > 0 ? (
-              pastSessions.map((session) => (
-                <MobileSessionCard
-                  key={session.id}
-                  session={{
-                    ...session,
-                    status: "completed"
-                  }}
-                  isPast={true}
-                />
-              ))
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                You have no past sessions
-              </div>
-            )
-          )}
-        </div>
-      </ScrollArea>
-    </div>
+      <TabsContent value="discover" className="mt-0 space-y-3">
+        <MobileSessionCard
+          session={featuredSession}
+          onViewDetails={onViewDetails}
+          onRegister={onRegister}
+          featured={true}
+        />
+        {availableSessions.map((session) => (
+          <MobileSessionCard
+            key={session.id}
+            session={session}
+            onViewDetails={onViewDetails}
+            onRegister={onRegister}
+          />
+        ))}
+      </TabsContent>
+      
+      <TabsContent value="past" className="mt-0 space-y-3">
+        {pastSessions.map((session) => (
+          <MobileSessionCard
+            key={session.id}
+            session={session}
+            isPast={true}
+          />
+        ))}
+        {pastSessions.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            No past sessions yet.
+          </div>
+        )}
+      </TabsContent>
+    </Tabs>
   );
 }

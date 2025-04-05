@@ -80,6 +80,18 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
     });
   };
   
+  // Handler for joining a video session
+  const handleJoinSession = (session: SessionItem) => {
+    toast({
+      title: "Joining Session",
+      description: `Joining ${session.name} with ${session.trainer}`,
+      variant: "default",
+    });
+    
+    // In a real app, this would launch the video session interface
+    window.open(`/video-session/${session.id}`, '_blank');
+  };
+  
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -107,6 +119,7 @@ export function UpcomingSessionsCard({ upcomingSessions }: UpcomingSessionsCardP
               key={session.id}
               session={session}
               onRegister={handleRegisterForSession}
+              onJoinSession={handleJoinSession}
             />
           ))}
 

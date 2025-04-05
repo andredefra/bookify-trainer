@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, CalendarCheck, CreditCard, Clock, Calendar, Video } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
+import { useState, useEffect } from "react";
 
 interface MobileSessionCardProps {
   session: SessionItem;
@@ -10,6 +11,7 @@ interface MobileSessionCardProps {
   onRegister?: (session: SessionItem) => void;
   onAddToCalendar?: (session: SessionItem) => void;
   onCancel?: (session: SessionItem) => void;
+  onJoinSession?: (session: SessionItem) => void;
   featured?: boolean;
   isPast?: boolean;
 }
@@ -20,9 +22,12 @@ export function MobileSessionCard({
   onRegister,
   onAddToCalendar,
   onCancel,
+  onJoinSession,
   featured = false,
   isPast = false
 }: MobileSessionCardProps) {
+  const [isLive, setIsLive] = useState(false);
+
   const getBgColor = () => {
     if (featured) return 'bg-blue-50 border-blue-100';
     if (isPast) return 'bg-gray-50 border-gray-200';
@@ -39,6 +44,35 @@ export function MobileSessionCard({
   const isVideoSession = session.mode === 'video' || 
     (session.name && session.name.toLowerCase().includes('hiit'));
   
+  // Check if this session is currently live
+  useEffect(() => {
+    const checkIfLive = () => {
+      // For demo purposes, we'll just check if it's today
+      const isToday = formattedDate === 'Today' || 
+                     (new Date()).toLocaleDateString() === formattedDate;
+      
+      // Parse the time (simple implementation for demo)
+      const timeStart = session.time.split(' - ')[0];
+      const [hours, minutes] = timeStart.split(':').map(Number);
+      
+      // Get current time
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      
+      // Session is live if it's today and current time is within 30 min of session start
+      const isTimeMatch = (currentHour === hours && currentMinute >= minutes) || 
+                          (currentHour === hours + 1 && currentMinute < 30);
+      
+      setIsLive(isToday && isTimeMatch);
+    };
+    
+    checkIfLive();
+    // Check every minute
+    const interval = setInterval(checkIfLive, 60000);
+    return () => clearInterval(interval);
+  }, [session, formattedDate]);
+  
   return (
     <div className={`rounded-lg border p-3 ${getBgColor()}`}>
       {/* Session header */}
@@ -48,6 +82,11 @@ export function MobileSessionCard({
           {isVideoSession && (
             <Badge variant="outline" className="mt-1 bg-blue-100 text-blue-700 border-blue-200">
               <Video className="h-3 w-3 mr-1" /> Video
+            </Badge>
+          )}
+          {isLive && isVideoSession && (
+            <Badge className="mt-1 ml-1 bg-red-100 text-red-700 border-red-200 animate-pulse">
+              LIVE NOW
             </Badge>
           )}
         </div>
@@ -100,7 +139,18 @@ export function MobileSessionCard({
         <div className="flex gap-2">
           {session.status === 'registered' || session.status === 'confirmed' ? (
             <>
-              {onAddToCalendar && (
+              {isVideoSession && isLive && onJoinSession && (
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  className="h-8 bg-red-600 hover:bg-red-700" 
+                  onClick={() => onJoinSession(session)}
+                >
+                  <Video className="h-3.5 w-3.5 mr-1" />
+                  Join Live
+                </Button>
+              )}
+              {onAddToCalendar && !isLive && (
                 <Button 
                   variant="outline" 
                   size="sm" 

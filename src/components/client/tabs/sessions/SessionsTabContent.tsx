@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SessionItem } from "@/types/sessions";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { toast } from "sonner";
 
 import { MySessionsTab } from "./MySessionsTab";
 import { SessionDiscoveryTab } from "./SessionDiscoveryTab";
@@ -48,6 +49,14 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
     handleCancelSession,
     handleBookingSubmit
   } = useSessionContext();
+  
+  // Handler for joining a video session
+  const handleJoinSession = (session: SessionItem) => {
+    toast.success(`Joining ${session.name} session with ${session.trainer}`);
+    
+    // In a real app, this would launch the video session interface
+    window.open(`/video-session/${session.id}`, '_blank');
+  };
   
   useEffect(() => {
     // If a session ID is passed in the URL, find that session
@@ -97,6 +106,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
             onRegister={handleRegisterForSession}
             onAddToCalendar={handleAddToCalendar}
             onCancel={handleCancelSession}
+            onJoinSession={handleJoinSession}
           />
         ) : (
           <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab}>
