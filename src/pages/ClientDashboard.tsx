@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClientProfile } from "@/components/ClientProfile";
@@ -32,7 +33,16 @@ const ClientDashboard = () => {
   const [activeSettingsSection, setActiveSettingsSection] = useState<string | undefined>(undefined);
   
   const upcomingSessions: SessionItem[] = [
-    { id: 1, name: "Morning HIIT", trainer: "Alex Thompson", time: "09:00 - 10:00", date: "Today", status: "confirmed" as SessionStatus, price: 45 },
+    { 
+      id: 1, 
+      name: "Morning HIIT", 
+      trainer: "Alex Thompson", 
+      time: "09:00 - 10:00", 
+      date: "Today", 
+      status: "confirmed" as SessionStatus, 
+      price: 45,
+      mode: "video" // Explicitly mark as a video session
+    },
     { id: 2, name: "Personal Training", trainer: "Sarah Johnson", time: "13:00 - 14:00", date: "Tomorrow", status: "confirmed" as SessionStatus },
     { id: 3, name: "Yoga Basics", trainer: "Sarah Johnson", time: "17:30 - 18:30", date: "Thursday", status: "confirmed" as SessionStatus, price: 35 },
   ];

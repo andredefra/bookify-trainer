@@ -24,6 +24,9 @@ export function MySessionsTab({
     
     // In a real app, this would launch the video session interface
     window.open(`/video-session/${session.id}`, '_blank');
+    
+    // Add a console log to help with debugging
+    console.log("Joining session:", session);
   };
   
   return (

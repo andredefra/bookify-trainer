@@ -36,12 +36,27 @@ export function SessionCard({
   const isVideoSession = session.mode === 'video' || 
     (session.name && session.name.toLowerCase().includes('hiit'));
   
+  // For debugging
+  useEffect(() => {
+    if (isVideoSession) {
+      console.log(`Video session found: ${session.name}, Status: ${session.status}, Date: ${formattedDate}`);
+    }
+  }, [session, isVideoSession, formattedDate]);
+  
   // Check if this session is currently live
   useEffect(() => {
     const checkIfLive = () => {
-      // For demo purposes, we'll just check if it's today
+      // For demo purposes, set sessions for "Today" to be live
       const isToday = formattedDate === 'Today' || 
                      (new Date()).toLocaleDateString() === formattedDate;
+      
+      // For demo, always consider the session live if it's today
+      // In a real app, we would check the actual time
+      if (isToday && isVideoSession) {
+        console.log(`Setting session ${session.name} as LIVE`);
+        setIsLive(true);
+        return;
+      }
       
       // Parse the time (simple implementation for demo)
       const timeStart = session.time.split(' - ')[0];
@@ -63,7 +78,14 @@ export function SessionCard({
     // Check every minute
     const interval = setInterval(checkIfLive, 60000);
     return () => clearInterval(interval);
-  }, [session, formattedDate]);
+  }, [session, formattedDate, isVideoSession]);
+  
+  // For debugging
+  useEffect(() => {
+    if (isLive && isVideoSession) {
+      console.log(`LIVE session: ${session.name}, Join handler present: ${!!onJoinSession}`);
+    }
+  }, [isLive, isVideoSession, session, onJoinSession]);
   
   return (
     <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
