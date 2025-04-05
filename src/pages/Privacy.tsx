@@ -1,15 +1,11 @@
-
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { useEffect } from 'react';
-
 const Privacy = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow pt-24 pb-16">
@@ -20,7 +16,7 @@ const Privacy = () => {
             <p className="text-muted-foreground mb-6">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
             <h2 className="text-xl font-semibold mb-4">1. Introduction</h2>
-            <p>mypersonalai ltd ("we", "our", "us") respects your privacy and is committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
+            <p>MyPersonal ltd ("we", "our", "us") respects your privacy and is committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
             
             <h2 className="text-xl font-semibold mt-8 mb-4">2. The Data We Collect About You</h2>
             <p>Personal data means any information about an individual from which that person can be identified. We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:</p>
@@ -71,8 +67,6 @@ const Privacy = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Privacy;
