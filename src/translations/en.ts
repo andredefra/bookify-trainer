@@ -1,3 +1,4 @@
+
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -67,8 +68,8 @@ export const en = {
   'howItWorks.cta.button': 'Get Started for Free',
   
   // Gym Section
-  'gym.title': 'A Complete Solution for Gyms',
-  'gym.subtitle': 'Empower your fitness center with a comprehensive management platform',
+  'gym.title': 'We Also Have a Solution for Gyms',
+  'gym.subtitle': 'Empower your trainers with a complete platform that allows you to track all your trainers\' performance, reduce costs and time to manage them and collect their data while providing a better experience to your clients',
   'gym.mainFeature': 'Seamless Integration for Your Entire Facility',
   'gym.mainDescription': 'Our gym solution provides centralized management for all your trainers, clients, and services. Increase operational efficiency while providing a premium experience to your members.',
   'gym.feature1.title': 'Multiple Trainer Management',
