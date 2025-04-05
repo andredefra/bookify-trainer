@@ -31,17 +31,17 @@ export function SalesTab() {
             <SalesTimeAnalytics contacts={contacts} />
           </div>
           
+          {/* Sales Funnel Title */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Sales Funnel</h3>
+          </div>
+          
           {/* Client and Prospect Metrics */}
           {(clientContacts.length > 0 || prospectContacts.length > 0) && (
             <div className="mb-4">
               <SalesMetrics clients={clientContacts} prospects={prospectContacts} />
             </div>
           )}
-          
-          {/* Sales Funnel Title */}
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold">Sales Funnel</h3>
-          </div>
           
           <DndProvider backend={HTML5Backend}>
             <SalesKanban 
