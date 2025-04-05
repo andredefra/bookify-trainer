@@ -1,98 +1,65 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { GraduationCap, Users, PieChart, BarChart4, Star } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
-import { useEffect } from 'react';
-
-const GymSection = () => {
-  const { t } = useLanguage();
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('.reveal');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
-
+export function GymSection() {
+  const { t } = useTranslation();
   return (
-    <section id="gym-solution" className="py-24 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="gyms" className="py-24 bg-white">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="reveal text-3xl md:text-4xl font-display font-bold tracking-tight text-gray-800 mb-6">
-            {t('gym.title')}
-          </h2>
-          <p className="reveal reveal-delay-1 text-muted-foreground">
-            {t('gym.subtitle')}
-          </p>
+          <h2 className="text-4xl font-bold mb-6">{t('gym.title')}</h2>
+          <p className="text-gray-600">{t('gym.clientConnection')}</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto mb-16">
-          <div className="reveal">
-            <div className="h-64 md:h-auto rounded-lg bg-cover bg-center shadow-lg" 
-                style={{
-                  backgroundImage: `url("/lovable-uploads/60d8d824-f090-4fbc-8935-e858e4d59547.png")`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  height: "100%",
-                  minHeight: "320px"
-                }}>
-            </div>
-          </div>
-          <div className="flex flex-col justify-center">
-            <h3 className="reveal text-2xl font-semibold text-gray-800 mb-4">{t('gym.mainFeature')}</h3>
-            <p className="reveal reveal-delay-1 text-muted-foreground mb-6">{t('gym.clientConnection')}</p>
+        
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h3 className="text-2xl font-bold">{t('gym.subtitle')}</h3>
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className={`reveal reveal-delay-${i} flex items-start`}>
-                  <div className="mr-4 bg-gray-100 p-2 rounded-full">
-                    {i === 1 ? <Users className="h-5 w-5 text-gray-700" /> : 
-                     i === 2 ? <BarChart4 className="h-5 w-5 text-gray-700" /> : 
-                     <Star className="h-5 w-5 text-gray-700" />}
+                <div key={i} className="flex items-start">
+                  <div className="flex-shrink-0 h-6 w-6 rounded-full bg-primary grid place-items-center text-white mt-1">
+                    <CheckIcon className="h-4 w-4" />
                   </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800">{t(`gym.feature${i}.title`)}</h4>
-                    <p className="text-sm text-muted-foreground">{t(`gym.feature${i}.description`)}</p>
-                  </div>
+                  <p className="ml-3">{t(`gym.benefit${i}`)}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {[1, 2, 3].map((i) => (
-            <div key={i + 3} className={`reveal reveal-delay-${i} bg-white p-8 rounded-2xl shadow-sm border border-gray-200`}>
-              <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                {i === 1 ? <PieChart className="h-6 w-6 text-gray-700" /> : 
-                 i === 2 ? <GraduationCap className="h-6 w-6 text-gray-700" /> : 
-                 <Users className="h-6 w-6 text-gray-700" />}
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">{t(`gym.benefit${i}.title`)}</h3>
-              <p className="text-muted-foreground">{t(`gym.benefit${i}.description`)}</p>
+            
+            <div className="pt-4">
+              <a href="#gym-pricing" className="reveal inline-flex px-6 py-3 bg-gray-800 text-white rounded-full text-base font-medium button-hover">
+                {t('gym.cta')}
+              </a>
             </div>
-          ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <a href="#gym-pricing" className="reveal inline-flex px-6 py-3 bg-gray-800 text-white rounded-full text-base font-medium button-hover">
-            {t('gym.cta')}
-          </a>
+          </div>
+          
+          <div>
+            <img 
+              src="/lovable-uploads/74599ec0-408c-4279-bc3d-ed4b7d787969.png" 
+              alt="Gym Dashboard" 
+              className="h-64 md:h-auto rounded-lg shadow-lg" 
+            />
+          </div>
         </div>
       </div>
     </section>
   );
-};
+}
 
-export default GymSection;
+function CheckIcon(props: React.ComponentProps<'svg'>) {
+  return (
+    <svg
+      {...props}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
+  );
+}
