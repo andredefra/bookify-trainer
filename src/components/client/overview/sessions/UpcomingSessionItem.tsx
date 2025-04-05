@@ -72,15 +72,15 @@ export function UpcomingSessionItem({
     <div className={`p-4 ${bgClass} rounded-lg`}>
       <div className="flex flex-col sm:flex-row justify-between gap-3">
         <div className="space-y-1">
-          <h3 className="font-medium">
+          <h3 className="font-medium flex flex-wrap items-center gap-2">
             {session.name}
             {isVideoSession && (
-              <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-700 border-blue-200">
+              <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-200">
                 <Video className="h-3 w-3 mr-1" /> Video
               </Badge>
             )}
             {isLive && isVideoSession && (
-              <Badge className="ml-2 bg-red-100 text-red-700 border-red-200 animate-pulse">
+              <Badge className="bg-red-100 text-red-700 border-red-200 animate-pulse">
                 LIVE NOW
               </Badge>
             )}
@@ -100,43 +100,51 @@ export function UpcomingSessionItem({
             </div>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+        <div className="flex flex-col gap-2 mt-2 sm:mt-0">
           {session.status === 'registered' ? (
             <>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                Registered
-              </Badge>
-              {isVideoSession && isLive && onJoinSession && (
-                <Button variant="default" size="sm" className="flex items-center bg-red-600 hover:bg-red-700" onClick={() => onJoinSession(session)}>
-                  <Video className="h-3.5 w-3.5 mr-1" />
-                  <span className="hidden sm:inline">Join Live</span>
-                  <span className="sm:hidden">Join</span>
-                </Button>
-              )}
-              {!isLive && (
-                <Button variant="outline" size="sm" className="flex items-center">
-                  <CalendarCheck className="h-3.5 w-3.5 mr-1" />
-                  <span className="hidden sm:inline">Add to Calendar</span>
-                  <span className="sm:hidden">Calendar</span>
-                </Button>
-              )}
+              <div className="flex items-center justify-end">
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Registered
+                </Badge>
+              </div>
+              <div className="flex flex-wrap gap-2 justify-end">
+                {isVideoSession && isLive && onJoinSession && (
+                  <Button variant="default" size="sm" className="flex items-center bg-red-600 hover:bg-red-700" onClick={() => onJoinSession(session)}>
+                    <Video className="h-3.5 w-3.5 mr-1" />
+                    <span className="hidden sm:inline">Join Live</span>
+                    <span className="sm:hidden">Join</span>
+                  </Button>
+                )}
+                {!isLive && (
+                  <Button variant="outline" size="sm" className="flex items-center">
+                    <CalendarCheck className="h-3.5 w-3.5 mr-1" />
+                    <span className="hidden sm:inline">Add to Calendar</span>
+                    <span className="sm:hidden">Calendar</span>
+                  </Button>
+                )}
+              </div>
             </>
           ) : (
             <>
-              {featured && (
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                  Premium
-                </Badge>
-              )}
-              <Button 
-                variant="secondary"
-                size="sm" 
-                className="flex items-center" 
-                onClick={handleRegisterClick}
-              >
-                <CreditCard className="h-3.5 w-3.5 mr-1" />
-                Register
-              </Button>
+              <div className="flex items-center justify-end">
+                {featured && (
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                    Premium
+                  </Badge>
+                )}
+              </div>
+              <div className="flex justify-end">
+                <Button 
+                  variant="secondary"
+                  size="sm" 
+                  className="flex items-center" 
+                  onClick={handleRegisterClick}
+                >
+                  <CreditCard className="h-3.5 w-3.5 mr-1" />
+                  Register
+                </Button>
+              </div>
             </>
           )}
         </div>
