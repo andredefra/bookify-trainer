@@ -5,6 +5,7 @@ import { RecentClientsCard } from "./overview/RecentClientsCard";
 import { MessageRequestsCard } from "./overview/MessageRequestsCard";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { EditSessionDialog } from "../tabs/sessions/EditSessionDialog";
+import { VideoSessionDialog } from "../tabs/sessions/components/VideoSessionDialog";
 import { toast } from "sonner";
 import { TrainerSessionItem } from "@/types/sessions";
 
@@ -31,6 +32,7 @@ interface OverviewTabProps {
 export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
   const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
+  const [showVideoSessionDialog, setShowVideoSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   
   // Add payment status and waiting list to mock data if not available
@@ -41,7 +43,10 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
       paid: Math.floor(Math.random() * session.participants),
       pending: Math.floor(Math.random() * session.participants),
       get total() { return this.paid + this.pending; }
-    }
+    },
+    // Ensure at least one video session
+    mode: session.id === 5 ? 'video' : (session.mode || 'in-person'),
+    status: session.id === 5 ? 'scheduled' : (session.status || 'scheduled')
   }));
   
   const handleViewSessionDetails = (session: TrainerSessionItem) => {
@@ -53,6 +58,11 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
     toast.success("Session updated successfully!");
     setShowEditSessionDialog(false);
   };
+
+  const handleStartVideoSession = (session: TrainerSessionItem) => {
+    setSelectedSession(session);
+    setShowVideoSessionDialog(true);
+  };
   
   return (
     <div className="space-y-6">
@@ -60,6 +70,7 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
         sessions={sessionsWithPaymentInfo} 
         onNewSession={() => setShowCreateSessionDialog(true)}
         onViewDetails={handleViewSessionDetails}
+        onStartVideoSession={handleStartVideoSession}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -83,6 +94,12 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
         onOpenChange={setShowEditSessionDialog}
         session={selectedSession}
         onSubmit={handleUpdateSession}
+      />
+
+      <VideoSessionDialog
+        open={showVideoSessionDialog}
+        onOpenChange={setShowVideoSessionDialog}
+        session={selectedSession}
       />
     </div>
   );

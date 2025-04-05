@@ -1,5 +1,5 @@
 
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Video } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +9,15 @@ interface UpcomingSessionsCardProps {
   sessions: TrainerSessionItem[];
   onNewSession: () => void;
   onViewDetails?: (session: TrainerSessionItem) => void;
+  onStartVideoSession?: (session: TrainerSessionItem) => void;
 }
 
-export function UpcomingSessionsCard({ sessions, onNewSession, onViewDetails }: UpcomingSessionsCardProps) {
+export function UpcomingSessionsCard({ 
+  sessions, 
+  onNewSession, 
+  onViewDetails,
+  onStartVideoSession 
+}: UpcomingSessionsCardProps) {
   // Get the first three upcoming sessions to display in the overview
   const nextSessions = sessions.slice(0, 3);
   
@@ -36,11 +42,22 @@ export function UpcomingSessionsCard({ sessions, onNewSession, onViewDetails }: 
               ? session.date.toLocaleDateString() 
               : session.date;
               
+            // Check if this is a video session that can be started
+            const isVideo = session.mode === 'video';
+            const canStartVideo = isVideo && session.status === 'scheduled';
+
             return (
               <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
                 <div className="flex flex-col gap-3">
                   <div className="space-y-2">
-                    <h3 className="font-medium text-base line-clamp-1">{session.name}</h3>
+                    <h3 className="font-medium text-base line-clamp-1">
+                      {session.name}
+                      {isVideo && (
+                        <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-700 border-blue-200">
+                          <Video className="h-3 w-3 mr-1" /> Video
+                        </Badge>
+                      )}
+                    </h3>
                     <div className="text-sm text-muted-foreground">
                       {formattedDate} • {session.time}
                     </div>
@@ -64,15 +81,29 @@ export function UpcomingSessionsCard({ sessions, onNewSession, onViewDetails }: 
                     <div className="text-sm">
                       <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                     </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-8 px-2 sm:px-4"
-                      onClick={() => onViewDetails && onViewDetails(session)}
-                    >
-                      <span className="hidden sm:inline">Details</span>
-                      <span className="sm:hidden">View</span>
-                    </Button>
+                    <div className="flex gap-2">
+                      {canStartVideo && onStartVideoSession && (
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          className="h-8 px-2 sm:px-4 flex items-center"
+                          onClick={() => onStartVideoSession(session)}
+                        >
+                          <Video className="h-4 w-4 mr-1" />
+                          <span className="hidden sm:inline">Start Video</span>
+                          <span className="sm:hidden">Video</span>
+                        </Button>
+                      )}
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-8 px-2 sm:px-4"
+                        onClick={() => onViewDetails && onViewDetails(session)}
+                      >
+                        <span className="hidden sm:inline">Details</span>
+                        <span className="sm:hidden">View</span>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
