@@ -1,4 +1,3 @@
-
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -76,8 +75,8 @@ export const en = {
   'gym.feature1.description': 'Manage all your trainers from a single administrative dashboard with simplified reporting.',
   'gym.feature2.title': 'Performance Analytics',
   'gym.feature2.description': 'Get detailed insights on class attendance, trainer performance, and member engagement.',
-  'gym.feature3.title': 'Equipment Tracking',
-  'gym.feature3.description': 'Monitor equipment usage, maintenance schedules, and member preferences.',
+  'gym.feature3.title': 'Premium Member Experience',
+  'gym.feature3.description': 'Offer your clients a personalized digital experience that enhances their fitness journey.',
   'gym.benefit1.title': 'Increase Revenue',
   'gym.benefit1.description': 'Boost session bookings, improve trainer utilization, and enhance membership value.',
   'gym.benefit2.title': 'Staff Development',
