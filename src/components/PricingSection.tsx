@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Users, Briefcase } from 'lucide-react';
+import { CheckCircle2, Users, Briefcase, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -49,6 +49,16 @@ const PricingSection = () => {
     t('pricing.features.advancedAnalytics'),
     t('pricing.features.customPrograms'),
   ];
+  
+  const gymFeatures = [
+    t('pricing.features.whiteLabel'),
+    t('pricing.features.unlimitedTrainers'),
+    t('pricing.features.unlimitedClients'),
+    t('pricing.features.reducedProPricing'),
+    t('pricing.features.directClientChat'),
+    t('pricing.features.clientResults'),
+    t('pricing.features.gymIntegration'),
+  ];
 
   return (
     <section id="pricing" className="py-24 bg-white">
@@ -88,7 +98,7 @@ const PricingSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {/* Standard Plan */}
           <div className="reveal flex flex-col p-8 rounded-2xl border border-border bg-white shadow-sm">
             <div className="mb-6">
@@ -182,6 +192,38 @@ const PricingSection = () => {
               className="w-full px-6 py-3 bg-primary text-white rounded-full text-center font-medium button-hover"
             >
               {t('pricing.pro.cta')}
+            </Link>
+          </div>
+          
+          {/* Gym Plan */}
+          <div className="reveal reveal-delay-2 flex flex-col p-8 rounded-2xl border border-border bg-white shadow-md">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.gym.title')}</h3>
+              <div className="flex items-baseline mb-1">
+                <span className="text-4xl font-display font-bold">
+                  {annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price')}
+                </span>
+                <span className="text-muted-foreground ml-2">{t('pricing.gym.period')}</span>
+              </div>
+              <p className="text-muted-foreground">
+                {t('pricing.gym.fee')}
+              </p>
+            </div>
+
+            <ul className="space-y-3 mb-8 flex-grow">
+              {gymFeatures.map((feature, index) => (
+                <li key={index} className="flex items-start">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Link 
+              to="/register?plan=gym" 
+              className="w-full px-6 py-3 bg-white text-primary border border-primary/20 rounded-full text-center font-medium button-hover"
+            >
+              {t('pricing.gym.cta')}
             </Link>
           </div>
         </div>
