@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Users, Briefcase, Building } from 'lucide-react';
+import { CheckCircle2, Users, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -48,23 +48,6 @@ const PricingSection = () => {
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
     t('pricing.features.customPrograms'),
-  ];
-  
-  const gymTrainerFeatures = [
-    t('pricing.features.everythingPro'),
-    t('pricing.features.gymBranding'),
-    t('pricing.features.gymClientAccess'),
-    t('pricing.features.directMessaging'),
-  ];
-  
-  const gymFeatures = [
-    t('pricing.features.whiteLabel'),
-    t('pricing.features.unlimitedTrainers'),
-    t('pricing.features.unlimitedClients'),
-    t('pricing.features.brandedTrainerPages'),
-    t('pricing.features.directClientCommunication'),
-    t('pricing.features.analyticsAccess'),
-    t('pricing.features.crmIntegration'),
   ];
 
   return (
@@ -199,84 +182,6 @@ const PricingSection = () => {
               className="w-full px-6 py-3 bg-primary text-white rounded-full text-center font-medium button-hover"
             >
               {t('pricing.pro.cta')}
-            </Link>
-          </div>
-        </div>
-        
-        {/* Business Plans */}
-        <div className="mt-20 mb-6 text-center">
-          <h3 className="text-2xl font-display font-bold text-primary mb-4">
-            {t('pricing.business.title')}
-          </h3>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('pricing.business.subtitle')}
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-          {/* Gym Trainer Plan */}
-          <div className="reveal flex flex-col p-8 rounded-2xl border border-border bg-white shadow-sm">
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.gymTrainer.title')}</h3>
-              <div className="flex items-baseline mb-1">
-                <span className="text-4xl font-display font-bold">{t('pricing.gymTrainer.price')}</span>
-                <span className="text-muted-foreground ml-2">{t('pricing.gymTrainer.period')}</span>
-              </div>
-              <p className="text-muted-foreground">
-                {t('pricing.gymTrainer.fee')}
-              </p>
-            </div>
-
-            <ul className="space-y-3 mb-8 flex-grow">
-              {gymTrainerFeatures.map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-            
-            <p className="text-sm text-amber-600 mb-4 font-medium">
-              * {t('pricing.gymTrainer.note')}
-            </p>
-
-            <Link 
-              to="/register?plan=gym-trainer" 
-              className="w-full px-6 py-3 bg-white text-primary border border-primary/20 rounded-full text-center font-medium button-hover"
-            >
-              {t('pricing.gymTrainer.cta')}
-            </Link>
-          </div>
-          
-          {/* Gym Plan */}
-          <div className="reveal reveal-delay-1 flex flex-col p-8 rounded-2xl border border-primary/30 bg-white shadow-lg">            
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-primary mb-2">{t('pricing.gym.title')}</h3>
-              <div className="flex items-baseline mb-1">
-                <span className="text-4xl font-display font-bold">
-                  {annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price')}
-                </span>
-                <span className="text-muted-foreground ml-2">{t('pricing.gym.period')}</span>
-              </div>
-              <p className="text-muted-foreground">
-                {t('pricing.gym.fee')}
-              </p>
-            </div>
-
-            <ul className="space-y-3 mb-8 flex-grow">
-              {gymFeatures.map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-            
-            <Link 
-              to="/register?plan=gym" 
-              className="w-full px-6 py-3 bg-primary/90 text-white rounded-full text-center font-medium button-hover"
-            >
-              {t('pricing.gym.cta')}
             </Link>
           </div>
         </div>

@@ -1,5 +1,5 @@
 
-import { CheckCircle2, Users, Briefcase, Building } from "lucide-react";
+import { CheckCircle2, Users, Briefcase } from "lucide-react";
 import { Plan } from "./types";
 
 export const plans: Plan[] = [
@@ -51,43 +51,5 @@ export const plans: Plan[] = [
     limitations: [],
     isPopular: true,
     icon: CheckCircle2
-  },
-  {
-    id: "gym-trainer",
-    name: "Gym Trainer",
-    price: "€9",
-    period: "per month",
-    description: "Special rate for trainers working with partner gyms.",
-    features: [
-      "Everything in Pro Plan",
-      "Gym Branding",
-      "Access to Gym Client Base",
-      "Direct Client Messaging"
-    ],
-    limitations: [
-      "Only for trainers affiliated with partner gyms",
-      "2% transaction fee"
-    ],
-    isPopular: false,
-    icon: Users
-  },
-  {
-    id: "gym",
-    name: "Gym",
-    price: "€59",
-    period: "per month",
-    description: "Complete solution for fitness facilities.",
-    features: [
-      "White Label Platform",
-      "Unlimited Trainers",
-      "Unlimited Clients",
-      "Branded Trainer Pages",
-      "Direct Client Communication",
-      "Access to Analytics Dashboard",
-      "CRM Integration"
-    ],
-    limitations: [],
-    isPopular: false,
-    icon: Building
   }
 ];
