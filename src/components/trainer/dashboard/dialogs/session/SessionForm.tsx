@@ -11,7 +11,7 @@ import {
   PricingInfo, 
   SessionSettings, 
   SessionDescription 
-} from "./FormSections";
+} from "./form-sections";
 
 interface SessionFormProps {
   onSubmit: (data: SessionFormValues) => void;
