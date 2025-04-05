@@ -34,6 +34,17 @@ export function MembershipSection({ user }: MembershipSectionProps) {
   // Find the current plan details
   const activePlan = plans.find(plan => plan.id === currentPlan) || plans[0];
 
+  // Filter by user type - show only relevant plans
+  const isGymTrainer = currentPlan === "gym-trainer";
+  const isGym = currentPlan === "gym";
+  
+  // Filter the plans based on user type
+  const filteredPlans = isGym 
+    ? plans.filter(plan => plan.id === "gym") 
+    : isGymTrainer 
+      ? plans.filter(plan => ["gym-trainer", "freemium", "standard"].includes(plan.id)) 
+      : plans.filter(plan => !["gym", "gym-trainer"].includes(plan.id));
+
   return (
     <div className="space-y-6">
       {/* Current Plan Summary */}
@@ -65,7 +76,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
       <p className="text-sm text-muted-foreground mb-4">Choose the plan that works best for your training business</p>
       
       <div className="grid grid-cols-1 gap-4">
-        {plans.map((plan) => (
+        {filteredPlans.map((plan) => (
           <Card 
             key={plan.id}
             className={`overflow-hidden transition-all ${
@@ -79,7 +90,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
                 <div>
                   <h3 className="font-semibold text-lg">{plan.name}</h3>
                   <div className="flex items-baseline mt-1">
-                    <span className="text-2xl font-bold">${plan.price}</span>
+                    <span className="text-2xl font-bold">{plan.price}</span>
                     <span className="text-muted-foreground ml-1 text-sm">/month</span>
                   </div>
                 </div>
@@ -106,6 +117,16 @@ export function MembershipSection({ user }: MembershipSectionProps) {
                     <span className="text-sm">{feature}</span>
                   </div>
                 ))}
+                
+                {plan.limitations && plan.limitations.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    {plan.limitations.map((limitation, index) => (
+                      <div key={index} className="flex items-start text-amber-700">
+                        <span className="text-xs italic">{limitation}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </Card>
