@@ -108,9 +108,15 @@ export function FitnessProgressCard({
   const handleDeleteGoal = () => {
     if (!selectedGoal) return;
     
-    const filteredProgressData = progressData.filter(item => 
-      !(item.id === selectedGoal.id || (item.goal === selectedGoal.goal && !item.id))
-    );
+    // Fix: Only filter out the specific goal that matches the selectedGoal's ID
+    const filteredProgressData = progressData.filter(item => {
+      // If the goal has an ID, compare IDs
+      if (selectedGoal.id && item.id) {
+        return item.id !== selectedGoal.id;
+      }
+      // If no ID (for backward compatibility), compare by goal name
+      return item.goal !== selectedGoal.goal;
+    });
     
     setProgressData(filteredProgressData);
     setOpenDeleteDialog(false);
