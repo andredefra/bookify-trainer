@@ -5,7 +5,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { Card, CardContent } from "@/components/ui/card";
 import { SalesKanban } from "./sales/SalesKanban";
 import { SalesMetrics } from "./sales/SalesMetrics";
-import { SalesTimeAnalytics } from "./sales/SalesTimeAnalytics";
+import { SalesTimeAnalytics } from "./sales/analytics/SalesTimeAnalytics";
 import { AddLeadDialog } from "./sales/AddLeadDialog";
 import { SalesHeader } from "./sales/SalesHeader";
 import { useSalesContacts } from "./sales/useSalesContacts";

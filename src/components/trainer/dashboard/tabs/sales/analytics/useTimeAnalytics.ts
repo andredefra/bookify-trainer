@@ -1,8 +1,5 @@
 
-import { useState, useMemo } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SalesContact } from "./types";
+import { useMemo } from "react";
 import {
   format,
   differenceInDays,
@@ -23,22 +20,11 @@ import {
   subYears
 } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Button } from "@/components/ui/button";
-import { Calendar, TrendingUp, ArrowUpRight, Users } from "lucide-react";
+import { SalesContact } from "../types";
+import { TimeFrame, TimeAnalyticsData } from "./types";
 
-interface SalesTimeAnalyticsProps {
-  contacts: SalesContact[];
-}
-
-type TimeFrame = "day" | "week" | "month" | "quarter" | "year" | "custom";
-
-export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
-  const [timeFrame, setTimeFrame] = useState<TimeFrame>("day");
-  const [customPeriod, setCustomPeriod] = useState(7); // Default 7 days
-
-  const analytics = useMemo(() => {
+export function useTimeAnalytics(contacts: SalesContact[], timeFrame: TimeFrame, customPeriod: number): TimeAnalyticsData {
+  return useMemo(() => {
     const now = new Date();
     
     const isWithinTimeFrame = (dateStr: string, compareDate = now): boolean => {
@@ -183,8 +169,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         }
       })();
       
-      const durationInDays = differenceInDays(startOfCurrentPeriod, startOfPreviousPeriod);
-      
       return contacts.filter(contact => {
         const contactDate = new Date(contact.createdAt);
         return contactDate >= startOfPreviousPeriod && contactDate < startOfCurrentPeriod;
@@ -216,141 +200,4 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
       })()
     };
   }, [contacts, timeFrame, customPeriod]);
-
-  const chartConfig = {
-    leads: {
-      label: "Leads",
-      theme: {
-        light: "#3b82f6",  // blue-500
-        dark: "#60a5fa"    // blue-400
-      }
-    }
-  };
-
-  // Helper function to render the chart for a specific timeframe
-  const renderTimeframeChart = () => {
-    return (
-      <BarChart data={analytics.timeSeriesData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-        <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-      </BarChart>
-    );
-  };
-
-  return (
-    <div className="space-y-4">
-      <Tabs defaultValue="day" value={timeFrame} onValueChange={(value) => setTimeFrame(value as TimeFrame)} className="w-full">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-semibold">Sales Performance</h3>
-          <TabsList>
-            <TabsTrigger value="day">Daily</TabsTrigger>
-            <TabsTrigger value="week">Weekly</TabsTrigger>
-            <TabsTrigger value="month">Monthly</TabsTrigger>
-            <TabsTrigger value="quarter">Quarterly</TabsTrigger>
-            <TabsTrigger value="year">Yearly</TabsTrigger>
-            <TabsTrigger value="custom">Custom</TabsTrigger>
-          </TabsList>
-        </div>
-        
-        {timeFrame === "custom" && (
-          <div className="flex items-center gap-2 mb-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setCustomPeriod(7)}
-              className={customPeriod === 7 ? "bg-primary/10" : ""}
-            >
-              7 Days
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setCustomPeriod(14)}
-              className={customPeriod === 14 ? "bg-primary/10" : ""}
-            >
-              14 Days
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setCustomPeriod(30)}
-              className={customPeriod === 30 ? "bg-primary/10" : ""}
-            >
-              30 Days
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setCustomPeriod(90)}
-              className={customPeriod === 90 ? "bg-primary/10" : ""}
-            >
-              90 Days
-            </Button>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-          <Card className="shadow-sm">
-            <CardContent className="p-3 flex items-center">
-              <div className="bg-blue-100 p-2 rounded-full mr-3">
-                <Users className="h-4 w-4 text-blue-700" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">New Contacts</p>
-                <h4 className="text-lg font-semibold">{analytics.totalNew} <span className="text-xs font-normal text-muted-foreground">in {analytics.timeFrameLabel.toLowerCase()}</span></h4>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-sm">
-            <CardContent className="p-3 flex items-center">
-              <div className="bg-green-100 p-2 rounded-full mr-3">
-                <TrendingUp className="h-4 w-4 text-green-700" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Conversion Rate</p>
-                <h4 className="text-lg font-semibold">{analytics.conversionRate.toFixed(1)}%</h4>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-sm">
-            <CardContent className="p-3 flex items-center">
-              <div className="bg-amber-100 p-2 rounded-full mr-3">
-                <Calendar className="h-4 w-4 text-amber-700" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Avg. Contact Value</p>
-                <h4 className="text-lg font-semibold">{analytics.averageValue.toFixed(0)}€</h4>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-sm">
-            <CardContent className="p-3 flex items-center">
-              <div className={`p-2 rounded-full mr-3 ${analytics.growthRate >= 0 ? 'bg-green-100' : 'bg-red-100'}`}>
-                <ArrowUpRight className={`h-4 w-4 ${analytics.growthRate >= 0 ? 'text-green-700' : 'text-red-700'} ${analytics.growthRate < 0 ? 'rotate-90' : ''}`} />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Growth Rate</p>
-                <h4 className="text-lg font-semibold">{analytics.growthRate.toFixed(1)}%</h4>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <TabsContent value={timeFrame} className="w-full h-[300px]">
-          <ChartContainer className="h-full" config={chartConfig}>
-            {/* Wrap in ResponsiveContainer to ensure single child element */}
-            <ResponsiveContainer width="100%" height="100%">
-              {renderTimeframeChart()}
-            </ResponsiveContainer>
-          </ChartContainer>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
 }
