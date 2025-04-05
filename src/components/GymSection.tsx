@@ -1,33 +1,37 @@
+
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 export function GymSection() {
-  const { t } = useTranslation();
+  // Instead of using the i18next hook, we'll directly use the translation strings
   return (
     <section id="gyms" className="py-24 bg-white">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold mb-6">{t('gym.title')}</h2>
-          <p className="text-gray-600">{t('gym.clientConnection')}</p>
+          <h2 className="text-4xl font-bold mb-6">We Also Have a Solution for Gyms</h2>
+          <p className="text-gray-600">Gyms can invite their clients to connect directly with personal trainers, facilitating valuable relationships that enhance member experience and retention while generating additional revenue streams.</p>
         </div>
         
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold">{t('gym.subtitle')}</h3>
+            <h3 className="text-2xl font-bold">Empower your trainers with a complete platform that allows you to track all your trainers' performance, reduce costs and time to manage them and collect their data while providing a better experience to your clients</h3>
             <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
+              {[
+                'Increase Revenue: Boost session bookings, improve trainer utilization, and enhance membership value.',
+                'Staff Development: Track trainer certifications, client satisfaction scores, and growth opportunities.',
+                'Member Retention: Improve the client experience with personalized programs and seamless communication.'
+              ].map((benefit, i) => (
                 <div key={i} className="flex items-start">
                   <div className="flex-shrink-0 h-6 w-6 rounded-full bg-primary grid place-items-center text-white mt-1">
                     <CheckIcon className="h-4 w-4" />
                   </div>
-                  <p className="ml-3">{t(`gym.benefit${i}`)}</p>
+                  <p className="ml-3">{benefit}</p>
                 </div>
               ))}
             </div>
             
             <div className="pt-4">
               <a href="#gym-pricing" className="reveal inline-flex px-6 py-3 bg-gray-800 text-white rounded-full text-base font-medium button-hover">
-                {t('gym.cta')}
+                See Gym Pricing Plan
               </a>
             </div>
           </div>
