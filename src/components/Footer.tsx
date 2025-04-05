@@ -67,7 +67,7 @@ const Footer = () => {
         
         {/* Copyright section - moved to bottom */}
         <div className="mt-12 pt-6 border-t border-border">
-          <p className="text-sm text-muted-foreground text-center">© {currentYear} MyPersonal ltd. {t('footer.copyright')}</p>
+          <p className="text-sm text-muted-foreground text-center">MyPersonal ltd.</p>
         </div>
       </div>
     </footer>;
