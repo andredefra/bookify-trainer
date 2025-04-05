@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -41,7 +40,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
   const analytics = useMemo(() => {
     const now = new Date();
     
-    // Helper function to check if a date is within the selected time frame
     const isWithinTimeFrame = (dateStr: string, compareDate = now): boolean => {
       const date = new Date(dateStr);
       
@@ -63,10 +61,8 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
       }
     };
 
-    // Filter contacts created within the selected time frame
     const recentContacts = contacts.filter(contact => isWithinTimeFrame(contact.createdAt));
     
-    // Count contacts by status
     const statusCounts = {
       lead: recentContacts.filter(c => c.status === "lead").length,
       prospect: recentContacts.filter(c => c.status === "prospect").length,
@@ -75,22 +71,18 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
       terminated: recentContacts.filter(c => c.status === "terminated").length,
     };
     
-    // Calculate conversion rates
     const totalLeads = statusCounts.lead + statusCounts.prospect + statusCounts.client + statusCounts.lost;
     const conversionRate = totalLeads > 0 ? (statusCounts.client / totalLeads) * 100 : 0;
     
-    // Calculate average value
     const totalValue = recentContacts.reduce((sum, contact) => sum + (contact.value || 0), 0);
     const averageValue = recentContacts.length > 0 ? totalValue / recentContacts.length : 0;
     
-    // Generate time-series data for charts based on timeframe
     let timeSeriesData = [];
     let compareData = [];
     let labelFormat = "";
     
     switch (timeFrame) {
       case "day":
-        // Hourly breakdown for today
         timeSeriesData = Array.from({ length: 24 }, (_, i) => ({
           name: `${i}:00`,
           value: recentContacts.filter(c => {
@@ -102,9 +94,8 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         break;
         
       case "week":
-        // Daily breakdown for this week
         timeSeriesData = Array.from({ length: 7 }, (_, i) => {
-          const day = (i + 1) % 7; // 0 = Sunday, 1 = Monday, etc.
+          const day = (i + 1) % 7;
           return {
             name: format(new Date(2023, 0, day + 1), "EEE", { locale: enUS }),
             value: recentContacts.filter(c => {
@@ -117,7 +108,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         break;
         
       case "month":
-        // Daily breakdown for this month
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         timeSeriesData = Array.from({ length: daysInMonth }, (_, i) => ({
           name: `${i + 1}`,
@@ -130,7 +120,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         break;
         
       case "quarter":
-        // Monthly breakdown for this quarter
         const quarterMonth = Math.floor(now.getMonth() / 3) * 3;
         timeSeriesData = Array.from({ length: 3 }, (_, i) => ({
           name: format(new Date(now.getFullYear(), quarterMonth + i, 1), "MMM"),
@@ -143,7 +132,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         break;
         
       case "year":
-        // Monthly breakdown for this year
         timeSeriesData = Array.from({ length: 12 }, (_, i) => ({
           name: format(new Date(now.getFullYear(), i, 1), "MMM"),
           value: recentContacts.filter(c => {
@@ -155,7 +143,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         break;
         
       case "custom":
-        // Daily breakdown for custom period
         timeSeriesData = Array.from({ length: customPeriod }, (_, i) => {
           const date = subDays(now, customPeriod - i - 1);
           return {
@@ -170,7 +157,6 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         break;
     }
 
-    // Calculate comparison with previous period
     const getPreviousPeriodContacts = () => {
       const startOfCurrentPeriod = (() => {
         switch (timeFrame) {
@@ -238,6 +224,20 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
         dark: "#60a5fa"    // blue-400
       }
     }
+  };
+
+  const renderTimeframeChart = (currentTimeframe: TimeFrame) => {
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={analytics.timeSeriesData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+          <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
+        </BarChart>
+      </ResponsiveContainer>
+    );
   };
 
   return (
@@ -342,79 +342,11 @@ export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
           </Card>
         </div>
 
-        <ChartContainer className="h-[300px]" config={chartConfig}>
-          <TabsContent value="day" className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analytics.timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </TabsContent>
-          
-          <TabsContent value="week" className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analytics.timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </TabsContent>
-          
-          <TabsContent value="month" className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analytics.timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </TabsContent>
-          
-          <TabsContent value="quarter" className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analytics.timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </TabsContent>
-          
-          <TabsContent value="year" className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analytics.timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </TabsContent>
-          
-          <TabsContent value="custom" className="w-full h-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analytics.timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-                <Bar dataKey="value" name="leads" fill="var(--color-leads)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </TabsContent>
-        </ChartContainer>
+        <TabsContent value={timeFrame} className="w-full h-[300px]">
+          <ChartContainer className="h-full" config={chartConfig}>
+            {renderTimeframeChart(timeFrame)}
+          </ChartContainer>
+        </TabsContent>
       </Tabs>
     </div>
   );
