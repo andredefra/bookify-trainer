@@ -1,4 +1,3 @@
-
 export const it = {
   // Navigation
   'nav.home': 'Home',
@@ -114,10 +113,11 @@ export const it = {
   'pricing.features.whiteLabel': 'Piattaforma White Label',
   'pricing.features.unlimitedTrainers': 'Trainers Illimitati',
   'pricing.features.unlimitedClients': 'Clienti Illimitati',
-  'pricing.features.reducedProPricing': 'Prezzo Pro Ridotto (€9/mese)',
-  'pricing.features.directClientChat': 'Chat Diretta con Clienti',
+  'pricing.features.reducedProPricing': 'Prezzo Pro Ridotto per Trainers (€9/mese)',
+  'pricing.features.directClientChat': 'Chat Diretta con Trainers',
   'pricing.features.clientResults': 'Dashboard Risultati Clienti',
   'pricing.features.gymIntegration': 'Integrazione Gestione Palestra',
+  'pricing.features.fitnessTracking': 'Monitoraggio Progressi Fitness',
   'pricing.disclaimer1': 'Tutti i piani includono elaborazione sicura dei pagamenti. Le commissioni sulle transazioni vengono addebitate solo sui pagamenti riusciti. Puoi aggiornare, declassare o annullare il tuo abbonamento in qualsiasi momento.',
   'pricing.disclaimer2': 'I tuoi clienti non pagano mai per l\'app — ottengono accesso alle funzionalità premium tramite il tuo abbonamento',
   

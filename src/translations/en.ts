@@ -1,4 +1,3 @@
-
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -114,8 +113,8 @@ export const en = {
   'pricing.features.whiteLabel': 'White Label Platform',
   'pricing.features.unlimitedTrainers': 'Unlimited Trainers',
   'pricing.features.unlimitedClients': 'Unlimited Clients',
-  'pricing.features.reducedProPricing': 'Reduced Pro Pricing (€9/mo)',
-  'pricing.features.directClientChat': 'Direct Chat with Clients',
+  'pricing.features.reducedProPricing': 'Reduced Pro Pricing for Trainers (€9/mo)',
+  'pricing.features.directClientChat': 'Direct Chat with Trainers',
   'pricing.features.clientResults': 'Client Results Dashboard',
   'pricing.features.gymIntegration': 'Gym Management Integration',
   'pricing.disclaimer1': 'All plans include secure payment processing. Transaction fees are charged only on successful payments. You can upgrade, downgrade, or cancel your subscription at any time.',
