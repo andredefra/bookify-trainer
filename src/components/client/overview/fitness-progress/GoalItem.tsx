@@ -11,6 +11,12 @@ interface GoalItemProps {
 }
 
 export function GoalItem({ item, onEdit, onDelete }: GoalItemProps) {
+  // Handle delete for this specific goal item only
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event bubbling
+    onDelete(item);
+  };
+  
   return (
     <div className="space-y-2">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
@@ -31,7 +37,7 @@ export function GoalItem({ item, onEdit, onDelete }: GoalItemProps) {
             <Button 
               variant="ghost" 
               size="icon" 
-              onClick={() => onDelete(item)}
+              onClick={handleDelete}
               className="h-7 w-7 text-destructive hover:text-destructive"
             >
               <Trash2 className="h-4 w-4" />
