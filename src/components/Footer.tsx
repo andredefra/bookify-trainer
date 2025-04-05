@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -36,7 +37,7 @@ const Footer = () => {
           {/* Logo and description */}
           <div className="col-span-12 md:col-span-5 lg:col-span-6">
             <Link to="/" className="inline-block">
-              <span className="font-display text-xl font-bold tracking-tight text-primary">MyPersonal.ai</span>
+              <span className="font-display text-xl font-bold tracking-tight text-primary">MyPersonal.fit</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">{t('footer.description')}</p>
           </div>

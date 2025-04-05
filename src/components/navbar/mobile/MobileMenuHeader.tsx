@@ -19,7 +19,7 @@ const MobileMenuHeader = ({ onClose }: MobileMenuHeaderProps) => {
         className="font-display text-xl font-bold text-primary"
         onClick={onClose}
       >
-        Personal.ai
+        Personal.fit
       </Link>
       <SheetClose asChild>
         <Button 
