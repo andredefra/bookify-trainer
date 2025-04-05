@@ -47,36 +47,21 @@ export function SessionList({
         const canStartVideo = isVideo && session.status === 'scheduled' && onStartVideoSession;
 
         return (
-          <Card key={session.id} className="p-4 hover:bg-accent/5 transition-colors">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center">
-                    <h3 className="font-medium text-base">
-                      {session.name}
-                    </h3>
-                    {isVideo && (
-                      <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-700 border-blue-200 flex items-center">
-                        <Video className="h-3 w-3 mr-1" /> Video
-                      </Badge>
-                    )}
-                  </div>
-                  
-                  <div className={`text-sm text-muted-foreground mt-1 ${isMobile ? 'flex flex-col gap-1' : 'flex items-center gap-2'}`}>
-                    <span>{formattedDate} • {session.time}</span>
-                    <div className="flex items-center">
-                      <Users className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
-                      <span>{session.participants}/{session.maxParticipants}</span>
-                      {session.waitingList && session.waitingList > 0 && (
-                        <Badge variant="outline" className="ml-2 bg-orange-50 text-orange-600 border-orange-200 text-xs">
-                          +{session.waitingList} waiting
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
+          <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="flex flex-col gap-3">
+              <div className="space-y-2">
+                <h3 className="font-medium text-base line-clamp-1">
+                  {session.name}
+                  {isVideo && (
+                    <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-700 border-blue-200">
+                      <Video className="h-3 w-3 mr-1" /> Video
+                    </Badge>
+                  )}
+                </h3>
+                <div className="text-sm text-muted-foreground">
+                  {formattedDate} • {session.time}
                 </div>
-
-                <div className="flex items-center gap-2 mt-2 md:mt-0 flex-wrap">
+                <div className="flex flex-wrap mt-2 gap-2">
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                     {session.paymentStatus?.paid || 0} paid
                   </Badge>
@@ -85,40 +70,53 @@ export function SessionList({
                       {session.paymentStatus?.pending || 0} pending
                     </Badge>
                   )}
+                  {(session.waitingList || 0) > 0 && (
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      {session.waitingList || 0} waiting
+                    </Badge>
+                  )}
                 </div>
               </div>
-
-              <div className={`flex ${isMobile ? 'flex-col' : ''} gap-2`}>
-                {canStartVideo ? (
-                  <Button 
-                    variant="secondary"
-                    size="sm"
-                    className="whitespace-nowrap"
-                    onClick={() => handleStartVideo(session)}
-                  >
-                    <Video className="h-4 w-4 mr-2" /> Start Video
-                  </Button>
-                ) : (
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-sm">
+                  <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
+                </div>
+                <div className="flex gap-2">
+                  {canStartVideo ? (
+                    <Button 
+                      variant="secondary" 
+                      size="sm" 
+                      className="h-8 px-2 sm:px-4 flex items-center"
+                      onClick={() => handleStartVideo(session)}
+                    >
+                      <Video className="h-4 w-4 mr-1" />
+                      <span className="hidden sm:inline">Start Video</span>
+                      <span className="sm:hidden">Video</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 px-2 sm:px-4"
+                      onClick={() => onEditSession(session)}
+                    >
+                      <span className="hidden sm:inline">Details</span>
+                      <span className="sm:hidden">View</span>
+                    </Button>
+                  )}
                   <Button
                     variant="outline"
                     size="sm"
-                    className="whitespace-nowrap"
-                    onClick={() => onEditSession(session)}
+                    className="h-8 px-2 sm:px-4"
+                    onClick={() => onCancelSession(session)}
                   >
-                    Edit
+                    <span className="hidden sm:inline">Cancel</span>
+                    <span className="sm:hidden">Cancel</span>
                   </Button>
-                )}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="whitespace-nowrap"
-                  onClick={() => onCancelSession(session)}
-                >
-                  Cancel
-                </Button>
+                </div>
               </div>
             </div>
-          </Card>
+          </div>
         );
       })}
 
