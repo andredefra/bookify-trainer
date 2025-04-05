@@ -4,6 +4,7 @@ import { UpcomingSessionsCard } from "./overview/UpcomingSessionsCard";
 import { RecentClientsCard } from "./overview/RecentClientsCard";
 import { MessageRequestsCard } from "./overview/MessageRequestsCard";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
+import { EditSessionDialog } from "../tabs/sessions/EditSessionDialog";
 import { toast } from "sonner";
 import { TrainerSessionItem } from "@/types/sessions";
 
@@ -29,6 +30,8 @@ interface OverviewTabProps {
 
 export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
+  const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
   
   // Add payment status and waiting list to mock data if not available
   const sessionsWithPaymentInfo = upcomingSessions.map(session => ({
@@ -41,11 +44,22 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
     }
   }));
   
+  const handleViewSessionDetails = (session: TrainerSessionItem) => {
+    setSelectedSession(session);
+    setShowEditSessionDialog(true);
+  };
+  
+  const handleUpdateSession = (data: any, sessionId: number) => {
+    toast.success("Session updated successfully!");
+    setShowEditSessionDialog(false);
+  };
+  
   return (
     <div className="space-y-6">
       <UpcomingSessionsCard 
         sessions={sessionsWithPaymentInfo} 
-        onNewSession={() => setShowCreateSessionDialog(true)} 
+        onNewSession={() => setShowCreateSessionDialog(true)}
+        onViewDetails={handleViewSessionDetails}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -62,6 +76,13 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
           toast.success("Session created successfully!");
           setShowCreateSessionDialog(false);
         }}
+      />
+      
+      <EditSessionDialog
+        open={showEditSessionDialog}
+        onOpenChange={setShowEditSessionDialog}
+        session={selectedSession}
+        onSubmit={handleUpdateSession}
       />
     </div>
   );

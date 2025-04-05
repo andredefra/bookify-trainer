@@ -8,9 +8,10 @@ import { TrainerSessionItem } from "@/types/sessions";
 interface UpcomingSessionsCardProps {
   sessions: TrainerSessionItem[];
   onNewSession: () => void;
+  onViewDetails?: (session: TrainerSessionItem) => void;
 }
 
-export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSessionsCardProps) {
+export function UpcomingSessionsCard({ sessions, onNewSession, onViewDetails }: UpcomingSessionsCardProps) {
   // Get the first three upcoming sessions to display in the overview
   const nextSessions = sessions.slice(0, 3);
   
@@ -63,7 +64,12 @@ export function UpcomingSessionsCard({ sessions, onNewSession }: UpcomingSession
                     <div className="text-sm">
                       <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                     </div>
-                    <Button variant="outline" size="sm" className="h-8 px-2 sm:px-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-8 px-2 sm:px-4"
+                      onClick={() => onViewDetails && onViewDetails(session)}
+                    >
                       <span className="hidden sm:inline">Details</span>
                       <span className="sm:hidden">View</span>
                     </Button>
