@@ -40,6 +40,17 @@ const sampleSessions: TrainerSessionItem[] = [
     maxParticipants: 12,
     paymentStatus: { paid: 6, pending: 2, total: 8 },
     waitingList: 2
+  },
+  {
+    id: 4,
+    name: "Core Strength Video Class",
+    time: "19:00 - 20:00",
+    date: "06/04/2025",
+    participants: 15,
+    maxParticipants: 30,
+    paymentStatus: { paid: 12, pending: 3, total: 15 },
+    mode: "video", 
+    status: "scheduled" // Added to indicate this session needs to be started
   }
 ];
 
@@ -84,6 +95,11 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
     setShowEditSessionDialog(false);
   };
 
+  const handleStartVideoSession = (session: TrainerSessionItem) => {
+    toast.success(`Video session "${session.name}" started!`);
+    // In a real application, this would navigate to a video session page or launch the video interface
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -99,12 +115,14 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             sessions={sessionsToDisplay}
             onEditSession={handleEditSession}
             onCancelSession={handleCancelSession}
+            onStartVideoSession={handleStartVideoSession}
           />
         ) : (
           <SessionList 
             sessions={sessionsToDisplay} 
             onEditSession={handleEditSession} 
             onCancelSession={handleCancelSession}
+            onStartVideoSession={handleStartVideoSession}
           />
         )}
         

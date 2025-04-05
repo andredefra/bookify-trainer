@@ -57,6 +57,7 @@ export function EditSessionDialog({ open, onOpenChange, session, onSubmit }: Edi
       duration: "60",
       maxParticipants: session.maxParticipants.toString(),
       description: session.description || "",
+      mode: session.mode || "in-person",
       // Set other defaults
       isFree: false,
       price: "50",

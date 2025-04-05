@@ -49,6 +49,11 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
     setShowEditSessionDialog(false);
   };
 
+  const handleStartVideoSession = (session: TrainerSessionItem) => {
+    toast.success(`Video session "${session.name}" started!`);
+    // In a real application, this would navigate to a video session page or launch the video interface
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -64,12 +69,14 @@ export function SessionsTabContent({ upcomingSessions }: SessionsTabContentProps
             sessions={upcomingSessions}
             onEditSession={handleEditSession}
             onCancelSession={handleCancelSession}
+            onStartVideoSession={handleStartVideoSession}
           />
         ) : (
           <SessionList 
             sessions={upcomingSessions} 
             onEditSession={handleEditSession} 
             onCancelSession={handleCancelSession}
+            onStartVideoSession={handleStartVideoSession}
           />
         )}
         

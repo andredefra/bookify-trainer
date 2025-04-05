@@ -3,7 +3,8 @@
  * Shared types for session-related components
  */
 
-export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'pending' | 'completed';
+export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'pending' | 'completed' | 'scheduled';
+export type SessionMode = 'in-person' | 'video';
 
 // Base session interface with common properties for all contexts
 export interface SessionBase {
@@ -12,6 +13,8 @@ export interface SessionBase {
   time: string;
   date: string | Date;
   description?: string;
+  mode?: SessionMode;
+  status?: SessionStatus;
 }
 
 // Client-facing session properties

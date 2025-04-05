@@ -1,5 +1,5 @@
 
-import { CalendarIcon, Clock, DollarSign, Users } from "lucide-react";
+import { CalendarIcon, Clock, DollarSign, Users, Video, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useFormContext, useWatch } from "react-hook-form";
 import { SessionFormValues } from "./SessionFormSchema";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // Basic Session Information component (name, date, time, duration)
 export const BasicSessionInfo = () => {
@@ -29,6 +30,47 @@ export const BasicSessionInfo = () => {
             <FormControl>
               <Input placeholder="e.g., HIIT Workout" {...field} />
             </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {/* Session Mode */}
+      <FormField
+        control={control}
+        name="mode"
+        render={({ field }) => (
+          <FormItem className="md:col-span-2">
+            <FormLabel>Session Mode</FormLabel>
+            <FormControl>
+              <RadioGroup
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                className="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-4"
+              >
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="in-person" />
+                  </FormControl>
+                  <FormLabel className="font-normal flex items-center">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    In-person
+                  </FormLabel>
+                </FormItem>
+                <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value="video" />
+                  </FormControl>
+                  <FormLabel className="font-normal flex items-center">
+                    <Video className="w-4 h-4 mr-1" />
+                    Video Lesson
+                  </FormLabel>
+                </FormItem>
+              </RadioGroup>
+            </FormControl>
+            <FormDescription>
+              Choose whether this session will be held in-person or as a video lesson
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

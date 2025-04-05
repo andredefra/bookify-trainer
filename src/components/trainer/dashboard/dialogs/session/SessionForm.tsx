@@ -34,6 +34,7 @@ export function SessionForm({ onSubmit, onCancel, defaultValues }: SessionFormPr
       paymentTime: "before",
       cancellationHours: "2",
       description: "",
+      mode: "in-person",
       ...defaultValues,
     },
   });
@@ -62,7 +63,9 @@ export function SessionForm({ onSubmit, onCancel, defaultValues }: SessionFormPr
           <Button variant="outline" type="button" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">Create Session</Button>
+          <Button type="submit">
+            {defaultValues ? "Update Session" : "Create Session"}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

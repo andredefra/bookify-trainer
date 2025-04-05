@@ -1,158 +1,113 @@
 
-import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Edit, X } from "lucide-react";
-import { format } from "date-fns";
 import { TrainerSessionItem } from "@/types/sessions";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Video } from "lucide-react";
 
 interface CalendarViewProps {
   sessions: TrainerSessionItem[];
   onEditSession: (session: TrainerSessionItem) => void;
   onCancelSession: (session: TrainerSessionItem) => void;
+  onStartVideoSession?: (session: TrainerSessionItem) => void;
 }
 
-export function CalendarView({ sessions, onEditSession, onCancelSession }: CalendarViewProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+export function CalendarView({ 
+  sessions, 
+  onEditSession, 
+  onCancelSession,
+  onStartVideoSession
+}: CalendarViewProps) {
+  // This component would typically have a full calendar implementation
+  // For simplicity, we're just showing a list of sessions grouped by date
   
-  const parseSessionDate = (dateStr: string | Date): Date => {
-    if (dateStr instanceof Date) return dateStr;
+  // Group sessions by date
+  const groupedSessions: Record<string, TrainerSessionItem[]> = {};
+  
+  sessions.forEach(session => {
+    const date = typeof session.date === 'string' ? session.date : session.date.toLocaleDateString();
     
-    // Handle MM/DD/YYYY format
-    if (typeof dateStr === 'string' && dateStr.includes('/')) {
-      const [month, day, year] = dateStr.split('/').map(Number);
-      return new Date(year, month - 1, day);
+    if (!groupedSessions[date]) {
+      groupedSessions[date] = [];
     }
     
-    // Fall back to standard date parsing
-    return new Date(dateStr);
-  };
-
-  // Parse all session dates once
-  const sessionDatesMap = sessions.map(session => {
-    try {
-      const date = parseSessionDate(session.date);
-      return {
-        session,
-        parsedDate: date,
-        formattedDate: format(date, "MM/dd/yyyy")
-      };
-    } catch (error) {
-      console.error("Error parsing date for session:", session, error);
-      return null;
-    }
-  }).filter(item => item !== null) as { session: TrainerSessionItem, parsedDate: Date, formattedDate: string }[];
-
-  // Log the dates for debugging
-  console.log("Parsed session dates:", sessionDatesMap.map(item => ({
-    sessionName: item.session.name,
-    originalDate: item.session.date,
-    parsedDate: item.parsedDate.toISOString()
-  })));
-
-  // Get all valid dates for calendar highlighting
-  const sessionDates = sessionDatesMap.map(item => item.parsedDate);
-
-  // Get sessions for the selected date
-  const sessionsOnSelectedDate = selectedDate 
-    ? sessionDatesMap.filter(item => 
-        format(item.parsedDate, "MM/dd/yyyy") === format(selectedDate, "MM/dd/yyyy")
-      ).map(item => item.session)
-    : [];
-
+    groupedSessions[date].push(session);
+  });
+  
+  // Sort dates
+  const sortedDates = Object.keys(groupedSessions).sort((a, b) => {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    return dateA.getTime() - dateB.getTime();
+  });
+  
   return (
-    <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-      <div className="md:col-span-3">
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          className="border rounded-md p-3"
-          modifiers={{
-            highlighted: sessionDates
-          }}
-          modifiersStyles={{
-            highlighted: {
-              fontWeight: 'bold',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              color: '#3b82f6'
-            }
-          }}
-        />
-      </div>
-      <div className="md:col-span-4">
-        <Card>
-          <CardContent className="p-0">
-            <div className="p-4 border-b">
-              <h3 className="font-medium text-lg">
-                {selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Select a date"}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {sessionsOnSelectedDate.length} sessions scheduled
-              </p>
-            </div>
-            <ScrollArea className="h-[400px] p-4">
-              {sessionsOnSelectedDate.length > 0 ? (
-                <div className="space-y-4">
-                  {sessionsOnSelectedDate.map((session) => (
-                    <div key={session.id} className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="font-medium">{session.name}</h4>
-                          <p className="text-sm text-muted-foreground">{session.time}</p>
-                          <div className="flex flex-wrap items-center mt-2 text-sm">
-                            <span className="font-medium mr-2">{session.participants}/{session.maxParticipants}</span>
-                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                              {session.paymentStatus?.paid || 0} paid
-                            </Badge>
-                            {(session.paymentStatus?.pending || 0) > 0 && (
-                              <Badge variant="outline" className="ml-2 bg-yellow-50 text-yellow-700 border-yellow-200">
-                                {session.paymentStatus?.pending || 0} pending
-                              </Badge>
-                            )}
-                            {(session.waitingList || 0) > 0 && (
-                              <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200">
-                                {session.waitingList || 0} waiting
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="h-8 px-3"
-                            onClick={() => onEditSession(session)}
-                          >
-                            <Edit className="h-4 w-4 mr-1" />
-                            <span className="hidden sm:inline">Edit</span>
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
-                            onClick={() => onCancelSession(session)}
-                          >
-                            <X className="h-4 w-4 mr-1" />
-                            <span className="hidden sm:inline">Cancel</span>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+    <div className="space-y-8">
+      {sortedDates.map(date => (
+        <div key={date} className="space-y-4">
+          <h3 className="font-semibold text-lg">{date}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {groupedSessions[date].map(session => (
+              <div 
+                key={session.id}
+                className="p-4 bg-white border rounded-lg shadow-sm flex flex-col space-y-3"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="font-medium text-base">
+                      {session.name}
+                      {session.mode === 'video' && (
+                        <span className="ml-2 inline-flex items-center">
+                          <Video className="h-4 w-4 text-blue-500" />
+                        </span>
+                      )}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">{session.time}</p>
+                  </div>
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-transparent">
+                    {session.participants}/{session.maxParticipants}
+                  </Badge>
                 </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  No sessions scheduled for this date
+                
+                <div className="flex items-center space-x-2 mt-2">
+                  {session.mode === 'video' && session.status === 'scheduled' && onStartVideoSession ? (
+                    <Button 
+                      size="sm" 
+                      variant="secondary"
+                      className="flex-1"
+                      onClick={() => onStartVideoSession(session)}
+                    >
+                      <Video className="h-4 w-4 mr-2" /> Start Video
+                    </Button>
+                  ) : (
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => onEditSession(session)}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => onCancelSession(session)}
+                  >
+                    Cancel
+                  </Button>
                 </div>
-              )}
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      
+      {sortedDates.length === 0 && (
+        <div className="flex items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed">
+          <p className="text-muted-foreground">No sessions scheduled</p>
+        </div>
+      )}
     </div>
   );
 }

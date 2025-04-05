@@ -34,6 +34,7 @@ export const sessionFormSchema = z.object({
     message: "Cancellation hours must be a valid number greater than or equal to 0.",
   }),
   description: z.string().optional(),
+  mode: z.enum(["in-person", "video"]).default("in-person"),
 });
 
 export type SessionFormValues = z.infer<typeof sessionFormSchema>;
