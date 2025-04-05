@@ -62,19 +62,21 @@ export const featuredSession: SessionItem = {
 };
 
 // Past sessions
-export const pastSessions = [
+export const pastSessions: SessionItem[] = [
   {
     id: 201,
     name: "Strength Training",
     trainer: "Sarah Johnson",
     time: "15:00 - 16:00",
-    date: "Last week"
+    date: "Last week",
+    status: "completed" as SessionStatus
   },
   {
     id: 202,
     name: "Cardio Kickboxing",
     trainer: "Alex Thompson",
     time: "10:00 - 11:00",
-    date: "2 weeks ago"
+    date: "2 weeks ago",
+    status: "completed" as SessionStatus
   }
 ];

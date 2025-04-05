@@ -1,17 +1,10 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-interface PastSessionItem {
-  id: number;
-  name: string;
-  trainer: string;
-  time: string;
-  date: string;
-}
+import { SessionItem } from "@/types/sessions";
 
 interface PastSessionsTabProps {
-  pastSessions: PastSessionItem[];
+  pastSessions: SessionItem[];
 }
 
 export function PastSessionsTab({ pastSessions }: PastSessionsTabProps) {
