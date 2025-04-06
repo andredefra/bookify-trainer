@@ -59,7 +59,6 @@ export const plans: Plan[] = [
     period: "per month",
     description: "Complete solution for gyms with multiple trainers.",
     features: [
-      "White Label Platform",
       "Unlimited Trainers",
       "Unlimited Clients",
       "Reduced Pro Pricing for Trainers (€9/month)",

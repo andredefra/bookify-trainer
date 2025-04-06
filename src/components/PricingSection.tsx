@@ -58,7 +58,6 @@ const PricingSection = () => {
   ];
   
   const gymFeatures = [
-    t('pricing.features.whiteLabel'),
     t('pricing.features.unlimitedTrainers'),
     t('pricing.features.unlimitedClients'),
     t('pricing.features.reducedProPricing'),

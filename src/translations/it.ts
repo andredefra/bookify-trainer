@@ -132,7 +132,6 @@ export const it = {
   'pricing.features.advancedAnalytics': 'Analisi Avanzate',
   'pricing.features.waitlistManagement': 'Gestione Liste d\'Attesa',
   'pricing.features.customPrograms': 'Programmi Personalizzati',
-  'pricing.features.whiteLabel': 'White Label',
   'pricing.features.unlimitedTrainers': 'Trainers Illimitati',
   'pricing.features.unlimitedClients': 'Clienti Illimitati',
   'pricing.features.reducedProPricing': 'Prezzo Pro Ridotto per Trainers (€9/mese)',
