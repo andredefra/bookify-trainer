@@ -1,3 +1,4 @@
+
 import { GraduationCap, Users, PieChart, BarChart4, Star } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useEffect } from 'react';
@@ -39,10 +40,10 @@ const GymSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto mb-16">
           <div className="reveal">
-            <div className="h-64 md:h-auto rounded-lg bg-cover bg-center shadow-lg" 
+            <div className="h-64 md:h-auto rounded-lg bg-contain bg-no-repeat bg-center shadow-lg" 
                 style={{
-                  backgroundImage: `url("/lovable-uploads/f6e41d18-a549-4fad-986d-5abb4047af21.png")`,
-                  backgroundSize: "cover",
+                  backgroundImage: `url("/lovable-uploads/90229e7e-b20c-4027-aec2-64f8dbf1d36c.png")`,
+                  backgroundSize: "contain",
                   backgroundPosition: "center",
                   height: "100%",
                   minHeight: "320px"
