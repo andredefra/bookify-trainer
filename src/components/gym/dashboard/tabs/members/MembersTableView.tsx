@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Member } from "./types";
-import { getStatusColor, getMembershipColor, getPlatformStatusColor, getPlatformStatusText } from "./utils";
+import { getMembershipColor, getPlatformStatusColor, getPlatformStatusText } from "./utils";
 
 interface MembersTableViewProps {
   members: Member[];
@@ -28,7 +28,6 @@ export function MembersTableView({ members, sendInviteEmail }: MembersTableViewP
             <TableHead>Member</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Membership</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Platform Status</TableHead>
             <TableHead>Join Date</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -50,11 +49,6 @@ export function MembersTableView({ members, sendInviteEmail }: MembersTableViewP
               <TableCell>
                 <Badge variant="outline" className={getMembershipColor(member.membershipType)}>
                   {member.membershipType}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getStatusColor(member.status)}>
-                  {member.status}
                 </Badge>
               </TableCell>
               <TableCell>
