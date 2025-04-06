@@ -13,5 +13,6 @@ export interface Plan {
   features: string[];
   limitations: string[];
   isPopular: boolean;
+  transactionFeeNote?: string;
   icon: LucideIcon;
 }
