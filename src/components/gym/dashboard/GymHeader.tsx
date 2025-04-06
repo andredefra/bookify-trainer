@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,16 +30,9 @@ export function GymHeader({
   const defaultImage = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
   const handleLogout = () => {
-    // Clear user data from localStorage
     localStorage.removeItem('demo-user');
-
-    // Show success toast
     toast.success("Logged out successfully!");
-
-    // Execute the passed onLogout function
     onLogout();
-
-    // Navigate to the landing page
     navigate('/');
   };
   
@@ -55,7 +47,7 @@ export function GymHeader({
                 <span className="sr-only">Toggle sidebar</span>
               </Button>
             )}
-            <span className="font-display text-xl font-bold text-primary -ml-2">MyPersonal.fit</span>
+            <span className="font-display text-xl font-bold text-primary -ml-4">MyPersonal.fit</span>
             
             <div className="hidden md:flex ml-6 items-center space-x-2">
               <Building className="h-4 w-4 text-primary" />
