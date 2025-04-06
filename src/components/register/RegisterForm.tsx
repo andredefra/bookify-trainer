@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -124,7 +125,7 @@ export const RegisterForm = ({ onSubmit, onCancel }: RegisterFormProps) => {
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">Create Account & Continue</Button>
+          <Button type="submit">Create Account</Button>
         </div>
       </form>
     </Form>
