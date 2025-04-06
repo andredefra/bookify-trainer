@@ -1,8 +1,14 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { ArrowRight, Check } from "lucide-react";
 
 export function IntegrationsTab() {
+  const handleConnect = () => {
+    toast.success("Connection initiated. Please follow the authentication steps.");
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -17,7 +23,7 @@ export function IntegrationsTab() {
                 <h4 className="font-medium">Google Calendar</h4>
                 <p className="text-sm text-muted-foreground">Sync gym schedules with Google Calendar</p>
               </div>
-              <Button variant="outline">Connect</Button>
+              <Button variant="outline" onClick={handleConnect}>Connect</Button>
             </div>
           </div>
         </CardContent>
