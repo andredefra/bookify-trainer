@@ -61,6 +61,7 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
           <DataSyncSettings 
             dataSync={dataSync} 
             toggleDataSync={toggleDataSync} 
+            appName={googleFitConnected ? "Google Fit" : (appleHealthConnected ? "Apple Health" : undefined)}
           />
         )}
       </CardContent>

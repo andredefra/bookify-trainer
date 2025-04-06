@@ -12,12 +12,16 @@ interface DataSyncSettings {
 interface DataSyncSettingsProps {
   dataSync: DataSyncSettings;
   toggleDataSync: (metric: keyof DataSyncSettings) => void;
+  appName?: string; // Make the appName prop optional
 }
 
-export function DataSyncSettings({ dataSync, toggleDataSync }: DataSyncSettingsProps) {
+export function DataSyncSettings({ dataSync, toggleDataSync, appName }: DataSyncSettingsProps) {
   return (
     <div className="border-t pt-4 mt-4">
-      <h3 className="font-medium mb-3">Data Sync Settings</h3>
+      <h3 className="font-medium mb-3">
+        Data Sync Settings
+        {appName && <span className="text-muted-foreground text-sm ml-2">({appName})</span>}
+      </h3>
       <div className="space-y-3">
         <SyncOption
           id="steps-sync"
