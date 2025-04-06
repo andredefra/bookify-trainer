@@ -1,11 +1,11 @@
 
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { toast } from "sonner";
-import { RegisterForm, registerSchema } from "@/components/trainer/RegisterForm";
+import { RegisterForm, registerSchema } from "@/components/register/RegisterForm";
 import { z } from "zod";
+import RegisterContainer from "@/components/register/RegisterContainer";
 
 const Register = () => {
   const location = useLocation();
@@ -39,33 +39,10 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow flex items-center justify-center py-20 px-6">
-        <div className="w-full max-w-lg">
-          <div className="text-center mb-8 mt-4">
-            <h1 className="text-3xl font-display font-bold text-primary mb-2">Create your account</h1>
-            <p className="text-muted-foreground">Join Personal.ai and start your fitness journey</p>
-          </div>
-          
-          <div className="bg-white rounded-xl shadow-sm border border-border p-8">
-            <RegisterForm onSubmit={handleRegister} onCancel={handleCancel} />
-            
-            <div className="mt-6 pt-6 border-t border-border text-center">
-              <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <Link to="/login" className="text-primary hover:underline">
-                  Sign in
-                </Link>
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+    <RegisterContainer 
+      onRegister={handleRegister} 
+      onCancel={handleCancel} 
+    />
   );
 };
 
