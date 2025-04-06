@@ -1,3 +1,4 @@
+
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -131,7 +132,7 @@ export const en = {
   'pricing.features.advancedAnalytics': 'Advanced Analytics',
   'pricing.features.waitlistManagement': 'Waitlist Management',
   'pricing.features.customPrograms': 'Custom Training Programs',
-  'pricing.features.whiteLabel': 'White Label Platform',
+  'pricing.features.whiteLabel': 'White Label',
   'pricing.features.unlimitedTrainers': 'Unlimited Trainers',
   'pricing.features.unlimitedClients': 'Unlimited Clients',
   'pricing.features.reducedProPricing': 'Reduced Pro Pricing for Trainers (€9/mo)',
