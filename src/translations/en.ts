@@ -109,6 +109,7 @@ export const en = {
   'pricing.pro.priceAnnual': '€24',
   'pricing.pro.period': '/month',
   'pricing.pro.fee': '+ 1.5% transaction fee',
+  'pricing.pro.transactionFeeNote': '(2% transaction fee applies to digital payments from platform trainers)',
   'pricing.pro.cta': 'Upgrade to Pro',
   'pricing.pro.recommended': 'RECOMMENDED',
   'pricing.gym.title': 'Gym',

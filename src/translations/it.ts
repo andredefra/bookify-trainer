@@ -109,6 +109,7 @@ export const it = {
   'pricing.pro.priceAnnual': '€24',
   'pricing.pro.period': '/mese',
   'pricing.pro.fee': '+ 1.5% commissione sulle transazioni',
+  'pricing.pro.transactionFeeNote': '(2% di commissione si applica ai pagamenti digitali dei trainers inseriti in piattaforma)',
   'pricing.pro.cta': 'Passa a Pro',
   'pricing.pro.recommended': 'CONSIGLIATO',
   'pricing.gym.title': 'Palestra',
