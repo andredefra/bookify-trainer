@@ -5,8 +5,10 @@ import { GymSidebar } from "./GymSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
 import { TrainersTab } from "./tabs/TrainersTab";
 import { MembersTab } from "./tabs/MembersTab";
+import { MessagesTab } from "./tabs/MessagesTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
+import { toast } from "sonner";
 
 export function GymDashboardContainer() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -33,7 +35,12 @@ export function GymDashboardContainer() {
   }, []);
 
   const handleLogout = () => {
-    // Logout handled by GymHeader component
+    // Clear user data from localStorage
+    localStorage.removeItem('demo-user');
+    // Show toast notification
+    toast.success("Logged out successfully!");
+    // Redirect to home page
+    window.location.href = '/';
   };
 
   return (
@@ -56,6 +63,7 @@ export function GymDashboardContainer() {
           {activeTab === "overview" && <OverviewTab user={user} />}
           {activeTab === "trainers" && <TrainersTab />}
           {activeTab === "members" && <MembersTab />}
+          {activeTab === "messages" && <MessagesTab />}
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "settings" && <SettingsTab user={user} />}
         </main>

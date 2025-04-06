@@ -2,7 +2,7 @@
 import { FitnessAppIntegration } from "@/components/client/settings/fitness-integrations/FitnessAppIntegration";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link2, Globe, Database, Shield } from "lucide-react";
+import { Link2, Database, Shield } from "lucide-react";
 
 interface IntegrationsSectionProps {
   user: { 
@@ -34,29 +34,14 @@ export function IntegrationsSection({ user }: IntegrationsSectionProps) {
       <Card className="border shadow-sm overflow-hidden">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Globe className="h-5 w-5 text-primary" />
-            Third-party Services
+            <Database className="h-5 w-5 text-primary" />
+            Other Integrations
           </CardTitle>
           <CardDescription>
             Connect to other services that help with your fitness journey
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex justify-between items-center p-4 border rounded-lg">
-            <div className="flex items-center space-x-3">
-              <div className="bg-blue-100 p-2 rounded-full">
-                <svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C10.6868 2 9.38642 2.25866 8.17317 2.7612C6.95991 3.26375 5.85752 4.00035 4.92893 4.92893C3.05357 6.8043 2 9.34784 2 12C2 14.6522 3.05357 17.1957 4.92893 19.0711C5.85752 19.9997 6.95991 20.7362 8.17317 21.2388C9.38642 21.7413 10.6868 22 12 22C14.6522 22 17.1957 20.9464 19.0711 19.0711C20.9464 17.1957 22 14.6522 22 12C22 10.6868 21.7413 9.38642 21.2388 8.17317C20.7362 6.95991 19.9997 5.85752 19.0711 4.92893C18.1425 4.00035 17.0401 3.26375 15.8268 2.7612C14.6136 2.25866 13.3132 2 12 2Z" fill="currentColor"/>
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-medium">Meditation App</h4>
-                <p className="text-sm text-muted-foreground">Connect for mindfulness tracking</p>
-              </div>
-            </div>
-            <Button variant="outline" size="sm">Connect</Button>
-          </div>
-          
           <div className="flex justify-between items-center p-4 border rounded-lg">
             <div className="flex items-center space-x-3">
               <div className="bg-green-100 p-2 rounded-full">

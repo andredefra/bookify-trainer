@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, Filter, Calendar, ArrowUpDown } from "lucide-react";
+import { Search, Plus, Filter, Calendar, ArrowUpDown, Mail } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 export function MembersTab() {
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
   
+  // Enhanced member data with platform activity status
   const members = [
     { 
       id: 1, 
@@ -25,6 +26,8 @@ export function MembersTab() {
       email: "sofia.r@example.com",
       membershipType: "Premium",
       status: "Active",
+      platformActive: true,
+      lastPlatformLogin: "Today",
       joinDate: "Jan 15, 2023",
       trainingSessions: 48,
       lastActive: "Today",
@@ -36,6 +39,8 @@ export function MembersTab() {
       email: "luca.m@example.com",
       membershipType: "Standard",
       status: "Active",
+      platformActive: false,
+      lastPlatformLogin: "Never",
       joinDate: "Mar 3, 2023",
       trainingSessions: 32,
       lastActive: "Yesterday",
@@ -47,6 +52,8 @@ export function MembersTab() {
       email: "elena.c@example.com",
       membershipType: "Premium",
       status: "Away",
+      platformActive: true,
+      lastPlatformLogin: "2 days ago",
       joinDate: "Nov 12, 2022",
       trainingSessions: 56,
       lastActive: "4 days ago",
@@ -58,6 +65,8 @@ export function MembersTab() {
       email: "roberto.f@example.com",
       membershipType: "Standard",
       status: "Active",
+      platformActive: false,
+      lastPlatformLogin: "Never",
       joinDate: "Feb 28, 2023",
       trainingSessions: 28,
       lastActive: "2 days ago",
@@ -69,6 +78,8 @@ export function MembersTab() {
       email: "martina.r@example.com",
       membershipType: "Premium",
       status: "Active",
+      platformActive: true,
+      lastPlatformLogin: "Yesterday",
       joinDate: "Dec 10, 2022",
       trainingSessions: 42,
       lastActive: "Today",
@@ -100,6 +111,23 @@ export function MembersTab() {
     }
   };
 
+  const getPlatformStatusColor = (isActive: boolean) => {
+    return isActive 
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
+      : "bg-red-50 text-red-700 border-red-200";
+  };
+
+  const getPlatformStatusText = (isActive: boolean) => {
+    return isActive ? "Platform Active" : "Not on Platform";
+  };
+
+  const sendInviteEmail = (email: string) => {
+    // This would typically integrate with your email system
+    console.log(`Sending platform invitation to ${email}`);
+    // Show a toast or other notification
+    alert(`Invitation sent to ${email}`);
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -129,7 +157,7 @@ export function MembersTab() {
         </div>
       </div>
       
-      <div className="bg-white rounded-md border">
+      <div className="bg-white rounded-md border shadow-sm">
         <div className="p-4 border-b flex justify-between items-center">
           <div className="flex items-center gap-2">
             <p className="font-medium">All Members</p>
@@ -167,6 +195,7 @@ export function MembersTab() {
                   <TableHead>Email</TableHead>
                   <TableHead>Membership</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Platform Status</TableHead>
                   <TableHead>Join Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -194,9 +223,26 @@ export function MembersTab() {
                         {member.status}
                       </Badge>
                     </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={getPlatformStatusColor(member.platformActive)}>
+                        {getPlatformStatusText(member.platformActive)}
+                      </Badge>
+                    </TableCell>
                     <TableCell>{member.joinDate}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm">View</Button>
+                      <div className="flex justify-end gap-2">
+                        {!member.platformActive && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => sendInviteEmail(member.email)}
+                          >
+                            <Mail className="h-3 w-3 mr-1" />
+                            Invite
+                          </Button>
+                        )}
+                        <Button variant="outline" size="sm">View</Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -206,7 +252,7 @@ export function MembersTab() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
             {members.map(member => (
-              <Card key={member.id} className="overflow-hidden">
+              <Card key={member.id} className="overflow-hidden border shadow-sm">
                 <CardContent className="p-0">
                   <div className="flex flex-col p-4">
                     <div className="flex items-center gap-3 mb-3">
@@ -227,6 +273,9 @@ export function MembersTab() {
                       <Badge variant="outline" className={getStatusColor(member.status)}>
                         {member.status}
                       </Badge>
+                      <Badge variant="outline" className={getPlatformStatusColor(member.platformActive)}>
+                        {getPlatformStatusText(member.platformActive)}
+                      </Badge>
                     </div>
                     
                     <div className="text-sm space-y-1 mb-4">
@@ -242,9 +291,26 @@ export function MembersTab() {
                         <span className="text-muted-foreground">Last active:</span>
                         <span>{member.lastActive}</span>
                       </div>
+                      {member.platformActive && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Last platform login:</span>
+                          <span>{member.lastPlatformLogin}</span>
+                        </div>
+                      )}
                     </div>
                     
                     <div className="flex gap-2">
+                      {!member.platformActive && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => sendInviteEmail(member.email)}
+                          className="flex-1"
+                        >
+                          <Mail className="h-3 w-3 mr-1" />
+                          Send Invite
+                        </Button>
+                      )}
                       <Button variant="outline" size="sm" className="flex-1">Profile</Button>
                       <Button size="sm" className="flex-1">Manage</Button>
                     </div>
