@@ -50,7 +50,6 @@ export const plans: Plan[] = [
     ],
     limitations: [],
     isPopular: true,
-    transactionFeeNote: "(2% transaction fee applies to digital payments from platform trainers)",
     icon: CheckCircle2
   },
   {
@@ -69,6 +68,7 @@ export const plans: Plan[] = [
     ],
     limitations: [],
     isPopular: false,
+    transactionFeeNote: "(2% transaction fee applies to digital payments from platform trainers)",
     icon: Building2
   }
 ];

@@ -66,8 +66,8 @@ const PricingSection = () => {
     t('pricing.features.gymIntegration'),
   ];
 
-  // Transaction fee note for Pro plan
-  const proTransactionFeeNote = t('pricing.pro.transactionFeeNote');
+  // Transaction fee note for Gym plan
+  const gymTransactionFeeNote = t('pricing.gym.transactionFeeNote');
 
   // Plans configuration for personal trainers
   const trainerPricingPlans = [
@@ -100,7 +100,6 @@ const PricingSection = () => {
       price: annual ? t('pricing.pro.priceAnnual') : t('pricing.pro.price'),
       period: t('pricing.pro.period'),
       fee: t('pricing.pro.fee'),
-      transactionFeeNote: proTransactionFeeNote,
       features: proFeatures,
       ctaText: t('pricing.pro.cta'),
       ctaLink: '/register?plan=pro',
@@ -115,6 +114,7 @@ const PricingSection = () => {
     price: annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price'),
     period: t('pricing.gym.period'),
     fee: t('pricing.gym.fee'),
+    transactionFeeNote: gymTransactionFeeNote,
     features: gymFeatures,
     ctaText: t('pricing.gym.cta'),
     ctaLink: '/register?plan=gym',
@@ -144,7 +144,6 @@ const PricingSection = () => {
               price={plan.price}
               period={plan.period}
               fee={plan.fee}
-              transactionFeeNote={plan.transactionFeeNote}
               features={plan.features}
               ctaText={plan.ctaText}
               ctaLink={plan.ctaLink}
@@ -170,6 +169,7 @@ const PricingSection = () => {
               price={gymPlan.price}
               period={gymPlan.period}
               fee={gymPlan.fee}
+              transactionFeeNote={gymPlan.transactionFeeNote}
               features={gymPlan.features}
               ctaText={gymPlan.ctaText}
               ctaLink={gymPlan.ctaLink}
