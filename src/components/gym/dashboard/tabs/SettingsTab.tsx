@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -211,24 +210,6 @@ export function SettingsTab({ user }: SettingsTabProps) {
                   <div className="space-y-1">
                     <h4 className="font-medium">Google Calendar</h4>
                     <p className="text-sm text-muted-foreground">Sync gym schedules with Google Calendar</p>
-                  </div>
-                  <Button variant="outline">Connect</Button>
-                </div>
-                <Separator />
-                
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <h4 className="font-medium">Stripe</h4>
-                    <p className="text-sm text-muted-foreground">Process payments and memberships</p>
-                  </div>
-                  <Button variant="outline">Connect</Button>
-                </div>
-                <Separator />
-                
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <h4 className="font-medium">MailChimp</h4>
-                    <p className="text-sm text-muted-foreground">Email marketing campaigns</p>
                   </div>
                   <Button variant="outline">Connect</Button>
                 </div>
