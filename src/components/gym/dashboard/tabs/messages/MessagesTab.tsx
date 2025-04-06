@@ -1,10 +1,12 @@
-
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabContent } from "./TabContent";
 import { TrainerMessage, Conversation } from "./types";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
+import { NewMessageDialog } from "./NewMessageDialog";
 
 interface MessagesTabProps {
   onMessagesRead?: () => void;
@@ -12,7 +14,7 @@ interface MessagesTabProps {
 
 export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
   const [activeConversation, setActiveConversation] = useState<number | null>(null);
-  const [newMessage, setNewMessage] = useState("");
+  const [showNewMessageDialog, setShowNewMessageDialog] = useState(false);
   
   // Mock data for trainers
   const trainers: TrainerMessage[] = [
@@ -112,9 +114,18 @@ export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Trainer Messages</h1>
-        <p className="text-muted-foreground">Communicate with your gym's trainers</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Trainer Messages</h1>
+          <p className="text-muted-foreground">Communicate with your gym's trainers</p>
+        </div>
+        <Button 
+          onClick={() => setShowNewMessageDialog(true)} 
+          className="flex items-center gap-2"
+        >
+          <Send className="h-4 w-4" />
+          <span>New Message</span>
+        </Button>
       </div>
       
       <Card className="border-none shadow-none">
@@ -164,6 +175,37 @@ export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
           </TabsContent>
         </Tabs>
       </Card>
+
+      <NewMessageDialog 
+        open={showNewMessageDialog} 
+        onOpenChange={setShowNewMessageDialog} 
+        trainers={trainers}
+        onSend={(trainerId, message) => {
+          setConversations(prev => {
+            const conversation = [...(prev[trainerId] || [])];
+            const newId = conversation.length > 0 
+              ? Math.max(...conversation.map(m => m.id)) + 1 
+              : 1;
+              
+            return {
+              ...prev,
+              [trainerId]: [
+                ...conversation,
+                { 
+                  id: newId, 
+                  sender: "you", 
+                  text: message, 
+                  time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                }
+              ]
+            };
+          });
+          
+          setActiveConversation(trainerId);
+          
+          toast.success("Message sent successfully");
+        }}
+      />
     </div>
   );
 }

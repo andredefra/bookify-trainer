@@ -1,67 +1,32 @@
 
 import { useState } from "react";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle,
-  DialogDescription,
-  DialogFooter
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
-import { toast } from "sonner";
-
-interface Trainer {
-  id: number;
-  name: string;
-  status: string;
-}
+import { TrainerMessage } from "./types";
 
 interface NewMessageDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  trainers: TrainerMessage[];
   onSend: (trainerId: number, message: string) => void;
-  trainers: Trainer[];
 }
 
-export function NewMessageDialog({ 
-  open, 
-  onOpenChange, 
-  onSend,
-  trainers 
-}: NewMessageDialogProps) {
-  const [selectedTrainerId, setSelectedTrainerId] = useState<number | null>(null);
-  const [messageContent, setMessageContent] = useState("");
-  const [isSending, setIsSending] = useState(false);
+export function NewMessageDialog({ open, onOpenChange, trainers, onSend }: NewMessageDialogProps) {
+  const [selectedTrainer, setSelectedTrainer] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   
-  const handleSend = () => {
-    if (!selectedTrainerId || !messageContent.trim()) {
-      toast.error("Please select a trainer and write a message");
-      return;
-    }
+  const handleSubmit = () => {
+    if (!selectedTrainer || !message.trim()) return;
     
-    setIsSending(true);
+    onSend(Number(selectedTrainer), message);
     
-    // Simulate sending with a small delay
-    setTimeout(() => {
-      onSend(selectedTrainerId, messageContent);
-      setIsSending(false);
-      onOpenChange(false);
-      
-      // Reset form
-      setSelectedTrainerId(null);
-      setMessageContent("");
-    }, 500);
+    // Reset form
+    setSelectedTrainer("");
+    setMessage("");
+    onOpenChange(false);
   };
   
   return (
@@ -69,26 +34,18 @@ export function NewMessageDialog({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>New Message</DialogTitle>
-          <DialogDescription>
-            Send a message to one of your trainers
-          </DialogDescription>
         </DialogHeader>
-        
-        <div className="space-y-4 py-2">
+        <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="trainer">Recipient</Label>
-            <Select 
-              value={selectedTrainerId?.toString() || ""} 
-              onValueChange={(value) => setSelectedTrainerId(parseInt(value))}
-            >
-              <SelectTrigger id="trainer">
+            <Label htmlFor="trainer">Trainer</Label>
+            <Select value={selectedTrainer} onValueChange={setSelectedTrainer}>
+              <SelectTrigger id="trainer" className="w-full">
                 <SelectValue placeholder="Select a trainer" />
               </SelectTrigger>
               <SelectContent>
-                {trainers.map((trainer) => (
+                {trainers.map(trainer => (
                   <SelectItem key={trainer.id} value={trainer.id.toString()}>
-                    {trainer.name} {trainer.status === "online" ? "(Online)" : 
-                      trainer.status === "away" ? "(Away)" : "(Offline)"}
+                    {trainer.name} ({trainer.status === "online" ? "Online" : trainer.status === "away" ? "Away" : "Offline"})
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -97,26 +54,26 @@ export function NewMessageDialog({
           
           <div className="space-y-2">
             <Label htmlFor="message">Message</Label>
-            <Textarea
-              id="message"
-              placeholder="Type your message here..."
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-              rows={5}
-              className="resize-none"
+            <Textarea 
+              id="message" 
+              placeholder="Type your message here"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="min-h-[120px]"
             />
           </div>
         </div>
         
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button 
-            onClick={handleSend} 
-            disabled={!selectedTrainerId || !messageContent.trim() || isSending}
+            type="submit" 
+            onClick={handleSubmit}
+            disabled={!selectedTrainer || !message.trim()}
           >
-            {isSending ? "Sending..." : "Send Message"}
+            Send Message
           </Button>
         </DialogFooter>
       </DialogContent>
