@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,7 +52,7 @@ export function GymHeader({
             
             <div className="hidden md:flex ml-6 items-center space-x-2">
               <Building className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">{displayName}</span>
+              <span className="text-sm font-medium">Fitactive - Via Tolstoj 79, San Giuliano Milanese (MI) - 20098</span>
             </div>
           </div>
           
