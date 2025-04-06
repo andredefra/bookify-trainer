@@ -1,5 +1,5 @@
 
-import { Mail } from "lucide-react";
+import { Mail, UserPlus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/table";
 import { Member } from "./types";
 import { getMembershipColor, getPlatformStatusColor, getPlatformStatusText } from "./utils";
+import { useState } from "react";
+import { AssignTrainerDialog } from "./AssignTrainerDialog";
 
 interface MembersTableViewProps {
   members: Member[];
@@ -20,62 +22,78 @@ interface MembersTableViewProps {
 }
 
 export function MembersTableView({ members, sendInviteEmail }: MembersTableViewProps) {
+  const [isAssignTrainerOpen, setIsAssignTrainerOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+
+  const handleAssignTrainer = (member: Member) => {
+    setSelectedMember(member);
+    setIsAssignTrainerOpen(true);
+  };
+
   return (
-    <div className="overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Member</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Membership</TableHead>
-            <TableHead>Platform Status</TableHead>
-            <TableHead>Join Date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {members.map(member => (
-            <TableRow key={member.id}>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={member.image} alt={member.name} />
-                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <span className="font-medium">{member.name}</span>
-                </div>
-              </TableCell>
-              <TableCell>{member.email}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getMembershipColor(member.membershipType)}>
-                  {member.membershipType}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className={getPlatformStatusColor(member.platformActive)}>
-                  {getPlatformStatusText(member.platformActive)}
-                </Badge>
-              </TableCell>
-              <TableCell>{member.joinDate}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  {!member.platformActive && (
+    <>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Member</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Membership</TableHead>
+              <TableHead>Platform Status</TableHead>
+              <TableHead>Join Date</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {members.map(member => (
+              <TableRow key={member.id}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={member.image} alt={member.name} />
+                      <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium">{member.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{member.email}</TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={getMembershipColor(member.membershipType)}>
+                    {member.membershipType}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={getPlatformStatusColor(member.platformActive)}>
+                    {getPlatformStatusText(member.platformActive)}
+                  </Badge>
+                </TableCell>
+                <TableCell>{member.joinDate}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => sendInviteEmail(member.email)}
+                      onClick={() => handleAssignTrainer(member)}
                     >
-                      <Mail className="h-3 w-3 mr-1" />
-                      Invite
+                      <UserPlus className="h-3 w-3 mr-1" />
+                      Assign Trainer
                     </Button>
-                  )}
-                  <Button variant="outline" size="sm">View</Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+                    <Button variant="outline" size="sm">View</Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      
+      {selectedMember && (
+        <AssignTrainerDialog
+          open={isAssignTrainerOpen}
+          onOpenChange={setIsAssignTrainerOpen}
+          member={selectedMember}
+        />
+      )}
+    </>
   );
 }
