@@ -5,6 +5,7 @@ import { TrainerMessage, Conversation } from "./types";
 import { ChatMessage } from "./ChatMessage";
 import { Send } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 
 interface TabContentProps {
   activeTab: string;

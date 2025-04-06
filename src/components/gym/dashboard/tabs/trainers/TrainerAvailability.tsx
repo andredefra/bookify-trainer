@@ -10,11 +10,6 @@ export function TrainerAvailability() {
   
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Trainer Availability</h1>
-        <p className="text-muted-foreground">View and manage your trainers' schedules</p>
-      </div>
-      
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-lg font-medium">Availability Schedule</CardTitle>
