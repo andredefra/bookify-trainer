@@ -8,7 +8,7 @@ export const RegisterHeader: React.FC = () => {
         Create your account
       </h1>
       <p className="text-muted-foreground">
-        Join Personal.ai and start your fitness journey
+        Join MyPersonal.fit and start your fitness journey
       </p>
     </div>
   );
