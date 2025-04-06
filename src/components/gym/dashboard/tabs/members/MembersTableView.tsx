@@ -1,5 +1,5 @@
 
-import { Mail, UserPlus } from "lucide-react";
+import { Mail, UserPlus, Edit } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -70,14 +70,24 @@ export function MembersTableView({ members, sendInviteEmail }: MembersTableViewP
                 <TableCell>{member.joinDate}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleAssignTrainer(member)}
-                    >
-                      <UserPlus className="h-3 w-3 mr-1" />
-                      Assign Trainer
-                    </Button>
+                    {member.platformActive ? (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                      >
+                        <Edit className="h-3 w-3 mr-1" />
+                        Edit
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleAssignTrainer(member)}
+                      >
+                        <UserPlus className="h-3 w-3 mr-1" />
+                        Assign Trainer
+                      </Button>
+                    )}
                     <Button variant="outline" size="sm">View</Button>
                   </div>
                 </TableCell>

@@ -1,5 +1,5 @@
 
-import { Mail, UserPlus } from "lucide-react";
+import { Mail, UserPlus, Edit } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -75,15 +75,26 @@ export function MembersCardView({ members }: MembersCardViewProps) {
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => handleAssignTrainer(member)}
-                    className="flex-1"
-                  >
-                    <UserPlus className="h-3 w-3 mr-1" />
-                    Assign Trainer
-                  </Button>
+                  {member.platformActive ? (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="flex-1"
+                    >
+                      <Edit className="h-3 w-3 mr-1" />
+                      Edit
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handleAssignTrainer(member)}
+                      className="flex-1"
+                    >
+                      <UserPlus className="h-3 w-3 mr-1" />
+                      Assign Trainer
+                    </Button>
+                  )}
                   <Button variant="outline" size="sm" className="flex-1">Profile</Button>
                   <Button size="sm" className="flex-1">Manage</Button>
                 </div>
