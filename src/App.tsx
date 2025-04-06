@@ -58,7 +58,7 @@ const RevealObserver = () => {
 const queryClient = new QueryClient();
 
 // Separate the router part to properly scope the hooks
-const AppRoutes = () => {
+const AppContent = () => {
   return (
     <>
       <ScrollToTop />
@@ -85,15 +85,15 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </TooltipProvider>
-      </LanguageProvider>
+      <BrowserRouter>
+        <LanguageProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <AppContent />
+          </TooltipProvider>
+        </LanguageProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };
