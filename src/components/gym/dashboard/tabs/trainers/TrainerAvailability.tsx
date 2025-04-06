@@ -18,7 +18,7 @@ export function TrainerAvailability() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-lg font-medium">Availability Schedule</CardTitle>
-          <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as "calendar" | "list")} className="w-[200px]">
+          <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as "calendar" | "list")}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="calendar">Calendar</TabsTrigger>
               <TabsTrigger value="list">List</TabsTrigger>
@@ -26,8 +26,7 @@ export function TrainerAvailability() {
           </Tabs>
         </CardHeader>
         <CardContent>
-          {/* We should have only one Tabs component containing all TabsContent components */}
-          <Tabs value={viewMode} className="w-full">
+          <Tabs value={viewMode}>
             <TabsContent value="calendar" className="mt-0">
               <AvailabilityCalendar />
             </TabsContent>
