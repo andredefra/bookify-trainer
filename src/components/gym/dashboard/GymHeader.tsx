@@ -55,7 +55,7 @@ export function GymHeader({
                 <span className="sr-only">Toggle sidebar</span>
               </Button>
             )}
-            <span className="font-display text-xl font-bold text-primary pl-4 lg:pl-4">MyPersonal.fit</span>
+            <span className="font-display text-xl font-bold text-primary pl-0 lg:pl-0">MyPersonal.fit</span>
             
             <div className="hidden md:flex ml-6 items-center space-x-2">
               <Building className="h-4 w-4 text-primary" />
