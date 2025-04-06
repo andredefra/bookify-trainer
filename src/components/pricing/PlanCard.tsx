@@ -55,9 +55,11 @@ export const PlanCard = ({
           <span className="text-4xl font-display font-bold">{price}</span>
           <span className="text-muted-foreground ml-2">{period}</span>
         </div>
-        <p className="text-muted-foreground">
-          {fee}
-        </p>
+        {fee && (
+          <p className="text-muted-foreground text-sm">
+            {fee}
+          </p>
+        )}
       </div>
 
       <ul className="space-y-3 mb-8 flex-grow">

@@ -96,7 +96,7 @@ const PricingSection = () => {
       name: t('pricing.pro.title'),
       price: annual ? t('pricing.pro.priceAnnual') : t('pricing.pro.price'),
       period: t('pricing.pro.period'),
-      fee: t('pricing.pro.fee'),
+      fee: t('pricing.pro.fee') + ' ' + t('pricing.pro.transactionFeeNote'),
       features: proFeatures,
       ctaText: t('pricing.pro.cta'),
       ctaLink: '/register?plan=pro',
