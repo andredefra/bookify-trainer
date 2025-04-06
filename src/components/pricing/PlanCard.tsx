@@ -14,6 +14,7 @@ interface PlanCardProps {
   isDelayed?: boolean;
   Icon?: LucideIcon;
   isGymPlan?: boolean;
+  transactionFeeNote?: string;
 }
 
 export const PlanCard = ({
@@ -27,7 +28,8 @@ export const PlanCard = ({
   isPopular = false,
   isDelayed = false,
   Icon,
-  isGymPlan = false
+  isGymPlan = false,
+  transactionFeeNote
 }: PlanCardProps) => {
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
   
@@ -58,6 +60,11 @@ export const PlanCard = ({
         {fee && (
           <p className="text-muted-foreground text-sm">
             {fee}
+          </p>
+        )}
+        {transactionFeeNote && (
+          <p className="text-muted-foreground text-sm mt-1 italic">
+            {transactionFeeNote}
           </p>
         )}
       </div>
