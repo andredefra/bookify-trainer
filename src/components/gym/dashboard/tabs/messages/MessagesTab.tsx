@@ -46,7 +46,7 @@ export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
   ];
   
   // Mock messages for conversations
-  const conversations: Conversation = {
+  const [conversations, setConversations] = useState<Conversation>({
     1: [
       { id: 1, sender: "trainer", text: "Good morning! I wanted to update you on our class attendance this week.", time: "10:15 AM" },
       { id: 2, sender: "you", text: "Great, how are the numbers looking?", time: "10:20 AM" },
@@ -63,7 +63,7 @@ export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
       { id: 2, sender: "trainer", text: "Yes, it's scheduled for next Thursday.", time: "Monday" },
       { id: 3, sender: "trainer", text: "We need to discuss the new equipment delivery.", time: "Tuesday" },
     ]
-  };
+  });
   
   // Effect to mark messages as read when component mounts
   useEffect(() => {
@@ -85,6 +85,28 @@ export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
     
     // Here you would typically send a message to your backend
     console.log(`Sending message to trainer ${activeConversation}: ${message}`);
+    
+    // Update the conversation with the new message
+    setConversations(prev => {
+      const conversation = [...(prev[activeConversation] || [])];
+      const newId = conversation.length > 0 
+        ? Math.max(...conversation.map(m => m.id)) + 1 
+        : 1;
+        
+      return {
+        ...prev,
+        [activeConversation]: [
+          ...conversation,
+          { 
+            id: newId, 
+            sender: "you", 
+            text: message, 
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+          }
+        ]
+      };
+    });
+    
     toast.success("Message sent successfully");
   };
 

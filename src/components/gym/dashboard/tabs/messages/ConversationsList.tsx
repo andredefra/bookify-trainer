@@ -19,7 +19,7 @@ export function ConversationsList({
   getStatusColor
 }: ConversationsListProps) {
   return (
-    <div className="border rounded-md overflow-hidden">
+    <div className="border rounded-md overflow-hidden h-full flex flex-col">
       <div className="p-3 border-b bg-muted/30">
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -31,7 +31,13 @@ export function ConversationsList({
         </div>
       </div>
       
-      <div className="overflow-auto h-[540px] divide-y">
+      <div className="overflow-auto flex-1 divide-y">
+        {trainers.length === 0 && (
+          <div className="py-8 px-3 text-center text-muted-foreground text-sm">
+            No conversations yet
+          </div>
+        )}
+        
         {trainers.map(trainer => (
           <div 
             key={trainer.id}
