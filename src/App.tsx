@@ -57,6 +57,31 @@ const RevealObserver = () => {
 // Create the QueryClient instance outside of the component
 const queryClient = new QueryClient();
 
+// Separate the router part to properly scope the hooks
+const AppRoutes = () => {
+  return (
+    <>
+      <ScrollToTop />
+      <RevealObserver />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/it" element={<IndexIta />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/find-trainer" element={<FindTrainer />} />
+        <Route path="/trainer/:id" element={<TrainerProfile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route path="/gym-dashboard" element={<GymDashboard />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/cookies" element={<Cookies />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
+};
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -65,23 +90,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <ScrollToTop />
-            <RevealObserver />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/it" element={<IndexIta />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/find-trainer" element={<FindTrainer />} />
-              <Route path="/trainer/:id" element={<TrainerProfile />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/client-dashboard" element={<ClientDashboard />} />
-              <Route path="/gym-dashboard" element={<GymDashboard />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/cookies" element={<Cookies />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AppRoutes />
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
