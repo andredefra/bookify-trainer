@@ -7,7 +7,6 @@ import { TrainersTab } from "./tabs/TrainersTab";
 import { MembersTab } from "./tabs/MembersTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
-import { MessagesTab } from "./tabs/MessagesTab";
 
 export function GymDashboardContainer() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -20,7 +19,6 @@ export function GymDashboardContainer() {
     profileImage?: string;
     gymName?: string;
   } | null>(null);
-  const [unreadMessages, setUnreadMessages] = useState<number>(3);
 
   useEffect(() => {
     const userData = localStorage.getItem('demo-user');
@@ -52,7 +50,6 @@ export function GymDashboardContainer() {
           setActiveTab={setActiveTab}
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
-          unreadMessages={unreadMessages}
         />
         
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
@@ -60,7 +57,6 @@ export function GymDashboardContainer() {
           {activeTab === "trainers" && <TrainersTab />}
           {activeTab === "members" && <MembersTab />}
           {activeTab === "analytics" && <AnalyticsTab />}
-          {activeTab === "messages" && <MessagesTab onMessageRead={() => setUnreadMessages(prev => Math.max(0, prev - 1))} />}
           {activeTab === "settings" && <SettingsTab user={user} />}
         </main>
       </div>
