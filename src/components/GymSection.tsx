@@ -42,7 +42,7 @@ const GymSection = () => {
           <div className="reveal">
             <div className="h-64 md:h-auto rounded-lg bg-cover bg-center shadow-lg" 
                 style={{
-                  backgroundImage: `url("/lovable-uploads/60d8d824-f090-4fbc-8935-e858e4d59547.png")`,
+                  backgroundImage: `url("/lovable-uploads/2ed73a54-a95a-4891-b352-42fc645e8f99.png")`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   height: "100%",
