@@ -16,10 +16,12 @@ export function EmptyState({ onNewMessage }: EmptyStateProps) {
       <p className="text-sm text-muted-foreground text-center mt-1 mb-4">
         Select a conversation from the list or start a new one
       </p>
-      <Button onClick={onNewMessage}>
-        <MessageSquarePlus className="mr-2 h-4 w-4" />
-        New Message
-      </Button>
+      {onNewMessage && (
+        <Button onClick={onNewMessage}>
+          <MessageSquarePlus className="mr-2 h-4 w-4" />
+          New Message
+        </Button>
+      )}
     </div>
   );
 }
