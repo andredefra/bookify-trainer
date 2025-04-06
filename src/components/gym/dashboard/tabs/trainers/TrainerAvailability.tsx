@@ -26,6 +26,7 @@ export function TrainerAvailability() {
           </Tabs>
         </CardHeader>
         <CardContent>
+          {/* We should have only one Tabs component containing all TabsContent components */}
           <Tabs value={viewMode} className="w-full">
             <TabsContent value="calendar" className="mt-0">
               <AvailabilityCalendar />
