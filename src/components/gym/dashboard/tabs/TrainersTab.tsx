@@ -1,11 +1,16 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, Star } from "lucide-react";
+import { Search, Plus, Star, Calendar } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrainerAvailability } from "./trainers/TrainerAvailability";
 
 export function TrainersTab() {
+  const [activeTab, setActiveTab] = useState<"list" | "availability">("list");
+  
   const trainers = [
     { 
       id: 1, 
@@ -42,57 +47,75 @@ export function TrainersTab() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Trainers Management</h1>
-          <p className="text-muted-foreground">Manage your gym's personal trainers</p>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search trainers..."
-              className="pl-8 w-full md:w-[200px] lg:w-[300px]"
-            />
+    <div className="space-y-6">
+      <div className="flex flex-col space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold">Trainers Management</h1>
+            <p className="text-muted-foreground">Manage your gym's personal trainers</p>
           </div>
           
-          <Button>
-            <Plus className="mr-1 h-4 w-4" />
-            Add Trainer
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search trainers..."
+                className="pl-8 w-full md:w-[200px] lg:w-[300px]"
+              />
+            </div>
+            
+            <Button>
+              <Plus className="mr-1 h-4 w-4" />
+              Add Trainer
+            </Button>
+          </div>
         </div>
+
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "list" | "availability")} className="w-full">
+          <TabsList>
+            <TabsTrigger value="list">Trainer List</TabsTrigger>
+            <TabsTrigger value="availability" className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              <span>Availability</span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {trainers.map(trainer => (
-          <Card key={trainer.id}>
-            <CardContent className="p-0">
-              <div className="flex flex-col items-center p-6">
-                <Avatar className="h-24 w-24 mb-4">
-                  <AvatarImage src={trainer.image} alt={trainer.name} />
-                  <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                
-                <h3 className="font-semibold text-lg">{trainer.name}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{trainer.specialty}</p>
-                
-                <div className="flex items-center text-sm mb-4">
-                  <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 mr-1" />
-                  <span>{trainer.rating} • {trainer.clients} clients</span>
+      <TabsContent value="list" className="mt-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {trainers.map(trainer => (
+            <Card key={trainer.id}>
+              <CardContent className="p-0">
+                <div className="flex flex-col items-center p-6">
+                  <Avatar className="h-24 w-24 mb-4">
+                    <AvatarImage src={trainer.image} alt={trainer.name} />
+                    <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  
+                  <h3 className="font-semibold text-lg">{trainer.name}</h3>
+                  <p className="text-sm text-muted-foreground mb-2">{trainer.specialty}</p>
+                  
+                  <div className="flex items-center text-sm mb-4">
+                    <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 mr-1" />
+                    <span>{trainer.rating} • {trainer.clients} clients</span>
+                  </div>
+                  
+                  <div className="flex gap-2 w-full">
+                    <Button variant="outline" className="flex-1" size="sm">Profile</Button>
+                    <Button className="flex-1" size="sm">Sessions</Button>
+                  </div>
                 </div>
-                
-                <div className="flex gap-2 w-full">
-                  <Button variant="outline" className="flex-1" size="sm">Profile</Button>
-                  <Button className="flex-1" size="sm">Sessions</Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </TabsContent>
+      
+      <TabsContent value="availability" className="mt-0">
+        <TrainerAvailability />
+      </TabsContent>
     </div>
   );
 }
