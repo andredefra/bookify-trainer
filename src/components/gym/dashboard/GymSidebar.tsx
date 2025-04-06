@@ -11,19 +11,22 @@ import {
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 
 interface GymSidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   showSidebar: boolean;
   setShowSidebar: (show: boolean) => void;
+  unreadMessagesCount?: number;
 }
 
 export function GymSidebar({ 
   activeTab, 
   setActiveTab, 
   showSidebar, 
-  setShowSidebar
+  setShowSidebar,
+  unreadMessagesCount = 0
 }: GymSidebarProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
@@ -61,10 +64,15 @@ export function GymSidebar({
             </button>
             <button 
               onClick={() => { setActiveTab("messages"); if (isMobile) setShowSidebar(false); }}
-              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "messages" ? "bg-primary/5 text-primary" : ""}`}
+              className={`flex items-center justify-between p-4 hover:bg-gray-50 transition-colors ${activeTab === "messages" ? "bg-primary/5 text-primary" : ""}`}
             >
-              <MessageSquare className="w-5 h-5 mr-3" />
-              <span>Messages</span>
+              <div className="flex items-center">
+                <MessageSquare className="w-5 h-5 mr-3" />
+                <span>Messages</span>
+              </div>
+              {unreadMessagesCount > 0 && (
+                <Badge className="bg-primary ml-2">{unreadMessagesCount}</Badge>
+              )}
             </button>
             <button 
               onClick={() => { setActiveTab("analytics"); if (isMobile) setShowSidebar(false); }}

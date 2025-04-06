@@ -5,7 +5,7 @@ import { GymSidebar } from "./GymSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
 import { TrainersTab } from "./tabs/TrainersTab";
 import { MembersTab } from "./tabs/MembersTab";
-import { MessagesTab } from "./tabs/MessagesTab";
+import { MessagesTab } from "./tabs/messages"; // Updated import path
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 export function GymDashboardContainer() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [user, setUser] = useState<{
     name?: string;
     email: string;
@@ -32,7 +33,17 @@ export function GymDashboardContainer() {
       }
       setUser(parsedUser);
     }
+    
+    // Initialize unread messages count (mock data)
+    setUnreadMessagesCount(3);
   }, []);
+
+  // Function to mark messages as read when the messages tab is opened
+  useEffect(() => {
+    if (activeTab === "messages") {
+      setUnreadMessagesCount(0);
+    }
+  }, [activeTab]);
 
   const handleLogout = () => {
     // Clear user data from localStorage
@@ -57,13 +68,14 @@ export function GymDashboardContainer() {
           setActiveTab={setActiveTab}
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
+          unreadMessagesCount={unreadMessagesCount}
         />
         
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
           {activeTab === "overview" && <OverviewTab user={user} />}
           {activeTab === "trainers" && <TrainersTab />}
           {activeTab === "members" && <MembersTab />}
-          {activeTab === "messages" && <MessagesTab />}
+          {activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "settings" && <SettingsTab user={user} />}
         </main>

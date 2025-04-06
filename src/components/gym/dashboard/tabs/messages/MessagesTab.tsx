@@ -1,11 +1,16 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabContent } from "./TabContent";
 import { TrainerMessage, Conversation } from "./types";
+import { toast } from "sonner";
 
-export function MessagesTab() {
+interface MessagesTabProps {
+  onMessagesRead?: () => void;
+}
+
+export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
   const [activeConversation, setActiveConversation] = useState<number | null>(null);
   const [newMessage, setNewMessage] = useState("");
   
@@ -34,7 +39,7 @@ export function MessagesTab() {
       name: "Emma Davis",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
       status: "away",
-      unread: 0,
+      unread: 1,
       lastMessage: "We need to discuss the new equipment delivery.",
       timestamp: "2 days ago"
     }
@@ -60,6 +65,13 @@ export function MessagesTab() {
     ]
   };
   
+  // Effect to mark messages as read when component mounts
+  useEffect(() => {
+    if (onMessagesRead) {
+      onMessagesRead();
+    }
+  }, [onMessagesRead]);
+  
   const getStatusColor = (status: string) => {
     switch(status) {
       case "online": return "bg-green-500";
@@ -73,6 +85,7 @@ export function MessagesTab() {
     
     // Here you would typically send a message to your backend
     console.log(`Sending message to trainer ${activeConversation}: ${message}`);
+    toast.success("Message sent successfully");
   };
 
   return (
@@ -109,7 +122,7 @@ export function MessagesTab() {
               activeTab="unread"
               activeConversation={activeConversation}
               setActiveConversation={setActiveConversation}
-              trainers={trainers}
+              trainers={trainers.filter(t => t.unread > 0)}
               conversations={conversations}
               getStatusColor={getStatusColor}
               handleSendMessage={handleSendMessage}
@@ -121,7 +134,7 @@ export function MessagesTab() {
               activeTab="archived"
               activeConversation={activeConversation}
               setActiveConversation={setActiveConversation}
-              trainers={trainers}
+              trainers={[]}
               conversations={conversations}
               getStatusColor={getStatusColor}
               handleSendMessage={handleSendMessage}
