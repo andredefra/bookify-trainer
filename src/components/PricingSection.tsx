@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { plans } from '@/components/trainer/dashboard/tabs/settings/membership/plansData';
@@ -66,8 +65,8 @@ const PricingSection = () => {
     t('pricing.features.gymIntegration'),
   ];
 
-  // Transaction fee note for Gym plan
-  const gymTransactionFeeNote = t('pricing.gym.transactionFeeNote');
+  // Transaction fee note for Gym plan - removing the 2% transaction fee text
+  const gymTransactionFeeNote = ""; // Empty string instead of t('pricing.gym.transactionFeeNote')
 
   // Plans configuration for personal trainers
   const trainerPricingPlans = [
