@@ -1,5 +1,7 @@
+
 import { CheckCircle2, LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 interface PlanCardProps {
   name: string;
   price: string;
@@ -14,6 +16,7 @@ interface PlanCardProps {
   isGymPlan?: boolean;
   transactionFeeNote?: string;
 }
+
 export const PlanCard = ({
   name,
   price,
@@ -29,14 +32,24 @@ export const PlanCard = ({
   transactionFeeNote
 }: PlanCardProps) => {
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
-  return <div className={`${revealClass} flex flex-col p-8 rounded-2xl border ${isPopular ? 'border-2 border-primary shadow-xl' : isGymPlan ? 'border-2 border-gray-800 shadow-lg' : 'border-border shadow-sm'} ${isGymPlan ? 'bg-gray-50' : 'bg-white'} relative`}>
-      {isPopular && <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs font-medium py-1 px-3 rounded-full">
+  
+  return (
+    <div className={`${revealClass} flex flex-col p-8 rounded-2xl border ${
+      isPopular ? 'border-2 border-primary shadow-xl' : 
+      isGymPlan ? 'border-2 border-gray-800 shadow-lg' : 
+      'border-border shadow-sm'
+    } ${isGymPlan ? 'bg-gray-50' : 'bg-white'} relative`}>
+      {isPopular && (
+        <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs font-medium py-1 px-3 rounded-full">
           RECOMMENDED
-        </div>}
+        </div>
+      )}
       
-      {isGymPlan && <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-gray-800 text-white text-xs font-medium py-1 px-3 rounded-full">
+      {isGymPlan && (
+        <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-gray-800 text-white text-xs font-medium py-1 px-3 rounded-full">
           FOR GYMS
-        </div>}
+        </div>
+      )}
       
       <div className="mb-6">
         <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
@@ -44,21 +57,39 @@ export const PlanCard = ({
           <span className="text-4xl font-display font-bold">{price}</span>
           <span className="text-muted-foreground ml-2">{period}</span>
         </div>
-        {fee && <p className="text-muted-foreground text-sm">
+        {fee && (
+          <p className="text-muted-foreground text-sm">
             {fee}
-          </p>}
-        {transactionFeeNote}
+          </p>
+        )}
+        {transactionFeeNote && (
+          <p className="text-muted-foreground text-sm mt-1 italic">
+            {transactionFeeNote}
+          </p>
+        )}
       </div>
 
       <ul className="space-y-3 mb-8 flex-grow">
-        {features.map((feature, index) => <li key={index} className="flex items-start">
+        {features.map((feature, index) => (
+          <li key={index} className="flex items-start">
             <CheckCircle2 className={`h-5 w-5 ${isGymPlan ? 'text-gray-700' : 'text-emerald-500'} mr-2 flex-shrink-0 mt-0.5`} />
             <span>{feature}</span>
-          </li>)}
+          </li>
+        ))}
       </ul>
 
-      <Link to={ctaLink} className={`w-full px-6 py-3 ${isPopular ? 'bg-primary text-white' : isGymPlan ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-white text-primary border border-primary/20'} rounded-full text-center font-medium button-hover`}>
+      <Link 
+        to={ctaLink}
+        className={`w-full px-6 py-3 ${
+          isPopular 
+            ? 'bg-primary text-white' 
+            : isGymPlan
+              ? 'bg-gray-800 text-white hover:bg-gray-900'
+              : 'bg-white text-primary border border-primary/20'
+        } rounded-full text-center font-medium button-hover`}
+      >
         {ctaText}
       </Link>
-    </div>;
+    </div>
+  );
 };
