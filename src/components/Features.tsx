@@ -158,7 +158,7 @@ const Features = () => {
                 <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400"></div>
               </div>
               <div className="mx-auto pr-6 md:pr-8 text-xs md:text-sm text-muted-foreground">
-                personal.ai/johndoe
+                my-personal-fit.it/michael-thompson
               </div>
             </div>
             <div className="h-[200px] md:h-[300px] bg-white rounded-lg p-2 md:p-4 flex items-center justify-center">
