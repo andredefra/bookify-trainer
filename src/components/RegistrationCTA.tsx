@@ -15,7 +15,7 @@ const RegistrationCTA = () => {
           {t('cta.description')}
         </p>
         <a
-          href="https://forms.gle/23JCufSRADPg7HRRA"
+          href="https://andredefra64.typeform.com/to/E2ELTdNF"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block px-8 py-3 bg-primary text-white rounded-full text-lg font-medium button-hover reveal reveal-delay-2"
