@@ -62,11 +62,7 @@ export const PlanCard = ({
             {fee}
           </p>
         )}
-        {transactionFeeNote && (
-          <p className="text-muted-foreground text-sm mt-1 italic">
-            {/* This paragraph is intentionally left empty */}
-          </p>
-        )}
+        {/* Completely removing the transactionFeeNote paragraph */}
       </div>
 
       <ul className="space-y-3 mb-8 flex-grow">

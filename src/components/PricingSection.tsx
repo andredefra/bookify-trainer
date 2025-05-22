@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { plans } from '@/components/trainer/dashboard/tabs/settings/membership/plansData';
@@ -112,7 +113,7 @@ const PricingSection = () => {
     name: t('pricing.gym.title'),
     price: annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price'),
     period: t('pricing.gym.period'),
-    fee: t('pricing.gym.fee'),
+    fee: "", // Removing the transaction fee text completely
     transactionFeeNote: gymTransactionFeeNote,
     features: gymFeatures,
     ctaText: t('pricing.gym.cta'),
