@@ -68,7 +68,7 @@ const Hero = () => {
               {isMobile ? (
                 <div className="flex items-center justify-center" style={{ margin: 0, padding: 0 }}>
                   <img 
-                    src="/lovable-uploads/5be2c47e-b243-42fd-8993-9e3e1fe5da3e.png" 
+                    src="/lovable-uploads/33f40158-7b96-482c-b3d4-65a30d1661f2.png" 
                     alt="Sales dashboard analytics" 
                     className="w-full h-auto"
                     style={{ display: 'block', maxHeight: '280px' }}
@@ -81,7 +81,7 @@ const Hero = () => {
                 </div>
               ) : (
                 <img 
-                  src="/lovable-uploads/5be2c47e-b243-42fd-8993-9e3e1fe5da3e.png" 
+                  src="/lovable-uploads/33f40158-7b96-482c-b3d4-65a30d1661f2.png" 
                   alt="Sales dashboard analytics" 
                   className="w-full h-[500px] object-contain object-center"
                   onError={(e) => {
