@@ -7,6 +7,7 @@ import { SettingsFooter } from "./components/SettingsFooter";
 
 import { ProfileSection } from "./ProfileSection";
 import { AvailabilitySection } from "./AvailabilitySection";
+import { InvoicingSection } from "./InvoicingSection";
 import { MembershipSection } from "./MembershipSection";
 import { BillingSection } from "./BillingSection";
 
@@ -69,11 +70,14 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
           <div className="space-y-6">
             {selectedSection === "profile" && <ProfileSection user={updatedUser} />}
             {selectedSection === "availability" && <AvailabilitySection />}
+            {selectedSection === "invoicing" && <InvoicingSection />}
             {selectedSection === "membership" && <MembershipSection user={updatedUser} />}
             {selectedSection === "billing" && <BillingSection user={updatedUser} />}
           </div>
           
-          <SettingsFooter onSave={handleSaveChanges} />
+          {selectedSection !== "invoicing" && (
+            <SettingsFooter onSave={handleSaveChanges} />
+          )}
         </div>
       </div>
     </div>
