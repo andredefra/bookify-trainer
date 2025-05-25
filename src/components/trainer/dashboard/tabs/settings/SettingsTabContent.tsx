@@ -8,6 +8,7 @@ import { SettingsFooter } from "./components/SettingsFooter";
 import { ProfileSection } from "./ProfileSection";
 import { AvailabilitySection } from "./AvailabilitySection";
 import { MembershipSection } from "./MembershipSection";
+import { InvoicingSection } from "./InvoicingSection";
 import { BillingSection } from "./BillingSection";
 
 interface SettingsTabContentProps {
@@ -70,6 +71,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
             {selectedSection === "profile" && <ProfileSection user={updatedUser} />}
             {selectedSection === "availability" && <AvailabilitySection />}
             {selectedSection === "membership" && <MembershipSection user={updatedUser} />}
+            {selectedSection === "invoicing" && <InvoicingSection user={updatedUser} />}
             {selectedSection === "billing" && <BillingSection user={updatedUser} />}
           </div>
           

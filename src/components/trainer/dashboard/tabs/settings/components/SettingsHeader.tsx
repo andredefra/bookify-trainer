@@ -11,6 +11,7 @@ export function SettingsHeader({ selectedSection }: SettingsHeaderProps) {
       case "profile": return "Profile";
       case "availability": return "Availability";
       case "membership": return "Membership";
+      case "invoicing": return "Invoicing";
       case "billing": return "Billing";
       default: return "Settings";
     }

@@ -13,6 +13,7 @@ export function SettingsSidebar({ selectedSection, setSelectedSection }: Setting
     { id: "profile", label: "Profile", icon: "👤" },
     { id: "availability", label: "Availability", icon: "📅" },
     { id: "membership", label: "Membership", icon: "🌟" },
+    { id: "invoicing", label: "Invoicing", icon: "📄" },
     { id: "billing", label: "Billing", icon: "💳" }
   ];
 
