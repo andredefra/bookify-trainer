@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Transaction } from "../types/TransactionHistoryTypes";
 import { PaymentMethodBadge } from "./PaymentMethodBadge";
 import { TransactionStatusBadge } from "./TransactionStatusBadge";
-import { FileInvoice } from "lucide-react";
+import { FileText } from "lucide-react";
 import { toast } from "sonner";
 
 interface TransactionsTableProps {
@@ -73,7 +73,7 @@ export function TransactionsTable({ transactions, onConfirmCashPayment }: Transa
                       className="h-7 text-xs" 
                       onClick={() => handleSendInvoice(transaction)}
                     >
-                      <FileInvoice className="h-3 w-3 mr-1" />
+                      <FileText className="h-3 w-3 mr-1" />
                       Invoice
                     </Button>
                   )}
