@@ -8,9 +8,11 @@ export interface Transaction {
   date: string;
   status: 'paid' | 'pending' | 'failed';
   paymentMethod?: 'card' | 'cash';
+  invoiceSent?: boolean;
 }
 
 export interface TransactionHistoryProps {
   transactions: Transaction[];
   onConfirmCashPayment?: (transactionId: number) => void;
+  onToggleInvoice?: (transactionId: number) => void;
 }

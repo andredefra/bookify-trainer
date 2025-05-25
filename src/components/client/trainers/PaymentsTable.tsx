@@ -1,4 +1,3 @@
-
 import { 
   Table,
   TableBody,
@@ -17,6 +16,7 @@ interface Payment {
   amount: number;
   date: string;
   type: string;
+  invoiceSent?: boolean;
 }
 
 interface PaymentsTableProps {
@@ -41,8 +41,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
               <TableHead>Trainer</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Invoice</TableHead>
-              <TableHead></TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -53,13 +52,13 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
                 <TableCell>{payment.type}</TableCell>
                 <TableCell>€{payment.amount}</TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm">
-                    <FileText className="h-4 w-4 mr-1" />
-                    Invoice
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button variant="ghost" size="sm">Receipt</Button>
+                  <div className="flex gap-2">
+                    <Button variant="ghost" size="sm">
+                      <FileText className="h-4 w-4 mr-1" />
+                      Invoice
+                    </Button>
+                    <Button variant="ghost" size="sm">Receipt</Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

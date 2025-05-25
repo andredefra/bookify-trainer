@@ -11,21 +11,27 @@ import { Button } from "@/components/ui/button";
 import { Transaction } from "../types/TransactionHistoryTypes";
 import { PaymentMethodBadge } from "./PaymentMethodBadge";
 import { TransactionStatusBadge } from "./TransactionStatusBadge";
-import { FileText } from "lucide-react";
+import { FileText, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
   onConfirmCashPayment?: (transactionId: number) => void;
+  onToggleInvoice?: (transactionId: number) => void;
 }
 
-export function TransactionsTable({ transactions, onConfirmCashPayment }: TransactionsTableProps) {
+export function TransactionsTable({ transactions, onConfirmCashPayment, onToggleInvoice }: TransactionsTableProps) {
   const handleSendInvoice = (transaction: Transaction) => {
     // Open popup/modal that redirects to the integrated invoice partner
     const invoiceUrl = `https://invoice-partner.com/create?amount=${transaction.amount}&client=${encodeURIComponent(transaction.client)}&description=${encodeURIComponent(transaction.name)}`;
     
     // Open in new window/tab
     window.open(invoiceUrl, 'invoice-popup', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    
+    // Mark invoice as sent
+    if (onToggleInvoice) {
+      onToggleInvoice(transaction.id);
+    }
     
     toast.success("Invoice integration opened. Complete the process in the new window.", {
       duration: 4000
@@ -44,7 +50,6 @@ export function TransactionsTable({ transactions, onConfirmCashPayment }: Transa
             <TableHead>Amount</TableHead>
             <TableHead>Method</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Invoice</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -65,36 +70,48 @@ export function TransactionsTable({ transactions, onConfirmCashPayment }: Transa
                 <TableCell>
                   <TransactionStatusBadge status={transaction.status} />
                 </TableCell>
-                <TableCell>
-                  {transaction.status === 'paid' && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-xs" 
-                      onClick={() => handleSendInvoice(transaction)}
-                    >
-                      <FileText className="h-3 w-3 mr-1" />
-                      Invoice
-                    </Button>
-                  )}
-                </TableCell>
                 <TableCell className="text-right">
-                  {transaction.paymentMethod === 'cash' && transaction.status === 'pending' && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 text-xs" 
-                      onClick={() => onConfirmCashPayment && onConfirmCashPayment(transaction.id)}
-                    >
-                      Confirm Receipt
-                    </Button>
-                  )}
+                  <div className="flex gap-2 justify-end">
+                    {/* Cash payment confirmation button */}
+                    {transaction.paymentMethod === 'cash' && transaction.status === 'pending' && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-7 text-xs" 
+                        onClick={() => onConfirmCashPayment && onConfirmCashPayment(transaction.id)}
+                      >
+                        Confirm Receipt
+                      </Button>
+                    )}
+                    
+                    {/* Invoice button - only for paid transactions */}
+                    {transaction.status === 'paid' && (
+                      <Button 
+                        variant={transaction.invoiceSent ? "secondary" : "outline"}
+                        size="sm" 
+                        className="h-7 text-xs" 
+                        onClick={() => handleSendInvoice(transaction)}
+                      >
+                        {transaction.invoiceSent ? (
+                          <>
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            Sent
+                          </>
+                        ) : (
+                          <>
+                            <FileText className="h-3 w-3 mr-1" />
+                            Invoice
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={9} className="text-center py-6 text-muted-foreground">
+              <TableCell colSpan={8} className="text-center py-6 text-muted-foreground">
                 No transactions found
               </TableCell>
             </TableRow>
