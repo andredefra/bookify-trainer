@@ -1,7 +1,6 @@
-
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video, CheckCircle, FileText } from 'lucide-react';
+import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Globe, Bot, UserPlus, Youtube, Video, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 const Features = () => {
@@ -149,21 +148,6 @@ const Features = () => {
           <p className="reveal reveal-delay-1 text-base md:text-lg text-muted-foreground mb-6 md:mb-8">
             {t('features.profileDesc')}
           </p>
-          
-          {/* Invoice Management Feature */}
-          <div className="reveal reveal-delay-2 mb-8 p-6 bg-secondary/30 rounded-xl border border-border">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10">
-                <FileText className="h-6 w-6 text-primary" />
-              </div>
-            </div>
-            <h4 className="text-lg md:text-xl font-semibold mb-3 text-primary">
-              Gestione Fatture
-            </h4>
-            <p className="text-sm md:text-base text-muted-foreground">
-              Connetti un gestionale di fatturazione, selezionando il tuo gestionale di fatturazione fra le integrazioni offerte, e genera fatture per ogni pagamento in entrata.
-            </p>
-          </div>
           
           <div className="reveal reveal-delay-2 p-3 md:p-4 bg-secondary/50 rounded-xl md:rounded-2xl border border-border shadow-sm">
             <div className="flex items-center space-x-2 p-1.5 md:p-2 mb-2 rounded bg-white/70 border-b border-black/5">
