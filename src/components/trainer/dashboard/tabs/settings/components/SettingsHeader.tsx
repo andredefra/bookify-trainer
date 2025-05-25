@@ -1,50 +1,29 @@
 
+import React from "react";
+
 interface SettingsHeaderProps {
   selectedSection: string;
 }
 
 export function SettingsHeader({ selectedSection }: SettingsHeaderProps) {
-  const getTitleAndDescription = () => {
-    switch (selectedSection) {
-      case "profile":
-        return {
-          title: "Profile Settings",
-          description: "Manage your personal information and professional details"
-        };
-      case "availability":
-        return {
-          title: "Availability Settings",
-          description: "Set your working hours and availability preferences"
-        };
-      case "invoicing":
-        return {
-          title: "Invoicing Integration",
-          description: "Connect your invoicing system to streamline payment processing"
-        };
-      case "membership":
-        return {
-          title: "Membership & Plan",
-          description: "Manage your subscription and account features"
-        };
-      case "billing":
-        return {
-          title: "Billing Information",
-          description: "Update your payment methods and billing details"
-        };
-      default:
-        return {
-          title: "Settings",
-          description: "Manage your account preferences"
-        };
+  const getSectionTitle = (section: string) => {
+    switch (section) {
+      case "profile": return "Profile";
+      case "availability": return "Availability";
+      case "membership": return "Membership";
+      case "billing": return "Billing";
+      default: return "Settings";
     }
   };
 
-  const { title, description } = getTitleAndDescription();
-
   return (
-    <div className="mb-6">
-      <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-      <p className="mt-1 text-sm text-gray-600">{description}</p>
+    <div className="hidden md:block mb-6">
+      <h2 className="text-2xl font-bold">
+        {getSectionTitle(selectedSection)}
+      </h2>
+      <p className="text-muted-foreground">
+        Manage your {selectedSection} settings
+      </p>
     </div>
   );
 }
