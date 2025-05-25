@@ -8,7 +8,7 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { CreditCard } from "lucide-react";
+import { CreditCard, FileInvoice } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface Payment {
@@ -41,6 +41,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
               <TableHead>Trainer</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Amount</TableHead>
+              <TableHead>Invoice</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -51,6 +52,12 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
                 <TableCell>{payment.trainer}</TableCell>
                 <TableCell>{payment.type}</TableCell>
                 <TableCell>€{payment.amount}</TableCell>
+                <TableCell>
+                  <Button variant="ghost" size="sm">
+                    <FileInvoice className="h-4 w-4 mr-1" />
+                    Invoice
+                  </Button>
+                </TableCell>
                 <TableCell>
                   <Button variant="ghost" size="sm">Receipt</Button>
                 </TableCell>
