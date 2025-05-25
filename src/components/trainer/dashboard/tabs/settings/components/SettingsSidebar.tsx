@@ -12,8 +12,8 @@ export function SettingsSidebar({ selectedSection, setSelectedSection }: Setting
   const sections = [
     { id: "profile", label: "Profile", icon: "👤" },
     { id: "availability", label: "Availability", icon: "📅" },
+    { id: "invoicing", label: "Invoicing", icon: "🧾" },
     { id: "membership", label: "Membership", icon: "🌟" },
-    { id: "invoicing", label: "Invoicing", icon: "📄" },
     { id: "billing", label: "Billing", icon: "💳" }
   ];
 

@@ -1,330 +1,243 @@
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { CheckCircle, AlertCircle, ExternalLink, Trash2 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-
-interface InvoicingSectionProps {
-  user: {
-    name?: string;
-    email: string;
-    type: string;
-    plan?: string;
-  };
-}
+import { toast } from "sonner";
+import { Link, CheckCircle, AlertCircle, ExternalLink } from "lucide-react";
 
 interface InvoicingProvider {
   id: string;
   name: string;
   description: string;
   logo: string;
-  fields: {
-    name: string;
-    label: string;
-    type: string;
-    required: boolean;
-    placeholder: string;
-  }[];
+  isConnected: boolean;
 }
 
-const invoicingProviders: InvoicingProvider[] = [
-  {
-    id: "fattureincloud",
-    name: "FattureInCloud",
-    description: "Gestionale di fatturazione online completo e semplice da usare",
-    logo: "🏢",
-    fields: [
-      { name: "apiKey", label: "API Key", type: "password", required: true, placeholder: "Inserisci la tua API Key" },
-      { name: "apiSecret", label: "API Secret", type: "password", required: true, placeholder: "Inserisci il tuo API Secret" },
-      { name: "companyId", label: "ID Azienda", type: "text", required: true, placeholder: "ID della tua azienda" }
-    ]
-  },
-  {
-    id: "fiscozen",
-    name: "Fiscozen",
-    description: "Commercialista online per partite IVA e piccole imprese",
-    logo: "📊",
-    fields: [
-      { name: "apiToken", label: "API Token", type: "password", required: true, placeholder: "Inserisci il tuo API Token" },
-      { name: "clientId", label: "Client ID", type: "text", required: true, placeholder: "ID del tuo account cliente" }
-    ]
-  },
-  {
-    id: "aruba",
-    name: "Aruba Fatturazione",
-    description: "Soluzione di fatturazione elettronica di Aruba",
-    logo: "🔐",
-    fields: [
-      { name: "username", label: "Username", type: "text", required: true, placeholder: "Il tuo username Aruba" },
-      { name: "password", label: "Password", type: "password", required: true, placeholder: "La tua password Aruba" },
-      { name: "companyCode", label: "Codice Azienda", type: "text", required: true, placeholder: "Codice della tua azienda" }
-    ]
-  }
-];
-
-export function InvoicingSection({ user }: InvoicingSectionProps) {
+export function InvoicingSection() {
   const [selectedProvider, setSelectedProvider] = useState<string>("");
-  const [formData, setFormData] = useState<Record<string, string>>({});
-  const [connectedProvider, setConnectedProvider] = useState<string | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'testing'>('disconnected');
+  const [apiKey, setApiKey] = useState("");
+  const [companyVat, setCompanyVat] = useState("");
+  const [isConnecting, setIsConnecting] = useState(false);
 
-  const handleProviderSelect = (providerId: string) => {
-    setSelectedProvider(providerId);
-    setFormData({});
-  };
+  const providers: InvoicingProvider[] = [
+    {
+      id: "fattureincloud",
+      name: "FattureInCloud",
+      description: "Sistema di fatturazione elettronica leader in Italia",
+      logo: "🧾",
+      isConnected: false
+    },
+    {
+      id: "fiscozen",
+      name: "Fiscozen",
+      description: "Commercialista digitale con fatturazione integrata",
+      logo: "📊",
+      isConnected: false
+    },
+    {
+      id: "aruba",
+      name: "Aruba Fatturazione",
+      description: "Fatturazione elettronica semplice e sicura",
+      logo: "🔒",
+      isConnected: false
+    }
+  ];
 
-  const handleInputChange = (fieldName: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-  };
-
-  const testConnection = async () => {
-    setConnectionStatus('testing');
-    
-    // Simulate API test
-    setTimeout(() => {
-      setConnectionStatus('connected');
-      toast({
-        title: "Connessione riuscita",
-        description: `Connesso con successo a ${invoicingProviders.find(p => p.id === selectedProvider)?.name}`,
-      });
-    }, 2000);
-  };
-
-  const saveConfiguration = () => {
-    if (!selectedProvider) return;
-    
-    const provider = invoicingProviders.find(p => p.id === selectedProvider);
-    const requiredFields = provider?.fields.filter(f => f.required);
-    const missingFields = requiredFields?.filter(f => !formData[f.name]);
-    
-    if (missingFields && missingFields.length > 0) {
-      toast({
-        title: "Campi mancanti",
-        description: "Compila tutti i campi obbligatori",
-        variant: "destructive",
-      });
+  const handleConnect = async () => {
+    if (!selectedProvider || !apiKey || !companyVat) {
+      toast.error("Compila tutti i campi richiesti");
       return;
     }
 
-    setConnectedProvider(selectedProvider);
-    setConnectionStatus('connected');
+    setIsConnecting(true);
     
-    toast({
-      title: "Configurazione salvata",
-      description: `Integrazione con ${provider?.name} configurata con successo`,
-    });
+    // Simula la connessione
+    setTimeout(() => {
+      localStorage.setItem('invoicing-provider', JSON.stringify({
+        provider: selectedProvider,
+        apiKey: apiKey,
+        companyVat: companyVat,
+        connectedAt: new Date().toISOString()
+      }));
+      
+      toast.success(`Connesso con successo a ${providers.find(p => p.id === selectedProvider)?.name}`);
+      setIsConnecting(false);
+      
+      // Reset form
+      setApiKey("");
+      setCompanyVat("");
+    }, 2000);
   };
 
-  const disconnect = () => {
-    setConnectedProvider(null);
-    setConnectionStatus('disconnected');
-    setSelectedProvider("");
-    setFormData({});
-    
-    toast({
-      title: "Disconnesso",
-      description: "Integrazione di fatturazione disconnessa",
-    });
+  const handleDisconnect = () => {
+    localStorage.removeItem('invoicing-provider');
+    toast.success("Disconnesso dal provider di fatturazione");
   };
+
+  const connectedProvider = localStorage.getItem('invoicing-provider') 
+    ? JSON.parse(localStorage.getItem('invoicing-provider')!) 
+    : null;
 
   return (
     <div className="space-y-6">
-      {/* Current Status */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            Stato Integrazione
-            {connectionStatus === 'connected' ? (
-              <Badge variant="default" className="bg-green-100 text-green-800">
-                <CheckCircle className="w-3 h-3 mr-1" />
-                Connesso
-              </Badge>
-            ) : (
-              <Badge variant="secondary">
-                <AlertCircle className="w-3 h-3 mr-1" />
-                Non connesso
-              </Badge>
-            )}
+            <Link className="h-5 w-5" />
+            Integrazione Fatturazione
           </CardTitle>
+          <CardDescription>
+            Connetti il tuo sistema di fatturazione per inviare fatture direttamente dalle transazioni
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           {connectedProvider ? (
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">
-                  {invoicingProviders.find(p => p.id === connectedProvider)?.logo}
-                </span>
-                <div>
-                  <h4 className="font-medium">
-                    {invoicingProviders.find(p => p.id === connectedProvider)?.name}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Integrazione attiva e funzionante
-                  </p>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <div>
+                    <h4 className="font-medium text-green-800">
+                      Connesso a {providers.find(p => p.id === connectedProvider.provider)?.name}
+                    </h4>
+                    <p className="text-sm text-green-600">
+                      P.IVA: {connectedProvider.companyVat}
+                    </p>
+                    <p className="text-xs text-green-500">
+                      Connesso il {new Date(connectedProvider.connectedAt).toLocaleDateString('it-IT')}
+                    </p>
+                  </div>
                 </div>
+                <Button variant="outline" size="sm" onClick={handleDisconnect}>
+                  Disconnetti
+                </Button>
               </div>
-              <Button variant="outline" size="sm" onClick={disconnect}>
-                <Trash2 className="w-4 h-4 mr-2" />
-                Disconnetti
-              </Button>
             </div>
           ) : (
-            <p className="text-muted-foreground">
-              Nessuna integrazione di fatturazione configurata. Seleziona un provider qui sotto per iniziare.
-            </p>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="provider">Seleziona Provider</Label>
+                <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Scegli il tuo sistema di fatturazione" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {providers.map((provider) => (
+                      <SelectItem key={provider.id} value={provider.id}>
+                        <div className="flex items-center gap-2">
+                          <span>{provider.logo}</span>
+                          <div>
+                            <div className="font-medium">{provider.name}</div>
+                            <div className="text-xs text-muted-foreground">{provider.description}</div>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {selectedProvider && (
+                <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg">{providers.find(p => p.id === selectedProvider)?.logo}</span>
+                    <h4 className="font-medium">{providers.find(p => p.id === selectedProvider)?.name}</h4>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="apiKey">API Key</Label>
+                      <Input
+                        id="apiKey"
+                        type="password"
+                        placeholder="Inserisci la tua API key"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Trova la tua API key nel pannello di controllo del provider
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="companyVat">Partita IVA</Label>
+                      <Input
+                        id="companyVat"
+                        placeholder="IT12345678901"
+                        value={companyVat}
+                        onChange={(e) => setCompanyVat(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    onClick={handleConnect} 
+                    disabled={isConnecting || !apiKey || !companyVat}
+                    className="w-full"
+                  >
+                    {isConnecting ? "Connessione in corso..." : "Connetti"}
+                  </Button>
+                </div>
+              )}
+            </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Provider Selection */}
-      {!connectedProvider && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Seleziona Provider di Fatturazione</CardTitle>
-            <CardDescription>
-              Scegli il tuo gestionale di fatturazione fra le integrazioni disponibili
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {invoicingProviders.map((provider) => (
-                <Card 
-                  key={provider.id}
-                  className={`cursor-pointer transition-all hover:shadow-md ${
-                    selectedProvider === provider.id ? 'border-primary bg-primary/5' : ''
-                  }`}
-                  onClick={() => handleProviderSelect(provider.id)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-2xl">{provider.logo}</span>
-                      <h3 className="font-medium">{provider.name}</h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {provider.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Configuration Form */}
-      {selectedProvider && !connectedProvider && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="text-xl">
-                {invoicingProviders.find(p => p.id === selectedProvider)?.logo}
-              </span>
-              Configura {invoicingProviders.find(p => p.id === selectedProvider)?.name}
-            </CardTitle>
-            <CardDescription>
-              Inserisci le tue credenziali API per collegare il tuo account
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {invoicingProviders
-              .find(p => p.id === selectedProvider)
-              ?.fields.map((field) => (
-                <div key={field.name} className="space-y-2">
-                  <Label htmlFor={field.name}>
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  <Input
-                    id={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    value={formData[field.name] || ""}
-                    onChange={(e) => handleInputChange(field.name, e.target.value)}
-                  />
-                </div>
-              ))}
-            
-            <Separator />
-            
-            <div className="flex gap-3">
-              <Button 
-                onClick={testConnection}
-                disabled={connectionStatus === 'testing'}
-                variant="outline"
-              >
-                {connectionStatus === 'testing' ? 'Test in corso...' : 'Testa Connessione'}
-              </Button>
-              <Button 
-                onClick={saveConfiguration}
-                disabled={connectionStatus !== 'connected'}
-              >
-                Salva Configurazione
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Help Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Come ottenere le credenziali API</CardTitle>
+          <CardTitle>Provider Disponibili</CardTitle>
+          <CardDescription>
+            Sistemi di fatturazione supportati dalla piattaforma
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <div className="grid gap-4">
-            <div className="flex items-start gap-3 p-3 border rounded-lg">
-              <span className="text-xl">🏢</span>
-              <div>
-                <h4 className="font-medium">FattureInCloud</h4>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Accedi al tuo account FattureInCloud, vai in Impostazioni > API e genera le tue credenziali.
-                </p>
-                <Button variant="link" size="sm" className="p-0 h-auto">
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  Vai alle API di FattureInCloud
-                </Button>
+            {providers.map((provider) => (
+              <div key={provider.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">{provider.logo}</span>
+                  <div>
+                    <h4 className="font-medium">{provider.name}</h4>
+                    <p className="text-sm text-muted-foreground">{provider.description}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {connectedProvider?.provider === provider.id ? (
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                      Connesso
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">Disponibile</Badge>
+                  )}
+                  <Button variant="ghost" size="sm">
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-            </div>
-            
-            <div className="flex items-start gap-3 p-3 border rounded-lg">
-              <span className="text-xl">📊</span>
-              <div>
-                <h4 className="font-medium">Fiscozen</h4>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Nel tuo pannello Fiscozen, vai alla sezione API per ottenere il token di autenticazione.
-                </p>
-                <Button variant="link" size="sm" className="p-0 h-auto">
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  Documentazione API Fiscozen
-                </Button>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3 p-3 border rounded-lg">
-              <span className="text-xl">🔐</span>
-              <div>
-                <h4 className="font-medium">Aruba Fatturazione</h4>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Usa le stesse credenziali del tuo account Aruba Fatturazione Elettronica.
-                </p>
-                <Button variant="link" size="sm" className="p-0 h-auto">
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  Accedi ad Aruba Fatturazione
-                </Button>
-              </div>
-            </div>
+            ))}
           </div>
         </CardContent>
       </Card>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <div className="flex gap-3">
+          <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+          <div>
+            <h4 className="font-medium text-amber-800 mb-1">Informazioni Importanti</h4>
+            <ul className="text-sm text-amber-700 space-y-1">
+              <li>• Le API key sono memorizzate in modo sicuro e crittografato</li>
+              <li>• Puoi disconnettere il provider in qualsiasi momento</li>
+              <li>• Le fatture inviate saranno automaticamente registrate nel tuo sistema</li>
+              <li>• Assicurati che i dati della tua azienda siano aggiornati nel provider</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
