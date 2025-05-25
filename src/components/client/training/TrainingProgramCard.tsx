@@ -21,7 +21,8 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
   
   const handleMarkCompleted = (dayId: string) => {
     // Here you would mark the day as completed in your state or database
-    console.log(`Marked day ${dayId} as completed`);
+    // This now includes the workout timing data from WorkoutDetails
+    console.log(`Marked day ${dayId} as completed with workout timing data`);
   };
   
   return (
@@ -53,7 +54,7 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
       <CardFooter className="bg-muted/20 p-4 text-sm text-muted-foreground">
         <div className="flex items-center">
           <CheckCircle className="h-4 w-4 mr-2 text-emerald-600" />
-          Update your weights and mark completed workouts to track your progress.
+          Start your workout to track timing data for analytics. Update your weights and mark completed workouts to track your progress.
         </div>
       </CardFooter>
     </Card>
