@@ -6,7 +6,7 @@ import { useTransactions } from "../context/TransactionsContext";
 import { RevenueCards } from "./RevenueCards";
 
 export function TransactionsTabsContent() {
-  const { filteredTransactions, filteredClients, transactions, handleConfirmCashPayment } = useTransactions();
+  const { filteredTransactions, filteredClients, transactions } = useTransactions();
   
   return (
     <Tabs defaultValue="all">
@@ -18,10 +18,7 @@ export function TransactionsTabsContent() {
       <TabsContent value="all">
         <div className="space-y-6">
           <RevenueCards />
-          <TransactionHistory 
-            transactions={filteredTransactions} 
-            onConfirmCashPayment={handleConfirmCashPayment}
-          />
+          <TransactionHistory />
         </div>
       </TabsContent>
       
