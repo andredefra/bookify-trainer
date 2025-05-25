@@ -1,4 +1,3 @@
-
 export const it = {
   // Navigation
   'nav.home': 'Home',
@@ -53,6 +52,8 @@ export const it = {
   'features.sessionManagementDesc': 'Crea sessioni individuali o di gruppo con limiti di capacità e gestione automatica delle liste d\'attesa.',
   'features.personalTrainerPage': 'Pagina Personal Trainer',
   'features.personalTrainerPageDesc': 'URL e profilo personalizzati per mostrare i tuoi servizi e disponibilità ai potenziali clienti.',
+  'features.invoiceManagement': 'Gestione Fatture',
+  'features.invoiceManagementDesc': 'Connetti un gestionale di fatturazione, selezionando il tuo gestionale di fatturazione fra le integrazioni offerte, e genera fatture per ogni pagamento in entrata.',
   
   // How it works
   'howItWorks.title': 'Come Funziona',

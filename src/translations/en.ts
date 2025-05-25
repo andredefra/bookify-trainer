@@ -1,4 +1,3 @@
-
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -53,6 +52,8 @@ export const en = {
   'features.sessionManagementDesc': 'Create one-on-one or group sessions with capacity limits and automatic waitlist management.',
   'features.personalTrainerPage': 'Personal Trainer Page',
   'features.personalTrainerPageDesc': 'Custom URL and profile to showcase your services and availability to potential clients.',
+  'features.invoiceManagement': 'Invoice Management',
+  'features.invoiceManagementDesc': 'Connect an invoice management system, selecting yours between the integrations we offer, and generate invoices for all your incoming payments.',
   
   // How it works
   'howItWorks.title': 'How It Works',
