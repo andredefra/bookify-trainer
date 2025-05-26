@@ -23,7 +23,7 @@ export const en = {
   'features.smartScheduling': 'Smart Scheduling',
   'features.smartSchedulingDesc': 'Sync with Google Calendar and let clients book directly based on your availability.',
   'features.automatedPayments': 'Automated Payments',
-  'features.automatedPaymentsDesc': 'Connect your Stripe account and get paid automatically when sessions are completed.',
+  'features.automatedPaymentsDesc': 'Connect your bank account and get paid for your programs, services and training sessions.',
   'features.aiAssistant': 'AI Assistant',
   'features.aiAssistantDesc': "Let AI handle client inquiries when you're unavailable or in a training session.",
   'features.videoTitle': 'Video Exercise Demonstrations',

@@ -23,7 +23,7 @@ export const it = {
   'features.smartScheduling': 'Programmazione Intelligente',
   'features.smartSchedulingDesc': 'Sincronizza con Google Calendar e permetti ai clienti di prenotare direttamente in base alla tua disponibilità.',
   'features.automatedPayments': 'Pagamenti Automatizzati',
-  'features.automatedPaymentsDesc': 'Collega il tuo account Stripe e ricevi pagamenti automaticamente quando le sessioni sono completate.',
+  'features.automatedPaymentsDesc': 'Collega il tuo conto bancario e ricevi pagamenti per i tuoi programmi, servizi e per le tue sessioni di allenamento.',
   'features.aiAssistant': 'Assistente AI',
   'features.aiAssistantDesc': "Lascia che l'AI gestisca le richieste dei clienti quando non sei disponibile o sei in sessione di allenamento.",
   'features.videoTitle': 'Dimostrazioni Video degli Esercizi',
