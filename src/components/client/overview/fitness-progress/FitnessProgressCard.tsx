@@ -16,6 +16,7 @@ export function FitnessProgressCard({
   const [openDialog, setOpenDialog] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [openLogDialog, setOpenLogDialog] = useState(false);
+  const [openWeightDialog, setOpenWeightDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openMeasurementsDialog, setOpenMeasurementsDialog] = useState(false);
   
@@ -26,6 +27,7 @@ export function FitnessProgressCard({
     addGoal,
     updateGoal,
     logActivity,
+    logWeight,
     addBodyMeasurements,
     syncFromFitnessApps,
     deleteGoal,
@@ -59,6 +61,12 @@ export function FitnessProgressCard({
   const handleLogSubmit = (data: any) => {
     if (logActivity(data)) {
       setOpenLogDialog(false);
+    }
+  };
+
+  const handleWeightSubmit = (data: any) => {
+    if (logWeight(data)) {
+      setOpenWeightDialog(false);
     }
   };
 
@@ -110,6 +118,7 @@ export function FitnessProgressCard({
           <CardActions 
             onAddGoal={() => setOpenDialog(true)}
             onLogActivity={() => setOpenLogDialog(true)}
+            onLogWeight={() => setOpenWeightDialog(true)}
             onLogMeasurements={() => setOpenMeasurementsDialog(true)}
           />
         </CardHeader>
@@ -149,6 +158,8 @@ export function FitnessProgressCard({
         setOpenUpdateDialog={handleCloseUpdateDialog}
         openLogDialog={openLogDialog}
         setOpenLogDialog={setOpenLogDialog}
+        openWeightDialog={openWeightDialog}
+        setOpenWeightDialog={setOpenWeightDialog}
         openDeleteDialog={openDeleteDialog}
         setOpenDeleteDialog={handleCloseDeleteDialog}
         openMeasurementsDialog={openMeasurementsDialog}
@@ -157,6 +168,7 @@ export function FitnessProgressCard({
         onSubmit={handleSubmit}
         onUpdateSubmit={handleUpdateSubmit}
         onLogSubmit={handleLogSubmit}
+        onWeightSubmit={handleWeightSubmit}
         onMeasurementsSubmit={handleMeasurementsSubmit}
         onDeleteGoal={handleDeleteGoal}
       />

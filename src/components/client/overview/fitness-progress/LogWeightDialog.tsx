@@ -5,19 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
+import { Weight } from "lucide-react";
 
-interface LogActivityDialogProps {
+interface LogWeightDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => void;
 }
 
-export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityDialogProps) {
-  const logForm = useForm({
+export function LogWeightDialog({ open, onOpenChange, onSubmit }: LogWeightDialogProps) {
+  const weightForm = useForm({
     defaultValues: {
-      steps: 0,
-      calories: 0,
-      minutes: 0,
+      weight: 0,
       date: new Date().toISOString().split('T')[0],
       note: ''
     }
@@ -25,23 +24,26 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
 
   const handleSubmit = (data: any) => {
     onSubmit(data);
-    logForm.reset();
+    weightForm.reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Log Daily Activity</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Weight className="h-5 w-5" />
+            Log Weight
+          </DialogTitle>
           <DialogDescription>
-            Manually log your activities to update your goals. Data will be automatically matched to relevant goals.
+            Record your current weight. This will automatically update any weight-related goals.
           </DialogDescription>
         </DialogHeader>
         
-        <Form {...logForm}>
-          <form onSubmit={logForm.handleSubmit(handleSubmit)} className="space-y-4">
+        <Form {...weightForm}>
+          <form onSubmit={weightForm.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
-              control={logForm.control}
+              control={weightForm.control}
               name="date"
               render={({ field }) => (
                 <FormItem>
@@ -55,15 +57,16 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
             />
             
             <FormField
-              control={logForm.control}
-              name="steps"
+              control={weightForm.control}
+              name="weight"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Steps</FormLabel>
+                  <FormLabel>Weight (kg)</FormLabel>
                   <FormControl>
                     <Input 
                       type="number" 
-                      placeholder="0" 
+                      step="0.1"
+                      placeholder="Enter your weight" 
                       {...field} 
                       onChange={e => field.onChange(Number(e.target.value))} 
                     />
@@ -74,52 +77,14 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
             />
             
             <FormField
-              control={logForm.control}
-              name="calories"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Calories Burned (kcal)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="0" 
-                      {...field} 
-                      onChange={e => field.onChange(Number(e.target.value))} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={logForm.control}
-              name="minutes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Activity Minutes</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      placeholder="0" 
-                      {...field} 
-                      onChange={e => field.onChange(Number(e.target.value))} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={logForm.control}
+              control={weightForm.control}
               name="note"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Notes (optional)</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Add any notes about this log entry..." 
+                      placeholder="Add any notes about this weight measurement..." 
                       className="resize-none"
                       {...field} 
                     />
@@ -133,7 +98,7 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button type="submit">Log Activity</Button>
+              <Button type="submit">Save Weight</Button>
             </DialogFooter>
           </form>
         </Form>

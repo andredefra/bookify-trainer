@@ -79,7 +79,7 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
       let newValue = item.current;
       let activityType = '';
       
-      // Map activity to specific goals
+      // Map activity to specific goals (excluding weight)
       if (item.unit === "steps" && data.steps > 0) {
         newValue += Number(data.steps);
         activityType = 'steps';
@@ -92,10 +92,6 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
         newValue += Number(data.minutes);
         activityType = 'workout minutes';
         shouldUpdate = true;
-      } else if (item.unit === "kg" && data.weight > 0) {
-        newValue = Number(data.weight);
-        activityType = 'weight measurement';
-        shouldUpdate = true;
       }
       
       if (shouldUpdate) {
@@ -103,9 +99,9 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
         const newLog: GoalLog = {
           id: `log-${Date.now()}-${item.id}`,
           date: currentDate,
-          value: shouldUpdate ? (item.unit === "kg" ? newValue : Number(data[activityType.split(' ')[0]])) : newValue,
+          value: shouldUpdate ? Number(data[activityType.split(' ')[0]]) : newValue,
           source: 'manual',
-          note: `Logged ${activityType}`
+          note: `Logged ${activityType}${data.note ? ` - ${data.note}` : ''}`
         };
         
         const updatedLogs = [...(item.logs || []), newLog];
@@ -124,6 +120,41 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
     
     setProgressData(updatedProgressData);
     toast.success(`Activity logged successfully! Updated ${updatedGoals} goals.`);
+    return true;
+  };
+
+  // Log weight separately
+  const logWeight = (data: any) => {
+    const currentDate = data.date || getCurrentDate();
+    let updatedGoals = 0;
+    
+    const updatedProgressData = progressData.map(item => {
+      if (item.unit === "kg" && data.weight > 0) {
+        updatedGoals++;
+        const newLog: GoalLog = {
+          id: `log-${Date.now()}-${item.id}`,
+          date: currentDate,
+          value: Number(data.weight),
+          source: 'manual',
+          note: `Weight measurement${data.note ? ` - ${data.note}` : ''}`
+        };
+        
+        const updatedLogs = [...(item.logs || []), newLog];
+        
+        return {
+          ...item,
+          current: Number(data.weight),
+          progress: calculateProgress(Number(data.weight), item.target),
+          lastUpdated: currentDate,
+          logs: updatedLogs
+        };
+      }
+      
+      return item;
+    });
+    
+    setProgressData(updatedProgressData);
+    toast.success(`Weight logged successfully! Updated ${updatedGoals} weight goals.`);
     return true;
   };
 
@@ -211,6 +242,7 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
     addGoal,
     updateGoal,
     logActivity,
+    logWeight,
     addBodyMeasurements,
     syncFromFitnessApps,
     deleteGoal,

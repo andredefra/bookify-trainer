@@ -3,6 +3,7 @@ import { ProgressItem } from "./types";
 import { AddGoalDialog } from "./AddGoalDialog";
 import { UpdateGoalDialog } from "./UpdateGoalDialog";
 import { LogActivityDialog } from "./LogActivityDialog";
+import { LogWeightDialog } from "./LogWeightDialog";
 import { DeleteGoalDialog } from "./DeleteGoalDialog";
 import { BodyMeasurementsDialog } from "./BodyMeasurementsDialog";
 
@@ -13,6 +14,8 @@ interface FitnessDialogsProps {
   setOpenUpdateDialog: (open: boolean) => void;
   openLogDialog: boolean;
   setOpenLogDialog: (open: boolean) => void;
+  openWeightDialog: boolean;
+  setOpenWeightDialog: (open: boolean) => void;
   openDeleteDialog: boolean;
   setOpenDeleteDialog: (open: boolean) => void;
   openMeasurementsDialog: boolean;
@@ -21,6 +24,7 @@ interface FitnessDialogsProps {
   onSubmit: (data: any) => void;
   onUpdateSubmit: (data: any) => void;
   onLogSubmit: (data: any) => void;
+  onWeightSubmit: (data: any) => void;
   onMeasurementsSubmit: (data: any) => void;
   onDeleteGoal: () => void;
 }
@@ -32,6 +36,8 @@ export function FitnessDialogs({
   setOpenUpdateDialog,
   openLogDialog,
   setOpenLogDialog,
+  openWeightDialog,
+  setOpenWeightDialog,
   openDeleteDialog,
   setOpenDeleteDialog,
   openMeasurementsDialog,
@@ -40,6 +46,7 @@ export function FitnessDialogs({
   onSubmit,
   onUpdateSubmit,
   onLogSubmit,
+  onWeightSubmit,
   onMeasurementsSubmit,
   onDeleteGoal
 }: FitnessDialogsProps) {
@@ -62,6 +69,12 @@ export function FitnessDialogs({
         open={openLogDialog}
         onOpenChange={setOpenLogDialog}
         onSubmit={onLogSubmit}
+      />
+      
+      <LogWeightDialog 
+        open={openWeightDialog}
+        onOpenChange={setOpenWeightDialog}
+        onSubmit={onWeightSubmit}
       />
       
       <BodyMeasurementsDialog 
