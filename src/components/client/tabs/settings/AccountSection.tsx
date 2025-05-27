@@ -23,6 +23,8 @@ export function AccountSection({ user }: AccountSectionProps) {
   
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email);
+  const [phone, setPhone] = useState("");
+  const [height, setHeight] = useState("");
   const [profileImage, setProfileImage] = useState<string>(user.profileImage || defaultImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -119,13 +121,37 @@ export function AccountSection({ user }: AccountSectionProps) {
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="name">Full Name</Label>
-          <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="name">Full Name</Label>
+            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+          <div>
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input 
+              id="phone" 
+              type="tel" 
+              value={phone} 
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+39 123 456 7890"
+            />
+          </div>
+          <div>
+            <Label htmlFor="height">Height (cm)</Label>
+            <Input 
+              id="height" 
+              type="number" 
+              value={height} 
+              onChange={(e) => setHeight(e.target.value)}
+              placeholder="175"
+              min="100"
+              max="250"
+            />
+          </div>
         </div>
         
         <div className="pt-2">
