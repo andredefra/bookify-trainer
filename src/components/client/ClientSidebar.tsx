@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Calendar, User, MessageSquare, Settings, LineChart, BarChart2, Dumbbell, Activity } from "lucide-react";
+import { Calendar, User, MessageSquare, Settings, Eye, BarChart2, Dumbbell, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ClientProfile } from "@/components/ClientProfile";
 import { Badge } from "@/components/ui/badge";
@@ -66,7 +66,7 @@ export function ClientSidebar({
               onClick={() => { setActiveTab("overview"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "overview" ? "bg-primary/5 text-primary" : ""}`}
             >
-              <LineChart className="w-5 h-5 mr-3" />
+              <Eye className="w-5 h-5 mr-3" />
               <span>Overview</span>
             </button>
             <button 
