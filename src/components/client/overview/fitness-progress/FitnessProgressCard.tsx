@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { FitnessProgressCardProps } from "./types";
@@ -17,17 +17,32 @@ export function FitnessProgressCard({
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [openLogDialog, setOpenLogDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openMeasurementsDialog, setOpenMeasurementsDialog] = useState(false);
   
   const {
     progressData,
+    bodyMeasurements,
     selectedGoal,
     addGoal,
     updateGoal,
     logActivity,
+    addBodyMeasurements,
+    syncFromFitnessApps,
     deleteGoal,
     selectGoal,
     clearSelectedGoal
   } = useFitnessGoals(initialProgressData);
+
+  // Auto-sync from connected fitness apps
+  useEffect(() => {
+    if (connectedApps.googleFit || connectedApps.appleHealth) {
+      const interval = setInterval(() => {
+        syncFromFitnessApps(connectedApps);
+      }, 300000); // Sync every 5 minutes
+      
+      return () => clearInterval(interval);
+    }
+  }, [connectedApps, syncFromFitnessApps]);
 
   // Handle form submissions from dialogs
   const handleSubmit = (data: any) => {
@@ -44,6 +59,12 @@ export function FitnessProgressCard({
   const handleLogSubmit = (data: any) => {
     if (logActivity(data)) {
       setOpenLogDialog(false);
+    }
+  };
+
+  const handleMeasurementsSubmit = (data: any) => {
+    if (addBodyMeasurements(data)) {
+      setOpenMeasurementsDialog(false);
     }
   };
 
@@ -82,13 +103,14 @@ export function FitnessProgressCard({
           <div className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Fitness Progress</CardTitle>
-              <CardDescription>Track your journey toward your goals</CardDescription>
+              <CardDescription>Track your journey toward your goals with detailed logging</CardDescription>
             </div>
           </div>
           
           <CardActions 
             onAddGoal={() => setOpenDialog(true)}
             onLogActivity={() => setOpenLogDialog(true)}
+            onLogMeasurements={() => setOpenMeasurementsDialog(true)}
           />
         </CardHeader>
         
@@ -103,6 +125,20 @@ export function FitnessProgressCard({
             progressDataExists={progressData.length > 0}
             connectedApps={connectedApps}
           />
+          
+          {bodyMeasurements.length > 0 && (
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">Latest Body Composition</h4>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {bodyMeasurements[bodyMeasurements.length - 1].bodyFatPercentage && (
+                  <div>Body Fat: {bodyMeasurements[bodyMeasurements.length - 1].bodyFatPercentage}%</div>
+                )}
+                {bodyMeasurements[bodyMeasurements.length - 1].leanMass && (
+                  <div>Lean Mass: {bodyMeasurements[bodyMeasurements.length - 1].leanMass}kg</div>
+                )}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -115,10 +151,13 @@ export function FitnessProgressCard({
         setOpenLogDialog={setOpenLogDialog}
         openDeleteDialog={openDeleteDialog}
         setOpenDeleteDialog={handleCloseDeleteDialog}
+        openMeasurementsDialog={openMeasurementsDialog}
+        setOpenMeasurementsDialog={setOpenMeasurementsDialog}
         selectedGoal={selectedGoal}
         onSubmit={handleSubmit}
         onUpdateSubmit={handleUpdateSubmit}
         onLogSubmit={handleLogSubmit}
+        onMeasurementsSubmit={handleMeasurementsSubmit}
         onDeleteGoal={handleDeleteGoal}
       />
     </>

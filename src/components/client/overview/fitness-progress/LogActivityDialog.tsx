@@ -3,6 +3,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 
 interface LogActivityDialogProps {
@@ -17,7 +18,9 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
       steps: 0,
       calories: 0,
       minutes: 0,
-      date: new Date().toISOString().split('T')[0]
+      weight: 0,
+      date: new Date().toISOString().split('T')[0],
+      note: ''
     }
   });
 
@@ -28,11 +31,11 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Log Daily Activity</DialogTitle>
           <DialogDescription>
-            Manually log your activities to update your goals.
+            Manually log your activities to update your goals. Data will be automatically matched to relevant goals.
           </DialogDescription>
         </DialogHeader>
         
@@ -102,6 +105,44 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
                       placeholder="0" 
                       {...field} 
                       onChange={e => field.onChange(Number(e.target.value))} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={logForm.control}
+              name="weight"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Weight (kg)</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      step="0.1"
+                      placeholder="0" 
+                      {...field} 
+                      onChange={e => field.onChange(Number(e.target.value))} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={logForm.control}
+              name="note"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Notes (optional)</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Add any notes about this log entry..." 
+                      className="resize-none"
+                      {...field} 
                     />
                   </FormControl>
                   <FormMessage />

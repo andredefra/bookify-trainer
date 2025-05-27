@@ -4,6 +4,7 @@ import { AddGoalDialog } from "./AddGoalDialog";
 import { UpdateGoalDialog } from "./UpdateGoalDialog";
 import { LogActivityDialog } from "./LogActivityDialog";
 import { DeleteGoalDialog } from "./DeleteGoalDialog";
+import { BodyMeasurementsDialog } from "./BodyMeasurementsDialog";
 
 interface FitnessDialogsProps {
   openDialog: boolean;
@@ -14,10 +15,13 @@ interface FitnessDialogsProps {
   setOpenLogDialog: (open: boolean) => void;
   openDeleteDialog: boolean;
   setOpenDeleteDialog: (open: boolean) => void;
+  openMeasurementsDialog: boolean;
+  setOpenMeasurementsDialog: (open: boolean) => void;
   selectedGoal: ProgressItem | null;
   onSubmit: (data: any) => void;
   onUpdateSubmit: (data: any) => void;
   onLogSubmit: (data: any) => void;
+  onMeasurementsSubmit: (data: any) => void;
   onDeleteGoal: () => void;
 }
 
@@ -30,10 +34,13 @@ export function FitnessDialogs({
   setOpenLogDialog,
   openDeleteDialog,
   setOpenDeleteDialog,
+  openMeasurementsDialog,
+  setOpenMeasurementsDialog,
   selectedGoal,
   onSubmit,
   onUpdateSubmit,
   onLogSubmit,
+  onMeasurementsSubmit,
   onDeleteGoal
 }: FitnessDialogsProps) {
   return (
@@ -55,6 +62,12 @@ export function FitnessDialogs({
         open={openLogDialog}
         onOpenChange={setOpenLogDialog}
         onSubmit={onLogSubmit}
+      />
+      
+      <BodyMeasurementsDialog 
+        open={openMeasurementsDialog}
+        onOpenChange={setOpenMeasurementsDialog}
+        onSubmit={onMeasurementsSubmit}
       />
       
       <DeleteGoalDialog 

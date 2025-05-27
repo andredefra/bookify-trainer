@@ -1,15 +1,17 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { ProgressItem } from "../types";
-import { calculateProgress, getCurrentDate } from "../utils";
+import { ProgressItem, GoalLog, BodyMeasurements } from "../types";
+import { calculateProgress, getCurrentDate, calculateBodyComposition } from "../utils";
 
 export function useFitnessGoals(initialProgressData: ProgressItem[]) {
   const [progressData, setProgressData] = useState<ProgressItem[]>(initialProgressData);
+  const [bodyMeasurements, setBodyMeasurements] = useState<BodyMeasurements[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
   
-  // Add a new goal
+  // Add a new goal with creation timestamp
   const addGoal = (data: any) => {
+    const currentDate = getCurrentDate();
     const newGoal: ProgressItem = {
       id: `goal-${Date.now()}`,
       goal: data.goal,
@@ -17,7 +19,15 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
       target: Number(data.target),
       unit: data.unit,
       progress: calculateProgress(Number(data.current), Number(data.target)),
-      lastUpdated: getCurrentDate()
+      lastUpdated: currentDate,
+      createdAt: currentDate,
+      logs: [{
+        id: `log-${Date.now()}`,
+        date: currentDate,
+        value: Number(data.current),
+        source: 'manual',
+        note: 'Initial goal setup'
+      }]
     };
     
     setProgressData([...progressData, newGoal]);
@@ -25,17 +35,28 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
     return true;
   };
 
-  // Update an existing goal
+  // Update an existing goal with new log entry
   const updateGoal = (data: any) => {
     if (!selectedGoal) return false;
     
+    const currentDate = getCurrentDate();
+    const newLog: GoalLog = {
+      id: `log-${Date.now()}`,
+      date: data.date || currentDate,
+      value: Number(data.current),
+      source: 'manual',
+      note: data.note
+    };
+    
     const updatedProgressData = progressData.map(item => {
       if (item.id === selectedGoal.id || (item.goal === selectedGoal.goal && !item.id)) {
+        const updatedLogs = [...(item.logs || []), newLog];
         const updatedItem = {
           ...item,
           current: Number(data.current),
           progress: calculateProgress(Number(data.current), item.target),
-          lastUpdated: getCurrentDate()
+          lastUpdated: currentDate,
+          logs: updatedLogs
         };
         return updatedItem;
       }
@@ -44,37 +65,57 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
     
     setProgressData(updatedProgressData);
     setSelectedGoal(null);
-    toast.success("Goal progress updated!");
+    toast.success("Goal progress updated with new log entry!");
     return true;
   };
 
-  // Log manual activity
+  // Log manual activity with detailed tracking per goal
   const logActivity = (data: any) => {
-    // Find goals related to the logged activities and update them
+    const currentDate = data.date || getCurrentDate();
+    let updatedGoals = 0;
+    
     const updatedProgressData = progressData.map(item => {
-      let updatedCurrent = item.current;
+      let shouldUpdate = false;
+      let newValue = item.current;
+      let activityType = '';
       
-      // Update step count goal
+      // Map activity to specific goals
       if (item.unit === "steps" && data.steps > 0) {
-        updatedCurrent += Number(data.steps);
+        newValue += Number(data.steps);
+        activityType = 'steps';
+        shouldUpdate = true;
+      } else if (item.unit === "kcal" && data.calories > 0) {
+        newValue += Number(data.calories);
+        activityType = 'calories burned';
+        shouldUpdate = true;
+      } else if (item.unit === "mins" && data.minutes > 0) {
+        newValue += Number(data.minutes);
+        activityType = 'workout minutes';
+        shouldUpdate = true;
+      } else if (item.unit === "kg" && data.weight > 0) {
+        newValue = Number(data.weight);
+        activityType = 'weight measurement';
+        shouldUpdate = true;
       }
       
-      // Update calories goal
-      if (item.unit === "kcal" && data.calories > 0) {
-        updatedCurrent += Number(data.calories);
-      }
-      
-      // Update workout minutes goal
-      if (item.unit === "mins" && data.minutes > 0) {
-        updatedCurrent += Number(data.minutes);
-      }
-      
-      if (updatedCurrent !== item.current) {
+      if (shouldUpdate) {
+        updatedGoals++;
+        const newLog: GoalLog = {
+          id: `log-${Date.now()}-${item.id}`,
+          date: currentDate,
+          value: shouldUpdate ? (item.unit === "kg" ? newValue : Number(data[activityType.split(' ')[0]])) : newValue,
+          source: 'manual',
+          note: `Logged ${activityType}`
+        };
+        
+        const updatedLogs = [...(item.logs || []), newLog];
+        
         return {
           ...item,
-          current: updatedCurrent,
-          progress: calculateProgress(updatedCurrent, item.target),
-          lastUpdated: getCurrentDate()
+          current: newValue,
+          progress: calculateProgress(newValue, item.target),
+          lastUpdated: currentDate,
+          logs: updatedLogs
         };
       }
       
@@ -82,21 +123,68 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
     });
     
     setProgressData(updatedProgressData);
-    toast.success("Activity logged successfully!");
+    toast.success(`Activity logged successfully! Updated ${updatedGoals} goals.`);
     return true;
+  };
+
+  // Add body measurements
+  const addBodyMeasurements = (data: BodyMeasurements) => {
+    const measurementWithCalculations = {
+      ...data,
+      ...calculateBodyComposition(data)
+    };
+    
+    setBodyMeasurements(prev => [...prev, measurementWithCalculations]);
+    toast.success("Body measurements logged successfully!");
+    return true;
+  };
+
+  // Auto-sync from fitness apps (simulated)
+  const syncFromFitnessApps = (connectedApps: any) => {
+    if (!connectedApps.googleFit && !connectedApps.appleHealth) return;
+    
+    // Simulate automatic data sync
+    const currentDate = getCurrentDate();
+    let syncedData = false;
+    
+    const updatedProgressData = progressData.map(item => {
+      // Simulate automatic step tracking
+      if (item.unit === "steps" && connectedApps.googleFit) {
+        const dailySteps = Math.floor(Math.random() * 3000) + 7000; // Simulate 7000-10000 steps
+        const newLog: GoalLog = {
+          id: `sync-${Date.now()}-${item.id}`,
+          date: currentDate,
+          value: dailySteps,
+          source: 'googleFit',
+          note: 'Auto-synced from Google Fit'
+        };
+        
+        syncedData = true;
+        return {
+          ...item,
+          current: item.current + dailySteps,
+          progress: calculateProgress(item.current + dailySteps, item.target),
+          lastUpdated: currentDate,
+          logs: [...(item.logs || []), newLog]
+        };
+      }
+      return item;
+    });
+    
+    if (syncedData) {
+      setProgressData(updatedProgressData);
+      toast.success("Data synced from fitness apps!");
+    }
   };
 
   // Delete a goal
   const deleteGoal = () => {
     if (!selectedGoal) return false;
     
-    // Filter out the specific goal that matches the selectedGoal's ID
     const filteredProgressData = progressData.filter(item => {
-      // If the goal has an ID, compare IDs
       if (selectedGoal.id && item.id) {
         return item.id !== selectedGoal.id;
       }
-      // If no ID (for backward compatibility), compare by goal name
       return item.goal !== selectedGoal.goal;
     });
     
@@ -118,10 +206,13 @@ export function useFitnessGoals(initialProgressData: ProgressItem[]) {
 
   return {
     progressData,
+    bodyMeasurements,
     selectedGoal,
     addGoal,
     updateGoal,
     logActivity,
+    addBodyMeasurements,
+    syncFromFitnessApps,
     deleteGoal,
     selectGoal,
     clearSelectedGoal
