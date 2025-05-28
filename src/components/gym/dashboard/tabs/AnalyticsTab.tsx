@@ -49,55 +49,70 @@ export function AnalyticsTab() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
-        <p className="text-muted-foreground">Analyze your gym's performance and trends</p>
+        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
+        <p className="text-gray-700 mt-1">Analizza le performance e i trend della tua palestra</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle className="text-slate-800">Membership Growth</CardTitle>
+        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
+          <CardHeader className="bg-gray-50 border-b border-gray-200">
+            <CardTitle className="text-xl font-semibold text-gray-900">Crescita Membri</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={membershipData}
                   margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="premium" name="Premium Members" stackId="a" fill="#8884d8" />
-                  <Bar dataKey="standard" name="Standard Members" stackId="a" fill="#82ca9d" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="name" tick={{ fill: '#374151', fontSize: 12 }} />
+                  <YAxis tick={{ fill: '#374151', fontSize: 12 }} />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#ffffff', 
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      color: '#111827'
+                    }} 
+                  />
+                  <Bar dataKey="premium" name="Membri Premium" stackId="a" fill="#3b82f6" />
+                  <Bar dataKey="standard" name="Membri Standard" stackId="a" fill="#10b981" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
         
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle className="text-slate-800">Monthly Revenue</CardTitle>
+        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
+          <CardHeader className="bg-gray-50 border-b border-gray-200">
+            <CardTitle className="text-xl font-semibold text-gray-900">Fatturato Mensile</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={revenueData}
                   margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [`€${value}`, 'Revenue']} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="name" tick={{ fill: '#374151', fontSize: 12 }} />
+                  <YAxis tick={{ fill: '#374151', fontSize: 12 }} />
+                  <Tooltip 
+                    formatter={(value) => [`€${value}`, 'Fatturato']} 
+                    contentStyle={{ 
+                      backgroundColor: '#ffffff', 
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      color: '#111827'
+                    }}
+                  />
                   <Line
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#8884d8"
-                    activeDot={{ r: 8 }}
-                    strokeWidth={2}
+                    stroke="#3b82f6"
+                    activeDot={{ r: 8, fill: '#3b82f6' }}
+                    strokeWidth={3}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -105,11 +120,11 @@ export function AnalyticsTab() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle className="text-slate-800">Revenue Breakdown</CardTitle>
+        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
+          <CardHeader className="bg-gray-50 border-b border-gray-200">
+            <CardTitle className="text-xl font-semibold text-gray-900">Suddivisione Fatturato</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <div className="flex justify-center items-center min-h-[300px]">
               <div className="h-64 w-64">
                 <ResponsiveContainer width="100%" height="100%">
@@ -123,12 +138,20 @@ export function AnalyticsTab() {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
+                      fontSize={12}
                     >
                       {pieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#ffffff', 
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        color: '#111827'
+                      }}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -136,46 +159,46 @@ export function AnalyticsTab() {
           </CardContent>
         </Card>
         
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle className="text-slate-800">Key Metrics</CardTitle>
+        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
+          <CardHeader className="bg-gray-50 border-b border-gray-200">
+            <CardTitle className="text-xl font-semibold text-gray-900">Metriche Chiave</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="border rounded-md p-4 bg-white">
-                  <p className="text-sm font-medium text-muted-foreground">Average Daily Check-ins</p>
-                  <h3 className="text-2xl font-bold mt-1 text-slate-900">78</h3>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <p className="text-sm font-medium text-gray-600">Check-in Giornalieri Medi</p>
+                  <h3 className="text-2xl font-bold mt-1 text-gray-900">78</h3>
+                  <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📈</span>
-                    +12% from last month
+                    +12% dal mese scorso
                   </p>
                 </div>
                 
-                <div className="border rounded-md p-4 bg-white">
-                  <p className="text-sm font-medium text-muted-foreground">New Member Conversion</p>
-                  <h3 className="text-2xl font-bold mt-1 text-slate-900">32%</h3>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <p className="text-sm font-medium text-gray-600">Conversione Nuovi Membri</p>
+                  <h3 className="text-2xl font-bold mt-1 text-gray-900">32%</h3>
+                  <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📈</span>
-                    +5% from last month
+                    +5% dal mese scorso
                   </p>
                 </div>
                 
-                <div className="border rounded-md p-4 bg-white">
-                  <p className="text-sm font-medium text-muted-foreground">Class Attendance Rate</p>
-                  <h3 className="text-2xl font-bold mt-1 text-slate-900">68%</h3>
-                  <p className="text-xs text-amber-600 flex items-center mt-1">
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <p className="text-sm font-medium text-gray-600">Partecipazione ai Corsi</p>
+                  <h3 className="text-2xl font-bold mt-1 text-gray-900">68%</h3>
+                  <p className="text-xs text-amber-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📉</span>
-                    -2% from last month
+                    -2% dal mese scorso
                   </p>
                 </div>
                 
-                <div className="border rounded-md p-4 bg-white">
-                  <p className="text-sm font-medium text-muted-foreground">Member Retention</p>
-                  <h3 className="text-2xl font-bold mt-1 text-slate-900">92%</h3>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <p className="text-sm font-medium text-gray-600">Retention Membri</p>
+                  <h3 className="text-2xl font-bold mt-1 text-gray-900">92%</h3>
+                  <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📈</span>
-                    +3% from last month
+                    +3% dal mese scorso
                   </p>
                 </div>
               </div>
