@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   BarChart, 
@@ -125,8 +124,25 @@ export function AnalyticsTab() {
             <CardTitle className="text-xl font-semibold text-gray-900">Suddivisione Fatturato</CardTitle>
           </CardHeader>
           <CardContent className="p-6 bg-white">
-            <div className="flex flex-col justify-center items-center min-h-[300px]">
-              <div className="h-64 w-64 mb-4">
+            <div className="flex items-center justify-center min-h-[300px] gap-6">
+              {/* Legend on the left */}
+              <div className="space-y-3">
+                {pieData.map((entry, index) => (
+                  <div key={`legend-${index}`} className="flex items-center">
+                    <div 
+                      className="w-4 h-4 mr-3 rounded" 
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">{entry.name}</div>
+                      <div className="text-gray-600">{entry.value}%</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Pie chart on the right */}
+              <div className="h-64 w-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -153,22 +169,6 @@ export function AnalyticsTab() {
                     />
                   </PieChart>
                 </ResponsiveContainer>
-              </div>
-              
-              {/* Custom Legend */}
-              <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
-                {pieData.map((entry, index) => (
-                  <div key={`legend-${index}`} className="flex items-center bg-gray-50 p-2 rounded border">
-                    <div 
-                      className="w-4 h-4 mr-2 rounded" 
-                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                    />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">{entry.name}</div>
-                      <div className="text-gray-600">{entry.value}%</div>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </CardContent>
