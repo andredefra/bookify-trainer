@@ -49,14 +49,14 @@ export function AnalyticsTab() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">Analytics</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
         <p className="text-muted-foreground">Analyze your gym's performance and trends</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Membership Growth</CardTitle>
+            <CardTitle className="text-slate-800">Membership Growth</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -79,7 +79,7 @@ export function AnalyticsTab() {
         
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Monthly Revenue</CardTitle>
+            <CardTitle className="text-slate-800">Monthly Revenue</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -107,72 +107,74 @@ export function AnalyticsTab() {
 
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Revenue Breakdown</CardTitle>
+            <CardTitle className="text-slate-800">Revenue Breakdown</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-center">
-            <div className="h-64 w-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+          <CardContent>
+            <div className="flex justify-center items-center min-h-[300px]">
+              <div className="h-64 w-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
         
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Key Metrics</CardTitle>
+            <CardTitle className="text-slate-800">Key Metrics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="border rounded-md p-4">
+                <div className="border rounded-md p-4 bg-white">
                   <p className="text-sm font-medium text-muted-foreground">Average Daily Check-ins</p>
-                  <h3 className="text-2xl font-bold mt-1">78</h3>
+                  <h3 className="text-2xl font-bold mt-1 text-slate-900">78</h3>
                   <p className="text-xs text-green-600 flex items-center mt-1">
-                    <span className="i-lucide-trending-up mr-1"></span>
+                    <span className="mr-1">📈</span>
                     +12% from last month
                   </p>
                 </div>
                 
-                <div className="border rounded-md p-4">
+                <div className="border rounded-md p-4 bg-white">
                   <p className="text-sm font-medium text-muted-foreground">New Member Conversion</p>
-                  <h3 className="text-2xl font-bold mt-1">32%</h3>
+                  <h3 className="text-2xl font-bold mt-1 text-slate-900">32%</h3>
                   <p className="text-xs text-green-600 flex items-center mt-1">
-                    <span className="i-lucide-trending-up mr-1"></span>
+                    <span className="mr-1">📈</span>
                     +5% from last month
                   </p>
                 </div>
                 
-                <div className="border rounded-md p-4">
+                <div className="border rounded-md p-4 bg-white">
                   <p className="text-sm font-medium text-muted-foreground">Class Attendance Rate</p>
-                  <h3 className="text-2xl font-bold mt-1">68%</h3>
+                  <h3 className="text-2xl font-bold mt-1 text-slate-900">68%</h3>
                   <p className="text-xs text-amber-600 flex items-center mt-1">
-                    <span className="i-lucide-trending-down mr-1"></span>
+                    <span className="mr-1">📉</span>
                     -2% from last month
                   </p>
                 </div>
                 
-                <div className="border rounded-md p-4">
+                <div className="border rounded-md p-4 bg-white">
                   <p className="text-sm font-medium text-muted-foreground">Member Retention</p>
-                  <h3 className="text-2xl font-bold mt-1">92%</h3>
+                  <h3 className="text-2xl font-bold mt-1 text-slate-900">92%</h3>
                   <p className="text-xs text-green-600 flex items-center mt-1">
-                    <span className="i-lucide-trending-up mr-1"></span>
+                    <span className="mr-1">📈</span>
                     +3% from last month
                   </p>
                 </div>
