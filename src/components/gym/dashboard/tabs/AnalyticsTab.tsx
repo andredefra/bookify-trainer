@@ -125,8 +125,8 @@ export function AnalyticsTab() {
             <CardTitle className="text-xl font-semibold text-gray-900">Suddivisione Fatturato</CardTitle>
           </CardHeader>
           <CardContent className="p-6 bg-white">
-            <div className="flex justify-center items-center min-h-[300px]">
-              <div className="h-64 w-64">
+            <div className="flex flex-col justify-center items-center min-h-[300px]">
+              <div className="h-64 w-64 mb-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -134,11 +134,10 @@ export function AnalyticsTab() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={false}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
-                      fontSize={12}
                     >
                       {pieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -154,6 +153,22 @@ export function AnalyticsTab() {
                     />
                   </PieChart>
                 </ResponsiveContainer>
+              </div>
+              
+              {/* Custom Legend */}
+              <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+                {pieData.map((entry, index) => (
+                  <div key={`legend-${index}`} className="flex items-center bg-gray-50 p-2 rounded border">
+                    <div 
+                      className="w-4 h-4 mr-2 rounded" 
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">{entry.name}</div>
+                      <div className="text-gray-600">{entry.value}%</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </CardContent>
