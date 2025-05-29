@@ -11,7 +11,7 @@ import { MonthlyRevenueChart } from "./charts/MonthlyRevenueChart";
 import { RevenueByProductChart } from "./charts/RevenueByProductChart";
 import { ClientGrowthChart } from "./charts/ClientGrowthChart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TransactionsProvider, useTransactions } from "./transactions/context/TransactionsContext";
+import { TransactionsProvider, useTransactions } from "../transactions/context/TransactionsContext";
 
 // Sample client list for the filter
 const clients = [
