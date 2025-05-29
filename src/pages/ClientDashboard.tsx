@@ -14,6 +14,7 @@ import { TrainingLogTab } from "@/components/client/tabs/TrainingLogTab";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -51,10 +52,42 @@ const ClientDashboard = () => {
     { id: 2, from: "Alex Thompson", preview: "Here's the nutrition plan we discussed. Let me know if you have questions.", time: "Yesterday", read: true },
   ];
   
-  const progressData = [
-    { goal: "Weight goal", current: 68, target: 65, unit: "kg", progress: 75 },
-    { goal: "Weekly workouts", current: 3, target: 4, unit: "sessions", progress: 75 },
-    { goal: "Daily steps", current: 8500, target: 10000, unit: "steps", progress: 85 },
+  const progressData: ProgressItem[] = [
+    { 
+      goal: "Lose weight for summer", 
+      current: 68, 
+      target: 65, 
+      unit: "kg", 
+      progress: 75,
+      goalType: "weight_management",
+      targetDate: "2024-06-30",
+      createdAt: "2024-03-01",
+      lastUpdated: "2024-03-15"
+    },
+    { 
+      goal: "Weekly workout consistency", 
+      current: 3, 
+      target: 4, 
+      unit: "sessions", 
+      progress: 75,
+      goalType: "workout_consistency",
+      targetDate: "2024-04-30",
+      frequency: { value: 4, period: "weekly" },
+      createdAt: "2024-03-01",
+      lastUpdated: "2024-03-15"
+    },
+    { 
+      goal: "Daily steps target", 
+      current: 8500, 
+      target: 10000, 
+      unit: "steps", 
+      progress: 85,
+      goalType: "activity_level",
+      targetDate: "2024-12-31",
+      frequency: { value: 10000, period: "daily" },
+      createdAt: "2024-03-01",
+      lastUpdated: "2024-03-15"
+    },
   ];
 
   const goals = ["Weight loss", "Muscle tone", "Flexibility"];
