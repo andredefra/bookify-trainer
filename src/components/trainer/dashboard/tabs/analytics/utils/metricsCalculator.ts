@@ -61,66 +61,95 @@ export function calculateAttendance(sessions: ClientData['sessions']): number {
   return Math.round((completedSessions.length / scheduledSessions.length) * 100);
 }
 
-// Calculate progress based on weight/BMI improvement
-export function calculateProgressMetric(client: ClientData): number {
+// Calculate progress toward weight target for a specific date
+export function calculateProgressMetricForDate(client: ClientData, targetDate: Date): number {
   const { height, age, bodyMeasurements, targetWeight } = client;
   
-  if (bodyMeasurements.length < 2) return 0;
+  if (bodyMeasurements.length < 1) return 0;
   
-  // Sort measurements by date
-  const sortedMeasurements = bodyMeasurements.sort((a, b) => a.date.getTime() - b.date.getTime());
-  const firstMeasurement = sortedMeasurements[0];
-  const latestMeasurement = sortedMeasurements[sortedMeasurements.length - 1];
+  // Get measurements up to the target date
+  const relevantMeasurements = bodyMeasurements
+    .filter(m => m.date <= targetDate)
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
+    
+  if (relevantMeasurements.length === 0) return 0;
   
-  const idealRange = getIdealWeightRange(height, age);
-  const startBMI = calculateBMI(firstMeasurement.weight, height);
-  const currentBMI = calculateBMI(latestMeasurement.weight, height);
-  
-  // Calculate progress toward ideal BMI range
-  let progress = 0;
+  const firstMeasurement = relevantMeasurements[0];
+  const latestMeasurement = relevantMeasurements[relevantMeasurements.length - 1];
   
   if (targetWeight) {
-    const targetBMI = calculateBMI(targetWeight, height);
-    const totalChange = Math.abs(startBMI - targetBMI);
-    const currentChange = Math.abs(startBMI - currentBMI);
+    // Calculate progress toward specific target weight
+    const startWeight = firstMeasurement.weight;
+    const currentWeight = latestMeasurement.weight;
+    const targetWeightValue = targetWeight;
     
-    if (totalChange > 0) {
-      progress = Math.min(100, (currentChange / totalChange) * 100);
+    const totalWeightToLose = Math.abs(startWeight - targetWeightValue);
+    const weightLostSoFar = Math.abs(startWeight - currentWeight);
+    
+    if (totalWeightToLose === 0) return 100;
+    
+    // For weight loss goals
+    if (startWeight > targetWeightValue) {
+      return Math.min(100, Math.round((weightLostSoFar / totalWeightToLose) * 100));
     }
-  } else {
-    // Use ideal BMI range as target
-    const idealBMI = (idealRange.min + idealRange.max) / 2;
-    const totalChange = Math.abs(startBMI - idealBMI);
-    const currentChange = Math.abs(startBMI - currentBMI);
-    
-    if (totalChange > 0) {
-      progress = Math.min(100, (currentChange / totalChange) * 100);
+    // For weight gain goals
+    else if (startWeight < targetWeightValue) {
+      return Math.min(100, Math.round((weightLostSoFar / totalWeightToLose) * 100));
     }
   }
   
-  return Math.round(progress);
+  // Fallback to BMI improvement
+  const idealRange = getIdealWeightRange(height, age);
+  const idealWeight = (idealRange.min + idealRange.max) / 2;
+  const startWeight = firstMeasurement.weight;
+  const currentWeight = latestMeasurement.weight;
+  
+  const totalWeightToLose = Math.abs(startWeight - idealWeight);
+  const weightLostSoFar = Math.abs(startWeight - currentWeight);
+  
+  if (totalWeightToLose === 0) return 100;
+  
+  return Math.min(100, Math.round((weightLostSoFar / totalWeightToLose) * 100));
+}
+
+// Calculate progress based on weight/BMI improvement
+export function calculateProgressMetric(client: ClientData): number {
+  return calculateProgressMetricForDate(client, new Date());
+}
+
+// Calculate goals reached percentage for a specific date
+export function calculateGoalsReachedForDate(goals: ClientData['goals'], targetDate: Date): number {
+  if (goals.length === 0) return 0;
+  
+  // Only consider goals that were created before or on the target date
+  const relevantGoals = goals.filter(goal => goal.createdAt <= targetDate);
+  
+  if (relevantGoals.length === 0) return 0;
+  
+  let totalProgress = 0;
+  
+  relevantGoals.forEach(goal => {
+    // Calculate time-based progress
+    const goalDuration = goal.deadline.getTime() - goal.createdAt.getTime();
+    const timeElapsed = Math.min(targetDate.getTime() - goal.createdAt.getTime(), goalDuration);
+    const timeProgress = Math.max(0, timeElapsed / goalDuration);
+    
+    // Calculate actual progress
+    const actualProgress = Math.min(1, goal.current / goal.target);
+    
+    // Combine time and actual progress (weighted average)
+    // If ahead of schedule, give full credit. If behind, scale down.
+    const combinedProgress = Math.min(1, actualProgress / Math.max(0.1, timeProgress)) * timeProgress;
+    
+    totalProgress += combinedProgress;
+  });
+  
+  return Math.round((totalProgress / relevantGoals.length) * 100);
 }
 
 // Calculate goals reached percentage
 export function calculateGoalsReached(goals: ClientData['goals']): number {
-  if (goals.length === 0) return 0;
-  
-  const now = new Date();
-  const activeGoals = goals.filter(goal => goal.deadline > now || 
-    (goal.deadline <= now && goal.current >= goal.target));
-  
-  let reachedGoals = 0;
-  
-  activeGoals.forEach(goal => {
-    const progressPercentage = (goal.current / goal.target) * 100;
-    
-    // Consider a goal "reached" if progress is >= 90%
-    if (progressPercentage >= 90) {
-      reachedGoals++;
-    }
-  });
-  
-  return Math.round((reachedGoals / activeGoals.length) * 100);
+  return calculateGoalsReachedForDate(goals, new Date());
 }
 
 // Generate weekly performance data for a client
@@ -142,32 +171,25 @@ export function generateClientPerformanceData(client: ClientData, weeks: number 
     weekEnd.setDate(weekStart.getDate() + 6);
     weekEnd.setHours(23, 59, 59, 999);
     
-    // Filter data for this week
+    // Filter sessions for this week
     const weekSessions = client.sessions.filter(session => 
       session.date >= weekStart && session.date <= weekEnd
     );
     
-    const weekMeasurements = client.bodyMeasurements.filter(measurement => 
-      measurement.date >= weekStart && measurement.date <= weekEnd
-    );
-    
-    // Calculate metrics for this week
+    // Calculate metrics for this specific week endpoint
     const attendance = calculateAttendance(weekSessions);
     
-    // For progress, use cumulative data up to this week
-    const cumulativeMeasurements = client.bodyMeasurements.filter(measurement => 
-      measurement.date <= weekEnd
-    );
-    const clientDataForWeek = { ...client, bodyMeasurements: cumulativeMeasurements };
-    const progress = calculateProgressMetric(clientDataForWeek);
+    // Calculate cumulative progress up to this week
+    const progress = calculateProgressMetricForDate(client, weekEnd);
     
-    const goalsReached = calculateGoalsReached(client.goals);
+    // Calculate goals progress up to this week
+    const goalsReached = calculateGoalsReachedForDate(client.goals, weekEnd);
     
     data.push({
       name: `Week ${weeks - i}`,
-      attendance,
-      progress,
-      goalsReached
+      attendance: attendance || 0,
+      progress: progress || 0,
+      goalsReached: goalsReached || 0
     });
   }
   
