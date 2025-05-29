@@ -6,14 +6,7 @@ import { MessagesCard } from "@/components/client/overview/MessagesCard";
 import { useEffect, useState } from "react";
 import { Info } from "lucide-react";
 import { SessionItem, SessionStatus } from "@/types/sessions";
-
-interface ProgressItem {
-  goal: string;
-  current: number;
-  target: number;
-  unit: string;
-  progress: number;
-}
+import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
 
 interface MessageItem {
   id: number;
