@@ -4,6 +4,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from "lucide-react";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 import { StatisticsSection } from "../analytics/sections/StatisticsSection";
+import { BodyCompositionSection } from "../analytics/sections/BodyCompositionSection";
 
 export function AnalyticsTab() {
   // Get progress data from localStorage or use mock data
@@ -57,7 +58,46 @@ export function AnalyticsTab() {
     ];
   };
 
+  // Get body measurements from localStorage or use mock data
+  const getBodyMeasurements = () => {
+    try {
+      const stored = localStorage.getItem('body-measurements-data');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.log('No stored body measurements found, using defaults');
+    }
+    
+    // Default body measurements data
+    return [
+      {
+        id: "measurement-1",
+        date: "2024-03-15",
+        waist: 82,
+        hips: 95,
+        thighs: 55,
+        shoulders: 110,
+        arms: 32,
+        neck: 38,
+        source: "manual"
+      },
+      {
+        id: "measurement-2", 
+        date: "2024-03-01",
+        waist: 85,
+        hips: 97,
+        thighs: 56,
+        shoulders: 109,
+        arms: 31,
+        neck: 39,
+        source: "manual"
+      }
+    ];
+  };
+
   const progressData = getProgressData();
+  const bodyMeasurements = getBodyMeasurements();
 
   return (
     <div className="space-y-6 w-full">
@@ -72,11 +112,16 @@ export function AnalyticsTab() {
           <Alert className="bg-blue-50 border-blue-100 shadow-sm mb-6">
             <InfoIcon className="h-4 w-4 text-blue-500" />
             <AlertDescription className="text-sm text-blue-700">
-              Your analytics are based on your manually logged workouts and fitness goals.
+              Your analytics are based on your manually logged workouts, fitness goals and body measurements.
             </AlertDescription>
           </Alert>
           
           <div className="space-y-8">
+            <BodyCompositionSection 
+              progressData={progressData} 
+              bodyMeasurements={bodyMeasurements}
+            />
+            
             <WorkoutAnalytics progressData={progressData} />
             
             <StatisticsSection />
