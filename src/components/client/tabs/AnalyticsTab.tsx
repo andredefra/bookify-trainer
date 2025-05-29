@@ -4,14 +4,61 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon } from "lucide-react";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 import { StatisticsSection } from "../analytics/sections/StatisticsSection";
-import { 
-  weeklyWorkoutData, 
-  monthlyGoalsData, 
-  workoutTypesData, 
-  progressHistoryData 
-} from "../analytics/data/sampleData";
 
 export function AnalyticsTab() {
+  // Get progress data from localStorage or use mock data
+  const getProgressData = () => {
+    try {
+      const stored = localStorage.getItem('fitness-progress-data');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.log('No stored progress data found, using defaults');
+    }
+    
+    // Default progress data
+    return [
+      { 
+        goal: "Lose weight for summer", 
+        current: 68, 
+        target: 65, 
+        unit: "kg", 
+        progress: 75,
+        goalType: "weight_management",
+        targetDate: "2024-06-30",
+        createdAt: "2024-03-01",
+        lastUpdated: "2024-03-15"
+      },
+      { 
+        goal: "Daily steps target", 
+        current: 8500, 
+        target: 10000, 
+        unit: "steps", 
+        progress: 85,
+        goalType: "activity_level",
+        targetDate: "2024-12-31",
+        frequency: { value: 10000, period: "daily" },
+        createdAt: "2024-03-01",
+        lastUpdated: "2024-03-15"
+      },
+      { 
+        goal: "Bench press strength", 
+        current: 70, 
+        target: 80, 
+        unit: "kg", 
+        progress: 87,
+        goalType: "strength_progress",
+        targetDate: "2024-05-31",
+        exerciseName: "Bench Press",
+        createdAt: "2024-03-01",
+        lastUpdated: "2024-03-15"
+      },
+    ];
+  };
+
+  const progressData = getProgressData();
+
   return (
     <div className="space-y-6 w-full">
       <Card className="w-full shadow-sm bg-white/80 backdrop-blur-sm border-slate-200">
@@ -25,17 +72,12 @@ export function AnalyticsTab() {
           <Alert className="bg-blue-50 border-blue-100 shadow-sm mb-6">
             <InfoIcon className="h-4 w-4 text-blue-500" />
             <AlertDescription className="text-sm text-blue-700">
-              Your analytics are based on your manually logged workouts and metrics.
+              Your analytics are based on your manually logged workouts and fitness goals.
             </AlertDescription>
           </Alert>
           
           <div className="space-y-8">
-            <WorkoutAnalytics 
-              weeklyData={weeklyWorkoutData}
-              monthlyData={monthlyGoalsData}
-              workoutTypes={workoutTypesData}
-              progressHistory={progressHistoryData}
-            />
+            <WorkoutAnalytics progressData={progressData} />
             
             <StatisticsSection />
           </div>

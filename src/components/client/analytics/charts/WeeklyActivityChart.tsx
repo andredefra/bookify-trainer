@@ -18,6 +18,8 @@ interface WeeklyDataItem {
   day: string;
   minutes: number;
   calories: number;
+  steps: number;
+  distance: number;
 }
 
 interface WeeklyActivityChartProps {
@@ -32,10 +34,13 @@ export function WeeklyActivityChart({ weeklyData, chartType }: WeeklyActivityCha
         <div className="bg-white p-2 shadow-md border rounded text-xs">
           <p className="font-medium">{label}</p>
           <p className="text-xs text-muted-foreground">
-            Minutes: <span className="font-medium">{payload[0].value}</span>
+            Minutes: <span className="font-medium">{payload[0]?.value || 0}</span>
           </p>
           <p className="text-xs text-muted-foreground">
-            Calories: <span className="font-medium">{payload[1].value}</span>
+            Calories: <span className="font-medium">{payload[1]?.value || 0}</span>
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Steps: <span className="font-medium">{payload[2]?.value || 0}</span>
           </p>
         </div>
       );
