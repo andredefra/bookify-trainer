@@ -68,12 +68,9 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
 
       {/* Main Content Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <UpcomingSessionsCard 
-          sessions={upcomingSessions} 
-          onNewSession={() => console.log("New session")}
-        />
+        <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
         <RecentClientsCard clients={clients} />
-        <MessageRequestsCard messages={messageRequests} />
+        <MessageRequestsCard messageRequests={messageRequests} />
       </div>
     </div>
   );
