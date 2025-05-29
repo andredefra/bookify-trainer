@@ -18,6 +18,7 @@ import {
 import { PerformanceLineChart } from "./charts/PerformanceLineChart";
 import { RetentionPieChart } from "./charts/RetentionPieChart";
 import { GoalAchievementChart } from "./charts/GoalAchievementChart";
+import { GoalAchievementDataPoint } from "./types";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -73,14 +74,32 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
     }
   };
 
-  // Generate goal achievement data based on selected client
-  const getGoalAchievementData = () => {
+  // Fixed goal achievement data function
+  const getGoalAchievementData = (): GoalAchievementDataPoint[] => {
     if (selectedClient === "all") {
       return calculateGoalAchievementData(mockClients);
     } else {
       const client = mockClients.find(c => c.id === selectedClient);
       if (client) {
-        return calculateSingleClientGoals(client);
+        // Create properly formatted data for single client
+        const clientGoals: GoalAchievementDataPoint[] = client.goals.map(goal => {
+          const progress = (goal.current / goal.target) * 100;
+          const timeElapsed = (new Date().getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+          const totalTime = (goal.deadline.getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+          const timeProgress = Math.min((timeElapsed / totalTime) * 100, 100);
+          
+          return {
+            name: goal.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            achieved: Math.round(progress),
+            total: 100,
+            goalType: goal.type,
+            timeProgress: Math.round(timeProgress),
+            onTrack: progress >= timeProgress * 0.8, // On track if progress is at least 80% of time progress
+            avgTimeToComplete: Math.round(timeElapsed)
+          };
+        });
+        
+        return clientGoals.length > 0 ? clientGoals : goalAchievementData;
       }
       return goalAchievementData;
     }

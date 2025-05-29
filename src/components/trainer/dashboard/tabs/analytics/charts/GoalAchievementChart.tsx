@@ -47,6 +47,19 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
     return "#ef4444"; // Red for low achievement
   };
 
+  // Safety check for empty data
+  if (!data || data.length === 0) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-center h-[350px]">
+            <p className="text-gray-500">No goal data available</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -107,13 +120,13 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
           <div className="bg-gray-50 p-3 rounded-lg">
             <p className="font-medium text-gray-700">Best Performing Goal</p>
             <p className="text-gray-600">
-              {data.reduce((prev, current) => (prev.achieved > current.achieved) ? prev : current).name}
+              {data.length > 0 ? data.reduce((prev, current) => (prev.achieved > current.achieved) ? prev : current).name : "No data"}
             </p>
           </div>
           <div className="bg-gray-50 p-3 rounded-lg">
             <p className="font-medium text-gray-700">Needs Attention</p>
             <p className="text-gray-600">
-              {data.reduce((prev, current) => (prev.achieved < current.achieved) ? prev : current).name}
+              {data.length > 0 ? data.reduce((prev, current) => (prev.achieved < current.achieved) ? prev : current).name : "No data"}
             </p>
           </div>
         </div>
