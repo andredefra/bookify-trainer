@@ -18,6 +18,24 @@ export interface GoalAchievementDataPoint {
   total: number;
 }
 
+// Revenue-related types
+export interface MonthlyRevenueDataPoint {
+  name: string;
+  programs: number;
+  sessions: number;
+  total: number;
+}
+
+export interface RevenueByProductDataPoint {
+  name: string;
+  value: number;
+}
+
+export interface ClientGrowthDataPoint {
+  name: string;
+  clients: number;
+}
+
 // New interface for client metrics calculation
 export interface ClientMetrics {
   clientId: string;

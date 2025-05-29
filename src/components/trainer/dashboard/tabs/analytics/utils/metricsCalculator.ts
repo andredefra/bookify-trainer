@@ -1,7 +1,7 @@
 
 // Utility functions for calculating real client performance metrics
 
-interface ClientData {
+export interface ClientData {
   id: string;
   name: string;
   age: number;
