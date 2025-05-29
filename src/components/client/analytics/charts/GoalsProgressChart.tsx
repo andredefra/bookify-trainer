@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { GoalProgressItem } from "../types";
-import { getGoalTypeLabel } from "@/components/client/overview/fitness-progress/data/goalTemplates";
+import { getGoalTypeLabel, GoalType } from "@/components/client/overview/fitness-progress/data/goalTemplates";
 
 interface GoalsProgressChartProps {
   goalsData: GoalProgressItem[];
@@ -26,13 +26,13 @@ export function GoalsProgressChart({ goalsData }: GoalsProgressChartProps) {
     ? { top: 20, right: 30, left: 20, bottom: 5 }
     : { top: 5, right: 60, left: 70, bottom: 5 };
 
-  const maxLabelLength = Math.max(...goalsData.map(item => getGoalTypeLabel(item.type).length));
+  const maxLabelLength = Math.max(...goalsData.map(item => getGoalTypeLabel(item.type as GoalType).length));
   const yAxisWidth = isMobile 
     ? Math.min(maxLabelLength * 6, 80)
     : 100;
 
   const truncateLabel = (type: string) => {
-    const label = getGoalTypeLabel(type);
+    const label = getGoalTypeLabel(type as GoalType);
     if (!isMobile) return label;
     
     const maxLength = 14;
@@ -79,7 +79,7 @@ export function GoalsProgressChart({ goalsData }: GoalsProgressChartProps) {
                 const data = payload[0].payload;
                 return (
                   <div className="bg-white p-2 shadow-md border rounded text-xs">
-                    <p className="font-medium">{getGoalTypeLabel(data.type)}</p>
+                    <p className="font-medium">{getGoalTypeLabel(data.type as GoalType)}</p>
                     <p className="text-xs text-muted-foreground">
                       Current: <span className="font-medium">{data.current} {data.unit}</span>
                     </p>
