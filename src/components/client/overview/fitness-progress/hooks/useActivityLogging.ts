@@ -4,7 +4,7 @@ import { ProgressItem, GoalLog } from "../types";
 import { calculateProgress, getCurrentDate } from "../utils";
 
 export function useActivityLogging() {
-  // Log manual activity with detailed tracking per goal
+  // Enhanced activity logging with support for all goal types
   const logActivity = (data: any, progressData: ProgressItem[], setProgressData: (updater: (prev: ProgressItem[]) => ProgressItem[]) => void) => {
     const currentDate = data.date || getCurrentDate();
     let updatedGoals = 0;
@@ -13,20 +13,90 @@ export function useActivityLogging() {
       let shouldUpdate = false;
       let newValue = item.current;
       let activityType = '';
+      let logData: Partial<GoalLog> = {};
       
-      // Map activity to specific goals (excluding weight)
-      if (item.unit === "steps" && data.steps > 0) {
-        newValue += Number(data.steps);
-        activityType = 'steps';
-        shouldUpdate = true;
-      } else if (item.unit === "kcal" && data.calories > 0) {
-        newValue += Number(data.calories);
-        activityType = 'calories burned';
-        shouldUpdate = true;
-      } else if (item.unit === "mins" && data.minutes > 0) {
-        newValue += Number(data.minutes);
-        activityType = 'workout minutes';
-        shouldUpdate = true;
+      // Map activity to specific goals based on goal type and units
+      switch (item.goalType) {
+        case 'activity_level':
+          if (item.unit === "steps" && data.steps > 0) {
+            newValue += Number(data.steps);
+            activityType = 'steps';
+            shouldUpdate = true;
+          } else if (item.unit === "kcal" && data.calories > 0) {
+            newValue += Number(data.calories);
+            activityType = 'calories burned';
+            shouldUpdate = true;
+          } else if (item.unit === "mins" && data.minutes > 0) {
+            newValue += Number(data.minutes);
+            activityType = 'activity minutes';
+            shouldUpdate = true;
+          }
+          break;
+
+        case 'cardiovascular_endurance':
+          if (item.unit === "km" && data.distance > 0) {
+            newValue += Number(data.distance);
+            activityType = 'distance covered';
+            logData.distance = Number(data.distance);
+            shouldUpdate = true;
+          } else if (item.unit === "mins" && data.cardioMinutes > 0) {
+            newValue += Number(data.cardioMinutes);
+            activityType = 'cardio minutes';
+            logData.duration = Number(data.cardioMinutes);
+            shouldUpdate = true;
+          }
+          break;
+
+        case 'strength_progress':
+          if (item.unit === "kg" && data.strengthWeight > 0 && 
+              (!item.exerciseId || item.exerciseId === data.exerciseId)) {
+            newValue = Math.max(newValue, Number(data.strengthWeight)); // Use max weight for strength goals
+            activityType = 'weight lifted';
+            logData.exerciseWeight = Number(data.strengthWeight);
+            logData.exerciseName = data.exerciseName || item.exerciseName;
+            logData.reps = data.reps;
+            logData.sets = data.sets;
+            shouldUpdate = true;
+          }
+          break;
+
+        case 'workout_consistency':
+          if (item.unit === "sessions" && data.workoutCompleted) {
+            newValue += 1;
+            activityType = 'workout session';
+            shouldUpdate = true;
+          }
+          break;
+
+        case 'flexibility_mobility':
+          if (item.unit === "degrees" && data.flexibility > 0) {
+            newValue = Math.max(newValue, Number(data.flexibility)); // Use max flexibility for progress
+            activityType = 'flexibility measurement';
+            logData.duration = data.stretchDuration;
+            shouldUpdate = true;
+          } else if (item.unit === "mins" && data.stretchMinutes > 0) {
+            newValue += Number(data.stretchMinutes);
+            activityType = 'stretching minutes';
+            logData.duration = Number(data.stretchMinutes);
+            shouldUpdate = true;
+          }
+          break;
+
+        default:
+          // Fallback for generic logging
+          if (item.unit === "steps" && data.steps > 0) {
+            newValue += Number(data.steps);
+            activityType = 'steps';
+            shouldUpdate = true;
+          } else if (item.unit === "kcal" && data.calories > 0) {
+            newValue += Number(data.calories);
+            activityType = 'calories burned';
+            shouldUpdate = true;
+          } else if (item.unit === "mins" && data.minutes > 0) {
+            newValue += Number(data.minutes);
+            activityType = 'workout minutes';
+            shouldUpdate = true;
+          }
       }
       
       if (shouldUpdate) {
@@ -34,9 +104,10 @@ export function useActivityLogging() {
         const newLog: GoalLog = {
           id: `log-${Date.now()}-${item.id}`,
           date: currentDate,
-          value: shouldUpdate ? Number(data[activityType.split(' ')[0]]) : newValue,
+          value: shouldUpdate ? Number(data[activityType.split(' ')[0]] || newValue) : newValue,
           source: 'manual',
-          note: `Logged ${activityType}${data.note ? ` - ${data.note}` : ''}`
+          note: `Logged ${activityType}${data.note ? ` - ${data.note}` : ''}`,
+          ...logData
         };
         
         const updatedLogs = [...(item.logs || []), newLog];
@@ -57,13 +128,14 @@ export function useActivityLogging() {
     return true;
   };
 
-  // Log weight separately
+  // Enhanced weight logging
   const logWeight = (data: any, progressData: ProgressItem[], setProgressData: (updater: (prev: ProgressItem[]) => ProgressItem[]) => void) => {
     const currentDate = data.date || getCurrentDate();
     let updatedGoals = 0;
     
     setProgressData(prev => prev.map(item => {
-      if (item.unit === "kg" && data.weight > 0) {
+      if ((item.goalType === 'weight_management' || item.goalType === 'body_composition') && 
+          item.unit === "kg" && data.weight > 0) {
         updatedGoals++;
         const newLog: GoalLog = {
           id: `log-${Date.now()}-${item.id}`,
@@ -91,8 +163,50 @@ export function useActivityLogging() {
     return true;
   };
 
+  // Log strength exercise specifically
+  const logStrengthExercise = (data: any, progressData: ProgressItem[], setProgressData: (updater: (prev: ProgressItem[]) => ProgressItem[]) => void) => {
+    const currentDate = data.date || getCurrentDate();
+    let updatedGoals = 0;
+    
+    setProgressData(prev => prev.map(item => {
+      if (item.goalType === 'strength_progress' && 
+          (!item.exerciseId || item.exerciseId === data.exerciseId) &&
+          data.weight > 0) {
+        updatedGoals++;
+        const newLog: GoalLog = {
+          id: `log-${Date.now()}-${item.id}`,
+          date: currentDate,
+          value: Number(data.weight),
+          source: 'strength_training',
+          note: `${data.exerciseName} - ${data.sets}x${data.reps}${data.note ? ` - ${data.note}` : ''}`,
+          exerciseWeight: Number(data.weight),
+          exerciseName: data.exerciseName,
+          reps: data.reps,
+          sets: data.sets
+        };
+        
+        const updatedLogs = [...(item.logs || []), newLog];
+        const newValue = Math.max(item.current, Number(data.weight)); // Use max weight achieved
+        
+        return {
+          ...item,
+          current: newValue,
+          progress: calculateProgress(newValue, item.target),
+          lastUpdated: currentDate,
+          logs: updatedLogs
+        };
+      }
+      
+      return item;
+    }));
+    
+    toast.success(`Strength exercise logged! Updated ${updatedGoals} strength goals.`);
+    return true;
+  };
+
   return {
     logActivity,
-    logWeight
+    logWeight,
+    logStrengthExercise
   };
 }

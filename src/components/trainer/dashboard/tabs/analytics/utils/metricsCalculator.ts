@@ -1,4 +1,3 @@
-
 import { PerformanceDataPoint, ClientMetrics, RetentionDataPoint, GoalAchievementDataPoint } from '../types';
 
 // Updated ClientData interface to match new goal system
@@ -113,42 +112,86 @@ export function calculateClientRetentionData(clients: ClientData[]): RetentionDa
   ];
 }
 
+// Enhanced goal achievement calculation with proper timeline analytics
 export function calculateGoalAchievementData(clients: ClientData[]): GoalAchievementDataPoint[] {
-  const goalStats = new Map<string, { achieved: number; total: number; totalTime: number; completedGoals: number }>();
+  const goalStats = new Map<string, { 
+    achieved: number; 
+    total: number; 
+    totalTime: number; 
+    completedGoals: number;
+    onTrackCount: number;
+  }>();
+  
+  // Initialize stats for all supported goal types
+  const goalTypes = [
+    'weight_management', 
+    'strength_progress', 
+    'cardiovascular_endurance', 
+    'flexibility_mobility', 
+    'body_composition', 
+    'workout_consistency', 
+    'activity_level'
+  ];
+  
+  goalTypes.forEach(type => {
+    goalStats.set(type, { achieved: 0, total: 0, totalTime: 0, completedGoals: 0, onTrackCount: 0 });
+  });
   
   clients.forEach(client => {
     client.goals.forEach(goal => {
       if (!goalStats.has(goal.type)) {
-        goalStats.set(goal.type, { achieved: 0, total: 0, totalTime: 0, completedGoals: 0 });
+        goalStats.set(goal.type, { achieved: 0, total: 0, totalTime: 0, completedGoals: 0, onTrackCount: 0 });
       }
       
       const stats = goalStats.get(goal.type)!;
       stats.total++;
       
       const progress = (goal.current / goal.target) * 100;
+      const timeElapsed = (new Date().getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+      const totalTime = (goal.deadline.getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+      const timeProgress = Math.min((timeElapsed / totalTime) * 100, 100);
+      
+      // Check if goal is on track (progress should be at least 80% of time progress)
+      const isOnTrack = progress >= timeProgress * 0.8;
+      if (isOnTrack) stats.onTrackCount++;
+      
+      // Consider goal achieved if progress >= 90%
       if (progress >= 90) {
         stats.achieved++;
-        const timeToComplete = (new Date().getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
-        stats.totalTime += timeToComplete;
+        stats.totalTime += timeElapsed;
         stats.completedGoals++;
       }
     });
   });
   
-  return Array.from(goalStats.entries()).map(([goalType, stats]) => {
-    const achievementRate = stats.total > 0 ? (stats.achieved / stats.total) * 100 : 0;
-    const avgTimeToComplete = stats.completedGoals > 0 ? stats.totalTime / stats.completedGoals : 0;
-    
-    return {
-      name: goalType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      achieved: Math.round(achievementRate),
-      total: 100,
-      goalType,
-      timeProgress: achievementRate,
-      onTrack: achievementRate >= 70,
-      avgTimeToComplete: Math.round(avgTimeToComplete)
-    };
-  });
+  return Array.from(goalStats.entries())
+    .filter(([_, stats]) => stats.total > 0) // Only include goal types that have data
+    .map(([goalType, stats]) => {
+      const achievementRate = (stats.achieved / stats.total) * 100;
+      const avgTimeToComplete = stats.completedGoals > 0 ? stats.totalTime / stats.completedGoals : 0;
+      const onTrackRate = (stats.onTrackCount / stats.total) * 100;
+      
+      // Map goal types to display names
+      const typeDisplayNames: Record<string, string> = {
+        'weight_management': 'Weight Management',
+        'strength_progress': 'Strength Progress',
+        'cardiovascular_endurance': 'Cardiovascular Endurance',
+        'flexibility_mobility': 'Flexibility & Mobility',
+        'body_composition': 'Body Composition',
+        'workout_consistency': 'Workout Consistency',
+        'activity_level': 'Daily Activity'
+      };
+      
+      return {
+        name: typeDisplayNames[goalType] || goalType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        achieved: Math.round(achievementRate),
+        total: 100,
+        goalType,
+        timeProgress: Math.round(onTrackRate),
+        onTrack: onTrackRate >= 70, // Consider on track if 70%+ of goals are progressing well
+        avgTimeToComplete: Math.round(avgTimeToComplete)
+      };
+    });
 }
 
 export function calculateSingleClientRetention(client: ClientData): RetentionDataPoint[] {

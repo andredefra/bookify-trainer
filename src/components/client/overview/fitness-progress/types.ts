@@ -9,10 +9,11 @@ export interface ProgressItem {
   lastUpdated?: string;
   createdAt?: string;
   logs?: GoalLog[];
-  // Nuovi campi per il sistema migliorato
+  // Enhanced goal system fields
   goalType: GoalType;
   targetDate: string;
-  exerciseId?: string; // Per strength goals
+  exerciseId?: string; // For strength goals
+  exerciseName?: string; // For strength goals display
   frequency?: {
     value: number;
     period: 'daily' | 'weekly' | 'monthly';
@@ -24,9 +25,14 @@ export interface GoalLog {
   id: string;
   date: string;
   value: number;
-  source: 'manual' | 'googleFit' | 'appleHealth' | 'workout';
+  source: 'manual' | 'googleFit' | 'appleHealth' | 'workout' | 'strength_training';
   note?: string;
-  exerciseWeight?: number; // Per strength tracking
+  exerciseWeight?: number; // For strength tracking
+  exerciseName?: string; // For strength exercise identification
+  distance?: number; // For cardio tracking (km)
+  duration?: number; // For cardio/flexibility tracking (minutes)
+  reps?: number; // For strength/flexibility tracking
+  sets?: number; // For strength tracking
 }
 
 export interface Milestone {
@@ -43,7 +49,8 @@ export type GoalType =
   | 'strength_progress'
   | 'activity_level'
   | 'body_composition'
-  | 'workout_consistency';
+  | 'workout_consistency'
+  | 'flexibility_mobility';
 
 export interface GoalTemplate {
   type: GoalType;
