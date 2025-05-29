@@ -65,18 +65,6 @@ const ClientDashboard = () => {
       lastUpdated: "2024-03-15"
     },
     { 
-      goal: "Weekly workout consistency", 
-      current: 3, 
-      target: 4, 
-      unit: "sessions", 
-      progress: 75,
-      goalType: "workout_consistency",
-      targetDate: "2024-04-30",
-      frequency: { value: 4, period: "weekly" },
-      createdAt: "2024-03-01",
-      lastUpdated: "2024-03-15"
-    },
-    { 
       goal: "Daily steps target", 
       current: 8500, 
       target: 10000, 
@@ -85,6 +73,18 @@ const ClientDashboard = () => {
       goalType: "activity_level",
       targetDate: "2024-12-31",
       frequency: { value: 10000, period: "daily" },
+      createdAt: "2024-03-01",
+      lastUpdated: "2024-03-15"
+    },
+    { 
+      goal: "Bench press strength", 
+      current: 70, 
+      target: 80, 
+      unit: "kg", 
+      progress: 87,
+      goalType: "strength_progress",
+      targetDate: "2024-05-31",
+      exerciseName: "Bench Press",
       createdAt: "2024-03-01",
       lastUpdated: "2024-03-15"
     },

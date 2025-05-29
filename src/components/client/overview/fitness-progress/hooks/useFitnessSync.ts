@@ -4,11 +4,11 @@ import { ProgressItem, GoalLog } from "../types";
 import { calculateProgress, getCurrentDate } from "../utils";
 
 export function useFitnessSync() {
-  // Enhanced auto-sync from fitness apps with support for all goal types
+  // Simplified auto-sync from fitness apps for supported goal types
   const syncFromFitnessApps = (connectedApps: any, progressData: ProgressItem[], setProgressData: (updater: (prev: ProgressItem[]) => ProgressItem[]) => void) => {
     if (!connectedApps.googleFit && !connectedApps.appleHealth) return;
     
-    // Simulate automatic data sync for various metrics
+    // Simulate automatic data sync for simplified metrics
     const currentDate = getCurrentDate();
     let syncedData = false;
     
@@ -16,7 +16,7 @@ export function useFitnessSync() {
       let newLog: GoalLog | null = null;
       let newValue = item.current;
       
-      // Sync based on goal type and connected apps
+      // Sync based on simplified goal types
       switch (item.goalType) {
         case 'activity_level':
           if (item.unit === "steps" && connectedApps.googleFit) {
@@ -87,23 +87,6 @@ export function useFitnessSync() {
                 note: 'Auto-synced weight measurement from Apple Health'
               };
               newValue = Math.round(currentWeight * 10) / 10;
-              syncedData = true;
-            }
-          }
-          break;
-
-        case 'workout_consistency':
-          if (item.unit === "sessions" && (connectedApps.googleFit || connectedApps.appleHealth)) {
-            // Simulate workout detection
-            if (Math.random() < 0.2) { // 20% chance of workout detection
-              newLog = {
-                id: `sync-${Date.now()}-${item.id}`,
-                date: currentDate,
-                value: 1,
-                source: connectedApps.appleHealth ? 'appleHealth' : 'googleFit',
-                note: `Auto-detected workout session from ${connectedApps.appleHealth ? 'Apple Health' : 'Google Fit'}`
-              };
-              newValue = item.current + 1;
               syncedData = true;
             }
           }

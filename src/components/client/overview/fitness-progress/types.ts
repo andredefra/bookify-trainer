@@ -30,8 +30,8 @@ export interface GoalLog {
   exerciseWeight?: number; // For strength tracking
   exerciseName?: string; // For strength exercise identification
   distance?: number; // For cardio tracking (km)
-  duration?: number; // For cardio/flexibility tracking (minutes)
-  reps?: number; // For strength/flexibility tracking
+  duration?: number; // For cardio tracking (minutes)
+  reps?: number; // For strength tracking
   sets?: number; // For strength tracking
 }
 
@@ -48,9 +48,7 @@ export type GoalType =
   | 'cardiovascular_endurance' 
   | 'strength_progress'
   | 'activity_level'
-  | 'body_composition'
-  | 'workout_consistency'
-  | 'flexibility_mobility';
+  | 'body_composition';
 
 export interface GoalTemplate {
   type: GoalType;

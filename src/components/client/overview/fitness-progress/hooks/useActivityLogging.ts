@@ -4,7 +4,7 @@ import { ProgressItem, GoalLog } from "../types";
 import { calculateProgress, getCurrentDate } from "../utils";
 
 export function useActivityLogging() {
-  // Enhanced activity logging with support for all goal types
+  // Simplified activity logging for user-friendly goal types
   const logActivity = (data: any, progressData: ProgressItem[], setProgressData: (updater: (prev: ProgressItem[]) => ProgressItem[]) => void) => {
     const currentDate = data.date || getCurrentDate();
     let updatedGoals = 0;
@@ -56,28 +56,6 @@ export function useActivityLogging() {
             logData.exerciseName = data.exerciseName || item.exerciseName;
             logData.reps = data.reps;
             logData.sets = data.sets;
-            shouldUpdate = true;
-          }
-          break;
-
-        case 'workout_consistency':
-          if (item.unit === "sessions" && data.workoutCompleted) {
-            newValue += 1;
-            activityType = 'workout session';
-            shouldUpdate = true;
-          }
-          break;
-
-        case 'flexibility_mobility':
-          if (item.unit === "degrees" && data.flexibility > 0) {
-            newValue = Math.max(newValue, Number(data.flexibility)); // Use max flexibility for progress
-            activityType = 'flexibility measurement';
-            logData.duration = data.stretchDuration;
-            shouldUpdate = true;
-          } else if (item.unit === "mins" && data.stretchMinutes > 0) {
-            newValue += Number(data.stretchMinutes);
-            activityType = 'stretching minutes';
-            logData.duration = Number(data.stretchMinutes);
             shouldUpdate = true;
           }
           break;

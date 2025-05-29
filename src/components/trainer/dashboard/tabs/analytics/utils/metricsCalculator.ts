@@ -1,6 +1,6 @@
 import { PerformanceDataPoint, ClientMetrics, RetentionDataPoint, GoalAchievementDataPoint } from '../types';
 
-// Updated ClientData interface to match new goal system
+// Updated ClientData interface to match simplified goal system
 export interface ClientData {
   id: string;
   name: string;
@@ -12,7 +12,7 @@ export interface ClientData {
     id: string;
     target: number;
     current: number;
-    type: 'weight_management' | 'strength_progress' | 'cardiovascular_endurance' | 'flexibility_mobility' | 'body_composition' | 'workout_consistency' | 'activity_level';
+    type: 'weight_management' | 'strength_progress' | 'cardiovascular_endurance' | 'body_composition' | 'activity_level';
     deadline: Date;
     createdAt: Date;
   }>;
@@ -112,7 +112,7 @@ export function calculateClientRetentionData(clients: ClientData[]): RetentionDa
   ];
 }
 
-// Enhanced goal achievement calculation with proper timeline analytics
+// Enhanced goal achievement calculation with simplified goal types
 export function calculateGoalAchievementData(clients: ClientData[]): GoalAchievementDataPoint[] {
   const goalStats = new Map<string, { 
     achieved: number; 
@@ -122,14 +122,12 @@ export function calculateGoalAchievementData(clients: ClientData[]): GoalAchieve
     onTrackCount: number;
   }>();
   
-  // Initialize stats for all supported goal types
+  // Initialize stats for simplified goal types
   const goalTypes = [
     'weight_management', 
     'strength_progress', 
     'cardiovascular_endurance', 
-    'flexibility_mobility', 
     'body_composition', 
-    'workout_consistency', 
     'activity_level'
   ];
   
@@ -176,9 +174,7 @@ export function calculateGoalAchievementData(clients: ClientData[]): GoalAchieve
         'weight_management': 'Weight Management',
         'strength_progress': 'Strength Progress',
         'cardiovascular_endurance': 'Cardiovascular Endurance',
-        'flexibility_mobility': 'Flexibility & Mobility',
         'body_composition': 'Body Composition',
-        'workout_consistency': 'Workout Consistency',
         'activity_level': 'Daily Activity'
       };
       

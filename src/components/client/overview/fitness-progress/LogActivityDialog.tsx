@@ -33,10 +33,6 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
     exerciseId: "",
     reps: "",
     sets: "",
-    workoutCompleted: false,
-    flexibility: "",
-    stretchMinutes: "",
-    stretchDuration: "",
     note: ""
   });
 
@@ -44,8 +40,7 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
     e.preventDefault();
     onSubmit({
       date: date.toISOString(),
-      ...formData,
-      workoutCompleted: activityType === "workout_session"
+      ...formData
     });
     
     // Reset form
@@ -60,10 +55,6 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
       exerciseId: "",
       reps: "",
       sets: "",
-      workoutCompleted: false,
-      flexibility: "",
-      stretchMinutes: "",
-      stretchDuration: "",
       note: ""
     });
     setActivityType("general");
@@ -149,41 +140,6 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
           </>
         );
       
-      case "flexibility":
-        return (
-          <>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="flexibility">Range of Motion (degrees)</Label>
-                <Input
-                  id="flexibility"
-                  type="number"
-                  value={formData.flexibility}
-                  onChange={(e) => setFormData({...formData, flexibility: e.target.value})}
-                  placeholder="30"
-                />
-              </div>
-              <div>
-                <Label htmlFor="stretchMinutes">Stretch Duration (minutes)</Label>
-                <Input
-                  id="stretchMinutes"
-                  type="number"
-                  value={formData.stretchMinutes}
-                  onChange={(e) => setFormData({...formData, stretchMinutes: e.target.value})}
-                  placeholder="15"
-                />
-              </div>
-            </div>
-          </>
-        );
-      
-      case "workout_session":
-        return (
-          <div className="text-sm text-gray-600 p-3 bg-blue-50 rounded-lg">
-            <p>This will log a completed workout session for consistency tracking.</p>
-          </div>
-        );
-      
       default:
         return (
           <>
@@ -265,8 +221,6 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit }: LogActivityD
                 <SelectItem value="general">General Activity</SelectItem>
                 <SelectItem value="cardio">Cardiovascular Exercise</SelectItem>
                 <SelectItem value="strength">Strength Training</SelectItem>
-                <SelectItem value="flexibility">Flexibility & Mobility</SelectItem>
-                <SelectItem value="workout_session">Workout Session</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -50,8 +50,7 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
     examples: [
       'Walk 10,000 steps daily for 30 days',
       'Burn 300 calories daily for 4 weeks',
-      'Be active for 60 minutes daily',
-      'Complete 5 workouts per week'
+      'Be active for 60 minutes daily'
     ]
   },
   body_composition: {
@@ -65,32 +64,6 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
       'Reduce body fat by 5%',
       'Increase muscle mass percentage',
       'Improve waist-to-hip ratio'
-    ]
-  },
-  workout_consistency: {
-    type: 'workout_consistency',
-    name: 'Workout Consistency',
-    description: 'Maintain regular workout schedule',
-    unit: 'sessions',
-    requiresFrequency: true,
-    examples: [
-      'Complete 3 workouts per week for 8 weeks',
-      'Train 20 sessions in 2 months',
-      'Never miss more than 1 workout per week',
-      'Maintain 90% workout attendance'
-    ]
-  },
-  flexibility_mobility: {
-    type: 'flexibility_mobility',
-    name: 'Flexibility & Mobility',
-    description: 'Improve flexibility, mobility, and range of motion',
-    unit: 'degrees',
-    defaultTarget: 30,
-    examples: [
-      'Improve shoulder mobility by 30 degrees',
-      'Touch toes without bending knees',
-      'Hold a deep squat for 2 minutes',
-      'Complete full overhead reach'
     ]
   }
 };
