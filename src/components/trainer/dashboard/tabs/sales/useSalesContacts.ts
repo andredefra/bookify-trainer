@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { SalesContact } from "./types";
 import { toast } from "sonner";
 import { differenceInDays } from "date-fns";
 
-// Sample data
+// Updated sample data with more realistic client information
 const INITIAL_CONTACTS: SalesContact[] = [
   {
     id: "1",
@@ -34,21 +33,48 @@ const INITIAL_CONTACTS: SalesContact[] = [
     nextAction: "Send proposal",
     nextActionDate: "2023-01-18T14:00:00Z"
   },
+  // Updated existing clients to match the ones from sample data
   {
     id: "3",
-    name: "Giovanni Verdi",
-    email: "g.verdi@example.com",
+    name: "Emma Thompson",
+    email: "emma.thompson@example.com",
+    phone: "+39 345 678 9012",
     status: "client",
-    company: "Verdi Fitness",
-    notes: "Corporate client - group sessions twice a week",
-    source: "LinkedIn",
-    createdAt: "2022-11-20T11:15:00Z",
+    notes: "Regular personal training client, very committed to weight loss goals",
+    source: "Instagram Ad",
+    createdAt: "2022-11-15T11:15:00Z",
     lastUpdated: "2023-01-07T09:30:00Z",
     clientSince: "2022-12-01T08:00:00Z",
-    value: 5000
+    value: 3600
   },
   {
     id: "4",
+    name: "Michael Chen",
+    email: "michael.chen@example.com", 
+    phone: "+39 456 789 0123",
+    status: "client",
+    notes: "Strength training focused, works well with HIIT sessions",
+    source: "Referral",
+    createdAt: "2022-10-20T15:30:00Z",
+    lastUpdated: "2023-01-05T14:00:00Z",
+    clientSince: "2022-11-01T08:00:00Z",
+    value: 2800
+  },
+  {
+    id: "5",
+    name: "Sarah Johnson", 
+    email: "sarah.johnson@example.com",
+    phone: "+39 567 890 1234",
+    status: "client",
+    notes: "Marathon training, excellent attendance and motivation",
+    source: "Website",
+    createdAt: "2022-09-10T10:00:00Z",
+    lastUpdated: "2023-01-03T16:15:00Z",
+    clientSince: "2022-10-01T08:00:00Z",
+    value: 4200
+  },
+  {
+    id: "6",
     name: "Francesca Neri",
     email: "f.neri@example.com",
     status: "lost",
@@ -59,28 +85,16 @@ const INITIAL_CONTACTS: SalesContact[] = [
     value: 800
   },
   {
-    id: "5",
+    id: "7",
     name: "Antonio Russo",
     email: "a.russo@example.com",
-    phone: "+39 345 678 9012",
+    phone: "+39 678 901 2345",
     status: "terminated",
     notes: "Relocated to another city",
     clientSince: "2022-06-15T08:00:00Z",
     createdAt: "2022-06-01T09:45:00Z",
     lastUpdated: "2022-12-20T16:15:00Z",
     value: 3600
-  },
-  {
-    id: "6",
-    name: "Sofia Esposito",
-    email: "s.esposito@example.com",
-    status: "client",
-    notes: "Weekly personal training sessions",
-    source: "Website",
-    createdAt: "2022-10-10T15:30:00Z",
-    lastUpdated: "2023-01-05T14:00:00Z",
-    clientSince: "2022-10-17T08:00:00Z",
-    value: 2400
   }
 ];
 

@@ -8,16 +8,10 @@ import { ClientGoalsDialog } from "./clients/ClientGoalsDialog";
 import { ClientCard } from "./clients/ClientCard";
 import { ClientProfileDialog } from "./clients/ClientProfileDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface ClientItem {
-  id: number;
-  name: string;
-  sessions: number;
-  lastSession: string;
-}
+import { UnifiedClient } from "../types/UnifiedClient";
 
 interface ClientsTabProps {
-  clients: ClientItem[];
+  clients: UnifiedClient[];
 }
 
 export function ClientsTab({ clients }: ClientsTabProps) {
@@ -25,14 +19,14 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [showClientDialog, setShowClientDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
-  const [activeClient, setActiveClient] = useState<ClientItem | null>(null);
+  const [activeClient, setActiveClient] = useState<UnifiedClient | null>(null);
   
   const handleSetGoals = (clientName: string) => {
     setSelectedClient(clientName);
     setShowGoalDialog(true);
   };
   
-  const handleViewProfile = (client: ClientItem) => {
+  const handleViewProfile = (client: UnifiedClient) => {
     setActiveClient(client);
     setShowProfileDialog(true);
   };

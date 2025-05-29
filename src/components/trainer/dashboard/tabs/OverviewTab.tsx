@@ -1,22 +1,12 @@
 
-import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { UpcomingSessionsCard } from "./overview/UpcomingSessionsCard";
 import { RecentClientsCard } from "./overview/RecentClientsCard";
 import { MessageRequestsCard } from "./overview/MessageRequestsCard";
-import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
-import { EditSessionDialog } from "../tabs/sessions/EditSessionDialog";
-import { VideoSessionDialog } from "../tabs/sessions/components/VideoSessionDialog";
-import { toast } from "sonner";
 import { TrainerSessionItem } from "@/types/sessions";
+import { UnifiedClient } from "../types/UnifiedClient";
 
-interface ClientItem {
-  id: number;
-  name: string;
-  sessions: number;
-  lastSession: string;
-}
-
-interface MessageItem {
+interface MessageRequest {
   id: number;
   from: string;
   preview: string;
@@ -25,82 +15,63 @@ interface MessageItem {
 
 interface OverviewTabProps {
   upcomingSessions: TrainerSessionItem[];
-  clients: ClientItem[];
-  messageRequests: MessageItem[];
+  clients: UnifiedClient[];
+  messageRequests: MessageRequest[];
 }
 
 export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
-  const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
-  const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
-  const [showVideoSessionDialog, setShowVideoSessionDialog] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
-  
-  // Enhanced mock data with a clearly visible video session
-  const sessionsWithPaymentInfo = upcomingSessions.map(session => ({
-    ...session,
-    waitingList: session.waitingList || 0,
-    paymentStatus: session.paymentStatus || {
-      paid: Math.floor(Math.random() * session.participants),
-      pending: Math.floor(Math.random() * session.participants),
-      get total() { return this.paid + this.pending; }
-    },
-    // Ensure we have a video session that's highly visible (putting it first in the list)
-    mode: session.id === 1 ? 'video' : (session.mode || 'in-person'),
-    status: session.id === 1 ? 'scheduled' : (session.status || 'scheduled')
-  }));
-  
-  const handleViewSessionDetails = (session: TrainerSessionItem) => {
-    setSelectedSession(session);
-    setShowEditSessionDialog(true);
-  };
-  
-  const handleUpdateSession = (data: any, sessionId: number) => {
-    toast.success("Session updated successfully!");
-    setShowEditSessionDialog(false);
-  };
+  const totalClients = clients.length;
+  const totalSessions = upcomingSessions.length;
+  const totalRevenue = clients.reduce((sum, client) => sum + (client.value || 0), 0);
 
-  const handleStartVideoSession = (session: TrainerSessionItem) => {
-    setSelectedSession(session);
-    setShowVideoSessionDialog(true);
-  };
-  
   return (
     <div className="space-y-6">
-      <UpcomingSessionsCard 
-        sessions={sessionsWithPaymentInfo} 
-        onNewSession={() => setShowCreateSessionDialog(true)}
-        onViewDetails={handleViewSessionDetails}
-        onStartVideoSession={handleStartVideoSession}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <RecentClientsCard clients={clients} />
-        <MessageRequestsCard messages={messageRequests} />
+      {/* Quick Stats */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalClients}</div>
+            <p className="text-xs text-muted-foreground">Active clients</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Upcoming Sessions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalSessions}</div>
+            <p className="text-xs text-muted-foreground">This week</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">€{totalRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">Total client value</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Messages</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{messageRequests.length}</div>
+            <p className="text-xs text-muted-foreground">Unread messages</p>
+          </CardContent>
+        </Card>
       </div>
-      
-      <CreateSessionDialog 
-        open={showCreateSessionDialog} 
-        onOpenChange={setShowCreateSessionDialog}
-        onSubmit={(data) => {
-          // Here you would typically save the session to your database
-          console.log("New session data:", data);
-          toast.success("Session created successfully!");
-          setShowCreateSessionDialog(false);
-        }}
-      />
-      
-      <EditSessionDialog
-        open={showEditSessionDialog}
-        onOpenChange={setShowEditSessionDialog}
-        session={selectedSession}
-        onSubmit={handleUpdateSession}
-      />
 
-      <VideoSessionDialog
-        open={showVideoSessionDialog}
-        onOpenChange={setShowVideoSessionDialog}
-        session={selectedSession}
-      />
+      {/* Main Content Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
+        <RecentClientsCard clients={clients} />
+        <MessageRequestsCard messageRequests={messageRequests} />
+      </div>
     </div>
   );
 }
