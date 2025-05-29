@@ -13,7 +13,8 @@ import {
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { GoalProgressItem } from "../types";
-import { getGoalTypeLabel, GoalType } from "@/components/client/overview/fitness-progress/data/goalTemplates";
+import { getGoalTypeLabel } from "@/components/client/overview/fitness-progress/data/goalTemplates";
+import { GoalType } from "@/components/client/overview/fitness-progress/types";
 
 interface GoalsProgressChartProps {
   goalsData: GoalProgressItem[];
