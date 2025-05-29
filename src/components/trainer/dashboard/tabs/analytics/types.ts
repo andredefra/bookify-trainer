@@ -1,38 +1,29 @@
 
-// Types for client performance analytics
-export type PerformanceDataPoint = {
+export interface PerformanceDataPoint {
   name: string;
   attendance: number;
   progress: number;
-  satisfaction: number;
-};
+  goalsReached: number; // Renamed from satisfaction
+}
 
-export type RetentionDataPoint = {
+export interface RetentionDataPoint {
   name: string;
   value: number;
   color: string;
-};
+}
 
-export type GoalAchievementDataPoint = {
+export interface GoalAchievementDataPoint {
   name: string;
   achieved: number;
   total: number;
-};
+}
 
-// Types for revenue analytics
-export type MonthlyRevenueDataPoint = {
-  name: string;
-  programs: number;
-  sessions: number;
-  total: number;
-};
-
-export type RevenueByProductDataPoint = {
-  name: string;
-  value: number;
-};
-
-export type ClientGrowthDataPoint = {
-  name: string;
-  clients: number;
-};
+// New interface for client metrics calculation
+export interface ClientMetrics {
+  clientId: string;
+  clientName: string;
+  weeklyData: PerformanceDataPoint[];
+  overallAttendance: number;
+  overallProgress: number;
+  overallGoalsReached: number;
+}

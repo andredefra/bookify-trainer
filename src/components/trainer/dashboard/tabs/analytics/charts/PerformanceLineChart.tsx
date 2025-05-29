@@ -39,9 +39,15 @@ export function PerformanceLineChart({ data }: PerformanceLineChartProps) {
                 stroke="#94a3b8"
                 axisLine={false}
                 tickLine={false}
+                domain={[0, 100]}
               />
               <Tooltip 
-                formatter={(value) => [`${value}%`, '']}
+                formatter={(value, name) => {
+                  const metricName = name === 'attendance' ? 'Attendance' : 
+                                   name === 'progress' ? 'Progress (BMI/Weight)' : 
+                                   'Goals Reached';
+                  return [`${value}%`, metricName];
+                }}
                 contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
               />
               <Legend iconSize={10} />
@@ -52,6 +58,7 @@ export function PerformanceLineChart({ data }: PerformanceLineChartProps) {
                 strokeWidth={2}
                 dot={{ r: 3 }}
                 activeDot={{ r: 5 }}
+                name="Attendance"
               />
               <Line 
                 type="monotone" 
@@ -60,17 +67,34 @@ export function PerformanceLineChart({ data }: PerformanceLineChartProps) {
                 strokeWidth={2}
                 dot={{ r: 3 }}
                 activeDot={{ r: 5 }}
+                name="Progress (BMI/Weight)"
               />
               <Line 
                 type="monotone" 
-                dataKey="satisfaction" 
+                dataKey="goalsReached" 
                 stroke="#f59e0b" 
                 strokeWidth={2}
                 dot={{ r: 3 }}
                 activeDot={{ r: 5 }}
+                name="Goals Reached"
               />
             </LineChart>
           </ResponsiveContainer>
+        </div>
+        
+        <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-indigo-500 rounded mr-2"></div>
+            <span className="text-gray-600">Attendance: Sessions completed vs scheduled</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-green-500 rounded mr-2"></div>
+            <span className="text-gray-600">Progress: BMI/Weight improvement toward target</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-amber-500 rounded mr-2"></div>
+            <span className="text-gray-600">Goals Reached: Percentage of goals achieved (≥90%)</span>
+          </div>
         </div>
       </CardContent>
     </Card>
