@@ -1,4 +1,3 @@
-
 // Utility functions for calculating real client performance metrics
 
 export interface ClientData {
@@ -194,4 +193,202 @@ export function generateClientPerformanceData(client: ClientData, weeks: number 
   }
   
   return data;
+}
+
+// Calculate client retention data based on session history
+export function calculateClientRetentionData(clients: ClientData[]): Array<{
+  name: string;
+  value: number;
+  color: string;
+}> {
+  if (clients.length === 0) {
+    return [
+      { name: 'No Data', value: 100, color: '#e5e7eb' }
+    ];
+  }
+
+  const now = new Date();
+  const retentionCategories = {
+    '1-3 months': { count: 0, color: '#FF8042' },
+    '3-6 months': { count: 0, color: '#FFBB28' },
+    '6-12 months': { count: 0, color: '#00C49F' },
+    '1+ year': { count: 0, color: '#0088FE' }
+  };
+
+  clients.forEach(client => {
+    if (client.sessions.length === 0) return;
+
+    // Find first and last session dates
+    const sessionDates = client.sessions
+      .filter(s => s.completed)
+      .map(s => s.date)
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    if (sessionDates.length === 0) return;
+
+    const firstSession = sessionDates[0];
+    const lastSession = sessionDates[sessionDates.length - 1];
+    
+    // Calculate how long they've been active (from first to last session)
+    const durationMs = lastSession.getTime() - firstSession.getTime();
+    const durationMonths = durationMs / (1000 * 60 * 60 * 24 * 30);
+
+    // Categorize based on duration
+    if (durationMonths <= 3) {
+      retentionCategories['1-3 months'].count++;
+    } else if (durationMonths <= 6) {
+      retentionCategories['3-6 months'].count++;
+    } else if (durationMonths <= 12) {
+      retentionCategories['6-12 months'].count++;
+    } else {
+      retentionCategories['1+ year'].count++;
+    }
+  });
+
+  const totalClients = clients.length;
+  
+  return Object.entries(retentionCategories).map(([name, data]) => ({
+    name,
+    value: totalClients > 0 ? Math.round((data.count / totalClients) * 100) : 0,
+    color: data.color
+  })).filter(item => item.value > 0);
+}
+
+// Calculate goal achievement data by goal type
+export function calculateGoalAchievementData(clients: ClientData[]): Array<{
+  name: string;
+  achieved: number;
+  total: number;
+}> {
+  if (clients.length === 0) {
+    return [
+      { name: 'No Goals', achieved: 0, total: 100 }
+    ];
+  }
+
+  const goalTypes = {
+    'Weight Loss': { achieved: 0, total: 0 },
+    'Strength': { achieved: 0, total: 0 },
+    'Endurance': { achieved: 0, total: 0 },
+    'Flexibility': { achieved: 0, total: 0 }
+  };
+
+  clients.forEach(client => {
+    client.goals.forEach(goal => {
+      let categoryName = '';
+      
+      switch (goal.type) {
+        case 'weight':
+          categoryName = 'Weight Loss';
+          break;
+        case 'strength':
+          categoryName = 'Strength';
+          break;
+        case 'endurance':
+          categoryName = 'Endurance';
+          break;
+        case 'flexibility':
+          categoryName = 'Flexibility';
+          break;
+        default:
+          return;
+      }
+
+      goalTypes[categoryName].total++;
+      
+      // Calculate if goal is achieved (current >= target)
+      const progressPercentage = (goal.current / goal.target) * 100;
+      if (progressPercentage >= 80) { // Consider 80%+ as achieved
+        goalTypes[categoryName].achieved++;
+      }
+    });
+  });
+
+  return Object.entries(goalTypes)
+    .filter(([_, data]) => data.total > 0)
+    .map(([name, data]) => ({
+      name,
+      achieved: Math.round((data.achieved / data.total) * 100),
+      total: 100
+    }));
+}
+
+// Calculate retention for a single client
+export function calculateSingleClientRetention(client: ClientData): Array<{
+  name: string;
+  value: number;
+  color: string;
+}> {
+  if (client.sessions.length === 0) {
+    return [{ name: 'No Sessions', value: 100, color: '#e5e7eb' }];
+  }
+
+  const completedSessions = client.sessions.filter(s => s.completed);
+  const scheduledSessions = client.sessions.filter(s => s.scheduled);
+  
+  if (scheduledSessions.length === 0) {
+    return [{ name: 'No Scheduled Sessions', value: 100, color: '#e5e7eb' }];
+  }
+
+  const attendanceRate = (completedSessions.length / scheduledSessions.length) * 100;
+  const missedRate = 100 - attendanceRate;
+
+  return [
+    { name: 'Attended', value: Math.round(attendanceRate), color: '#00C49F' },
+    { name: 'Missed', value: Math.round(missedRate), color: '#FF8042' }
+  ].filter(item => item.value > 0);
+}
+
+// Calculate goal achievement for a single client
+export function calculateSingleClientGoals(client: ClientData): Array<{
+  name: string;
+  achieved: number;
+  total: number;
+}> {
+  if (client.goals.length === 0) {
+    return [{ name: 'No Goals Set', achieved: 0, total: 100 }];
+  }
+
+  const goalTypes = {
+    'Weight Loss': { achieved: 0, total: 0 },
+    'Strength': { achieved: 0, total: 0 },
+    'Endurance': { achieved: 0, total: 0 },
+    'Flexibility': { achieved: 0, total: 0 }
+  };
+
+  client.goals.forEach(goal => {
+    let categoryName = '';
+    
+    switch (goal.type) {
+      case 'weight':
+        categoryName = 'Weight Loss';
+        break;
+      case 'strength':
+        categoryName = 'Strength';
+        break;
+      case 'endurance':
+        categoryName = 'Endurance';
+        break;
+      case 'flexibility':
+        categoryName = 'Flexibility';
+        break;
+      default:
+        return;
+    }
+
+    goalTypes[categoryName].total++;
+    
+    const progressPercentage = (goal.current / goal.target) * 100;
+    if (progressPercentage >= 80) {
+      goalTypes[categoryName].achieved++;
+    }
+  });
+
+  return Object.entries(goalTypes)
+    .filter(([_, data]) => data.total > 0)
+    .map(([name, data]) => ({
+      name,
+      achieved: Math.round((data.achieved / data.total) * 100),
+      total: 100
+    }));
 }

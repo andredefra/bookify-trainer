@@ -8,7 +8,13 @@ import {
   COLORS 
 } from "./data/performanceData";
 import { mockClients } from "./data/clientMockData";
-import { generateClientPerformanceData } from "./utils/metricsCalculator";
+import { 
+  generateClientPerformanceData,
+  calculateClientRetentionData,
+  calculateGoalAchievementData,
+  calculateSingleClientRetention,
+  calculateSingleClientGoals
+} from "./utils/metricsCalculator";
 import { PerformanceLineChart } from "./charts/PerformanceLineChart";
 import { RetentionPieChart } from "./charts/RetentionPieChart";
 import { GoalAchievementChart } from "./charts/GoalAchievementChart";
@@ -53,6 +59,32 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
       return performanceData;
     }
   };
+
+  // Generate retention data based on selected client
+  const getRetentionData = () => {
+    if (selectedClient === "all") {
+      return calculateClientRetentionData(mockClients);
+    } else {
+      const client = mockClients.find(c => c.id === selectedClient);
+      if (client) {
+        return calculateSingleClientRetention(client);
+      }
+      return retentionData;
+    }
+  };
+
+  // Generate goal achievement data based on selected client
+  const getGoalAchievementData = () => {
+    if (selectedClient === "all") {
+      return calculateGoalAchievementData(mockClients);
+    } else {
+      const client = mockClients.find(c => c.id === selectedClient);
+      if (client) {
+        return calculateSingleClientGoals(client);
+      }
+      return goalAchievementData;
+    }
+  };
   
   return (
     <div className="space-y-6">
@@ -93,11 +125,11 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
       <PerformanceLineChart data={getPerformanceData()} />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Client Retention */}
-        <RetentionPieChart data={retentionData} colors={COLORS} />
+        {/* Client Retention - now using dynamic data */}
+        <RetentionPieChart data={getRetentionData()} colors={COLORS} />
         
-        {/* Goal Achievement */}
-        <GoalAchievementChart data={goalAchievementData} />
+        {/* Goal Achievement - now using dynamic data */}
+        <GoalAchievementChart data={getGoalAchievementData()} />
       </div>
     </div>
   );
