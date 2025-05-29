@@ -88,9 +88,9 @@ export const mockClients: ClientData[] = [
       },
       {
         id: 'goal7',
-        target: 4,
-        current: 3,
-        type: 'workout_consistency',
+        target: 12000,
+        current: 9500,
+        type: 'activity_level',
         deadline: new Date('2024-12-31'),
         createdAt: new Date('2024-03-01')
       },
