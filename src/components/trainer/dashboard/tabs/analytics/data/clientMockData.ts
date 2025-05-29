@@ -4,7 +4,7 @@ import { ClientData } from '../utils/metricsCalculator';
 // Mock client data with realistic fitness metrics
 export const mockClients: ClientData[] = [
   {
-    id: 'client1',
+    id: '1', // Changed from 'client1' to '1' to match ClientsTab
     name: 'Sarah Johnson',
     age: 28,
     height: 165, // cm
@@ -55,7 +55,7 @@ export const mockClients: ClientData[] = [
     ]
   },
   {
-    id: 'client2',
+    id: '2', // Changed from 'client2' to '2' to match ClientsTab
     name: 'Mike Peterson',
     age: 35,
     height: 180, // cm
