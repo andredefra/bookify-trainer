@@ -3,12 +3,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { ProgressItem, GoalLog } from "../types";
 import { calculateProgress, getCurrentDate } from "../utils";
+import { generateMilestones } from "../utils/progressCalculator";
 
 export function useGoalManagement(initialProgressData: ProgressItem[]) {
   const [progressData, setProgressData] = useState<ProgressItem[]>(initialProgressData);
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
 
-  // Add a new goal with creation timestamp
+  // Add a new goal with creation timestamp and milestones
   const addGoal = (data: any) => {
     const currentDate = getCurrentDate();
     const newGoal: ProgressItem = {
@@ -20,6 +21,10 @@ export function useGoalManagement(initialProgressData: ProgressItem[]) {
       progress: calculateProgress(Number(data.current), Number(data.target)),
       lastUpdated: currentDate,
       createdAt: currentDate,
+      goalType: data.goalType,
+      targetDate: data.targetDate,
+      exerciseId: data.exerciseId,
+      frequency: data.frequency,
       logs: [{
         id: `log-${Date.now()}`,
         date: currentDate,
@@ -29,8 +34,16 @@ export function useGoalManagement(initialProgressData: ProgressItem[]) {
       }]
     };
     
+    // Generate milestones for the goal
+    newGoal.milestones = generateMilestones(newGoal).map((milestone, index) => ({
+      id: `milestone-${Date.now()}-${index}`,
+      targetValue: milestone.value,
+      targetDate: milestone.date,
+      achieved: milestone.value <= newGoal.current
+    }));
+    
     setProgressData(prev => [...prev, newGoal]);
-    toast.success("New fitness goal added!");
+    toast.success(`New ${data.goalType.replace('_', ' ')} goal added!`);
     return true;
   };
 
@@ -50,13 +63,24 @@ export function useGoalManagement(initialProgressData: ProgressItem[]) {
     setProgressData(prev => prev.map(item => {
       if (item.id === selectedGoal.id || (item.goal === selectedGoal.goal && !item.id)) {
         const updatedLogs = [...(item.logs || []), newLog];
-        return {
+        const updatedItem = {
           ...item,
           current: Number(data.current),
           progress: calculateProgress(Number(data.current), item.target),
           lastUpdated: currentDate,
           logs: updatedLogs
         };
+        
+        // Update milestone achievements
+        if (updatedItem.milestones) {
+          updatedItem.milestones = updatedItem.milestones.map(milestone => ({
+            ...milestone,
+            achieved: milestone.targetValue <= updatedItem.current,
+            achievedDate: milestone.targetValue <= updatedItem.current && !milestone.achieved ? currentDate : milestone.achievedDate
+          }));
+        }
+        
+        return updatedItem;
       }
       return item;
     }));
