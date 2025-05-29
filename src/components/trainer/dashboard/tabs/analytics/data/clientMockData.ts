@@ -1,10 +1,10 @@
 
 import { ClientData } from '../utils/metricsCalculator';
 
-// Mock client data with realistic fitness metrics
+// Mock client data with realistic fitness metrics using new goal system
 export const mockClients: ClientData[] = [
   {
-    id: '1', // Changed from 'client1' to '1' to match ClientsTab
+    id: '1',
     name: 'Sarah Johnson',
     age: 28,
     height: 165, // cm
@@ -14,26 +14,34 @@ export const mockClients: ClientData[] = [
       {
         id: 'goal1',
         target: 65,
-        current: 68.5, // Progressing toward 65kg target
-        type: 'weight',
+        current: 68.5,
+        type: 'weight_management',
         deadline: new Date('2024-06-01'),
         createdAt: new Date('2024-01-01')
       },
       {
         id: 'goal2',
         target: 80,
-        current: 75, // Progressing toward strength goal
-        type: 'strength',
+        current: 75,
+        type: 'strength_progress',
         deadline: new Date('2024-05-01'),
         createdAt: new Date('2024-01-15')
       },
       {
         id: 'goal3',
-        target: 90,
-        current: 70, // Endurance goal
-        type: 'endurance',
+        target: 10000,
+        current: 8500,
+        type: 'activity_level',
         deadline: new Date('2024-07-01'),
         createdAt: new Date('2024-02-01')
+      },
+      {
+        id: 'goal4',
+        target: 15,
+        current: 22,
+        type: 'body_composition',
+        deadline: new Date('2024-08-01'),
+        createdAt: new Date('2024-02-15')
       }
     ],
     sessions: [
@@ -55,7 +63,7 @@ export const mockClients: ClientData[] = [
     ]
   },
   {
-    id: '2', // Changed from 'client2' to '2' to match ClientsTab
+    id: '2',
     name: 'Mike Peterson',
     age: 35,
     height: 180, // cm
@@ -63,20 +71,36 @@ export const mockClients: ClientData[] = [
     targetWeight: 80, // kg
     goals: [
       {
-        id: 'goal3',
+        id: 'goal5',
         target: 80,
-        current: 83, // Making good progress toward weight goal
-        type: 'weight',
+        current: 83,
+        type: 'weight_management',
         deadline: new Date('2024-07-01'),
         createdAt: new Date('2024-02-01')
       },
       {
-        id: 'goal4',
+        id: 'goal6',
         target: 100,
-        current: 92, // Excellent progress on strength
-        type: 'strength',
+        current: 92,
+        type: 'strength_progress',
         deadline: new Date('2024-06-01'),
         createdAt: new Date('2024-02-15')
+      },
+      {
+        id: 'goal7',
+        target: 4,
+        current: 3,
+        type: 'workout_consistency',
+        deadline: new Date('2024-12-31'),
+        createdAt: new Date('2024-03-01')
+      },
+      {
+        id: 'goal8',
+        target: 5,
+        current: 3.2,
+        type: 'cardiovascular_endurance',
+        deadline: new Date('2024-08-01'),
+        createdAt: new Date('2024-03-15')
       }
     ],
     sessions: [

@@ -16,6 +16,10 @@ export interface GoalAchievementDataPoint {
   name: string;
   achieved: number;
   total: number;
+  goalType: string;
+  timeProgress: number; // % of time elapsed towards deadline
+  onTrack: boolean; // Whether goal is on track based on timeline
+  avgTimeToComplete?: number; // Average days to complete this goal type
 }
 
 // Revenue-related types
