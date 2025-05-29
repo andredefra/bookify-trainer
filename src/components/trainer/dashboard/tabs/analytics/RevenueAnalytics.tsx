@@ -10,21 +10,9 @@ import { MonthlySummaryCards } from "./charts/MonthlySummaryCards";
 import { MonthlyRevenueChart } from "./charts/MonthlyRevenueChart";
 import { RevenueByProductChart } from "./charts/RevenueByProductChart";
 import { ClientGrowthChart } from "./charts/ClientGrowthChart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TransactionsProvider, useTransactions } from "../transactions/context/TransactionsContext";
 
-// Sample client list for the filter
-const clients = [
-  { id: "all", name: "All Clients" },
-  { id: "client1", name: "Sarah Johnson" },
-  { id: "client2", name: "Mike Peterson" },
-  { id: "client3", name: "Lisa Garcia" },
-  { id: "client4", name: "David Kim" },
-  { id: "client5", name: "Emma Thompson" },
-];
-
 function RevenueAnalyticsContent() {
-  const [selectedClient, setSelectedClient] = useState("all");
   const { transactions } = useTransactions();
 
   // Calculate real revenue data from transactions
@@ -77,26 +65,12 @@ function RevenueAnalyticsContent() {
 
   return (
     <div className="space-y-6">
-      {/* Client Filter */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h3 className="text-lg font-semibold">Revenue Analytics</h3>
-          <p className="text-sm text-muted-foreground">
-            Analisi delle entrate per tipologia di servizio (Sessions vs Programs)
-          </p>
-        </div>
-        <Select value={selectedClient} onValueChange={setSelectedClient}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Select Client" />
-          </SelectTrigger>
-          <SelectContent>
-            {clients.map((client) => (
-              <SelectItem key={client.id} value={client.id}>
-                {client.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Header */}
+      <div>
+        <h3 className="text-lg font-semibold">Revenue Analytics</h3>
+        <p className="text-sm text-muted-foreground">
+          Analisi delle entrate per tipologia di servizio (Sessions vs Programs)
+        </p>
       </div>
       
       {/* Summary cards with real data */}
