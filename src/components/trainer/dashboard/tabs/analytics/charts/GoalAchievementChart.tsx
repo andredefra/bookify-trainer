@@ -52,7 +52,7 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
     return (
       <Card>
         <CardContent className="pt-6">
-          <div className="flex items-center justify-center h-[350px]">
+          <div className="flex items-center justify-center h-[450px]">
             <p className="text-gray-500">No goal data available</p>
           </div>
         </CardContent>
@@ -63,8 +63,8 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
   return (
     <Card>
       <CardContent className="pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-medium">Goal Achievement by Type</h3>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-medium">Goal Achievement by Type</h3>
           <div className="flex items-center space-x-4 text-xs">
             <div className="flex items-center">
               <div className="w-3 h-3 bg-green-500 rounded mr-2"></div>
@@ -80,12 +80,12 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
             </div>
           </div>
         </div>
-        <div className="h-[350px]">
+        <div className="h-[450px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               data={data}
               layout="vertical"
-              margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+              margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
               <XAxis 
@@ -98,7 +98,7 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
               <YAxis 
                 type="category" 
                 dataKey="name" 
-                width={90}
+                width={110}
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 12 }}
@@ -107,7 +107,7 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
               <Bar 
                 dataKey="achieved" 
                 radius={[0, 4, 4, 0]}
-                barSize={25}
+                barSize={35}
               >
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={getBarColor(entry)} />
@@ -116,17 +116,30 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <p className="font-medium text-gray-700">Best Performing Goal</p>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="font-medium text-gray-700 mb-2">Best Performing Goal</p>
             <p className="text-gray-600">
               {data.length > 0 ? data.reduce((prev, current) => (prev.achieved > current.achieved) ? prev : current).name : "No data"}
             </p>
+            <p className="text-green-600 font-medium mt-1">
+              {data.length > 0 ? `${data.reduce((prev, current) => (prev.achieved > current.achieved) ? prev : current).achieved}%` : "0%"}
+            </p>
           </div>
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <p className="font-medium text-gray-700">Needs Attention</p>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="font-medium text-gray-700 mb-2">Needs Attention</p>
             <p className="text-gray-600">
               {data.length > 0 ? data.reduce((prev, current) => (prev.achieved < current.achieved) ? prev : current).name : "No data"}
+            </p>
+            <p className="text-red-600 font-medium mt-1">
+              {data.length > 0 ? `${data.reduce((prev, current) => (prev.achieved < current.achieved) ? prev : current).achieved}%` : "0%"}
+            </p>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="font-medium text-gray-700 mb-2">Average Achievement</p>
+            <p className="text-gray-600">Across all goal types</p>
+            <p className="text-blue-600 font-medium mt-1">
+              {data.length > 0 ? `${Math.round(data.reduce((sum, item) => sum + item.achieved, 0) / data.length)}%` : "0%"}
             </p>
           </div>
         </div>

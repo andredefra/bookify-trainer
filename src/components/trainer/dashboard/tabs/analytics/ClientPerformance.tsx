@@ -3,20 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   performanceData, 
-  retentionData, 
   goalAchievementData, 
   COLORS 
 } from "./data/performanceData";
 import { mockClients } from "./data/clientMockData";
 import { 
   generateClientPerformanceData,
-  calculateClientRetentionData,
   calculateGoalAchievementData,
-  calculateSingleClientRetention,
   calculateSingleClientGoals
 } from "./utils/metricsCalculator";
 import { PerformanceLineChart } from "./charts/PerformanceLineChart";
-import { RetentionPieChart } from "./charts/RetentionPieChart";
 import { GoalAchievementChart } from "./charts/GoalAchievementChart";
 import { GoalAchievementDataPoint } from "./types";
 
@@ -58,19 +54,6 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
         return data;
       }
       return performanceData;
-    }
-  };
-
-  // Generate retention data based on selected client
-  const getRetentionData = () => {
-    if (selectedClient === "all") {
-      return calculateClientRetentionData(mockClients);
-    } else {
-      const client = mockClients.find(c => c.id === selectedClient);
-      if (client) {
-        return calculateSingleClientRetention(client);
-      }
-      return retentionData;
     }
   };
 
@@ -143,11 +126,8 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
       {/* Performance Metrics Chart */}
       <PerformanceLineChart data={getPerformanceData()} />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Client Retention - now using dynamic data */}
-        <RetentionPieChart data={getRetentionData()} colors={COLORS} />
-        
-        {/* Goal Achievement - now using dynamic data */}
+      {/* Goal Achievement - now full width with increased height */}
+      <div className="w-full">
         <GoalAchievementChart data={getGoalAchievementData()} />
       </div>
     </div>
