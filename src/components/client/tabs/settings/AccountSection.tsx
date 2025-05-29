@@ -25,6 +25,7 @@ export function AccountSection({ user }: AccountSectionProps) {
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState("");
   const [height, setHeight] = useState("");
+  const [age, setAge] = useState("");
   const [profileImage, setProfileImage] = useState<string>(user.profileImage || defaultImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -138,6 +139,18 @@ export function AccountSection({ user }: AccountSectionProps) {
               value={phone} 
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+39 123 456 7890"
+            />
+          </div>
+          <div>
+            <Label htmlFor="age">Age</Label>
+            <Input 
+              id="age" 
+              type="number" 
+              value={age} 
+              onChange={(e) => setAge(e.target.value)}
+              placeholder="25"
+              min="1"
+              max="120"
             />
           </div>
           <div>
