@@ -1,10 +1,16 @@
 
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { UnifiedClient } from "../../types/UnifiedClient";
+
+interface ClientItem {
+  id: number;
+  name: string;
+  sessions: number;
+  lastSession: string;
+}
 
 interface RecentClientsCardProps {
-  clients: UnifiedClient[];
+  clients: ClientItem[];
 }
 
 export function RecentClientsCard({ clients }: RecentClientsCardProps) {

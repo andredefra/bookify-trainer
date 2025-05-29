@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
@@ -12,8 +13,6 @@ import { SalesTab } from "./tabs/SalesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { TrainerSessionItem } from "@/types/sessions";
-import { useSalesContacts } from "./tabs/sales/useSalesContacts";
-import { createUnifiedClient } from "./types/UnifiedClient";
 
 // Sample sessions - these are the same ones used in the client dashboard
 const sampleSessions: TrainerSessionItem[] = [
@@ -77,12 +76,6 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const isMobile = useIsMobile();
-  
-  // Get sales contacts to use as the unified data source
-  const { clientContacts } = useSalesContacts();
-  
-  // Convert sales contacts (status: 'client') to unified client data
-  const unifiedClients = clientContacts.map(createUnifiedClient);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -108,11 +101,11 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
             {activeTab === "overview" && (
               <OverviewTab
                 upcomingSessions={sampleSessions}
-                clients={unifiedClients}
+                clients={sampleClients}
                 messageRequests={sampleMessageRequests}
               />
             )}
-            {activeTab === "clients" && <ClientsTab clients={unifiedClients} />}
+            {activeTab === "clients" && <ClientsTab clients={sampleClients} />}
             {activeTab === "sessions" && <SessionsTab upcomingSessions={sampleSessions} />}
             {activeTab === "programs" && <ProgramsTab />}
             {activeTab === "analytics" && <AnalyticsTab />}
