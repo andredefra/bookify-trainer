@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -71,6 +70,7 @@ export function WorkoutAnalytics({
           onTimeframeChange={setTimeframe}
           chartType={chartType}
           onChartTypeChange={setChartType}
+          hideChartTypeSelector={true}
         />
       </CardHeader>
       <CardContent className={`${isMobile ? 'p-2 pt-1' : 'p-4 pt-2'}`}>
@@ -91,7 +91,7 @@ export function WorkoutAnalytics({
           </TabsList>
           
           <TabsContent value="activity" className="mt-0">
-            <WeeklyActivityChart weeklyData={actualWeeklyData} chartType={chartType} />
+            <WeeklyActivityChart weeklyData={actualWeeklyData} chartType="bar" />
           </TabsContent>
           
           <TabsContent value="types" className="mt-0">

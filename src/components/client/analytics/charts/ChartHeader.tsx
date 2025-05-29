@@ -12,6 +12,7 @@ interface ChartHeaderProps {
   chartType: string;
   onChartTypeChange: (value: string) => void;
   showChartTypeSelector?: boolean;
+  hideChartTypeSelector?: boolean;
 }
 
 export function ChartHeader({ 
@@ -21,7 +22,8 @@ export function ChartHeader({
   onTimeframeChange, 
   chartType, 
   onChartTypeChange, 
-  showChartTypeSelector = true 
+  showChartTypeSelector = true,
+  hideChartTypeSelector = false
 }: ChartHeaderProps) {
   const isMobile = useIsMobile();
   
@@ -43,7 +45,7 @@ export function ChartHeader({
           </SelectContent>
         </Select>
         
-        {showChartTypeSelector && (
+        {showChartTypeSelector && !hideChartTypeSelector && (
           <Select value={chartType} onValueChange={onChartTypeChange}>
             <SelectTrigger className={`${isMobile ? 'w-[90px] h-7 text-xs px-2' : 'w-[120px] h-8'}`}>
               <SelectValue placeholder="Chart Type" />

@@ -11,6 +11,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer
 } from "recharts";
 
@@ -48,6 +49,25 @@ export function WeeklyActivityChart({ weeklyData, chartType }: WeeklyActivityCha
     return null;
   };
 
+  const renderCustomLegend = (props: any) => {
+    const { payload } = props;
+    return (
+      <div className="flex justify-center gap-4 pb-2">
+        {payload.map((entry: any, index: number) => (
+          <div key={`legend-${index}`} className="flex items-center gap-1">
+            <div 
+              className="w-3 h-3 rounded-sm" 
+              style={{ backgroundColor: entry.color }}
+            />
+            <span className="text-xs text-muted-foreground font-medium">
+              {entry.value === 'minutes' ? 'Minutes' : 'Calories'}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
@@ -67,6 +87,7 @@ export function WeeklyActivityChart({ weeklyData, chartType }: WeeklyActivityCha
               tickLine={false}
             />
             <Tooltip content={renderTooltipContent} />
+            <Legend content={renderCustomLegend} />
             <Bar dataKey="minutes" fill="#4f46e5" radius={[3, 3, 0, 0]} />
             <Bar dataKey="calories" fill="#10b981" radius={[3, 3, 0, 0]} />
           </BarChart>
@@ -86,6 +107,7 @@ export function WeeklyActivityChart({ weeklyData, chartType }: WeeklyActivityCha
               tickLine={false}
             />
             <Tooltip content={renderTooltipContent} />
+            <Legend content={renderCustomLegend} />
             <Line type="monotone" dataKey="minutes" stroke="#4f46e5" strokeWidth={2} dot={{ r: 3 }} />
             <Line type="monotone" dataKey="calories" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
           </LineChart>
@@ -105,6 +127,7 @@ export function WeeklyActivityChart({ weeklyData, chartType }: WeeklyActivityCha
               tickLine={false}
             />
             <Tooltip content={renderTooltipContent} />
+            <Legend content={renderCustomLegend} />
             <Area type="monotone" dataKey="minutes" fill="#4f46e5" stroke="#4f46e5" fillOpacity={0.3} />
             <Area type="monotone" dataKey="calories" fill="#10b981" stroke="#10b981" fillOpacity={0.3} />
           </AreaChart>
