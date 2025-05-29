@@ -2,11 +2,13 @@
 import { Plus } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { ClientInviteDialog } from "./clients/ClientInviteDialog";
 import { ClientGoalsDialog } from "./clients/ClientGoalsDialog";
 import { ClientCard } from "./clients/ClientCard";
 import { ClientProfileDialog } from "./clients/ClientProfileDialog";
+import { ClientPerformance } from "./analytics/ClientPerformance";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ClientItem {
@@ -38,7 +40,8 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   };
   
   return (
-    <>
+    <div className="space-y-6">
+      {/* Client Management Section */}
       <Card className="w-full">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -57,7 +60,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[70vh] pr-4">
+          <ScrollArea className="h-[400px] pr-4">
             <div className="space-y-4 w-full">
               {clients.map((client) => (
                 <ClientCard 
@@ -69,6 +72,21 @@ export function ClientsTab({ clients }: ClientsTabProps) {
               ))}
             </div>
           </ScrollArea>
+        </CardContent>
+      </Card>
+
+      {/* Performance Analytics Section */}
+      <Card className="w-full">
+        <CardHeader>
+          <div>
+            <CardTitle>Client Performance Analytics</CardTitle>
+            <CardDescription>
+              Track client progress, attendance, goals achievement and retention metrics
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <ClientPerformance />
         </CardContent>
       </Card>
       
@@ -89,6 +107,6 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         open={showProfileDialog}
         onOpenChange={setShowProfileDialog}
       />
-    </>
+    </div>
   );
 }
