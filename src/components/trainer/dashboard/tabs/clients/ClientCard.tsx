@@ -1,5 +1,5 @@
 
-import { Target, Dumbbell, Eye } from "lucide-react";
+import { Target, Dumbbell, Eye, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -14,9 +14,10 @@ interface ClientCardProps {
   client: ClientItem;
   onSetGoals: (clientName: string) => void;
   onViewProfile: (client: ClientItem) => void;
+  onViewAnalytics: (client: ClientItem) => void;
 }
 
-export function ClientCard({ client, onSetGoals, onViewProfile }: ClientCardProps) {
+export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics }: ClientCardProps) {
   return (
     <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -57,6 +58,15 @@ export function ClientCard({ client, onSetGoals, onViewProfile }: ClientCardProp
             <Target className="mr-1 h-4 w-4" />
             <span className="hidden sm:inline">Set Goals</span>
             <span className="sm:hidden">Goals</span>
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => onViewAnalytics(client)}
+          >
+            <TrendingUp className="mr-1 h-4 w-4" />
+            <span className="hidden sm:inline">Analytics</span>
+            <span className="sm:hidden">Stats</span>
           </Button>
           <Button 
             variant="ghost" 

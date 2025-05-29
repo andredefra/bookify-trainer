@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   performanceData, 
@@ -19,9 +19,18 @@ const clients = [
   ...mockClients.map(client => ({ id: client.id, name: client.name }))
 ];
 
-export function ClientPerformance() {
+interface ClientPerformanceProps {
+  initialClientFilter?: string;
+}
+
+export function ClientPerformance({ initialClientFilter = "all" }: ClientPerformanceProps) {
   const [timeframe, setTimeframe] = useState("weekly");
-  const [selectedClient, setSelectedClient] = useState("all");
+  const [selectedClient, setSelectedClient] = useState(initialClientFilter);
+  
+  // Update selected client when prop changes
+  useEffect(() => {
+    setSelectedClient(initialClientFilter);
+  }, [initialClientFilter]);
   
   // Generate performance data based on selected client
   const getPerformanceData = () => {
