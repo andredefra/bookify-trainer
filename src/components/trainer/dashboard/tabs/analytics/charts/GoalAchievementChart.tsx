@@ -96,6 +96,10 @@ const StatsCards = ({ data, isMobile }: { data: GoalAchievementDataPoint[], isMo
 export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
   const isMobile = useIsMobile();
 
+  // Debug logging
+  console.log("GoalAchievementChart received data:", data);
+  console.log("isMobile:", isMobile);
+
   // Color bars based on whether goals are on track
   const getBarColor = (dataPoint: GoalAchievementDataPoint) => {
     if (dataPoint.achieved >= 80) return "#10b981"; // Green for high achievement
@@ -105,29 +109,32 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
 
   // Safety check for empty data
   if (!data || data.length === 0) {
+    console.log("No goal data available - showing empty state");
     return (
-      <Card>
-        <CardContent className={isMobile ? "pt-4" : "pt-6"}>
-          <div className={`flex items-center justify-center ${isMobile ? 'h-[200px]' : 'h-[300px]'}`}>
-            <p className="text-gray-500">No goal data available</p>
+      <Card className="border border-gray-200">
+        <CardContent className={isMobile ? "p-4" : "p-6"}>
+          <div className={`flex items-center justify-center ${isMobile ? 'h-[200px]' : 'h-[300px]'} bg-gray-50 rounded-lg border-2 border-dashed border-gray-300`}>
+            <div className="text-center">
+              <p className="text-gray-500 text-lg mb-2">No goal data available</p>
+              <p className="text-gray-400 text-sm">Goal achievements will appear here once data is available</p>
+            </div>
           </div>
         </CardContent>
       </Card>
     );
   }
 
-  // Responsive chart configurations
-  const chartHeight = isMobile ? 300 : 400;
+  // Responsive configurations - using fixed Tailwind classes
   const chartMargins = isMobile 
     ? { top: 5, right: 10, left: 80, bottom: 5 }
     : { top: 5, right: 30, left: 120, bottom: 5 };
   const yAxisWidth = isMobile ? 75 : 110;
   const fontSize = isMobile ? 10 : 12;
-  const barSize = isMobile ? 25 : 35;
+  const barSize = isMobile ? 20 : 30;
 
   return (
-    <Card>
-      <CardContent className={isMobile ? "pt-4" : "pt-6"}>
+    <Card className="border border-gray-200">
+      <CardContent className={isMobile ? "p-4" : "p-6"}>
         {/* Header Section */}
         <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start justify-between'} mb-4`}>
           <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-medium`}>Goal Achievement by Type</h3>
@@ -141,8 +148,8 @@ export function GoalAchievementChart({ data }: GoalAchievementChartProps) {
           </div>
         )}
 
-        {/* Chart Section */}
-        <div className={`h-[${chartHeight}px]`}>
+        {/* Chart Section - Using fixed Tailwind classes instead of dynamic */}
+        <div className={`${isMobile ? 'h-[300px]' : 'h-[400px]'} w-full bg-white rounded border`}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               data={data}
