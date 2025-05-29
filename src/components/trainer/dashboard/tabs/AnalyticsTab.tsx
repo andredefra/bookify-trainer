@@ -3,8 +3,8 @@ import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Calendar, FileDown } from "lucide-react";
+import { RevenueAnalytics } from "./analytics/RevenueAnalytics";
 import { EnhancedRevenueAnalytics } from "./analytics/EnhancedRevenueAnalytics";
-import { ClientPerformance } from "./analytics/ClientPerformance";
 
 export function AnalyticsTab() {
   return (
@@ -12,8 +12,8 @@ export function AnalyticsTab() {
       <CardHeader>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <CardTitle>Business Data Dashboard</CardTitle>
-            <CardDescription>Analisi completa del business con distinzione tra clienti ricorrenti e partecipanti occasionali</CardDescription>
+            <CardTitle>Business Analytics Dashboard</CardTitle>
+            <CardDescription>Analisi completa del business con breakdown per servizi e tipologie di clienti</CardDescription>
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm">
@@ -31,15 +31,15 @@ export function AnalyticsTab() {
         <Tabs defaultValue="revenue">
           <TabsList className="mb-6">
             <TabsTrigger value="revenue">Revenue Analytics</TabsTrigger>
-            <TabsTrigger value="clients">Client Performance</TabsTrigger>
+            <TabsTrigger value="clienttypes">Client Type Analytics</TabsTrigger>
           </TabsList>
           
           <TabsContent value="revenue" className="mt-0">
-            <EnhancedRevenueAnalytics />
+            <RevenueAnalytics />
           </TabsContent>
           
-          <TabsContent value="clients" className="mt-0">
-            <ClientPerformance />
+          <TabsContent value="clienttypes" className="mt-0">
+            <EnhancedRevenueAnalytics />
           </TabsContent>
         </Tabs>
       </CardContent>

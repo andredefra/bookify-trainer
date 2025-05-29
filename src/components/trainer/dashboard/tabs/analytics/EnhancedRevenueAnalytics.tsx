@@ -42,9 +42,9 @@ function EnhancedRevenueAnalyticsContent() {
       {/* Client Filter */}
       <div className="flex justify-between items-center">
         <div>
-          <h3 className="text-lg font-semibold">Business Revenue Analytics</h3>
+          <h3 className="text-lg font-semibold">Client Type Analytics</h3>
           <p className="text-sm text-muted-foreground">
-            Revenue breakdown between recurring clients and occasional participants
+            Distinzione revenue tra clienti ricorrenti e partecipanti occasionali
           </p>
         </div>
         <Select value={selectedClient} onValueChange={setSelectedClient}>
