@@ -102,9 +102,9 @@ export function IntegrationsSection({ user }: IntegrationsSectionProps) {
           <div>
             <h3 className="font-medium text-amber-700 mb-1">Privacy & Data Accuracy</h3>
             <p className="text-sm text-amber-600">
-              Smart scale and body composition data provides more accurate insights when combined with manual measurements. 
+              Data from connected fitness apps provides more accurate insights when combined with manual measurements. 
               Your data is only shared with the apps you choose to connect, and our algorithms use multiple data points 
-              to provide the most realistic body composition analysis based on your age, height, and fitness profile.
+              to provide the most realistic analysis based on your age, height, and fitness profile.
             </p>
           </div>
         </div>
