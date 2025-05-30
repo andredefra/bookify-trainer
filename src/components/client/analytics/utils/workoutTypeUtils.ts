@@ -2,37 +2,40 @@
 import { ProgressItem, GoalLog, GoalType } from "@/components/client/overview/fitness-progress/types";
 import { WorkoutType } from "../types";
 
-// Map goal types to workout categories
-const goalTypeToWorkoutType: Record<GoalType, string> = {
-  'strength_progress': 'Strength',
-  'cardiovascular_endurance': 'Cardio',
-  'activity_level': 'Activity',
-  'weight_management': 'Weight Management',
-  'body_composition': 'Body Composition'
+// Map goal types to simplified activity categories
+const goalTypeToActivityType: Record<GoalType, string> = {
+  'strength_progress': 'Strength Training',
+  'cardiovascular_endurance': 'Cardio Training',
+  'activity_level': 'Cardio Training',
+  'weight_management': 'Cardio Training',
+  'body_composition': 'Cardio Training'
 };
 
-// Generate workout types from real progress data
+// Generate activity types from real progress data
 export const generateWorkoutTypesFromData = (progressData: ProgressItem[]): WorkoutType[] => {
-  const workoutCounts: Record<string, number> = {};
+  const activityCounts: Record<string, number> = {
+    'Strength Training': 0,
+    'Cardio Training': 0
+  };
   let totalSessions = 0;
 
   // Count sessions by analyzing goal logs
   progressData.forEach(goal => {
     if (goal.logs && goal.logs.length > 0) {
-      const workoutType = goalTypeToWorkoutType[goal.goalType] || 'Other';
+      const activityType = goalTypeToActivityType[goal.goalType] || 'Cardio Training';
       
       // Count sessions from logs (each log represents a session)
       const sessionCount = goal.logs.filter(log => 
         log.source === 'workout' || log.source === 'strength_training' || log.source === 'manual'
       ).length;
       
-      workoutCounts[workoutType] = (workoutCounts[workoutType] || 0) + sessionCount;
+      activityCounts[activityType] = (activityCounts[activityType] || 0) + sessionCount;
       totalSessions += sessionCount;
     } else {
       // If no logs, estimate based on goal type
-      const workoutType = goalTypeToWorkoutType[goal.goalType] || 'Other';
-      const estimatedSessions = 3; // Conservative estimate
-      workoutCounts[workoutType] = (workoutCounts[workoutType] || 0) + estimatedSessions;
+      const activityType = goalTypeToActivityType[goal.goalType] || 'Cardio Training';
+      const estimatedSessions = 2; // Conservative estimate
+      activityCounts[activityType] = (activityCounts[activityType] || 0) + estimatedSessions;
       totalSessions += estimatedSessions;
     }
   });
@@ -42,24 +45,26 @@ export const generateWorkoutTypesFromData = (progressData: ProgressItem[]): Work
     return getDefaultWorkoutTypes();
   }
 
-  // Convert counts to percentages and create WorkoutType objects
-  const colors = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-  let colorIndex = 0;
+  // Calculate total activity time (assuming 1 hour per session on average)
+  const totalActivityHours = totalSessions;
+  const totalHoursInWeek = 24 * 7; // 168 hours per week
+  const inactivityHours = totalHoursInWeek - totalActivityHours;
+  
+  // Calculate percentages
+  const inactivityPercentage = Math.round((inactivityHours / totalHoursInWeek) * 100);
+  const strengthPercentage = Math.round((activityCounts['Strength Training'] / totalHoursInWeek) * 100);
+  const cardioPercentage = Math.round((activityCounts['Cardio Training'] / totalHoursInWeek) * 100);
 
-  return Object.entries(workoutCounts)
-    .map(([name, count]) => ({
-      name,
-      value: Math.round((count / totalSessions) * 100),
-      color: colors[colorIndex++ % colors.length]
-    }))
-    .filter(type => type.value > 0)
-    .sort((a, b) => b.value - a.value);
+  return [
+    { name: "Inactivity", value: inactivityPercentage, color: "#94a3b8" },
+    { name: "Cardio Training", value: cardioPercentage, color: "#10b981" },
+    { name: "Strength Training", value: strengthPercentage, color: "#4f46e5" }
+  ].filter(type => type.value > 0);
 };
 
-// Realistic default workout types (no more "Flexibility")
+// Realistic default activity types
 export const getDefaultWorkoutTypes = (): WorkoutType[] => [
-  { name: "Strength", value: 40, color: "#4f46e5" },
-  { name: "Cardio", value: 35, color: "#10b981" },
-  { name: "Activity", value: 20, color: "#f59e0b" },
-  { name: "Other", value: 5, color: "#ef4444" }
+  { name: "Inactivity", value: 75, color: "#94a3b8" },
+  { name: "Cardio Training", value: 15, color: "#10b981" },
+  { name: "Strength Training", value: 10, color: "#4f46e5" }
 ];

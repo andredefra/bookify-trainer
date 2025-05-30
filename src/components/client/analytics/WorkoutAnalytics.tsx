@@ -14,7 +14,7 @@ import { WorkoutTypesChart } from "./charts/WorkoutTypesChart";
 import { GoalsProgressChart } from "./charts/GoalsProgressChart";
 import { ChartHeader } from "./charts/ChartHeader";
 
-// Import workout type utilities
+// Import activity type utilities
 import { generateWorkoutTypesFromData, getDefaultWorkoutTypes } from "./utils/workoutTypeUtils";
 
 // Helper function to generate weekly data from progress logs
@@ -56,8 +56,8 @@ export function WorkoutAnalytics({
   const actualWeeklyData = weeklyData || generateWeeklyDataFromLogs(progressData);
   const goalsProgress = convertToGoalProgress(progressData);
   
-  // Generate workout types from real data or use realistic defaults
-  const actualWorkoutTypes = workoutTypes || generateWorkoutTypesFromData(progressData);
+  // Generate activity types from real data or use realistic defaults
+  const actualActivityTypes = workoutTypes || generateWorkoutTypesFromData(progressData);
 
   return (
     <Card className="col-span-12 border shadow-sm">
@@ -81,7 +81,7 @@ export function WorkoutAnalytics({
             </TabsTrigger>
             <TabsTrigger value="types" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-[10px] sm:text-sm">
               <PieChartIcon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? 'mr-0.5' : 'mr-1'}`} />
-              <span className={`${isMobile ? 'inline text-[9px]' : ''}`}>Types</span>
+              <span className={`${isMobile ? 'inline text-[9px]' : ''}`}>Distribution</span>
             </TabsTrigger>
             <TabsTrigger value="goals" className="flex items-center justify-center gap-1 py-1 sm:py-2 text-[10px] sm:text-sm">
               <Target className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${isMobile ? 'mr-0.5' : 'mr-1'}`} />
@@ -94,7 +94,7 @@ export function WorkoutAnalytics({
           </TabsContent>
           
           <TabsContent value="types" className="mt-0">
-            <WorkoutTypesChart workoutTypes={actualWorkoutTypes} />
+            <WorkoutTypesChart workoutTypes={actualActivityTypes} />
           </TabsContent>
           
           <TabsContent value="goals" className="mt-0">
