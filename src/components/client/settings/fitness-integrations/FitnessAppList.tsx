@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -18,15 +17,13 @@ export function FitnessAppList({
   const { toast } = useToast();
 
   const handleGoogleFitConnect = () => {
-    // In a real app, this would trigger OAuth flow
     if (!googleFitConnected) {
       setTimeout(() => {
         setGoogleFitConnected(true);
-        // Save to localStorage
         localStorage.setItem('googleFitConnected', 'true');
         
-        // Simulate updating fitness goals
         updateGoalsFromFitnessApp('Google Fit');
+        updateBodyCompositionData('Google Fit');
         
         toast({
           title: "Google Fit connected",
@@ -35,7 +32,6 @@ export function FitnessAppList({
       }, 1000);
     } else {
       setGoogleFitConnected(false);
-      // Remove from localStorage
       localStorage.setItem('googleFitConnected', 'false');
       
       toast({
@@ -46,15 +42,13 @@ export function FitnessAppList({
   };
 
   const handleAppleHealthConnect = () => {
-    // In a real app, this would trigger Apple Health permission flow
     if (!appleHealthConnected) {
       setTimeout(() => {
         setAppleHealthConnected(true);
-        // Save to localStorage
         localStorage.setItem('appleHealthConnected', 'true');
         
-        // Simulate updating fitness goals
         updateGoalsFromFitnessApp('Apple Health');
+        updateBodyCompositionData('Apple Health');
         
         toast({
           title: "Apple Health connected",
@@ -63,7 +57,6 @@ export function FitnessAppList({
       }, 1000);
     } else {
       setAppleHealthConnected(false);
-      // Remove from localStorage
       localStorage.setItem('appleHealthConnected', 'false');
       
       toast({
@@ -75,7 +68,6 @@ export function FitnessAppList({
 
   // Simulate updating fitness goals from connected app
   const updateGoalsFromFitnessApp = (appName: string) => {
-    // Load existing goals from localStorage
     const goalsString = localStorage.getItem('fitnessGoals');
     if (!goalsString) return;
     
@@ -86,7 +78,6 @@ export function FitnessAppList({
       // Update steps goal if exists
       const stepsGoal = goals.find((g: any) => g.unit === 'steps');
       if (stepsGoal) {
-        // Simulate getting data from fitness app (random steps between 1000-10000)
         const simSteps = Math.floor(Math.random() * 9000) + 1000;
         stepsGoal.current = simSteps;
         stepsGoal.progress = Math.min(100, Math.round((simSteps / stepsGoal.target) * 100));
@@ -94,17 +85,65 @@ export function FitnessAppList({
         updated = true;
       }
       
-      // Could do the same for other metrics like workouts, calories, etc.
-      
       if (updated) {
         localStorage.setItem('fitnessGoals', JSON.stringify(goals));
-        toast({
-          title: "Goals Updated",
-          description: `Your fitness goals have been updated with ${appName} data`
-        });
       }
     } catch (err) {
       console.error("Error updating goals:", err);
+    }
+  };
+
+  // Simulate updating body composition data from smart scales/fitness apps
+  const updateBodyCompositionData = (appName: string) => {
+    try {
+      // Get existing body measurements or create new
+      const existingMeasurements = localStorage.getItem('body-measurements-data');
+      let measurements = existingMeasurements ? JSON.parse(existingMeasurements) : [];
+      
+      // Add new measurement with realistic body composition data
+      const newMeasurement = {
+        id: `smart-scale-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        weight: Math.round((65 + Math.random() * 10) * 10) / 10, // 65-75kg range
+        bodyFat: Math.round((15 + Math.random() * 8) * 10) / 10, // 15-23% range
+        muscleMass: Math.round((30 + Math.random() * 10) * 10) / 10, // 30-40kg range
+        bmi: Math.round((20 + Math.random() * 5) * 10) / 10, // 20-25 BMI range
+        waist: Math.round(82 + Math.random() * 6), // 82-88cm
+        hips: Math.round(95 + Math.random() * 4), // 95-99cm
+        source: appName.toLowerCase().replace(' ', '_'),
+        deviceType: 'smart_scale'
+      };
+      
+      measurements.unshift(newMeasurement);
+      
+      // Keep only last 10 measurements
+      if (measurements.length > 10) {
+        measurements = measurements.slice(0, 10);
+      }
+      
+      localStorage.setItem('body-measurements-data', JSON.stringify(measurements));
+      
+      // Also update fitness-progress-data for weight goals
+      const progressString = localStorage.getItem('fitness-progress-data');
+      if (progressString) {
+        const progressData = JSON.parse(progressString);
+        const weightGoal = progressData.find((g: any) => g.unit === 'kg' && g.goalType === 'weight_management');
+        
+        if (weightGoal) {
+          weightGoal.current = newMeasurement.weight;
+          weightGoal.progress = Math.min(100, Math.round(((weightGoal.target - newMeasurement.weight) / (weightGoal.target - 70)) * 100));
+          weightGoal.lastUpdated = new Date().toISOString();
+          localStorage.setItem('fitness-progress-data', JSON.stringify(progressData));
+        }
+      }
+      
+      toast({
+        title: "Body composition updated",
+        description: `New smart scale data synced from ${appName} - Weight: ${newMeasurement.weight}kg, Body Fat: ${newMeasurement.bodyFat}%`
+      });
+      
+    } catch (err) {
+      console.error("Error updating body composition:", err);
     }
   };
 
@@ -114,7 +153,7 @@ export function FitnessAppList({
         <div>
           <h3 className="font-medium">Google Fit</h3>
           <p className="text-sm text-muted-foreground">
-            Connect to your Google Fit account
+            Connect to sync steps, workouts, and smart scale data
           </p>
         </div>
         <Button 
@@ -129,7 +168,7 @@ export function FitnessAppList({
         <div>
           <h3 className="font-medium">Apple Health</h3>
           <p className="text-sm text-muted-foreground">
-            Connect to your Apple Health account
+            Connect to sync comprehensive health and body composition data
           </p>
         </div>
         <Button 

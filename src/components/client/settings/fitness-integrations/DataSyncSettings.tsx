@@ -7,12 +7,14 @@ interface DataSyncSettings {
   heartRate: boolean;
   sleep: boolean;
   workouts: boolean;
+  bodyComposition: boolean;
+  weight: boolean;
 }
 
 interface DataSyncSettingsProps {
   dataSync: DataSyncSettings;
   toggleDataSync: (metric: keyof DataSyncSettings) => void;
-  appName?: string; // Make the appName prop optional
+  appName?: string;
 }
 
 export function DataSyncSettings({ dataSync, toggleDataSync, appName }: DataSyncSettingsProps) {
@@ -40,19 +42,35 @@ export function DataSyncSettings({ dataSync, toggleDataSync, appName }: DataSync
         />
 
         <SyncOption
-          id="sleep-sync"
-          title="Sleep"
-          description="Import sleep tracking data"
-          checked={dataSync.sleep}
-          onChange={() => toggleDataSync("sleep")}
-        />
-
-        <SyncOption
           id="workouts-sync"
           title="Workouts"
           description="Import workouts automatically"
           checked={dataSync.workouts}
           onChange={() => toggleDataSync("workouts")}
+        />
+
+        <SyncOption
+          id="weight-sync"
+          title="Weight"
+          description="Import weight measurements from smart scales"
+          checked={dataSync.weight}
+          onChange={() => toggleDataSync("weight")}
+        />
+
+        <SyncOption
+          id="body-composition-sync"
+          title="Body Composition"
+          description="Import BMI, body fat %, muscle mass from smart scales"
+          checked={dataSync.bodyComposition}
+          onChange={() => toggleDataSync("bodyComposition")}
+        />
+
+        <SyncOption
+          id="sleep-sync"
+          title="Sleep"
+          description="Import sleep tracking data"
+          checked={dataSync.sleep}
+          onChange={() => toggleDataSync("sleep")}
         />
       </div>
     </div>

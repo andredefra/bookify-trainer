@@ -15,7 +15,9 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
     steps: true,
     heartRate: true,
     sleep: true,
-    workouts: true
+    workouts: true,
+    bodyComposition: true,
+    weight: true
   });
 
   // Load connection status from localStorage on component mount
@@ -46,7 +48,7 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
       <CardHeader>
         <CardTitle>Fitness App Integration</CardTitle>
         <CardDescription>
-          Connect your fitness apps to sync your health and activity data
+          Connect your fitness apps to sync your health and activity data automatically
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
