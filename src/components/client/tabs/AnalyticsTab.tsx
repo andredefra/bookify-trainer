@@ -1,12 +1,15 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { InfoIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { InfoIcon, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 import { StatisticsSection } from "../analytics/sections/StatisticsSection";
 import { BodyCompositionSection } from "../analytics/sections/BodyCompositionSection";
 
 export function AnalyticsTab() {
+  const navigate = useNavigate();
+
   // Get progress data from localStorage or use mock data
   const getProgressData = () => {
     try {
@@ -99,6 +102,15 @@ export function AnalyticsTab() {
   const progressData = getProgressData();
   const bodyMeasurements = getBodyMeasurements();
 
+  const handleGoToIntegrations = () => {
+    navigate('/client-dashboard', { 
+      state: { 
+        activeTab: 'settings', 
+        settingsSection: 'integrations' 
+      } 
+    });
+  };
+
   return (
     <div className="space-y-6 w-full">
       <Card className="w-full shadow-sm bg-white/80 backdrop-blur-sm border-slate-200">
@@ -112,7 +124,21 @@ export function AnalyticsTab() {
           <Alert className="bg-blue-50 border-blue-100 shadow-sm mb-6">
             <InfoIcon className="h-4 w-4 text-blue-500" />
             <AlertDescription className="text-sm text-blue-700">
-              Your analytics are based on your manually logged workouts, fitness goals and body measurements.
+              <div className="space-y-2">
+                <p>Your analytics are based on your manually logged workouts, fitness goals and body measurements.</p>
+                <p>
+                  <span className="font-medium">Vuoi automatizzare l'inserimento dati?</span> Connetti le tue app fitness e health per far fluire automaticamente i dati senza dover inserire tutto manualmente.
+                </p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleGoToIntegrations}
+                  className="mt-2 bg-white hover:bg-blue-50 border-blue-200 text-blue-700"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  Vai alle Integrazioni
+                </Button>
+              </div>
             </AlertDescription>
           </Alert>
           
