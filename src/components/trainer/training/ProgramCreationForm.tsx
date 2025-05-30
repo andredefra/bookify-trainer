@@ -21,8 +21,8 @@ export function ProgramCreationForm({
   const {
     program,
     setProgram,
-    activeDay,
-    setActiveDay,
+    activeSession,
+    setActiveSession,
     handleAddExercise,
     handleUpdateExercise,
     handleRemoveExercise,
@@ -71,9 +71,9 @@ export function ProgramCreationForm({
             <ProgramInfoFields form={form} />
             
             <ProgramWorkoutEditor
-              days={program.days}
-              activeDay={activeDay}
-              setActiveDay={setActiveDay}
+              sessions={program.sessions}
+              activeSession={activeSession}
+              setActiveSession={setActiveSession}
               onAddExercise={handleAddExercise}
               onUpdateExercise={handleUpdateExercise}
               onRemoveExercise={handleRemoveExercise}

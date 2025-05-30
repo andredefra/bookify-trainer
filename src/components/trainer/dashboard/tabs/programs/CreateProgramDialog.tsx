@@ -2,7 +2,7 @@
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { ProgramCreationForm } from "@/components/trainer/training/ProgramCreationForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Exercise, WorkoutDay } from "@/data/training/types";
+import { Exercise, WorkoutSession } from "@/data/training/types";
 
 interface CreateProgramDialogProps {
   open: boolean;
@@ -35,16 +35,17 @@ export function CreateProgramDialog({
   };
 
   // Create the exercises data structure for the program form
-  const generateInitialDaysWithExercises = (): WorkoutDay[] => {
-    // If we have existing exercises, add them to Monday
-    const days = Array.from({ length: 7 }, (_, i) => ({
+  const generateInitialSessionsWithExercises = (): WorkoutSession[] => {
+    // If we have existing exercises, add them to session 1
+    const sessions = Array.from({ length: 4 }, (_, i) => ({
       id: String(i + 1),
-      day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][i],
+      sessionNumber: i + 1,
+      title: `Session ${i + 1}`,
       exercises: i === 0 && program?.exercises ? [...program.exercises] : [],
       completed: false
     }));
     
-    return days;
+    return sessions;
   };
 
   return (
@@ -75,7 +76,7 @@ export function CreateProgramDialog({
                 description: "",
                 isPaid: program.isPaid || false,
                 price: program.price || 0,
-                days: generateInitialDaysWithExercises()
+                sessions: generateInitialSessionsWithExercises()
               } : undefined}
             />
           </div>

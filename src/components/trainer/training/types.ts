@@ -1,7 +1,7 @@
 
-import { Exercise, WorkoutDay, TrainingProgram } from "@/data/training/types";
+import { Exercise, WorkoutSession, TrainingProgram } from "@/data/training/types";
 
-export type { Exercise, WorkoutDay, TrainingProgram };
+export type { Exercise, WorkoutSession, TrainingProgram };
 
 export interface ProgramFormProps {
   clientId: string;
@@ -17,7 +17,7 @@ export interface ProgramFormProps {
     description: string;
     isPaid: boolean;
     price: number;
-    days?: WorkoutDay[];
+    sessions?: WorkoutSession[];
   };
 }
 

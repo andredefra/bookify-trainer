@@ -18,7 +18,7 @@ export function ProgramsTab() {
   const [activeProgramId, setActiveProgramId] = useState<number | null>(null);
   
   // Sample exercises we can use for our programs
-  const sampleExercises: Exercise[] = currentProgram.days[0].exercises.map(ex => ({
+  const sampleExercises: Exercise[] = currentProgram.sessions[0].exercises.map(ex => ({
     ...ex,
     id: Math.random().toString(36).substring(2, 9)
   }));

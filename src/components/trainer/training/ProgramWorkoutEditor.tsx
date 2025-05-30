@@ -1,38 +1,38 @@
 
-import { WorkoutDay } from "@/data/training/types";
-import { DayTabs } from "./DayTabs";
-import { WorkoutDayPanel } from "./WorkoutDayPanel";
+import { WorkoutSession } from "@/data/training/types";
+import { SessionTabs } from "./SessionTabs";
+import { WorkoutSessionPanel } from "./WorkoutSessionPanel";
 
 interface ProgramWorkoutEditorProps {
-  days: WorkoutDay[];
-  activeDay: string;
-  setActiveDay: (dayId: string) => void;
-  onAddExercise: (dayId: string) => void;
-  onUpdateExercise: (dayId: string, exerciseId: string, field: string, value: any) => void;
-  onRemoveExercise: (dayId: string, exerciseId: string) => void;
+  sessions: WorkoutSession[];
+  activeSession: string;
+  setActiveSession: (sessionId: string) => void;
+  onAddExercise: (sessionId: string) => void;
+  onUpdateExercise: (sessionId: string, exerciseId: string, field: string, value: any) => void;
+  onRemoveExercise: (sessionId: string, exerciseId: string) => void;
 }
 
 export function ProgramWorkoutEditor({
-  days,
-  activeDay,
-  setActiveDay,
+  sessions,
+  activeSession,
+  setActiveSession,
   onAddExercise,
   onUpdateExercise,
   onRemoveExercise
 }: ProgramWorkoutEditorProps) {
   return (
     <div className="border rounded-md">
-      <DayTabs 
-        days={days} 
-        activeDay={activeDay} 
-        setActiveDay={setActiveDay} 
+      <SessionTabs 
+        sessions={sessions} 
+        activeSession={activeSession} 
+        setActiveSession={setActiveSession} 
       />
 
-      {days.map((day) => (
-        <WorkoutDayPanel
-          key={day.id}
-          day={day}
-          activeDay={activeDay}
+      {sessions.map((session) => (
+        <WorkoutSessionPanel
+          key={session.id}
+          session={session}
+          activeSession={activeSession}
           onAddExercise={onAddExercise}
           onUpdateExercise={onUpdateExercise}
           onRemoveExercise={onRemoveExercise}

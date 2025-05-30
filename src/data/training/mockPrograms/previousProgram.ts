@@ -6,11 +6,19 @@ export const previousProgram: TrainingProgram = {
   title: "Foundation Building",
   week: "May 13 - May 19",
   trainerName: "Sarah Johnson",
-  days: [
+  targetFrequency: 3,
+  totalSessions: 12,
+  duration: 4,
+  objective: "Build foundation strength",
+  description: "A beginner-friendly 4-week program",
+  isPaid: false,
+  sessions: [
     {
-      id: "day-1-prev",
-      day: "Monday",
+      id: "session-1-prev",
+      sessionNumber: 1,
+      title: "Foundation Day 1",
       completed: true,
+      completedDate: "2024-05-13T10:00:00Z",
       exercises: [
         {
           id: "ex-1-prev",
@@ -31,9 +39,11 @@ export const previousProgram: TrainingProgram = {
       ]
     },
     {
-      id: "day-2-prev",
-      day: "Tuesday",
+      id: "session-2-prev",
+      sessionNumber: 2,
+      title: "Cardio Foundation",
       completed: true,
+      completedDate: "2024-05-15T14:00:00Z",
       exercises: [
         {
           id: "ex-4-prev",
@@ -45,42 +55,20 @@ export const previousProgram: TrainingProgram = {
       ]
     },
     {
-      id: "day-3-prev",
-      day: "Wednesday",
+      id: "session-3-prev",
+      sessionNumber: 3,
+      title: "Recovery Session",
       completed: true,
+      completedDate: "2024-05-17T09:00:00Z",
       exercises: [
         {
           id: "ex-7-prev",
-          name: "Rest Day",
-          sets: 0,
-          reps: "",
-          notes: "Stay active with light walking or stretching"
+          name: "Stretching Routine",
+          sets: 1,
+          reps: "20 min",
+          notes: "Focus on flexibility and mobility"
         }
       ]
-    },
-    {
-      id: "day-4-prev",
-      day: "Thursday",
-      completed: true,
-      exercises: []
-    },
-    {
-      id: "day-5-prev",
-      day: "Friday",
-      completed: true,
-      exercises: []
-    },
-    {
-      id: "day-6-prev",
-      day: "Saturday",
-      completed: true,
-      exercises: []
-    },
-    {
-      id: "day-7-prev",
-      day: "Sunday",
-      completed: true,
-      exercises: []
     }
   ]
 };

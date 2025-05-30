@@ -16,9 +16,10 @@ export function TrainingProgramContent({ currentProgram, previousPrograms }: Tra
       return program;
     }
     
-    // Convert old days structure to sessions
-    if ('days' in program && program.days) {
-      const sessions = program.days.map((day: any, index: number) => ({
+    // Convert old days structure to sessions (for backward compatibility)
+    const legacyProgram = program as any;
+    if (legacyProgram.days && Array.isArray(legacyProgram.days)) {
+      const sessions = legacyProgram.days.map((day: any, index: number) => ({
         id: day.id,
         sessionNumber: index + 1,
         title: `${day.day} Workout`,
@@ -31,9 +32,7 @@ export function TrainingProgramContent({ currentProgram, previousPrograms }: Tra
         ...program,
         sessions,
         targetFrequency: program.targetFrequency || 4,
-        totalSessions: program.totalSessions || sessions.length,
-        // Remove old days property
-        days: undefined
+        totalSessions: program.totalSessions || sessions.length
       } as TrainingProgram;
     }
     

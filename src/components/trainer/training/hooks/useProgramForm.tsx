@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { TrainingProgram, WorkoutDay, Exercise } from "@/data/training/types";
+import { TrainingProgram, WorkoutSession, Exercise } from "@/data/training/types";
 
 interface InitialProgramData {
   id: string;
@@ -11,50 +11,36 @@ interface InitialProgramData {
   description: string;
   isPaid: boolean;
   price: number;
-  days?: WorkoutDay[];
+  sessions?: WorkoutSession[];
 }
 
 export function useProgramForm(initialData?: InitialProgramData) {
-  const defaultDays = [
+  const defaultSessions: WorkoutSession[] = [
     {
       id: "1",
-      day: "Monday",
+      sessionNumber: 1,
+      title: "Session 1",
       exercises: [],
       completed: false,
     },
     {
       id: "2",
-      day: "Tuesday",
+      sessionNumber: 2,
+      title: "Session 2",
       exercises: [],
       completed: false,
     },
     {
       id: "3",
-      day: "Wednesday",
+      sessionNumber: 3,
+      title: "Session 3",
       exercises: [],
       completed: false,
     },
     {
       id: "4",
-      day: "Thursday",
-      exercises: [],
-      completed: false,
-    },
-    {
-      id: "5",
-      day: "Friday",
-      exercises: [],
-      completed: false,
-    },
-    {
-      id: "6",
-      day: "Saturday",
-      exercises: [],
-      completed: false,
-    },
-    {
-      id: "7",
-      day: "Sunday",
+      sessionNumber: 4,
+      title: "Session 4",
       exercises: [],
       completed: false,
     },
@@ -65,26 +51,27 @@ export function useProgramForm(initialData?: InitialProgramData) {
     title: initialData?.title || "Weekly Training Program",
     week: "",
     trainerName: "",
-    // Add the additional properties
     weekStart: initialData?.weekStart || "",
     duration: initialData?.duration || 4,
     objective: initialData?.objective || "Strength & Conditioning",
     description: initialData?.description || "",
     isPaid: initialData?.isPaid || false,
     price: initialData?.price || 0,
-    days: initialData?.days || defaultDays,
+    targetFrequency: 4,
+    totalSessions: 16,
+    sessions: initialData?.sessions || defaultSessions,
   });
 
-  const [activeDay, setActiveDay] = useState<string>("1");
+  const [activeSession, setActiveSession] = useState<string>("1");
 
-  const handleAddExercise = (dayId: string) => {
+  const handleAddExercise = (sessionId: string) => {
     setProgram((prev) => {
-      const updatedDays = prev.days.map((day) => {
-        if (day.id === dayId) {
+      const updatedSessions = prev.sessions.map((session) => {
+        if (session.id === sessionId) {
           return {
-            ...day,
+            ...session,
             exercises: [
-              ...day.exercises,
+              ...session.exercises,
               {
                 id: Math.random().toString(36).substring(2, 9),
                 name: "",
@@ -96,21 +83,21 @@ export function useProgramForm(initialData?: InitialProgramData) {
             ],
           };
         }
-        return day;
+        return session;
       });
 
       return {
         ...prev,
-        days: updatedDays,
+        sessions: updatedSessions,
       };
     });
   };
 
-  const handleUpdateExercise = (dayId: string, exerciseId: string, field: string, value: any) => {
+  const handleUpdateExercise = (sessionId: string, exerciseId: string, field: string, value: any) => {
     setProgram((prev) => {
-      const updatedDays = prev.days.map((day) => {
-        if (day.id === dayId) {
-          const updatedExercises = day.exercises.map((exercise) => {
+      const updatedSessions = prev.sessions.map((session) => {
+        if (session.id === sessionId) {
+          const updatedExercises = session.exercises.map((exercise) => {
             if (exercise.id === exerciseId) {
               return {
                 ...exercise,
@@ -121,35 +108,35 @@ export function useProgramForm(initialData?: InitialProgramData) {
           });
 
           return {
-            ...day,
+            ...session,
             exercises: updatedExercises,
           };
         }
-        return day;
+        return session;
       });
 
       return {
         ...prev,
-        days: updatedDays,
+        sessions: updatedSessions,
       };
     });
   };
 
-  const handleRemoveExercise = (dayId: string, exerciseId: string) => {
+  const handleRemoveExercise = (sessionId: string, exerciseId: string) => {
     setProgram((prev) => {
-      const updatedDays = prev.days.map((day) => {
-        if (day.id === dayId) {
+      const updatedSessions = prev.sessions.map((session) => {
+        if (session.id === sessionId) {
           return {
-            ...day,
-            exercises: day.exercises.filter((exercise) => exercise.id !== exerciseId),
+            ...session,
+            exercises: session.exercises.filter((exercise) => exercise.id !== exerciseId),
           };
         }
-        return day;
+        return session;
       });
 
       return {
         ...prev,
-        days: updatedDays,
+        sessions: updatedSessions,
       };
     });
   };
@@ -157,8 +144,8 @@ export function useProgramForm(initialData?: InitialProgramData) {
   return {
     program,
     setProgram,
-    activeDay,
-    setActiveDay,
+    activeSession,
+    setActiveSession,
     handleAddExercise,
     handleUpdateExercise,
     handleRemoveExercise,
