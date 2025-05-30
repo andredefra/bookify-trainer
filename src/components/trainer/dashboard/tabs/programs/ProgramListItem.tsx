@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { CalendarDays, Users, DollarSign, Edit, UserPlus, Dumbbell } from "lucide-react";
+import { CalendarDays, Users, DollarSign, Edit, UserPlus, Dumbbell, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Exercise } from "@/data/training/types";
 
@@ -19,9 +19,10 @@ interface ProgramListItemProps {
   };
   onAssign: () => void;
   onEdit: () => void;
+  onViewClients: () => void;
 }
 
-export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemProps) {
+export function ProgramListItem({ program, onAssign, onEdit, onViewClients }: ProgramListItemProps) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors gap-4">
       <div className="overflow-hidden">
@@ -76,6 +77,15 @@ export function ProgramListItem({ program, onAssign, onEdit }: ProgramListItemPr
       </div>
 
       <div className="flex items-center space-x-2 mt-3 sm:mt-0">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={onViewClients} 
+          className="flex items-center gap-1 flex-1 sm:flex-auto justify-center"
+        >
+          <Eye className="h-4 w-4" />
+          <span className="sm:hidden md:inline">Clients</span>
+        </Button>
         <Button 
           variant="outline" 
           size="sm" 

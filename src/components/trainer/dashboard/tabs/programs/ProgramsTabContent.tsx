@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TabsContent } from "@/components/ui/tabs";
 import { ProgramListItem } from "./ProgramListItem";
 import { AssignedProgramItem } from "./AssignedProgramItem";
+import { ProgramClientsDialog } from "../clients/ClientProfileTabs/ProgramClientsDialog";
 
 interface ProgramsTabContentProps {
   programs: {
@@ -35,6 +36,9 @@ export function ProgramsTabContent({
   setShowEditProgram,
   setActiveProgramId
 }: ProgramsTabContentProps) {
+  const [showProgramClients, setShowProgramClients] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<typeof programs[0] | null>(null);
+
   const handleAssign = () => {
     setActiveClient(null);
     setShowAssignDialog(true);
@@ -51,6 +55,11 @@ export function ProgramsTabContent({
     setShowEditProgram(true);
   };
 
+  const handleViewClients = (program: typeof programs[0]) => {
+    setSelectedProgram(program);
+    setShowProgramClients(true);
+  };
+
   return (
     <>
       <TabsContent value="programs" className="space-y-4 mt-2">
@@ -61,6 +70,7 @@ export function ProgramsTabContent({
               program={program} 
               onAssign={handleAssign}
               onEdit={() => handleEdit(program.id)}
+              onViewClients={() => handleViewClients(program)}
             />
           ))
         ) : (
@@ -86,6 +96,13 @@ export function ProgramsTabContent({
           </div>
         )}
       </TabsContent>
+
+      {/* Program Clients Dialog */}
+      <ProgramClientsDialog 
+        program={selectedProgram}
+        open={showProgramClients}
+        onOpenChange={setShowProgramClients}
+      />
     </>
   );
 }
