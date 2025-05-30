@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { SettingsSidebar } from "./components/SettingsSidebar";
@@ -52,7 +51,7 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
       {/* Mobile header with settings icon */}
       <div className="p-4 border-b md:hidden">
         <div className="flex justify-between items-center">
-          <div className="font-semibold">Menu</div>
+          <div className="font-semibold">Settings</div>
         </div>
       </div>
       
