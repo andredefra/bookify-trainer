@@ -1,3 +1,4 @@
+
 export interface Exercise {
   id: string;
   name: string;
@@ -7,6 +8,10 @@ export interface Exercise {
   notes?: string;
   videoUrl?: string;
   videoSource?: 'youtube' | 'vimeo';
+  // User tracking fields
+  userNotes?: string;
+  maxWeight?: number; // For strength exercises
+  exerciseType?: 'strength' | 'cardio';
 }
 
 export interface WorkoutSession {

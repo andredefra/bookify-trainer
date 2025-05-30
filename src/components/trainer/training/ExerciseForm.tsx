@@ -9,12 +9,11 @@ import { Exercise } from "@/data/training/types";
 
 interface ExerciseFormProps {
   exercise: Exercise;
-  dayId: string;
-  onUpdate: (dayId: string, exerciseId: string, field: string, value: any) => void;
-  onRemove: (dayId: string, exerciseId: string) => void;
+  onUpdate: (field: string, value: any) => void;
+  onRemove: () => void;
 }
 
-export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFormProps) {
+export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps) {
   return (
     <div className="border rounded-md p-4">
       <div className="grid grid-cols-2 gap-4 mb-3">
@@ -22,9 +21,7 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
           <FormLabel>Exercise Name</FormLabel>
           <Input
             value={exercise.name}
-            onChange={(e) =>
-              onUpdate(dayId, exercise.id, "name", e.target.value)
-            }
+            onChange={(e) => onUpdate("name", e.target.value)}
             placeholder="e.g. Squat, Bench Press, etc."
           />
         </div>
@@ -34,28 +31,14 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
             <Input
               type="number"
               value={exercise.sets}
-              onChange={(e) =>
-                onUpdate(
-                  dayId,
-                  exercise.id,
-                  "sets",
-                  parseInt(e.target.value)
-                )
-              }
+              onChange={(e) => onUpdate("sets", parseInt(e.target.value))}
             />
           </div>
           <div>
             <FormLabel>Reps</FormLabel>
             <Input
               value={exercise.reps}
-              onChange={(e) =>
-                onUpdate(
-                  dayId,
-                  exercise.id,
-                  "reps",
-                  e.target.value
-                )
-              }
+              onChange={(e) => onUpdate("reps", e.target.value)}
               placeholder="e.g. 10, 8-12, etc."
             />
           </div>
@@ -66,14 +49,7 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
         <FormLabel>Notes</FormLabel>
         <Textarea
           value={exercise.notes || ""}
-          onChange={(e) =>
-            onUpdate(
-              dayId,
-              exercise.id,
-              "notes",
-              e.target.value
-            )
-          }
+          onChange={(e) => onUpdate("notes", e.target.value)}
           placeholder="Instructions, tempo, rest periods, etc."
           rows={2}
         />
@@ -84,14 +60,7 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
           <FormLabel>Video Source</FormLabel>
           <Select
             value={exercise.videoSource || "none"}
-            onValueChange={(value) =>
-              onUpdate(
-                dayId,
-                exercise.id,
-                "videoSource",
-                value === "none" ? undefined : value
-              )
-            }
+            onValueChange={(value) => onUpdate("videoSource", value === "none" ? undefined : value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select source" />
@@ -112,14 +81,7 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
               {exercise.videoSource === "vimeo" && <Video className="h-4 w-4 text-blue-500" />}
               <Input
                 value={exercise.videoUrl || ""}
-                onChange={(e) =>
-                  onUpdate(
-                    dayId,
-                    exercise.id,
-                    "videoUrl",
-                    e.target.value
-                  )
-                }
+                onChange={(e) => onUpdate("videoUrl", e.target.value)}
                 placeholder={`Enter ${exercise.videoSource} video URL`}
               />
             </div>
@@ -133,7 +95,7 @@ export function ExerciseForm({ exercise, dayId, onUpdate, onRemove }: ExerciseFo
           variant="ghost"
           size="sm"
           className="text-destructive"
-          onClick={() => onRemove(dayId, exercise.id)}
+          onClick={onRemove}
         >
           <Trash2 className="h-4 w-4 mr-1" />
           Remove

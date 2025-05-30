@@ -27,14 +27,20 @@ export const currentProgram: TrainingProgram = {
           sets: 3,
           reps: "8-10",
           weight: 70,
-          notes: "Focus on controlled movement"
+          notes: "Focus on controlled movement",
+          exerciseType: "strength",
+          videoUrl: "https://www.youtube.com/watch?v=rT7DgCr-3pg",
+          videoSource: "youtube"
         },
         {
           id: "ex-2",
           name: "Pull-ups",
           sets: 3,
           reps: "6-8",
-          notes: "Use assistance if needed"
+          notes: "Use assistance if needed",
+          exerciseType: "strength",
+          videoUrl: "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+          videoSource: "youtube"
         },
         {
           id: "ex-3",
@@ -42,7 +48,10 @@ export const currentProgram: TrainingProgram = {
           sets: 3,
           reps: "8-10",
           weight: 45,
-          notes: "Keep core tight"
+          notes: "Keep core tight",
+          exerciseType: "strength",
+          videoUrl: "https://www.youtube.com/watch?v=2yjwXTZQDDI",
+          videoSource: "youtube"
         }
       ]
     },
@@ -59,7 +68,10 @@ export const currentProgram: TrainingProgram = {
           sets: 4,
           reps: "6-8",
           weight: 80,
-          notes: "Go below parallel"
+          notes: "Go below parallel",
+          exerciseType: "strength",
+          videoUrl: "https://www.youtube.com/watch?v=YaXPRqUwItQ",
+          videoSource: "youtube"
         },
         {
           id: "ex-5",
@@ -67,7 +79,8 @@ export const currentProgram: TrainingProgram = {
           sets: 3,
           reps: "8-10",
           weight: 60,
-          notes: "Feel the stretch in hamstrings"
+          notes: "Feel the stretch in hamstrings",
+          exerciseType: "strength"
         },
         {
           id: "ex-6",
@@ -75,7 +88,8 @@ export const currentProgram: TrainingProgram = {
           sets: 3,
           reps: "10 each leg",
           weight: 25,
-          notes: "Focus on balance"
+          notes: "Focus on balance",
+          exerciseType: "strength"
         }
       ]
     },
@@ -90,7 +104,8 @@ export const currentProgram: TrainingProgram = {
           name: "Push-ups",
           sets: 3,
           reps: "12-15",
-          notes: "Modify on knees if needed"
+          notes: "Modify on knees if needed",
+          exerciseType: "strength"
         },
         {
           id: "ex-8",
@@ -98,14 +113,16 @@ export const currentProgram: TrainingProgram = {
           sets: 3,
           reps: "10-12",
           weight: 35,
-          notes: "Squeeze shoulder blades"
+          notes: "Squeeze shoulder blades",
+          exerciseType: "strength"
         },
         {
           id: "ex-9",
           name: "Dips",
           sets: 3,
           reps: "8-10",
-          notes: "Use assistance if needed"
+          notes: "Use assistance if needed",
+          exerciseType: "strength"
         }
       ]
     },
@@ -120,23 +137,43 @@ export const currentProgram: TrainingProgram = {
           name: "Burpees",
           sets: 3,
           reps: "10",
-          notes: "Rest 60 seconds between sets"
+          notes: "Rest 60 seconds between sets",
+          exerciseType: "cardio"
         },
         {
           id: "ex-11",
           name: "Mountain Climbers",
           sets: 3,
           reps: "20 each leg",
-          notes: "Keep hips level"
+          notes: "Keep hips level",
+          exerciseType: "cardio"
         },
         {
           id: "ex-12",
           name: "Plank",
           sets: 3,
           reps: "45 seconds",
-          notes: "Keep body straight"
+          notes: "Keep body straight",
+          exerciseType: "strength"
         }
       ]
-    }
+    },
+    // Adding more sessions to reach 32 total
+    ...Array.from({ length: 28 }, (_, i) => ({
+      id: `session-${i + 5}`,
+      sessionNumber: i + 5,
+      title: `Session ${i + 5}`,
+      completed: false,
+      exercises: [
+        {
+          id: `ex-${i + 13}`,
+          name: "Placeholder Exercise",
+          sets: 3,
+          reps: "10",
+          notes: "Exercise details to be configured",
+          exerciseType: "strength" as const
+        }
+      ]
+    }))
   ]
 };

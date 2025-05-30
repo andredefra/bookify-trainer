@@ -31,7 +31,13 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
       <TrainingProgramHeader 
         title={program.title} 
         week={program.week} 
-        trainerName={program.trainerName} 
+        trainerName={program.trainerName}
+        duration={program.duration}
+        targetFrequency={program.targetFrequency}
+        totalSessions={program.totalSessions}
+        isPaid={program.isPaid}
+        price={program.price}
+        objective={program.objective}
       />
       
       <CardContent className="p-0">

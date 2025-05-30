@@ -1,23 +1,12 @@
 
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { CheckCircle, Edit, Video, Youtube, Play } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-
-interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  weight?: number;
-  notes?: string;
-  videoUrl?: string;
-  videoSource?: 'youtube' | 'vimeo';
-}
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Youtube, Video, Save, Edit3, Weight, StickyNote } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Exercise } from "@/data/training/types";
 
 interface ExerciseItemProps {
   exercise: Exercise;
@@ -26,147 +15,175 @@ interface ExerciseItemProps {
 }
 
 export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
-  const form = useForm();
-  
-  const handleSave = () => {
-    onSaveWeight(
-      exercise.id, 
-      dayId, 
-      parseFloat(form.getValues(`weight-${exercise.id}`) || "0")
-    );
-    setIsEditing(false);
-  };
-  
-  const getEmbedUrl = (url: string, source: 'youtube' | 'vimeo') => {
-    if (!url) return null;
-    
-    if (source === 'youtube') {
-      // Extract YouTube video ID
-      const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-      const match = url.match(youtubeRegex);
-      return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  const isMobile = useIsMobile();
+  const [weight, setWeight] = useState(exercise.weight?.toString() || "");
+  const [maxWeight, setMaxWeight] = useState(exercise.maxWeight?.toString() || "");
+  const [userNotes, setUserNotes] = useState(exercise.userNotes || "");
+  const [showUserNotes, setShowUserNotes] = useState(false);
+  const [showMaxWeight, setShowMaxWeight] = useState(false);
+
+  const handleSaveWeight = () => {
+    const weightValue = parseFloat(weight);
+    if (!isNaN(weightValue)) {
+      onSaveWeight(exercise.id, dayId, weightValue);
     }
-    
-    if (source === 'vimeo') {
-      // Extract Vimeo video ID
-      const vimeoRegex = /(?:vimeo\.com\/(?:video\/)?|player\.vimeo\.com\/video\/)([0-9]+)/;
-      const match = url.match(vimeoRegex);
-      return match ? `https://player.vimeo.com/video/${match[1]}` : null;
-    }
-    
-    return null;
   };
-  
+
+  const handleSaveMaxWeight = () => {
+    const maxWeightValue = parseFloat(maxWeight);
+    if (!isNaN(maxWeightValue)) {
+      console.log(`Saved max weight ${maxWeightValue} for exercise ${exercise.id}`);
+    }
+  };
+
+  const handleSaveUserNotes = () => {
+    console.log(`Saved user notes for exercise ${exercise.id}: ${userNotes}`);
+    setShowUserNotes(false);
+  };
+
+  const openVideoLink = () => {
+    if (exercise.videoUrl) {
+      window.open(exercise.videoUrl, '_blank');
+    }
+  };
+
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-start mb-2">
-        <div>
-          <h4 className="font-medium">{exercise.name}</h4>
-          <p className="text-sm text-muted-foreground">
-            {exercise.sets} sets × {exercise.reps}
-          </p>
-        </div>
-        
-        <div className="flex items-center">
-          {isEditing ? (
-            <div className="flex items-center space-x-2">
-              <Form {...form}>
-                <FormField
-                  control={form.control}
-                  name={`weight-${exercise.id}`}
-                  defaultValue={exercise.weight || ""}
-                  render={({ field }) => (
-                    <FormItem className="flex items-center space-x-2">
-                      <FormControl>
-                        <Input
-                          type="number"
-                          {...field}
-                          className="w-20 h-8"
-                          placeholder="kg"
-                        />
-                      </FormControl>
-                      <FormLabel className="text-xs font-normal mt-0">kg</FormLabel>
-                    </FormItem>
-                  )}
-                />
-              </Form>
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                className="h-8 w-8 p-0"
-                onClick={handleSave}
+    <div className={`${isMobile ? 'p-3' : 'p-4'} border-b`}>
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <h4 className="font-medium">{exercise.name}</h4>
+            {exercise.exerciseType && (
+              <Badge variant={exercise.exerciseType === 'strength' ? 'default' : 'secondary'} className="text-xs">
+                {exercise.exerciseType}
+              </Badge>
+            )}
+            {exercise.videoUrl && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0"
+                onClick={openVideoLink}
               >
-                <CheckCircle className="h-4 w-4 text-emerald-600" />
+                {exercise.videoSource === 'youtube' ? (
+                  <Youtube className="h-4 w-4 text-red-500" />
+                ) : (
+                  <Video className="h-4 w-4 text-blue-500" />
+                )}
               </Button>
-            </div>
-          ) : (
-            <div className="flex items-center">
-              {exercise.weight ? (
-                <Badge variant="outline" className="mr-2">
-                  {exercise.weight} kg
-                </Badge>
-              ) : null}
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                className="h-8 w-8 p-0"
-                onClick={() => setIsEditing(true)}
-              >
-                <Edit className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </div>
+            )}
+          </div>
+          
+          <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-2 text-sm text-muted-foreground mb-2`}>
+            <span>{exercise.sets} sets</span>
+            <span>{exercise.reps} reps</span>
+            {exercise.weight && <span>{exercise.weight}kg</span>}
+          </div>
+          
+          {exercise.notes && (
+            <p className="text-sm text-muted-foreground mb-2">
+              <strong>Coach notes:</strong> {exercise.notes}
+            </p>
           )}
         </div>
       </div>
-      
-      {exercise.notes && (
-        <div className="bg-muted/30 p-2 rounded text-sm mt-2">
-          {exercise.notes}
+
+      {/* Weight tracking for current session */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Input
+            type="number"
+            placeholder="Weight used (kg)"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            className="w-32"
+            step="0.5"
+          />
+          <Button onClick={handleSaveWeight} size="sm" variant="outline">
+            <Save className="mr-1 h-3 w-3" />
+            Save
+          </Button>
         </div>
-      )}
-      
-      {exercise.videoUrl && exercise.videoSource && (
-        <div className="mt-3">
-          {!showVideo ? (
-            <Button 
-              variant="outline" 
+
+        {/* Max weight tracking for strength exercises */}
+        {exercise.exerciseType === 'strength' && (
+          <div className="space-y-2">
+            {!showMaxWeight ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowMaxWeight(true)}
+                className="text-blue-600 p-0 h-auto"
+              >
+                <Weight className="mr-1 h-3 w-3" />
+                Track Max Weight
+              </Button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  placeholder="Max weight (kg)"
+                  value={maxWeight}
+                  onChange={(e) => setMaxWeight(e.target.value)}
+                  className="w-32"
+                  step="0.5"
+                />
+                <Button onClick={handleSaveMaxWeight} size="sm" variant="outline">
+                  <Save className="mr-1 h-3 w-3" />
+                  Save Max
+                </Button>
+                <Button onClick={() => setShowMaxWeight(false)} size="sm" variant="ghost">
+                  Cancel
+                </Button>
+              </div>
+            )}
+            {exercise.maxWeight && (
+              <p className="text-xs text-muted-foreground">
+                Current max: {exercise.maxWeight}kg
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* User notes */}
+        <div className="space-y-2">
+          {!showUserNotes ? (
+            <Button
+              variant="ghost"
               size="sm"
-              onClick={() => setShowVideo(true)}
-              className="w-full flex items-center justify-center bg-muted/20"
+              onClick={() => setShowUserNotes(true)}
+              className="text-green-600 p-0 h-auto"
             >
-              {exercise.videoSource === 'youtube' ? (
-                <Youtube className="mr-2 h-4 w-4 text-red-500" />
-              ) : (
-                <Video className="mr-2 h-4 w-4 text-blue-500" />
-              )}
-              <Play className="mr-2 h-4 w-4" />
-              Watch {exercise.videoSource === 'youtube' ? 'YouTube' : 'Vimeo'} demonstration
+              <StickyNote className="mr-1 h-3 w-3" />
+              {exercise.userNotes ? 'Edit My Notes' : 'Add My Notes'}
             </Button>
           ) : (
-            <div className="border rounded overflow-hidden">
-              <AspectRatio ratio={16 / 9}>
-                <iframe
-                  src={getEmbedUrl(exercise.videoUrl, exercise.videoSource)}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title={`${exercise.name} demonstration`}
-                ></iframe>
-              </AspectRatio>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setShowVideo(false)}
-                className="w-full text-muted-foreground"
-              >
-                Hide video
-              </Button>
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Add your personal notes about this exercise..."
+                value={userNotes}
+                onChange={(e) => setUserNotes(e.target.value)}
+                rows={2}
+                className="text-sm"
+              />
+              <div className="flex gap-2">
+                <Button onClick={handleSaveUserNotes} size="sm" variant="outline">
+                  <Save className="mr-1 h-3 w-3" />
+                  Save Notes
+                </Button>
+                <Button onClick={() => setShowUserNotes(false)} size="sm" variant="ghost">
+                  Cancel
+                </Button>
+              </div>
             </div>
           )}
+          {exercise.userNotes && !showUserNotes && (
+            <p className="text-sm bg-green-50 p-2 rounded border-l-4 border-green-200">
+              <strong>My notes:</strong> {exercise.userNotes}
+            </p>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
