@@ -46,9 +46,8 @@ export function WorkoutDayPanel({
             <ExerciseForm
               key={exercise.id}
               exercise={exercise}
-              dayId={day.id}
-              onUpdate={onUpdateExercise}
-              onRemove={onRemoveExercise}
+              onUpdate={(field, value) => onUpdateExercise(day.id, exercise.id, field, value)}
+              onRemove={() => onRemoveExercise(day.id, exercise.id)}
             />
           ))}
         </div>
