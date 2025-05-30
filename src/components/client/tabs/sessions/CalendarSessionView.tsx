@@ -54,7 +54,7 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12">
       <Card className="md:col-span-5 lg:col-span-5">
-        <CardContent className="p-2 sm:p-4">
+        <CardContent className="p-3 sm:p-4">
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -68,9 +68,10 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
             }}
             modifiersStyles={{
               booked: { 
-                backgroundColor: "rgba(59, 130, 246, 0.1)",
-                fontWeight: "bold",
-                position: "relative"
+                backgroundColor: "hsl(var(--muted))",
+                fontWeight: "600",
+                position: "relative",
+                color: "hsl(var(--foreground))"
               }
             }}
             components={{
@@ -82,7 +83,7 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
                   <div className="relative">
                     <div>{date.getDate()}</div>
                     {hasSession && (
-                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></span>
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rounded-full"></span>
                     )}
                   </div>
                 );
@@ -93,7 +94,7 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
       </Card>
       
       <Card className="md:col-span-7 lg:col-span-7">
-        <CardContent className="p-3">
+        <CardContent className="p-3 sm:p-4">
           <div className="flex items-center gap-2 mb-4">
             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
             <h3 className="text-lg font-medium">
@@ -101,7 +102,7 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
             </h3>
           </div>
           
-          <div className="h-[calc(100vh-24rem)] min-h-[280px]">
+          <div className="h-[calc(100vh-26rem)] min-h-[280px] max-h-[400px]">
             {selectedDateSessions.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No sessions scheduled for this date
@@ -109,34 +110,37 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
             ) : (
               <div className="space-y-3 max-h-full overflow-y-auto pr-1">
                 {selectedDateSessions.map((session) => (
-                  <div key={session.id} className="flex flex-col p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div key={session.id} className="flex flex-col p-3 bg-muted/50 rounded-lg border">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-2">
-                      <div>
-                        <h3 className="font-medium">{session.name}</h3>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-medium truncate">{session.name}</h3>
                         <div className="text-sm text-muted-foreground">
                           {session.trainer} • {session.time}
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         {session.status === "available" && (
-                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-800 cursor-pointer"
-                            onClick={() => onRegister && onRegister(session)}>
+                          <Badge 
+                            variant="outline" 
+                            className="bg-background hover:bg-muted cursor-pointer border-border"
+                            onClick={() => onRegister && onRegister(session)}
+                          >
                             Register
                           </Badge>
                         )}
                         {session.status === "confirmed" && (
-                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-800">
+                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800">
                             Confirmed
                           </Badge>
                         )}
                         {session.status === "pending" && (
-                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800">
+                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800">
                             Pending
                           </Badge>
                         )}
                         <Badge 
                           variant="outline" 
-                          className="bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-800 cursor-pointer"
+                          className="bg-background hover:bg-muted cursor-pointer border-border"
                           onClick={() => onViewDetails && onViewDetails(session)}
                         >
                           Details
