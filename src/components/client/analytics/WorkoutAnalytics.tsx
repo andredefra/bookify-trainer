@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +13,9 @@ import { WeeklyActivityChart } from "./charts/WeeklyActivityChart";
 import { WorkoutTypesChart } from "./charts/WorkoutTypesChart";
 import { GoalsProgressChart } from "./charts/GoalsProgressChart";
 import { ChartHeader } from "./charts/ChartHeader";
+
+// Import workout type utilities
+import { generateWorkoutTypesFromData, getDefaultWorkoutTypes } from "./utils/workoutTypeUtils";
 
 // Helper function to generate weekly data from progress logs
 const generateWeeklyDataFromLogs = (progressData: any[]): WeeklyDataItem[] => {
@@ -52,13 +56,8 @@ export function WorkoutAnalytics({
   const actualWeeklyData = weeklyData || generateWeeklyDataFromLogs(progressData);
   const goalsProgress = convertToGoalProgress(progressData);
   
-  // Default workout types if not provided
-  const defaultWorkoutTypes = workoutTypes || [
-    { name: "Strength", value: 35, color: "#4f46e5" },
-    { name: "Cardio", value: 30, color: "#10b981" },
-    { name: "Flexibility", value: 20, color: "#f59e0b" },
-    { name: "Other", value: 15, color: "#ef4444" }
-  ];
+  // Generate workout types from real data or use realistic defaults
+  const actualWorkoutTypes = workoutTypes || generateWorkoutTypesFromData(progressData);
 
   return (
     <Card className="col-span-12 border shadow-sm">
@@ -95,7 +94,7 @@ export function WorkoutAnalytics({
           </TabsContent>
           
           <TabsContent value="types" className="mt-0">
-            <WorkoutTypesChart workoutTypes={defaultWorkoutTypes} />
+            <WorkoutTypesChart workoutTypes={actualWorkoutTypes} />
           </TabsContent>
           
           <TabsContent value="goals" className="mt-0">
