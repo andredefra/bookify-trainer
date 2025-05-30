@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -127,7 +128,7 @@ export function AnalyticsTab() {
               <div className="space-y-2">
                 <p>Your analytics are based on your manually logged workouts, fitness goals and body measurements.</p>
                 <p>
-                  <span className="font-medium">Vuoi automatizzare l'inserimento dati?</span> Connetti le tue app fitness e health per far fluire automaticamente i dati senza dover inserire tutto manualmente.
+                  <span className="font-medium">Want to automate data collection?</span> Connect your fitness and health apps to automatically sync your data without manual entry.
                 </p>
                 <Button 
                   variant="outline" 
@@ -136,7 +137,7 @@ export function AnalyticsTab() {
                   className="mt-2 bg-white hover:bg-blue-50 border-blue-200 text-blue-700"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Vai alle Integrazioni
+                  Go to Integrations
                 </Button>
               </div>
             </AlertDescription>
