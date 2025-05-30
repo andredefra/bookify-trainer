@@ -3,27 +3,28 @@ import { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 import { TrainingProgramHeader } from "./TrainingProgramHeader";
-import { DaySelector } from "./DaySelector";
-import { WorkoutDetails } from "./WorkoutDetails";
-import { TrainingProgram, WorkoutDay, Exercise } from "@/data/training";
+import { SessionSelector } from "./SessionSelector";
+import { SessionWorkoutDetails } from "./SessionWorkoutDetails";
+import { TrainingProgram, WorkoutSession, Exercise } from "@/data/training";
 
 interface TrainingProgramProps {
   program: TrainingProgram;
 }
 
 export function TrainingProgramCard({ program }: TrainingProgramProps) {
-  const [activeDay, setActiveDay] = useState<string | null>(program.days[0]?.id || null);
+  const [activeSession, setActiveSession] = useState<string | null>(program.sessions[0]?.id || null);
   
-  const handleSaveWeight = (exerciseId: string, dayId: string, value: number) => {
-    // Here you would update the weight in your state or database
-    console.log(`Saved weight ${value} for exercise ${exerciseId} on day ${dayId}`);
+  const handleSaveWeight = (exerciseId: string, sessionId: string, value: number) => {
+    console.log(`Saved weight ${value} for exercise ${exerciseId} in session ${sessionId}`);
   };
   
-  const handleMarkCompleted = (dayId: string) => {
-    // Here you would mark the day as completed in your state or database
-    // This now includes the workout timing data from WorkoutDetails
-    console.log(`Marked day ${dayId} as completed with workout timing data`);
+  const handleMarkCompleted = (sessionId: string) => {
+    const completedDate = new Date().toISOString();
+    console.log(`Marked session ${sessionId} as completed on ${completedDate}`);
+    // In a real app, this would update the session in state/database with completedDate
   };
+  
+  const completedSessions = program.sessions.filter(session => session.completed).length;
   
   return (
     <Card className="border-primary/10">
@@ -34,16 +35,18 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
       />
       
       <CardContent className="p-0">
-        <DaySelector 
-          days={program.days} 
-          activeDay={activeDay} 
-          onDaySelect={setActiveDay} 
+        <SessionSelector 
+          sessions={program.sessions} 
+          activeSession={activeSession} 
+          onSessionSelect={setActiveSession}
+          completedSessions={completedSessions}
+          totalSessions={program.totalSessions}
         />
 
-        {program.days.map((day) => (
-          <div key={day.id} className={activeDay === day.id ? "block" : "hidden"}>
-            <WorkoutDetails 
-              day={day} 
+        {program.sessions.map((session) => (
+          <div key={session.id} className={activeSession === session.id ? "block" : "hidden"}>
+            <SessionWorkoutDetails 
+              session={session} 
               onMarkCompleted={handleMarkCompleted}
               onSaveWeight={handleSaveWeight}
             />
@@ -54,7 +57,7 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
       <CardFooter className="bg-muted/20 p-4 text-sm text-muted-foreground">
         <div className="flex items-center">
           <CheckCircle className="h-4 w-4 mr-2 text-emerald-600" />
-          Start your workout to track timing data for analytics. Update your weights and mark completed workouts to track your progress.
+          Track your progress through {program.totalSessions} sessions. Complete {program.targetFrequency} sessions per week to stay on schedule.
         </div>
       </CardFooter>
     </Card>

@@ -1,172 +1,140 @@
 
-import { TrainingProgram } from '../types';
+import { TrainingProgram } from "../types";
 
 export const currentProgram: TrainingProgram = {
   id: "prog-1",
-  title: "Strength & Conditioning",
-  week: "May 20 - May 26",
+  title: "Strength & Conditioning Program",
+  week: "Week 1 of 8",
   trainerName: "Sarah Johnson",
-  days: [
+  targetFrequency: 4, // 4 sessions per week
+  totalSessions: 32, // 8 weeks × 4 sessions per week
+  duration: 8,
+  objective: "Build strength and improve conditioning",
+  description: "A comprehensive 8-week program focusing on compound movements and metabolic conditioning",
+  isPaid: true,
+  price: 89.99,
+  sessions: [
     {
-      id: "day-1",
-      day: "Monday",
+      id: "session-1",
+      sessionNumber: 1,
+      title: "Upper Body Strength",
       completed: true,
+      completedDate: "2024-03-10T10:30:00Z",
       exercises: [
         {
           id: "ex-1",
-          name: "Barbell Squat",
-          sets: 4,
+          name: "Bench Press",
+          sets: 3,
           reps: "8-10",
-          weight: 75,
-          notes: "Focus on depth and keep your chest up",
-          videoUrl: "https://www.youtube.com/watch?v=ultWZbUMPL8",
-          videoSource: "youtube"
+          weight: 70,
+          notes: "Focus on controlled movement"
         },
         {
           id: "ex-2",
-          name: "Romanian Deadlift",
+          name: "Pull-ups",
           sets: 3,
-          reps: "10-12",
-          weight: 65,
-          notes: "Keep a slight bend in your knees",
-          videoUrl: "https://vimeo.com/362756265",
-          videoSource: "vimeo"
+          reps: "6-8",
+          notes: "Use assistance if needed"
         },
         {
           id: "ex-3",
-          name: "Walking Lunges",
+          name: "Overhead Press",
           sets: 3,
-          reps: "12 per leg",
-          weight: 10
+          reps: "8-10",
+          weight: 45,
+          notes: "Keep core tight"
         }
       ]
     },
     {
-      id: "day-2",
-      day: "Tuesday",
+      id: "session-2",
+      sessionNumber: 2,
+      title: "Lower Body Power",
       completed: true,
+      completedDate: "2024-03-12T14:15:00Z",
       exercises: [
         {
           id: "ex-4",
-          name: "Bench Press",
+          name: "Squats",
           sets: 4,
-          reps: "8",
-          weight: 60,
-          notes: "Keep shoulders retracted"
+          reps: "6-8",
+          weight: 80,
+          notes: "Go below parallel"
         },
         {
           id: "ex-5",
-          name: "Seated Cable Rows",
+          name: "Romanian Deadlifts",
           sets: 3,
-          reps: "12",
-          weight: 50
+          reps: "8-10",
+          weight: 60,
+          notes: "Feel the stretch in hamstrings"
         },
         {
           id: "ex-6",
-          name: "Dumbbell Lateral Raises",
+          name: "Bulgarian Split Squats",
           sets: 3,
-          reps: "15",
-          weight: 7.5
+          reps: "10 each leg",
+          weight: 25,
+          notes: "Focus on balance"
         }
       ]
     },
     {
-      id: "day-3",
-      day: "Wednesday",
+      id: "session-3",
+      sessionNumber: 3,
+      title: "Push/Pull Circuit",
       completed: false,
       exercises: [
         {
           id: "ex-7",
-          name: "Rest Day",
-          sets: 0,
-          reps: "",
-          notes: "Stay active with light walking or stretching"
-        }
-      ]
-    },
-    {
-      id: "day-4",
-      day: "Thursday",
-      completed: false,
-      exercises: [
+          name: "Push-ups",
+          sets: 3,
+          reps: "12-15",
+          notes: "Modify on knees if needed"
+        },
         {
           id: "ex-8",
-          name: "Pull-ups",
-          sets: 4,
-          reps: "6-8",
-          notes: "Use assistance band if needed"
+          name: "Bent-over Rows",
+          sets: 3,
+          reps: "10-12",
+          weight: 35,
+          notes: "Squeeze shoulder blades"
         },
         {
           id: "ex-9",
-          name: "Barbell Overhead Press",
+          name: "Dips",
           sets: 3,
           reps: "8-10",
-          weight: 40
-        },
-        {
-          id: "ex-10",
-          name: "Face Pulls",
-          sets: 3,
-          reps: "15",
-          weight: 25,
-          notes: "Focus on external rotation"
+          notes: "Use assistance if needed"
         }
       ]
     },
     {
-      id: "day-5",
-      day: "Friday",
+      id: "session-4",
+      sessionNumber: 4,
+      title: "Full Body Conditioning",
       completed: false,
       exercises: [
         {
+          id: "ex-10",
+          name: "Burpees",
+          sets: 3,
+          reps: "10",
+          notes: "Rest 60 seconds between sets"
+        },
+        {
           id: "ex-11",
-          name: "Deadlift",
-          sets: 4,
-          reps: "6",
-          weight: 85,
-          notes: "Focus on form over weight"
+          name: "Mountain Climbers",
+          sets: 3,
+          reps: "20 each leg",
+          notes: "Keep hips level"
         },
         {
           id: "ex-12",
-          name: "Leg Press",
+          name: "Plank",
           sets: 3,
-          reps: "12",
-          weight: 120
-        },
-        {
-          id: "ex-13",
-          name: "Calf Raises",
-          sets: 4,
-          reps: "20",
-          weight: 40
-        }
-      ]
-    },
-    {
-      id: "day-6",
-      day: "Saturday",
-      completed: false,
-      exercises: [
-        {
-          id: "ex-14",
-          name: "HIIT Cardio",
-          sets: 10,
-          reps: "30s work / 30s rest",
-          notes: "Choose from: sprints, burpees, mountain climbers, jumping jacks"
-        }
-      ]
-    },
-    {
-      id: "day-7",
-      day: "Sunday",
-      completed: false,
-      exercises: [
-        {
-          id: "ex-15",
-          name: "Active Recovery",
-          sets: 1,
-          reps: "30-45 min",
-          notes: "Light walking, swimming, or yoga"
+          reps: "45 seconds",
+          notes: "Keep body straight"
         }
       ]
     }

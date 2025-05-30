@@ -1,4 +1,3 @@
-
 export interface Exercise {
   id: string;
   name: string;
@@ -10,11 +9,13 @@ export interface Exercise {
   videoSource?: 'youtube' | 'vimeo';
 }
 
-export interface WorkoutDay {
+export interface WorkoutSession {
   id: string;
-  day: string;
+  sessionNumber: number;
+  title: string;
   exercises: Exercise[];
   completed: boolean;
+  completedDate?: string; // ISO date string when completed
 }
 
 export interface TrainingProgram {
@@ -22,12 +23,23 @@ export interface TrainingProgram {
   title: string;
   week: string;
   trainerName: string;
-  days: WorkoutDay[];
-  // Additional properties needed for ProgramCreationForm
+  sessions: WorkoutSession[];
+  // Program configuration
   weekStart?: string;
-  duration?: number;
+  duration?: number; // in weeks
   objective?: string;
   description?: string;
   isPaid?: boolean;
   price?: number;
+  // Session tracking
+  targetFrequency: number; // sessions per week (e.g., 4)
+  totalSessions: number; // total sessions in program
+}
+
+// Keep backward compatibility
+export interface WorkoutDay {
+  id: string;
+  day: string;
+  exercises: Exercise[];
+  completed: boolean;
 }
