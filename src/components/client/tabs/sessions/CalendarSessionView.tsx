@@ -54,7 +54,7 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12">
       <Card className="md:col-span-5 lg:col-span-5">
-        <CardContent className="py-3 px-2 sm:py-4 sm:px-3">
+        <CardContent className="p-0">
           <Calendar
             mode="single"
             selected={selectedDate}
