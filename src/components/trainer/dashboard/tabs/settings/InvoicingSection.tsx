@@ -27,21 +27,21 @@ export function InvoicingSection() {
     {
       id: "fattureincloud",
       name: "FattureInCloud",
-      description: "Sistema di fatturazione elettronica leader in Italia",
+      description: "Leading electronic invoicing system in Italy",
       logo: "🧾",
       isConnected: false
     },
     {
       id: "fiscozen",
       name: "Fiscozen",
-      description: "Commercialista digitale con fatturazione integrata",
+      description: "Digital accountant with integrated invoicing",
       logo: "📊",
       isConnected: false
     },
     {
       id: "aruba",
       name: "Aruba Fatturazione",
-      description: "Fatturazione elettronica semplice e sicura",
+      description: "Simple and secure electronic invoicing",
       logo: "🔒",
       isConnected: false
     }
@@ -49,13 +49,13 @@ export function InvoicingSection() {
 
   const handleConnect = async () => {
     if (!selectedProvider || !apiKey || !companyVat) {
-      toast.error("Compila tutti i campi richiesti");
+      toast.error("Please fill in all required fields");
       return;
     }
 
     setIsConnecting(true);
     
-    // Simula la connessione
+    // Simulate connection
     setTimeout(() => {
       localStorage.setItem('invoicing-provider', JSON.stringify({
         provider: selectedProvider,
@@ -64,7 +64,7 @@ export function InvoicingSection() {
         connectedAt: new Date().toISOString()
       }));
       
-      toast.success(`Connesso con successo a ${providers.find(p => p.id === selectedProvider)?.name}`);
+      toast.success(`Successfully connected to ${providers.find(p => p.id === selectedProvider)?.name}`);
       setIsConnecting(false);
       
       // Reset form
@@ -75,7 +75,7 @@ export function InvoicingSection() {
 
   const handleDisconnect = () => {
     localStorage.removeItem('invoicing-provider');
-    toast.success("Disconnesso dal provider di fatturazione");
+    toast.success("Disconnected from invoicing provider");
   };
 
   const connectedProvider = localStorage.getItem('invoicing-provider') 
@@ -88,10 +88,10 @@ export function InvoicingSection() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Link className="h-5 w-5" />
-            Integrazione Fatturazione
+            Invoicing Integration
           </CardTitle>
           <CardDescription>
-            Connetti il tuo sistema di fatturazione per inviare fatture direttamente dalle transazioni
+            Connect your invoicing system to send invoices directly from transactions
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -102,28 +102,28 @@ export function InvoicingSection() {
                   <CheckCircle className="h-5 w-5 text-green-600" />
                   <div>
                     <h4 className="font-medium text-green-800">
-                      Connesso a {providers.find(p => p.id === connectedProvider.provider)?.name}
+                      Connected to {providers.find(p => p.id === connectedProvider.provider)?.name}
                     </h4>
                     <p className="text-sm text-green-600">
-                      P.IVA: {connectedProvider.companyVat}
+                      VAT Number: {connectedProvider.companyVat}
                     </p>
                     <p className="text-xs text-green-500">
-                      Connesso il {new Date(connectedProvider.connectedAt).toLocaleDateString('it-IT')}
+                      Connected on {new Date(connectedProvider.connectedAt).toLocaleDateString('en-US')}
                     </p>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" onClick={handleDisconnect}>
-                  Disconnetti
+                  Disconnect
                 </Button>
               </div>
             </div>
           ) : (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="provider">Seleziona Provider</Label>
+                <Label htmlFor="provider">Select Provider</Label>
                 <Select value={selectedProvider} onValueChange={setSelectedProvider}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Scegli il tuo sistema di fatturazione" />
+                    <SelectValue placeholder="Choose your invoicing system" />
                   </SelectTrigger>
                   <SelectContent>
                     {providers.map((provider) => (
@@ -154,17 +154,17 @@ export function InvoicingSection() {
                       <Input
                         id="apiKey"
                         type="password"
-                        placeholder="Inserisci la tua API key"
+                        placeholder="Enter your API key"
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Trova la tua API key nel pannello di controllo del provider
+                        Find your API key in the provider's control panel
                       </p>
                     </div>
                     
                     <div>
-                      <Label htmlFor="companyVat">Partita IVA</Label>
+                      <Label htmlFor="companyVat">VAT Number</Label>
                       <Input
                         id="companyVat"
                         placeholder="IT12345678901"
@@ -179,7 +179,7 @@ export function InvoicingSection() {
                     disabled={isConnecting || !apiKey || !companyVat}
                     className="w-full"
                   >
-                    {isConnecting ? "Connessione in corso..." : "Connetti"}
+                    {isConnecting ? "Connecting..." : "Connect"}
                   </Button>
                 </div>
               )}
@@ -190,9 +190,9 @@ export function InvoicingSection() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Provider Disponibili</CardTitle>
+          <CardTitle>Available Providers</CardTitle>
           <CardDescription>
-            Sistemi di fatturazione supportati dalla piattaforma
+            Invoicing systems supported by the platform
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -209,10 +209,10 @@ export function InvoicingSection() {
                 <div className="flex items-center gap-2">
                   {connectedProvider?.provider === provider.id ? (
                     <Badge variant="secondary" className="bg-green-100 text-green-700">
-                      Connesso
+                      Connected
                     </Badge>
                   ) : (
-                    <Badge variant="outline">Disponibile</Badge>
+                    <Badge variant="outline">Available</Badge>
                   )}
                   <Button variant="ghost" size="sm">
                     <ExternalLink className="h-4 w-4" />
@@ -228,12 +228,12 @@ export function InvoicingSection() {
         <div className="flex gap-3">
           <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="font-medium text-amber-800 mb-1">Informazioni Importanti</h4>
+            <h4 className="font-medium text-amber-800 mb-1">Important Information</h4>
             <ul className="text-sm text-amber-700 space-y-1">
-              <li>• Le API key sono memorizzate in modo sicuro e crittografato</li>
-              <li>• Puoi disconnettere il provider in qualsiasi momento</li>
-              <li>• Le fatture inviate saranno automaticamente registrate nel tuo sistema</li>
-              <li>• Assicurati che i dati della tua azienda siano aggiornati nel provider</li>
+              <li>• API keys are stored securely and encrypted</li>
+              <li>• You can disconnect the provider at any time</li>
+              <li>• Sent invoices will be automatically recorded in your system</li>
+              <li>• Make sure your company data is up to date in the provider</li>
             </ul>
           </div>
         </div>
