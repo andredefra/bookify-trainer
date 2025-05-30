@@ -35,9 +35,10 @@ export function CreateProgramDialog({
   };
 
   // Create the exercises data structure for the program form
-  const generateInitialSessionsWithExercises = (): WorkoutSession[] => {
-    // If we have existing exercises, add them to session 1
-    const sessions = Array.from({ length: 4 }, (_, i) => ({
+  const generateInitialSessionsWithExercises = (targetFrequency: number, duration: number): WorkoutSession[] => {
+    const totalSessions = duration * targetFrequency;
+    
+    const sessions = Array.from({ length: totalSessions }, (_, i) => ({
       id: String(i + 1),
       sessionNumber: i + 1,
       title: `Session ${i + 1}`,
@@ -47,6 +48,19 @@ export function CreateProgramDialog({
     
     return sessions;
   };
+
+  // Calculate targetFrequency based on program type or use default
+  const getTargetFrequency = (programType?: string) => {
+    switch (programType) {
+      case 'strength': return 4;
+      case 'cardio': return 5;
+      case 'mobility': return 3;
+      default: return 3;
+    }
+  };
+
+  const targetFrequency = program ? getTargetFrequency(program.type) : 3;
+  const duration = program?.duration || 4;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -71,12 +85,13 @@ export function CreateProgramDialog({
                 id: String(program.id),
                 title: program.title,
                 weekStart: "",
-                duration: program.duration || 4,
+                duration: duration,
+                targetFrequency: targetFrequency,
                 objective: program.objective || "",
                 description: "",
                 isPaid: program.isPaid || false,
                 price: program.price || 0,
-                sessions: generateInitialSessionsWithExercises()
+                sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
               } : undefined}
             />
           </div>

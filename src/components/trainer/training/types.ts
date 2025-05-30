@@ -13,6 +13,7 @@ export interface ProgramFormProps {
     title: string;
     weekStart: string;
     duration: number;
+    targetFrequency: number;
     objective: string;
     description: string;
     isPaid: boolean;

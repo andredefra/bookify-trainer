@@ -7,6 +7,7 @@ interface InitialProgramData {
   title: string;
   weekStart: string;
   duration: number;
+  targetFrequency: number;
   objective: string;
   description: string;
   isPaid: boolean;
@@ -15,37 +16,6 @@ interface InitialProgramData {
 }
 
 export function useProgramForm(initialData?: InitialProgramData) {
-  const defaultSessions: WorkoutSession[] = [
-    {
-      id: "1",
-      sessionNumber: 1,
-      title: "Session 1",
-      exercises: [],
-      completed: false,
-    },
-    {
-      id: "2",
-      sessionNumber: 2,
-      title: "Session 2",
-      exercises: [],
-      completed: false,
-    },
-    {
-      id: "3",
-      sessionNumber: 3,
-      title: "Session 3",
-      exercises: [],
-      completed: false,
-    },
-    {
-      id: "4",
-      sessionNumber: 4,
-      title: "Session 4",
-      exercises: [],
-      completed: false,
-    },
-  ];
-
   const [program, setProgram] = useState<TrainingProgram>({
     id: initialData?.id || Math.random().toString(36).substring(2, 9),
     title: initialData?.title || "Weekly Training Program",
@@ -53,16 +23,72 @@ export function useProgramForm(initialData?: InitialProgramData) {
     trainerName: "",
     weekStart: initialData?.weekStart || "",
     duration: initialData?.duration || 4,
+    targetFrequency: initialData?.targetFrequency || 3,
     objective: initialData?.objective || "Strength & Conditioning",
     description: initialData?.description || "",
     isPaid: initialData?.isPaid || false,
     price: initialData?.price || 0,
-    targetFrequency: 4,
-    totalSessions: 16,
-    sessions: initialData?.sessions || defaultSessions,
+    totalSessions: (initialData?.duration || 4) * (initialData?.targetFrequency || 3),
+    sessions: [],
   });
 
   const [activeSession, setActiveSession] = useState<string>("1");
+
+  // Generate sessions based on duration and target frequency
+  const generateSessions = (duration: number, targetFrequency: number, existingSessions?: WorkoutSession[]) => {
+    const totalSessions = duration * targetFrequency;
+    const sessions: WorkoutSession[] = [];
+    
+    for (let i = 1; i <= totalSessions; i++) {
+      // Check if we have an existing session to preserve
+      const existingSession = existingSessions?.find(s => s.sessionNumber === i);
+      
+      sessions.push({
+        id: existingSession?.id || String(i),
+        sessionNumber: i,
+        title: existingSession?.title || `Session ${i}`,
+        exercises: existingSession?.exercises || [],
+        completed: existingSession?.completed || false,
+      });
+    }
+    
+    return sessions;
+  };
+
+  // Initialize sessions
+  useEffect(() => {
+    if (initialData?.sessions) {
+      setProgram(prev => ({
+        ...prev,
+        sessions: initialData.sessions,
+      }));
+    } else {
+      const initialSessions = generateSessions(program.duration, program.targetFrequency);
+      setProgram(prev => ({
+        ...prev,
+        sessions: initialSessions,
+      }));
+    }
+  }, []);
+
+  // Update sessions when duration or frequency changes
+  const updateProgramStructure = (duration: number, targetFrequency: number) => {
+    const totalSessions = duration * targetFrequency;
+    const newSessions = generateSessions(duration, targetFrequency, program.sessions);
+    
+    setProgram(prev => ({
+      ...prev,
+      duration,
+      targetFrequency,
+      totalSessions,
+      sessions: newSessions,
+    }));
+    
+    // Reset active session if it's out of range
+    if (parseInt(activeSession) > totalSessions) {
+      setActiveSession("1");
+    }
+  };
 
   const handleAddExercise = (sessionId: string) => {
     setProgram((prev) => {
@@ -149,5 +175,6 @@ export function useProgramForm(initialData?: InitialProgramData) {
     handleAddExercise,
     handleUpdateExercise,
     handleRemoveExercise,
+    updateProgramStructure,
   };
 }

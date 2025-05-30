@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -26,6 +26,7 @@ export function ProgramCreationForm({
     handleAddExercise,
     handleUpdateExercise,
     handleRemoveExercise,
+    updateProgramStructure,
   } = useProgramForm(initialData);
   
   const form = useForm({
@@ -33,6 +34,7 @@ export function ProgramCreationForm({
       title: program.title,
       weekStart: program.weekStart,
       duration: program.duration,
+      targetFrequency: program.targetFrequency,
       objective: program.objective,
       description: program.description,
       isPaid: program.isPaid,
@@ -40,12 +42,24 @@ export function ProgramCreationForm({
     },
   });
 
+  // Watch form changes to update program structure
+  const watchedDuration = form.watch("duration");
+  const watchedTargetFrequency = form.watch("targetFrequency");
+
+  useEffect(() => {
+    if (watchedDuration && watchedTargetFrequency) {
+      updateProgramStructure(watchedDuration, watchedTargetFrequency);
+    }
+  }, [watchedDuration, watchedTargetFrequency]);
+
   const onSubmit = form.handleSubmit((data) => {
     const finalProgram = {
       ...program,
       title: data.title,
       weekStart: data.weekStart,
       duration: data.duration,
+      targetFrequency: data.targetFrequency,
+      totalSessions: data.duration * data.targetFrequency,
       objective: data.objective,
       description: data.description,
       isPaid: data.isPaid,

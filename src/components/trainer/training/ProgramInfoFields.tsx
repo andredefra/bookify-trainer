@@ -4,9 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 export function ProgramInfoFields({ form }) {
   const [isPaid, setIsPaid] = useState(false);
+  
+  // Watch duration and targetFrequency to calculate total sessions
+  const duration = form.watch("duration") || 4;
+  const targetFrequency = form.watch("targetFrequency") || 3;
+  const totalSessions = duration * targetFrequency;
   
   return (
     <div className="space-y-4">
@@ -36,24 +42,59 @@ export function ProgramInfoFields({ form }) {
         )}
       />
       
-      <FormField
-        control={form.control}
-        name="duration"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Duration (weeks)</FormLabel>
-            <FormControl>
-              <Input 
-                type="number" 
-                min="1" 
-                placeholder="4" 
-                {...field} 
-                onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Duration (weeks)</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  min="1" 
+                  placeholder="4" 
+                  {...field} 
+                  onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="targetFrequency"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sessions per week</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  min="1" 
+                  max="7"
+                  placeholder="3" 
+                  {...field} 
+                  onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                />
+              </FormControl>
+              <FormDescription>
+                How many workouts per week
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+      </div>
+      
+      {/* Total Sessions Preview */}
+      <div className="p-3 bg-muted rounded-md">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Total Sessions:</span>
+          <Badge variant="outline">
+            {duration} weeks × {targetFrequency} sessions = {totalSessions} total sessions
+          </Badge>
+        </div>
+      </div>
       
       <FormField
         control={form.control}
