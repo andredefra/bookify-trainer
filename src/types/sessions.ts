@@ -3,6 +3,8 @@
  * Shared types for session-related components
  */
 
+import { SessionParticipant, WaitingListEntry } from './sessionParticipants';
+
 export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'pending' | 'completed' | 'scheduled';
 export type SessionMode = 'in-person' | 'video';
 
@@ -37,6 +39,9 @@ export interface TrainerSessionItem extends SessionBase {
     pending: number;
     total: number;
   };
+  participantDetails?: SessionParticipant[];
+  waitingListDetails?: WaitingListEntry[];
+  inviteLink?: string;
 }
 
 // For backwards compatibility

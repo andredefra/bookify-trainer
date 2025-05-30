@@ -2,9 +2,10 @@
 import { TrainerSessionItem } from "@/types/sessions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Video } from "lucide-react";
+import { Video, Users } from "lucide-react";
 import { useState } from "react";
 import { VideoSessionDialog } from "./VideoSessionDialog";
+import { SessionParticipantsDialog } from "./SessionParticipantsDialog";
 
 interface CalendarViewProps {
   sessions: TrainerSessionItem[];
@@ -20,7 +21,9 @@ export function CalendarView({
   onStartVideoSession
 }: CalendarViewProps) {
   const [showVideoDialog, setShowVideoDialog] = useState(false);
+  const [showParticipantsDialog, setShowParticipantsDialog] = useState(false);
   const [selectedVideoSession, setSelectedVideoSession] = useState<TrainerSessionItem | null>(null);
+  const [selectedParticipantsSession, setSelectedParticipantsSession] = useState<TrainerSessionItem | null>(null);
   
   // Group sessions by date
   const groupedSessions: Record<string, TrainerSessionItem[]> = {};
@@ -48,6 +51,11 @@ export function CalendarView({
     if (onStartVideoSession) {
       onStartVideoSession(session);
     }
+  };
+
+  const handleViewParticipants = (session: TrainerSessionItem) => {
+    setSelectedParticipantsSession(session);
+    setShowParticipantsDialog(true);
   };
   
   return (
@@ -79,6 +87,14 @@ export function CalendarView({
                 </div>
                 
                 <div className="flex items-center space-x-2 mt-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => handleViewParticipants(session)}
+                  >
+                    <Users className="h-4 w-4 mr-2" /> Participants
+                  </Button>
                   {session.mode === 'video' && session.status === 'scheduled' && onStartVideoSession ? (
                     <Button 
                       size="sm" 
@@ -98,15 +114,15 @@ export function CalendarView({
                       Edit
                     </Button>
                   )}
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={() => onCancelSession(session)}
-                  >
-                    Cancel
-                  </Button>
                 </div>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => onCancelSession(session)}
+                >
+                  Cancel
+                </Button>
               </div>
             ))}
           </div>
@@ -123,6 +139,12 @@ export function CalendarView({
         open={showVideoDialog} 
         onOpenChange={setShowVideoDialog} 
         session={selectedVideoSession} 
+      />
+
+      <SessionParticipantsDialog 
+        open={showParticipantsDialog} 
+        onOpenChange={setShowParticipantsDialog} 
+        session={selectedParticipantsSession} 
       />
     </div>
   );

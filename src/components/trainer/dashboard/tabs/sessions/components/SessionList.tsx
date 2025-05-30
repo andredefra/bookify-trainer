@@ -7,6 +7,7 @@ import { Video, Users } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { useState } from "react";
 import { VideoSessionDialog } from "./VideoSessionDialog";
+import { SessionParticipantsDialog } from "./SessionParticipantsDialog";
 
 interface SessionListProps {
   sessions: TrainerSessionItem[];
@@ -23,7 +24,9 @@ export function SessionList({
 }: SessionListProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [showVideoDialog, setShowVideoDialog] = useState(false);
+  const [showParticipantsDialog, setShowParticipantsDialog] = useState(false);
   const [selectedVideoSession, setSelectedVideoSession] = useState<TrainerSessionItem | null>(null);
+  const [selectedParticipantsSession, setSelectedParticipantsSession] = useState<TrainerSessionItem | null>(null);
 
   const handleStartVideo = (session: TrainerSessionItem) => {
     setSelectedVideoSession(session);
@@ -31,6 +34,11 @@ export function SessionList({
     if (onStartVideoSession) {
       onStartVideoSession(session);
     }
+  };
+
+  const handleViewParticipants = (session: TrainerSessionItem) => {
+    setSelectedParticipantsSession(session);
+    setShowParticipantsDialog(true);
   };
 
   return (
@@ -82,6 +90,16 @@ export function SessionList({
                   <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                 </div>
                 <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-8 px-2 sm:px-4 flex items-center"
+                    onClick={() => handleViewParticipants(session)}
+                  >
+                    <Users className="h-4 w-4 mr-1" />
+                    <span className="hidden sm:inline">Participants</span>
+                    <span className="sm:hidden">Users</span>
+                  </Button>
                   {canStartVideo ? (
                     <Button 
                       variant="secondary" 
@@ -130,6 +148,12 @@ export function SessionList({
         open={showVideoDialog} 
         onOpenChange={setShowVideoDialog} 
         session={selectedVideoSession} 
+      />
+
+      <SessionParticipantsDialog 
+        open={showParticipantsDialog} 
+        onOpenChange={setShowParticipantsDialog} 
+        session={selectedParticipantsSession} 
       />
     </div>
   );
