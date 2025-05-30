@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { HighlightText } from "./shared/HighlightText";
-import { ProgramDetailsDialog } from "./ProgramDetailsDialog";
+import { TrainerProgramDetailsDialog } from "./TrainerProgramDetailsDialog";
 import { currentProgram } from "@/data/training";
 
 interface ProgramsTabProps {
@@ -66,10 +66,11 @@ export function ProgramsTab({ searchQuery = "" }: ProgramsTabProps) {
         </CardContent>
       </Card>
 
-      <ProgramDetailsDialog 
+      <TrainerProgramDetailsDialog 
         program={selectedProgram}
         open={showProgramDetails}
         onOpenChange={setShowProgramDetails}
+        clientName="Sarah Johnson"
       />
     </>
   );
