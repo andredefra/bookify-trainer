@@ -2,12 +2,12 @@
 import { TrainerSessionItem } from "@/types/sessions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { Video, Users } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { useState } from "react";
 import { VideoSessionDialog } from "./VideoSessionDialog";
 import { SessionParticipantsDialog } from "./SessionParticipantsDialog";
+import { InviteLinkButton } from "./InviteLinkButton";
 
 interface SessionListProps {
   sessions: TrainerSessionItem[];
@@ -90,6 +90,7 @@ export function SessionList({
                   <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                 </div>
                 <div className="flex gap-2">
+                  <InviteLinkButton session={session} />
                   <Button 
                     variant="outline" 
                     size="sm" 

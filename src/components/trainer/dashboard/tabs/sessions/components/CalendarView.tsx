@@ -6,6 +6,7 @@ import { Video, Users } from "lucide-react";
 import { useState } from "react";
 import { VideoSessionDialog } from "./VideoSessionDialog";
 import { SessionParticipantsDialog } from "./SessionParticipantsDialog";
+import { InviteLinkButton } from "./InviteLinkButton";
 
 interface CalendarViewProps {
   sessions: TrainerSessionItem[];
@@ -87,6 +88,7 @@ export function CalendarView({
                 </div>
                 
                 <div className="flex items-center space-x-2 mt-2">
+                  <InviteLinkButton session={session} />
                   <Button 
                     size="sm" 
                     variant="outline" 

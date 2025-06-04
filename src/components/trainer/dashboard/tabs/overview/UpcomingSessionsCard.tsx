@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrainerSessionItem } from "@/types/sessions";
 import { useState } from "react";
 import { SessionParticipantsDialog } from "../sessions/components/SessionParticipantsDialog";
+import { InviteLinkButton } from "../sessions/components/InviteLinkButton";
 
 interface UpcomingSessionsCardProps {
   sessions: TrainerSessionItem[];
@@ -93,6 +94,7 @@ export function UpcomingSessionsCard({
                         <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                       </div>
                       <div className="flex gap-2">
+                        <InviteLinkButton session={session} />
                         <Button 
                           variant="outline" 
                           size="sm" 
