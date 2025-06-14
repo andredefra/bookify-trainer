@@ -6,7 +6,6 @@ import { InfoIcon, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 import { StatisticsSection } from "../analytics/sections/StatisticsSection";
-import { BodyCompositionSection } from "../analytics/sections/BodyCompositionSection";
 
 export function AnalyticsTab() {
   const navigate = useNavigate();
@@ -144,14 +143,9 @@ export function AnalyticsTab() {
           </Alert>
           
           <div className="space-y-8">
-            <BodyCompositionSection 
-              progressData={progressData} 
-              bodyMeasurements={bodyMeasurements}
-            />
-            
             <WorkoutAnalytics progressData={progressData} />
             
-            <StatisticsSection />
+            <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
           </div>
         </CardContent>
       </Card>
