@@ -7,6 +7,7 @@ export interface TrendData {
   percentageChange: number;
   trend: 'up' | 'down' | 'stable';
   isPositive: boolean;
+  previousDate?: string;
 }
 
 export const calculateTrend = (current: number, previous: number): TrendData => {
@@ -61,7 +62,11 @@ export const getBodyFatTrend = (measurements: BodyMeasurements[]): TrendData | n
   
   if (!currentBodyFat || !previousBodyFat) return null;
   
-  return calculateTrend(currentBodyFat, previousBodyFat);
+  const trendData = calculateTrend(currentBodyFat, previousBodyFat);
+  return {
+    ...trendData,
+    previousDate: sortedMeasurements[1].date
+  };
 };
 
 const calculateBodyFatFromMeasurements = (measurements: BodyMeasurements): number | null => {

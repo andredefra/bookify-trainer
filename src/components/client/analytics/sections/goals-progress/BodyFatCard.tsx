@@ -55,21 +55,21 @@ export function BodyFatCard({
         )}
       </div>
       
-      <div className="space-y-3">
+      <div className="space-y-2">
         {bodyFatRequirements.sufficient && bodyFatPercentage ? (
-          <div className="text-center bg-muted/30 rounded-md p-3">
+          <div className="text-center bg-muted/30 rounded-md p-2">
             <div className="flex items-center justify-center space-x-2 mb-1">
               <span className="text-xl font-bold text-purple-700">{bodyFatPercentage}%</span>
               {renderTrendIcon()}
             </div>
-            {bodyFatTrend && (
+            {bodyFatTrend && bodyFatTrend.previousDate && (
               <div className={`text-xs font-medium ${bodyFatTrend.trend === 'down' ? 'text-green-600' : bodyFatTrend.trend === 'up' ? 'text-red-500' : 'text-muted-foreground'}`}>
-                {formatTrendChange(bodyFatTrend, '%')} vs previous
+                {formatTrendChange(bodyFatTrend, '%')} vs {new Date(bodyFatTrend.previousDate).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
               </div>
             )}
           </div>
         ) : (
-          <div className="text-center bg-muted/30 rounded-md p-3">
+          <div className="text-center bg-muted/30 rounded-md p-2">
             <div className="text-xs text-muted-foreground mb-1">Missing:</div>
             <div className="text-xs font-medium text-purple-700">
               {bodyFatRequirements.missing.join(', ')}
