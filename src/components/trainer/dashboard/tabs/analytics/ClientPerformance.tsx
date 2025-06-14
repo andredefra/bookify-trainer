@@ -13,8 +13,8 @@ import {
   calculateSingleClientGoals
 } from "./utils/metricsCalculator";
 import { PerformanceLineChart } from "./charts/PerformanceLineChart";
-import { GoalAchievementChart } from "./charts/GoalAchievementChart";
-import { GoalAchievementDataPoint } from "./types";
+import { ExerciseMaxChart } from "./charts/ExerciseMaxChart";
+import { getClientExerciseData } from "./data/exerciseMaxData";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -57,35 +57,9 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
     }
   };
 
-  // Fixed goal achievement data function
-  const getGoalAchievementData = (): GoalAchievementDataPoint[] => {
-    if (selectedClient === "all") {
-      return calculateGoalAchievementData(mockClients);
-    } else {
-      const client = mockClients.find(c => c.id === selectedClient);
-      if (client) {
-        // Create properly formatted data for single client
-        const clientGoals: GoalAchievementDataPoint[] = client.goals.map(goal => {
-          const progress = (goal.current / goal.target) * 100;
-          const timeElapsed = (new Date().getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
-          const totalTime = (goal.deadline.getTime() - goal.createdAt.getTime()) / (1000 * 60 * 60 * 24);
-          const timeProgress = Math.min((timeElapsed / totalTime) * 100, 100);
-          
-          return {
-            name: goal.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()),
-            achieved: Math.round(progress),
-            total: 100,
-            goalType: goal.type,
-            timeProgress: Math.round(timeProgress),
-            onTrack: progress >= timeProgress * 0.8, // On track if progress is at least 80% of time progress
-            avgTimeToComplete: Math.round(timeElapsed)
-          };
-        });
-        
-        return clientGoals.length > 0 ? clientGoals : goalAchievementData;
-      }
-      return goalAchievementData;
-    }
+  // Get exercise max data based on selected client
+  const getExerciseMaxData = () => {
+    return getClientExerciseData(selectedClient);
   };
   
   return (
@@ -126,9 +100,9 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
       {/* Performance Metrics Chart */}
       <PerformanceLineChart data={getPerformanceData()} />
       
-      {/* Goal Achievement - now full width with increased height */}
+      {/* Exercise Maxes Chart - now full width with increased height */}
       <div className="w-full">
-        <GoalAchievementChart data={getGoalAchievementData()} />
+        <ExerciseMaxChart data={getExerciseMaxData()} />
       </div>
     </div>
   );
