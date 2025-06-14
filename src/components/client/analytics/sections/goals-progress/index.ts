@@ -3,3 +3,4 @@ export { BMIWeightCard } from './BMIWeightCard';
 export { WorkoutGoalCard } from './WorkoutGoalCard';
 export { BodyFatCard } from './BodyFatCard';
 export { BodyMeasurementsCard } from './BodyMeasurementsCard';
+export { ProgressTrendsCard } from './ProgressTrendsCard';

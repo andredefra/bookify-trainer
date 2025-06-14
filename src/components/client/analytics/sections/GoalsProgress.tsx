@@ -8,7 +8,8 @@ import {
   BMIWeightCard, 
   WorkoutGoalCard, 
   BodyFatCard, 
-  BodyMeasurementsCard 
+  BodyMeasurementsCard,
+  ProgressTrendsCard 
 } from "./goals-progress";
 
 interface GoalsProgressProps {
@@ -38,7 +39,7 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
     getBodyFatStatus(bodyFatPercentage, latestMeasurements.gender) : null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* Weight Goal Card */}
       {weightGoal && <WeightGoalCard weightGoal={weightGoal} />}
 
@@ -59,10 +60,19 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
         bodyFatStatus={bodyFatStatus}
         bodyFatRequirements={bodyFatRequirements}
         latestMeasurements={latestMeasurements}
+        bodyMeasurements={bodyMeasurements}
       />
 
       {/* Body Measurements Card */}
-      {latestMeasurements && <BodyMeasurementsCard latestMeasurements={latestMeasurements} />}
+      {latestMeasurements && (
+        <BodyMeasurementsCard 
+          latestMeasurements={latestMeasurements} 
+          bodyMeasurements={bodyMeasurements}
+        />
+      )}
+
+      {/* Progress Trends Card */}
+      <ProgressTrendsCard progressData={progressData} />
     </div>
   );
 }
