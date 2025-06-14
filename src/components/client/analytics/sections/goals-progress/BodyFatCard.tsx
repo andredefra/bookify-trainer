@@ -23,24 +23,33 @@ export function BodyFatCard({
   const bodyFatTrend = getBodyFatTrend(bodyMeasurements);
   
   const renderTrendIcon = () => {
-    if (!bodyFatTrend || bodyFatTrend.trend === 'stable') return <Minus className="h-3 w-3 text-gray-500" />;
+    if (!bodyFatTrend || bodyFatTrend.trend === 'stable') return <Minus className="h-3 w-3 text-muted-foreground" />;
     if (bodyFatTrend.trend === 'down') return <TrendingDown className="h-3 w-3 text-green-600" />;
     return <TrendingUp className="h-3 w-3 text-red-500" />;
   };
+
+  const formatLastMeasured = () => {
+    if (!latestMeasurements) return 'No data';
+    return new Date(latestMeasurements.date).toLocaleDateString('it-IT', { 
+      day: 'numeric', 
+      month: 'short' 
+    });
+  };
+
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 border border-purple-200/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="bg-purple-500 rounded-lg p-2">
-            <Users className="h-5 w-5 text-white" />
+    <div className="bg-card border rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          <div className="bg-purple-500 rounded-md p-1.5">
+            <Users className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h4 className="font-semibold text-slate-800">Body Fat %</h4>
-            <p className="text-xs text-slate-600">Body composition</p>
+            <h4 className="font-medium text-foreground text-sm">Body Fat %</h4>
+            <p className="text-xs text-muted-foreground">Last: {formatLastMeasured()}</p>
           </div>
         </div>
         {bodyFatStatus && (
-          <Badge className={`${bodyFatStatus.color} border-0 font-medium`}>
+          <Badge className={`${bodyFatStatus.color} border-0 text-xs`}>
             {bodyFatStatus.label}
           </Badge>
         )}
@@ -48,34 +57,25 @@ export function BodyFatCard({
       
       <div className="space-y-3">
         {bodyFatRequirements.sufficient && bodyFatPercentage ? (
-          <div className="space-y-3">
-            <div className="text-center bg-white/60 rounded-lg p-4">
-              <div className="flex items-center justify-center space-x-2 mb-1">
-                <span className="text-2xl font-bold text-purple-700">{bodyFatPercentage}%</span>
-                {renderTrendIcon()}
-              </div>
-              <div className="text-xs text-slate-600 mb-1">Current Body Fat</div>
-              {bodyFatTrend && (
-                <div className={`text-xs font-medium ${bodyFatTrend.trend === 'down' ? 'text-green-600' : bodyFatTrend.trend === 'up' ? 'text-red-500' : 'text-gray-500'}`}>
-                  {formatTrendChange(bodyFatTrend, '%')} vs previous
-                </div>
-              )}
+          <div className="text-center bg-muted/30 rounded-md p-3">
+            <div className="flex items-center justify-center space-x-2 mb-1">
+              <span className="text-xl font-bold text-purple-700">{bodyFatPercentage}%</span>
+              {renderTrendIcon()}
             </div>
+            {bodyFatTrend && (
+              <div className={`text-xs font-medium ${bodyFatTrend.trend === 'down' ? 'text-green-600' : bodyFatTrend.trend === 'up' ? 'text-red-500' : 'text-muted-foreground'}`}>
+                {formatTrendChange(bodyFatTrend, '%')} vs previous
+              </div>
+            )}
           </div>
         ) : (
-          <div className="text-center bg-white/60 rounded-lg p-4">
-            <div className="text-sm text-slate-600 mb-2">Missing measurements:</div>
+          <div className="text-center bg-muted/30 rounded-md p-3">
+            <div className="text-xs text-muted-foreground mb-1">Missing:</div>
             <div className="text-xs font-medium text-purple-700">
               {bodyFatRequirements.missing.join(', ')}
             </div>
           </div>
         )}
-        
-        <div className="text-center">
-          <span className="text-xs text-purple-600">
-            {bodyFatPercentage ? 'Using Navy body fat formula' : 'Complete profile for calculation'}
-          </span>
-        </div>
       </div>
     </div>
   );
