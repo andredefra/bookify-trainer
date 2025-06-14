@@ -8,35 +8,66 @@ interface BodyMeasurementsCardProps {
 }
 
 export function BodyMeasurementsCard({ latestMeasurements }: BodyMeasurementsCardProps) {
+  const getSourceInfo = () => {
+    switch (latestMeasurements.source) {
+      case 'manual':
+        return { label: 'Manual Entry', color: 'bg-orange-100 text-orange-800' };
+      case 'googleFit':
+        return { label: 'Google Fit', color: 'bg-blue-100 text-blue-800' };
+      case 'appleHealth':
+        return { label: 'Apple Health', color: 'bg-gray-100 text-gray-800' };
+      default:
+        return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
+    }
+  };
+
+  const sourceInfo = getSourceInfo();
+
   return (
-    <div className="bg-orange-50 p-4 rounded-lg min-w-0">
-      <div className="flex flex-col gap-2 mb-2.5">
-        <div className="flex items-center">
-          <Activity className="h-4 w-4 mr-2 text-orange-600 flex-shrink-0" />
-          <span className="text-sm font-medium text-orange-800 truncate">Body Measurements</span>
+    <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 border border-orange-200/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="bg-orange-500 rounded-lg p-2">
+            <Activity className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <h4 className="font-semibold text-slate-800">Body Measurements</h4>
+            <p className="text-xs text-slate-600">
+              {new Date(latestMeasurements.date).toLocaleDateString()}
+            </p>
+          </div>
         </div>
-        <div className="text-xs text-orange-600 mb-1">
-          Last: {new Date(latestMeasurements.date).toLocaleDateString()}
-        </div>
+        <Badge className={`${sourceInfo.color} border-0 font-medium text-xs`}>
+          {sourceInfo.label}
+        </Badge>
       </div>
-      <div className="grid grid-cols-2 gap-1 text-xs mb-2">
+      
+      <div className="grid grid-cols-2 gap-3">
         {latestMeasurements.waist && (
-          <div>Waist: <span className="font-medium">{latestMeasurements.waist}cm</span></div>
+          <div className="bg-white/60 rounded-lg p-3 text-center">
+            <div className="text-lg font-bold text-orange-700">{latestMeasurements.waist}</div>
+            <div className="text-xs text-slate-600">Waist (cm)</div>
+          </div>
         )}
         {latestMeasurements.hips && (
-          <div>Hips: <span className="font-medium">{latestMeasurements.hips}cm</span></div>
+          <div className="bg-white/60 rounded-lg p-3 text-center">
+            <div className="text-lg font-bold text-orange-700">{latestMeasurements.hips}</div>
+            <div className="text-xs text-slate-600">Hips (cm)</div>
+          </div>
         )}
         {latestMeasurements.arms && (
-          <div>Arms: <span className="font-medium">{latestMeasurements.arms}cm</span></div>
+          <div className="bg-white/60 rounded-lg p-3 text-center">
+            <div className="text-lg font-bold text-orange-700">{latestMeasurements.arms}</div>
+            <div className="text-xs text-slate-600">Arms (cm)</div>
+          </div>
         )}
         {latestMeasurements.neck && (
-          <div>Neck: <span className="font-medium">{latestMeasurements.neck}cm</span></div>
+          <div className="bg-white/60 rounded-lg p-3 text-center">
+            <div className="text-lg font-bold text-orange-700">{latestMeasurements.neck}</div>
+            <div className="text-xs text-slate-600">Neck (cm)</div>
+          </div>
         )}
       </div>
-      <Badge className="text-xs px-2 py-1 bg-orange-100 text-orange-800 border-0">
-        {latestMeasurements.source === 'manual' ? 'Manual Entry' : 
-         latestMeasurements.source === 'googleFit' ? 'Google Fit' : 'Apple Health'}
-      </Badge>
     </div>
   );
 }

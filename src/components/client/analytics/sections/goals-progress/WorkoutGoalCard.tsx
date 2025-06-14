@@ -8,35 +8,42 @@ interface WorkoutGoalCardProps {
 }
 
 export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
+  const isActivityGoal = workoutGoal.goalType === 'activity_level';
+  
   return (
-    <div className="bg-teal-50 p-4 rounded-lg min-w-0">
-      <div className="flex flex-col gap-2 mb-2.5">
-        <div className="flex items-center">
-          <Dumbbell className="h-4 w-4 mr-2 text-teal-600 flex-shrink-0" />
-          <span className="text-sm font-medium text-teal-800 truncate">
-            {workoutGoal.goalType === 'activity_level' ? 'Activity Goal' : 'Strength Goal'}
-          </span>
+    <div className="bg-gradient-to-br from-teal-50 to-teal-100/50 border border-teal-200/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="bg-teal-500 rounded-lg p-2">
+            <Dumbbell className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <h4 className="font-semibold text-slate-800">
+              {isActivityGoal ? 'Activity Goal' : 'Strength Goal'}
+            </h4>
+            <p className="text-xs text-slate-600">{workoutGoal.goal}</p>
+          </div>
         </div>
-        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
-          <span className="text-xs bg-teal-200 text-teal-800 px-2 py-0.5 rounded whitespace-nowrap">
-            Current: {workoutGoal.current}{workoutGoal.unit}
-          </span>
-          <span className="text-xs bg-teal-300 text-teal-900 px-2 py-0.5 rounded whitespace-nowrap">
-            Target: {workoutGoal.target}{workoutGoal.unit}
+        <div className="text-right">
+          <div className="text-2xl font-bold text-teal-600">{workoutGoal.progress}%</div>
+          <div className="text-xs text-slate-500">Complete</div>
+        </div>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="flex justify-between text-sm">
+          <span className="text-slate-600">Current: <span className="font-medium text-slate-800">{workoutGoal.current}{workoutGoal.unit}</span></span>
+          <span className="text-slate-600">Target: <span className="font-medium text-slate-800">{workoutGoal.target}{workoutGoal.unit}</span></span>
+        </div>
+        
+        <Progress value={workoutGoal.progress} className="h-2 bg-teal-100" />
+        
+        <div className="text-center">
+          <span className="text-sm font-medium text-teal-700">
+            {workoutGoal.target - workoutGoal.current} {workoutGoal.unit} remaining
           </span>
         </div>
       </div>
-      <div className="mb-2 flex items-center">
-        <Progress value={workoutGoal.progress} className="h-2.5 flex-grow bg-teal-200" 
-          style={{ 
-            "--theme-primary": "rgb(20 184 166)",
-          } as React.CSSProperties} 
-        />
-        <span className="ml-2 text-xs font-semibold text-teal-800 w-12 text-right flex-shrink-0">{workoutGoal.progress}%</span>
-      </div>
-      <p className="text-xs text-teal-700">
-        {workoutGoal.target - workoutGoal.current} {workoutGoal.unit} remaining
-      </p>
     </div>
   );
 }

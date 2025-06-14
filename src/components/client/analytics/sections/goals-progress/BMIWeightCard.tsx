@@ -10,32 +10,52 @@ interface BMIWeightCardProps {
 }
 
 export function BMIWeightCard({ currentWeight, bmi, bmiStatus, weightTrend }: BMIWeightCardProps) {
+  const getTrendIcon = () => {
+    if (weightTrend === 'down') return '📉';
+    if (weightTrend === 'up') return '📈';
+    return '➖';
+  };
+
+  const getTrendText = () => {
+    if (weightTrend === 'down') return 'Losing weight';
+    if (weightTrend === 'up') return 'Gaining weight';
+    return 'Weight stable';
+  };
+
   return (
-    <div className="bg-green-50 p-4 rounded-lg min-w-0">
-      <div className="flex flex-col gap-2 mb-2.5">
-        <div className="flex items-center">
-          <Scale className="h-4 w-4 mr-2 text-green-600 flex-shrink-0" />
-          <span className="text-sm font-medium text-green-800 truncate">BMI & Weight</span>
+    <div className="bg-gradient-to-br from-green-50 to-green-100/50 border border-green-200/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="bg-green-500 rounded-lg p-2">
+            <Scale className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <h4 className="font-semibold text-slate-800">BMI & Weight</h4>
+            <p className="text-xs text-slate-600">Health metrics</p>
+          </div>
         </div>
-        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
-          <span className="text-xs bg-green-200 text-green-800 px-2 py-0.5 rounded whitespace-nowrap">
-            Weight: {currentWeight}kg
-          </span>
-          <span className="text-xs bg-green-300 text-green-900 px-2 py-0.5 rounded whitespace-nowrap">
-            BMI: {bmi}
-          </span>
-        </div>
-      </div>
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs text-green-700">Status:</span>
-        <Badge className={`text-xs px-2 py-1 ${bmiStatus.color} border-0`}>
+        <Badge className={`${bmiStatus.color} border-0 font-medium`}>
           {bmiStatus.label}
         </Badge>
       </div>
-      <p className="text-xs text-green-700">
-        {weightTrend === 'down' ? '📉 Losing weight' : 
-         weightTrend === 'up' ? '📈 Gaining weight' : '➖ Weight stable'}
-      </p>
+      
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="text-center bg-white/60 rounded-lg p-3">
+            <div className="text-xl font-bold text-green-700">{currentWeight}</div>
+            <div className="text-xs text-slate-600">kg</div>
+          </div>
+          <div className="text-center bg-white/60 rounded-lg p-3">
+            <div className="text-xl font-bold text-green-700">{bmi}</div>
+            <div className="text-xs text-slate-600">BMI</div>
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-center space-x-2 text-sm">
+          <span className="text-xl">{getTrendIcon()}</span>
+          <span className="font-medium text-green-700">{getTrendText()}</span>
+        </div>
+      </div>
     </div>
   );
 }
