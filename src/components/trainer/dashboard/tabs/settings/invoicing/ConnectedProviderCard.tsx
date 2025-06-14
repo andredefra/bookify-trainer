@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
-import { InvoicingProvider } from "./InvoicingProviders";
+import { InvoicingProvider } from "./CountriesAndProviders";
 
 interface ConnectedProviderCardProps {
   connectedProvider: {
