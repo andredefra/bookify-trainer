@@ -64,6 +64,8 @@ export interface GoalTemplate {
 export interface BodyMeasurements {
   id?: string;
   date: string;
+  height?: number; // altezza in centimetri
+  gender?: 'male' | 'female'; // genere per formula body fat
   waist?: number; // vita
   hips?: number; // fianchi
   thighs?: number; // cosce

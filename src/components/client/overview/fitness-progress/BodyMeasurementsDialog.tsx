@@ -3,6 +3,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { Ruler } from "lucide-react";
 
@@ -16,6 +17,8 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMea
   const measurementsForm = useForm({
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
+      height: 0,
+      gender: '',
       waist: 0,
       hips: 0,
       thighs: 0,
@@ -63,6 +66,50 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMea
                 </FormItem>
               )}
             />
+            
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <FormField
+                control={measurementsForm.control}
+                name="height"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Height (cm)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        step="0.1"
+                        placeholder="170" 
+                        {...field} 
+                        onChange={e => field.onChange(Number(e.target.value))} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={measurementsForm.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             
             <div className="grid grid-cols-2 gap-4">
               <FormField

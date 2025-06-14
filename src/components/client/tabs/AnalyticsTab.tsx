@@ -77,6 +77,8 @@ export function AnalyticsTab() {
       {
         id: "measurement-1",
         date: "2024-03-15",
+        height: 175,
+        gender: "male" as const,
         waist: 82,
         hips: 95,
         thighs: 55,
@@ -88,6 +90,8 @@ export function AnalyticsTab() {
       {
         id: "measurement-2", 
         date: "2024-03-01",
+        height: 175,
+        gender: "male" as const,
         waist: 85,
         hips: 97,
         thighs: 56,

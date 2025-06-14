@@ -1,12 +1,13 @@
 
 import React from "react";
-import { Target, TrendingUp, Award, Dumbbell, Scale, Activity } from "lucide-react";
+import { Target, TrendingUp, Award, Dumbbell, Scale, Activity, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ProgressItem, BodyMeasurements } from "@/components/client/overview/fitness-progress/types";
 import { getLatestMeasurements, getWeightData, calculateBMI, getBMIStatus } from "./body-composition/utils";
+import { calculateBodyFatPercentage, getBodyFatStatus, checkBodyFatRequirements } from "../utils/bodyFatCalculations";
 
 interface GoalsProgressProps {
   progressData: ProgressItem[];
@@ -30,6 +31,12 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
   const workoutGoal = progressData.find(goal => goal.goalType === 'activity_level') || 
                      progressData.find(goal => goal.goalType === 'strength_progress');
 
+  // Calculate body fat data
+  const bodyFatPercentage = latestMeasurements ? calculateBodyFatPercentage(latestMeasurements) : null;
+  const bodyFatRequirements = latestMeasurements ? checkBodyFatRequirements(latestMeasurements) : { sufficient: false, missing: [] };
+  const bodyFatStatus = bodyFatPercentage && latestMeasurements?.gender ? 
+    getBodyFatStatus(bodyFatPercentage, latestMeasurements.gender) : null;
+
   return (
     <Card className="shadow-md hover:shadow-lg transition-all bg-white border-slate-200">
       <CardContent className="p-5">
@@ -38,7 +45,7 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
           <span>Goals Progress</span>
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Weight Goal Card */}
           {weightGoal && (
             <div className="bg-blue-50 p-4 rounded-lg min-w-0">
@@ -131,6 +138,45 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
             </div>
           )}
 
+          {/* Body Fat % Card */}
+          <div className="bg-purple-50 p-4 rounded-lg min-w-0">
+            <div className="flex flex-col gap-2 mb-2.5">
+              <div className="flex items-center">
+                <Users className="h-4 w-4 mr-2 text-purple-600 flex-shrink-0" />
+                <span className="text-sm font-medium text-purple-800 truncate">Body Fat %</span>
+              </div>
+              {bodyFatRequirements.sufficient && bodyFatPercentage ? (
+                <>
+                  <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                    <span className="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded whitespace-nowrap">
+                      BF: {bodyFatPercentage}%
+                    </span>
+                    <span className="text-xs bg-purple-300 text-purple-900 px-2 py-0.5 rounded whitespace-nowrap">
+                      {latestMeasurements?.gender === 'male' ? 'Male' : 'Female'}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="text-xs text-purple-600">
+                  Missing: {bodyFatRequirements.missing.join(', ')}
+                </div>
+              )}
+            </div>
+            {bodyFatStatus ? (
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs text-purple-700">Category:</span>
+                <Badge className={`text-xs px-2 py-1 ${bodyFatStatus.color} border-0`}>
+                  {bodyFatStatus.label}
+                </Badge>
+              </div>
+            ) : (
+              <div className="mb-2 text-xs text-purple-500">Add measurements to calculate</div>
+            )}
+            <p className="text-xs text-purple-700">
+              {bodyFatPercentage ? 'Using Navy body fat formula' : 'Complete profile for calculation'}
+            </p>
+          </div>
+
           {/* Body Measurements Card */}
           {latestMeasurements && (
             <div className="bg-orange-50 p-4 rounded-lg min-w-0">
@@ -153,8 +199,8 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
                 {latestMeasurements.arms && (
                   <div>Arms: <span className="font-medium">{latestMeasurements.arms}cm</span></div>
                 )}
-                {latestMeasurements.thighs && (
-                  <div>Thighs: <span className="font-medium">{latestMeasurements.thighs}cm</span></div>
+                {latestMeasurements.neck && (
+                  <div>Neck: <span className="font-medium">{latestMeasurements.neck}cm</span></div>
                 )}
               </div>
               <Badge className="text-xs px-2 py-1 bg-orange-100 text-orange-800 border-0">
