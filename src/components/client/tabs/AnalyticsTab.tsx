@@ -6,6 +6,7 @@ import { InfoIcon, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 import { StatisticsSection } from "../analytics/sections/StatisticsSection";
+import { GoalsProgress } from "../analytics/sections/GoalsProgress";
 
 export function AnalyticsTab() {
   const navigate = useNavigate();
@@ -117,6 +118,12 @@ export function AnalyticsTab() {
 
   return (
     <div className="space-y-6 w-full">
+      {/* Goals Progress Summary - Above Main Analytics */}
+      <div className="w-full">
+        <h2 className="text-2xl font-bold mb-4 text-slate-800">Progress Overview</h2>
+        <GoalsProgress progressData={progressData} bodyMeasurements={bodyMeasurements} />
+      </div>
+      
       <Card className="w-full shadow-sm bg-white/80 backdrop-blur-sm border-slate-200">
         <CardHeader className="py-4 px-5">
           <CardTitle className="text-xl font-bold text-slate-800">Fitness Analytics Dashboard</CardTitle>

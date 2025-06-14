@@ -38,14 +38,7 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
     getBodyFatStatus(bodyFatPercentage, latestMeasurements.gender) : null;
 
   return (
-    <Card className="shadow-md hover:shadow-lg transition-all bg-white border-slate-200">
-      <CardContent className="p-5">
-        <h3 className="text-base font-semibold mb-4 flex items-center text-slate-800">
-          <Target className="h-5 w-5 mr-2.5 text-blue-600" />
-          <span>Goals Progress</span>
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           {/* Weight Goal Card */}
           {weightGoal && (
             <div className="bg-blue-50 p-4 rounded-lg min-w-0">
@@ -209,8 +202,6 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
               </Badge>
             </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
