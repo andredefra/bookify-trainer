@@ -146,14 +146,14 @@ export function ExerciseMaxChart({ data }: ExerciseMaxChartProps) {
           
           {/* Exercise Filter */}
           <div className={`${isMobile ? 'w-full' : 'w-64'}`}>
-            <Select value={selectedExercises.join(',')} onValueChange={(value) => {
-              setSelectedExercises(value ? value.split(',') : []);
+            <Select value={selectedExercises.length > 0 ? selectedExercises.join(',') : "all"} onValueChange={(value) => {
+              setSelectedExercises(value === "all" ? [] : value.split(','));
             }}>
               <SelectTrigger className="bg-white border border-gray-300 shadow-sm">
                 <SelectValue placeholder="Filter exercises" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-300 shadow-lg z-50">
-                <SelectItem value="">All Exercises</SelectItem>
+                <SelectItem value="all">All Exercises</SelectItem>
                 {availableExercises.map((exercise) => (
                   <SelectItem key={exercise} value={exercise}>
                     {exercise}
