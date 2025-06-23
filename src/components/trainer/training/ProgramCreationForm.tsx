@@ -74,31 +74,43 @@ export function ProgramCreationForm({
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <ProgramFormHeader clientName={clientName} />
-      </CardHeader>
+    <div className="space-y-6">
+      <ProgramFormHeader clientName={clientName} />
       
       <Form {...form}>
-        <form onSubmit={onSubmit}>
-          <CardContent className="space-y-6">
-            <ProgramInfoFields form={form} />
-            
-            <ProgramWorkoutEditor
-              sessions={program.sessions}
-              activeSession={activeSession}
-              setActiveSession={setActiveSession}
-              onAddExercise={handleAddExercise}
-              onUpdateExercise={handleUpdateExercise}
-              onRemoveExercise={handleRemoveExercise}
-            />
-          </CardContent>
+        <form onSubmit={onSubmit} className="space-y-6">
+          <Card>
+            <CardHeader className="pb-4">
+              <h3 className="text-lg font-medium">Program Information</h3>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <ProgramInfoFields form={form} />
+            </CardContent>
+          </Card>
           
-          <CardFooter className="border-t bg-muted/20 justify-between">
-            <ProgramFormFooter clientName={clientName} />
-          </CardFooter>
+          <Card>
+            <CardHeader className="pb-4">
+              <h3 className="text-lg font-medium">Workout Sessions</h3>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ProgramWorkoutEditor
+                sessions={program.sessions}
+                activeSession={activeSession}
+                setActiveSession={setActiveSession}
+                onAddExercise={handleAddExercise}
+                onUpdateExercise={handleUpdateExercise}
+                onRemoveExercise={handleRemoveExercise}
+              />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardFooter className="bg-muted/20 border-t pt-6">
+              <ProgramFormFooter clientName={clientName} />
+            </CardFooter>
+          </Card>
         </form>
       </Form>
-    </Card>
+    </div>
   );
 }

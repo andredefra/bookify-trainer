@@ -1,5 +1,5 @@
 
-import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from "@/components/ui/dialog";
 import { ProgramCreationForm } from "@/components/trainer/training/ProgramCreationForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Exercise, WorkoutSession } from "@/data/training/types";
@@ -64,18 +64,20 @@ export function CreateProgramDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-hidden">
-        <DialogHeader>
-          <DialogTitle>{editMode ? 'Edit Program' : 'Create New Program'}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-xl font-semibold">
+            {editMode ? 'Edit Program' : 'Create New Program'}
+          </DialogTitle>
+          <DialogDescription className="text-base">
             {editMode 
               ? 'Make changes to your existing program and save when done.' 
               : 'Create a new training program for your clients.'}
           </DialogDescription>
         </DialogHeader>
         
-        <ScrollArea className="max-h-[calc(85vh-150px)]">
-          <div className="px-1 py-2">
+        <ScrollArea className="max-h-[calc(90vh-120px)] pr-4">
+          <div className="px-2 py-2">
             <ProgramCreationForm 
               clientId="mock-client-id" 
               clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
