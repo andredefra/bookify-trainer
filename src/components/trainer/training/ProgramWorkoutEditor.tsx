@@ -1,6 +1,7 @@
 
 import { WorkoutSession } from "@/data/training/types";
 import { SessionTabs } from "./SessionTabs";
+import { SessionNavigator } from "./SessionNavigator";
 import { WorkoutSessionPanel } from "./WorkoutSessionPanel";
 
 interface ProgramWorkoutEditorProps {
@@ -21,7 +22,7 @@ export function ProgramWorkoutEditor({
   onRemoveExercise
 }: ProgramWorkoutEditorProps) {
   return (
-    <div className="border rounded-md">
+    <div className="border rounded-md overflow-hidden">
       <SessionTabs 
         sessions={sessions} 
         activeSession={activeSession} 
@@ -38,6 +39,14 @@ export function ProgramWorkoutEditor({
           onRemoveExercise={onRemoveExercise}
         />
       ))}
+
+      {sessions.length > 6 && (
+        <SessionNavigator
+          sessions={sessions}
+          activeSession={activeSession}
+          setActiveSession={setActiveSession}
+        />
+      )}
     </div>
   );
 }
