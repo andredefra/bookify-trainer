@@ -22,19 +22,19 @@ export function EditSessionDialog({ open, onOpenChange, session, onSubmit }: Edi
     try {
       console.log("Parsing date:", session.date);
       
-      // Try to parse MM/DD/YYYY format
-      if (typeof session.date === 'string' && session.date.includes('/')) {
-        const [month, day, year] = session.date.split('/').map(Number);
-        sessionDate = new Date(year, month - 1, day);
-      } else if (typeof session.date === 'string') {
-        // Try parsing as a direct date string
-        sessionDate = new Date(session.date);
-      } else if (session.date instanceof Date) {
+      // Handle both string and Date types properly
+      if (typeof session.date === 'string') {
+        // Try to parse MM/DD/YYYY format
+        if (session.date.includes('/')) {
+          const [month, day, year] = session.date.split('/').map(Number);
+          sessionDate = new Date(year, month - 1, day);
+        } else {
+          // Try parsing as a direct date string
+          sessionDate = new Date(session.date);
+        }
+      } else {
         // Already a Date object
         sessionDate = session.date;
-      } else {
-        // Fallback
-        sessionDate = new Date();
       }
       
       // Check if valid date was created
@@ -62,8 +62,13 @@ export function EditSessionDialog({ open, onOpenChange, session, onSubmit }: Edi
       isFree: false,
       price: "50",
       isPrivate: false,
-      paymentTime: "before",
-      cancellationHours: "2"
+      paymentTime: "before" as const,
+      cancellationHours: "2",
+      // Location fields
+      address: session.address || "",
+      locationNotes: session.locationNotes || "",
+      latitude: session.latitude,
+      longitude: session.longitude
     };
   };
 

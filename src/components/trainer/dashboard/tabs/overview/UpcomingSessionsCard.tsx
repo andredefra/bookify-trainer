@@ -49,10 +49,10 @@ export function UpcomingSessionsCard({
         <CardContent>
           <div className="space-y-4">
             {nextSessions.map((session) => {
-              // Format date if it's a Date object
-              const formattedDate = session.date instanceof Date 
-                ? session.date.toLocaleDateString() 
-                : session.date;
+              // Format date properly handling both string and Date types
+              const formattedDate = typeof session.date === 'string' 
+                ? session.date 
+                : session.date.toLocaleDateString();
                 
               // Check if this is a video session that can be started
               const isVideo = session.mode === 'video';

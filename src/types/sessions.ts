@@ -1,5 +1,5 @@
 
-export type SessionStatus = "upcoming" | "completed" | "cancelled" | "pending" | "confirmed" | "registered";
+export type SessionStatus = "upcoming" | "completed" | "cancelled" | "pending" | "confirmed" | "registered" | "available";
 
 export interface SessionItem {
   id: number;
@@ -24,7 +24,7 @@ export interface TrainerSessionItem {
   id: number;
   name: string;
   time: string;
-  date: string;
+  date: string | Date;
   participants: number;
   maxParticipants: number;
   paymentStatus: {
