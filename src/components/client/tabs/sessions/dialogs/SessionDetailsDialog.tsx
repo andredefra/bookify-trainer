@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Users, Calendar, Clock, CreditCard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { SessionItem } from "@/types/sessions";
+import { SessionLocationDisplay } from "../components/SessionLocationDisplay";
 
 interface SessionDetailsDialogProps {
   open: boolean;
@@ -34,7 +35,7 @@ export function SessionDetailsDialog({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={isMobile ? "sm:max-w-[425px] p-4 sm:p-6" : "sm:max-w-[500px]"}>
+      <DialogContent className={`${isMobile ? "sm:max-w-[425px] p-4 sm:p-6" : "sm:max-w-[600px]"} max-h-[90vh] overflow-y-auto`}>
         <DialogHeader>
           <DialogTitle>{session.name}</DialogTitle>
           <DialogDescription>
@@ -42,7 +43,7 @@ export function SessionDetailsDialog({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4 py-4">
+        <div className="space-y-6 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center">
               <Calendar className="h-5 w-5 mr-2 text-muted-foreground" />
@@ -78,6 +79,16 @@ export function SessionDetailsDialog({
               {session.description || `Join ${session.trainer} for an exciting ${session.name.toLowerCase()} session designed to improve your fitness and well-being.`}
             </p>
           </div>
+
+          {/* Location information for in-person sessions */}
+          {session.mode === 'in-person' && (
+            <SessionLocationDisplay
+              address={session.address}
+              locationNotes={session.locationNotes}
+              latitude={session.latitude}
+              longitude={session.longitude}
+            />
+          )}
         </div>
         
         <DialogFooter className={`${isMobile ? "flex-col space-y-2" : "sm:space-x-2"}`}>

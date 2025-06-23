@@ -1,5 +1,5 @@
 
-import { Calendar, Clock, Users } from "lucide-react";
+import { Calendar, Clock, Users, MapPin } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
 
 interface SessionDetailsProps {
@@ -25,6 +25,13 @@ export function SessionDetails({ session, formattedDate }: SessionDetailsProps) 
           <span className="ml-2">({session.attendees}/{session.maxAttendees})</span>
         )}
       </div>
+      {/* Show location for in-person sessions */}
+      {session.mode === 'in-person' && session.address && (
+        <div className="flex items-center text-muted-foreground col-span-2">
+          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+          <span className="truncate">{session.address.split(',')[0]}</span>
+        </div>
+      )}
     </div>
   );
 }

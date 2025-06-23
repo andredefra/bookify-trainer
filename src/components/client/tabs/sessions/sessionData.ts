@@ -19,6 +19,7 @@ export const availableSessions: SessionItem[] = [
     price: 25,
     attendees: 8,
     maxAttendees: 15,
+    mode: "video",
     description: "Start your day with a high-intensity interval training session designed to boost your metabolism and energy levels."
   },
   { 
@@ -31,6 +32,11 @@ export const availableSessions: SessionItem[] = [
     price: 20,
     attendees: 12,
     maxAttendees: 20,
+    mode: "in-person",
+    address: "123 Wellness Street, Downtown Fitness Center, New York, NY 10001",
+    locationNotes: "Enter through the main entrance and go to Studio B on the second floor. Please arrive 10 minutes early for check-in.",
+    latitude: 40.7589,
+    longitude: -73.9851,
     description: "A gentle introduction to yoga fundamentals, focusing on proper alignment and breathing techniques."
   },
   { 
@@ -43,6 +49,11 @@ export const availableSessions: SessionItem[] = [
     price: 30,
     attendees: 5,
     maxAttendees: 12,
+    mode: "in-person",
+    address: "456 Fitness Avenue, PowerGym, Brooklyn, NY 11201",
+    locationNotes: "Use the side entrance after 5 PM. The session will be held in the functional training area.",
+    latitude: 40.6892,
+    longitude: -73.9442,
     description: "Focus on building core strength and stability with a series of targeted exercises for your abdominals, lower back, and pelvis."
   }
 ];
@@ -58,6 +69,11 @@ export const featuredSession: SessionItem = {
   price: 35,
   attendees: 12,
   maxAttendees: 20,
+  mode: "in-person",
+  address: "789 Elite Fitness Boulevard, Premium Gym, Manhattan, NY 10016",
+  locationNotes: "Premium studio on the 3rd floor. Complimentary towels and water provided.",
+  latitude: 40.7505,
+  longitude: -73.9934,
   description: "A premium high-intensity interval training session with one of our top trainers. This session is designed for all fitness levels with modifications provided."
 };
 
@@ -69,7 +85,9 @@ export const pastSessions: SessionItem[] = [
     trainer: "Sarah Johnson",
     time: "15:00 - 16:00",
     date: "Last week",
-    status: "completed" as SessionStatus
+    status: "completed" as SessionStatus,
+    mode: "in-person",
+    address: "321 Strong Street, Iron Gym, Queens, NY 11375"
   },
   {
     id: 202,
@@ -77,6 +95,7 @@ export const pastSessions: SessionItem[] = [
     trainer: "Alex Thompson",
     time: "10:00 - 11:00",
     date: "2 weeks ago",
-    status: "completed" as SessionStatus
+    status: "completed" as SessionStatus,
+    mode: "video"
   }
 ];
