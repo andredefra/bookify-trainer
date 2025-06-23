@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, CalendarCheck, CreditCard, Video } from "lucide-react";
+import { Users, CalendarCheck, CreditCard, Video, MapPin } from "lucide-react";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 import { useState, useEffect } from "react";
 
@@ -97,6 +97,11 @@ export function SessionCard({
               <Video className="h-3 w-3 mr-1" /> Video
             </Badge>
           )}
+          {session.mode === 'in-person' && (
+            <Badge variant="outline" className="ml-2 bg-green-100 text-green-700 border-green-200">
+              <MapPin className="h-3 w-3 mr-1" /> In-Person
+            </Badge>
+          )}
           {isLive && isVideoSession && (
             <Badge className="ml-2 bg-red-100 text-red-700 border-red-200 animate-pulse">
               LIVE NOW
@@ -106,6 +111,13 @@ export function SessionCard({
         <div className="text-sm text-muted-foreground">
           With {session.trainer} • {formattedDate} • {session.time}
         </div>
+        {/* Show location for in-person sessions */}
+        {session.mode === 'in-person' && session.address && (
+          <div className="text-sm text-muted-foreground flex items-center mt-1">
+            <MapPin className="h-3.5 w-3.5 mr-1" />
+            <span className="truncate max-w-xs">{session.address}</span>
+          </div>
+        )}
         {session.price && (
           <div className="text-sm font-medium mt-1">
             €{session.price}

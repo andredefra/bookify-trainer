@@ -35,6 +35,14 @@ export const sessionFormSchema = z.object({
   }),
   description: z.string().optional(),
   mode: z.enum(["in-person", "video"]).default("in-person"),
+  // New location fields
+  address: z.string().optional().refine((val) => {
+    // Only require address if mode is in-person
+    return true; // Will be handled conditionally in the form
+  }),
+  locationNotes: z.string().optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
 });
 
 export type SessionFormValues = z.infer<typeof sessionFormSchema>;

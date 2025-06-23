@@ -10,7 +10,8 @@ import {
   BasicSessionInfo, 
   PricingInfo, 
   SessionSettings, 
-  SessionDescription 
+  SessionDescription,
+  LocationInfo
 } from "./form-sections";
 
 interface SessionFormProps {
@@ -35,11 +36,22 @@ export function SessionForm({ onSubmit, onCancel, defaultValues }: SessionFormPr
       cancellationHours: "2",
       description: "",
       mode: "in-person",
+      address: "",
+      locationNotes: "",
       ...defaultValues,
     },
   });
 
   const handleSubmit = (values: SessionFormValues) => {
+    // Validate address for in-person sessions
+    if (values.mode === "in-person" && !values.address?.trim()) {
+      form.setError("address", {
+        type: "required",
+        message: "Address is required for in-person sessions"
+      });
+      return;
+    }
+
     // If session is free, ensure price is set to 0
     const finalValues = {
       ...values,
@@ -54,6 +66,7 @@ export function SessionForm({ onSubmit, onCancel, defaultValues }: SessionFormPr
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <BasicSessionInfo />
+          <LocationInfo />
           <PricingInfo />
           <SessionSettings />
           <SessionDescription />
