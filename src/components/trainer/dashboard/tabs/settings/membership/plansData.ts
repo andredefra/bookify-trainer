@@ -5,14 +5,15 @@ import { Plan } from "./types";
 export const plans: Plan[] = [
   {
     id: "standard",
-    name: "Standard",
-    price: "€5",
+    name: "Free",
+    price: "€0",
     period: "per month",
-    description: "Essential features for beginners without sessions.",
+    description: "Start your trainer journey at no cost. Perfect for beginners.",
     features: [
       "Personal Trainer Page",
       "Client Messaging",
-      "Client Management"
+      "Client Management",
+      "Basic Scheduling"
     ],
     limitations: [],
     isPopular: false,
@@ -20,15 +21,16 @@ export const plans: Plan[] = [
   },
   {
     id: "freemium",
-    name: "Basic",
+    name: "Essential",
     price: "€9",
     period: "per month",
-    description: "Basic tier with essential features for new trainers.",
+    description: "Unlock unlimited sessions and grow your client base.",
     features: [
       "Unlimited Sessions",
       "Personal Trainer Page",
       "Client Messaging",
-      "Client Management"
+      "Client Management",
+      "Email Support"
     ],
     limitations: [],
     isPopular: false,
@@ -39,14 +41,15 @@ export const plans: Plan[] = [
     name: "Pro",
     price: "€29",
     period: "per month",
-    description: "Premium features for serious trainers.",
+    description: "Complete professional toolkit for serious trainers.",
     features: [
-      "Everything in Basic",
+      "Everything in Essential",
       "Google Calendar Integration",
       "Digital & Cash Payments",
       "Priority Support",
       "Advanced Analytics",
-      "Custom Training Programs"
+      "Custom Training Programs",
+      "Waitlist Management"
     ],
     limitations: [],
     isPopular: true,
@@ -57,14 +60,15 @@ export const plans: Plan[] = [
     name: "Gym",
     price: "€59",
     period: "per month",
-    description: "Complete solution for gyms with multiple trainers.",
+    description: "Enterprise solution for gyms with multiple trainers.",
     features: [
       "Unlimited Trainers",
       "Unlimited Clients",
       "Reduced Pro Pricing for Trainers (€9/month)",
       "Direct Chat with Clients",
       "Comprehensive Client Results",
-      "Integrated with Gym Management Systems"
+      "Integrated with Gym Management Systems",
+      "White Label Options"
     ],
     limitations: [],
     isPopular: false,
