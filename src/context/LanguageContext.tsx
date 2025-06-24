@@ -21,12 +21,18 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return 'en';
   };
 
-  const [language, setLanguage] = useState<Language>(getSavedLanguage);
+  const [language, setLanguageState] = useState<Language>(getSavedLanguage);
 
   // Save language preference to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem('language', language);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', language);
+    }
   }, [language]);
+
+  const setLanguage = (newLanguage: Language) => {
+    setLanguageState(newLanguage);
+  };
 
   const t = (key: string): string => {
     if (!translations[language]) {

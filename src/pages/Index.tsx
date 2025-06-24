@@ -16,7 +16,13 @@ const Index = () => {
   // Scroll to the top when the page loads and set language to English
   useEffect(() => {
     window.scrollTo(0, 0);
-    setLanguage('en');
+    
+    // Set language to English with a small delay to ensure provider is ready
+    const timer = setTimeout(() => {
+      setLanguage('en');
+    }, 0);
+    
+    return () => clearTimeout(timer);
   }, [setLanguage]);
 
   return (
