@@ -52,6 +52,7 @@ const PricingSection = () => {
     t('pricing.features.everythingFreemium'),
     t('pricing.features.googleCalendar'),
     t('pricing.features.digitalCashPayments'),
+    t('pricing.features.lowerFee'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
     t('pricing.features.customPrograms'),
@@ -85,8 +86,7 @@ const PricingSection = () => {
     },
     {
       name: t('pricing.freemium.title'),
-      price: t('pricing.freemium.price'),
-      priceAnnual: t('pricing.freemium.price'),
+      price: annual ? t('pricing.freemium.priceAnnual') : t('pricing.freemium.price'),
       period: t('pricing.freemium.period'),
       fee: t('pricing.freemium.fee'),
       features: freemiumFeatures,

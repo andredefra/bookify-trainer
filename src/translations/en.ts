@@ -103,6 +103,7 @@ export const en = {
   'pricing.standard.cta': 'Start Free Now',
   'pricing.freemium.title': 'Essential',
   'pricing.freemium.price': '€9',
+  'pricing.freemium.priceAnnual': '€5',
   'pricing.freemium.period': '/month',
   'pricing.freemium.fee': 'Unlock unlimited sessions',
   'pricing.freemium.cta': 'Upgrade to Essential',

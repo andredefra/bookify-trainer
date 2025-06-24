@@ -103,6 +103,7 @@ export const it = {
   'pricing.standard.cta': 'Inizia Gratis Ora',
   'pricing.freemium.title': 'Essenziale',
   'pricing.freemium.price': '€9',
+  'pricing.freemium.priceAnnual': '€5',
   'pricing.freemium.period': '/mese',
   'pricing.freemium.fee': 'Sblocca sessioni illimitate',
   'pricing.freemium.cta': 'Passa a Essenziale',
