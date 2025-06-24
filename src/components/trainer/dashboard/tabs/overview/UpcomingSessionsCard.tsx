@@ -89,42 +89,50 @@ export function UpcomingSessionsCard({
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between gap-2">
+                    
+                    {/* Mobile-first responsive button layout */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="text-sm">
                         <span className="font-medium">{session.participants}/{session.maxParticipants}</span> booked
                       </div>
-                      <div className="flex gap-2">
-                        <InviteLinkButton session={session} />
+                      
+                      {/* Button container with responsive wrapping */}
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        <InviteLinkButton 
+                          session={session} 
+                          variant="outline" 
+                          size="sm"
+                        />
+                        
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="h-8 px-2 sm:px-4 flex items-center"
+                          className="h-8 flex items-center min-w-0 flex-shrink-0"
                           onClick={() => handleViewParticipants(session)}
                         >
-                          <Users className="h-4 w-4 mr-1" />
-                          <span className="hidden sm:inline">Participants</span>
-                          <span className="sm:hidden">Users</span>
+                          <Users className="h-4 w-4 sm:mr-1" />
+                          <span className="hidden sm:inline ml-1">Participants</span>
                         </Button>
+                        
                         {canStartVideo && onStartVideoSession && (
                           <Button 
                             variant="secondary" 
                             size="sm" 
-                            className="h-8 px-2 sm:px-4 flex items-center"
+                            className="h-8 flex items-center min-w-0 flex-shrink-0"
                             onClick={() => onStartVideoSession(session)}
                           >
-                            <Video className="h-4 w-4 mr-1" />
-                            <span className="hidden sm:inline">Start Video</span>
-                            <span className="sm:hidden">Video</span>
+                            <Video className="h-4 w-4 sm:mr-1" />
+                            <span className="hidden sm:inline ml-1">Start</span>
                           </Button>
                         )}
+                        
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="h-8 px-2 sm:px-4"
+                          className="h-8 flex items-center min-w-0 flex-shrink-0"
                           onClick={() => onViewDetails && onViewDetails(session)}
                         >
-                          <span className="hidden sm:inline">Details</span>
-                          <span className="sm:hidden">View</span>
+                          <span className="text-sm">Details</span>
                         </Button>
                       </div>
                     </div>

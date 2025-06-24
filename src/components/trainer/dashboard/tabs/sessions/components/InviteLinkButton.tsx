@@ -48,16 +48,16 @@ export function InviteLinkButton({
           <Button 
             variant={variant} 
             size={size} 
-            className="flex items-center gap-1"
+            className="h-8 flex items-center min-w-0 flex-shrink-0"
             onClick={handleClick}
           >
             {copied ? (
-              <Check className="h-3.5 w-3.5 text-green-600" />
+              <Check className="h-4 w-4 text-green-600" />
             ) : (
-              <Link2 className="h-3.5 w-3.5" />
+              <Link2 className="h-4 w-4" />
             )}
             {size !== "icon" && (
-              <span className="hidden sm:inline">
+              <span className="hidden sm:inline ml-1">
                 {copied ? "Copied!" : "Share"}
               </span>
             )}
