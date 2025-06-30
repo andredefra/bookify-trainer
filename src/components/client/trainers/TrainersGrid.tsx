@@ -1,8 +1,10 @@
 
+import { useState } from "react";
 import { TrainerCard } from "./TrainerCard";
-import { getTrainerById } from "@/data/trainerMockData";
-import { useMediaQuery } from "@/hooks/use-mobile";
-import { MobileTrainerCard } from "./MobileTrainerCard";
+import { ReviewDialog } from "./ReviewDialog";
+import { TrainerProfileDialog } from "./TrainerProfileDialog";
+import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 interface Trainer {
   id: number;
@@ -11,6 +13,7 @@ interface Trainer {
   rating: number;
   reviews: number;
   image: string;
+  status?: "online" | "in-session" | "offline";
 }
 
 interface TrainersGridProps {
@@ -20,31 +23,59 @@ interface TrainersGridProps {
   onFollowToggle: (id: number, name: string) => void;
 }
 
-export function TrainersGrid({ trainers, onPayClick, followedTrainers, onFollowToggle }: TrainersGridProps) {
-  const isMobile = useMediaQuery("(max-width: 640px)");
-  
+export function TrainersGrid({ 
+  trainers, 
+  onPayClick, 
+  followedTrainers, 
+  onFollowToggle 
+}: TrainersGridProps) {
+  const navigate = useNavigate();
+  const [showReviewDialog, setShowReviewDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [selectedTrainer, setSelectedTrainer] = useState<{id: number, name: string} | null>(null);
+
+  const handleViewProfile = (id: number, name: string) => {
+    setSelectedTrainer({ id, name });
+    setShowProfileDialog(true);
+  };
+
+  const handleLeaveReview = (id: number, name: string) => {
+    setSelectedTrainer({ id, name });
+    setShowReviewDialog(true);
+  };
+
+  const handleBookSession = (trainerName: string) => {
+    setShowProfileDialog(false);
+    // Navigate to sessions tab to book
+    navigate('/client-dashboard', { 
+      state: { 
+        activeTab: "sessions"
+      } 
+    });
+    toast({
+      title: "Booking Session",
+      description: `Redirecting to book a session with ${trainerName}`,
+    });
+  };
+
+  const handleSendMessage = (trainerName: string) => {
+    setShowProfileDialog(false);
+    // Navigate to messages tab
+    navigate('/client-dashboard', { 
+      state: { 
+        activeTab: "messages"
+      } 
+    });
+    toast({
+      title: "Opening Messages",
+      description: `Opening chat with ${trainerName}`,
+    });
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-      {trainers.map((trainer) => {
-        // Get the trainer status from our mock data
-        const trainerData = getTrainerById(`t${trainer.id}`);
-        const status = trainerData?.status || "offline";
-        
-        return isMobile ? (
-          <MobileTrainerCard
-            key={trainer.id}
-            id={trainer.id}
-            name={trainer.name}
-            specialty={trainer.specialty}
-            rating={trainer.rating}
-            reviews={trainer.reviews}
-            image={trainer.image}
-            status={status}
-            onPayClick={onPayClick}
-            isFollowing={followedTrainers.includes(trainer.id)}
-            onFollowToggle={onFollowToggle}
-          />
-        ) : (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {trainers.map((trainer) => (
           <TrainerCard
             key={trainer.id}
             id={trainer.id}
@@ -53,13 +84,37 @@ export function TrainersGrid({ trainers, onPayClick, followedTrainers, onFollowT
             rating={trainer.rating}
             reviews={trainer.reviews}
             image={trainer.image}
-            status={status}
+            status={trainer.status}
             onPayClick={onPayClick}
             isFollowing={followedTrainers.includes(trainer.id)}
             onFollowToggle={onFollowToggle}
+            onViewProfile={handleViewProfile}
+            onLeaveReview={handleLeaveReview}
           />
-        );
-      })}
-    </div>
+        ))}
+      </div>
+
+      {/* Review Dialog */}
+      {selectedTrainer && (
+        <ReviewDialog
+          open={showReviewDialog}
+          onOpenChange={setShowReviewDialog}
+          trainerId={selectedTrainer.id}
+          trainerName={selectedTrainer.name}
+        />
+      )}
+
+      {/* Profile Dialog */}
+      {selectedTrainer && (
+        <TrainerProfileDialog
+          open={showProfileDialog}
+          onOpenChange={setShowProfileDialog}
+          trainerId={selectedTrainer.id}
+          trainerName={selectedTrainer.name}
+          onBookSession={handleBookSession}
+          onSendMessage={handleSendMessage}
+        />
+      )}
+    </>
   );
 }

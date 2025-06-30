@@ -9,7 +9,7 @@ import { PaymentsTable } from "@/components/client/trainers/PaymentsTable";
 import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollowedTrainers";
 import { FollowedTrainersSection } from "@/components/client/trainers/FollowedTrainersSection";
 import { NavigationButtons } from "@/components/client/trainers/NavigationButtons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data for payment history
@@ -41,6 +41,7 @@ const myTrainers = [
 
 export function TrainersTab() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);

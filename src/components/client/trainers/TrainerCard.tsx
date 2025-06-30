@@ -1,5 +1,4 @@
 
-import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { TrainerCardHeader } from "./TrainerCardHeader";
 import { TrainerCardContent } from "./TrainerCardContent";
@@ -16,6 +15,8 @@ interface TrainerCardProps {
   onPayClick: (trainer: string, amount: number) => void;
   isFollowing: boolean;
   onFollowToggle: (id: number, name: string) => void;
+  onViewProfile: (id: number, name: string) => void;
+  onLeaveReview: (id: number, name: string) => void;
 }
 
 export function TrainerCard({ 
@@ -28,10 +29,10 @@ export function TrainerCard({
   status = "offline",
   onPayClick,
   isFollowing,
-  onFollowToggle
+  onFollowToggle,
+  onViewProfile,
+  onLeaveReview
 }: TrainerCardProps) {
-  const navigate = useNavigate();
-
   return (
     <Card className="overflow-hidden">
       <TrainerCardHeader 
@@ -51,8 +52,9 @@ export function TrainerCard({
       <TrainerCardActions 
         id={id}
         name={name}
-        navigate={navigate}
         onPayClick={onPayClick}
+        onViewProfile={onViewProfile}
+        onLeaveReview={onLeaveReview}
       />
     </Card>
   );
