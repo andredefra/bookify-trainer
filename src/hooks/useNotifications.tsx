@@ -28,8 +28,14 @@ export function useNotifications() {
 
       if (error) throw error;
 
-      setNotifications(data || []);
-      setUnreadCount((data || []).filter(n => !n.read).length);
+      // Type cast the data to ensure it matches our interface
+      const typedData = (data || []).map(item => ({
+        ...item,
+        type: item.type as TrainerNotification['type']
+      })) as TrainerNotification[];
+
+      setNotifications(typedData);
+      setUnreadCount(typedData.filter(n => !n.read).length);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
@@ -85,7 +91,12 @@ export function useNotifications() {
           table: 'trainer_notifications'
         },
         (payload) => {
-          setNotifications(prev => [payload.new as TrainerNotification, ...prev]);
+          const newNotification = {
+            ...payload.new,
+            type: payload.new.type as TrainerNotification['type']
+          } as TrainerNotification;
+          
+          setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
         }
       )

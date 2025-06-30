@@ -1,5 +1,6 @@
+
 import { Button } from "@/components/ui/button";
-import { HeaderActions } from "./HeaderActions";
+import { HeaderActions } from "./header/HeaderActions";
 import { Menu } from "lucide-react";
 
 interface DashboardHeaderProps {

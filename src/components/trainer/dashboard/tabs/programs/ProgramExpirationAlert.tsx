@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Calendar, Users } from 'lucide-react';
+import { AlertTriangle, Calendar, Users, Clock } from 'lucide-react';
 import { ProgramProgress } from '@/hooks/useProgramAssignments';
 
 interface ProgramExpirationAlertProps {
