@@ -16,27 +16,6 @@ const Navbar = () => {
   const location = useLocation();
   const scrolled = useScrollHandler();
   
-  // Check if we're on tablet size (768px - 1024px)
-  const [isTablet, setIsTablet] = useState(false);
-  
-  useEffect(() => {
-    const checkTablet = () => {
-      const width = window.innerWidth;
-      const newIsTablet = width >= 768 && width < 1024;
-      setIsTablet(newIsTablet);
-      
-      // Debug logs to help troubleshoot
-      console.log('Window width:', width);
-      console.log('isMobile:', isMobile);
-      console.log('isTablet:', newIsTablet);
-      console.log('shouldShowMobileMenu:', isMobile || newIsTablet);
-    };
-    
-    checkTablet();
-    window.addEventListener('resize', checkTablet);
-    return () => window.removeEventListener('resize', checkTablet);
-  }, [isMobile]);
-  
   // Check if we're on the home page
   const isHomePage = location.pathname === '/' || location.pathname === '/it';
   
@@ -48,9 +27,9 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Show mobile menu on mobile and tablet, show desktop menu only on desktop (>1024px)
-  const shouldShowMobileMenu = isMobile || isTablet;
-  const shouldShowDesktopMenu = !shouldShowMobileMenu; // This will be true only on desktop
+  // Show mobile menu only on mobile (<768px), show desktop menu on tablet and desktop (>=768px)
+  const shouldShowMobileMenu = isMobile;
+  const shouldShowDesktopMenu = !isMobile;
 
   return (
     <nav
@@ -63,7 +42,7 @@ const Navbar = () => {
           <BrandLogo />
         </div>
         
-        {/* Show NavLinks only on desktop (>1024px) */}
+        {/* Show NavLinks on tablet and desktop (>=768px) */}
         {shouldShowDesktopMenu && (
           <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
         )}
