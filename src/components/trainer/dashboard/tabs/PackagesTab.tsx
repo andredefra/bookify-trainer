@@ -3,14 +3,22 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircle, Package, CreditCard, Users, Clock } from "lucide-react";
+import { PlusCircle, Package, CreditCard, Users, Clock, Edit, UserPlus, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { CreatePackageDialog } from "./packages/CreatePackageDialog";
+import { EditPackageDialog } from "./packages/EditPackageDialog";
+import { AssignPackageDialog } from "./packages/AssignPackageDialog";
+import { toast } from "sonner";
 
 export function PackagesTab() {
   const [activeTab, setActiveTab] = useState("templates");
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showAssignDialog, setShowAssignDialog] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<any>(null);
 
   // Mock data for demonstration
-  const packageTemplates = [
+  const [packageTemplates, setPackageTemplates] = useState([
     {
       id: 1,
       title: "Personal Training Package",
@@ -19,7 +27,10 @@ export function PackagesTab() {
       sessions: 10,
       price: 500,
       isActive: true,
-      clientsAssigned: 5
+      clientsAssigned: 5,
+      isPaid: true,
+      objective: "Strength",
+      duration: 8
     },
     {
       id: 2,
@@ -30,7 +41,10 @@ export function PackagesTab() {
       programs: ["Strength Building Program"],
       price: 750,
       isActive: true,
-      clientsAssigned: 3
+      clientsAssigned: 3,
+      isPaid: true,
+      objective: "Body Transformation",
+      duration: 12
     },
     {
       id: 3,
@@ -40,9 +54,12 @@ export function PackagesTab() {
       programs: ["Beginner Fitness Program"],
       price: 200,
       isActive: true,
-      clientsAssigned: 8
+      clientsAssigned: 8,
+      isPaid: true,
+      objective: "Foundation",
+      duration: 6
     }
-  ];
+  ]);
 
   const activePackages = [
     {
@@ -68,6 +85,47 @@ export function PackagesTab() {
     }
   ];
 
+  const handleCreatePackage = async (data: any) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const newPackage = {
+      id: Date.now(),
+      ...data,
+      isActive: true,
+      clientsAssigned: 0
+    };
+    
+    setPackageTemplates(prev => [...prev, newPackage]);
+  };
+
+  const handleEditPackage = async (id: number, data: any) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    setPackageTemplates(prev => 
+      prev.map(pkg => pkg.id === id ? { ...pkg, ...data } : pkg)
+    );
+  };
+
+  const handleAssignPackage = async (packageId: number, clientId: string) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // In real app, this would create a package assignment
+    console.log(`Assigning package ${packageId} to client ${clientId}`);
+  };
+
+  const handleEditClick = (pkg: any) => {
+    setSelectedPackage(pkg);
+    setShowEditDialog(true);
+  };
+
+  const handleAssignClick = (pkg: any) => {
+    setSelectedPackage(pkg);
+    setShowAssignDialog(true);
+  };
+
   const getPackageTypeColor = (type: string) => {
     switch (type) {
       case 'sessions_only': return 'bg-blue-100 text-blue-800';
@@ -88,163 +146,232 @@ export function PackagesTab() {
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <CardTitle>Package Management</CardTitle>
-          <CardDescription>Create and manage training packages for your clients</CardDescription>
-        </div>
-        <Button className="flex items-center self-start sm:self-auto w-full sm:w-auto">
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Create Package
-        </Button>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="templates">Templates</TabsTrigger>
-            <TabsTrigger value="active">Active Packages</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          </TabsList>
+    <>
+      <Card>
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle>Package Management</CardTitle>
+            <CardDescription>Create and manage training packages for your clients</CardDescription>
+          </div>
+          <Button 
+            onClick={() => setShowCreateDialog(true)}
+            className="flex items-center self-start sm:self-auto w-full sm:w-auto"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Create Package
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
+              <TabsTrigger value="templates">Templates</TabsTrigger>
+              <TabsTrigger value="active">Active Packages</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="templates" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {packageTemplates.map((pkg) => (
-                <Card key={pkg.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <Package className="h-5 w-5 text-muted-foreground" />
-                      <Badge className={getPackageTypeColor(pkg.type)}>
-                        {pkg.type.replace('_', ' ')}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg">{pkg.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{pkg.description}</p>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold">${pkg.price}</span>
-                      <div className="text-sm text-muted-foreground">
-                        {pkg.sessions && `${pkg.sessions} sessions`}
-                        {pkg.programs && ` + ${pkg.programs.length} program(s)`}
+            <TabsContent value="templates" className="space-y-4">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {packageTemplates.map((pkg) => (
+                  <Card key={pkg.id} className="hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <Package className="h-5 w-5 text-muted-foreground mt-1" />
+                        <Badge className={getPackageTypeColor(pkg.type)}>
+                          {pkg.type.replace('_', ' ')}
+                        </Badge>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>{pkg.clientsAssigned} clients assigned</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" className="flex-1">
-                        Edit
-                      </Button>
-                      <Button size="sm" variant="outline" className="flex-1">
-                        Assign
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="active" className="space-y-4">
-            <div className="space-y-4">
-              {activePackages.map((pkg) => (
-                <Card key={pkg.id}>
-                  <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="space-y-2">
-                        <h3 className="font-semibold">{pkg.clientName}</h3>
-                        <p className="text-sm text-muted-foreground">{pkg.packageTitle}</p>
-                        <div className="flex items-center gap-4 text-sm">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>Sessions: {pkg.sessionsUsed}/{pkg.totalSessions}</span>
+                        <CardTitle className="text-lg leading-tight">{pkg.title}</CardTitle>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{pkg.description}</p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Price and Sessions Info */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl font-bold">€{pkg.price}</span>
+                          <div className="text-right">
+                            {pkg.sessions && (
+                              <div className="text-sm font-medium">{pkg.sessions} sessions</div>
+                            )}
+                            {pkg.programs && (
+                              <div className="text-sm text-muted-foreground">
+                                + {pkg.programs.length} program(s)
+                              </div>
+                            )}
                           </div>
-                          <div className="flex items-center gap-1">
-                            <CreditCard className="h-4 w-4" />
-                            <span>Paid: ${pkg.totalPaid}</span>
+                        </div>
+                        
+                        {/* Package Details */}
+                        <div className="flex flex-wrap gap-2">
+                          {pkg.objective && (
+                            <Badge variant="outline" className="text-xs">
+                              {pkg.objective}
+                            </Badge>
+                          )}
+                          {pkg.duration && (
+                            <Badge variant="outline" className="text-xs">
+                              {pkg.duration} weeks
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Clients Info */}
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Users className="h-4 w-4" />
+                        <span>{pkg.clientsAssigned} clients assigned</span>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-2 pt-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleAssignClick(pkg)}
+                          className="flex items-center gap-1 flex-1"
+                        >
+                          <UserPlus className="h-3 w-3" />
+                          Assign
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleEditClick(pkg)}
+                          className="flex items-center gap-1 flex-1"
+                        >
+                          <Edit className="h-3 w-3" />
+                          Edit
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="active" className="space-y-4">
+              <div className="space-y-4">
+                {activePackages.map((pkg) => (
+                  <Card key={pkg.id}>
+                    <CardContent className="p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="space-y-3">
+                          <div>
+                            <h3 className="font-semibold text-lg">{pkg.clientName}</h3>
+                            <p className="text-sm text-muted-foreground">{pkg.packageTitle}</p>
+                          </div>
+                          <div className="flex items-center gap-6 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              <span>Sessions: {pkg.sessionsUsed}/{pkg.totalSessions}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <CreditCard className="h-4 w-4" />
+                              <span>Paid: €{pkg.totalPaid}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col sm:items-end gap-3">
+                          <Badge className={getPaymentStatusColor(pkg.paymentStatus)}>
+                            {pkg.paymentStatus}
+                          </Badge>
+                          <div className="text-sm text-muted-foreground">
+                            <p>Expires: {pkg.expiryDate}</p>
+                            {pkg.remainingPayment && (
+                              <p className="text-red-600 font-medium">
+                                Remaining: €{pkg.remainingPayment}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col sm:items-end gap-2">
-                        <Badge className={getPaymentStatusColor(pkg.paymentStatus)}>
-                          {pkg.paymentStatus}
-                        </Badge>
-                        <p className="text-sm text-muted-foreground">
-                          Expires: {pkg.expiryDate}
-                        </p>
-                        {pkg.remainingPayment && (
-                          <p className="text-sm text-red-600">
-                            Remaining: ${pkg.remainingPayment}
-                          </p>
-                        )}
+                      <div className="mt-4">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full transition-all" 
+                            style={{ width: `${(pkg.sessionsUsed / pkg.totalSessions) * 100}%` }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-4">
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full transition-all" 
-                          style={{ width: `${(pkg.sessionsUsed / pkg.totalSessions) * 100}%` }}
-                        />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Total Revenue</p>
+                        <p className="text-2xl font-bold">€3,250</p>
                       </div>
+                      <CreditCard className="h-8 w-8 text-muted-foreground" />
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </TabsContent>
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Active Packages</p>
+                        <p className="text-2xl font-bold">16</p>
+                      </div>
+                      <Package className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Pending Payments</p>
+                        <p className="text-2xl font-bold">€875</p>
+                      </div>
+                      <Clock className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Conversion Rate</p>
+                        <p className="text-2xl font-bold">68%</p>
+                      </div>
+                      <Users className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
 
-          <TabsContent value="analytics" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total Revenue</p>
-                      <p className="text-2xl font-bold">$3,250</p>
-                    </div>
-                    <CreditCard className="h-8 w-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Active Packages</p>
-                      <p className="text-2xl font-bold">16</p>
-                    </div>
-                    <Package className="h-8 w-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Pending Payments</p>
-                      <p className="text-2xl font-bold">$875</p>
-                    </div>
-                    <Clock className="h-8 w-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Conversion Rate</p>
-                      <p className="text-2xl font-bold">68%</p>
-                    </div>
-                    <Users className="h-8 w-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+      {/* Dialogs */}
+      <CreatePackageDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onSubmit={handleCreatePackage}
+      />
+
+      <EditPackageDialog
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        onSubmit={handleEditPackage}
+        package={selectedPackage}
+      />
+
+      <AssignPackageDialog
+        open={showAssignDialog}
+        onOpenChange={setShowAssignDialog}
+        onAssign={handleAssignPackage}
+        packageData={selectedPackage}
+      />
+    </>
   );
 }
