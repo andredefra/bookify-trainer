@@ -38,11 +38,11 @@ export function TrainerCardHeader({ image, name, status }: TrainerCardHeaderProp
   const statusConfig = getStatusConfig(status);
   
   return (
-    <div className="relative h-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+    <div className="relative w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
       <img 
         src={image}
         alt={name}
-        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+        className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
       <div className="absolute top-2 right-2 z-10">
