@@ -1,18 +1,12 @@
+
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
-import { TrainerMarketplace } from "@/components/client/trainers/TrainerMarketplace";
-import { TrainersGrid } from "@/components/client/trainers/TrainersGrid";
-import { PaymentsTable } from "@/components/client/trainers/PaymentsTable";
 import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollowedTrainers";
-import { FollowedTrainersSection } from "@/components/client/trainers/FollowedTrainersSection";
-import { NavigationButtons } from "@/components/client/trainers/NavigationButtons";
-import { MyTrainerExplanation } from "@/components/client/trainers/MyTrainerExplanation";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { TrainersTabHeader } from "@/components/client/trainers/TrainersTabHeader";
+import { TrainersTabContent } from "@/components/client/trainers/TrainersTabContent";
+import { useLocation } from "react-router-dom";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -104,8 +98,6 @@ const myTrainers = [
 
 export function TrainersTab() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
@@ -119,9 +111,6 @@ export function TrainersTab() {
       setActiveTab("marketplace");
     }
   }, [location.state]);
-  
-  console.log("myTrainers in TrainersTab:", myTrainers.map(t => `${t.id} - ${t.name}`));
-  console.log("followedTrainers in TrainersTab:", followedTrainers);
   
   useEffect(() => {
     if (followedTrainers.length === 0) {
@@ -149,57 +138,19 @@ export function TrainersTab() {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-between'}`}>
-            <div>
-              <CardTitle>
-                {activeTab === "marketplace" ? "Find New Trainer" : 
-                 activeTab === "followed" ? "Followed Trainers" : 
-                 activeTab === "payments" ? "Payment History" :
-                 "My Trainers"}
-              </CardTitle>
-              <CardDescription>
-                {activeTab === "marketplace" 
-                  ? "Browse trainers and book sessions" 
-                  : activeTab === "followed"
-                  ? "Trainers you follow and their group events"
-                  : activeTab === "payments"
-                  ? "View your past payments to trainers"
-                  : "Your personal training team"}
-              </CardDescription>
-            </div>
-            <NavigationButtons 
-              activeTab={activeTab} 
-              onTabChange={setActiveTab}
-              isMobile={isMobile}
-            />
-          </div>
-        </CardHeader>
-        <CardContent className={`space-y-4 ${isMobile ? "px-3 sm:px-6" : ""}`}>
-          {activeTab === "marketplace" ? (
-            <TrainerMarketplace />
-          ) : activeTab === "trainers" ? (
-            <>
-              <MyTrainerExplanation />
-              <TrainersGrid 
-                trainers={myTrainers} 
-                onPayClick={handlePayTrainer} 
-                followedTrainers={followedTrainers}
-                onFollowToggle={handleFollowToggle}
-              />
-            </>
-          ) : activeTab === "followed" ? (
-            <FollowedTrainersSection 
-              followedTrainers={followedTrainers}
-              allTrainers={myTrainers}
-              onPayClick={handlePayTrainer}
-              onFollowToggle={handleFollowToggle}
-              onBrowseTrainers={() => setActiveTab("marketplace")}
-            />
-          ) : (
-            <PaymentsTable payments={paymentHistory} />
-          )}
-        </CardContent>
+        <TrainersTabHeader 
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+        <TrainersTabContent
+          activeTab={activeTab}
+          myTrainers={myTrainers}
+          paymentHistory={paymentHistory}
+          followedTrainers={followedTrainers}
+          onPayClick={handlePayTrainer}
+          onFollowToggle={handleFollowToggle}
+          onTabChange={setActiveTab}
+        />
         
         {/* Payment Dialog */}
         {selectedTrainer && (
