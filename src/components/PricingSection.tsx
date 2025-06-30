@@ -45,6 +45,7 @@ const PricingSection = () => {
     t('pricing.features.everythingFree'),
     t('pricing.features.unlimitedSessions'),
     t('pricing.features.googleCalendar'),
+    t('pricing.features.customPrograms'),
   ];
 
   const proFeatures = [
@@ -53,7 +54,6 @@ const PricingSection = () => {
     t('pricing.features.paymentInstallments'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
-    t('pricing.features.customPrograms'),
   ];
   
   const gymFeatures = [
