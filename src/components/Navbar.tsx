@@ -27,9 +27,22 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Show mobile menu only on mobile (<768px), show desktop menu on tablet and desktop (>=768px)
-  const shouldShowMobileMenu = isMobile;
-  const shouldShowDesktopMenu = !isMobile;
+  // Use a higher breakpoint (1024px) to avoid overlapping on smaller screens
+  // Show mobile menu on screens smaller than 1024px to prevent overlapping
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  const shouldShowMobileMenu = !isLargeScreen;
+  const shouldShowDesktopMenu = isLargeScreen;
 
   return (
     <nav
@@ -42,7 +55,7 @@ const Navbar = () => {
           <BrandLogo />
         </div>
         
-        {/* Show NavLinks on tablet and desktop (>=768px) */}
+        {/* Show NavLinks only on large screens (>=1024px) */}
         {shouldShowDesktopMenu && (
           <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
         )}
