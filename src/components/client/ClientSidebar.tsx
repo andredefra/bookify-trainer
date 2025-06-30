@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -75,14 +74,13 @@ export function ClientSidebar({
         showSidebar ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
-          {/* Header with Close Button only */}
-          <div className="flex items-center justify-end p-4 border-b border-border bg-gradient-to-r from-primary/5 to-primary/10">
-            {/* Mobile close button */}
+          {/* Mobile close button - only visible on mobile */}
+          <div className="flex items-center justify-end p-2 md:hidden">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => setShowSidebar(false)}
-              className="md:hidden h-8 w-8"
+              className="h-8 w-8"
             >
               <X className="h-4 w-4" />
             </Button>
