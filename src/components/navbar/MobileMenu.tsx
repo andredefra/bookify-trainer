@@ -52,7 +52,7 @@ const MobileMenu = ({
         ref={menuButtonRef}
         variant="ghost" 
         size="icon" 
-        className="fixed relative z-50" 
+        className="relative z-50" 
         onClick={handleOpenMenu}
         aria-label={t('nav.openMenu') || "Open menu"}
       >
@@ -65,9 +65,9 @@ const MobileMenu = ({
       >
         <SheetContent 
           side="right" 
-          className="p-0 w-full max-w-xs overflow-y-auto"
+          className="p-0 w-full max-w-xs overflow-y-auto bg-background/95 backdrop-blur-md border-l border-border/20"
         >
-          <div className="p-6 flex flex-col h-full">
+          <div className="p-6 flex flex-col h-full bg-background/50">
             <MobileMenuHeader onClose={handleCloseMenu} />
             
             <MobileNavLinks 

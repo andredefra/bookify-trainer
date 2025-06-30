@@ -78,4 +78,8 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .glass-navbar {
+    @apply bg-background/90 backdrop-blur-md shadow-sm border-b border-border/10;
+  }
 }

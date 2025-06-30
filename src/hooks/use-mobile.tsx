@@ -19,7 +19,7 @@ export function useIsMobile() {
   return !!isMobile
 }
 
-// Add the missing useMediaQuery function
+// Add the missing useMediaQuery function and tablet detection
 export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = React.useState(false)
 
@@ -34,4 +34,21 @@ export function useMediaQuery(query: string): boolean {
   }, [matches, query])
 
   return matches
+}
+
+export function useIsTablet() {
+  const [isTablet, setIsTablet] = React.useState<boolean | undefined>(undefined)
+
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(min-width: ${MOBILE_BREAKPOINT}px) and (max-width: 1023px)`)
+    const onChange = () => {
+      const width = window.innerWidth
+      setIsTablet(width >= MOBILE_BREAKPOINT && width < 1024)
+    }
+    mql.addEventListener("change", onChange)
+    onChange() // Call immediately to set initial value
+    return () => mql.removeEventListener("change", onChange)
+  }, [])
+
+  return !!isTablet
 }

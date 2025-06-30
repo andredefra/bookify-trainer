@@ -16,6 +16,20 @@ const Navbar = () => {
   const location = useLocation();
   const scrolled = useScrollHandler();
   
+  // Check if we're on tablet size (768px - 1024px)
+  const [isTablet, setIsTablet] = useState(false);
+  
+  useEffect(() => {
+    const checkTablet = () => {
+      const width = window.innerWidth;
+      setIsTablet(width >= 768 && width < 1024);
+    };
+    
+    checkTablet();
+    window.addEventListener('resize', checkTablet);
+    return () => window.removeEventListener('resize', checkTablet);
+  }, []);
+  
   // Check if we're on the home page
   const isHomePage = location.pathname === '/' || location.pathname === '/it';
   
@@ -27,10 +41,13 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Show mobile menu on both mobile and tablet
+  const shouldShowMobileMenu = isMobile || isTablet;
+
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 px-6 lg:px-10 ${
-        scrolled ? 'py-3 glass' : 'py-5 bg-transparent'
+        scrolled ? 'py-3 glass-navbar' : 'py-5 bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between relative">
@@ -38,16 +55,17 @@ const Navbar = () => {
           <BrandLogo />
         </div>
         
-        {!isMobile ? (
+        {/* Only show NavLinks on desktop (1024px+) */}
+        {!shouldShowMobileMenu ? (
           <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
         ) : null}
         
         <div className="flex-none flex items-center gap-3">
-          {!isMobile && <LanguageToggle />}
-          {!isMobile && <AuthButtons />}
+          {!shouldShowMobileMenu && <LanguageToggle />}
+          {!shouldShowMobileMenu && <AuthButtons />}
         </div>
         
-        {isMobile && (
+        {shouldShowMobileMenu && (
           <div className="ml-auto">
             <MobileMenu 
               mobileMenuOpen={mobileMenuOpen}
