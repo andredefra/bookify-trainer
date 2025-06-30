@@ -18,7 +18,6 @@ interface ClientHeaderProps {
   onLogout: () => void;
   onMobileMenuClick?: () => void;
   showMobileMenuButton?: boolean;
-  notificationCount?: number;
 }
 
 export function ClientHeader({
@@ -26,8 +25,7 @@ export function ClientHeader({
   name,
   onLogout,
   onMobileMenuClick,
-  showMobileMenuButton = false,
-  notificationCount = 3
+  showMobileMenuButton = false
 }: ClientHeaderProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
@@ -60,7 +58,6 @@ export function ClientHeader({
           <HeaderActions 
             user={user} 
             onLogout={handleLogout} 
-            notificationCount={notificationCount}
           />
         </div>
       </div>

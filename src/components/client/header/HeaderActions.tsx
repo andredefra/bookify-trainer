@@ -16,10 +16,9 @@ interface User {
 interface HeaderActionsProps {
   user?: User | null;
   onLogout: () => void;
-  notificationCount?: number;
 }
 
-export function HeaderActions({ user, onLogout, notificationCount }: HeaderActionsProps) {
+export function HeaderActions({ user, onLogout }: HeaderActionsProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
@@ -37,7 +36,7 @@ export function HeaderActions({ user, onLogout, notificationCount }: HeaderActio
       </div>
       
       <div className="flex items-center space-x-3">
-        <NotificationBell count={notificationCount} />
+        <NotificationBell />
         
         <Button variant="outline" size="sm" onClick={onLogout}>
           {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
