@@ -32,15 +32,15 @@ export const packagePerformanceData = [
 // Enhanced colors for charts
 export const ENHANCED_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
-// Export enhanced types
+// Export enhanced types - making clientRevenue and occasionalRevenue optional to match MonthlyRevenueDataPoint
 export interface EnhancedRevenueDataPoint {
   name: string;
   programs: number;
   sessions: number;
   packages: number;
   total: number;
-  clientRevenue: number;
-  occasionalRevenue: number;
+  clientRevenue?: number;
+  occasionalRevenue?: number;
 }
 
 export interface RevenueBreakdown {
@@ -51,7 +51,6 @@ export interface RevenueBreakdown {
   packageClientsCount: number;
   individualClientsCount: number;
   conversionRate: number;
-  clientConversionRate: number;
   clientsRevenue: number;
   occasionalParticipantsRevenue: number;
   averageClientValue: number;
@@ -95,7 +94,6 @@ export const calculateRevenueFromTransactions = (transactions: any[], recurringC
     packageClientsCount: packageClients.size,
     individualClientsCount: individualClients.size,
     conversionRate: Math.round((packageClients.size / (packageClients.size + individualClients.size)) * 100),
-    clientConversionRate: Math.round((packageClients.size / (packageClients.size + individualClients.size)) * 100),
     clientsRevenue,
     occasionalParticipantsRevenue,
     averageClientValue: clientsRevenue / Math.max(recurringClients.length, 1),

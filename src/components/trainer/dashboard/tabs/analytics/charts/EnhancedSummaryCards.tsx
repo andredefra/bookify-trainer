@@ -1,79 +1,68 @@
 
-import React from "react";
-import { EnhancedRevenueDataPoint, RevenueBreakdown } from "../data/enhancedRevenueData";
-import { Users, TrendingUp, Euro, Target } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { MonthlyRevenueDataPoint } from "../types";
+import { RevenueBreakdown } from "../data/enhancedRevenueData";
 
 interface EnhancedSummaryCardsProps {
-  data: EnhancedRevenueDataPoint[];
+  data: MonthlyRevenueDataPoint[];
   revenueBreakdown: RevenueBreakdown;
 }
 
 export function EnhancedSummaryCards({ data, revenueBreakdown }: EnhancedSummaryCardsProps) {
-  // Calculate summary metrics from mock data
+  // Calculate totals from data
   const totalRevenue = data.reduce((sum, month) => sum + month.total, 0);
-  const totalClientRevenue = data.reduce((sum, month) => sum + month.clientRevenue, 0);
-  const totalOccasionalRevenue = data.reduce((sum, month) => sum + month.occasionalRevenue, 0);
+  const totalClientRevenue = data.reduce((sum, month) => sum + (month.clientRevenue || 0), 0);
+  const totalOccasionalRevenue = data.reduce((sum, month) => sum + (month.occasionalRevenue || 0), 0);
   
-  const clientRevenuePercentage = (totalClientRevenue / totalRevenue) * 100;
-  const lastMonthTotal = data[data.length - 1].total;
-  const prevMonthTotal = data[data.length - 2].total;
-  const monthOverMonthGrowth = ((lastMonthTotal - prevMonthTotal) / prevMonthTotal) * 100;
-  
+  // Calculate monthly averages
+  const monthlyAverage = totalRevenue / data.length;
+  const avgMonthlyGrowth = data.length > 1 ? 
+    ((data[data.length - 1].total - data[0].total) / data[0].total * 100) / (data.length - 1) : 0;
+
+  const cards = [
+    {
+      title: "Fatturato Totale (6 mesi)",
+      value: `€${totalRevenue.toLocaleString()}`,
+      subtitle: `Media mensile: €${Math.round(monthlyAverage).toLocaleString()}`,
+      color: "bg-blue-50 border-blue-200"
+    },
+    {
+      title: "Clienti Ricorrenti",
+      value: `€${revenueBreakdown.clientsRevenue.toLocaleString()}`,
+      subtitle: `${Math.round((revenueBreakdown.clientsRevenue / totalRevenue) * 100)}% del totale`,
+      color: "bg-green-50 border-green-200"
+    },
+    {
+      title: "Partecipanti Occasionali", 
+      value: `€${revenueBreakdown.occasionalParticipantsRevenue.toLocaleString()}`,
+      subtitle: `${Math.round((revenueBreakdown.occasionalParticipantsRevenue / totalRevenue) * 100)}% del totale`,
+      color: "bg-purple-50 border-purple-200"
+    },
+    {
+      title: "Valore Medio Cliente",
+      value: `€${Math.round(revenueBreakdown.averageClientValue)}`,
+      subtitle: `Crescita media: ${avgMonthlyGrowth > 0 ? '+' : ''}${avgMonthlyGrowth.toFixed(1)}%/mese`,
+      color: "bg-orange-50 border-orange-200"
+    }
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <div className="flex items-center space-x-3">
-          <div className="bg-blue-100 p-2 rounded-full">
-            <Euro className="h-5 w-5 text-blue-600" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-muted-foreground">Revenue da Clienti</div>
-            <div className="text-2xl font-bold">€{revenueBreakdown.clientsRevenue.toFixed(0)}</div>
-            <div className="text-xs text-blue-600">{clientRevenuePercentage.toFixed(1)}% del totale</div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <div className="flex items-center space-x-3">
-          <div className="bg-green-100 p-2 rounded-full">
-            <Users className="h-5 w-5 text-green-600" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-muted-foreground">Revenue Occasionali</div>
-            <div className="text-2xl font-bold">€{revenueBreakdown.occasionalParticipantsRevenue.toFixed(0)}</div>
-            <div className="text-xs text-green-600">{(100 - clientRevenuePercentage).toFixed(1)}% del totale</div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <div className="flex items-center space-x-3">
-          <div className="bg-purple-100 p-2 rounded-full">
-            <Target className="h-5 w-5 text-purple-600" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-muted-foreground">Valore Medio Cliente</div>
-            <div className="text-2xl font-bold">€{revenueBreakdown.averageClientValue.toFixed(0)}</div>
-            <div className="text-xs text-purple-600">Per transazione</div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <div className="flex items-center space-x-3">
-          <div className="bg-amber-100 p-2 rounded-full">
-            <TrendingUp className="h-5 w-5 text-amber-600" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-muted-foreground">Crescita Mensile</div>
-            <div className="text-2xl font-bold">{monthOverMonthGrowth > 0 ? '+' : ''}{monthOverMonthGrowth.toFixed(1)}%</div>
-            <div className={`text-xs ${monthOverMonthGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              vs mese precedente
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {cards.map((card, index) => (
+        <Card key={index} className={`${card.color}`}>
+          <CardContent className="p-4">
+            <h3 className="text-sm font-medium text-gray-600 mb-1">
+              {card.title}
+            </h3>
+            <p className="text-2xl font-bold text-gray-900 mb-1">
+              {card.value}
+            </p>
+            <p className="text-xs text-gray-500">
+              {card.subtitle}
+            </p>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }

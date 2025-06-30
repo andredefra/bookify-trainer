@@ -1,57 +1,61 @@
 
-import React from "react";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend,
-  ResponsiveContainer 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ComposedChart,
+  Bar,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend
 } from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
-import { EnhancedRevenueDataPoint } from "../data/enhancedRevenueData";
+import { MonthlyRevenueDataPoint } from "../types";
 
 interface ClientTypeRevenueChartProps {
-  data: EnhancedRevenueDataPoint[];
+  data: MonthlyRevenueDataPoint[];
 }
 
 export function ClientTypeRevenueChart({ data }: ClientTypeRevenueChartProps) {
   return (
     <Card>
-      <CardContent className="pt-6">
-        <h3 className="text-base font-medium mb-4">Revenue per Tipo di Cliente</h3>
-        <div className="w-full h-[300px]">
+      <CardHeader>
+        <CardTitle>Fatturato per Tipologia Cliente</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart 
-              data={data}
-              margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis 
-                dataKey="name" 
-                stroke="#94a3b8" 
-                axisLine={false} 
-                tickLine={false}
-              />
-              <YAxis
-                stroke="#94a3b8"
-                tickFormatter={(value) => `€${value}`}
-                axisLine={false} 
-                tickLine={false}
-              />
+            <ComposedChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
               <Tooltip 
-                formatter={(value, name) => [`€${value}`, name === 'clientRevenue' ? 'Clienti Ricorrenti' : 'Partecipanti Occasionali']}
-                contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                formatter={(value, name) => [`€${value}`, name]}
+                labelFormatter={(label) => `Mese: ${label}`}
               />
-              <Legend 
-                iconSize={10}
-                formatter={(value) => value === 'clientRevenue' ? 'Clienti Ricorrenti' : 'Partecipanti Occasionali'}
+              <Legend />
+              <Bar 
+                dataKey="clientRevenue" 
+                name="Clienti Ricorrenti" 
+                fill="#0088FE" 
+                stackId="client-type"
               />
-              <Bar dataKey="clientRevenue" fill="#0088FE" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              <Bar dataKey="occasionalRevenue" fill="#00C49F" radius={[4, 4, 0, 0]} maxBarSize={40} />
-            </BarChart>
+              <Bar 
+                dataKey="occasionalRevenue" 
+                name="Partecipanti Occasionali" 
+                fill="#00C49F" 
+                stackId="client-type"
+              />
+              <Line 
+                type="monotone" 
+                dataKey="total" 
+                name="Total Revenue" 
+                stroke="#FF8042" 
+                strokeWidth={2}
+                dot={{ fill: '#FF8042' }}
+              />
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
