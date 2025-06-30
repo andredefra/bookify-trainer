@@ -89,7 +89,7 @@ export function TrainerProfileDialog({
       stats: {
         clientsHelped: "200+",
         successRate: "95%",
-        avgWeightLoss: "12 lbs",
+        avgResult: "12 lbs lost",
         specializations: 4
       },
       availability: {
@@ -134,7 +134,7 @@ export function TrainerProfileDialog({
       stats: {
         clientsHelped: "150+",
         successRate: "92%",
-        avgFitnessGain: "35%",
+        avgResult: "35% fitness gain",
         specializations: 4
       },
       availability: {
@@ -232,7 +232,7 @@ export function TrainerProfileDialog({
                 </Card>
                 <Card className="p-4 text-center">
                   <TrendingUp className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-                  <div className="text-lg font-bold">{trainer.stats.avgWeightLoss || trainer.stats.avgFitnessGain}</div>
+                  <div className="text-lg font-bold">{trainer.stats.avgResult}</div>
                   <div className="text-xs text-gray-500">Avg. Results</div>
                 </Card>
                 <Card className="p-4 text-center">
