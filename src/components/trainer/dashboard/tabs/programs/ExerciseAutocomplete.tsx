@@ -96,11 +96,11 @@ export function ExerciseAutocomplete({
                 <div className="flex items-center justify-between mb-1">
                   <span className="font-medium">{exercise.name}</span>
                   <div className="flex gap-1">
-                    <Badge className={getCategoryColor(exercise.category)} size="sm">
+                    <Badge className={getCategoryColor(exercise.category)}>
                       {exercise.category}
                     </Badge>
                     {exercise.isCustom && (
-                      <Badge variant="outline" size="sm">Custom</Badge>
+                      <Badge variant="outline">Custom</Badge>
                     )}
                   </div>
                 </div>
