@@ -38,7 +38,7 @@ export function TrainerCardHeader({ image, name, status }: TrainerCardHeaderProp
   const statusConfig = getStatusConfig(status);
   
   return (
-    <div className="relative aspect-[5/4] bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+    <div className="relative h-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
       <img 
         src={image}
         alt={name}
