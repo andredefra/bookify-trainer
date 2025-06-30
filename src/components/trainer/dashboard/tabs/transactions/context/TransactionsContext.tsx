@@ -1,3 +1,4 @@
+
 import { createContext, useState, useContext, ReactNode } from "react";
 import { TransactionType } from "../types/transactionTypes";
 import { ClientSummary, ClientData } from "../types/TransactionsTabTypes";
@@ -19,7 +20,6 @@ const initialTransactions = [
   { id: 12, client: "Daniel Lee", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-07", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, packageId: "pkg-003" },
 ];
 
-// Client data
 const clientList: ClientData[] = [
   { id: 1, name: "Sarah Johnson" },
   { id: 2, name: "Mike Peterson" },
@@ -111,29 +111,22 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   };
   
   const handleConfirmCashPayment = (transactionId: number) => {
-    setTransactions(transactions.map(transaction => 
-      transaction.id === transactionId 
-        ? { ...transaction, status: 'paid' as const } 
-        : transaction
-    ));
-    
-    toast.success("Cash payment confirmed", {
-      duration: 3000
-    });
+    setTransactions(prev => 
+      prev.map(t => 
+        t.id === transactionId ? { ...t, status: 'paid' as const } : t
+      )
+    );
+    toast.success("Cash payment confirmed", { duration: 2000 });
   };
 
   const handleToggleInvoice = (transactionId: number) => {
-    setTransactions(transactions.map(transaction => 
-      transaction.id === transactionId 
-        ? { ...transaction, invoiceSent: !transaction.invoiceSent } 
-        : transaction
-    ));
-    
-    toast.success("Invoice status updated", {
-      duration: 3000
-    });
+    setTransactions(prev => 
+      prev.map(t => 
+        t.id === transactionId ? { ...t, invoiceSent: !t.invoiceSent } : t
+      )
+    );
   };
-  
+
   const filteredTransactions = transactions.filter(t => 
     t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
     t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||

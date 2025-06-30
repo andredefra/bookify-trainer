@@ -1,5 +1,5 @@
 
-import { MonthlyRevenueDataPoint } from '../types';
+import { MonthlyRevenueDataPoint, RevenueBreakdownDataPoint } from '../types';
 
 // Enhanced revenue data including packages
 export const enhancedMonthlyRevenue: MonthlyRevenueDataPoint[] = [
@@ -32,8 +32,27 @@ export const packagePerformanceData = [
 // Enhanced colors for charts
 export const ENHANCED_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+// Export missing types
+export interface EnhancedRevenueDataPoint {
+  name: string;
+  programs: number;
+  sessions: number;
+  packages: number;
+  total: number;
+}
+
+export interface RevenueBreakdown {
+  packageRevenue: number;
+  individualSessionRevenue: number;
+  programRevenue: number;
+  totalRevenue: number;
+  packageClientsCount: number;
+  individualClientsCount: number;
+  conversionRate: number;
+}
+
 // Calculate revenue breakdown from transactions
-export const calculateRevenueFromTransactions = (transactions: any[], recurringClients: string[]) => {
+export const calculateRevenueFromTransactions = (transactions: any[], recurringClients: string[]): RevenueBreakdown => {
   const packageRevenue = transactions
     .filter(t => t.type === 'Package' && t.status === 'paid')
     .reduce((sum, t) => sum + t.amount, 0);

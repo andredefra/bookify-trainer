@@ -1,5 +1,5 @@
 
-export type SessionStatus = "upcoming" | "completed" | "cancelled" | "pending" | "confirmed" | "registered" | "available";
+export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'cancelled' | 'completed';
 
 export interface SessionItem {
   id: number;
@@ -11,20 +11,18 @@ export interface SessionItem {
   price?: number;
   attendees?: number;
   maxAttendees?: number;
-  mode?: "in-person" | "video";
-  description?: string;
-  // Location fields for in-person sessions
+  mode?: 'video' | 'in-person';
   address?: string;
-  locationNotes?: string;
-  latitude?: number;
-  longitude?: number;
+  location?: string;
+  description?: string;
+  packageSession?: boolean;
 }
 
 export interface TrainerSessionItem {
   id: number;
   name: string;
   time: string;
-  date: string | Date;
+  date: string;
   participants: number;
   maxParticipants: number;
   paymentStatus: {
@@ -33,29 +31,4 @@ export interface TrainerSessionItem {
     total: number;
   };
   waitingList?: number;
-  mode?: "in-person" | "video";
-  status?: "scheduled" | "completed" | "cancelled";
-  description?: string;
-  participantDetails?: Array<{
-    id: string;
-    name: string;
-    email: string;
-    isClient: boolean;
-    paymentStatus: string;
-    bookedAt: string;
-    phone?: string;
-  }>;
-  waitingListDetails?: Array<{
-    id: string;
-    name: string;
-    email: string;
-    isClient: boolean;
-    addedAt: string;
-    priority: number;
-  }>;
-  // Location fields for in-person sessions
-  address?: string;
-  locationNotes?: string;
-  latitude?: number;
-  longitude?: number;
 }

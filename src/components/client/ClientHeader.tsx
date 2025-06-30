@@ -8,25 +8,29 @@ import { useMediaQuery } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 
 interface ClientHeaderProps {
-  user: {
+  user?: {
     name?: string;
     email: string;
     type: string;
     plan?: string;
     profileImage?: string;
   } | null;
+  name?: string;
   onLogout: () => void;
   onMobileMenuClick?: () => void;
+  showMobileMenuButton?: boolean;
 }
 
 export function ClientHeader({
   user,
+  name,
   onLogout,
-  onMobileMenuClick
+  onMobileMenuClick,
+  showMobileMenuButton = false
 }: ClientHeaderProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
-  const displayName = user?.name || user?.email?.split('@')[0] || "Client";
+  const displayName = name || user?.name || user?.email?.split('@')[0] || "Client";
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
   const handleLogout = () => {
@@ -48,7 +52,7 @@ export function ClientHeader({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
-            {isMobile && (
+            {(isMobile || showMobileMenuButton) && (
               <Button variant="ghost" size="icon" onClick={onMobileMenuClick} className="mr-2">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle sidebar</span>

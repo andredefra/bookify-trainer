@@ -3,12 +3,12 @@ import { MonthlyRevenueDataPoint, RevenueByProductDataPoint, ClientGrowthDataPoi
 
 // Mock data for revenue analytics
 export const monthlyRevenue: MonthlyRevenueDataPoint[] = [
-  { name: 'Jan', programs: 720, sessions: 480, total: 1200 },
-  { name: 'Feb', programs: 840, sessions: 560, total: 1400 },
-  { name: 'Mar', programs: 900, sessions: 600, total: 1500 },
-  { name: 'Apr', programs: 1080, sessions: 720, total: 1800 },
-  { name: 'May', programs: 1200, sessions: 800, total: 2000 },
-  { name: 'Jun', programs: 1020, sessions: 680, total: 1700 },
+  { name: 'Jan', programs: 720, sessions: 480, packages: 400, total: 1600 },
+  { name: 'Feb', programs: 840, sessions: 560, packages: 600, total: 2000 },
+  { name: 'Mar', programs: 900, sessions: 600, packages: 750, total: 2250 },
+  { name: 'Apr', programs: 1080, sessions: 720, packages: 900, total: 2700 },
+  { name: 'May', programs: 1200, sessions: 800, packages: 1000, total: 3000 },
+  { name: 'Jun', programs: 1020, sessions: 680, packages: 850, total: 2550 },
 ];
 
 export const revenueByProduct: RevenueByProductDataPoint[] = [

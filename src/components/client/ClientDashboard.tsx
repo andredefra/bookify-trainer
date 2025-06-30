@@ -13,6 +13,7 @@ import { SettingsTab } from "./tabs/SettingsTab";
 import { MyPackagesTab } from "./tabs/packages/MyPackagesTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SessionItem } from "@/types/sessions";
+import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
 
 // Sample upcoming sessions data
 const upcomingSessions: SessionItem[] = [
@@ -45,6 +46,49 @@ const upcomingSessions: SessionItem[] = [
   }
 ];
 
+// Sample messages data
+const trainerMessages = [
+  { id: 1, from: "John Doe", preview: "Great progress on your training!", time: "2h ago", read: false },
+  { id: 2, from: "Jane Smith", preview: "Don't forget your session tomorrow", time: "1d ago", read: true },
+];
+
+// Sample progress data
+const progressData: ProgressItem[] = [
+  { 
+    goal: "Lose weight for summer", 
+    current: 68, 
+    target: 65, 
+    unit: "kg", 
+    progress: 75,
+    goalType: "weight_management",
+    targetDate: "2024-06-30",
+    createdAt: "2024-03-01",
+    lastUpdated: "2024-03-15"
+  },
+  { 
+    goal: "Daily steps target", 
+    current: 8500, 
+    target: 10000, 
+    unit: "steps", 
+    progress: 85,
+    goalType: "activity_level",
+    targetDate: "2024-12-31",
+    frequency: { value: 10000, period: "daily" },
+    createdAt: "2024-03-01",
+    lastUpdated: "2024-03-15"
+  }
+];
+
+// Sample user data
+const sampleUser = {
+  name: "Demo Client",
+  email: "client@demo.com",
+  type: "client",
+  plan: "pro"
+};
+
+const goals = ["Weight loss", "Muscle gain", "Flexibility"];
+
 interface ClientDashboardProps {
   customName?: string;
 }
@@ -58,6 +102,7 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
     <div className="min-h-screen flex flex-col">
       <ClientHeader
         name={customName || "Client Dashboard"} 
+        user={sampleUser}
         onLogout={() => console.log("Logout clicked")}
         onMobileMenuClick={() => setShowSidebar(!showSidebar)}
         showMobileMenuButton={isMobile}
@@ -72,15 +117,21 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
         
         <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-6xl space-y-6">
-            {activeTab === "overview" && <Overview />}
+            {activeTab === "overview" && (
+              <Overview 
+                progressData={progressData}
+                upcomingSessions={upcomingSessions}
+                trainerMessages={trainerMessages}
+              />
+            )}
             {activeTab === "sessions" && <SessionsTab upcomingSessions={upcomingSessions} />}
             {activeTab === "packages" && <MyPackagesTab />}
             {activeTab === "training-program" && <TrainingProgramTab />}
             {activeTab === "training-log" && <TrainingLogTab />}
             {activeTab === "trainers" && <TrainersTab />}
             {activeTab === "analytics" && <AnalyticsTab />}
-            {activeTab === "messages" && <MessagesTab />}
-            {activeTab === "settings" && <SettingsTab />}
+            {activeTab === "messages" && <MessagesTab messages={trainerMessages} />}
+            {activeTab === "settings" && <SettingsTab user={sampleUser} goals={goals} />}
           </div>
         </main>
       </div>
