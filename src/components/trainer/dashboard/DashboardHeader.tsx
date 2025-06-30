@@ -25,7 +25,7 @@ export function DashboardHeader({ name, onLogout, onMobileMenuClick, showMobileM
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Dashboard</h1>
             <p className="text-sm text-muted-foreground hidden sm:block">
-              Benvenuto, {name}
+              Welcome, {name}
             </p>
           </div>
         </div>
