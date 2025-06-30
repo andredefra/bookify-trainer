@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Bot, UserPlus, Youtube, Video, CheckCircle, FileText } from 'lucide-react';
+import { Calendar, CreditCard, Users, Clock, ListChecks, MessageSquare, Bot, UserPlus, Youtube, Video, CheckCircle, FileText, Star, Package, Plus } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 const Features = () => {
@@ -71,6 +71,21 @@ const Features = () => {
       icon: <FileText className="h-6 w-6 text-primary" />,
       title: t('features.invoiceManagement'),
       description: t('features.invoiceManagementDesc')
+    },
+    {
+      icon: <Star className="h-6 w-6 text-primary" />,
+      title: t('features.reviewManagement'),
+      description: t('features.reviewManagementDesc')
+    },
+    {
+      icon: <Package className="h-6 w-6 text-primary" />,
+      title: t('features.packageCreation'),
+      description: t('features.packageCreationDesc')
+    },
+    {
+      icon: <Plus className="h-6 w-6 text-primary" />,
+      title: t('features.serviceManagement'),
+      description: t('features.serviceManagementDesc')
     }
   ];
 

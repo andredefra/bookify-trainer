@@ -1,4 +1,3 @@
-
 export const en = {
   // Navigation
   'nav.home': 'Home',
@@ -55,6 +54,12 @@ export const en = {
   'features.personalTrainerPageDesc': 'Custom URL and profile to showcase your services and availability to potential clients.',
   'features.invoiceManagement': 'Invoice Management',
   'features.invoiceManagementDesc': 'Connect an invoice management system, selecting yours between the integrations we offer, and generate invoices for all your incoming payments.',
+  'features.reviewManagement': 'Review Management',
+  'features.reviewManagementDesc': 'Manage client reviews and testimonials to build trust and credibility with potential clients.',
+  'features.packageCreation': 'Package Creation',
+  'features.packageCreationDesc': 'Create customized training packages combining sessions, programs, and services for comprehensive client offerings.',
+  'features.serviceManagement': 'Service Management',
+  'features.serviceManagementDesc': 'Offer additional services that can be integrated into your packages to enhance client experience.',
   
   // How it works
   'howItWorks.title': 'How It Works',

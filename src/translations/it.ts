@@ -1,4 +1,3 @@
-
 export const it = {
   // Navigation
   'nav.home': 'Home',
@@ -55,6 +54,12 @@ export const it = {
   'features.personalTrainerPageDesc': 'URL e profilo personalizzati per mostrare i tuoi servizi e disponibilità ai potenziali clienti.',
   'features.invoiceManagement': 'Gestione Fatture',
   'features.invoiceManagementDesc': 'Connetti un gestionale di fatturazione, selezionando il tuo gestionale di fatturazione fra le integrazioni offerte, e genera fatture per ogni pagamento in entrata.',
+  'features.reviewManagement': 'Gestione Recensioni',
+  'features.reviewManagementDesc': 'Gestisci le recensioni e le testimonianze dei clienti per costruire fiducia e credibilità con potenziali clienti.',
+  'features.packageCreation': 'Creazione Pacchetti',
+  'features.packageCreationDesc': 'Crea pacchetti di allenamento personalizzati combinando sessioni, programmi e servizi per offerte complete ai clienti.',
+  'features.serviceManagement': 'Gestione Servizi',
+  'features.serviceManagementDesc': 'Offri servizi aggiuntivi che possono essere integrati nei tuoi pacchetti per migliorare l\'esperienza del cliente.',
   
   // How it works
   'howItWorks.title': 'Come Funziona',
