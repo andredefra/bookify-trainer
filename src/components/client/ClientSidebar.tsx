@@ -75,11 +75,8 @@ export function ClientSidebar({
         showSidebar ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
-          {/* Header with Logo and Close Button */}
-          <div className="flex items-center justify-between p-4 border-b border-border bg-gradient-to-r from-primary/5 to-primary/10">
-            <div className="flex items-center">
-              <span className="font-display text-lg font-bold text-primary">MyPersonal.fit</span>
-            </div>
+          {/* Header with Close Button only */}
+          <div className="flex items-center justify-end p-4 border-b border-border bg-gradient-to-r from-primary/5 to-primary/10">
             {/* Mobile close button */}
             <Button 
               variant="ghost" 
