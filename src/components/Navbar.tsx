@@ -22,13 +22,20 @@ const Navbar = () => {
   useEffect(() => {
     const checkTablet = () => {
       const width = window.innerWidth;
-      setIsTablet(width >= 768 && width < 1024);
+      const newIsTablet = width >= 768 && width < 1024;
+      setIsTablet(newIsTablet);
+      
+      // Debug logs to help troubleshoot
+      console.log('Window width:', width);
+      console.log('isMobile:', isMobile);
+      console.log('isTablet:', newIsTablet);
+      console.log('shouldShowMobileMenu:', isMobile || newIsTablet);
     };
     
     checkTablet();
     window.addEventListener('resize', checkTablet);
     return () => window.removeEventListener('resize', checkTablet);
-  }, []);
+  }, [isMobile]);
   
   // Check if we're on the home page
   const isHomePage = location.pathname === '/' || location.pathname === '/it';
@@ -41,8 +48,9 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Show mobile menu on both mobile and tablet
+  // Show mobile menu on mobile and tablet, show desktop menu only on desktop (>1024px)
   const shouldShowMobileMenu = isMobile || isTablet;
+  const shouldShowDesktopMenu = !shouldShowMobileMenu; // This will be true only on desktop
 
   return (
     <nav
@@ -55,14 +63,14 @@ const Navbar = () => {
           <BrandLogo />
         </div>
         
-        {/* Only show NavLinks on desktop (1024px+) */}
-        {!shouldShowMobileMenu ? (
+        {/* Show NavLinks only on desktop (>1024px) */}
+        {shouldShowDesktopMenu && (
           <NavLinks isHomePage={isHomePage} scrollToSection={scrollToSection} />
-        ) : null}
+        )}
         
         <div className="flex-none flex items-center gap-3">
-          {!shouldShowMobileMenu && <LanguageToggle />}
-          {!shouldShowMobileMenu && <AuthButtons />}
+          {shouldShowDesktopMenu && <LanguageToggle />}
+          {shouldShowDesktopMenu && <AuthButtons />}
         </div>
         
         {shouldShowMobileMenu && (
