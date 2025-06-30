@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Clock, CreditCard } from "lucide-react";
+import { Package, Clock, CreditCard, User } from "lucide-react";
 import { ClientPackage } from "@/hooks/useClientPackages";
 
 interface BrowsePackagesDialogProps {
@@ -16,6 +16,17 @@ interface BrowsePackagesDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+// Trainer name mapping function
+const getTrainerName = (trainerId: string): string => {
+  const trainerNames: { [key: string]: string } = {
+    '00000000-0000-0000-0000-000000000001': 'John Doe',
+    '11111111-1111-1111-1111-111111111111': 'Sarah Johnson',
+    '22222222-2222-2222-2222-222222222222': 'Alex Thompson'
+  };
+  
+  return trainerNames[trainerId] || 'Unknown Trainer';
+};
 
 export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePackagesDialogProps) {
   const getPackageTypeColor = (type: string) => {
@@ -49,6 +60,10 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
                   </Badge>
                 </div>
                 <CardTitle className="text-lg">{pkg.title}</CardTitle>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <User className="h-4 w-4" />
+                  <span>by {getTrainerName(pkg.trainer_id)}</span>
+                </div>
                 <p className="text-sm text-muted-foreground">{pkg.description}</p>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -105,7 +120,7 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
             <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Packages Available</h3>
             <p className="text-muted-foreground">
-              Check back later for new training packages.
+              Check back later for new training packages from your trainers.
             </p>
           </div>
         )}

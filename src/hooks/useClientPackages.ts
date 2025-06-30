@@ -10,6 +10,7 @@ export interface ClientPackage {
   sessions_count: number;
   price: number;
   validity_days: number;
+  trainer_id: string;
 }
 
 export interface ClientPackageAssignment {
@@ -34,6 +35,30 @@ const isValidPackageType = (type: string): type is 'sessions_only' | 'program_on
 
 const isValidStatus = (status: string): status is 'active' | 'expired' | 'completed' | 'cancelled' => {
   return ['active', 'expired', 'completed', 'cancelled'].includes(status);
+};
+
+// Function to determine actual status based on expiry date
+const getActualStatus = (dbStatus: string, expiryDate: string): 'active' | 'expired' | 'completed' | 'cancelled' => {
+  const today = new Date();
+  const expiry = new Date(expiryDate);
+  
+  // If expiry date has passed, override status to expired
+  if (expiry < today && dbStatus === 'active') {
+    return 'expired';
+  }
+  
+  return isValidStatus(dbStatus) ? dbStatus : 'active';
+};
+
+// Trainer name mapping
+const getTrainerName = (trainerId: string): string => {
+  const trainerNames: { [key: string]: string } = {
+    '00000000-0000-0000-0000-000000000001': 'John Doe',
+    '11111111-1111-1111-1111-111111111111': 'Sarah Johnson',
+    '22222222-2222-2222-2222-222222222222': 'Alex Thompson'
+  };
+  
+  return trainerNames[trainerId] || 'Unknown Trainer';
 };
 
 export function useClientPackages() {
@@ -73,7 +98,7 @@ export function useClientPackages() {
 
       console.log('Raw assignments data:', assignments);
 
-      // Transform the data to match our interface with proper type checking
+      // Transform the data to match our interface with proper type checking and status calculation
       const transformedAssignments: ClientPackageAssignment[] = assignments?.map(assignment => {
         const pkg = assignment.package;
         
@@ -83,11 +108,8 @@ export function useClientPackages() {
           pkg.package_type = 'sessions_only';
         }
         
-        // Ensure status is valid
-        if (!isValidStatus(assignment.status)) {
-          console.warn(`Invalid status: ${assignment.status}, defaulting to active`);
-          assignment.status = 'active';
-        }
+        // Calculate actual status based on expiry date
+        const actualStatus = getActualStatus(assignment.status, assignment.expiry_date);
 
         return {
           id: assignment.id,
@@ -99,7 +121,7 @@ export function useClientPackages() {
           sessions_used: assignment.sessions_used || 0,
           sessions_total: assignment.sessions_total,
           total_paid: assignment.total_paid || 0,
-          status: assignment.status as 'active' | 'expired' | 'completed' | 'cancelled',
+          status: actualStatus,
           package: {
             id: pkg.id,
             title: pkg.title,
@@ -107,20 +129,26 @@ export function useClientPackages() {
             package_type: pkg.package_type as 'sessions_only' | 'program_only' | 'hybrid' | 'service',
             sessions_count: pkg.sessions_count || 0,
             price: pkg.price,
-            validity_days: pkg.validity_days || 90
+            validity_days: pkg.validity_days || 90,
+            trainer_id: pkg.trainer_id
           },
-          trainer_name: "John Doe" // TODO: Add trainer name lookup
+          trainer_name: getTrainerName(assignment.trainer_id)
         };
       }) || [];
 
       console.log('Transformed assignments:', transformedAssignments);
       setPackages(transformedAssignments);
       
-      // Fetch available packages for browsing
+      // Get trainer IDs for this client's packages to filter available packages
+      const clientTrainerIds = transformedAssignments.map(pkg => pkg.trainer_id);
+      const uniqueTrainerIds = [...new Set(clientTrainerIds)];
+      
+      // Fetch available packages from client's trainers only
       const { data, error } = await supabase
         .from('client_packages')
         .select('*')
         .eq('is_active', true)
+        .in('trainer_id', uniqueTrainerIds.length > 0 ? uniqueTrainerIds : ['00000000-0000-0000-0000-000000000001'])
         .order('price', { ascending: true });
 
       if (error) {
@@ -143,7 +171,8 @@ export function useClientPackages() {
           package_type: pkg.package_type as 'sessions_only' | 'program_only' | 'hybrid' | 'service',
           sessions_count: pkg.sessions_count || 0,
           price: pkg.price,
-          validity_days: pkg.validity_days || 90
+          validity_days: pkg.validity_days || 90,
+          trainer_id: pkg.trainer_id
         };
       }) || [];
 
