@@ -32,7 +32,11 @@ export function DashboardHeader({ name, onLogout, onMobileMenuClick, showMobileM
         
         <div className="flex items-center gap-4">
           <NotificationBell />
-          <HeaderActions onLogout={onLogout} />
+          <HeaderActions 
+            displayName={name}
+            status="online"
+            onLogout={onLogout}
+          />
         </div>
       </div>
     </header>
