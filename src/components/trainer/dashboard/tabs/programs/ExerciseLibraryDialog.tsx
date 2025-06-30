@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, Plus, Filter } from 'lucide-react';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { AddExerciseDialog } from './AddExerciseDialog';
+import { EditExerciseDialog } from './EditExerciseDialog';
 import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
+import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 
 interface ExerciseLibraryDialogProps {
   open: boolean;
@@ -17,6 +19,8 @@ interface ExerciseLibraryDialogProps {
 
 export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDialogProps) {
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [editingExercise, setEditingExercise] = useState<ExerciseData | null>(null);
   const [activeTab, setActiveTab] = useState('all');
   
   const {
@@ -27,7 +31,8 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     selectedCategory,
     setSelectedCategory,
     deleteCustomExercise,
-    updateCustomExercise
+    updateExercise,
+    resetExercise
   } = useExerciseLibrary();
 
   const categories = [
@@ -53,6 +58,19 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     }
     return true;
   });
+
+  const handleEditExercise = (exercise: ExerciseData) => {
+    setEditingExercise(exercise);
+    setShowEditDialog(true);
+  };
+
+  const handleSaveEdit = (id: string, updates: Partial<ExerciseData>) => {
+    updateExercise(id, updates);
+  };
+
+  const handleResetExercise = (id: string) => {
+    resetExercise(id);
+  };
 
   return (
     <>
@@ -105,7 +123,7 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
               <TabsContent value="all" className="mt-6">
                 <ExerciseLibraryList
                   exercises={allExercises}
-                  onEdit={null} // Can't edit predefined exercises
+                  onEdit={handleEditExercise}
                   onDelete={null} // Can't delete predefined exercises
                 />
               </TabsContent>
@@ -113,7 +131,7 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
               <TabsContent value="custom" className="mt-6">
                 <ExerciseLibraryList
                   exercises={myExercises}
-                  onEdit={updateCustomExercise}
+                  onEdit={handleEditExercise}
                   onDelete={deleteCustomExercise}
                 />
               </TabsContent>
@@ -125,6 +143,14 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
       <AddExerciseDialog
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
+      />
+
+      <EditExerciseDialog
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        exercise={editingExercise}
+        onSave={handleSaveEdit}
+        onReset={!editingExercise?.isCustom ? handleResetExercise : undefined}
       />
     </>
   );

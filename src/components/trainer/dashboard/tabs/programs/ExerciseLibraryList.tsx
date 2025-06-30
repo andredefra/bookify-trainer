@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ExternalLink, Edit, Trash2, Play, Dumbbell } from 'lucide-react';
+import { ExternalLink, Edit, Trash2, Play, Dumbbell, Settings } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 
 interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
-  onEdit: ((id: string, updates: Partial<ExerciseData>) => void) | null;
+  onEdit: ((exercise: ExerciseData) => void) | null;
   onDelete: ((id: string) => void) | null;
 }
 
@@ -60,9 +60,17 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <CardTitle className="text-lg leading-tight">{exercise.name}</CardTitle>
-                {exercise.isCustom && (
-                  <Badge variant="outline" className="ml-2 shrink-0">Custom</Badge>
-                )}
+                <div className="flex gap-1 ml-2 shrink-0">
+                  {exercise.isCustom && (
+                    <Badge variant="outline">Custom</Badge>
+                  )}
+                  {(exercise as any).isModified && (
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <Settings className="h-3 w-3 mr-1" />
+                      Modified
+                    </Badge>
+                  )}
+                </div>
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 <Badge className={getCategoryColor(exercise.category)}>
@@ -119,13 +127,13 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       </Button>
                     )}
 
-                    {exercise.isCustom && onEdit && (
+                    {onEdit && (
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={(e) => {
                           e.stopPropagation();
-                          // TODO: Implement edit functionality
+                          onEdit(exercise);
                         }}
                       >
                         <Edit className="h-3 w-3 mr-1" />
