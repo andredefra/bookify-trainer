@@ -1,165 +1,99 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Home,
-  Calendar,
-  Package,
-  Dumbbell,
-  BookOpen,
-  Users,
-  BarChart3,
-  MessageSquare,
-  Settings,
-  Menu,
-  X
-} from "lucide-react";
+import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface ClientSidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   showSidebar: boolean;
   setShowSidebar: (show: boolean) => void;
+  unreadMessageCount?: number;
+  user?: {
+    name?: string;
+    email: string;
+    type: string;
+    plan?: string;
+  };
 }
+
+const sidebarItems = [
+  { id: "overview", label: "Overview", icon: User },
+  { id: "sessions", label: "Sessions", icon: Calendar },
+  { id: "packages", label: "My Packages", icon: Package },
+  { id: "training-program", label: "Training Program", icon: Dumbbell },
+  { id: "training-log", label: "Training Log", icon: BookOpen },
+  { id: "trainers", label: "Trainers", icon: Users },
+  { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "messages", label: "Messages", icon: MessageSquare, badge: true },
+  { id: "settings", label: "Settings", icon: Settings },
+];
 
 export function ClientSidebar({ 
   activeTab, 
   setActiveTab, 
   showSidebar, 
-  setShowSidebar 
+  setShowSidebar,
+  unreadMessageCount = 0,
+  user 
 }: ClientSidebarProps) {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
-
-  const navigationItems = [
-    {
-      title: "Overview",
-      icon: Home,
-      href: "overview",
-    },
-    {
-      title: "Sessions",
-      icon: Calendar,
-      href: "sessions",
-    },
-    {
-      title: "My Packages",
-      icon: Package,
-      href: "packages",
-      badge: 2,
-    },
-    {
-      title: "Training Program",
-      icon: Dumbbell,
-      href: "training-program",
-    },
-    {
-      title: "Training Log",
-      icon: BookOpen,
-      href: "training-log",
-    },
-    {
-      title: "Trainers",
-      icon: Users,
-      href: "trainers",
-    },
-    {
-      title: "Analytics",
-      icon: BarChart3,
-      href: "analytics",
-    },
-    {
-      title: "Messages",
-      icon: MessageSquare,
-      href: "messages",
-      badge: 2,
-    },
-    {
-      title: "Settings",
-      icon: Settings,
-      href: "settings",
-    },
-  ];
-
-  const handleTabClick = (tab: string) => {
-    setActiveTab(tab);
-    if (!isDesktop) {
-      setShowSidebar(false);
-    }
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+    setShowSidebar(false);
   };
 
-  // Desktop sidebar
-  if (isDesktop) {
-    return (
-      <aside className="w-64 bg-white border-r border-border flex flex-col">
-        <div className="flex-1 overflow-y-auto p-4">
-          <nav className="space-y-2">
-            {navigationItems.map((item) => (
-              <Button
-                key={item.href}
-                variant={activeTab === item.href ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => handleTabClick(item.href)}
-              >
-                <item.icon className="w-5 h-5 mr-3" />
-                {item.title}
-                {item.badge && (
-                  <Badge className="ml-auto">{item.badge}</Badge>
-                )}
-              </Button>
-            ))}
-          </nav>
-        </div>
-      </aside>
-    );
-  }
-
-  // Mobile sidebar
   return (
     <>
-      {/* Overlay */}
+      {/* Mobile overlay */}
       {showSidebar && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" 
           onClick={() => setShowSidebar(false)}
         />
       )}
-
-      {/* Mobile Sidebar */}
-      <aside
-        className={cn(
-          "fixed left-0 top-0 h-full w-64 bg-white border-r border-border z-50 transform transition-transform duration-200 ease-in-out lg:hidden",
-          showSidebar ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="font-semibold">Menu</h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowSidebar(false)}
-          >
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
-        
-        <div className="flex-1 overflow-y-auto p-4">
-          <nav className="space-y-2">
-            {navigationItems.map((item) => (
-              <Button
-                key={item.href}
-                variant={activeTab === item.href ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => handleTabClick(item.href)}
-              >
-                <item.icon className="w-5 h-5 mr-3" />
-                {item.title}
-                {item.badge && (
-                  <Badge className="ml-auto">{item.badge}</Badge>
-                )}
-              </Button>
-            ))}
+      
+      {/* Sidebar */}
+      <aside className={cn(
+        "fixed left-0 top-0 z-50 h-full w-64 bg-white border-r border-border transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
+        showSidebar ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex flex-col h-full pt-16 md:pt-0">
+          {/* Mobile close button */}
+          <div className="flex justify-end p-4 md:hidden">
+            <Button variant="ghost" size="icon" onClick={() => setShowSidebar(false)}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          {/* Navigation */}
+          <nav className="flex-1 px-4 pb-4 space-y-2">
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              const showBadge = item.badge && unreadMessageCount > 0;
+              
+              return (
+                <Button
+                  key={item.id}
+                  variant={isActive ? "secondary" : "ghost"}
+                  className={cn(
+                    "w-full justify-start gap-3 h-10",
+                    isActive && "bg-primary/10 text-primary hover:bg-primary/15"
+                  )}
+                  onClick={() => handleTabClick(item.id)}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {showBadge && (
+                    <Badge variant="destructive" className="ml-auto h-5 w-5 flex items-center justify-center p-0 text-xs">
+                      {unreadMessageCount}
+                    </Badge>
+                  )}
+                </Button>
+              );
+            })}
           </nav>
         </div>
       </aside>

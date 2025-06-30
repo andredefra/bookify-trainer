@@ -1,5 +1,5 @@
 
-export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'cancelled' | 'completed';
+export type SessionStatus = 'available' | 'registered' | 'confirmed' | 'cancelled' | 'completed' | 'pending' | 'scheduled';
 
 export interface SessionItem {
   id: number;
@@ -14,6 +14,9 @@ export interface SessionItem {
   mode?: 'video' | 'in-person';
   address?: string;
   location?: string;
+  locationNotes?: string;
+  latitude?: number;
+  longitude?: number;
   description?: string;
   packageSession?: boolean;
 }
@@ -22,7 +25,7 @@ export interface TrainerSessionItem {
   id: number;
   name: string;
   time: string;
-  date: string;
+  date: string | Date;
   participants: number;
   maxParticipants: number;
   paymentStatus: {
@@ -31,4 +34,13 @@ export interface TrainerSessionItem {
     total: number;
   };
   waitingList?: number;
+  mode?: 'video' | 'in-person';
+  status?: 'scheduled' | 'cancelled' | 'completed';
+  description?: string;
+  address?: string;
+  locationNotes?: string;
+  latitude?: number;
+  longitude?: number;
+  participantDetails?: any[];
+  waitingListDetails?: any[];
 }

@@ -29,6 +29,8 @@ export interface MonthlyRevenueDataPoint {
   sessions: number;
   packages: number;
   total: number;
+  clientRevenue?: number;
+  occasionalRevenue?: number;
 }
 
 export interface RevenueByProductDataPoint {

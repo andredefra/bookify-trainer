@@ -3,12 +3,12 @@ import { MonthlyRevenueDataPoint, RevenueBreakdownDataPoint } from '../types';
 
 // Enhanced revenue data including packages
 export const enhancedMonthlyRevenue: MonthlyRevenueDataPoint[] = [
-  { name: 'Jan', programs: 720, sessions: 480, packages: 1200, total: 2400 },
-  { name: 'Feb', programs: 840, sessions: 560, packages: 1400, total: 2800 },
-  { name: 'Mar', programs: 900, sessions: 600, packages: 1500, total: 3000 },
-  { name: 'Apr', programs: 1080, sessions: 720, packages: 1800, total: 3600 },
-  { name: 'May', programs: 1200, sessions: 800, packages: 2000, total: 4000 },
-  { name: 'Jun', programs: 1020, sessions: 680, packages: 1700, total: 3400 },
+  { name: 'Jan', programs: 720, sessions: 480, packages: 1200, total: 2400, clientRevenue: 1800, occasionalRevenue: 600 },
+  { name: 'Feb', programs: 840, sessions: 560, packages: 1400, total: 2800, clientRevenue: 2100, occasionalRevenue: 700 },
+  { name: 'Mar', programs: 900, sessions: 600, packages: 1500, total: 3000, clientRevenue: 2250, occasionalRevenue: 750 },
+  { name: 'Apr', programs: 1080, sessions: 720, packages: 1800, total: 3600, clientRevenue: 2700, occasionalRevenue: 900 },
+  { name: 'May', programs: 1200, sessions: 800, packages: 2000, total: 4000, clientRevenue: 3000, occasionalRevenue: 1000 },
+  { name: 'Jun', programs: 1020, sessions: 680, packages: 1700, total: 3400, clientRevenue: 2550, occasionalRevenue: 850 },
 ];
 
 // Client type revenue breakdown
@@ -32,13 +32,15 @@ export const packagePerformanceData = [
 // Enhanced colors for charts
 export const ENHANCED_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
-// Export missing types
+// Export enhanced types
 export interface EnhancedRevenueDataPoint {
   name: string;
   programs: number;
   sessions: number;
   packages: number;
   total: number;
+  clientRevenue: number;
+  occasionalRevenue: number;
 }
 
 export interface RevenueBreakdown {
@@ -49,6 +51,11 @@ export interface RevenueBreakdown {
   packageClientsCount: number;
   individualClientsCount: number;
   conversionRate: number;
+  clientConversionRate: number;
+  clientsRevenue: number;
+  occasionalParticipantsRevenue: number;
+  averageClientValue: number;
+  averageOccasionalValue: number;
 }
 
 // Calculate revenue breakdown from transactions
@@ -69,13 +76,29 @@ export const calculateRevenueFromTransactions = (transactions: any[], recurringC
   const packageClients = new Set(transactions.filter(t => t.isPackagePayment).map(t => t.client));
   const individualClients = new Set(transactions.filter(t => !t.isPackagePayment && !t.packageId).map(t => t.client));
   
+  // Calculate client vs occasional revenue
+  const clientsRevenue = transactions
+    .filter(t => recurringClients.includes(t.client) && t.status === 'paid')
+    .reduce((sum, t) => sum + t.amount, 0);
+    
+  const occasionalParticipantsRevenue = transactions
+    .filter(t => !recurringClients.includes(t.client) && t.status === 'paid')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const totalRevenue = packageRevenue + individualSessionRevenue + programRevenue;
+  
   return {
     packageRevenue,
     individualSessionRevenue,
     programRevenue,
-    totalRevenue: packageRevenue + individualSessionRevenue + programRevenue,
+    totalRevenue,
     packageClientsCount: packageClients.size,
     individualClientsCount: individualClients.size,
-    conversionRate: Math.round((packageClients.size / (packageClients.size + individualClients.size)) * 100)
+    conversionRate: Math.round((packageClients.size / (packageClients.size + individualClients.size)) * 100),
+    clientConversionRate: Math.round((packageClients.size / (packageClients.size + individualClients.size)) * 100),
+    clientsRevenue,
+    occasionalParticipantsRevenue,
+    averageClientValue: clientsRevenue / Math.max(recurringClients.length, 1),
+    averageOccasionalValue: occasionalParticipantsRevenue / Math.max(transactions.filter(t => !recurringClients.includes(t.client)).length, 1)
   };
 };

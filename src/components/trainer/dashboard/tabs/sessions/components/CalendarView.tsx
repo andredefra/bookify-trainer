@@ -30,7 +30,9 @@ export function CalendarView({
   const groupedSessions: Record<string, TrainerSessionItem[]> = {};
   
   sessions.forEach(session => {
-    const date = typeof session.date === 'string' ? session.date : session.date.toLocaleDateString();
+    const date = typeof session.date === 'string' 
+      ? session.date 
+      : session.date.toLocaleDateString();
     
     if (!groupedSessions[date]) {
       groupedSessions[date] = [];
