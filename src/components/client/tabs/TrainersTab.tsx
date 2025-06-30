@@ -1,5 +1,8 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Info } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { PaymentDialog } from "@/components/shared/PaymentDialog";
 import { TrainerMarketplace } from "@/components/client/trainers/TrainerMarketplace";
@@ -18,7 +21,6 @@ const paymentHistory = [
   { id: 3, trainer: "Alex Thompson", amount: 120, date: "2023-06-01", type: "Program" },
 ];
 
-// Enhanced mock data for trainers with complete information
 const myTrainers = [
   { 
     id: 1, 
@@ -108,10 +110,7 @@ export function TrainersTab() {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
   
-  // Force myTrainers to be included in the default trainers
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
-  
-  // Mock user plan - in a real app, this would come from your user context or state
   const userPlan = localStorage.getItem('user-plan') || "freemium";
   
   // Check if we should show the marketplace tab based on navigation state
@@ -121,11 +120,9 @@ export function TrainersTab() {
     }
   }, [location.state]);
   
-  // Add explicit logs for debugging
   console.log("myTrainers in TrainersTab:", myTrainers.map(t => `${t.id} - ${t.name}`));
   console.log("followedTrainers in TrainersTab:", followedTrainers);
   
-  // Force initialization of followedTrainers with myTrainers on component mount
   useEffect(() => {
     if (followedTrainers.length === 0) {
       const trainerIds = myTrainers.map(trainer => trainer.id);
@@ -150,75 +147,89 @@ export function TrainersTab() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-between'}`}>
-          <div>
-            <CardTitle>
-              {activeTab === "marketplace" ? "Find New Trainer" : 
-               activeTab === "followed" ? "Followed Trainers" : 
-               activeTab === "payments" ? "Payment History" :
-               "My Trainers"}
-            </CardTitle>
-            <CardDescription>
-              {activeTab === "marketplace" 
-                ? "Browse trainers and book sessions" 
-                : activeTab === "followed"
-                ? "Trainers you follow and their group events"
-                : activeTab === "payments"
-                ? "View your past payments to trainers"
-                : "Your personal training team"}
-            </CardDescription>
-          </div>
-          <NavigationButtons 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab}
-            isMobile={isMobile}
-          />
-        </div>
-      </CardHeader>
-      <CardContent className={isMobile ? "px-3 sm:px-6" : undefined}>
-        {activeTab === "marketplace" ? (
-          <TrainerMarketplace />
-        ) : activeTab === "trainers" ? (
-          <TrainersGrid 
-            trainers={myTrainers} 
-            onPayClick={handlePayTrainer} 
-            followedTrainers={followedTrainers}
-            onFollowToggle={handleFollowToggle}
-          />
-        ) : activeTab === "followed" ? (
-          <FollowedTrainersSection 
-            followedTrainers={followedTrainers}
-            allTrainers={myTrainers}
-            onPayClick={handlePayTrainer}
-            onFollowToggle={handleFollowToggle}
-            onBrowseTrainers={() => setActiveTab("marketplace")}
-          />
-        ) : (
-          <PaymentsTable payments={paymentHistory} />
-        )}
-      </CardContent>
-      
-      {/* Payment Dialog */}
-      {selectedTrainer && (
-        <PaymentDialog
-          open={showPaymentDialog}
-          onOpenChange={setShowPaymentDialog}
-          item={{
-            id: `trainer-payment-${Date.now()}`,
-            name: `Payment to ${selectedTrainer.name}`,
-            price: selectedTrainer.amount,
-            description: "Direct payment for trainer services",
-            reference: "Direct Payment"
-          }}
-          onPaymentComplete={handlePaymentComplete}
-          title={`Pay ${selectedTrainer.name}`}
-          description="Complete payment for trainer services"
-          isPremiumFeature={true}
-          userPlan={userPlan}
-        />
+    <div className="space-y-6">
+      {/* My Trainer Explanation - Only show on trainers tab */}
+      {activeTab === "trainers" && (
+        <Alert className="border-blue-200 bg-blue-50">
+          <Info className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="text-blue-800">
+            <strong>What is "My Trainer"?</strong> A trainer becomes your personal trainer when they assign you a customized program or package. 
+            Simply following a trainer, participating in their group sessions, or being invited doesn't make them "your trainer" - 
+            they only become your personal trainer when they send you a personalized package or training program.
+          </AlertDescription>
+        </Alert>
       )}
-    </Card>
+
+      <Card>
+        <CardHeader>
+          <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-between'}`}>
+            <div>
+              <CardTitle>
+                {activeTab === "marketplace" ? "Find New Trainer" : 
+                 activeTab === "followed" ? "Followed Trainers" : 
+                 activeTab === "payments" ? "Payment History" :
+                 "My Trainers"}
+              </CardTitle>
+              <CardDescription>
+                {activeTab === "marketplace" 
+                  ? "Browse trainers and book sessions" 
+                  : activeTab === "followed"
+                  ? "Trainers you follow and their group events"
+                  : activeTab === "payments"
+                  ? "View your past payments to trainers"
+                  : "Your personal training team"}
+              </CardDescription>
+            </div>
+            <NavigationButtons 
+              activeTab={activeTab} 
+              onTabChange={setActiveTab}
+              isMobile={isMobile}
+            />
+          </div>
+        </CardHeader>
+        <CardContent className={isMobile ? "px-3 sm:px-6" : undefined}>
+          {activeTab === "marketplace" ? (
+            <TrainerMarketplace />
+          ) : activeTab === "trainers" ? (
+            <TrainersGrid 
+              trainers={myTrainers} 
+              onPayClick={handlePayTrainer} 
+              followedTrainers={followedTrainers}
+              onFollowToggle={handleFollowToggle}
+            />
+          ) : activeTab === "followed" ? (
+            <FollowedTrainersSection 
+              followedTrainers={followedTrainers}
+              allTrainers={myTrainers}
+              onPayClick={handlePayTrainer}
+              onFollowToggle={handleFollowToggle}
+              onBrowseTrainers={() => setActiveTab("marketplace")}
+            />
+          ) : (
+            <PaymentsTable payments={paymentHistory} />
+          )}
+        </CardContent>
+        
+        {/* Payment Dialog */}
+        {selectedTrainer && (
+          <PaymentDialog
+            open={showPaymentDialog}
+            onOpenChange={setShowPaymentDialog}
+            item={{
+              id: `trainer-payment-${Date.now()}`,
+              name: `Payment to ${selectedTrainer.name}`,
+              price: selectedTrainer.amount,
+              description: "Direct payment for trainer services",
+              reference: "Direct Payment"
+            }}
+            onPaymentComplete={handlePaymentComplete}
+            title={`Pay ${selectedTrainer.name}`}
+            description="Complete payment for trainer services"
+            isPremiumFeature={true}
+            userPlan={userPlan}
+          />
+        )}
+      </Card>
+    </div>
   );
 }
