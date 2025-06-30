@@ -36,6 +36,56 @@ interface PaymentDialogProps {
   userPlan?: string;
 }
 
+// PayPal payment form mockup
+const PayPalPaymentForm = () => (
+  <div className="space-y-4">
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="text-blue-600 font-bold text-lg">PayPal</div>
+      </div>
+      <p className="text-sm text-blue-700 mb-3">
+        You'll be redirected to PayPal to complete your payment securely
+      </p>
+      <div className="text-xs text-blue-600">
+        ✓ Buyer protection included
+      </div>
+    </div>
+  </div>
+);
+
+// Klarna payment form mockup
+const KlarnaPaymentForm = ({ amount }: { amount: number }) => (
+  <div className="space-y-4">
+    <div className="bg-pink-50 border border-pink-200 rounded-lg p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-6 h-6 bg-pink-600 rounded text-white text-xs flex items-center justify-center font-bold">K</div>
+        <span className="font-semibold text-pink-800">Klarna</span>
+      </div>
+      <p className="text-sm text-pink-700 mb-3">
+        Split your payment into 4 interest-free installments
+      </p>
+      <div className="grid grid-cols-4 gap-2 text-xs">
+        <div className="text-center">
+          <div className="font-medium">Today</div>
+          <div className="text-gray-600">€{(amount / 4).toFixed(2)}</div>
+        </div>
+        <div className="text-center">
+          <div className="font-medium">2 weeks</div>
+          <div className="text-gray-600">€{(amount / 4).toFixed(2)}</div>
+        </div>
+        <div className="text-center">
+          <div className="font-medium">4 weeks</div>
+          <div className="text-gray-600">€{(amount / 4).toFixed(2)}</div>
+        </div>
+        <div className="text-center">
+          <div className="font-medium">6 weeks</div>
+          <div className="text-gray-600">€{(amount / 4).toFixed(2)}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 export function PaymentDialog({ 
   open, 
   onOpenChange, 
@@ -47,7 +97,7 @@ export function PaymentDialog({
   userPlan = "freemium"
 }: PaymentDialogProps) {
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash' | 'paypal' | 'klarna'>('card');
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -72,19 +122,27 @@ export function PaymentDialog({
     setTimeout(() => {
       setLoading(false);
       
-      if (paymentMethod === 'card') {
-        // Validate card details
-        if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
-          toast.error("Please fill in all card details");
-          return;
-        }
-        
-        // Process card payment
-        toast.success("Payment processed successfully");
-      } else {
-        // Cash payment notification
-        toast.success("Payment marked as pending. Pay your trainer in cash.");
+      let message = "";
+      switch (paymentMethod) {
+        case 'card':
+          if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
+            toast.error("Please fill in all card details");
+            return;
+          }
+          message = "Payment processed successfully";
+          break;
+        case 'paypal':
+          message = "PayPal payment completed successfully";
+          break;
+        case 'klarna':
+          message = "Klarna payment set up successfully. First installment charged.";
+          break;
+        case 'cash':
+          message = "Payment marked as pending. Pay your trainer in cash.";
+          break;
       }
+      
+      toast.success(message);
       
       // Reset form
       setCardNumber('');
@@ -96,6 +154,32 @@ export function PaymentDialog({
       onOpenChange(false);
       onPaymentComplete();
     }, 1500);
+  };
+
+  const renderPaymentForm = () => {
+    switch (paymentMethod) {
+      case 'card':
+        return (
+          <CardPaymentForm 
+            cardNumber={cardNumber}
+            setCardNumber={setCardNumber}
+            cardHolder={cardHolder}
+            setCardHolder={setCardHolder}
+            expiryDate={expiryDate}
+            setExpiryDate={setExpiryDate}
+            cvv={cvv}
+            setCvv={setCvv}
+          />
+        );
+      case 'paypal':
+        return <PayPalPaymentForm />;
+      case 'klarna':
+        return <KlarnaPaymentForm amount={item.price} />;
+      case 'cash':
+        return <CashPaymentNotice />;
+      default:
+        return null;
+    }
   };
   
   return (
@@ -135,20 +219,7 @@ export function PaymentDialog({
                 onMethodChange={setPaymentMethod} 
               />
               
-              {paymentMethod === 'card' ? (
-                <CardPaymentForm 
-                  cardNumber={cardNumber}
-                  setCardNumber={setCardNumber}
-                  cardHolder={cardHolder}
-                  setCardHolder={setCardHolder}
-                  expiryDate={expiryDate}
-                  setExpiryDate={setExpiryDate}
-                  cvv={cvv}
-                  setCvv={setCvv}
-                />
-              ) : (
-                <CashPaymentNotice />
-              )}
+              {renderPaymentForm()}
             </div>
             
             <DialogFooter className={isMobile ? "mt-4 flex-col gap-2" : ""}>
@@ -165,7 +236,7 @@ export function PaymentDialog({
                 disabled={loading}
                 className={isMobile ? "w-full" : ""}
               >
-                {loading ? "Processing..." : paymentMethod === 'card' ? "Pay Now" : "Confirm Cash Payment"}
+                {loading ? "Processing..." : `Pay €${item.price}`}
               </Button>
             </DialogFooter>
           </form>
