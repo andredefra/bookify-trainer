@@ -10,7 +10,9 @@ import {
   Settings,
   CreditCard,
   LineChart,
-  FolderKanban
+  FolderKanban,
+  Package,
+  CalendarDays
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -48,6 +50,16 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
       title: "Sessions",
       icon: Calendar,
       href: "sessions",
+    },
+    {
+      title: "Packages",
+      icon: Package,
+      href: "packages",
+    },
+    {
+      title: "Calendar",
+      icon: CalendarDays,
+      href: "calendar",
     },
     {
       title: "Messages",

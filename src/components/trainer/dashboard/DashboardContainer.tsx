@@ -6,6 +6,8 @@ import { OverviewTab } from "./tabs/OverviewTab";
 import { ClientsTab } from "./tabs/ClientsTab";
 import { SessionsTab } from "./tabs/SessionsTab";
 import { ProgramsTab } from "./tabs/ProgramsTab";
+import { PackagesTab } from "./tabs/PackagesTab";
+import { CalendarTab } from "./tabs/CalendarTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { MessagesTab } from "./tabs/MessagesTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
@@ -108,6 +110,8 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
             {activeTab === "clients" && <ClientsTab clients={sampleClients} />}
             {activeTab === "sessions" && <SessionsTab upcomingSessions={sampleSessions} />}
             {activeTab === "programs" && <ProgramsTab />}
+            {activeTab === "packages" && <PackagesTab />}
+            {activeTab === "calendar" && <CalendarTab />}
             {activeTab === "analytics" && <AnalyticsTab />}
             {activeTab === "messages" && <MessagesTab messageRequests={sampleMessageRequests} />}
             {activeTab === "transactions" && <TransactionsTab />}

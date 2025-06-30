@@ -9,6 +9,271 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      calendar_events: {
+        Row: {
+          client_id: string | null
+          color: string | null
+          created_at: string
+          description: string | null
+          end_datetime: string
+          event_category: Database["public"]["Enums"]["event_category"]
+          id: string
+          is_recurring: boolean | null
+          lead_id: string | null
+          location: string | null
+          package_assignment_id: string | null
+          recurrence_pattern: string | null
+          session_id: string | null
+          start_datetime: string
+          title: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          end_datetime: string
+          event_category: Database["public"]["Enums"]["event_category"]
+          id?: string
+          is_recurring?: boolean | null
+          lead_id?: string | null
+          location?: string | null
+          package_assignment_id?: string | null
+          recurrence_pattern?: string | null
+          session_id?: string | null
+          start_datetime: string
+          title: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          end_datetime?: string
+          event_category?: Database["public"]["Enums"]["event_category"]
+          id?: string
+          is_recurring?: boolean | null
+          lead_id?: string | null
+          location?: string | null
+          package_assignment_id?: string | null
+          recurrence_pattern?: string | null
+          session_id?: string | null
+          start_datetime?: string
+          title?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          conversion_date: string | null
+          created_at: string
+          email: string | null
+          first_contact_date: string | null
+          id: string
+          last_activity_date: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          source: string | null
+          status: string | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          conversion_date?: string | null
+          created_at?: string
+          email?: string | null
+          first_contact_date?: string | null
+          id?: string
+          last_activity_date?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          conversion_date?: string | null
+          created_at?: string
+          email?: string | null
+          first_contact_date?: string | null
+          id?: string
+          last_activity_date?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      package_assignments: {
+        Row: {
+          client_id: string
+          created_at: string
+          expiry_date: string | null
+          id: string
+          package_id: string | null
+          purchase_date: string | null
+          sessions_used: number | null
+          status: string | null
+          total_paid: number | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          package_id?: string | null
+          purchase_date?: string | null
+          sessions_used?: number | null
+          status?: string | null
+          total_paid?: number | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          package_id?: string | null
+          purchase_date?: string | null
+          sessions_used?: number | null
+          status?: string | null
+          total_paid?: number | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_assignments_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      package_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string | null
+          id: string
+          installment_number: number | null
+          notes: string | null
+          package_assignment_id: string | null
+          paid_date: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          stripe_payment_intent_id: string | null
+          total_installments: number | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          installment_number?: number | null
+          notes?: string | null
+          package_assignment_id?: string | null
+          paid_date?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          stripe_payment_intent_id?: string | null
+          total_installments?: number | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          installment_number?: number | null
+          notes?: string | null
+          package_assignment_id?: string | null
+          paid_date?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          stripe_payment_intent_id?: string | null
+          total_installments?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_payments_package_assignment_id_fkey"
+            columns: ["package_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "package_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      packages: {
+        Row: {
+          created_at: string
+          description: string | null
+          discount_percentage: number | null
+          id: string
+          is_active: boolean | null
+          is_template: boolean | null
+          package_type: Database["public"]["Enums"]["package_type"]
+          price: number
+          program_ids: string[] | null
+          sessions_count: number | null
+          title: string
+          trainer_id: string
+          updated_at: string
+          validity_days: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_template?: boolean | null
+          package_type?: Database["public"]["Enums"]["package_type"]
+          price: number
+          program_ids?: string[] | null
+          sessions_count?: number | null
+          title: string
+          trainer_id: string
+          updated_at?: string
+          validity_days?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_template?: boolean | null
+          package_type?: Database["public"]["Enums"]["package_type"]
+          price?: number
+          program_ids?: string[] | null
+          sessions_count?: number | null
+          title?: string
+          trainer_id?: string
+          updated_at?: string
+          validity_days?: number | null
+        }
+        Relationships: []
+      }
       program_assignments: {
         Row: {
           actual_end_date: string | null
@@ -53,6 +318,59 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      sales_activities: {
+        Row: {
+          activity_type: string
+          calendar_event_id: string | null
+          completed_date: string | null
+          created_at: string
+          description: string | null
+          id: string
+          lead_id: string | null
+          outcome: string | null
+          scheduled_date: string | null
+          title: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          activity_type: string
+          calendar_event_id?: string | null
+          completed_date?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          lead_id?: string | null
+          outcome?: string | null
+          scheduled_date?: string | null
+          title: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          activity_type?: string
+          calendar_event_id?: string | null
+          completed_date?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          lead_id?: string | null
+          outcome?: string | null
+          scheduled_date?: string | null
+          title?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_activities_calendar_event_id_fkey"
+            columns: ["calendar_event_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trainer_notifications: {
         Row: {
@@ -106,7 +424,16 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      event_category:
+        | "session"
+        | "program_milestone"
+        | "sales_activity"
+        | "personal_task"
+        | "deadline"
+        | "availability"
+      package_type: "sessions_only" | "program_only" | "hybrid" | "service"
+      payment_method: "cash" | "stripe" | "installments"
+      payment_status: "pending" | "paid" | "overdue" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -221,6 +548,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      event_category: [
+        "session",
+        "program_milestone",
+        "sales_activity",
+        "personal_task",
+        "deadline",
+        "availability",
+      ],
+      package_type: ["sessions_only", "program_only", "hybrid", "service"],
+      payment_method: ["cash", "stripe", "installments"],
+      payment_status: ["pending", "paid", "overdue", "cancelled"],
+    },
   },
 } as const
