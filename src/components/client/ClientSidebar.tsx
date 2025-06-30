@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, LogOut, UserCircle, CreditCard, ChevronDown } from "lucide-react";
+import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, LogOut, UserCircle, CreditCard, MoreVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ClientSidebarProps {
@@ -78,67 +78,73 @@ export function ClientSidebar({
         showSidebar ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
-          {/* Mobile close button */}
-          <div className="flex justify-end p-4 md:hidden">
-            <Button variant="ghost" size="icon" onClick={() => setShowSidebar(false)}>
-              <X className="h-5 w-5" />
+          {/* Header with Logo and Close Button */}
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center">
+              <span className="font-display text-lg font-bold text-primary">MyPersonal.fit</span>
+            </div>
+            {/* Mobile close button */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setShowSidebar(false)}
+              className="md:hidden h-8 w-8"
+            >
+              <X className="h-4 w-4" />
             </Button>
           </div>
           
-          {/* User Profile Section */}
-          <div className="p-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-between p-3 h-auto hover:bg-muted/50 border border-border/50 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={user?.profileImage} alt={user?.name || "User"} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {getUserInitials(user?.name, user?.email)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 text-left">
-                      <p className="font-medium text-sm text-foreground">
-                        {user?.name || "User"}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {user?.email}
-                      </p>
-                      {user?.plan && (
-                        <Badge variant="secondary" className="text-xs h-4 mt-1 bg-primary/10 text-primary">
-                          {user.plan.charAt(0).toUpperCase() + user.plan.slice(1)}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuItem onClick={() => handleTabClick('settings')}>
-                  <UserCircle className="mr-2 h-4 w-4" />
-                  Profile Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleTabClick('settings')}>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Account & Billing
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {/* User Profile Section - Always Visible */}
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center gap-3 mb-3">
+              <Avatar className="h-12 w-12 border-2 border-primary/10">
+                <AvatarImage src={user?.profileImage} alt={user?.name || "User"} />
+                <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                  {getUserInitials(user?.name, user?.email)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm text-foreground truncate">
+                  {user?.name || "User"}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {user?.email}
+                </p>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => handleTabClick('settings')}>
+                    <UserCircle className="mr-2 h-4 w-4" />
+                    Profile Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleTabClick('settings')}>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    Account & Billing
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            
+            {/* Plan Badge */}
+            {user?.plan && (
+              <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                {user.plan.charAt(0).toUpperCase() + user.plan.slice(1)} Plan
+              </Badge>
+            )}
           </div>
-
-          <Separator />
           
           {/* Navigation Menu */}
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -149,15 +155,15 @@ export function ClientSidebar({
                   key={item.id}
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
-                    "w-full justify-start gap-3 px-3 py-2 h-10 text-left",
-                    isActive && "bg-primary/10 text-primary hover:bg-primary/15 font-medium"
+                    "w-full justify-start gap-3 px-3 py-2.5 h-11 text-left font-normal",
+                    isActive && "bg-primary/10 text-primary hover:bg-primary/15 font-medium shadow-sm"
                   )}
                   onClick={() => handleTabClick(item.id)}
                 >
                   <Icon className="h-4 w-4 flex-shrink-0" />
                   <span className="flex-1">{item.label}</span>
                   {showBadge && (
-                    <Badge variant="destructive" className="h-5 w-5 flex items-center justify-center p-0 text-xs">
+                    <Badge variant="destructive" className="h-5 w-5 flex items-center justify-center p-0 text-xs font-medium">
                       {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
                     </Badge>
                   )}
