@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useClientNotifications } from "@/hooks/useClientNotifications";
 
 interface ClientSidebarProps {
   activeTab: string;
@@ -43,6 +44,8 @@ export function ClientSidebar({
   user,
   onLogout
 }: ClientSidebarProps) {
+  const { unreadCount } = useClientNotifications();
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
     setShowSidebar(false);
@@ -192,14 +195,14 @@ export function ClientSidebar({
             })}
           </nav>
 
-          {/* Notification Bell */}
+          {/* Updated notification bell to show same count as header */}
           <div className="p-4 border-t border-border">
             <Button variant="outline" size="sm" className="w-full justify-center gap-2">
               <Bell className="h-4 w-4" />
               <span>Notifications</span>
-              {unreadMessageCount > 0 && (
+              {unreadCount > 0 && (
                 <Badge variant="destructive" className="h-4 w-4 flex items-center justify-center p-0 text-xs">
-                  {unreadMessageCount}
+                  {unreadCount > 9 ? '9+' : unreadCount}
                 </Badge>
               )}
             </Button>
