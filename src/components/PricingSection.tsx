@@ -26,7 +26,7 @@ const PricingSection = () => {
     elements.forEach((el) => observer.observe(el));
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
+      elements.forEach((el) => observer.unObserve(el));
     };
   }, []);
 
@@ -39,20 +39,19 @@ const PricingSection = () => {
     t('pricing.features.personalTrainerPage'),
     t('pricing.features.clientMessaging'),
     t('pricing.features.clientManagement'),
+    t('pricing.features.salesManagement'),
   ];
   
   const freemiumFeatures = [
+    t('pricing.features.everythingFree'),
     t('pricing.features.unlimitedSessions'),
-    t('pricing.features.personalTrainerPage'),
-    t('pricing.features.clientMessaging'),
-    t('pricing.features.clientManagement'),
+    t('pricing.features.googleCalendar'),
   ];
 
   const proFeatures = [
-    t('pricing.features.everythingFreemium'),
-    t('pricing.features.googleCalendar'),
+    t('pricing.features.everythingEssential'),
     t('pricing.features.digitalCashPayments'),
-    t('pricing.features.paymentIntegration'),
+    t('pricing.features.paymentInstallments'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
     t('pricing.features.customPrograms'),
