@@ -11,6 +11,7 @@ import { SettingsTab } from "@/components/client/tabs/SettingsTab";
 import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
 import { TrainingProgramTab } from "@/components/client/tabs/TrainingProgramTab";
 import { TrainingLogTab } from "@/components/client/tabs/TrainingLogTab";
+import { MyPackagesTab } from "@/components/client/tabs/packages/MyPackagesTab";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -158,6 +159,10 @@ const ClientDashboard = () => {
 
               <TabsContent value="sessions" className="mt-0">
                 <SessionsTab upcomingSessions={upcomingSessions} />
+              </TabsContent>
+
+              <TabsContent value="packages" className="mt-0">
+                <MyPackagesTab />
               </TabsContent>
 
               <TabsContent value="training-program" className="mt-0">
