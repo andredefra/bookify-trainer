@@ -13,7 +13,8 @@ import {
   FolderKanban,
   Package,
   CalendarDays,
-  Wrench
+  Wrench,
+  Star
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -82,6 +83,12 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
       title: "Business Data",
       icon: LineChart,
       href: "analytics",
+    },
+    {
+      title: "Reviews",
+      icon: Star,
+      href: "reviews",
+      badge: 1, // Pending modification requests
     },
     {
       title: "Settings",

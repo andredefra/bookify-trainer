@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
@@ -14,6 +13,7 @@ import { MessagesTab } from "./tabs/MessagesTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
 import { SalesTab } from "./tabs/SalesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
+import { ReviewsTab } from "./tabs/ReviewsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { TrainerSessionItem } from "@/types/sessions";
 
@@ -118,6 +118,7 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
             {activeTab === "messages" && <MessagesTab messageRequests={sampleMessageRequests} />}
             {activeTab === "transactions" && <TransactionsTab />}
             {activeTab === "sales" && <SalesTab />}
+            {activeTab === "reviews" && <ReviewsTab />}
             {activeTab === "settings" && <SettingsTab user={sampleUser} />}
           </div>
         </main>
