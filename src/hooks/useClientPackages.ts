@@ -1,6 +1,6 @@
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface ClientPackage {
   id: string;
@@ -42,20 +42,36 @@ export function useClientPackages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+
   const fetchPackages = async () => {
     try {
       setLoading(true);
-      
-      // Fetch user's package assignments with package details
+      setError(null);
+
+      // Get current user or use demo client ID
+      const { data: { user } } = await supabase.auth.getUser();
+      const clientId = user?.id || '00000000-0000-0000-0000-000000000002';
+
+      console.log('Fetching packages for client ID:', clientId);
+
+      // Fetch package assignments with package details
       const { data: assignments, error: assignmentsError } = await supabase
         .from('client_package_assignments')
         .select(`
           *,
           package:client_packages(*)
         `)
-        .order('created_at', { ascending: false });
+        .eq('client_id', clientId);
 
-      if (assignmentsError) throw assignmentsError;
+      if (assignmentsError) {
+        console.error('Error fetching assignments:', assignmentsError);
+        throw assignmentsError;
+      }
+
+      console.log('Raw assignments data:', assignments);
 
       // Transform the data to match our interface with proper type checking
       const transformedAssignments: ClientPackageAssignment[] = assignments?.map(assignment => {
@@ -97,25 +113,20 @@ export function useClientPackages() {
         };
       }) || [];
 
+      console.log('Transformed assignments:', transformedAssignments);
       setPackages(transformedAssignments);
       
-    } catch (err) {
-      console.error('Error fetching packages:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch packages');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchAvailablePackages = async () => {
-    try {
+      // Fetch available packages for browsing
       const { data, error } = await supabase
         .from('client_packages')
         .select('*')
         .eq('is_active', true)
         .order('price', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching available packages:', error);
+        throw error;
+      }
 
       // Transform the data to match our interface with proper type checking
       const transformedPackages: ClientPackage[] = data?.map(pkg => {
@@ -138,14 +149,12 @@ export function useClientPackages() {
 
       setAvailablePackages(transformedPackages);
     } catch (err) {
-      console.error('Error fetching available packages:', err);
+      console.error('Error fetching packages:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch packages');
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchPackages();
-    fetchAvailablePackages();
-  }, []);
 
   return {
     packages,
