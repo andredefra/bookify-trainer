@@ -1,10 +1,11 @@
 
-import { PackageBuilder } from "./PackageBuilder";
+import { PackageBuilder, PackageType } from "./PackageBuilder";
 
 interface PackageFormData {
   title: string;
   description: string;
   objective: string;
+  type: PackageType;
   sessions: {
     individual: { count: number; pricePerSession: number; };
     group: { count: number; pricePerSession: number; };

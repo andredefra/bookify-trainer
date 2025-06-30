@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -58,6 +57,18 @@ export function PackagesTab() {
       isPaid: true,
       objective: "Foundation",
       duration: 6
+    },
+    {
+      id: 4,
+      title: "Nutrition Consultation",
+      description: "Complete nutrition analysis and meal planning",
+      type: "service",
+      price: 150,
+      isActive: true,
+      clientsAssigned: 12,
+      isPaid: true,
+      objective: "Nutrition",
+      duration: 4
     }
   ]);
 
@@ -93,7 +104,11 @@ export function PackagesTab() {
       id: Date.now(),
       ...data,
       isActive: true,
-      clientsAssigned: 0
+      clientsAssigned: 0,
+      sessions: data.sessions?.individual?.count + data.sessions?.group?.count + data.sessions?.online?.count || 0,
+      programs: data.selectedPrograms?.map((p: any) => p.title) || [],
+      price: data.finalPrice,
+      duration: data.calculatedDuration
     };
     
     setPackageTemplates(prev => [...prev, newPackage]);
@@ -191,12 +206,17 @@ export function PackagesTab() {
                         <div className="flex items-center justify-between">
                           <span className="text-2xl font-bold">€{pkg.price}</span>
                           <div className="text-right">
-                            {pkg.sessions && (
+                            {pkg.sessions && pkg.type !== 'service' && (
                               <div className="text-sm font-medium">{pkg.sessions} sessions</div>
                             )}
-                            {pkg.programs && (
+                            {pkg.programs && pkg.programs.length > 0 && (
                               <div className="text-sm text-muted-foreground">
                                 + {pkg.programs.length} program(s)
+                              </div>
+                            )}
+                            {pkg.type === 'service' && (
+                              <div className="text-sm text-muted-foreground">
+                                Service package
                               </div>
                             )}
                           </div>

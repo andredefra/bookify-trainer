@@ -11,11 +11,14 @@ import { AdditionalServicesStep } from "./builder/AdditionalServicesStep";
 import { PricingStep } from "./builder/PricingStep";
 import { PackageSummary } from "./builder/PackageSummary";
 
+export type PackageType = 'sessions_only' | 'program_only' | 'hybrid' | 'service';
+
 interface PackageData {
   // Basic Info
   title: string;
   description: string;
   objective: string;
+  type: PackageType;
   
   // Sessions
   sessions: {
@@ -61,6 +64,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
     title: "",
     description: "",
     objective: "",
+    type: "sessions_only",
     sessions: {
       individual: { count: 0, pricePerSession: 50 },
       group: { count: 0, pricePerSession: 30 },
@@ -111,6 +115,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
         title: "",
         description: "",
         objective: "",
+        type: "sessions_only",
         sessions: {
           individual: { count: 0, pricePerSession: 50 },
           group: { count: 0, pricePerSession: 30 },
@@ -138,15 +143,31 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
       return;
     }
 
-    const totalComponents = 
-      packageData.sessions.individual.count + 
-      packageData.sessions.group.count + 
-      packageData.sessions.online.count + 
-      packageData.selectedPrograms.length;
+    // Validate based on package type
+    const validateByType = () => {
+      switch (packageData.type) {
+        case 'sessions_only':
+          const totalSessions = packageData.sessions.individual.count + 
+                               packageData.sessions.group.count + 
+                               packageData.sessions.online.count;
+          return totalSessions > 0;
+        case 'program_only':
+          return packageData.selectedPrograms.length > 0;
+        case 'service':
+          return packageData.additionalServices.length > 0;
+        case 'hybrid':
+          const hasSessions = (packageData.sessions.individual.count + 
+                              packageData.sessions.group.count + 
+                              packageData.sessions.online.count) > 0;
+          const hasPrograms = packageData.selectedPrograms.length > 0;
+          return hasSessions || hasPrograms;
+        default:
+          return false;
+      }
+    };
 
-    if (totalComponents === 0) {
-      toast.error("Seleziona almeno una sessione o un programma");
-      setCurrentStep("sessions");
+    if (!validateByType()) {
+      toast.error("Seleziona almeno un componente in base al tipo di package scelto");
       return;
     }
 
@@ -165,11 +186,11 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
   const isStepValid = (step: string) => {
     switch (step) {
       case "basic":
-        return packageData.title.trim().length > 0;
+        return packageData.title.trim().length > 0 && packageData.type;
       case "sessions":
       case "programs":
       case "services":
-        return true; // These are optional
+        return true; // These are optional based on type
       case "pricing":
         return packageData.basePrice > 0;
       default:
@@ -177,17 +198,37 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
     }
   };
 
+  const isStepRelevant = (step: string) => {
+    switch (step) {
+      case "sessions":
+        return packageData.type === 'sessions_only' || packageData.type === 'hybrid';
+      case "programs":
+        return packageData.type === 'program_only' || packageData.type === 'hybrid';
+      case "services":
+        return packageData.type === 'service' || packageData.type === 'hybrid';
+      default:
+        return true;
+    }
+  };
+
+  const getAvailableSteps = () => {
+    const allSteps = ["basic", "sessions", "programs", "services", "pricing"];
+    return allSteps.filter(step => isStepRelevant(step));
+  };
+
   const getNextStep = (current: string) => {
-    const steps = ["basic", "sessions", "programs", "services", "pricing"];
-    const currentIndex = steps.indexOf(current);
-    return currentIndex < steps.length - 1 ? steps[currentIndex + 1] : null;
+    const availableSteps = getAvailableSteps();
+    const currentIndex = availableSteps.indexOf(current);
+    return currentIndex < availableSteps.length - 1 ? availableSteps[currentIndex + 1] : null;
   };
 
   const getPrevStep = (current: string) => {
-    const steps = ["basic", "sessions", "programs", "services", "pricing"];
-    const currentIndex = steps.indexOf(current);
-    return currentIndex > 0 ? steps[currentIndex - 1] : null;
+    const availableSteps = getAvailableSteps();
+    const currentIndex = availableSteps.indexOf(current);
+    return currentIndex > 0 ? availableSteps[currentIndex - 1] : null;
   };
+
+  const availableSteps = getAvailableSteps();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -202,11 +243,17 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs value={currentStep} onValueChange={setCurrentStep}>
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className={`grid w-full grid-cols-${availableSteps.length}`}>
                 <TabsTrigger value="basic" disabled={false}>Base</TabsTrigger>
-                <TabsTrigger value="sessions" disabled={!isStepValid("basic")}>Sessioni</TabsTrigger>
-                <TabsTrigger value="programs" disabled={!isStepValid("basic")}>Programmi</TabsTrigger>
-                <TabsTrigger value="services" disabled={!isStepValid("basic")}>Servizi</TabsTrigger>
+                {availableSteps.includes("sessions") && (
+                  <TabsTrigger value="sessions" disabled={!isStepValid("basic")}>Sessioni</TabsTrigger>
+                )}
+                {availableSteps.includes("programs") && (
+                  <TabsTrigger value="programs" disabled={!isStepValid("basic")}>Programmi</TabsTrigger>
+                )}
+                {availableSteps.includes("services") && (
+                  <TabsTrigger value="services" disabled={!isStepValid("basic")}>Servizi</TabsTrigger>
+                )}
                 <TabsTrigger value="pricing" disabled={!isStepValid("basic")}>Prezzo</TabsTrigger>
               </TabsList>
 
@@ -218,26 +265,32 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
                   />
                 </TabsContent>
 
-                <TabsContent value="sessions" className="space-y-4">
-                  <SessionsStep 
-                    data={packageData} 
-                    onChange={updatePackageData} 
-                  />
-                </TabsContent>
+                {availableSteps.includes("sessions") && (
+                  <TabsContent value="sessions" className="space-y-4">
+                    <SessionsStep 
+                      data={packageData} 
+                      onChange={updatePackageData} 
+                    />
+                  </TabsContent>
+                )}
 
-                <TabsContent value="programs" className="space-y-4">
-                  <ProgramsStep 
-                    data={packageData} 
-                    onChange={updatePackageData} 
-                  />
-                </TabsContent>
+                {availableSteps.includes("programs") && (
+                  <TabsContent value="programs" className="space-y-4">
+                    <ProgramsStep 
+                      data={packageData} 
+                      onChange={updatePackageData} 
+                    />
+                  </TabsContent>
+                )}
 
-                <TabsContent value="services" className="space-y-4">
-                  <AdditionalServicesStep 
-                    data={packageData} 
-                    onChange={updatePackageData} 
-                  />
-                </TabsContent>
+                {availableSteps.includes("services") && (
+                  <TabsContent value="services" className="space-y-4">
+                    <AdditionalServicesStep 
+                      data={packageData} 
+                      onChange={updatePackageData} 
+                    />
+                  </TabsContent>
+                )}
 
                 <TabsContent value="pricing" className="space-y-4">
                   <PricingStep 
