@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { plans } from '@/components/trainer/dashboard/tabs/settings/membership/plansData';
@@ -26,7 +25,7 @@ const PricingSection = () => {
     elements.forEach((el) => observer.observe(el));
 
     return () => {
-      elements.forEach((el) => observer.unObserve(el));
+      elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
 
