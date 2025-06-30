@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2, Youtube, Video } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Exercise } from "@/data/training/types";
+import { ExerciseAutocomplete } from "@/components/trainer/dashboard/tabs/programs/ExerciseAutocomplete";
 
 interface ExerciseFormProps {
   exercise: Exercise;
@@ -14,15 +15,23 @@ interface ExerciseFormProps {
 }
 
 export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps) {
+  const handleExerciseSelect = (notes: string) => {
+    // Auto-fill notes when an exercise is selected from the library
+    if (!exercise.notes || exercise.notes.trim() === '') {
+      onUpdate("notes", notes);
+    }
+  };
+
   return (
     <div className="border rounded-md p-4">
       <div className="grid grid-cols-2 gap-4 mb-3">
         <div>
           <FormLabel>Exercise Name</FormLabel>
-          <Input
+          <ExerciseAutocomplete
             value={exercise.name}
-            onChange={(e) => onUpdate("name", e.target.value)}
-            placeholder="e.g. Squat, Bench Press, etc."
+            onChange={(value) => onUpdate("name", value)}
+            onExerciseSelect={handleExerciseSelect}
+            placeholder="es. Bench Press, Squat, etc."
           />
         </div>
         <div className="grid grid-cols-2 gap-2">

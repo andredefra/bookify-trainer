@@ -1,10 +1,12 @@
+
 import { useState } from "react";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Settings } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreateProgramDialog } from "./programs/CreateProgramDialog";
 import { AssignProgramDialog } from "./programs/AssignProgramDialog";
+import { ExerciseLibraryDialog } from "./programs/ExerciseLibraryDialog";
 import { ProgramsTabContent } from "./programs/ProgramsTabContent";
 import { currentProgram } from "@/data/training/mockPrograms/currentProgram";
 import { Exercise } from "@/data/training/types";
@@ -14,6 +16,7 @@ import { useProgramAssignments } from '@/hooks/useProgramAssignments';
 
 export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
+  const [showExerciseLibrary, setShowExerciseLibrary] = useState(false);
   const [activeClient, setActiveClient] = useState<string | null>(null);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   const [showEditProgram, setShowEditProgram] = useState(false);
@@ -141,13 +144,23 @@ export function ProgramsTab() {
           <CardTitle>Training Programs</CardTitle>
           <CardDescription>Create and manage training programs for your clients</CardDescription>
         </div>
-        <Button 
-          className="flex items-center self-start sm:self-auto w-full sm:w-auto"
-          onClick={() => setShowProgramForm(true)}
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Create Program
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button 
+            variant="outline"
+            className="flex items-center w-full sm:w-auto"
+            onClick={() => setShowExerciseLibrary(true)}
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            Manage Exercises
+          </Button>
+          <Button 
+            className="flex items-center w-full sm:w-auto"
+            onClick={() => setShowProgramForm(true)}
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Create Program
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Expiration Alert */}
@@ -190,6 +203,11 @@ export function ProgramsTab() {
         <CreateProgramDialog 
           open={showProgramForm} 
           onOpenChange={setShowProgramForm} 
+        />
+
+        <ExerciseLibraryDialog
+          open={showExerciseLibrary}
+          onOpenChange={setShowExerciseLibrary}
         />
         
         <AssignProgramDialog 
