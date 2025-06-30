@@ -33,13 +33,13 @@ export function NavigationButtons({ activeTab, onTabChange, isMobile }: Navigati
       id: "payments" as const, 
       label: "Payments", 
       icon: CreditCard, 
-      shortLabel: "Payments"
+      shortLabel: "Pay"
     }
   ];
 
   if (isMobile) {
     return (
-      <div className="flex flex-wrap gap-2 w-full">
+      <div className="grid grid-cols-2 gap-2 w-full">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -50,10 +50,10 @@ export function NavigationButtons({ activeTab, onTabChange, isMobile }: Navigati
               variant={isActive ? "default" : "outline"}
               size="sm"
               onClick={() => onTabChange(tab.id)}
-              className="flex-1 min-w-0"
+              className="flex items-center justify-center gap-1.5 h-9"
             >
-              <Icon className="h-3.5 w-3.5 mr-1.5 shrink-0" />
-              <span className="truncate text-xs">{tab.shortLabel}</span>
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              <span className="text-xs font-medium">{tab.shortLabel}</span>
             </Button>
           );
         })}
@@ -62,7 +62,7 @@ export function NavigationButtons({ activeTab, onTabChange, isMobile }: Navigati
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -73,10 +73,10 @@ export function NavigationButtons({ activeTab, onTabChange, isMobile }: Navigati
             variant={isActive ? "default" : "outline"}
             size="sm"
             onClick={() => onTabChange(tab.id)}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 h-9"
           >
             <Icon className="h-4 w-4" />
-            {tab.label}
+            <span className="text-sm">{tab.label}</span>
           </Button>
         );
       })}

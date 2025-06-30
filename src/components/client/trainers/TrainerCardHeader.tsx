@@ -38,20 +38,20 @@ export function TrainerCardHeader({ image, name, status }: TrainerCardHeaderProp
   const statusConfig = getStatusConfig(status);
   
   return (
-    <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+    <div className="relative aspect-[5/4] bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
       <img 
         src={image}
         alt={name}
         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
       <div className="absolute top-2 right-2 z-10">
         <Badge 
           variant="secondary" 
-          className={`flex items-center gap-1 px-2 py-1 shadow-md ${statusConfig.color} ${statusConfig.glowClass} backdrop-blur-sm text-xs font-medium`}
+          className={`flex items-center gap-1 px-2 py-1 shadow-sm ${statusConfig.color} ${statusConfig.glowClass} backdrop-blur-sm text-xs font-medium whitespace-nowrap`}
         >
-          <Circle className={`h-1.5 w-1.5 ${statusConfig.dotColor} animate-pulse`} />
-          <span>{statusConfig.text}</span>
+          <Circle className={`h-1.5 w-1.5 ${statusConfig.dotColor} animate-pulse shrink-0`} />
+          <span className="text-xs">{statusConfig.text}</span>
         </Badge>
       </div>
     </div>

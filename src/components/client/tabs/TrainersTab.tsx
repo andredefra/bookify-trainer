@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -11,6 +10,7 @@ import { PaymentsTable } from "@/components/client/trainers/PaymentsTable";
 import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollowedTrainers";
 import { FollowedTrainersSection } from "@/components/client/trainers/FollowedTrainersSection";
 import { NavigationButtons } from "@/components/client/trainers/NavigationButtons";
+import { MyTrainerExplanation } from "@/components/client/trainers/MyTrainerExplanation";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -148,18 +148,6 @@ export function TrainersTab() {
 
   return (
     <div className="space-y-6">
-      {/* My Trainer Explanation - Only show on trainers tab */}
-      {activeTab === "trainers" && (
-        <Alert className="border-blue-200 bg-blue-50">
-          <Info className="h-4 w-4 text-blue-600" />
-          <AlertDescription className="text-blue-800">
-            <strong>What is "My Trainer"?</strong> A trainer becomes your personal trainer when they assign you a customized program or package. 
-            Simply following a trainer, participating in their group sessions, or being invited doesn't make them "your trainer" - 
-            they only become your personal trainer when they send you a personalized package or training program.
-          </AlertDescription>
-        </Alert>
-      )}
-
       <Card>
         <CardHeader>
           <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center justify-between'}`}>
@@ -187,16 +175,19 @@ export function TrainersTab() {
             />
           </div>
         </CardHeader>
-        <CardContent className={isMobile ? "px-3 sm:px-6" : undefined}>
+        <CardContent className={`space-y-4 ${isMobile ? "px-3 sm:px-6" : ""}`}>
           {activeTab === "marketplace" ? (
             <TrainerMarketplace />
           ) : activeTab === "trainers" ? (
-            <TrainersGrid 
-              trainers={myTrainers} 
-              onPayClick={handlePayTrainer} 
-              followedTrainers={followedTrainers}
-              onFollowToggle={handleFollowToggle}
-            />
+            <>
+              <MyTrainerExplanation />
+              <TrainersGrid 
+                trainers={myTrainers} 
+                onPayClick={handlePayTrainer} 
+                followedTrainers={followedTrainers}
+                onFollowToggle={handleFollowToggle}
+              />
+            </>
           ) : activeTab === "followed" ? (
             <FollowedTrainersSection 
               followedTrainers={followedTrainers}

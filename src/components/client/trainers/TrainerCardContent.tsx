@@ -30,29 +30,28 @@ export function TrainerCardContent({
   location
 }: TrainerCardContentProps) {
   return (
-    <div className="p-5 space-y-4">
+    <div className="p-4 space-y-3">
       {/* Header with name and follow button */}
-      <div className="flex justify-between items-start gap-3">
+      <div className="flex justify-between items-start gap-2">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg text-gray-900 leading-tight mb-1">{name}</h3>
-          <p className="text-sm text-gray-600 font-medium">{specialty}</p>
+          <h3 className="font-semibold text-base text-gray-900 leading-tight truncate">{name}</h3>
+          <p className="text-sm text-gray-600 font-medium mt-0.5 truncate">{specialty}</p>
         </div>
         <Button 
           variant={isFollowing ? "outline" : "secondary"}
           size="sm"
           onClick={() => onFollowToggle(id, name)}
-          className="shrink-0"
+          className="shrink-0 h-8 px-3"
         >
           {isFollowing ? (
             <>
-              <UserMinus className="h-3.5 w-3.5 mr-1.5" />
-              <span className="hidden sm:inline">Following</span>
-              <span className="sm:hidden">Follow</span>
+              <UserMinus className="h-3 w-3 mr-1" />
+              <span className="text-xs">Following</span>
             </>
           ) : (
             <>
-              <UserPlus className="h-3.5 w-3.5 mr-1.5" />
-              <span>Follow</span>
+              <UserPlus className="h-3 w-3 mr-1" />
+              <span className="text-xs">Follow</span>
             </>
           )}
         </Button>
@@ -60,38 +59,38 @@ export function TrainerCardContent({
 
       {/* Rating and verification */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-0.5">
+            <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
             <span className="font-semibold text-sm">{rating}</span>
           </div>
-          <span className="text-xs text-gray-500">({reviews} reviews)</span>
+          <span className="text-xs text-gray-500">({reviews})</span>
         </div>
-        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200 px-2 py-0.5">
           Verified
         </Badge>
       </div>
 
-      {/* Additional info - organized in grid for better spacing */}
-      <div className="grid grid-cols-1 gap-2 text-sm">
+      {/* Additional info - single column layout */}
+      <div className="space-y-1.5 text-sm">
         {location && (
-          <div className="flex items-center gap-2 text-gray-600">
-            <MapPin className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">{location}</span>
+          <div className="flex items-center gap-1.5 text-gray-600">
+            <MapPin className="h-3 w-3 shrink-0" />
+            <span className="truncate text-xs">{location}</span>
           </div>
         )}
         
         {hourlyRate && (
-          <div className="flex items-center gap-2 text-gray-900 font-medium">
-            <DollarSign className="h-3.5 w-3.5 shrink-0" />
-            <span>${hourlyRate}/hour</span>
+          <div className="flex items-center gap-1.5 text-gray-900 font-medium">
+            <DollarSign className="h-3 w-3 shrink-0" />
+            <span className="text-xs">${hourlyRate}/hour</span>
           </div>
         )}
         
         {nextAvailability && (
-          <div className="flex items-center gap-2 text-green-600">
-            <Clock className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">{nextAvailability}</span>
+          <div className="flex items-center gap-1.5 text-green-600">
+            <Clock className="h-3 w-3 shrink-0" />
+            <span className="truncate text-xs">{nextAvailability}</span>
           </div>
         )}
       </div>
