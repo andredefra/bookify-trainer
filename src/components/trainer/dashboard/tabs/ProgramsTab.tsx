@@ -156,7 +156,7 @@ export function ProgramsTab() {
         {/* Program Progress Cards */}
         {programProgress.length > 0 && (
           <div>
-            <h3 className="text-lg font-semibold mb-4">Monitoraggio Progressi Clienti</h3>
+            <h3 className="text-lg font-semibold mb-4">Client Progress Monitoring</h3>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
               {programProgress.map((progress) => (
                 <ProgramProgressCard

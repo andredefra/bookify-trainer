@@ -28,7 +28,7 @@ export function ProgramExpirationAlert({
           
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-orange-900 mb-2">
-              Attenzione: Programmi in Scadenza
+              Attention: Expiring Programs
             </h3>
             
             <div className="space-y-2 mb-4">
@@ -36,7 +36,7 @@ export function ProgramExpirationAlert({
                 <div className="flex items-center gap-2 text-red-700">
                   <Calendar className="h-4 w-4" />
                   <span className="text-sm">
-                    <strong>{expiredCount}</strong> {expiredCount === 1 ? 'programma scaduto' : 'programmi scaduti'}
+                    <strong>{expiredCount}</strong> {expiredCount === 1 ? 'expired program' : 'expired programs'}
                   </span>
                 </div>
               )}
@@ -45,24 +45,24 @@ export function ProgramExpirationAlert({
                 <div className="flex items-center gap-2 text-orange-700">
                   <Clock className="h-4 w-4" />
                   <span className="text-sm">
-                    <strong>{expiringCount}</strong> {expiringCount === 1 ? 'programma in scadenza' : 'programmi in scadenza'} nei prossimi 7 giorni
+                    <strong>{expiringCount}</strong> {expiringCount === 1 ? 'expiring program' : 'expiring programs'} in the next 7 days
                   </span>
                 </div>
               )}
             </div>
 
             <div className="text-sm text-orange-800 mb-4">
-              Contatta i tuoi clienti per rinnovare i programmi e mantenere alta la loro motivazione!
+              Contact your clients to renew programs and keep their motivation high!
             </div>
 
             <div className="flex gap-2">
               <Button size="sm" variant="default">
                 <Users className="h-4 w-4 mr-2" />
-                Vedi Dettagli
+                View Details
               </Button>
               <Button size="sm" variant="outline">
                 <Calendar className="h-4 w-4 mr-2" />
-                Pianifica Rinnovi
+                Schedule Renewals
               </Button>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Clock, CheckCircle, AlertTriangle, Users } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 
 interface NotificationCenterProps {
   onClose: () => void;
@@ -31,13 +31,13 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
   const getNotificationTitle = (type: string) => {
     switch (type) {
       case 'program_expiring':
-        return 'Programma in Scadenza';
+        return 'Program Expiring';
       case 'client_behind_schedule':
-        return 'Cliente in Ritardo';
+        return 'Client Behind Schedule';
       case 'program_completed':
-        return 'Programma Completato';
+        return 'Program Completed';
       default:
-        return 'Notifica';
+        return 'Notification';
     }
   };
 
@@ -45,16 +45,16 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
     <div className="w-full">
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Notifiche</h3>
+          <h3 className="text-lg font-semibold">Notifications</h3>
           {unreadCount > 0 && (
             <Button variant="ghost" size="sm" onClick={markAllAsRead}>
-              Segna tutto come letto
+              Mark all as read
             </Button>
           )}
         </div>
         {unreadCount > 0 && (
           <p className="text-sm text-muted-foreground mt-1">
-            {unreadCount} {unreadCount === 1 ? 'notifica non letta' : 'notifiche non lette'}
+            {unreadCount} {unreadCount === 1 ? 'unread notification' : 'unread notifications'}
           </p>
         )}
       </div>
@@ -63,7 +63,7 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
         {notifications.length === 0 ? (
           <div className="p-4 text-center text-muted-foreground">
             <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
-            <p>Nessuna notifica</p>
+            <p>No notifications</p>
           </div>
         ) : (
           <div className="space-y-1">
@@ -86,7 +86,7 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
                       </p>
                       {!notification.read && (
                         <Badge variant="secondary" className="text-xs">
-                          Nuovo
+                          New
                         </Badge>
                       )}
                     </div>
@@ -96,7 +96,7 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
                     <p className="text-xs text-gray-400">
                       {formatDistanceToNow(new Date(notification.created_at), {
                         addSuffix: true,
-                        locale: it
+                        locale: enUS
                       })}
                     </p>
                   </div>
@@ -115,7 +115,7 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
           className="w-full text-blue-600"
           onClick={onClose}
         >
-          Chiudi
+          Close
         </Button>
       </div>
     </div>

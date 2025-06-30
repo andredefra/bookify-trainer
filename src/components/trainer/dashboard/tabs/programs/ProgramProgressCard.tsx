@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Calendar, TrendingUp, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import { ProgramProgress } from '@/hooks/useProgramAssignments';
 import { formatDistanceToNow } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 
 interface ProgramProgressCardProps {
   progress: ProgramProgress;
@@ -37,29 +37,29 @@ export function ProgramProgressCard({
   const getStatusBadge = () => {
     switch (progress.status) {
       case 'on_track':
-        return <Badge variant="default" className="bg-green-100 text-green-800">In Orario</Badge>;
+        return <Badge variant="default" className="bg-green-100 text-green-800">On Track</Badge>;
       case 'ahead_of_schedule':
-        return <Badge variant="default" className="bg-blue-100 text-blue-800">In Anticipo</Badge>;
+        return <Badge variant="default" className="bg-blue-100 text-blue-800">Ahead of Schedule</Badge>;
       case 'behind_schedule':
-        return <Badge variant="destructive">In Ritardo</Badge>;
+        return <Badge variant="destructive">Behind Schedule</Badge>;
       case 'expired':
-        return <Badge variant="destructive">Scaduto</Badge>;
+        return <Badge variant="destructive">Expired</Badge>;
       default:
-        return <Badge variant="secondary">Sconosciuto</Badge>;
+        return <Badge variant="secondary">Unknown</Badge>;
     }
   };
 
   const getExpirationText = () => {
     if (progress.daysUntilExpiry < 0) {
-      return `Scaduto ${Math.abs(progress.daysUntilExpiry)} giorni fa`;
+      return `Expired ${Math.abs(progress.daysUntilExpiry)} days ago`;
     } else if (progress.daysUntilExpiry === 0) {
-      return 'Scade oggi';
+      return 'Expires today';
     } else if (progress.daysUntilExpiry <= 7) {
-      return `Scade tra ${progress.daysUntilExpiry} giorni`;
+      return `Expires in ${progress.daysUntilExpiry} days`;
     } else {
       return formatDistanceToNow(new Date(progress.estimatedEndDate), {
         addSuffix: true,
-        locale: it
+        locale: enUS
       });
     }
   };
@@ -83,12 +83,12 @@ export function ProgramProgressCard({
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span>Progresso</span>
+            <span>Progress</span>
             <span className="font-medium">{progress.completionPercentage}%</span>
           </div>
           <Progress value={progress.completionPercentage} className="h-2" />
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{progress.sessionsCompleted}/{progress.totalSessions} sessioni</span>
+            <span>{progress.sessionsCompleted}/{progress.totalSessions} sessions</span>
             <span>{getExpirationText()}</span>
           </div>
         </div>
@@ -98,10 +98,10 @@ export function ProgramProgressCard({
           <div className="flex items-center gap-2">
             {getStatusIcon()}
             <span className="text-sm font-medium">
-              {progress.status === 'on_track' && 'Tutto a posto'}
-              {progress.status === 'ahead_of_schedule' && 'Ottimo ritmo!'}
-              {progress.status === 'behind_schedule' && 'Serve incentivo'}
-              {progress.status === 'expired' && 'Programma scaduto'}
+              {progress.status === 'on_track' && 'All good'}
+              {progress.status === 'ahead_of_schedule' && 'Great pace!'}
+              {progress.status === 'behind_schedule' && 'Needs encouragement'}
+              {progress.status === 'expired' && 'Program expired'}
             </span>
           </div>
           
@@ -112,12 +112,12 @@ export function ProgramProgressCard({
                 variant="outline"
                 onClick={() => onContactClient?.(progress.clientName)}
               >
-                Contatta
+                Contact
               </Button>
             )}
             {progress.daysUntilExpiry <= 7 && progress.daysUntilExpiry >= 0 && (
               <Button size="sm" variant="default">
-                Rinnova
+                Renew
               </Button>
             )}
           </div>
@@ -128,7 +128,7 @@ export function ProgramProgressCard({
           <div className="flex items-center gap-2 p-3 bg-orange-100 rounded-lg">
             <Calendar className="h-4 w-4 text-orange-600" />
             <span className="text-sm text-orange-800">
-              Programma in scadenza! Considera di proporre un rinnovo.
+              Program expiring! Consider proposing a renewal.
             </span>
           </div>
         )}

@@ -34,11 +34,11 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
 
   const getStatusBadge = () => {
     if (programDetails.status === 'expired') {
-      return <Badge variant="destructive">Scaduto</Badge>;
+      return <Badge variant="destructive">Expired</Badge>;
     } else if (programDetails.status === 'expiring') {
-      return <Badge variant="destructive" className="bg-orange-100 text-orange-800">Scade tra {programDetails.daysUntilExpiry} giorni</Badge>;
+      return <Badge variant="destructive" className="bg-orange-100 text-orange-800">Expires in {programDetails.daysUntilExpiry} days</Badge>;
     } else {
-      return <Badge variant="default" className="bg-green-100 text-green-800">Attivo</Badge>;
+      return <Badge variant="default" className="bg-green-100 text-green-800">Active</Badge>;
     }
   };
 
@@ -61,8 +61,8 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
         {/* Progress Bar */}
         <div className="mb-3">
           <div className="flex justify-between text-xs text-muted-foreground mb-1">
-            <span>Progresso: {programDetails.completionPercentage}%</span>
-            <span>{programDetails.sessionsCompleted}/{programDetails.totalSessions} sessioni</span>
+            <span>Progress: {programDetails.completionPercentage}%</span>
+            <span>{programDetails.sessionsCompleted}/{programDetails.totalSessions} sessions</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
@@ -127,7 +127,7 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
             size="sm"
             className="bg-red-600 hover:bg-red-700 text-white flex-1 sm:flex-auto"
           >
-            Rinnova Ora
+            Renew Now
           </Button>
         )}
         {programDetails.status === 'expiring' && (
@@ -135,7 +135,7 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
             size="sm"
             className="bg-orange-600 hover:bg-orange-700 text-white flex-1 sm:flex-auto"
           >
-            Contatta Cliente
+            Contact Client
           </Button>
         )}
         <Button 
