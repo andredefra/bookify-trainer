@@ -1,0 +1,123 @@
+
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Clock, CheckCircle, AlertTriangle, Users } from 'lucide-react';
+import { useNotifications } from '@/hooks/useNotifications';
+import { formatDistanceToNow } from 'date-fns';
+import { it } from 'date-fns/locale';
+
+interface NotificationCenterProps {
+  onClose: () => void;
+}
+
+export function NotificationCenter({ onClose }: NotificationCenterProps) {
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'program_expiring':
+        return <Clock className="h-4 w-4 text-orange-500" />;
+      case 'client_behind_schedule':
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case 'program_completed':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      default:
+        return <Users className="h-4 w-4 text-blue-500" />;
+    }
+  };
+
+  const getNotificationTitle = (type: string) => {
+    switch (type) {
+      case 'program_expiring':
+        return 'Programma in Scadenza';
+      case 'client_behind_schedule':
+        return 'Cliente in Ritardo';
+      case 'program_completed':
+        return 'Programma Completato';
+      default:
+        return 'Notifica';
+    }
+  };
+
+  return (
+    <div className="w-full">
+      <div className="p-4 border-b">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Notifiche</h3>
+          {unreadCount > 0 && (
+            <Button variant="ghost" size="sm" onClick={markAllAsRead}>
+              Segna tutto come letto
+            </Button>
+          )}
+        </div>
+        {unreadCount > 0 && (
+          <p className="text-sm text-muted-foreground mt-1">
+            {unreadCount} {unreadCount === 1 ? 'notifica non letta' : 'notifiche non lette'}
+          </p>
+        )}
+      </div>
+
+      <ScrollArea className="h-96">
+        {notifications.length === 0 ? (
+          <div className="p-4 text-center text-muted-foreground">
+            <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <p>Nessuna notifica</p>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            {notifications.map((notification) => (
+              <div
+                key={notification.id}
+                className={`p-4 hover:bg-gray-50 cursor-pointer border-l-4 ${
+                  notification.read 
+                    ? 'border-l-transparent bg-white' 
+                    : 'border-l-blue-500 bg-blue-50/50'
+                }`}
+                onClick={() => !notification.read && markAsRead(notification.id)}
+              >
+                <div className="flex items-start gap-3">
+                  {getNotificationIcon(notification.type)}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm font-medium text-gray-900">
+                        {getNotificationTitle(notification.type)}
+                      </p>
+                      {!notification.read && (
+                        <Badge variant="secondary" className="text-xs">
+                          Nuovo
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {notification.message}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {formatDistanceToNow(new Date(notification.created_at), {
+                        addSuffix: true,
+                        locale: it
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </ScrollArea>
+
+      <Separator />
+      <div className="p-3">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="w-full text-blue-600"
+          onClick={onClose}
+        >
+          Chiudi
+        </Button>
+      </div>
+    </div>
+  );
+}

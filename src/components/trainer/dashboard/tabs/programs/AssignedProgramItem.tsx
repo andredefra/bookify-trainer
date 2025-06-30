@@ -1,8 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Mail, Calendar, DollarSign } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { useProgramAssignments } from '@/hooks/useProgramAssignments';
 
 interface AssignedProgramItemProps {
   client: {
@@ -15,22 +15,67 @@ interface AssignedProgramItemProps {
 }
 
 export function AssignedProgramItem({ client, currentProgram, onChangeProgram }: AssignedProgramItemProps) {
-  // Mock data to simulate program details
+  const { updateSessionsCompleted } = useProgramAssignments();
+  
+  // Enhanced mock data with progress tracking
   const programDetails = {
     paid: client.id % 2 === 0,
     price: client.id % 2 === 0 ? 49.99 : 0,
     startDate: "2023-06-15",
     endDate: "2023-08-10",
-    objective: client.id % 2 === 0 ? "Strength & Conditioning" : "Weight Loss"
+    objective: client.id % 2 === 0 ? "Strength & Conditioning" : "Weight Loss",
+    // New progress fields
+    sessionsCompleted: client.id % 3 === 0 ? 8 : client.id % 2 === 0 ? 12 : 6,
+    totalSessions: 16,
+    completionPercentage: client.id % 3 === 0 ? 50 : client.id % 2 === 0 ? 75 : 37,
+    daysUntilExpiry: client.id % 4 === 0 ? 3 : client.id % 3 === 0 ? -2 : 15,
+    status: client.id % 4 === 0 ? 'expiring' : client.id % 3 === 0 ? 'expired' : 'on_track'
+  };
+
+  const getStatusBadge = () => {
+    if (programDetails.status === 'expired') {
+      return <Badge variant="destructive">Scaduto</Badge>;
+    } else if (programDetails.status === 'expiring') {
+      return <Badge variant="destructive" className="bg-orange-100 text-orange-800">Scade tra {programDetails.daysUntilExpiry} giorni</Badge>;
+    } else {
+      return <Badge variant="default" className="bg-green-100 text-green-800">Attivo</Badge>;
+    }
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg gap-4">
+    <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg gap-4 ${
+      programDetails.status === 'expired' ? 'bg-red-50 border border-red-200' :
+      programDetails.status === 'expiring' ? 'bg-orange-50 border border-orange-200' :
+      'bg-gray-50'
+    }`}>
       <div className="overflow-hidden">
-        <h3 className="font-medium truncate">{client.name}</h3>
-        <div className="text-sm text-muted-foreground overflow-hidden text-ellipsis">
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="font-medium truncate">{client.name}</h3>
+          {getStatusBadge()}
+        </div>
+        
+        <div className="text-sm text-muted-foreground overflow-hidden text-ellipsis mb-2">
           Current program: <span className="font-medium">{currentProgram}</span>
         </div>
+
+        {/* Progress Bar */}
+        <div className="mb-3">
+          <div className="flex justify-between text-xs text-muted-foreground mb-1">
+            <span>Progresso: {programDetails.completionPercentage}%</span>
+            <span>{programDetails.sessionsCompleted}/{programDetails.totalSessions} sessioni</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className={`h-2 rounded-full transition-all ${
+                programDetails.completionPercentage >= 80 ? 'bg-green-500' :
+                programDetails.completionPercentage >= 60 ? 'bg-blue-500' : 
+                'bg-orange-500'
+              }`}
+              style={{ width: `${Math.min(programDetails.completionPercentage, 100)}%` }}
+            />
+          </div>
+        </div>
+
         <div className="flex flex-wrap mt-2 gap-2">
           <Badge variant="outline" className="whitespace-nowrap">
             <Calendar className="h-3 w-3 mr-1 shrink-0" />
@@ -54,6 +99,8 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
             </Badge>
           )}
         </div>
+        
+        {/* Email section */}
         <div className="text-sm text-muted-foreground flex items-center mt-1 truncate">
           <TooltipProvider>
             <Tooltip>
@@ -75,6 +122,22 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
       </div>
       
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-2 sm:mt-0">
+        {programDetails.status === 'expired' && (
+          <Button 
+            size="sm"
+            className="bg-red-600 hover:bg-red-700 text-white flex-1 sm:flex-auto"
+          >
+            Rinnova Ora
+          </Button>
+        )}
+        {programDetails.status === 'expiring' && (
+          <Button 
+            size="sm"
+            className="bg-orange-600 hover:bg-orange-700 text-white flex-1 sm:flex-auto"
+          >
+            Contatta Cliente
+          </Button>
+        )}
         <Button 
           variant="outline" 
           size="sm"

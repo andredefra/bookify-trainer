@@ -9,13 +9,101 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      program_assignments: {
+        Row: {
+          actual_end_date: string | null
+          client_id: string
+          created_at: string
+          estimated_end_date: string
+          id: string
+          program_id: string
+          sessions_completed: number
+          start_date: string
+          target_frequency: number
+          total_sessions_planned: number
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          actual_end_date?: string | null
+          client_id: string
+          created_at?: string
+          estimated_end_date: string
+          id?: string
+          program_id: string
+          sessions_completed?: number
+          start_date?: string
+          target_frequency?: number
+          total_sessions_planned: number
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          actual_end_date?: string | null
+          client_id?: string
+          created_at?: string
+          estimated_end_date?: string
+          id?: string
+          program_id?: string
+          sessions_completed?: number
+          start_date?: string
+          target_frequency?: number
+          total_sessions_planned?: number
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      trainer_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read: boolean
+          related_client_id: string | null
+          related_program_assignment_id: string | null
+          trainer_id: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          read?: boolean
+          related_client_id?: string | null
+          related_program_assignment_id?: string | null
+          trainer_id: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          related_client_id?: string | null
+          related_program_assignment_id?: string | null
+          trainer_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trainer_notifications_related_program_assignment_id_fkey"
+            columns: ["related_program_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "program_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_expiring_program_notifications: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

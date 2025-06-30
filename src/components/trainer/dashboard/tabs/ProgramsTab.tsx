@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,6 +8,9 @@ import { AssignProgramDialog } from "./programs/AssignProgramDialog";
 import { ProgramsTabContent } from "./programs/ProgramsTabContent";
 import { currentProgram } from "@/data/training/mockPrograms/currentProgram";
 import { Exercise } from "@/data/training/types";
+import { ProgramProgressCard } from './programs/ProgramProgressCard';
+import { ProgramExpirationAlert } from './programs/ProgramExpirationAlert';
+import { useProgramAssignments } from '@/hooks/useProgramAssignments';
 
 export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
@@ -120,6 +122,18 @@ export function ProgramsTab() {
     ? programs.find(p => p.id === activeProgramId) 
     : null;
   
+  const { programProgress, updateSessionsCompleted } = useProgramAssignments();
+  
+  // Filter expiring programs (within 7 days or expired)
+  const expiringPrograms = programProgress.filter(p => 
+    p.daysUntilExpiry <= 7 || p.status === 'expired'
+  );
+
+  const handleContactClient = (clientName: string) => {
+    console.log(`Contacting client: ${clientName}`);
+    // Here you could open a message dialog or navigate to messages
+  };
+  
   return (
     <Card>
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 overflow-visible">
@@ -135,7 +149,27 @@ export function ProgramsTab() {
           Create Program
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-6">
+        {/* Expiration Alert */}
+        <ProgramExpirationAlert expiringPrograms={expiringPrograms} />
+        
+        {/* Program Progress Cards */}
+        {programProgress.length > 0 && (
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Monitoraggio Progressi Clienti</h3>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              {programProgress.map((progress) => (
+                <ProgramProgressCard
+                  key={progress.id}
+                  progress={progress}
+                  onUpdateSessions={updateSessionsCompleted}
+                  onContactClient={handleContactClient}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        
         <Tabs defaultValue="programs" className="w-full">
           <TabsList className="mb-6 w-full sm:w-auto">
             <TabsTrigger value="programs" className="flex-1 sm:flex-none">My Programs</TabsTrigger>
@@ -152,13 +186,12 @@ export function ProgramsTab() {
           />
         </Tabs>
         
-        {/* Create Program Dialog */}
+        {/* Dialogs */}
         <CreateProgramDialog 
           open={showProgramForm} 
           onOpenChange={setShowProgramForm} 
         />
         
-        {/* Assign Program Dialog */}
         <AssignProgramDialog 
           open={showAssignDialog} 
           onOpenChange={setShowAssignDialog}
@@ -167,7 +200,6 @@ export function ProgramsTab() {
           programs={programs}
         />
         
-        {/* Edit Program Dialog */}
         <CreateProgramDialog 
           open={showEditProgram} 
           onOpenChange={setShowEditProgram}
