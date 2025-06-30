@@ -3,7 +3,7 @@ export interface PerformanceDataPoint {
   name: string;
   attendance: number;
   progress: number;
-  goalsReached: number; // Renamed from satisfaction
+  goalsReached: number;
 }
 
 export interface RetentionDataPoint {
@@ -17,16 +17,17 @@ export interface GoalAchievementDataPoint {
   achieved: number;
   total: number;
   goalType: string;
-  timeProgress: number; // % of time elapsed towards deadline
-  onTrack: boolean; // Whether goal is on track based on timeline
-  avgTimeToComplete?: number; // Average days to complete this goal type
+  timeProgress: number;
+  onTrack: boolean;
+  avgTimeToComplete?: number;
 }
 
-// Revenue-related types
+// Enhanced revenue-related types with packages
 export interface MonthlyRevenueDataPoint {
   name: string;
   programs: number;
   sessions: number;
+  packages: number;
   total: number;
 }
 
@@ -40,7 +41,6 @@ export interface ClientGrowthDataPoint {
   clients: number;
 }
 
-// New interface for client metrics calculation
 export interface ClientMetrics {
   clientId: string;
   clientName: string;
@@ -48,4 +48,22 @@ export interface ClientMetrics {
   overallAttendance: number;
   overallProgress: number;
   overallGoalsReached: number;
+}
+
+// New package-specific types
+export interface PackagePerformanceDataPoint {
+  packageType: string;
+  sold: number;
+  revenue: number;
+  avgValue: number;
+}
+
+export interface RevenueBreakdownDataPoint {
+  packageRevenue: number;
+  individualSessionRevenue: number;
+  programRevenue: number;
+  totalRevenue: number;
+  packageClientsCount: number;
+  individualClientsCount: number;
+  conversionRate: number;
 }

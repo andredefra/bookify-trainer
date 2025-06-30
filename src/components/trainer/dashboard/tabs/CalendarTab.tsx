@@ -3,53 +3,104 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function CalendarTab() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
 
-  // Mock events data
+  // Enhanced mock events data with real upcoming sessions and historical data
   const events = [
+    // Today's events
     {
       id: 1,
-      title: "Personal Training - Sarah",
+      title: "Personal Training - Sarah Johnson",
       type: "session",
-      start: new Date(2024, 6, 15, 9, 0),
-      end: new Date(2024, 6, 15, 10, 0),
+      start: new Date(2024, 5, 30, 9, 0), // Today
+      end: new Date(2024, 5, 30, 10, 0),
       client: "Sarah Johnson",
       location: "Main Gym",
-      color: "bg-blue-500"
+      color: "bg-blue-500",
+      status: "confirmed"
     },
     {
       id: 2,
-      title: "Lead Meeting - Mike",
-      type: "sales_activity",
-      start: new Date(2024, 6, 15, 14, 0),
-      end: new Date(2024, 6, 15, 15, 0),
+      title: "Package Payment Due - Mike Peterson",
+      type: "deadline",
+      start: new Date(2024, 5, 30, 14, 0),
+      end: new Date(2024, 5, 30, 14, 0),
       client: "Mike Peterson",
-      location: "Coffee Shop",
-      color: "bg-green-500"
+      color: "bg-orange-500",
+      status: "pending"
     },
+    // Tomorrow's events
     {
       id: 3,
-      title: "Program Check-in - Lisa",
-      type: "program_milestone",
-      start: new Date(2024, 6, 16, 11, 0),
-      end: new Date(2024, 6, 16, 11, 30),
-      client: "Lisa Garcia",
-      location: "Online",
-      color: "bg-purple-500"
+      title: "Lead Meeting - Emma Thompson",
+      type: "sales_activity",
+      start: new Date(2024, 6, 1, 14, 0), // Tomorrow
+      end: new Date(2024, 6, 1, 15, 0),
+      client: "Emma Thompson",
+      location: "Coffee Shop",
+      color: "bg-green-500",
+      status: "scheduled"
     },
     {
       id: 4,
-      title: "Package Payment Due",
-      type: "deadline",
-      start: new Date(2024, 6, 18, 9, 0),
-      end: new Date(2024, 6, 18, 9, 0),
+      title: "Morning HIIT Session",
+      type: "session",
+      start: new Date(2024, 6, 1, 9, 0),
+      end: new Date(2024, 6, 1, 10, 0),
+      client: "Group Session",
+      location: "Studio B",
+      color: "bg-blue-500",
+      status: "confirmed"
+    },
+    // Historical events (past week)
+    {
+      id: 5,
+      title: "Program Check-in - Lisa Garcia",
+      type: "program_milestone",
+      start: new Date(2024, 5, 25, 11, 0),
+      end: new Date(2024, 5, 25, 11, 30),
+      client: "Lisa Garcia",
+      location: "Online",
+      color: "bg-purple-500",
+      status: "completed"
+    },
+    {
+      id: 6,
+      title: "New Client Consultation - David Kim",
+      type: "sales_activity",
+      start: new Date(2024, 5, 23, 16, 0),
+      end: new Date(2024, 5, 23, 17, 0),
       client: "David Kim",
-      color: "bg-orange-500"
+      location: "Main Gym",
+      color: "bg-green-500",
+      status: "completed"
+    },
+    // Next week events
+    {
+      id: 7,
+      title: "Yoga Basics Session",
+      type: "session",
+      start: new Date(2024, 6, 5, 17, 30),
+      end: new Date(2024, 6, 5, 18, 30),
+      client: "Group Session",
+      location: "Studio A",
+      color: "bg-blue-500",
+      status: "confirmed"
+    },
+    {
+      id: 8,
+      title: "Package Expiry Alert - James Wilson",
+      type: "deadline",
+      start: new Date(2024, 6, 7, 9, 0),
+      end: new Date(2024, 6, 7, 9, 0),
+      client: "James Wilson",
+      color: "bg-red-500",
+      status: "alert"
     }
   ];
 
@@ -157,6 +208,10 @@ export function CalendarTab() {
                     className={cn(view === 'day' && 'bg-primary text-primary-foreground')}>
               Day
             </Button>
+            <Button variant="outline" size="sm">
+              <Settings className="h-4 w-4 mr-2" />
+              Google Calendar
+            </Button>
             <Button size="sm">
               <Plus className="h-4 w-4 mr-2" />
               Add Event
@@ -247,6 +302,27 @@ export function CalendarTab() {
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Google Calendar Integration */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Google Calendar</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <span className="text-sm">Not Connected</span>
+                </div>
+                <Button size="sm" variant="outline">
+                  Connect
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Sync your calendar events with Google Calendar for seamless scheduling
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Today's Events */}
           <Card>
             <CardHeader>

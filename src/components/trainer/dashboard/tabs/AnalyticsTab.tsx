@@ -1,45 +1,43 @@
 
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Calendar, FileDown } from "lucide-react";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RevenueAnalytics } from "./analytics/RevenueAnalytics";
 import { EnhancedRevenueAnalytics } from "./analytics/EnhancedRevenueAnalytics";
+import { PackageAnalyticsChart } from "./analytics/charts/PackageAnalyticsChart";
 
 export function AnalyticsTab() {
   return (
-    <Card className="shadow-sm">
+    <Card>
       <CardHeader>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <CardTitle>Business Analytics Dashboard</CardTitle>
-            <CardDescription>Analisi completa del business con breakdown per servizi e tipologie di clienti</CardDescription>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <Calendar className="mr-2 h-4 w-4" />
-              Date Range
-            </Button>
-            <Button size="sm">
-              <FileDown className="mr-2 h-4 w-4" />
-              Export Report
-            </Button>
-          </div>
-        </div>
+        <CardTitle>Business Analytics</CardTitle>
       </CardHeader>
-      <CardContent className="p-4 pb-6">
-        <Tabs defaultValue="revenue">
-          <TabsList className="mb-6">
-            <TabsTrigger value="revenue">Revenue Analytics</TabsTrigger>
-            <TabsTrigger value="clienttypes">Client Type Analytics</TabsTrigger>
+      <CardContent>
+        <Tabs defaultValue="revenue" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="revenue">Revenue</TabsTrigger>
+            <TabsTrigger value="packages">Packages</TabsTrigger>
+            <TabsTrigger value="clients">Client Types</TabsTrigger>
+            <TabsTrigger value="performance">Performance</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="revenue" className="mt-0">
+          <TabsContent value="revenue" className="space-y-6 mt-6">
             <RevenueAnalytics />
           </TabsContent>
           
-          <TabsContent value="clienttypes" className="mt-0">
+          <TabsContent value="packages" className="space-y-6 mt-6">
+            <PackageAnalyticsChart />
+          </TabsContent>
+          
+          <TabsContent value="clients" className="space-y-6 mt-6">
             <EnhancedRevenueAnalytics />
+          </TabsContent>
+          
+          <TabsContent value="performance" className="space-y-6 mt-6">
+            <div className="text-center py-8">
+              <h3 className="text-lg font-semibold mb-2">Performance Analytics</h3>
+              <p className="text-muted-foreground">Detailed performance metrics coming soon</p>
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>
