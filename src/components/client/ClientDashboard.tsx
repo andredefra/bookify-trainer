@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ClientHeader } from "./ClientHeader";
 import { ClientSidebar } from "./ClientSidebar";
@@ -79,12 +78,13 @@ const progressData: ProgressItem[] = [
   }
 ];
 
-// Sample user data
+// Sample user data with profile image
 const sampleUser = {
   name: "Demo Client",
   email: "client@demo.com",
   type: "client",
-  plan: "pro"
+  plan: "pro",
+  profileImage: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&auto=format&fit=crop&crop=face"
 };
 
 const goals = ["Weight loss", "Muscle gain", "Flexibility"];

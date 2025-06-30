@@ -97,7 +97,12 @@ const ClientDashboard = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem('demo-user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const userData = JSON.parse(storedUser);
+      // Add profile image if not present in stored data
+      if (!userData.profileImage) {
+        userData.profileImage = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&auto=format&fit=crop&crop=face";
+      }
+      setUser(userData);
     } else {
       navigate('/login');
     }
