@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { DollarSign, MessageSquare, Star } from "lucide-react";
+import { DollarSign, MessageSquare, Star, User } from "lucide-react";
 
 interface TrainerCardActionsProps {
   id: number;
@@ -8,6 +8,7 @@ interface TrainerCardActionsProps {
   onPayClick: (trainer: string, amount: number) => void;
   onViewProfile: (id: number, name: string) => void;
   onLeaveReview: (id: number, name: string) => void;
+  hourlyRate?: number;
 }
 
 export function TrainerCardActions({ 
@@ -15,29 +16,43 @@ export function TrainerCardActions({
   name, 
   onPayClick,
   onViewProfile,
-  onLeaveReview
+  onLeaveReview,
+  hourlyRate
 }: TrainerCardActionsProps) {
+  const paymentAmount = hourlyRate || (id === 1 ? 50 : 45);
+  
   return (
-    <div className="px-4 pb-4 mt-0 flex flex-wrap gap-2">
-      <Button size="sm" onClick={() => onViewProfile(id, name)}>
+    <div className="px-5 pb-5 flex flex-col gap-3 border-t border-gray-100 pt-4">
+      {/* Primary action */}
+      <Button 
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-sm"
+        onClick={() => onViewProfile(id, name)}
+      >
+        <User className="h-4 w-4 mr-2" />
         View Profile
       </Button>
-      <Button 
-        variant="outline" 
-        size="sm"
-        onClick={() => onLeaveReview(id, name)}
-      >
-        <Star className="h-3.5 w-3.5 mr-1" />
-        Review
-      </Button>
-      <Button 
-        variant="secondary" 
-        size="sm"
-        onClick={() => onPayClick(name, (id === 1) ? 45 : 50)}
-      >
-        <DollarSign className="h-3.5 w-3.5 mr-1" />
-        Pay
-      </Button>
+      
+      {/* Secondary actions */}
+      <div className="flex gap-2">
+        <Button 
+          variant="outline" 
+          size="sm"
+          className="flex-1 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700"
+          onClick={() => onLeaveReview(id, name)}
+        >
+          <Star className="h-3.5 w-3.5 mr-1" />
+          Review
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm"
+          className="flex-1 hover:bg-green-50 hover:border-green-200 hover:text-green-700"
+          onClick={() => onPayClick(name, paymentAmount)}
+        >
+          <DollarSign className="h-3.5 w-3.5 mr-1" />
+          Pay ${paymentAmount}
+        </Button>
+      </div>
     </div>
   );
 }

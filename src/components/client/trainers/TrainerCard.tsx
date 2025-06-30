@@ -12,6 +12,9 @@ interface TrainerCardProps {
   reviews: number;
   image: string;
   status?: "online" | "in-session" | "offline";
+  hourlyRate?: number;
+  nextAvailability?: string;
+  location?: string;
   onPayClick: (trainer: string, amount: number) => void;
   isFollowing: boolean;
   onFollowToggle: (id: number, name: string) => void;
@@ -27,6 +30,9 @@ export function TrainerCard({
   reviews, 
   image, 
   status = "offline",
+  hourlyRate,
+  nextAvailability,
+  location,
   onPayClick,
   isFollowing,
   onFollowToggle,
@@ -34,7 +40,7 @@ export function TrainerCard({
   onLeaveReview
 }: TrainerCardProps) {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-0 shadow-sm bg-gradient-to-br from-white to-gray-50/50">
       <TrainerCardHeader 
         image={image} 
         name={name} 
@@ -48,6 +54,9 @@ export function TrainerCard({
         id={id}
         isFollowing={isFollowing}
         onFollowToggle={onFollowToggle}
+        hourlyRate={hourlyRate}
+        nextAvailability={nextAvailability}
+        location={location}
       />
       <TrainerCardActions 
         id={id}
@@ -55,6 +64,7 @@ export function TrainerCard({
         onPayClick={onPayClick}
         onViewProfile={onViewProfile}
         onLeaveReview={onLeaveReview}
+        hourlyRate={hourlyRate}
       />
     </Card>
   );
