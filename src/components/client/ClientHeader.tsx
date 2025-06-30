@@ -2,8 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu, LogOut, Bell } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 
@@ -30,8 +29,6 @@ export function ClientHeader({
 }: ClientHeaderProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
-  const displayName = name || user?.name || user?.email?.split('@')[0] || "Client";
-  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
   const handleLogout = () => {
     // Clear any user data from localStorage
@@ -75,21 +72,22 @@ export function ClientHeader({
             </div>
             
             <div className="flex items-center space-x-3">
-              <Avatar className="h-9 w-9 border border-primary/10">
-                <AvatarImage src={user?.profileImage || defaultImage} alt={displayName} />
-                <AvatarFallback className="bg-primary/10 text-primary">
-                  {displayName.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="hidden md:block">
-                <p className="text-sm font-medium leading-none">{displayName}</p>
-                <p className="text-xs text-muted-foreground">{user?.email}</p>
-              </div>
+              {/* Notification Bell */}
+              <Button variant="outline" size="icon" className="relative">
+                <Bell className="h-4 w-4" />
+                {/* Notification badge */}
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs font-medium"
+                >
+                  3
+                </Badge>
+              </Button>
+              
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
+              </Button>
             </div>
-            
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
-            </Button>
           </div>
         </div>
       </div>
