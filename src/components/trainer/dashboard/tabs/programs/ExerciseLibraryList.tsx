@@ -43,7 +43,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
     return (
       <div className="text-center py-12">
         <Dumbbell className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-        <p className="text-muted-foreground">Nessun esercizio trovato</p>
+        <p className="text-muted-foreground">No exercises found</p>
       </div>
     );
   }
@@ -76,7 +76,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
             
             <CardContent className="space-y-3">
               <div>
-                <p className="text-sm font-medium mb-1">Gruppi Muscolari:</p>
+                <p className="text-sm font-medium mb-1">Muscle Groups:</p>
                 <div className="flex flex-wrap gap-1">
                   {exercise.muscleGroup.map((muscle, idx) => (
                     <Badge key={idx} variant="outline" className="text-xs">
@@ -88,7 +88,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
 
               {exercise.equipment.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium mb-1">Attrezzatura:</p>
+                  <p className="text-sm font-medium mb-1">Equipment:</p>
                   <p className="text-sm text-muted-foreground">
                     {exercise.equipment.join(', ')}
                   </p>
@@ -98,7 +98,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
               {expandedCard === exercise.id && (
                 <div className="space-y-3 pt-3 border-t">
                   <div>
-                    <p className="text-sm font-medium mb-1">Note Esercizio:</p>
+                    <p className="text-sm font-medium mb-1">Exercise Notes:</p>
                     <p className="text-sm text-muted-foreground">
                       {exercise.notes}
                     </p>
@@ -129,7 +129,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                         }}
                       >
                         <Edit className="h-3 w-3 mr-1" />
-                        Modifica
+                        Edit
                       </Button>
                     )}
 
@@ -140,13 +140,13 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                         className="text-destructive hover:text-destructive"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (confirm('Sei sicuro di voler eliminare questo esercizio?')) {
+                          if (confirm('Are you sure you want to delete this exercise?')) {
                             onDelete(exercise.id);
                           }
                         }}
                       >
                         <Trash2 className="h-3 w-3 mr-1" />
-                        Elimina
+                        Delete
                       </Button>
                     )}
                   </div>

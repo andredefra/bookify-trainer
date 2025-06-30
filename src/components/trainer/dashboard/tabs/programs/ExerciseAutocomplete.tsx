@@ -16,7 +16,7 @@ export function ExerciseAutocomplete({
   value, 
   onChange, 
   onExerciseSelect, 
-  placeholder = "es. Bench Press, Squat, etc." 
+  placeholder = "e.g. Bench Press, Squat, etc." 
 }: ExerciseAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -106,7 +106,7 @@ export function ExerciseAutocomplete({
                 </div>
                 <div className="text-sm text-muted-foreground">
                   {exercise.muscleGroup.slice(0, 2).join(', ')}
-                  {exercise.muscleGroup.length > 2 && ` +${exercise.muscleGroup.length - 2} più`}
+                  {exercise.muscleGroup.length > 2 && ` +${exercise.muscleGroup.length - 2} more`}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
                   {exercise.notes}

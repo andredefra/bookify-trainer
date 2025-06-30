@@ -31,12 +31,12 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
   } = useExerciseLibrary();
 
   const categories = [
-    { value: 'all', label: 'Tutte le categorie' },
-    { value: 'chest', label: 'Petto' },
-    { value: 'back', label: 'Schiena' },
-    { value: 'legs', label: 'Gambe' },
-    { value: 'shoulders', label: 'Spalle' },
-    { value: 'arms', label: 'Braccia' },
+    { value: 'all', label: 'All Categories' },
+    { value: 'chest', label: 'Chest' },
+    { value: 'back', label: 'Back' },
+    { value: 'legs', label: 'Legs' },
+    { value: 'shoulders', label: 'Shoulders' },
+    { value: 'arms', label: 'Arms' },
     { value: 'core', label: 'Core' },
     { value: 'cardio', label: 'Cardio' },
     { value: 'stretching', label: 'Stretching' }
@@ -60,10 +60,10 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
-              <span>Libreria Esercizi</span>
+              <span>Exercise Library</span>
               <Button onClick={() => setShowAddDialog(true)} className="ml-4">
                 <Plus className="h-4 w-4 mr-2" />
-                Aggiungi Esercizio
+                Add Exercise
               </Button>
             </DialogTitle>
           </DialogHeader>
@@ -74,7 +74,7 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Cerca esercizi..."
+                  placeholder="Search exercises..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -98,8 +98,8 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
             {/* Exercise Lists */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="all">Tutti gli Esercizi ({allExercises.length})</TabsTrigger>
-                <TabsTrigger value="custom">I Miei Esercizi ({myExercises.length})</TabsTrigger>
+                <TabsTrigger value="all">All Exercises ({allExercises.length})</TabsTrigger>
+                <TabsTrigger value="custom">My Exercises ({myExercises.length})</TabsTrigger>
               </TabsList>
 
               <TabsContent value="all" className="mt-6">

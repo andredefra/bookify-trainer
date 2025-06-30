@@ -33,20 +33,20 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
   const [newEquipment, setNewEquipment] = useState('');
 
   const categories = [
-    { value: 'chest', label: 'Petto' },
-    { value: 'back', label: 'Schiena' },
-    { value: 'legs', label: 'Gambe' },
-    { value: 'shoulders', label: 'Spalle' },
-    { value: 'arms', label: 'Braccia' },
+    { value: 'chest', label: 'Chest' },
+    { value: 'back', label: 'Back' },
+    { value: 'legs', label: 'Legs' },
+    { value: 'shoulders', label: 'Shoulders' },
+    { value: 'arms', label: 'Arms' },
     { value: 'core', label: 'Core' },
     { value: 'cardio', label: 'Cardio' },
     { value: 'stretching', label: 'Stretching' }
   ];
 
   const difficulties = [
-    { value: 'beginner', label: 'Principiante' },
-    { value: 'intermediate', label: 'Intermedio' },
-    { value: 'advanced', label: 'Avanzato' }
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' }
   ];
 
   const commonMuscleGroups = [
@@ -99,12 +99,12 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
     e.preventDefault();
     
     if (!formData.name || !formData.category || !formData.difficulty || !formData.notes) {
-      toast.error('Compila tutti i campi obbligatori');
+      toast.error('Please fill in all required fields');
       return;
     }
 
     if (formData.muscleGroups.length === 0) {
-      toast.error('Aggiungi almeno un gruppo muscolare');
+      toast.error('Please add at least one muscle group');
       return;
     }
 
@@ -118,7 +118,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
       equipment: formData.equipment.length > 0 ? formData.equipment : ['Bodyweight'],
     });
 
-    toast.success('Esercizio aggiunto con successo!');
+    toast.success('Exercise added successfully!');
     
     // Reset form
     setFormData({
@@ -138,29 +138,29 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Aggiungi Nuovo Esercizio</DialogTitle>
+          <DialogTitle>Add New Exercise</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Nome Esercizio *</Label>
+              <Label htmlFor="name">Exercise Name *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="es. Custom Squat Variation"
+                placeholder="e.g. Custom Squat Variation"
               />
             </div>
 
             <div>
-              <Label htmlFor="category">Categoria *</Label>
+              <Label htmlFor="category">Category *</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Seleziona categoria" />
+                  <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map(cat => (
@@ -174,13 +174,13 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
           </div>
 
           <div>
-            <Label htmlFor="difficulty">Difficoltà *</Label>
+            <Label htmlFor="difficulty">Difficulty *</Label>
             <Select
               value={formData.difficulty}
               onValueChange={(value) => setFormData(prev => ({ ...prev, difficulty: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Seleziona difficoltà" />
+                <SelectValue placeholder="Select difficulty" />
               </SelectTrigger>
               <SelectContent>
                 {difficulties.map(diff => (
@@ -193,18 +193,18 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
           </div>
 
           <div>
-            <Label htmlFor="notes">Note/Istruzioni *</Label>
+            <Label htmlFor="notes">Notes/Instructions *</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-              placeholder="Descrivi come eseguire l'esercizio, posizione, movimento, punti chiave..."
+              placeholder="Describe how to perform the exercise, position, movement, key points..."
               rows={4}
             />
           </div>
 
           <div>
-            <Label htmlFor="videoUrl">URL Video (opzionale)</Label>
+            <Label htmlFor="videoUrl">Video URL (optional)</Label>
             <Input
               id="videoUrl"
               type="url"
@@ -215,11 +215,11 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
           </div>
 
           <div>
-            <Label>Gruppi Muscolari *</Label>
+            <Label>Muscle Groups *</Label>
             <div className="flex gap-2 mb-2">
               <Select value={newMuscleGroup} onValueChange={setNewMuscleGroup}>
                 <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Seleziona gruppo muscolare" />
+                  <SelectValue placeholder="Select muscle group" />
                 </SelectTrigger>
                 <SelectContent>
                   {commonMuscleGroups.map(muscle => (
@@ -230,7 +230,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                 </SelectContent>
               </Select>
               <Button type="button" onClick={handleAddMuscleGroup}>
-                Aggiungi
+                Add
               </Button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -247,11 +247,11 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
           </div>
 
           <div>
-            <Label>Attrezzatura</Label>
+            <Label>Equipment</Label>
             <div className="flex gap-2 mb-2">
               <Select value={newEquipment} onValueChange={setNewEquipment}>
                 <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Seleziona attrezzatura" />
+                  <SelectValue placeholder="Select equipment" />
                 </SelectTrigger>
                 <SelectContent>
                   {commonEquipment.map(equip => (
@@ -262,7 +262,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                 </SelectContent>
               </Select>
               <Button type="button" onClick={handleAddEquipment}>
-                Aggiungi
+                Add
               </Button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -280,10 +280,10 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
 
           <div className="flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annulla
+              Cancel
             </Button>
             <Button type="submit">
-              Aggiungi Esercizio
+              Add Exercise
             </Button>
           </div>
         </form>
