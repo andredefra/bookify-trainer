@@ -74,23 +74,24 @@ export function TrainersGrid({
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
         {trainers.map((trainer) => (
-          <TrainerCard
-            key={trainer.id}
-            id={trainer.id}
-            name={trainer.name}
-            specialty={trainer.specialty}
-            rating={trainer.rating}
-            reviews={trainer.reviews}
-            image={trainer.image}
-            status={trainer.status}
-            onPayClick={onPayClick}
-            isFollowing={followedTrainers.includes(trainer.id)}
-            onFollowToggle={onFollowToggle}
-            onViewProfile={handleViewProfile}
-            onLeaveReview={handleLeaveReview}
-          />
+          <div key={trainer.id} className="min-h-[480px]">
+            <TrainerCard
+              id={trainer.id}
+              name={trainer.name}
+              specialty={trainer.specialty}
+              rating={trainer.rating}
+              reviews={trainer.reviews}
+              image={trainer.image}
+              status={trainer.status}
+              onPayClick={onPayClick}
+              isFollowing={followedTrainers.includes(trainer.id)}
+              onFollowToggle={onFollowToggle}
+              onViewProfile={handleViewProfile}
+              onLeaveReview={handleLeaveReview}
+            />
+          </div>
         ))}
       </div>
 

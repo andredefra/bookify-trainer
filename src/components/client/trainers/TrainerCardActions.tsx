@@ -22,7 +22,7 @@ export function TrainerCardActions({
   const paymentAmount = hourlyRate || (id === 1 ? 50 : 45);
   
   return (
-    <div className="px-5 pb-5 flex flex-col gap-3 border-t border-gray-100 pt-4">
+    <div className="px-4 pb-4 flex flex-col gap-3 border-t border-gray-100 pt-4">
       {/* Primary action */}
       <Button 
         className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-sm"
@@ -32,25 +32,25 @@ export function TrainerCardActions({
         View Profile
       </Button>
       
-      {/* Secondary actions */}
+      {/* Secondary actions - improved layout */}
       <div className="flex gap-2">
         <Button 
           variant="outline" 
           size="sm"
-          className="flex-1 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700"
+          className="flex-1 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 min-w-0"
           onClick={() => onLeaveReview(id, name)}
         >
-          <Star className="h-3.5 w-3.5 mr-1" />
-          Review
+          <Star className="h-3.5 w-3.5 mr-1 shrink-0" />
+          <span className="truncate text-xs">Review</span>
         </Button>
         <Button 
           variant="outline" 
           size="sm"
-          className="flex-1 hover:bg-green-50 hover:border-green-200 hover:text-green-700"
+          className="flex-1 hover:bg-green-50 hover:border-green-200 hover:text-green-700 min-w-0"
           onClick={() => onPayClick(name, paymentAmount)}
         >
-          <DollarSign className="h-3.5 w-3.5 mr-1" />
-          Pay ${paymentAmount}
+          <DollarSign className="h-3.5 w-3.5 mr-1 shrink-0" />
+          <span className="truncate text-xs">${paymentAmount}</span>
         </Button>
       </div>
     </div>

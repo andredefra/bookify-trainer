@@ -40,32 +40,36 @@ export function TrainerCard({
   onLeaveReview
 }: TrainerCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-0 shadow-sm bg-gradient-to-br from-white to-gray-50/50">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-0 shadow-sm bg-gradient-to-br from-white to-gray-50/50 h-full flex flex-col">
       <TrainerCardHeader 
         image={image} 
         name={name} 
         status={status} 
       />
-      <TrainerCardContent 
-        name={name}
-        specialty={specialty}
-        rating={rating}
-        reviews={reviews}
-        id={id}
-        isFollowing={isFollowing}
-        onFollowToggle={onFollowToggle}
-        hourlyRate={hourlyRate}
-        nextAvailability={nextAvailability}
-        location={location}
-      />
-      <TrainerCardActions 
-        id={id}
-        name={name}
-        onPayClick={onPayClick}
-        onViewProfile={onViewProfile}
-        onLeaveReview={onLeaveReview}
-        hourlyRate={hourlyRate}
-      />
+      <div className="flex-1 flex flex-col">
+        <TrainerCardContent 
+          name={name}
+          specialty={specialty}
+          rating={rating}
+          reviews={reviews}
+          id={id}
+          isFollowing={isFollowing}
+          onFollowToggle={onFollowToggle}
+          hourlyRate={hourlyRate}
+          nextAvailability={nextAvailability}
+          location={location}
+        />
+        <div className="mt-auto">
+          <TrainerCardActions 
+            id={id}
+            name={name}
+            onPayClick={onPayClick}
+            onViewProfile={onViewProfile}
+            onLeaveReview={onLeaveReview}
+            hourlyRate={hourlyRate}
+          />
+        </div>
+      </div>
     </Card>
   );
 }

@@ -31,9 +31,9 @@ export function TrainerCardContent({
 }: TrainerCardContentProps) {
   return (
     <div className="p-4 space-y-3">
-      {/* Header with name and follow button */}
-      <div className="flex justify-between items-start gap-2">
-        <div className="flex-1 min-w-0">
+      {/* Header with name and follow button - improved layout */}
+      <div className="flex justify-between items-start gap-3">
+        <div className="flex-1 min-w-0 max-w-[calc(100%-80px)]">
           <h3 className="font-semibold text-base text-gray-900 leading-tight truncate">{name}</h3>
           <p className="text-sm text-gray-600 font-medium mt-0.5 truncate">{specialty}</p>
         </div>
@@ -41,12 +41,13 @@ export function TrainerCardContent({
           variant={isFollowing ? "outline" : "secondary"}
           size="sm"
           onClick={() => onFollowToggle(id, name)}
-          className="shrink-0 h-8 px-3"
+          className="shrink-0 h-8 px-2 min-w-[70px]"
         >
           {isFollowing ? (
             <>
               <UserMinus className="h-3 w-3 mr-1" />
-              <span className="text-xs">Following</span>
+              <span className="text-xs hidden sm:inline">Following</span>
+              <span className="text-xs sm:hidden">Follow</span>
             </>
           ) : (
             <>
