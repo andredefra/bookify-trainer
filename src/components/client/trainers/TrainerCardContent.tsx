@@ -30,50 +30,48 @@ export function TrainerCardContent({
   location
 }: TrainerCardContentProps) {
   return (
-    <div className="p-4 space-y-3">
-      {/* Header with name and follow button - improved layout */}
-      <div className="flex justify-between items-start gap-3">
-        <div className="flex-1 min-w-0 max-w-[calc(100%-80px)]">
-          <h3 className="font-semibold text-base text-gray-900 leading-tight truncate">{name}</h3>
-          <p className="text-sm text-gray-600 font-medium mt-0.5 truncate">{specialty}</p>
+    <div className="p-3 sm:p-4 space-y-2.5">
+      {/* Header with name and follow button using CSS Grid */}
+      <div className="grid grid-cols-[1fr_auto] gap-2 items-start">
+        <div className="min-w-0 overflow-hidden">
+          <h3 className="font-semibold text-sm sm:text-base text-gray-900 leading-tight truncate">{name}</h3>
+          <p className="text-xs sm:text-sm text-gray-600 font-medium mt-0.5 truncate">{specialty}</p>
         </div>
         <Button 
           variant={isFollowing ? "outline" : "secondary"}
           size="sm"
           onClick={() => onFollowToggle(id, name)}
-          className="shrink-0 h-8 px-2 min-w-[70px]"
+          className="shrink-0 h-7 px-2 text-xs min-w-[60px] sm:min-w-[70px]"
         >
           {isFollowing ? (
             <>
               <UserMinus className="h-3 w-3 mr-1" />
-              <span className="text-xs hidden sm:inline">Following</span>
-              <span className="text-xs sm:hidden">Follow</span>
+              <span className="hidden sm:inline">Following</span>
+              <span className="sm:hidden">Follow</span>
             </>
           ) : (
             <>
               <UserPlus className="h-3 w-3 mr-1" />
-              <span className="text-xs">Follow</span>
+              <span>Follow</span>
             </>
           )}
         </Button>
       </div>
 
-      {/* Rating and verification */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <div className="flex items-center gap-0.5">
-            <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
-            <span className="font-semibold text-sm">{rating}</span>
-          </div>
+      {/* Rating and verification - compacted layout */}
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+          <span className="font-semibold text-sm">{rating}</span>
           <span className="text-xs text-gray-500">({reviews})</span>
         </div>
-        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200 px-2 py-0.5">
+        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200 px-1.5 py-0.5 h-5">
           Verified
         </Badge>
       </div>
 
-      {/* Additional info - single column layout */}
-      <div className="space-y-1.5 text-sm">
+      {/* Additional info - compact single column */}
+      <div className="space-y-1 text-sm">
         {location && (
           <div className="flex items-center gap-1.5 text-gray-600">
             <MapPin className="h-3 w-3 shrink-0" />
