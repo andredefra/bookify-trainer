@@ -98,12 +98,16 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
   const [showSidebar, setShowSidebar] = useState(false);
   const isMobile = useIsMobile();
 
+  const handleLogout = () => {
+    console.log("Logout clicked");
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <ClientHeader
         name={customName || "Client Dashboard"} 
         user={sampleUser}
-        onLogout={() => console.log("Logout clicked")}
+        onLogout={handleLogout}
         onMobileMenuClick={() => setShowSidebar(!showSidebar)}
         showMobileMenuButton={isMobile}
       />
@@ -113,6 +117,8 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
           setActiveTab={setActiveTab}
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
+          user={sampleUser}
+          onLogout={handleLogout}
         />
         
         <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">

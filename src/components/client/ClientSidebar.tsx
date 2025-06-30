@@ -2,7 +2,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
+import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, LogOut, UserCircle, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ClientSidebarProps {
@@ -16,7 +19,9 @@ interface ClientSidebarProps {
     email: string;
     type: string;
     plan?: string;
+    profileImage?: string;
   };
+  onLogout?: () => void;
 }
 
 const sidebarItems = [
@@ -37,11 +42,24 @@ export function ClientSidebar({
   showSidebar, 
   setShowSidebar,
   unreadMessageCount = 0,
-  user 
+  user,
+  onLogout
 }: ClientSidebarProps) {
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
     setShowSidebar(false);
+  };
+
+  const handleLogout = () => {
+    onLogout?.();
+    setShowSidebar(false);
+  };
+
+  const getUserInitials = (name?: string, email?: string) => {
+    if (name) {
+      return name.split(' ').map(part => part[0]).join('').toUpperCase().slice(0, 2);
+    }
+    return email?.slice(0, 2).toUpperCase() || 'U';
   };
 
   return (
@@ -65,6 +83,52 @@ export function ClientSidebar({
             <Button variant="ghost" size="icon" onClick={() => setShowSidebar(false)}>
               <X className="h-5 w-5" />
             </Button>
+          </div>
+          
+          {/* User Profile Section */}
+          <div className="px-4 py-6 border-b">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="w-full justify-start p-3 h-auto hover:bg-muted/50">
+                  <div className="flex items-center gap-3 w-full">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={user?.profileImage} alt={user?.name || "User"} />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {getUserInitials(user?.name, user?.email)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 text-left">
+                      <p className="font-medium text-sm text-foreground">
+                        {user?.name || "User"}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {user?.email}
+                      </p>
+                      {user?.plan && (
+                        <Badge variant="secondary" className="text-xs h-4 mt-1 bg-primary/10 text-primary">
+                          {user.plan.charAt(0).toUpperCase() + user.plan.slice(1)}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuItem onClick={() => handleTabClick('settings')}>
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  Profile Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleTabClick('settings')}>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Account & Billing
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           {/* Navigation */}
