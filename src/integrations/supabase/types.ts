@@ -69,6 +69,148 @@ export type Database = {
         }
         Relationships: []
       }
+      client_package_assignments: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          expiry_date: string | null
+          id: string
+          package_id: string
+          purchase_date: string | null
+          sessions_total: number
+          sessions_used: number | null
+          status: string | null
+          total_paid: number | null
+          trainer_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          package_id: string
+          purchase_date?: string | null
+          sessions_total: number
+          sessions_used?: number | null
+          status?: string | null
+          total_paid?: number | null
+          trainer_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          package_id?: string
+          purchase_date?: string | null
+          sessions_total?: number
+          sessions_used?: number | null
+          status?: string | null
+          total_paid?: number | null
+          trainer_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_package_assignments_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "client_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_package_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: string
+          notes: string | null
+          package_assignment_id: string
+          payment_date: string | null
+          payment_method: string | null
+          payment_status: string | null
+          stripe_payment_intent_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          package_assignment_id: string
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          stripe_payment_intent_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          package_assignment_id?: string
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          stripe_payment_intent_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_package_payments_package_assignment_id_fkey"
+            columns: ["package_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "client_package_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_packages: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          package_type: string
+          price: number
+          sessions_count: number | null
+          title: string
+          trainer_id: string
+          updated_at: string | null
+          validity_days: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          package_type: string
+          price: number
+          sessions_count?: number | null
+          title: string
+          trainer_id: string
+          updated_at?: string | null
+          validity_days?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          package_type?: string
+          price?: number
+          sessions_count?: number | null
+          title?: string
+          trainer_id?: string
+          updated_at?: string | null
+          validity_days?: number | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           conversion_date: string | null
