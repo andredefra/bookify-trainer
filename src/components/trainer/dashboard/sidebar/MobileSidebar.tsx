@@ -5,7 +5,19 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Home, Users, Dumbbell, Calendar, MessageSquare, Settings, CreditCard, LineChart, FolderKanban } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Users, 
+  Dumbbell, 
+  Calendar, 
+  MessageSquare, 
+  Settings, 
+  CreditCard, 
+  LineChart, 
+  FolderKanban,
+  Package,
+  CalendarDays
+} from "lucide-react";
 import { StatusSelector } from "../header/StatusSelector";
 import { TrainerSessionItem } from "@/types/sessions";
 
@@ -32,11 +44,13 @@ export function MobileSidebar({
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
 
   const navigationItems = [
-    { title: "Overview", icon: Home, href: "overview" },
+    { title: "Overview", icon: LayoutDashboard, href: "overview" },
     { title: "Sales", icon: FolderKanban, href: "sales" },
     { title: "Clients", icon: Users, href: "clients" },
     { title: "Programs", icon: Dumbbell, href: "programs" },
     { title: "Sessions", icon: Calendar, href: "sessions" },
+    { title: "Packages", icon: Package, href: "packages" },
+    { title: "Calendar", icon: CalendarDays, href: "calendar" },
     { title: "Messages", icon: MessageSquare, href: "messages", badge: 3 },
     { title: "Transactions", icon: CreditCard, href: "transactions" },
     { title: "Business Data", icon: LineChart, href: "analytics" },
@@ -66,7 +80,6 @@ export function MobileSidebar({
                   </Badge>
                 </div>
               </div>
-              {/* Just use the built-in close button of SheetContent */}
             </div>
             
             {/* Add status selector in mobile sidebar */}
@@ -82,13 +95,13 @@ export function MobileSidebar({
                 <Button
                   key={item.href}
                   variant={activeTab === item.href ? "default" : "ghost"}
-                  className="w-full justify-start mb-1 text-lg font-medium"
+                  className="w-full justify-start mb-1 text-sm font-medium"
                   onClick={() => {
                     handleTabClick(item.href);
                     setShowSidebar(false);
                   }}
                 >
-                  <item.icon className="mr-3 h-5 w-5" />
+                  <item.icon className="mr-3 h-4 w-4" />
                   <span>{item.title}</span>
                   {item.badge && (
                     <Badge className="ml-auto">{item.badge}</Badge>
