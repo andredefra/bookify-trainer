@@ -23,7 +23,9 @@ export function DashboardHeader({ name, onLogout, onMobileMenuClick, showMobileM
             </Button>
           )}
           <div>
-            <h1 className="text-lg sm:text-xl md:text-2xl font-bold">Dashboard</h1>
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-primary">
+              MyPersonal.fit
+            </h1>
             <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
               Welcome, {name}
             </p>
