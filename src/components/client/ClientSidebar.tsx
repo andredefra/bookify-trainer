@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, LogOut, UserCircle, CreditCard } from "lucide-react";
+import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, LogOut, UserCircle, CreditCard, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ClientSidebarProps {
@@ -77,7 +77,7 @@ export function ClientSidebar({
         "fixed left-0 top-0 z-50 h-full w-64 bg-white border-r border-border transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
         showSidebar ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex flex-col h-full pt-16 md:pt-0">
+        <div className="flex flex-col h-full">
           {/* Mobile close button */}
           <div className="flex justify-end p-4 md:hidden">
             <Button variant="ghost" size="icon" onClick={() => setShowSidebar(false)}>
@@ -86,11 +86,14 @@ export function ClientSidebar({
           </div>
           
           {/* User Profile Section */}
-          <div className="px-4 py-6 border-b">
+          <div className="p-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-full justify-start p-3 h-auto hover:bg-muted/50">
-                  <div className="flex items-center gap-3 w-full">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-between p-3 h-auto hover:bg-muted/50 border border-border/50 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={user?.profileImage} alt={user?.name || "User"} />
                       <AvatarFallback className="bg-primary text-primary-foreground">
@@ -111,6 +114,7 @@ export function ClientSidebar({
                       )}
                     </div>
                   </div>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
@@ -130,9 +134,11 @@ export function ClientSidebar({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
+          <Separator />
           
-          {/* Navigation */}
-          <nav className="flex-1 px-4 pb-4 space-y-2">
+          {/* Navigation Menu */}
+          <nav className="flex-1 p-4 space-y-1">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -143,16 +149,16 @@ export function ClientSidebar({
                   key={item.id}
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
-                    "w-full justify-start gap-3 h-10",
-                    isActive && "bg-primary/10 text-primary hover:bg-primary/15"
+                    "w-full justify-start gap-3 px-3 py-2 h-10 text-left",
+                    isActive && "bg-primary/10 text-primary hover:bg-primary/15 font-medium"
                   )}
                   onClick={() => handleTabClick(item.id)}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.label}</span>
+                  <Icon className="h-4 w-4 flex-shrink-0" />
+                  <span className="flex-1">{item.label}</span>
                   {showBadge && (
-                    <Badge variant="destructive" className="ml-auto h-5 w-5 flex items-center justify-center p-0 text-xs">
-                      {unreadMessageCount}
+                    <Badge variant="destructive" className="h-5 w-5 flex items-center justify-center p-0 text-xs">
+                      {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
                     </Badge>
                   )}
                 </Button>
