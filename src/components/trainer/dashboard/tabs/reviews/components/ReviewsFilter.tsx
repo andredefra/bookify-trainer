@@ -3,13 +3,15 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
 
+interface FilterState {
+  rating: string;
+  status: string;
+  search: string;
+}
+
 interface ReviewsFilterProps {
-  filter: {
-    rating: string;
-    status: string;
-    search: string;
-  };
-  onFilterChange: (updates: Partial<typeof filter>) => void;
+  filter: FilterState;
+  onFilterChange: (updates: Partial<FilterState>) => void;
 }
 
 export function ReviewsFilter({ filter, onFilterChange }: ReviewsFilterProps) {
