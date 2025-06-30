@@ -22,7 +22,7 @@ export function ConversionMetricsChart({ revenueBreakdown }: ConversionMetricsCh
                 </div>
                 <div>
                   <p className="text-sm font-medium text-blue-700">Tasso di Conversione</p>
-                  <h3 className="text-xl font-bold text-blue-900">{revenueBreakdown.clientConversionRate.toFixed(1)}%</h3>
+                  <h3 className="text-xl font-bold text-blue-900">{revenueBreakdown.conversionRate.toFixed(1)}%</h3>
                   <p className="text-xs text-blue-600">Da occasionale a cliente</p>
                 </div>
               </div>
