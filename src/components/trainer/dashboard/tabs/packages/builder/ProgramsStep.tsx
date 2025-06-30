@@ -10,8 +10,6 @@ interface Program {
   title: string;
   duration: number; // weeks
   price: number;
-  objective: string;
-  description: string;
 }
 
 interface PackageData {
@@ -30,41 +28,31 @@ const availablePrograms: Program[] = [
     id: "1",
     title: "Strength Building Program",
     duration: 8,
-    price: 150,
-    objective: "Forza",
-    description: "Programma di 8 settimane per aumentare la forza massimale"
+    price: 150
   },
   {
     id: "2",
     title: "Weight Loss Intensive",
     duration: 12,
-    price: 200,
-    objective: "Perdita di peso",
-    description: "Programma completo di 12 settimane per perdita di peso sostenibile"
+    price: 200
   },
   {
     id: "3",
     title: "Beginner Fitness Foundation",
     duration: 6,
-    price: 100,
-    objective: "Base fitness",
-    description: "Programma introduttivo di 6 settimane per principianti"
+    price: 100
   },
   {
     id: "4",
     title: "Advanced Muscle Building",
     duration: 10,
-    price: 180,
-    objective: "Massa muscolare",
-    description: "Programma avanzato di 10 settimane per massimizzare la crescita muscolare"
+    price: 180
   },
   {
     id: "5",
     title: "Functional Movement",
     duration: 4,
-    price: 80,
-    objective: "Mobilità",
-    description: "Programma di 4 settimane per migliorare mobilità e movimento funzionale"
+    price: 80
   }
 ];
 
@@ -72,8 +60,7 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredPrograms = availablePrograms.filter(program =>
-    program.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    program.objective.toLowerCase().includes(searchTerm.toLowerCase())
+    program.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleProgram = (program: Program) => {
@@ -132,7 +119,7 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
                     <div>
                       <CardTitle className="text-base">{program.title}</CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {program.description}
+                        Programma di {program.duration} settimane
                       </p>
                     </div>
                   </div>
@@ -143,10 +130,6 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     <span>{program.duration} settimane</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Target className="h-4 w-4" />
-                    <span>{program.objective}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Euro className="h-4 w-4" />

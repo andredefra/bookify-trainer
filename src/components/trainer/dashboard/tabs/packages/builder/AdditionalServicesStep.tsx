@@ -8,8 +8,6 @@ interface AdditionalService {
   id: string;
   name: string;
   price: number;
-  description: string;
-  icon: any;
 }
 
 interface PackageData {
@@ -22,7 +20,7 @@ interface AdditionalServicesStepProps {
   onChange: (updates: Partial<PackageData>) => void;
 }
 
-const availableServices: AdditionalService[] = [
+const availableServices = [
   {
     id: "whatsapp",
     name: "Supporto WhatsApp 24/7",
@@ -68,7 +66,13 @@ const availableServices: AdditionalService[] = [
 ];
 
 export function AdditionalServicesStep({ data, onChange }: AdditionalServicesStepProps) {
-  const toggleService = (service: AdditionalService) => {
+  const toggleService = (serviceData: typeof availableServices[0]) => {
+    const service: AdditionalService = {
+      id: serviceData.id,
+      name: serviceData.name,
+      price: serviceData.price
+    };
+    
     const isSelected = data.additionalServices.some(s => s.id === service.id);
     
     if (isSelected) {
