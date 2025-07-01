@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,8 +22,7 @@ export function CalendarTab() {
       case 'program_milestone': return 'Program';
       case 'deadline': return 'Deadline';
       case 'personal_task': return 'Task';
-      case 'reminder': return 'Reminder';
-      case 'equipment': return 'Equipment';
+      case 'availability': return 'Available';
       default: return 'Event';
     }
   };

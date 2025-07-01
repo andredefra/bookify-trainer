@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 export interface CalendarEvent {
   id: string;
   title: string;
-  type: 'session' | 'sales_activity' | 'program_milestone' | 'deadline' | 'personal_task' | 'reminder' | 'equipment';
+  type: 'session' | 'sales_activity' | 'program_milestone' | 'deadline' | 'personal_task' | 'availability';
   start: Date;
   end: Date;
   client?: string;
@@ -39,7 +39,7 @@ export function useCalendarEvents(trainerId: string) {
     {
       id: '2',
       title: 'Prepare weekly workout plans',
-      type: 'reminder',
+      type: 'personal_task',
       start: new Date(2024, 11, 30, 14, 0),
       end: new Date(2024, 11, 30, 14, 30),
       color: 'bg-purple-500',
@@ -88,7 +88,7 @@ export function useCalendarEvents(trainerId: string) {
     {
       id: '6',
       title: 'Equipment delivery reminder',
-      type: 'reminder',
+      type: 'personal_task',
       start: new Date(2024, 11, 31, 11, 0),
       end: new Date(2024, 11, 31, 11, 30),
       color: 'bg-gray-500',
@@ -126,7 +126,7 @@ export function useCalendarEvents(trainerId: string) {
     {
       id: '9',
       title: 'Certification renewal reminder',
-      type: 'reminder',
+      type: 'personal_task',
       start: new Date(2024, 11, 20, 9, 0),
       end: new Date(2024, 11, 20, 9, 15),
       color: 'bg-yellow-500',
@@ -174,7 +174,7 @@ export function useCalendarEvents(trainerId: string) {
     {
       id: '13',
       title: 'Gym equipment maintenance',
-      type: 'equipment',
+      type: 'personal_task',
       start: new Date(2025, 0, 10, 8, 0),
       end: new Date(2025, 0, 10, 10, 0),
       location: 'Main Gym',
@@ -186,12 +186,60 @@ export function useCalendarEvents(trainerId: string) {
     {
       id: '14',
       title: 'Monthly progress review - All clients',
-      type: 'reminder',
+      type: 'personal_task',
       start: new Date(2025, 0, 15, 18, 0),
       end: new Date(2025, 0, 15, 19, 0),
       color: 'bg-purple-500',
       status: 'scheduled',
       description: 'Review progress reports and update programs',
+      trainer_id: trainerId
+    },
+    {
+      id: '15',
+      title: 'Available Time Slot - Morning',
+      type: 'availability',
+      start: new Date(2025, 0, 3, 10, 0),
+      end: new Date(2025, 0, 3, 12, 0),
+      color: 'bg-emerald-500',
+      status: 'scheduled',
+      description: 'Open slot for new client bookings',
+      trainer_id: trainerId
+    },
+    {
+      id: '16',
+      title: 'Follow-up - New Lead Contact',
+      type: 'sales_activity',
+      start: new Date(2025, 0, 4, 16, 30),
+      end: new Date(2025, 0, 4, 17, 0),
+      client: 'Michael Brown',
+      color: 'bg-green-500',
+      status: 'scheduled',
+      description: 'First contact with gym referral',
+      trainer_id: trainerId
+    },
+    {
+      id: '17',
+      title: 'Contract renewal deadline - Premium client',
+      type: 'deadline',
+      start: new Date(2025, 0, 12, 17, 0),
+      end: new Date(2025, 0, 12, 17, 0),
+      client: 'Amanda Foster',
+      color: 'bg-red-500',
+      status: 'alert',
+      description: 'VIP package renewal needed',
+      trainer_id: trainerId
+    },
+    {
+      id: '18',
+      title: 'Program completion celebration - Tom Wilson',
+      type: 'program_milestone',
+      start: new Date(2025, 0, 20, 19, 0),
+      end: new Date(2025, 0, 20, 20, 0),
+      client: 'Tom Wilson',
+      location: 'Main Gym',
+      color: 'bg-purple-500',
+      status: 'scheduled',
+      description: '12-week transformation program completed successfully',
       trainer_id: trainerId
     }
   ];
