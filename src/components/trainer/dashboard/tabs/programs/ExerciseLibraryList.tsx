@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -6,9 +5,10 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { Edit, Trash2, Play, RotateCcw, ChevronDown, Info, Dumbbell } from 'lucide-react';
+import { Edit, Trash2, Play, ChevronDown, Info, Dumbbell, Image, ExternalLink } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { AlternativeExercisesList } from './AlternativeExercisesList';
+import { EquipmentImageGallery } from './EquipmentImageGallery';
 
 interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
@@ -79,6 +79,9 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
         <div className="space-y-3">
           {exercises.map((exercise) => {
             const isExpanded = expandedCards.has(exercise.id);
+            const hasVideo = exercise.videoUrl;
+            const hasImages = exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0;
+            const hasAlternatives = exercise.alternativeExercises && exercise.alternativeExercises.length > 0;
             
             return (
               <Card key={exercise.id} className="relative hover:shadow-md transition-shadow">
@@ -115,6 +118,28 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                                 Primary: {exercise.primaryEquipment}
                               </Badge>
                             )}
+                            
+                            {/* Media indicators */}
+                            <div className="flex gap-1">
+                              {hasVideo && (
+                                <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                                  <Play className="h-3 w-3 mr-1" />
+                                  Video
+                                </Badge>
+                              )}
+                              {hasImages && (
+                                <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
+                                  <Image className="h-3 w-3 mr-1" />
+                                  Images
+                                </Badge>
+                              )}
+                              {hasAlternatives && (
+                                <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">
+                                  <ExternalLink className="h-3 w-3 mr-1" />
+                                  Alternatives
+                                </Badge>
+                              )}
+                            </div>
                           </div>
 
                           <div className="flex flex-wrap gap-1 mb-2">
@@ -145,7 +170,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                         </div>
 
                         <div className="flex items-center gap-1 ml-4">
-                          {exercise.videoUrl && (
+                          {hasVideo && (
                             <Button
                               size="sm"
                               variant="ghost"
@@ -153,7 +178,8 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                                 e.stopPropagation();
                                 previewVideo(exercise.videoUrl);
                               }}
-                              className="h-8 w-8 p-0"
+                              className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                              title="Watch video"
                             >
                               <Play className="h-3 w-3" />
                             </Button>
@@ -167,6 +193,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                               onEdit(exercise);
                             }}
                             className="h-8 w-8 p-0"
+                            title="Edit exercise"
                           >
                             <Edit className="h-3 w-3" />
                           </Button>
@@ -180,6 +207,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                                 handleDeleteClick(exercise);
                               }}
                               className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                              title="Delete exercise"
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
@@ -201,6 +229,44 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                           {exercise.notes}
                         </p>
                       </div>
+
+                      {/* Equipment Images Gallery */}
+                      {hasImages && (
+                        <EquipmentImageGallery 
+                          equipmentImages={exercise.equipmentImages!}
+                        />
+                      )}
+
+                      {/* Video Tutorial */}
+                      {hasVideo && (
+                        <div>
+                          <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                            <Play className="h-4 w-4 text-blue-500" />
+                            Video Tutorial
+                          </h4>
+                          <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <div className="w-16 h-12 bg-blue-100 rounded flex items-center justify-center">
+                              <Play className="h-6 w-6 text-blue-600" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-blue-900">
+                                Watch {exercise.name} demonstration
+                              </p>
+                              <p className="text-xs text-blue-700">
+                                Learn proper form and technique
+                              </p>
+                            </div>
+                            <Button
+                              size="sm"
+                              onClick={() => previewVideo(exercise.videoUrl)}
+                              className="bg-blue-600 hover:bg-blue-700"
+                            >
+                              <Play className="h-3 w-3 mr-1" />
+                              Watch
+                            </Button>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Complete Muscle Groups */}
                       {exercise.muscleGroup.length > 3 && (
@@ -231,27 +297,11 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       )}
 
                       {/* Alternative Exercises */}
-                      {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                      {hasAlternatives && (
                         <AlternativeExercisesList
-                          alternativeExerciseIds={exercise.alternativeExercises}
+                          alternativeExerciseIds={exercise.alternativeExercises!}
                           className="mt-4"
                         />
-                      )}
-
-                      {/* Video Link */}
-                      {exercise.videoUrl && (
-                        <div>
-                          <h4 className="font-medium text-sm mb-2">Video Tutorial</h4>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => previewVideo(exercise.videoUrl)}
-                            className="flex items-center gap-2"
-                          >
-                            <Play className="h-3 w-3" />
-                            Watch Tutorial
-                          </Button>
-                        </div>
                       )}
                     </CardContent>
                   </CollapsibleContent>

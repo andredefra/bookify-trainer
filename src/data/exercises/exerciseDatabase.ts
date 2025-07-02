@@ -1,3 +1,5 @@
+import { generateEquipmentImages } from './equipmentImageMap';
+import { getExerciseVideoUrl } from './videoUrls';
 
 export interface ExerciseData {
   id: string;
@@ -24,7 +26,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Start in plank position, lower chest to ground, push back up. Keep core tight throughout movement.",
-    alternativeExercises: ["incline-push-up", "knee-push-up", "diamond-push-up"]
+    videoUrl: getExerciseVideoUrl("1"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["11", "21", "8"]
   },
   {
     id: "2",
@@ -34,7 +38,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Stand with feet shoulder-width apart, lower hips back and down, keep chest up, return to standing.",
-    alternativeExercises: ["goblet-squat", "wall-squat", "jump-squat"]
+    videoUrl: getExerciseVideoUrl("2"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["43", "82", "17"]
   },
   {
     id: "3",
@@ -44,7 +50,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Hold straight line from head to heels, engage core, breathe normally.",
-    alternativeExercises: ["knee-plank", "side-plank", "plank-up-down"]
+    videoUrl: getExerciseVideoUrl("3"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["66", "67", "74"]
   },
   {
     id: "4",
@@ -54,7 +62,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Step forward, lower back knee toward ground, push back to starting position. Alternate legs.",
-    alternativeExercises: ["reverse-lunge", "lateral-lunge", "walking-lunge"]
+    videoUrl: getExerciseVideoUrl("4"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["45", "46", "47"]
   },
   {
     id: "5",
@@ -64,7 +74,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Squat down, jump back to plank, do push-up, jump feet to hands, jump up with arms overhead.",
-    alternativeExercises: ["half-burpee", "burpee-without-pushup", "mountain-climber"]
+    videoUrl: getExerciseVideoUrl("5"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["6", "7", "97"]
   },
   {
     id: "6",
@@ -74,7 +86,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Start in plank position, alternate bringing knees to chest rapidly while maintaining plank form.",
-    alternativeExercises: ["high-knees", "running-in-place", "plank-jacks"]
+    videoUrl: getExerciseVideoUrl("6"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["5", "10", "75"]
   },
   {
     id: "7",
@@ -84,7 +98,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Jump feet apart while raising arms overhead, jump back to starting position.",
-    alternativeExercises: ["step-touch", "arm-circles", "marching-in-place"]
+    videoUrl: getExerciseVideoUrl("7"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["10", "6", "96"]
   },
   {
     id: "8",
@@ -94,7 +110,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["chair", "bench"],
     difficulty: "intermediate",
     notes: "Sit on edge of chair, hands beside hips, lower body by bending elbows, push back up.",
-    alternativeExercises: ["wall-push-up", "tricep-push-up", "overhead-press"]
+    videoUrl: getExerciseVideoUrl("8"),
+    equipmentImages: generateEquipmentImages(["chair", "bench"]),
+    alternativeExercises: ["28", "31", "1"]
   },
   {
     id: "9",
@@ -104,7 +122,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Lie on back, knees bent, hands behind head, lift shoulders off ground using core muscles.",
-    alternativeExercises: ["sit-ups", "bicycle-crunches", "dead-bug"]
+    videoUrl: getExerciseVideoUrl("9"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["62", "68", "69"]
   },
   {
     id: "10",
@@ -114,7 +134,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Run in place bringing knees up to hip level, pump arms naturally.",
-    alternativeExercises: ["marching-in-place", "butt-kicks", "jumping-jacks"]
+    videoUrl: getExerciseVideoUrl("10"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["7", "6", "96"]
   },
   {
     id: "11",
@@ -124,7 +146,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "bench"],
     difficulty: "intermediate",
     notes: "Lie on bench, grip bar slightly wider than shoulders, lower to chest, press up.",
-    alternativeExercises: ["dumbbell-press", "push-up", "incline-press"]
+    videoUrl: getExerciseVideoUrl("11"),
+    equipmentImages: generateEquipmentImages(["barbell", "bench"]),
+    alternativeExercises: ["1", "21", "23"]
   },
   {
     id: "12",
@@ -134,7 +158,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell"],
     difficulty: "advanced",
     notes: "Stand with feet hip-width apart, grip bar, lift by extending hips and knees, keep back straight.",
-    alternativeExercises: ["romanian-deadlift", "sumo-deadlift", "trap-bar-deadlift"]
+    videoUrl: getExerciseVideoUrl("12"),
+    equipmentImages: generateEquipmentImages(["barbell"]),
+    alternativeExercises: ["40", "41", "35"]
   },
   {
     id: "13",
@@ -144,7 +170,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["pull-up bar"],
     difficulty: "advanced",
     notes: "Hang from bar with overhand grip, pull body up until chin clears bar, lower with control.",
-    alternativeExercises: ["assisted-pull-up", "lat-pulldown", "inverted-rows"]
+    videoUrl: getExerciseVideoUrl("13"),
+    equipmentImages: generateEquipmentImages(["pull-up bar"]),
+    alternativeExercises: ["18", "36", "37"]
   },
   {
     id: "14",
@@ -154,7 +182,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "dumbbells"],
     difficulty: "intermediate",
     notes: "Stand with feet shoulder-width apart, press weight overhead, keep core engaged.",
-    alternativeExercises: ["dumbbell-press", "pike-push-up", "handstand-push-up"]
+    videoUrl: getExerciseVideoUrl("14"),
+    equipmentImages: generateEquipmentImages(["barbell", "dumbbells"]),
+    alternativeExercises: ["25", "26", "84"]
   },
   {
     id: "15",
@@ -164,7 +194,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "dumbbells"],
     difficulty: "intermediate",
     notes: "Bend at hips, pull weight to lower chest/upper abdomen, squeeze shoulder blades together.",
-    alternativeExercises: ["cable-row", "t-bar-row", "inverted-row"]
+    videoUrl: getExerciseVideoUrl("15"),
+    equipmentImages: generateEquipmentImages(["barbell", "dumbbells"]),
+    alternativeExercises: ["36", "37", "35"]
   },
   {
     id: "16",
@@ -174,7 +206,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "beginner",
     notes: "Stand with dumbbells at sides, curl weights up by flexing biceps, lower with control.",
-    alternativeExercises: ["hammer-curls", "cable-curls", "resistance-band-curls"]
+    videoUrl: getExerciseVideoUrl("16"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["29", "30", "121"]
   },
   {
     id: "17",
@@ -184,7 +218,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["leg press machine"],
     difficulty: "intermediate",
     notes: "Sit in machine, place feet on platform, lower weight by bending knees, press back up.",
-    alternativeExercises: ["squat", "hack-squat", "goblet-squat"]
+    videoUrl: getExerciseVideoUrl("17"),
+    equipmentImages: generateEquipmentImages(["leg press machine"]),
+    alternativeExercises: ["2", "43", "44"]
   },
   {
     id: "18",
@@ -194,7 +230,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["cable machine"],
     difficulty: "intermediate",
     notes: "Sit at machine, grip bar wider than shoulders, pull down to upper chest, control the return.",
-    alternativeExercises: ["pull-ups", "assisted-pull-up", "cable-row"]
+    videoUrl: getExerciseVideoUrl("18"),
+    equipmentImages: generateEquipmentImages(["cable machine"]),
+    alternativeExercises: ["13", "36", "37"]
   },
   {
     id: "19",
@@ -204,7 +242,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["leg curl machine"],
     difficulty: "beginner",
     notes: "Lie face down, curl heels toward glutes by flexing hamstrings, lower with control.",
-    alternativeExercises: ["romanian-deadlift", "good-mornings", "glute-ham-raise"]
+    videoUrl: getExerciseVideoUrl("19"),
+    equipmentImages: generateEquipmentImages(["leg curl machine"]),
+    alternativeExercises: ["40", "50", "51"]
   },
   {
     id: "20",
@@ -214,7 +254,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight", "dumbbells"],
     difficulty: "beginner",
     notes: "Stand on balls of feet, raise up onto toes, lower with control. Can add weight for resistance.",
-    alternativeExercises: ["seated-calf-raise", "single-leg-calf-raise", "jump-rope"]
+    videoUrl: getExerciseVideoUrl("20"),
+    equipmentImages: generateEquipmentImages(["bodyweight", "dumbbells"]),
+    alternativeExercises: ["92", "48", "60"]
   },
   {
     id: "21",
@@ -224,7 +266,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "incline bench"],
     difficulty: "intermediate",
     notes: "Set bench to 30-45 degree incline, press weight from chest level to arms extended.",
-    alternativeExercises: ["incline-dumbbell-press", "incline-push-up", "pike-push-up"]
+    videoUrl: getExerciseVideoUrl("21"),
+    equipmentImages: generateEquipmentImages(["barbell", "incline bench"]),
+    alternativeExercises: ["11", "1", "23"]
   },
   {
     id: "22",
@@ -234,7 +278,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "decline bench"],
     difficulty: "intermediate",
     notes: "Set bench to decline position, press weight from chest to arms extended, control the descent.",
-    alternativeExercises: ["decline-dumbbell-press", "dips", "decline-push-up"]
+    videoUrl: getExerciseVideoUrl("22"),
+    equipmentImages: generateEquipmentImages(["barbell", "decline bench"]),
+    alternativeExercises: ["11", "8", "34"]
   },
   {
     id: "23",
@@ -244,7 +290,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells", "bench"],
     difficulty: "intermediate",
     notes: "Lie on bench, arms extended with slight bend, lower weights in arc motion, squeeze chest to return.",
-    alternativeExercises: ["cable-flyes", "pec-deck", "push-up-variations"]
+    videoUrl: getExerciseVideoUrl("23"),
+    equipmentImages: generateEquipmentImages(["dumbbells", "bench"]),
+    alternativeExercises: ["34", "11", "1"]
   },
   {
     id: "24",
@@ -254,7 +302,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells", "barbell"],
     difficulty: "beginner",
     notes: "Hold weights at sides, lift shoulders straight up toward ears, hold briefly, lower slowly.",
-    alternativeExercises: ["upright-rows", "face-pulls", "reverse-flyes"]
+    videoUrl: getExerciseVideoUrl("24"),
+    equipmentImages: generateEquipmentImages(["dumbbells", "barbell"]),
+    alternativeExercises: ["32", "33", "15"]
   },
   {
     id: "25",
@@ -264,7 +314,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "beginner",
     notes: "Stand with weights at sides, raise arms out to sides until parallel to floor, lower slowly.",
-    alternativeExercises: ["cable-lateral-raise", "resistance-band-raise", "upright-rows"]
+    videoUrl: getExerciseVideoUrl("25"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["32", "14", "121"]
   },
   {
     id: "26",
@@ -274,7 +326,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "beginner",
     notes: "Hold weights in front of thighs, raise one or both arms forward to shoulder height.",
-    alternativeExercises: ["cable-front-raise", "plate-raise", "pike-push-up"]
+    videoUrl: getExerciseVideoUrl("26"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["14", "25", "121"]
   },
   {
     id: "27",
@@ -284,7 +338,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "intermediate",
     notes: "Bend forward at hips, arms hanging down, raise weights out to sides squeezing shoulder blades.",
-    alternativeExercises: ["cable-reverse-flye", "face-pulls", "band-pull-aparts"]
+    videoUrl: getExerciseVideoUrl("27"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["33", "121", "15"]
   },
   {
     id: "28",
@@ -294,7 +350,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells", "cable"],
     difficulty: "beginner",
     notes: "Hold weight overhead, lower behind head by bending elbows, extend back to start position.",
-    alternativeExercises: ["tricep-dips", "close-grip-push-up", "diamond-push-up"]
+    videoUrl: getExerciseVideoUrl("28"),
+    equipmentImages: generateEquipmentImages(["dumbbells", "cable"]),
+    alternativeExercises: ["8", "31", "1"]
   },
   {
     id: "29",
@@ -304,7 +362,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "beginner",
     notes: "Hold dumbbells with neutral grip, curl up keeping palms facing each other throughout movement.",
-    alternativeExercises: ["regular-curls", "cable-hammer-curls", "resistance-band-curls"]
+    videoUrl: getExerciseVideoUrl("29"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["16", "30", "121"]
   },
   {
     id: "30",
@@ -314,7 +374,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["preacher bench", "barbell"],
     difficulty: "intermediate",
     notes: "Sit at preacher bench, arms over pad, curl weight up focusing on bicep contraction.",
-    alternativeExercises: ["concentration-curls", "cable-curls", "incline-curls"]
+    videoUrl: getExerciseVideoUrl("30"),
+    equipmentImages: generateEquipmentImages(["preacher bench", "barbell"]),
+    alternativeExercises: ["16", "29", "121"]
   },
   {
     id: "31",
@@ -324,7 +386,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "bench"],
     difficulty: "intermediate",
     notes: "Grip bar with hands closer than shoulder-width, press focusing on tricep engagement.",
-    alternativeExercises: ["diamond-push-up", "tricep-dips", "overhead-press"]
+    videoUrl: getExerciseVideoUrl("31"),
+    equipmentImages: generateEquipmentImages(["barbell", "bench"]),
+    alternativeExercises: ["8", "28", "1"]
   },
   {
     id: "32",
@@ -334,7 +398,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "dumbbells"],
     difficulty: "intermediate",
     notes: "Hold weight with narrow grip, pull straight up to chest level, elbows leading the movement.",
-    alternativeExercises: ["lateral-raises", "face-pulls", "high-pulls"]
+    videoUrl: getExerciseVideoUrl("32"),
+    equipmentImages: generateEquipmentImages(["barbell", "dumbbells"]),
+    alternativeExercises: ["25", "33", "24"]
   },
   {
     id: "33",
@@ -344,7 +410,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["cable machine"],
     difficulty: "intermediate",
     notes: "Pull cable to face level, separate hands at face, focus on squeezing shoulder blades together.",
-    alternativeExercises: ["rear-delt-flyes", "band-pull-aparts", "reverse-flyes"]
+    videoUrl: getExerciseVideoUrl("33"),
+    equipmentImages: generateEquipmentImages(["cable machine"]),
+    alternativeExercises: ["27", "121", "15"]
   },
   {
     id: "34",
@@ -354,7 +422,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["cable machine"],
     difficulty: "intermediate",
     notes: "Stand between cable towers, bring handles together in front of chest in hugging motion.",
-    alternativeExercises: ["dumbbell-flyes", "pec-deck", "push-ups"]
+    videoUrl: getExerciseVideoUrl("34"),
+    equipmentImages: generateEquipmentImages(["cable machine"]),
+    alternativeExercises: ["23", "11", "1"]
   },
   {
     id: "35",
@@ -364,7 +434,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["t-bar", "plates"],
     difficulty: "intermediate",
     notes: "Straddle T-bar, bend at hips, pull weight to lower chest, squeeze shoulder blades together.",
-    alternativeExercises: ["barbell-rows", "cable-rows", "dumbbell-rows"]
+    videoUrl: getExerciseVideoUrl("35"),
+    equipmentImages: generateEquipmentImages(["t-bar", "plates"]),
+    alternativeExercises: ["15", "36", "37"]
   },
   {
     id: "36",
@@ -374,7 +446,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["cable machine"],
     difficulty: "intermediate",
     notes: "Sit at cable machine, pull handle to lower chest/upper abdomen, squeeze shoulder blades.",
-    alternativeExercises: ["barbell-rows", "t-bar-rows", "dumbbell-rows"]
+    videoUrl: getExerciseVideoUrl("36"),
+    equipmentImages: generateEquipmentImages(["cable machine"]),
+    alternativeExercises: ["15", "35", "37"]
   },
   {
     id: "37",
@@ -384,7 +458,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbell", "bench"],
     difficulty: "intermediate",
     notes: "Support body with one hand on bench, row dumbbell to hip with other arm, alternate sides.",
-    alternativeExercises: ["cable-rows", "barbell-rows", "inverted-rows"]
+    videoUrl: getExerciseVideoUrl("37"),
+    equipmentImages: generateEquipmentImages(["dumbbell", "bench"]),
+    alternativeExercises: ["36", "15", "35"]
   },
   {
     id: "38",
@@ -394,7 +470,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["hyperextension bench"],
     difficulty: "intermediate",
     notes: "Lie face down on bench, lower upper body, raise back up using lower back muscles.",
-    alternativeExercises: ["good-mornings", "superman", "reverse-plank"]
+    videoUrl: getExerciseVideoUrl("38"),
+    equipmentImages: generateEquipmentImages(["hyperextension bench"]),
+    alternativeExercises: ["39", "65", "12"]
   },
   {
     id: "39",
@@ -404,7 +482,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell"],
     difficulty: "advanced",
     notes: "Bar on shoulders, bend forward at hips keeping back straight, return to upright position.",
-    alternativeExercises: ["romanian-deadlift", "hyperextensions", "hip-hinge"]
+    videoUrl: getExerciseVideoUrl("39"),
+    equipmentImages: generateEquipmentImages(["barbell"]),
+    alternativeExercises: ["40", "38", "12"]
   },
   {
     id: "40",
@@ -414,7 +494,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "dumbbells"],
     difficulty: "intermediate",
     notes: "Hold weight, hinge at hips lowering weight while keeping legs relatively straight, return to standing.",
-    alternativeExercises: ["stiff-leg-deadlift", "good-mornings", "glute-ham-raise"]
+    videoUrl: getExerciseVideoUrl("40"),
+    equipmentImages: generateEquipmentImages(["barbell", "dumbbells"]),
+    alternativeExercises: ["12", "50", "39"]
   },
   {
     id: "41",
@@ -424,7 +506,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell"],
     difficulty: "advanced",
     notes: "Wide stance, toes pointed out, grip bar inside legs, lift by extending hips and knees.",
-    alternativeExercises: ["conventional-deadlift", "trap-bar-deadlift", "goblet-squat"]
+    videoUrl: getExerciseVideoUrl("41"),
+    equipmentImages: generateEquipmentImages(["barbell"]),
+    alternativeExercises: ["12", "2", "82"]
   },
   {
     id: "42",
@@ -434,7 +518,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell"],
     difficulty: "advanced",
     notes: "Bar rests on front of shoulders, squat down keeping chest up and elbows high.",
-    alternativeExercises: ["back-squat", "goblet-squat", "hack-squat"]
+    videoUrl: getExerciseVideoUrl("42"),
+    equipmentImages: generateEquipmentImages(["barbell"]),
+    alternativeExercises: ["43", "82", "2"]
   },
   {
     id: "43",
@@ -444,7 +530,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "squat rack"],
     difficulty: "intermediate",
     notes: "Bar on upper back, feet shoulder-width apart, squat down and drive through heels to stand.",
-    alternativeExercises: ["front-squat", "goblet-squat", "leg-press"]
+    videoUrl: getExerciseVideoUrl("43"),
+    equipmentImages: generateEquipmentImages(["barbell", "squat rack"]),
+    alternativeExercises: ["2", "42", "17"]
   },
   {
     id: "44",
@@ -454,7 +542,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["hack squat machine"],
     difficulty: "intermediate",
     notes: "Stand in machine with back against pad, squat down and press through heels to return.",
-    alternativeExercises: ["leg-press", "back-squat", "goblet-squat"]
+    videoUrl: getExerciseVideoUrl("44"),
+    equipmentImages: generateEquipmentImages(["hack squat machine"]),
+    alternativeExercises: ["17", "43", "2"]
   },
   {
     id: "45",
@@ -464,7 +554,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bench", "dumbbells"],
     difficulty: "intermediate",
     notes: "Rear foot elevated on bench, lunge down on front leg, drive through heel to return.",
-    alternativeExercises: ["lunges", "step-ups", "single-leg-squat"]
+    videoUrl: getExerciseVideoUrl("45"),
+    equipmentImages: generateEquipmentImages(["bench", "dumbbells"]),
+    alternativeExercises: ["4", "46", "47"]
   },
   {
     id: "46",
@@ -474,7 +566,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight", "dumbbells"],
     difficulty: "intermediate",
     notes: "Step forward into lunge, bring back leg forward into next lunge, continue walking pattern.",
-    alternativeExercises: ["stationary-lunges", "reverse-lunges", "lateral-lunges"]
+    videoUrl: getExerciseVideoUrl("46"),
+    equipmentImages: generateEquipmentImages(["bodyweight", "dumbbells"]),
+    alternativeExercises: ["4", "45", "47"]
   },
   {
     id: "47",
@@ -484,7 +578,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["box", "bench"],
     difficulty: "beginner",
     notes: "Step up onto box with one foot, drive through heel, step down with control, alternate legs.",
-    alternativeExercises: ["box-jumps", "lunges", "single-leg-squat"]
+    videoUrl: getExerciseVideoUrl("47"),
+    equipmentImages: generateEquipmentImages(["box", "bench"]),
+    alternativeExercises: ["48", "4", "45"]
   },
   {
     id: "48",
@@ -494,7 +590,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["box"],
     difficulty: "intermediate",
     notes: "Jump up onto box landing softly, step down with control, focus on landing mechanics.",
-    alternativeExercises: ["step-ups", "jump-squats", "broad-jumps"]
+    videoUrl: getExerciseVideoUrl("48"),
+    equipmentImages: generateEquipmentImages(["box"]),
+    alternativeExercises: ["47", "60", "90"]
   },
   {
     id: "49",
@@ -504,7 +602,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["leg extension machine"],
     difficulty: "beginner",
     notes: "Sit in machine, extend legs by straightening knees, lower with control, focus on quad contraction.",
-    alternativeExercises: ["squats", "lunges", "wall-sit"]
+    videoUrl: getExerciseVideoUrl("49"),
+    equipmentImages: generateEquipmentImages(["leg extension machine"]),
+    alternativeExercises: ["2", "4", "57"]
   },
   {
     id: "50",
@@ -514,7 +614,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["barbell", "dumbbells"],
     difficulty: "intermediate",
     notes: "Keep legs straight, hinge at hips lowering weight, feel stretch in hamstrings, return to standing.",
-    alternativeExercises: ["romanian-deadlift", "good-mornings", "leg-curls"]
+    videoUrl: getExerciseVideoUrl("50"),
+    equipmentImages: generateEquipmentImages(["barbell", "dumbbells"]),
+    alternativeExercises: ["40", "19", "39"]
   },
   {
     id: "51",
@@ -524,7 +626,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["glute ham developer"],
     difficulty: "advanced",
     notes: "Kneel on pad, lower body forward, use hamstrings and glutes to return to starting position.",
-    alternativeExercises: ["leg-curls", "romanian-deadlift", "good-mornings"]
+    videoUrl: getExerciseVideoUrl("51"),
+    equipmentImages: generateEquipmentImages(["glute ham developer"]),
+    alternativeExercises: ["19", "40", "39"]
   },
   {
     id: "52",
@@ -534,7 +638,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bench", "barbell"],
     difficulty: "intermediate",
     notes: "Upper back on bench, drive hips up squeezing glutes at top, lower with control.",
-    alternativeExercises: ["glute-bridges", "romanian-deadlift", "squats"]
+    videoUrl: getExerciseVideoUrl("52"),
+    equipmentImages: generateEquipmentImages(["bench", "barbell"]),
+    alternativeExercises: ["53", "54", "40"]
   },
   {
     id: "53",
@@ -544,7 +650,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Lie on back, knees bent, drive hips up squeezing glutes, hold briefly, lower slowly.",
-    alternativeExercises: ["hip-thrusts", "single-leg-glute-bridge", "clamshells"]
+    videoUrl: getExerciseVideoUrl("53"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["52", "54", "55"]
   },
   {
     id: "54",
@@ -554,7 +662,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on back, one leg extended, drive up through planted heel, alternate legs.",
-    alternativeExercises: ["glute-bridges", "hip-thrusts", "single-leg-deadlift"]
+    videoUrl: getExerciseVideoUrl("54"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["53", "52", "58"]
   },
   {
     id: "55",
@@ -564,7 +674,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["resistance band"],
     difficulty: "beginner",
     notes: "Lie on side, knees bent, lift top knee while keeping feet together, focus on glute activation.",
-    alternativeExercises: ["side-lying-leg-lifts", "monster-walks", "lateral-band-walks"]
+    videoUrl: getExerciseVideoUrl("55"),
+    equipmentImages: generateEquipmentImages(["resistance band"]),
+    alternativeExercises: ["56", "53", "121"]
   },
   {
     id: "56",
@@ -574,7 +686,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["resistance band"],
     difficulty: "beginner",
     notes: "Band around ankles, maintain squat position, step sideways maintaining tension in band.",
-    alternativeExercises: ["lateral-band-walks", "clamshells", "side-steps"]
+    videoUrl: getExerciseVideoUrl("56"),
+    equipmentImages: generateEquipmentImages(["resistance band"]),
+    alternativeExercises: ["55", "121", "2"]
   },
   {
     id: "57",
@@ -584,7 +698,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["wall"],
     difficulty: "beginner",
     notes: "Back against wall, slide down to squat position, hold position, keep knees at 90 degrees.",
-    alternativeExercises: ["squats", "leg-extensions", "isometric-squat"]
+    videoUrl: getExerciseVideoUrl("57"),
+    equipmentImages: generateEquipmentImages(["wall"]),
+    alternativeExercises: ["2", "49", "136"]
   },
   {
     id: "58",
@@ -594,7 +710,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "intermediate",
     notes: "Stand on one leg, hinge at hip lowering weight, maintain balance, alternate legs.",
-    alternativeExercises: ["romanian-deadlift", "single-leg-glute-bridge", "balance-exercises"]
+    videoUrl: getExerciseVideoUrl("58"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["40", "54", "120"]
   },
   {
     id: "59",
@@ -604,7 +722,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "advanced",
     notes: "Single-leg squat, other leg extended forward, requires significant strength and balance.",
-    alternativeExercises: ["assisted-pistol-squat", "single-leg-squat", "bulgarian-split-squat"]
+    videoUrl: getExerciseVideoUrl("59"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["2", "45", "120"]
   },
   {
     id: "60",
@@ -614,7 +734,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Perform squat, explode up into jump, land softly and immediately go into next squat.",
-    alternativeExercises: ["squats", "box-jumps", "broad-jumps"]
+    videoUrl: getExerciseVideoUrl("60"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["2", "48", "94"]
   },
   {
     id: "61",
@@ -624,7 +746,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight", "medicine ball"],
     difficulty: "intermediate",
     notes: "Sit with knees bent, lean back slightly, rotate torso side to side, can add weight for resistance.",
-    alternativeExercises: ["bicycle-crunches", "side-plank", "wood-chops"]
+    videoUrl: getExerciseVideoUrl("61"),
+    equipmentImages: generateEquipmentImages(["bodyweight", "medicine ball"]),
+    alternativeExercises: ["62", "66", "73"]
   },
   {
     id: "62",
@@ -634,7 +758,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on back, alternate bringing elbow to opposite knee in cycling motion.",
-    alternativeExercises: ["russian-twists", "mountain-climbers", "cross-crunches"]
+    videoUrl: getExerciseVideoUrl("62"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["61", "6", "9"]
   },
   {
     id: "63",
@@ -644,7 +770,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Lie on back, arms up, knees bent at 90°, lower opposite arm and leg, return to start.",
-    alternativeExercises: ["bird-dog", "plank", "hollow-hold"]
+    videoUrl: getExerciseVideoUrl("63"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["64", "3", "67"]
   },
   {
     id: "64",
@@ -654,7 +782,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Start on hands and knees, extend opposite arm and leg, hold, return to start, alternate.",
-    alternativeExercises: ["dead-bug", "superman", "plank"]
+    videoUrl: getExerciseVideoUrl("64"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["63", "3", "65"]
   },
   {
     id: "65",
@@ -664,7 +794,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Lie face down, lift chest and legs off ground simultaneously, hold briefly, lower slowly.",
-    alternativeExercises: ["bird-dog", "hyperextensions", "reverse-plank"]
+    videoUrl: getExerciseVideoUrl("65"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["64", "38", "39"]
   },
   {
     id: "66",
@@ -674,7 +806,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on side, prop up on elbow, lift hips creating straight line from head to feet.",
-    alternativeExercises: ["modified-side-plank", "russian-twists", "lateral-raises"]
+    videoUrl: getExerciseVideoUrl("66"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["3", "61", "80"]
   },
   {
     id: "67",
@@ -684,7 +818,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on back, press lower back to floor, lift shoulders and legs, hold hollow position.",
-    alternativeExercises: ["dead-bug", "plank", "v-ups"]
+    videoUrl: getExerciseVideoUrl("67"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["3", "68", "69"]
   },
   {
     id: "68",
@@ -694,7 +830,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on back, simultaneously lift legs and torso to form V shape, lower with control.",
-    alternativeExercises: ["sit-ups", "hollow-hold", "leg-raises"]
+    videoUrl: getExerciseVideoUrl("68"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["9", "67", "69"]
   },
   {
     id: "69",
@@ -704,7 +842,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on back, lift straight legs to 90°, lower slowly without touching ground.",
-    alternativeExercises: ["knee-raises", "reverse-crunches", "dead-bug"]
+    videoUrl: getExerciseVideoUrl("69"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["71", "72", "70"]
   },
   {
     id: "70",
@@ -714,7 +854,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["pull-up bar"],
     difficulty: "advanced",
     notes: "Hang from bar, lift legs to 90° or higher, lower with control, avoid swinging.",
-    alternativeExercises: ["leg-raises", "knee-raises", "v-ups"]
+    videoUrl: getExerciseVideoUrl("70"),
+    equipmentImages: generateEquipmentImages(["pull-up bar"]),
+    alternativeExercises: ["69", "71", "13"]
   },
   {
     id: "71",
@@ -724,7 +866,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Lie on back, bring knees to chest, lower slowly, easier variation of leg raises.",
-    alternativeExercises: ["leg-raises", "reverse-crunches", "dead-bug"]
+    videoUrl: getExerciseVideoUrl("71"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["69", "72", "63"]
   },
   {
     id: "72",
@@ -734,7 +878,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Lie on back, knees bent, lift hips off ground bringing knees toward chest.",
-    alternativeExercises: ["knee-raises", "leg-raises", "v-ups"]
+    videoUrl: getExerciseVideoUrl("72"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["71", "69", "68"]
   },
   {
     id: "73",
@@ -744,7 +890,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["medicine ball", "cable"],
     difficulty: "intermediate",
     notes: "Hold weight, rotate from high to low across body, engage core throughout movement.",
-    alternativeExercises: ["russian-twists", "cable-twists", "medicine-ball-slams"]
+    videoUrl: getExerciseVideoUrl("73"),
+    equipmentImages: generateEquipmentImages(["medicine ball", "cable"]),
+    alternativeExercises: ["61", "87", "36"]
   },
   {
     id: "74",
@@ -754,7 +902,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Start in plank, lower to forearms one arm at a time, return to plank position.",
-    alternativeExercises: ["plank", "push-ups", "mountain-climbers"]
+    videoUrl: getExerciseVideoUrl("74"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["3", "1", "6"]
   },
   {
     id: "75",
@@ -764,7 +914,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Hold plank position, jump feet apart and together like jumping jacks.",
-    alternativeExercises: ["mountain-climbers", "plank", "jumping-jacks"]
+    videoUrl: getExerciseVideoUrl("75"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["6", "3", "7"]
   },
   {
     id: "76",
@@ -774,7 +926,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Start on hands and knees, lift knees slightly, crawl forward maintaining position.",
-    alternativeExercises: ["mountain-climbers", "plank", "crab-walks"]
+    videoUrl: getExerciseVideoUrl("76"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["6", "3", "77"]
   },
   {
     id: "77",
@@ -784,7 +938,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Sit with hands behind you, lift hips, walk backward and forward in crab position.",
-    alternativeExercises: ["bear-crawls", "tricep-dips", "glute-bridges"]
+    videoUrl: getExerciseVideoUrl("77"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["76", "8", "53"]
   },
   {
     id: "78",
@@ -794,7 +950,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["kettlebell", "dumbbell"],
     difficulty: "advanced",
     notes: "Complex movement from lying to standing while holding weight overhead, requires practice.",
-    alternativeExercises: ["overhead-press", "single-arm-press", "core-stability"]
+    videoUrl: getExerciseVideoUrl("78"),
+    equipmentImages: generateEquipmentImages(["kettlebell", "dumbbell"]),
+    alternativeExercises: ["14", "84", "120"]
   },
   {
     id: "79",
@@ -804,7 +962,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells", "kettlebells"],
     difficulty: "intermediate",
     notes: "Hold heavy weights at sides, walk maintaining good posture, engages entire core.",
-    alternativeExercises: ["suitcase-carry", "overhead-carry", "plank"]
+    videoUrl: getExerciseVideoUrl("79"),
+    equipmentImages: generateEquipmentImages(["dumbbells", "kettlebells"]),
+    alternativeExercises: ["80", "3", "24"]
   },
   {
     id: "80",
@@ -814,7 +974,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbell", "kettlebell"],
     difficulty: "intermediate",
     notes: "Hold weight in one hand, walk maintaining upright posture, resist lateral bending.",
-    alternativeExercises: ["farmers-walk", "side-plank", "single-arm-row"]
+    videoUrl: getExerciseVideoUrl("80"),
+    equipmentImages: generateEquipmentImages(["dumbbell", "kettlebell"]),
+    alternativeExercises: ["79", "66", "37"]
   },
   {
     id: "81",
@@ -824,7 +986,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["kettlebell"],
     difficulty: "intermediate",
     notes: "Hip hinge movement, swing kettlebell to shoulder height using hip drive, not arms.",
-    alternativeExercises: ["hip-thrusts", "romanian-deadlift", "jump-squats"]
+    videoUrl: getExerciseVideoUrl("81"),
+    equipmentImages: generateEquipmentImages(["kettlebell"]),
+    alternativeExercises: ["52", "40", "60"]
   },
   {
     id: "82",
@@ -834,7 +998,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["kettlebell"],
     difficulty: "beginner",
     notes: "Hold kettlebell at chest, squat down keeping chest up, easier to maintain form than back squat.",
-    alternativeExercises: ["bodyweight-squat", "front-squat", "dumbbell-squat"]
+    videoUrl: getExerciseVideoUrl("82"),
+    equipmentImages: generateEquipmentImages(["kettlebell"]),
+    alternativeExercises: ["2", "43", "42"]
   },
   {
     id: "83",
@@ -844,7 +1010,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["kettlebell"],
     difficulty: "advanced",
     notes: "Complex movement pattern from lying to standing with kettlebell overhead.",
-    alternativeExercises: ["turkish-get-up", "overhead-press", "core-stability"]
+    videoUrl: getExerciseVideoUrl("83"),
+    equipmentImages: generateEquipmentImages(["kettlebell"]),
+    alternativeExercises: ["78", "14", "120"]
   },
   {
     id: "84",
@@ -854,7 +1022,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["kettlebell"],
     difficulty: "advanced",
     notes: "Clean kettlebell to shoulder, then press overhead, full body explosive movement.",
-    alternativeExercises: ["overhead-press", "push-press", "clean-and-jerk"]
+    videoUrl: getExerciseVideoUrl("84"),
+    equipmentImages: generateEquipmentImages(["kettlebell"]),
+    alternativeExercises: ["14", "98", "85"]
   },
   {
     id: "85",
@@ -864,7 +1034,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["kettlebell"],
     difficulty: "advanced",
     notes: "Explosive movement from floor to overhead in one motion, requires technique practice.",
-    alternativeExercises: ["kettlebell-swings", "clean-and-press", "high-pulls"]
+    videoUrl: getExerciseVideoUrl("85"),
+    equipmentImages: generateEquipmentImages(["kettlebell"]),
+    alternativeExercises: ["81", "84", "99"]
   },
   {
     id: "86",
@@ -874,7 +1046,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["battle ropes"],
     difficulty: "intermediate",
     notes: "Alternate arm waves, spirals, or slams with heavy ropes, great cardio workout.",
-    alternativeExercises: ["mountain-climbers", "burpees", "high-intensity-intervals"]
+    videoUrl: getExerciseVideoUrl("86"),
+    equipmentImages: generateEquipmentImages(["battle ropes"]),
+    alternativeExercises: ["6", "5", "130"]
   },
   {
     id: "87",
@@ -884,7 +1058,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["medicine ball"],
     difficulty: "intermediate",
     notes: "Lift ball overhead, slam down with full force, pick up and repeat, explosive movement.",
-    alternativeExercises: ["burpees", "wood-chops", "overhead-press"]
+    videoUrl: getExerciseVideoUrl("87"),
+    equipmentImages: generateEquipmentImages(["medicine ball"]),
+    alternativeExercises: ["5", "73", "14"]
   },
   {
     id: "88",
@@ -894,7 +1070,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["medicine ball", "wall"],
     difficulty: "intermediate",
     notes: "Throw ball against wall from chest, catch and immediately throw again, explosive power.",
-    alternativeExercises: ["push-ups", "chest-pass", "medicine-ball-slams"]
+    videoUrl: getExerciseVideoUrl("88"),
+    equipmentImages: generateEquipmentImages(["medicine ball", "wall"]),
+    alternativeExercises: ["1", "11", "87"]
   },
   {
     id: "89",
@@ -904,7 +1082,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["box", "bench"],
     difficulty: "beginner",
     notes: "Step up onto box with control, step down slowly, focus on the working leg.",
-    alternativeExercises: ["lunges", "step-ups", "single-leg-squat"]
+    videoUrl: getExerciseVideoUrl("89"),
+    equipmentImages: generateEquipmentImages(["box", "bench"]),
+    alternativeExercises: ["47", "4", "45"]
   },
   {
     id: "90",
@@ -914,7 +1094,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Jump forward as far as possible, land softly, focus on distance and landing mechanics.",
-    alternativeExercises: ["box-jumps", "jump-squats", "long-jumps"]
+    videoUrl: getExerciseVideoUrl("90"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["48", "60", "94"]
   },
   {
     id: "91",
@@ -924,7 +1106,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Jump sideways from one foot to the other, focus on lateral power and stability.",
-    alternativeExercises: ["lateral-lunges", "side-steps", "skater-hops"]
+    videoUrl: getExerciseVideoUrl("91"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["96", "56", "120"]
   },
   {
     id: "92",
@@ -934,7 +1118,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Hop on one leg forward, backward, or in place, challenges balance and power.",
-    alternativeExercises: ["calf-raises", "single-leg-squat", "balance-exercises"]
+    videoUrl: getExerciseVideoUrl("92"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["20", "120", "58"]
   },
   {
     id: "93",
@@ -944,7 +1130,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["box"],
     difficulty: "advanced",
     notes: "Step off box, land and immediately jump up, focuses on reactive strength.",
-    alternativeExercises: ["box-jumps", "jump-squats", "plyometric-exercises"]
+    videoUrl: getExerciseVideoUrl("93"),
+    equipmentImages: generateEquipmentImages(["box"]),
+    alternativeExercises: ["48", "60", "124"]
   },
   {
     id: "94",
@@ -954,7 +1142,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Jump up bringing knees to chest, land softly, explosive vertical movement.",
-    alternativeExercises: ["jump-squats", "box-jumps", "knee-raises"]
+    videoUrl: getExerciseVideoUrl("94"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["60", "48", "71"]
   },
   {
     id: "95",
@@ -964,7 +1154,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Start in lunge position, jump and switch legs in air, land in opposite lunge.",
-    alternativeExercises: ["lunges", "jump-squats", "alternating-lunges"]
+    videoUrl: getExerciseVideoUrl("95"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["4", "46", "60"]
   },
   {
     id: "96",
@@ -974,7 +1166,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Hop side to side on one foot, mimicking skating motion, challenges lateral stability.",
-    alternativeExercises: ["lateral-bounds", "lateral-lunges", "side-steps"]
+    videoUrl: getExerciseVideoUrl("96"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["91", "95", "120"]
   },
   {
     id: "97",
@@ -984,7 +1178,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["box"],
     difficulty: "advanced",
     notes: "Perform burpee, then jump onto box, step down, repeat, combines cardio and power.",
-    alternativeExercises: ["burpees", "box-jumps", "mountain-climbers"]
+    videoUrl: getExerciseVideoUrl("97"),
+    equipmentImages: generateEquipmentImages(["box"]),
+    alternativeExercises: ["5", "48", "6"]
   },
   {
     id: "98",
@@ -994,7 +1190,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells", "barbell"],
     difficulty: "intermediate",
     notes: "Squat down, drive up and press weight overhead in one fluid movement.",
-    alternativeExercises: ["squat-to-press", "overhead-press", "front-squat"]
+    videoUrl: getExerciseVideoUrl("98"),
+    equipmentImages: generateEquipmentImages(["dumbbells", "barbell"]),
+    alternativeExercises: ["84", "14", "2"]
   },
   {
     id: "99",
@@ -1004,7 +1202,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "advanced",
     notes: "Burpee with dumbbells, add rows at bottom, press overhead at top, full body exercise.",
-    alternativeExercises: ["burpees", "thrusters", "renegade-rows"]
+    videoUrl: getExerciseVideoUrl("99"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["5", "98", "100"]
   },
   {
     id: "100",
@@ -1014,7 +1214,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "advanced",
     notes: "Plank position with dumbbells, alternate rowing each arm while maintaining plank.",
-    alternativeExercises: ["plank", "dumbbell-rows", "mountain-climbers"]
+    videoUrl: getExerciseVideoUrl("100"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["3", "37", "6"]
   },
   {
     id: "101",
@@ -1024,7 +1226,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["dumbbells"],
     difficulty: "advanced",
     notes: "Burpee with dumbbells, swing weights overhead at top, extremely challenging full body movement.",
-    alternativeExercises: ["man-makers", "thrusters", "burpees"]
+    videoUrl: getExerciseVideoUrl("101"),
+    equipmentImages: generateEquipmentImages(["dumbbells"]),
+    alternativeExercises: ["99", "98", "5"]
   },
   {
     id: "102",
@@ -1034,7 +1238,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["medicine ball", "wall"],
     difficulty: "intermediate",
     notes: "Squat with medicine ball, drive up and throw ball to target on wall, catch and repeat.",
-    alternativeExercises: ["thrusters", "squat-to-press", "medicine-ball-throws"]
+    videoUrl: getExerciseVideoUrl("102"),
+    equipmentImages: generateEquipmentImages(["medicine ball", "wall"]),
+    alternativeExercises: ["98", "88", "2"]
   },
   {
     id: "103",
@@ -1044,7 +1250,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["assault bike"],
     difficulty: "intermediate",
     notes: "Full body cardio machine, arms and legs work together, adjustable intensity.",
-    alternativeExercises: ["rowing-machine", "burpees", "mountain-climbers"]
+    videoUrl: getExerciseVideoUrl("103"),
+    equipmentImages: generateEquipmentImages(["assault bike"]),
+    alternativeExercises: ["104", "5", "6"]
   },
   {
     id: "104",
@@ -1054,7 +1262,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["rowing machine"],
     difficulty: "intermediate",
     notes: "Full body cardio, drive with legs, pull with arms, great for endurance and strength.",
-    alternativeExercises: ["assault-bike", "swimming", "cable-rows"]
+    videoUrl: getExerciseVideoUrl("104"),
+    equipmentImages: generateEquipmentImages(["rowing machine"]),
+    alternativeExercises: ["103", "111", "36"]
   },
   {
     id: "105",
@@ -1064,7 +1274,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["treadmill"],
     difficulty: "beginner",
     notes: "Adjustable speed and incline, great for steady state or interval cardio training.",
-    alternativeExercises: ["outdoor-running", "elliptical", "stationary-bike"]
+    videoUrl: getExerciseVideoUrl("105"),
+    equipmentImages: generateEquipmentImages(["treadmill"]),
+    alternativeExercises: ["106", "107", "126"]
   },
   {
     id: "106",
@@ -1074,7 +1286,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["elliptical machine"],
     difficulty: "beginner",
     notes: "Low impact cardio machine, works both upper and lower body, joint-friendly option.",
-    alternativeExercises: ["treadmill", "stationary-bike", "rowing-machine"]
+    videoUrl: getExerciseVideoUrl("106"),
+    equipmentImages: generateEquipmentImages(["elliptical machine"]),
+    alternativeExercises: ["105", "107", "104"]
   },
   {
     id: "107",
@@ -1084,7 +1298,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["stationary bike"],
     difficulty: "beginner",
     notes: "Low impact cardio focusing on legs, adjustable resistance, good for all fitness levels.",
-    alternativeExercises: ["outdoor-cycling", "elliptical", "treadmill"]
+    videoUrl: getExerciseVideoUrl("107"),
+    equipmentImages: generateEquipmentImages(["stationary bike"]),
+    alternativeExercises: ["106", "105", "103"]
   },
   {
     id: "108",
@@ -1094,7 +1310,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["stair climber"],
     difficulty: "intermediate",
     notes: "Simulates stair climbing, great for leg strength and cardio endurance.",
-    alternativeExercises: ["step-ups", "treadmill-incline", "box-steps"]
+    videoUrl: getExerciseVideoUrl("108"),
+    equipmentImages: generateEquipmentImages(["stair climber"]),
+    alternativeExercises: ["47", "105", "127"]
   },
   {
     id: "109",
@@ -1104,7 +1322,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["jacobs ladder"],
     difficulty: "advanced",
     notes: "Climbing motion on angled ladder, self-paced, extremely challenging full body cardio.",
-    alternativeExercises: ["mountain-climbers", "bear-crawls", "stair-climber"]
+    videoUrl: getExerciseVideoUrl("109"),
+    equipmentImages: generateEquipmentImages(["jacobs ladder"]),
+    alternativeExercises: ["6", "76", "108"]
   },
   {
     id: "110",
@@ -1114,7 +1334,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["ski erg"],
     difficulty: "intermediate",
     notes: "Simulates cross-country skiing motion, great upper body and core cardio workout.",
-    alternativeExercises: ["rowing-machine", "battle-ropes", "pull-ups"]
+    videoUrl: getExerciseVideoUrl("110"),
+    equipmentImages: generateEquipmentImages(["ski erg"]),
+    alternativeExercises: ["104", "86", "13"]
   },
   {
     id: "111",
@@ -1124,7 +1346,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["pool"],
     difficulty: "intermediate",
     notes: "Full body, low impact cardio, excellent for all fitness levels, joint-friendly.",
-    alternativeExercises: ["rowing-machine", "elliptical", "water-aerobics"]
+    videoUrl: getExerciseVideoUrl("111"),
+    equipmentImages: generateEquipmentImages(["pool"]),
+    alternativeExercises: ["104", "106", "112"]
   },
   {
     id: "112",
@@ -1134,7 +1358,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["pool"],
     difficulty: "beginner",
     notes: "Low impact exercises in water, great for rehabilitation and joint-friendly workouts.",
-    alternativeExercises: ["swimming", "elliptical", "chair-exercises"]
+    videoUrl: getExerciseVideoUrl("112"),
+    equipmentImages: generateEquipmentImages(["pool"]),
+    alternativeExercises: ["111", "106", "113"]
   },
   {
     id: "113",
@@ -1144,7 +1370,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["yoga mat"],
     difficulty: "beginner",
     notes: "Flowing sequence of yoga poses, improves flexibility, balance, and mindfulness.",
-    alternativeExercises: ["static-stretching", "pilates", "tai-chi"]
+    videoUrl: getExerciseVideoUrl("113"),
+    equipmentImages: generateEquipmentImages(["yoga mat"]),
+    alternativeExercises: ["118", "114", "115"]
   },
   {
     id: "114",
@@ -1154,7 +1382,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["mat", "pilates equipment"],
     difficulty: "intermediate",
     notes: "Focus on core strength, flexibility, and body awareness through controlled movements.",
-    alternativeExercises: ["yoga", "core-exercises", "bodyweight-training"]
+    videoUrl: getExerciseVideoUrl("114"),
+    equipmentImages: generateEquipmentImages(["mat", "pilates equipment"]),
+    alternativeExercises: ["113", "3", "135"]
   },
   {
     id: "115",
@@ -1164,7 +1394,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Slow, flowing movements that improve balance, flexibility, and mental focus.",
-    alternativeExercises: ["yoga", "qigong", "gentle-stretching"]
+    videoUrl: getExerciseVideoUrl("115"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["113", "120", "167"]
   },
   {
     id: "116",
@@ -1174,7 +1406,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["foam roller"],
     difficulty: "beginner",
     notes: "Self-myofascial release technique to improve muscle recovery and flexibility.",
-    alternativeExercises: ["massage", "stretching", "lacrosse-ball-massage"]
+    videoUrl: getExerciseVideoUrl("116"),
+    equipmentImages: generateEquipmentImages(["foam roller"]),
+    alternativeExercises: ["118", "141", "165"]
   },
   {
     id: "117",
@@ -1184,7 +1418,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Movement-based warm-up to prepare body for exercise, includes leg swings, arm circles, etc.",
-    alternativeExercises: ["light-cardio", "static-stretching", "joint-mobility"]
+    videoUrl: getExerciseVideoUrl("117"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["118", "119", "7"]
   },
   {
     id: "118",
@@ -1194,7 +1430,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Hold stretches for 15-30 seconds, best performed after workouts when muscles are warm.",
-    alternativeExercises: ["dynamic-stretching", "yoga", "pnf-stretching"]
+    videoUrl: getExerciseVideoUrl("118"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["117", "113", "119"]
   },
   {
     id: "119",
@@ -1204,7 +1442,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Joint-specific movements to improve range of motion and movement quality.",
-    alternativeExercises: ["dynamic-warm-up", "yoga", "stretching"]
+    videoUrl: getExerciseVideoUrl("119"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["117", "118", "113"]
   },
   {
     id: "120",
@@ -1214,7 +1454,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["balance board", "bosu ball"],
     difficulty: "intermediate",
     notes: "Exercises to improve proprioception and stability, important for injury prevention.",
-    alternativeExercises: ["single-leg-stands", "yoga", "stability-ball-exercises"]
+    videoUrl: getExerciseVideoUrl("120"),
+    equipmentImages: generateEquipmentImages(["balance board", "bosu ball"]),
+    alternativeExercises: ["58", "59", "115"]
   },
   {
     id: "121",
@@ -1224,7 +1466,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["resistance bands"],
     difficulty: "beginner",
     notes: "Versatile equipment for strength training, good for travel and home workouts.",
-    alternativeExercises: ["bodyweight-exercises", "light-weights", "cable-exercises"]
+    videoUrl: getExerciseVideoUrl("121"),
+    equipmentImages: generateEquipmentImages(["resistance bands"]),
+    alternativeExercises: ["134", "158", "122"]
   },
   {
     id: "122",
@@ -1234,7 +1478,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["suspension trainer"],
     difficulty: "intermediate",
     notes: "Bodyweight exercises using suspension straps, adjustable difficulty by changing body angle.",
-    alternativeExercises: ["bodyweight-training", "cable-exercises", "functional-training"]
+    videoUrl: getExerciseVideoUrl("122"),
+    equipmentImages: generateEquipmentImages(["suspension trainer"]),
+    alternativeExercises: ["121", "135", "123"]
   },
   {
     id: "123",
@@ -1244,7 +1490,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Exercises that mimic real-life movements, improves daily activity performance.",
-    alternativeExercises: ["compound-exercises", "bodyweight-training", "sport-specific-training"]
+    videoUrl: getExerciseVideoUrl("123"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["137", "135", "122"]
   },
   {
     id: "124",
@@ -1254,7 +1502,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight", "boxes"],
     difficulty: "advanced",
     notes: "Explosive movements to develop power and speed, includes jumps, bounds, and throws.",
-    alternativeExercises: ["jump-training", "explosive-exercises", "sprint-training"]
+    videoUrl: getExerciseVideoUrl("124"),
+    equipmentImages: generateEquipmentImages(["bodyweight", "boxes"]),
+    alternativeExercises: ["48", "90", "93"]
   },
   {
     id: "125",
@@ -1264,7 +1514,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["cones", "ladder"],
     difficulty: "intermediate",
     notes: "Quick directional changes and footwork patterns to improve coordination and speed.",
-    alternativeExercises: ["cone-drills", "ladder-drills", "sport-specific-drills"]
+    videoUrl: getExerciseVideoUrl("125"),
+    equipmentImages: generateEquipmentImages(["cones", "ladder"]),
+    alternativeExercises: ["96", "91", "126"]
   },
   {
     id: "126",
@@ -1274,7 +1526,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["track", "field"],
     difficulty: "advanced",
     notes: "High-intensity running intervals to develop speed and anaerobic capacity.",
-    alternativeExercises: ["interval-running", "hill-sprints", "bike-sprints"]
+    videoUrl: getExerciseVideoUrl("126"),
+    equipmentImages: generateEquipmentImages(["track", "field"]),
+    alternativeExercises: ["105", "130", "125"]
   },
   {
     id: "127",
@@ -1284,7 +1538,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["hills", "incline"],
     difficulty: "intermediate",
     notes: "Running or walking on inclines to build leg strength and cardiovascular endurance.",
-    alternativeExercises: ["treadmill-incline", "stair-climbing", "step-ups"]
+    videoUrl: getExerciseVideoUrl("127"),
+    equipmentImages: generateEquipmentImages(["hills", "incline"]),
+    alternativeExercises: ["105", "108", "47"]
   },
   {
     id: "128",
@@ -1294,7 +1550,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Series of exercises performed in sequence with minimal rest, combines strength and cardio.",
-    alternativeExercises: ["interval-training", "crosstraining", "bootcamp-style"]
+    videoUrl: getExerciseVideoUrl("128"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["130", "129", "131"]
   },
   {
     id: "129",
@@ -1304,7 +1562,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "advanced",
     notes: "4-minute high-intensity protocol: 20 seconds work, 10 seconds rest, repeated 8 times.",
-    alternativeExercises: ["hiit-training", "interval-training", "circuit-training"]
+    videoUrl: getExerciseVideoUrl("129"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["130", "128", "5"]
   },
   {
     id: "130",
@@ -1314,7 +1574,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "High-intensity intervals alternated with rest periods, efficient for fitness and fat loss.",
-    alternativeExercises: ["tabata", "circuit-training", "interval-running"]
+    videoUrl: getExerciseVideoUrl("130"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["129", "128", "126"]
   },
   {
     id: "131",
@@ -1324,7 +1586,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Combining different types of exercise to improve overall fitness and prevent boredom.",
-    alternativeExercises: ["circuit-training", "varied-workouts", "multi-sport-training"]
+    videoUrl: getExerciseVideoUrl("131"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["128", "130", "123"]
   },
   {
     id: "132",
@@ -1334,7 +1598,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Military-inspired group fitness combining cardio, strength, and agility exercises.",
-    alternativeExercises: ["circuit-training", "hiit", "functional-training"]
+    videoUrl: getExerciseVideoUrl("132"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["128", "130", "152"]
   },
   {
     id: "133",
@@ -1344,7 +1610,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["natural environment"],
     difficulty: "intermediate",
     notes: "Using outdoor environment for workouts: parks, beaches, trails, adds variety and fresh air.",
-    alternativeExercises: ["gym-workouts", "home-workouts", "nature-activities"]
+    videoUrl: getExerciseVideoUrl("133"),
+    equipmentImages: generateEquipmentImages(["natural environment"]),
+    alternativeExercises: ["127", "126", "158"]
   },
   {
     id: "134",
@@ -1354,7 +1622,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Series of bodyweight exercises performed in circuit format, no equipment needed.",
-    alternativeExercises: ["calisthenics", "circuit-training", "home-workouts"]
+    videoUrl: getExerciseVideoUrl("134"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["135", "128", "158"]
   },
   {
     id: "135",
@@ -1364,7 +1634,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "intermediate",
     notes: "Bodyweight exercises focusing on strength, flexibility, and body control.",
-    alternativeExercises: ["bodyweight-training", "gymnastics", "functional-movement"]
+    videoUrl: getExerciseVideoUrl("135"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["134", "122", "123"]
   },
   {
     id: "136",
@@ -1374,7 +1646,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["bodyweight"],
     difficulty: "beginner",
     notes: "Static holds that build strength without joint movement, like planks and wall sits.",
-    alternativeExercises: ["static-holds", "strength-training", "rehabilitation-exercises"]
+    videoUrl: getExerciseVideoUrl("136"),
+    equipmentImages: generateEquipmentImages(["bodyweight"]),
+    alternativeExercises: ["3", "57", "67"]
   },
   {
     id: "137",
@@ -1384,7 +1658,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Exercises that work multiple muscle groups simultaneously, efficient and functional.",
-    alternativeExercises: ["isolation-exercises", "functional-training", "full-body-workouts"]
+    videoUrl: getExerciseVideoUrl("137"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["12", "43", "11"]
   },
   {
     id: "138",
@@ -1394,7 +1670,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "beginner",
     notes: "Exercises targeting specific muscle groups, good for addressing weaknesses or imbalances.",
-    alternativeExercises: ["compound-movements", "targeted-training", "rehabilitation"]
+    videoUrl: getExerciseVideoUrl("138"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["16", "25", "19"]
   },
   {
     id: "139",
@@ -1404,7 +1682,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Gradually increasing weight, reps, or intensity to continue making strength gains.",
-    alternativeExercises: ["periodization", "strength-progression", "training-variation"]
+    videoUrl: getExerciseVideoUrl("139"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["140", "170", "11"]
   },
   {
     id: "140",
@@ -1414,7 +1694,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "advanced",
     notes: "Systematic planning of training phases to optimize performance and prevent plateaus.",
-    alternativeExercises: ["linear-progression", "block-periodization", "undulating-periodization"]
+    videoUrl: getExerciseVideoUrl("140"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["139", "149", "170"]
   },
   {
     id: "141",
@@ -1424,7 +1706,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["light"],
     difficulty: "beginner",
     notes: "Light activity on rest days to promote blood flow and recovery without adding stress.",
-    alternativeExercises: ["complete-rest", "gentle-movement", "restorative-activities"]
+    videoUrl: getExerciseVideoUrl("141"),
+    equipmentImages: generateEquipmentImages(["light"]),
+    alternativeExercises: ["113", "118", "116"]
   },
   {
     id: "142",
@@ -1434,7 +1718,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Planned reduction in training intensity/volume to allow for recovery and adaptation.",
-    alternativeExercises: ["active-recovery", "light-training", "skill-work"]
+    videoUrl: getExerciseVideoUrl("142"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["141", "165", "143"]
   },
   {
     id: "143",
@@ -1444,7 +1730,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Focused practice on movement patterns and exercise technique rather than intensity.",
-    alternativeExercises: ["technique-work", "movement-practice", "form-focus"]
+    videoUrl: getExerciseVideoUrl("143"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["144", "119", "167"]
   },
   {
     id: "144",
@@ -1454,7 +1742,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Evaluation of movement patterns to identify limitations and areas for improvement.",
-    alternativeExercises: ["fitness-testing", "postural-assessment", "flexibility-testing"]
+    videoUrl: getExerciseVideoUrl("144"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["145", "170", "119"]
   },
   {
     id: "145",
@@ -1464,7 +1754,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "beginner",
     notes: "Exercises designed to address movement dysfunctions and muscle imbalances.",
-    alternativeExercises: ["physical-therapy", "postural-correction", "injury-prevention"]
+    videoUrl: getExerciseVideoUrl("145"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["146", "147", "144"]
   },
   {
     id: "146",
@@ -1474,7 +1766,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "beginner",
     notes: "Exercises and practices designed to reduce injury risk and maintain joint health.",
-    alternativeExercises: ["prehabilitation", "corrective-exercise", "mobility-work"]
+    videoUrl: getExerciseVideoUrl("146"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["147", "145", "119"]
   },
   {
     id: "147",
@@ -1484,7 +1778,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "beginner",
     notes: "Proactive exercises to prevent injuries before they occur, especially for vulnerable areas.",
-    alternativeExercises: ["injury-prevention", "corrective-exercise", "strengthening"]
+    videoUrl: getExerciseVideoUrl("147"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["146", "145", "116"]
   },
   {
     id: "148",
@@ -1494,7 +1790,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["sport-specific"],
     difficulty: "intermediate",
     notes: "Training designed to improve performance in specific sports or activities.",
-    alternativeExercises: ["general-fitness", "functional-training", "skill-development"]
+    videoUrl: getExerciseVideoUrl("148"),
+    equipmentImages: generateEquipmentImages(["sport-specific"]),
+    alternativeExercises: ["123", "125", "124"]
   },
   {
     id: "149",
@@ -1504,7 +1802,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "advanced",
     notes: "Specialized training phase leading up to competition or performance event.",
-    alternativeExercises: ["general-training", "off-season-training", "maintenance-training"]
+    videoUrl: getExerciseVideoUrl("149"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["140", "148", "151"]
   },
   {
     id: "150",
@@ -1514,7 +1814,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Training during non-competitive periods to build base fitness and address weaknesses.",
-    alternativeExercises: ["in-season-training", "general-fitness", "cross-training"]
+    videoUrl: getExerciseVideoUrl("150"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["151", "131", "137"]
   },
   {
     id: "151",
@@ -1524,7 +1826,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Maintenance training during competitive season to preserve fitness without overreaching.",
-    alternativeExercises: ["off-season-training", "competition-prep", "recovery-focus"]
+    videoUrl: getExerciseVideoUrl("151"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["150", "149", "142"]
   },
   {
     id: "152",
@@ -1534,7 +1838,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Group-based training sessions that build camaraderie and motivation through shared effort.",
-    alternativeExercises: ["individual-training", "partner-workouts", "group-fitness"]
+    videoUrl: getExerciseVideoUrl("152"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["153", "154", "132"]
   },
   {
     id: "153",
@@ -1544,7 +1850,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Training with a partner for motivation, accountability, and exercise assistance.",
-    alternativeExercises: ["solo-training", "group-training", "buddy-system"]
+    videoUrl: getExerciseVideoUrl("153"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["152", "154", "157"]
   },
   {
     id: "154",
@@ -1554,7 +1862,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Structured fitness classes led by instructor, provides motivation and social interaction.",
-    alternativeExercises: ["individual-training", "personal-training", "home-workouts"]
+    videoUrl: getExerciseVideoUrl("154"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["155", "152", "160"]
   },
   {
     id: "155",
@@ -1564,7 +1874,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "beginner",
     notes: "One-on-one training with qualified instructor for personalized programming and form correction.",
-    alternativeExercises: ["group-fitness", "self-directed-training", "online-coaching"]
+    videoUrl: getExerciseVideoUrl("155"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["154", "156", "157"]
   },
   {
     id: "156",
@@ -1574,7 +1886,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Remote coaching through digital platforms, provides flexibility and expert guidance.",
-    alternativeExercises: ["in-person-training", "self-programming", "group-coaching"]
+    videoUrl: getExerciseVideoUrl("156"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["155", "161", "157"]
   },
   {
     id: "157",
@@ -1584,7 +1898,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["various"],
     difficulty: "intermediate",
     notes: "Independent training following self-designed or researched programs, requires discipline.",
-    alternativeExercises: ["coached-training", "guided-programs", "structured-classes"]
+    videoUrl: getExerciseVideoUrl("157"),
+    equipmentImages: generateEquipmentImages(["various"]),
+    alternativeExercises: ["156", "158", "170"]
   },
   {
     id: "158",
@@ -1594,7 +1910,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["minimal"],
     difficulty: "beginner",
     notes: "Training at home with minimal equipment, convenient and time-efficient option.",
-    alternativeExercises: ["gym-workouts", "outdoor-training", "studio-classes"]
+    videoUrl: getExerciseVideoUrl("158"),
+    equipmentImages: generateEquipmentImages(["minimal"]),
+    alternativeExercises: ["159", "134", "121"]
   },
   {
     id: "159",
@@ -1604,7 +1922,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["full-gym"],
     difficulty: "intermediate",
     notes: "Training in fully equipped fitness facility with access to wide variety of equipment.",
-    alternativeExercises: ["home-workouts", "outdoor-training", "studio-workouts"]
+    videoUrl: getExerciseVideoUrl("159"),
+    equipmentImages: generateEquipmentImages(["full-gym"]),
+    alternativeExercises: ["158", "160", "137"]
   },
   {
     id: "160",
@@ -1614,7 +1934,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["studio-specific"],
     difficulty: "intermediate",
     notes: "Specialized classes in dedicated studios: yoga, pilates, spin, dance, etc.",
-    alternativeExercises: ["gym-classes", "home-practice", "outdoor-activities"]
+    videoUrl: getExerciseVideoUrl("160"),
+    equipmentImages: generateEquipmentImages(["studio-specific"]),
+    alternativeExercises: ["154", "113", "114"]
   },
   {
     id: "161",
@@ -1624,27 +1946,33 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["device"],
     difficulty: "beginner",
     notes: "Training using apps, videos, or virtual reality for guidance and motivation.",
-    alternativeExercises: ["in-person-training", "book-based-programs", "self-guided"]
+    videoUrl: getExerciseVideoUrl("161"),
+    equipmentImages: generateEquipmentImages(["device"]),
+    alternativeExercises: ["156", "158", "162"]
   },
   {
     id: "162",
     name: "Wearable Technology",
     category: "technology",
     muscleGroup: ["monitoring"],
-    equipment: ["wearable-device"],
+    equipment: ["wearable device"],
     difficulty: "beginner",
     notes: "Using fitness trackers, heart rate monitors, and smartwatches to monitor and guide training.",
-    alternativeExercises: ["manual-tracking", "perceived-exertion", "traditional-methods"]
+    videoUrl: getExerciseVideoUrl("162"),
+    equipmentImages: generateEquipmentImages(["wearable device"]),
+    alternativeExercises: ["163", "170", "161"]
   },
   {
     id: "163",
     name: "Biometric Monitoring",
     category: "assessment",
     muscleGroup: ["various"],
-    equipment: ["monitoring-devices"],
+    equipment: ["monitoring devices"],
     difficulty: "intermediate",
     notes: "Tracking physiological markers like heart rate variability, sleep, and recovery metrics.",
-    alternativeExercises: ["subjective-monitoring", "basic-tracking", "simple-metrics"]
+    videoUrl: getExerciseVideoUrl("163"),
+    equipmentImages: generateEquipmentImages(["monitoring devices"]),
+    alternativeExercises: ["162", "170", "165"]
   },
   {
     id: "164",
@@ -1654,7 +1982,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "intermediate",
     notes: "Coordinating training with proper nutrition timing and composition for optimal results.",
-    alternativeExercises: ["basic-nutrition", "intuitive-eating", "standard-diet"]
+    videoUrl: getExerciseVideoUrl("164"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["165", "166", "116"]
   },
   {
     id: "165",
@@ -1664,7 +1994,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Prioritizing quality sleep for recovery, adaptation, and performance enhancement.",
-    alternativeExercises: ["basic-sleep", "napping", "rest-periods"]
+    videoUrl: getExerciseVideoUrl("165"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["164", "166", "141"]
   },
   {
     id: "166",
@@ -1674,7 +2006,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Incorporating stress reduction techniques to support training and overall health.",
-    alternativeExercises: ["meditation", "relaxation", "time-management"]
+    videoUrl: getExerciseVideoUrl("166"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["167", "168", "165"]
   },
   {
     id: "167",
@@ -1684,7 +2018,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Developing present-moment awareness to improve focus, reduce stress, and enhance performance.",
-    alternativeExercises: ["meditation", "breathing-exercises", "mental-training"]
+    videoUrl: getExerciseVideoUrl("167"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["168", "113", "166"]
   },
   {
     id: "168",
@@ -1694,7 +2030,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "intermediate",
     notes: "Mental rehearsal of movements and performance to improve skill acquisition and confidence.",
-    alternativeExercises: ["mental-practice", "imagery", "cognitive-training"]
+    videoUrl: getExerciseVideoUrl("168"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["167", "169", "143"]
   },
   {
     id: "169",
@@ -1704,17 +2042,21 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["none"],
     difficulty: "beginner",
     notes: "Establishing specific, measurable, achievable, relevant, and time-bound fitness objectives.",
-    alternativeExercises: ["general-training", "intuitive-training", "flexible-approach"]
+    videoUrl: getExerciseVideoUrl("169"),
+    equipmentImages: generateEquipmentImages(["none"]),
+    alternativeExercises: ["170", "168", "139"]
   },
   {
     id: "170",
     name: "Progress Tracking",
     category: "assessment",
     muscleGroup: ["various"],
-    equipment: ["tracking-tools"],
+    equipment: ["tracking tools"],
     difficulty: "beginner",
     notes: "Systematic recording of training variables and outcomes to monitor improvement and adjust programs.",
-    alternativeExercises: ["intuitive-training", "memory-based", "casual-tracking"]
+    videoUrl: getExerciseVideoUrl("170"),
+    equipmentImages: generateEquipmentImages(["tracking tools"]),
+    alternativeExercises: ["162", "163", "169"]
   },
   {
     id: "171",
@@ -1724,7 +2066,9 @@ export const exerciseDatabase: ExerciseData[] = [
     equipment: ["leg press machine"],
     difficulty: "intermediate",
     notes: "Position feet at an angle on the leg press platform. Press the weight up through your heels while keeping your knees aligned with your toes.",
-    alternativeExercises: ["horizontal-leg-press", "hack-squat", "squat-smith-machine"]
+    videoUrl: getExerciseVideoUrl("171"),
+    equipmentImages: generateEquipmentImages(["leg press machine"]),
+    alternativeExercises: ["17", "43", "44"]
   }
 ];
 
