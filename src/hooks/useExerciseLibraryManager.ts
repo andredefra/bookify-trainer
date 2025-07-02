@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { ExerciseData, exerciseDatabase, getExerciseById } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData, completeExerciseDatabase as exerciseDatabase, getExerciseById } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
 
