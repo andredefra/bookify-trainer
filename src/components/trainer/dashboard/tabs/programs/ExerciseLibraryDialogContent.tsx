@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
-import { CreateExerciseDialog } from './CreateExerciseDialog';
+import { AddExerciseDialog } from './AddExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';
 import { ExerciseLibraryFilters } from './ExerciseLibraryFilters';
 import { 
@@ -68,6 +68,11 @@ export function ExerciseLibraryDialogContent({
 
   const handleCreateExercise = () => {
     setShowCreateForm(true);
+  };
+
+  const handleSaveNewExercise = (exerciseData: any) => {
+    onCreateExercise(exerciseData);
+    setShowCreateForm(false);
   };
 
   return (
@@ -149,10 +154,9 @@ export function ExerciseLibraryDialogContent({
         <Button onClick={onClose} size="sm">Close</Button>
       </div>
 
-      <CreateExerciseDialog
+      <AddExerciseDialog
         open={showCreateForm}
         onOpenChange={setShowCreateForm}
-        onSave={onCreateExercise}
       />
 
       {exerciseToEdit && (
