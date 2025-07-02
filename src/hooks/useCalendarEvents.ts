@@ -15,6 +15,25 @@ export type CalendarEvent = {
   trainer_id: string;
 }
 
+// Valid event categories that match the database enum
+const VALID_EVENT_CATEGORIES = [
+  'session',
+  'sales_activity', 
+  'program_milestone',
+  'deadline',
+  'personal_task',
+  'availability'
+] as const;
+
+// Helper function to safely map database event category to our type
+function mapEventCategory(dbCategory: string): CalendarEvent['type'] {
+  if (VALID_EVENT_CATEGORIES.includes(dbCategory as any)) {
+    return dbCategory as CalendarEvent['type'];
+  }
+  console.warn(`Unknown event category from database: ${dbCategory}, defaulting to 'personal_task'`);
+  return 'personal_task';
+}
+
 export function useCalendarEvents(trainerId: string) {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -267,18 +286,28 @@ export function useCalendarEvents(trainerId: string) {
           .order('start_datetime', { ascending: true });
 
         if (dbError) {
-          console.error('useCalendarEvents - Error fetching from database:', dbError);
+          console.error('useCalendarEvents - Database error:', dbError.message);
+          
+          // Check if it's an RLS policy error
+          if (dbError.message.includes('row-level security policy')) {
+            console.warn('useCalendarEvents - RLS policy issue, using mock data for demo user');
+            setError('Using demo data - database access restricted for demo users');
+          } else {
+            console.error('useCalendarEvents - Unexpected database error:', dbError);
+            setError(`Database error: ${dbError.message}`);
+          }
+          
           // Fall back to mock events
           const filteredMockEvents = mockEvents.filter(event => event.trainer_id === trainerId);
           console.log('useCalendarEvents - Using mock events, count:', filteredMockEvents.length);
           setEvents(filteredMockEvents);
         } else if (dbEvents && dbEvents.length > 0) {
           console.log('useCalendarEvents - Found database events, count:', dbEvents.length);
-          // Convert database events to our format
+          // Convert database events to our format with safe type mapping
           const formattedEvents: CalendarEvent[] = dbEvents.map(event => ({
             id: event.id,
             title: event.title,
-            type: event.event_category as CalendarEvent['type'],
+            type: mapEventCategory(event.event_category),
             start: new Date(event.start_datetime),
             end: new Date(event.end_datetime),
             client: event.client_id || undefined,
@@ -297,8 +326,9 @@ export function useCalendarEvents(trainerId: string) {
           setEvents(filteredMockEvents);
         }
       } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
         console.error('useCalendarEvents - Unexpected error in fetchEvents:', err);
-        setError('Failed to load calendar events');
+        setError(`Failed to load calendar events: ${errorMessage}`);
         // Fall back to mock events
         const filteredMockEvents = mockEvents.filter(event => event.trainer_id === trainerId);
         setEvents(filteredMockEvents);
@@ -327,7 +357,13 @@ export function useCalendarEvents(trainerId: string) {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating event:', error);
+        if (error.message.includes('row-level security policy')) {
+          return { success: false, error: 'Cannot create events for demo users' };
+        }
+        throw error;
+      }
 
       const newEvent: CalendarEvent = {
         id: data.id,
@@ -338,8 +374,9 @@ export function useCalendarEvents(trainerId: string) {
       setEvents(prev => [...prev, newEvent]);
       return { success: true, event: newEvent };
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       console.error('Error creating event:', err);
-      return { success: false, error: 'Failed to create event' };
+      return { success: false, error: `Failed to create event: ${errorMessage}` };
     }
   };
 
@@ -359,15 +396,22 @@ export function useCalendarEvents(trainerId: string) {
         .eq('id', eventId)
         .eq('trainer_id', trainerId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating event:', error);
+        if (error.message.includes('row-level security policy')) {
+          return { success: false, error: 'Cannot update events for demo users' };
+        }
+        throw error;
+      }
 
       setEvents(prev => prev.map(event => 
         event.id === eventId ? { ...event, ...updates } : event
       ));
       return { success: true };
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       console.error('Error updating event:', err);
-      return { success: false, error: 'Failed to update event' };
+      return { success: false, error: `Failed to update event: ${errorMessage}` };
     }
   };
 
@@ -379,13 +423,20 @@ export function useCalendarEvents(trainerId: string) {
         .eq('id', eventId)
         .eq('trainer_id', trainerId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error deleting event:', error);
+        if (error.message.includes('row-level security policy')) {
+          return { success: false, error: 'Cannot delete events for demo users' };
+        }
+        throw error;
+      }
 
       setEvents(prev => prev.filter(event => event.id !== eventId));
       return { success: true };
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       console.error('Error deleting event:', err);
-      return { success: false, error: 'Failed to delete event' };
+      return { success: false, error: `Failed to delete event: ${errorMessage}` };
     }
   };
 
