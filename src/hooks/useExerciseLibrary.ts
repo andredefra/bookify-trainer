@@ -1,16 +1,20 @@
+
 import { useState, useEffect } from 'react';
 import { ExerciseData, exerciseDatabase, searchExercises } from '@/data/exercises/exerciseDatabase';
+import { toast } from 'sonner';
 
 const CUSTOM_EXERCISES_KEY = 'trainer_custom_exercises';
 const EXERCISE_MODIFICATIONS_KEY = 'trainer_exercise_modifications';
+const DELETED_EXERCISES_KEY = 'trainer_deleted_exercises';
 
 export function useExerciseLibrary() {
   const [customExercises, setCustomExercises] = useState<ExerciseData[]>([]);
   const [exerciseModifications, setExerciseModifications] = useState<Record<string, Partial<ExerciseData>>>({});
+  const [deletedExercises, setDeletedExercises] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // Load custom exercises and modifications from localStorage on mount
+  // Load data from localStorage on mount
   useEffect(() => {
     const savedCustom = localStorage.getItem(CUSTOM_EXERCISES_KEY);
     if (savedCustom) {
@@ -29,33 +33,47 @@ export function useExerciseLibrary() {
         console.error('Error loading exercise modifications:', error);
       }
     }
+
+    const savedDeleted = localStorage.getItem(DELETED_EXERCISES_KEY);
+    if (savedDeleted) {
+      try {
+        setDeletedExercises(JSON.parse(savedDeleted));
+      } catch (error) {
+        console.error('Error loading deleted exercises:', error);
+      }
+    }
   }, []);
 
-  // Save custom exercises to localStorage whenever they change
+  // Save to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem(CUSTOM_EXERCISES_KEY, JSON.stringify(customExercises));
   }, [customExercises]);
 
-  // Save exercise modifications to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem(EXERCISE_MODIFICATIONS_KEY, JSON.stringify(exerciseModifications));
   }, [exerciseModifications]);
 
-  // Get all exercises (predefined + custom) with modifications applied
-  const getAllExercises = () => {
-    const predefinedWithModifications = exerciseDatabase.map(exercise => {
-      const modifications = exerciseModifications[exercise.id];
-      if (modifications) {
-        return {
-          ...exercise,
-          ...modifications,
-          isModified: true
-        };
-      }
-      return exercise;
-    });
+  useEffect(() => {
+    localStorage.setItem(DELETED_EXERCISES_KEY, JSON.stringify(deletedExercises));
+  }, [deletedExercises]);
 
-    return [...predefinedWithModifications, ...customExercises];
+  // Get all exercises (predefined + custom) with modifications applied, excluding deleted
+  const getAllExercises = () => {
+    const predefinedWithModifications = exerciseDatabase
+      .filter(exercise => !deletedExercises.includes(exercise.id))
+      .map(exercise => {
+        const modifications = exerciseModifications[exercise.id];
+        if (modifications) {
+          return {
+            ...exercise,
+            ...modifications,
+            isModified: true
+          };
+        }
+        return exercise;
+      });
+
+    return [...predefinedWithModifications, ...customExercises.filter(ex => !deletedExercises.includes(ex.id))];
   };
 
   // Get filtered exercises based on search and category
@@ -110,6 +128,7 @@ export function useExerciseLibrary() {
     };
     
     setCustomExercises(prev => [...prev, newExercise]);
+    toast.success('Custom exercise added successfully!');
     return newExercise;
   };
 
@@ -120,6 +139,7 @@ export function useExerciseLibrary() {
         exercise.id === id ? { ...exercise, ...updates } : exercise
       )
     );
+    toast.success('Exercise updated successfully!');
   };
 
   // Update any exercise (custom or predefined)
@@ -134,6 +154,7 @@ export function useExerciseLibrary() {
         ...prev,
         [id]: { ...prev[id], ...updates }
       }));
+      toast.success('Exercise updated successfully!');
     }
   };
 
@@ -144,11 +165,33 @@ export function useExerciseLibrary() {
       delete newModifications[id];
       return newModifications;
     });
+    toast.success('Exercise reset to original values!');
   };
 
-  // Delete custom exercise
+  // Delete exercise (soft delete for predefined, hard delete for custom)
+  const deleteExercise = (id: string) => {
+    const customExercise = customExercises.find(ex => ex.id === id);
+    
+    if (customExercise) {
+      // Hard delete custom exercises
+      setCustomExercises(prev => prev.filter(exercise => exercise.id !== id));
+      toast.success('Custom exercise deleted successfully!');
+    } else {
+      // Soft delete predefined exercises (add to blacklist)
+      setDeletedExercises(prev => [...prev, id]);
+      toast.success('Exercise removed from library!');
+    }
+  };
+
+  // Restore deleted exercise
+  const restoreExercise = (id: string) => {
+    setDeletedExercises(prev => prev.filter(deletedId => deletedId !== id));
+    toast.success('Exercise restored to library!');
+  };
+
+  // Delete custom exercise (legacy function name for compatibility)
   const deleteCustomExercise = (id: string) => {
-    setCustomExercises(prev => prev.filter(exercise => exercise.id !== id));
+    deleteExercise(id);
   };
 
   // Get exercise suggestions for autocomplete
@@ -173,11 +216,17 @@ export function useExerciseLibrary() {
     );
   };
 
+  // Get deleted exercises (for potential restore functionality)
+  const getDeletedExercises = () => {
+    return exerciseDatabase.filter(exercise => deletedExercises.includes(exercise.id));
+  };
+
   return {
     // Data
     allExercises: getAllExercises(),
     filteredExercises: getFilteredExercises(),
     customExercises,
+    deletedExercises: getDeletedExercises(),
     
     // Search and filter state
     searchQuery,
@@ -190,11 +239,13 @@ export function useExerciseLibrary() {
     updateCustomExercise,
     updateExercise,
     resetExercise,
-    deleteCustomExercise,
+    deleteExercise,
+    deleteCustomExercise, // Keep for compatibility
+    restoreExercise,
     getExerciseSuggestions,
     getExerciseByName,
     
-    // New functions
+    // Utility functions
     findAlternativesByEquipment,
     getExercisesByEquipment,
   };

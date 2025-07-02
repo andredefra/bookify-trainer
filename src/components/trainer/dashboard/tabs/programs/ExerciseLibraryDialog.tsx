@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, Filter } from 'lucide-react';
+import { Search, Plus, Filter, RotateCcw } from 'lucide-react';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { AddExerciseDialog } from './AddExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';
@@ -26,13 +26,15 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
   const {
     filteredExercises,
     customExercises,
+    deletedExercises,
     searchQuery,
     setSearchQuery,
     selectedCategory,
     setSelectedCategory,
-    deleteCustomExercise,
+    deleteExercise,
     updateExercise,
-    resetExercise
+    resetExercise,
+    restoreExercise
   } = useExerciseLibrary();
 
   const categories = [
@@ -70,6 +72,14 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
 
   const handleResetExercise = (id: string) => {
     resetExercise(id);
+  };
+
+  const handleDeleteExercise = (id: string) => {
+    deleteExercise(id);
+  };
+
+  const handleRestoreExercise = (id: string) => {
+    restoreExercise(id);
   };
 
   return (
@@ -120,16 +130,17 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
 
             {/* Exercise Lists */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="all">All Exercises ({allExercises.length})</TabsTrigger>
                 <TabsTrigger value="custom">My Exercises ({myExercises.length})</TabsTrigger>
+                <TabsTrigger value="deleted">Deleted ({deletedExercises.length})</TabsTrigger>
               </TabsList>
 
               <TabsContent value="all" className="mt-6">
                 <ExerciseLibraryList
                   exercises={allExercises}
                   onEdit={handleEditExercise}
-                  onDelete={null}
+                  onDelete={handleDeleteExercise}
                 />
               </TabsContent>
 
@@ -137,8 +148,40 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
                 <ExerciseLibraryList
                   exercises={myExercises}
                   onEdit={handleEditExercise}
-                  onDelete={deleteCustomExercise}
+                  onDelete={handleDeleteExercise}
                 />
+              </TabsContent>
+
+              <TabsContent value="deleted" className="mt-6">
+                <div className="space-y-3">
+                  {deletedExercises.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-muted-foreground">No deleted exercises</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Deleted exercises will appear here and can be restored
+                      </p>
+                    </div>
+                  ) : (
+                    deletedExercises.map((exercise) => (
+                      <div key={exercise.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div>
+                          <h3 className="font-medium">{exercise.name}</h3>
+                          <p className="text-sm text-muted-foreground capitalize">
+                            {exercise.category} • {exercise.difficulty}
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleRestoreExercise(exercise.id)}
+                        >
+                          <RotateCcw className="h-4 w-4 mr-2" />
+                          Restore
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
           </div>
