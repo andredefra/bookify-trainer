@@ -6,12 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash2, Bug } from 'lucide-react';
+import { Plus, Edit, Trash2 } from 'lucide-react';
 import { ExerciseData, exerciseDatabase, getExerciseById } from '@/data/exercises/exerciseDatabase';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { CreateExerciseDialog } from './CreateExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';
-import { ExerciseLibraryDiagnostics } from './ExerciseLibraryDiagnostics';
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ExerciseLibraryStatus } from './ExerciseLibraryStatus';
@@ -29,7 +28,6 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
   const [muscleGroupFilter, setMuscleGroupFilter] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [exerciseToEdit, setExerciseToEdit] = useState<ExerciseData | null>(null);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
@@ -152,26 +150,12 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            <span>Exercise Library ({exercises.length} exercises)</span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowDiagnostics(!showDiagnostics)}
-              className="text-xs"
-            >
-              <Bug className="h-3 w-3 mr-1" />
-              Debug
-            </Button>
+          <DialogTitle>
+            Exercise Library ({exercises.length} exercises)
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-          {/* Diagnostics Panel */}
-          {showDiagnostics && (
-            <ExerciseLibraryDiagnostics onRefresh={loadExercises} />
-          )}
-          
           {/* Status Overview */}
           <ExerciseLibraryStatus exercises={filteredExercises} />
           
