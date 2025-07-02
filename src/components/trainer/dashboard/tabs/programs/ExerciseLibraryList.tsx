@@ -1,14 +1,14 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ExternalLink, Edit, Trash2, Play, Dumbbell, Settings, Images, RotateCcw, Camera } from 'lucide-react';
+import { ExternalLink, Edit, Trash2, Play, Dumbbell, Images, RotateCcw, Camera } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { EquipmentImageGallery } from './EquipmentImageGallery';
 import { AlternativeExercisesList } from './AlternativeExercisesList';
-import { EquipmentThumbnail } from './EquipmentThumbnail';
 import { EditEquipmentImagesDialog } from './EditEquipmentImagesDialog';
 
 interface ExerciseLibraryListProps {
@@ -31,7 +31,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
       arms: 'bg-purple-100 text-purple-800',
       core: 'bg-orange-100 text-orange-800',
       cardio: 'bg-pink-100 text-pink-800',
-      stretching: 'bg-teal-100 text-teal-800'
+      functional: 'bg-teal-100 text-teal-800'
     };
     return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
@@ -46,13 +46,13 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
   };
 
   const handleSaveImages = (exerciseId: string, images: { [equipment: string]: string }) => {
-    // Per ora salviamo solo localmente - in futuro si potrebbe integrare con il sistema di salvataggio
     console.log('Saving images for exercise:', exerciseId, images);
     setShowImageDialog(false);
     setEditingExercise(null);
   };
 
-  const handleEditImages = (exercise: ExerciseData) => {
+  const handleEditImages = (exercise: ExerciseData, e: React.MouseEvent) => {
+    e.stopPropagation();
     setEditingExercise(exercise);
     setShowImageDialog(true);
   };
@@ -73,16 +73,37 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
           {exercises.map((exercise) => (
             <Card 
               key={exercise.id} 
-              className="hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => setExpandedCard(expandedCard === exercise.id ? null : exercise.id)}
+              className="hover:shadow-md transition-shadow"
             >
-              <CardHeader className="pb-3">
+              <CardHeader 
+                className="pb-3 cursor-pointer"
+                onClick={() => setExpandedCard(expandedCard === exercise.id ? null : exercise.id)}
+              >
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-lg leading-tight">{exercise.name}</CardTitle>
                   <div className="flex items-center gap-2 ml-2 shrink-0">
-                    {/* Equipment Thumbnail */}
+                    {/* Equipment Images Badge */}
                     {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                      <EquipmentThumbnail equipmentImages={exercise.equipmentImages} />
+                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                        <Images className="h-3 w-3 mr-1" />
+                        {Object.keys(exercise.equipmentImages).length}
+                      </Badge>
+                    )}
+                    
+                    {/* Alternatives Badge */}
+                    {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                      <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">
+                        <RotateCcw className="h-3 w-3 mr-1" />
+                        {exercise.alternativeExercises.length}
+                      </Badge>
+                    )}
+                    
+                    {/* Video Badge */}
+                    {exercise.videoUrl && (
+                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                        <Play className="h-3 w-3 mr-1" />
+                        Video
+                      </Badge>
                     )}
                     
                     {exercise.isCustom && (
@@ -90,7 +111,6 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                     )}
                     {(exercise as any).isModified && (
                       <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                        <Settings className="h-3 w-3 mr-1" />
                         Modified
                       </Badge>
                     )}
@@ -131,30 +151,28 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                   </div>
                 )}
 
-                {/* Quick Info Icons */}
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                    <div className="flex items-center gap-1">
-                      <Images className="h-4 w-4 text-blue-500" />
-                      <span>{Object.keys(exercise.equipmentImages).length} images</span>
-                    </div>
-                  )}
-                  
-                  {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
-                    <div className="flex items-center gap-1">
-                      <RotateCcw className="h-4 w-4 text-orange-500" />
-                      <span>{exercise.alternativeExercises.length} alternatives</span>
-                    </div>
-                  )}
-                </div>
-
                 {expandedCard === exercise.id && (
                   <div className="space-y-4 pt-3 border-t">
                     <Tabs defaultValue="details" className="w-full">
                       <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="details">Details</TabsTrigger>
-                        <TabsTrigger value="equipment">Equipment</TabsTrigger>
-                        <TabsTrigger value="alternatives">Alternatives</TabsTrigger>
+                        <TabsTrigger 
+                          value="details"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Details
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="equipment"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Equipment
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="alternatives"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Alternatives
+                        </TabsTrigger>
                       </TabsList>
                       
                       <TabsContent value="details" className="space-y-3">
@@ -172,10 +190,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleEditImages(exercise);
-                            }}
+                            onClick={(e) => handleEditImages(exercise, e)}
                           >
                             <Camera className="h-3 w-3 mr-1" />
                             Edit Images
@@ -192,10 +207,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                               size="sm"
                               variant="outline"
                               className="mt-2"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditImages(exercise);
-                              }}
+                              onClick={(e) => handleEditImages(exercise, e)}
                             >
                               <Camera className="h-3 w-3 mr-1" />
                               Add Images
@@ -227,7 +239,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                           }}
                         >
                           <Play className="h-3 w-3 mr-1" />
-                          Video
+                          Watch Video
                         </Button>
                       )}
 
