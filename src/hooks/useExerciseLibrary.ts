@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { ExerciseData, exerciseDatabase, searchExercises } from '@/data/exercises/exerciseDatabase';
 
@@ -68,7 +67,8 @@ export function useExerciseLibrary() {
       exercises = exercises.filter(exercise =>
         exercise.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         exercise.muscleGroup.some(muscle => muscle.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        exercise.category.toLowerCase().includes(searchQuery.toLowerCase())
+        exercise.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        exercise.equipment.some(eq => eq.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
@@ -78,6 +78,27 @@ export function useExerciseLibrary() {
     }
 
     return exercises;
+  };
+
+  // Find exercises by equipment availability
+  const findAlternativesByEquipment = (unavailableEquipment: string[], targetMuscleGroups: string[]) => {
+    const allExercises = getAllExercises();
+    
+    return allExercises.filter(exercise => 
+      // Exercise doesn't use the unavailable equipment
+      !exercise.equipment.some(eq => unavailableEquipment.includes(eq)) &&
+      // Exercise targets at least one of the same muscle groups
+      exercise.muscleGroup.some(muscle => targetMuscleGroups.includes(muscle))
+    );
+  };
+
+  // Get exercises by primary equipment
+  const getExercisesByEquipment = (equipment: string) => {
+    const allExercises = getAllExercises();
+    return allExercises.filter(exercise => 
+      exercise.primaryEquipment === equipment || 
+      exercise.equipment.includes(equipment)
+    );
   };
 
   // Add custom exercise
@@ -172,5 +193,9 @@ export function useExerciseLibrary() {
     deleteCustomExercise,
     getExerciseSuggestions,
     getExerciseByName,
+    
+    // New functions
+    findAlternativesByEquipment,
+    getExercisesByEquipment,
   };
 }

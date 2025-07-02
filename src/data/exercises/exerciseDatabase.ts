@@ -1,4 +1,3 @@
-
 export interface ExerciseData {
   id: string;
   name: string;
@@ -9,7 +8,56 @@ export interface ExerciseData {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   equipment: string[];
   isCustom: boolean;
+  equipmentImages?: { [equipment: string]: string };
+  alternativeExercises?: string[];
+  primaryEquipment?: string;
 }
+
+// Equipment image mappings using available placeholder images
+const equipmentImages = {
+  'Leg Press Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Leg Extension Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Leg Curl Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Standing Leg Curl Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Hip Thrust Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Abductor Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Adductor Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Smith Machine': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Hack Squat Machine': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Barbell': 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Squat Rack': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Calf Raise Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Bench': 'https://images.unsplash.com/photo-1571019614011-15f5b52c11db?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Dumbbells': 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Incline Bench': 'https://images.unsplash.com/photo-1571019614011-15f5b52c11db?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Chest Press Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Chest Fly Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Cable Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Parallel Bars': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Pull-up Bar': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'T-Bar': 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Hyperextension Bench': 'https://images.unsplash.com/photo-1571019614011-15f5b52c11db?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Shoulder Press Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Preacher Bench': 'https://images.unsplash.com/photo-1571019614011-15f5b52c11db?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Bodyweight': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Treadmill': 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Stationary Bike': 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Rowing Machine': 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Elliptical Machine': 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Jump Rope': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+  'Resistance Band': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80'
+};
+
+// Helper function to get equipment images for an exercise
+const getEquipmentImages = (equipment: string[]): { [equipment: string]: string } => {
+  const images: { [equipment: string]: string } = {};
+  equipment.forEach(eq => {
+    if (equipmentImages[eq as keyof typeof equipmentImages]) {
+      images[eq] = equipmentImages[eq as keyof typeof equipmentImages];
+    }
+  });
+  return images;
+};
 
 export const exerciseDatabase: ExerciseData[] = [
   // LEG EXERCISES
@@ -22,7 +70,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
     difficulty: 'beginner',
     equipment: ['Leg Press Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Leg Press Machine']),
+    alternativeExercises: ['horizontal-leg-press', 'barbell-squat', 'hack-squat'],
+    primaryEquipment: 'Leg Press Machine'
   },
   {
     id: 'horizontal-leg-press',
@@ -33,7 +84,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
     difficulty: 'beginner',
     equipment: ['Leg Press Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Leg Press Machine']),
+    alternativeExercises: ['angled-leg-press', 'barbell-squat', 'hack-squat'],
+    primaryEquipment: 'Leg Press Machine'
   },
   {
     id: 'leg-extension',
@@ -44,7 +98,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=YyvSfVjQeL0',
     difficulty: 'beginner',
     equipment: ['Leg Extension Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Leg Extension Machine']),
+    alternativeExercises: ['barbell-squat', 'bulgarian-squat', 'single-leg-step-up'],
+    primaryEquipment: 'Leg Extension Machine'
   },
   {
     id: 'seated-leg-curl',
@@ -55,7 +112,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ELOCsoDSmrg',
     difficulty: 'beginner',
     equipment: ['Leg Curl Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Leg Curl Machine']),
+    alternativeExercises: ['leg-curl-lying-down', 'romanian-deadlifts-dumbbells', 'standing-leg-curl'],
+    primaryEquipment: 'Leg Curl Machine'
   },
   {
     id: 'leg-curl-lying-down',
@@ -66,7 +126,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ELOCsoDSmrg',
     difficulty: 'beginner',
     equipment: ['Leg Curl Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Leg Curl Machine']),
+    alternativeExercises: ['seated-leg-curl', 'romanian-deadlifts-dumbbells', 'standing-leg-curl'],
+    primaryEquipment: 'Leg Curl Machine'
   },
   {
     id: 'standing-leg-curl',
@@ -76,7 +139,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Stand at machine, curl one leg at a time, maintain balance, focus on hamstring isolation.',
     difficulty: 'intermediate',
     equipment: ['Standing Leg Curl Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Standing Leg Curl Machine']),
+    alternativeExercises: ['machine-hip-thrust', 'standing-abductor-machine', 'abductors-machine', 'adductors-machine', 'squat-smith-machine', 'hack-squat', 'barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Standing Leg Curl Machine'
   },
   {
     id: 'machine-hip-thrust',
@@ -87,7 +153,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=xDmFkJxPzeM',
     difficulty: 'intermediate',
     equipment: ['Hip Thrust Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Hip Thrust Machine']),
+    alternativeExercises: ['standing-abductor-machine', 'abductors-machine', 'adductors-machine', 'squat-smith-machine', 'hack-squat', 'barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Hip Thrust Machine'
   },
   {
     id: 'standing-abductor-machine',
@@ -97,7 +166,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Stand at abductor machine, lift leg out to side against resistance, control the movement.',
     difficulty: 'beginner',
     equipment: ['Abductor Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Abductor Machine']),
+    alternativeExercises: ['abductors-machine', 'adductors-machine', 'squat-smith-machine', 'hack-squat', 'barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Abductor Machine'
   },
   {
     id: 'abductors-machine',
@@ -107,7 +179,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit in abductor machine, push legs apart against resistance, squeeze glutes and abductors.',
     difficulty: 'beginner',
     equipment: ['Abductor Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Abductor Machine']),
+    alternativeExercises: ['adductors-machine', 'squat-smith-machine', 'hack-squat', 'barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Abductor Machine'
   },
   {
     id: 'adductors-machine',
@@ -117,7 +192,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit in adductor machine, squeeze legs together against resistance, control the movement.',
     difficulty: 'beginner',
     equipment: ['Adductor Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Adductor Machine']),
+    alternativeExercises: ['squat-smith-machine', 'hack-squat', 'barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Adductor Machine'
   },
   {
     id: 'squat-smith-machine',
@@ -128,7 +206,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=rT7DgCr-3pg',
     difficulty: 'intermediate',
     equipment: ['Smith Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Smith Machine']),
+    alternativeExercises: ['hack-squat', 'barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Smith Machine'
   },
   {
     id: 'hack-squat',
@@ -139,7 +220,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=EdtaJRBqsOE',
     difficulty: 'intermediate',
     equipment: ['Hack Squat Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Hack Squat Machine']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Hack Squat Machine'
   },
   {
     id: 'reverse-hack-squat',
@@ -149,7 +233,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Face the hack squat machine, position chest against pad, focus on glute activation.',
     difficulty: 'intermediate',
     equipment: ['Hack Squat Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Hack Squat Machine']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Hack Squat Machine'
   },
   {
     id: 'barbell-squat',
@@ -160,7 +247,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ultWZbUMPL8',
     difficulty: 'advanced',
     equipment: ['Barbell', 'Squat Rack'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell', 'Squat Rack']),
+    alternativeExercises: ['hack-squat', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Barbell'
   },
   {
     id: 'calf-machine',
@@ -171,7 +261,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=gwLzBJYoWlI',
     difficulty: 'beginner',
     equipment: ['Calf Raise Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Calf Raise Machine']),
+    alternativeExercises: ['barbell-squat', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Calf Raise Machine'
   },
   {
     id: 'bulgarian-squat',
@@ -182,7 +275,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=2C-uNgKwPLE',
     difficulty: 'intermediate',
     equipment: ['Bench', 'Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bench', 'Dumbbells']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'single-leg-step-up',
@@ -192,7 +288,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Step onto bench with one leg, drive through heel, step down with control.',
     difficulty: 'intermediate',
     equipment: ['Bench', 'Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bench', 'Dumbbells']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'romanian-deadlifts-dumbbells',
@@ -203,7 +302,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=2SHsk9AzdjA',
     difficulty: 'intermediate',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Dumbbells'
   },
   {
     id: 'romanian-deadlifts-barbell',
@@ -214,7 +316,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=2SHsk9AzdjA',
     difficulty: 'intermediate',
     equipment: ['Barbell'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Barbell'
   },
   {
     id: 'barbell-deadlift',
@@ -225,7 +330,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ytGaGIn3SjE',
     difficulty: 'advanced',
     equipment: ['Barbell'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell']),
+    alternativeExercises: ['barbell-squat', 'calf-machine', 'bulgarian-squat', 'single-leg-step-up', 'romanian-deadlifts-dumbbells', 'romanian-deadlifts-barbell', 'barbell-deadlift', 'push-ups', 'dips'],
+    primaryEquipment: 'Barbell'
   },
 
   // CHEST EXERCISES
@@ -238,7 +346,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=QcuF1YiMReM',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Bench']),
+    alternativeExercises: ['barbell-flat-bench-press', 'chest-press', 'push-ups'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'dumbbell-inclined-bench-press',
@@ -249,7 +360,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=8iPEnn-ltC8',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Incline Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Incline Bench']),
+    alternativeExercises: ['barbell-flat-bench-press', 'chest-press', 'smith-machine-flat-bench-press'],
+    primaryEquipment: 'Incline Bench'
   },
   {
     id: 'barbell-flat-bench-press',
@@ -260,7 +374,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=gRVjAtPip0Y',
     difficulty: 'intermediate',
     equipment: ['Barbell', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell', 'Bench']),
+    alternativeExercises: ['dumbbell-flat-bench-press', 'chest-press', 'smith-machine-flat-bench-press'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'barbell-incline-bench-press',
@@ -271,7 +388,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=IP9aRxuBqhA',
     difficulty: 'intermediate',
     equipment: ['Barbell', 'Incline Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell', 'Incline Bench']),
+    alternativeExercises: ['dumbbell-flat-bench-press', 'chest-press', 'smith-machine-flat-bench-press'],
+    primaryEquipment: 'Incline Bench'
   },
   {
     id: 'smith-machine-flat-bench-press',
@@ -281,7 +401,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use Smith machine for guided movement, focus on chest contraction, control the descent.',
     difficulty: 'beginner',
     equipment: ['Smith Machine', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Smith Machine', 'Bench']),
+    alternativeExercises: ['dumbbell-flat-bench-press', 'chest-press', 'smith-machine-flat-bench-press'],
+    primaryEquipment: 'Smith Machine'
   },
   {
     id: 'smith-machine-incline-bench-press',
@@ -291,7 +414,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Incline bench with Smith machine, controlled movement, focus on upper chest development.',
     difficulty: 'beginner',
     equipment: ['Smith Machine', 'Incline Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Smith Machine', 'Incline Bench']),
+    alternativeExercises: ['dumbbell-flat-bench-press', 'chest-press', 'smith-machine-flat-bench-press'],
+    primaryEquipment: 'Smith Machine'
   },
   {
     id: 'chest-press',
@@ -301,7 +427,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit in chest press machine, press handles forward, squeeze chest muscles, control return.',
     difficulty: 'beginner',
     equipment: ['Chest Press Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Chest Press Machine']),
+    alternativeExercises: ['dumbbell-flat-bench-press', 'barbell-flat-bench-press', 'push-ups'],
+    primaryEquipment: 'Chest Press Machine'
   },
   {
     id: 'chest-fly-machine',
@@ -311,7 +440,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit in fly machine, bring arms together in wide arc, squeeze chest at center.',
     difficulty: 'beginner',
     equipment: ['Chest Fly Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Chest Fly Machine']),
+    alternativeExercises: ['dumbbell-fly-incline-bench', 'dumbbell-fly-flat-bench', 'cable-chest-fly'],
+    primaryEquipment: 'Chest Fly Machine'
   },
   {
     id: 'dumbbell-fly-incline-bench',
@@ -322,7 +454,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=eozdVDA78K0',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Incline Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Incline Bench']),
+    alternativeExercises: ['dumbbell-fly-flat-bench', 'cable-chest-fly'],
+    primaryEquipment: 'Incline Bench'
   },
   {
     id: 'dumbbell-fly-flat-bench',
@@ -333,7 +468,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=eozdVDA78K0',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Bench']),
+    alternativeExercises: ['dumbbell-fly-incline-bench', 'cable-chest-fly'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'cable-chest-fly',
@@ -343,7 +481,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Stand between cable machine, bring handles together in arc motion, squeeze chest.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['dumbbell-fly-incline-bench', 'dumbbell-fly-flat-bench'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'push-ups',
@@ -354,7 +495,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=IODxDxX7oi4',
     difficulty: 'beginner',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['chest-press', 'dumbbell-flat-bench-press', 'dips'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'dips',
@@ -365,7 +509,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=6kALZikXxLc',
     difficulty: 'intermediate',
     equipment: ['Parallel Bars'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Parallel Bars']),
+    alternativeExercises: ['chest-press', 'dumbbell-flat-bench-press', 'dips'],
+    primaryEquipment: 'Parallel Bars'
   },
 
   // BACK EXERCISES
@@ -378,7 +525,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=CAwf7n6Luuc',
     difficulty: 'beginner',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['pull-ups', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'lat-machine-reverse-grip',
@@ -388,7 +538,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Pull lat bar with reverse (supinated) grip, focus on lat activation and bicep engagement.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['pull-ups', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'triangle-bar-lat-pulldown',
@@ -398,7 +551,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use triangle/V-bar attachment, pull to upper chest, focus on lat squeeze.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['pull-ups', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'seated-cable-low-row-triangle',
@@ -408,7 +564,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit upright, pull triangle bar to abdomen, squeeze shoulder blades together.',
     difficulty: 'beginner',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['pull-ups', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'single-arm-seated-low-row',
@@ -418,7 +577,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Row one arm at a time, focus on lat contraction, avoid rotation.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['pull-ups', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'pull-ups',
@@ -429,7 +591,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar']),
+    alternativeExercises: ['lat-machine-pulldown', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'reverse-grip-pull-ups',
@@ -439,7 +604,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Pull-ups with supinated grip, increased bicep activation.',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar']),
+    alternativeExercises: ['lat-machine-pulldown', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'neutral-grip-pull-ups',
@@ -449,7 +617,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use parallel grip handles, pull up focusing on lat activation.',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar']),
+    alternativeExercises: ['lat-machine-pulldown', 'bent-over-row', 'single-arm-dumbbell-row'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'bent-over-row',
@@ -460,7 +631,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=FWJR5Ve8bnQ',
     difficulty: 'intermediate',
     equipment: ['Barbell'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell']),
+    alternativeExercises: ['single-arm-dumbbell-row', 't-bar-row', 'hyperextension'],
+    primaryEquipment: 'Barbell'
   },
   {
     id: 'single-arm-dumbbell-row',
@@ -470,7 +644,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Support body on bench, row dumbbell to hip, focus on lat contraction.',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Bench']),
+    alternativeExercises: ['bent-over-row', 't-bar-row', 'hyperextension'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 't-bar-row',
@@ -480,7 +657,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Straddle T-bar, pull to chest, focus on squeezing shoulder blades.',
     difficulty: 'intermediate',
     equipment: ['T-Bar'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['T-Bar']),
+    alternativeExercises: ['bent-over-row', 'hyperextension'],
+    primaryEquipment: 'T-Bar'
   },
   {
     id: 'hyperextension',
@@ -490,7 +670,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Position hips on pad, lower torso, extend back up using lower back muscles.',
     difficulty: 'beginner',
     equipment: ['Hyperextension Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Hyperextension Bench']),
+    alternativeExercises: ['bent-over-row', 't-bar-row'],
+    primaryEquipment: 'Hyperextension Bench'
   },
 
   // SHOULDER EXERCISES
@@ -503,7 +686,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=QSgd7AEVK9I',
     difficulty: 'intermediate',
     equipment: ['Barbell'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell']),
+    alternativeExercises: ['shoulder-press-machine', 'standing-lateral-raises', 'single-arm-lateral-raises', 'single-arm-cable-lateral-raise', 'single-arm-cable-rear-delt-fly', 'bent-over-rear-delt-flys', 'standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Barbell'
   },
   {
     id: 'shoulder-press-machine',
@@ -513,7 +699,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit in machine, press handles overhead, control the descent.',
     difficulty: 'beginner',
     equipment: ['Shoulder Press Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Shoulder Press Machine']),
+    alternativeExercises: ['barbell-shoulder-press', 'standing-lateral-raises', 'single-arm-lateral-raises', 'single-arm-cable-lateral-raise', 'single-arm-cable-rear-delt-fly', 'bent-over-rear-delt-flys', 'standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Shoulder Press Machine'
   },
   {
     id: 'standing-lateral-raises',
@@ -524,7 +713,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
     difficulty: 'beginner',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['single-arm-lateral-raises', 'single-arm-cable-lateral-raise', 'single-arm-cable-rear-delt-fly', 'bent-over-rear-delt-flys', 'standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Dumbbells'
   },
   {
     id: 'single-arm-lateral-raises',
@@ -534,7 +726,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Raise one arm at a time, focus on medial deltoid isolation.',
     difficulty: 'beginner',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['single-arm-cable-lateral-raise', 'single-arm-cable-rear-delt-fly', 'bent-over-rear-delt-flys', 'standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Dumbbells'
   },
   {
     id: 'single-arm-cable-lateral-raise',
@@ -544,7 +739,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use low cable pulley, raise arm to shoulder height, control the movement.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['single-arm-cable-rear-delt-fly', 'bent-over-rear-delt-flys', 'standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'single-arm-cable-rear-delt-fly',
@@ -554,7 +752,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Pull cable across body, focus on rear deltoid contraction.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['bent-over-rear-delt-flys', 'standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'bent-over-rear-delt-flys',
@@ -565,17 +766,23 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ea7qmaN0f_c',
     difficulty: 'beginner',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['standing-dumbbell-front-raises', 'standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Dumbbells'
   },
   {
-    id: 'standing-dumbell-front-raises',
+    id: 'standing-dumbbell-front-raises',
     name: 'Standing Dumbbell Front Raises',
     category: 'shoulders',
     muscleGroup: ['Anterior Deltoids'],
     notes: 'Raise dumbbells in front to shoulder height, control the descent.',
     difficulty: 'beginner',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['standing-dumbbell-shoulder-press', 'seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Dumbbells'
   },
   {
     id: 'standing-dumbbell-shoulder-press',
@@ -585,7 +792,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Press dumbbells overhead, core engaged, controlled movement.',
     difficulty: 'intermediate',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['seated-dumbbell-shoulder-press', 'upright-barbell-rows'],
+    primaryEquipment: 'Dumbbells'
   },
   {
     id: 'seated-dumbbell-shoulder-press',
@@ -595,7 +805,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Sit with back support, press dumbbells overhead, control descent.',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Bench']),
+    alternativeExercises: ['upright-barbell-rows'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'upright-barbell-rows',
@@ -605,7 +818,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Pull bar up to chest height, elbows high, focus on deltoid activation.',
     difficulty: 'intermediate',
     equipment: ['Barbell'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell']),
+    alternativeExercises: [],
+    primaryEquipment: 'Barbell'
   },
 
   // ARM EXERCISES
@@ -617,7 +833,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Stand at cable machine, curl handles up, squeeze biceps at top.',
     difficulty: 'beginner',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['cable-tricep-pushdown', 'reverse-grip-cable-pushdown', 'cable-rope-pushdown', 'barbell-preacher-curl', 'dumbbell-preacher-curl', 'standing-dumbbell-curl-hammer-grip', 'wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'cable-tricep-pushdown',
@@ -627,7 +846,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Press cable bar down, keep elbows at sides, squeeze triceps.',
     difficulty: 'beginner',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['reverse-grip-cable-pushdown', 'cable-rope-pushdown', 'barbell-preacher-curl', 'dumbbell-preacher-curl', 'standing-dumbbell-curl-hammer-grip', 'wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'reverse-grip-cable-pushdown',
@@ -637,7 +859,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use reverse grip on cable pushdown, focus on tricep long head.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['cable-rope-pushdown', 'barbell-preacher-curl', 'dumbbell-preacher-curl', 'standing-dumbbell-curl-hammer-grip', 'wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'cable-rope-pushdown',
@@ -647,7 +872,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use rope attachment, push down and apart at bottom, squeeze triceps.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['barbell-preacher-curl', 'dumbbell-preacher-curl', 'standing-dumbbell-curl-hammer-grip', 'wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'barbell-preacher-curl',
@@ -657,7 +885,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Use preacher bench, curl barbell with controlled movement, focus on bicep isolation.',
     difficulty: 'intermediate',
     equipment: ['Barbell', 'Preacher Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell', 'Preacher Bench']),
+    alternativeExercises: ['dumbbell-preacher-curl', 'standing-dumbbell-curl-hammer-grip', 'wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Preacher Bench'
   },
   {
     id: 'dumbbell-preacher-curl',
@@ -667,7 +898,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Single arm preacher curls, focus on bicep contraction and control.',
     difficulty: 'intermediate',
     equipment: ['Dumbbells', 'Preacher Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Preacher Bench']),
+    alternativeExercises: ['standing-dumbbell-curl-hammer-grip', 'wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Preacher Bench'
   },
   {
     id: 'standing-dumbbell-curl-hammer-grip',
@@ -677,7 +911,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Neutral grip curls, focus on brachialis and bicep development.',
     difficulty: 'beginner',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: ['wide-grip-barbell-curl', 'close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Dumbbells'
   },
   {
     id: 'wide-grip-barbell-curl',
@@ -687,7 +924,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Wider than shoulder grip, curl bar up, focus on outer bicep head.',
     difficulty: 'intermediate',
     equipment: ['Barbell'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell']),
+    alternativeExercises: ['close-grip-barbell-bench-press', 'single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Barbell'
   },
   {
     id: 'close-grip-barbell-bench-press',
@@ -698,7 +938,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=nEF0bv2FW94',
     difficulty: 'intermediate',
     equipment: ['Barbell', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell', 'Bench']),
+    alternativeExercises: ['single-arm-dumbbell-kickback', 'overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'single-arm-dumbbell-kickback',
@@ -708,7 +951,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Lean on bench, extend arm back, squeeze tricep at extension.',
     difficulty: 'beginner',
     equipment: ['Dumbbells', 'Bench'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells', 'Bench']),
+    alternativeExercises: ['overhead-dumbbell-tricep-extension'],
+    primaryEquipment: 'Bench'
   },
   {
     id: 'overhead-dumbbell-tricep-extension',
@@ -718,7 +964,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Hold dumbbell overhead, lower behind head, extend back up.',
     difficulty: 'intermediate',
     equipment: ['Dumbbells'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Dumbbells']),
+    alternativeExercises: [],
+    primaryEquipment: 'Dumbbells'
   },
 
   // CORE EXERCISES
@@ -731,7 +980,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ASdvN_XEl_c',
     difficulty: 'beginner',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['crunch', 'reverse-crunch', 'v-up', 'hanging-leg-raise', 'kneeling-cable-crunch', 'mountain-climber'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'crunch',
@@ -741,7 +993,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Lie on back, lift shoulders off ground, squeeze abs at top.',
     difficulty: 'beginner',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['plank', 'reverse-crunch', 'v-up', 'hanging-leg-raise', 'kneeling-cable-crunch', 'mountain-climber'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'reverse-crunch',
@@ -751,7 +1006,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Lift knees toward chest, focus on lower abdominal contraction.',
     difficulty: 'beginner',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['plank', 'crunch', 'v-up', 'hanging-leg-raise', 'kneeling-cable-crunch', 'mountain-climber'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'v-up',
@@ -761,7 +1019,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Simultaneously lift legs and torso, form V-shape at top.',
     difficulty: 'intermediate',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['plank', 'crunch', 'reverse-crunch', 'hanging-leg-raise', 'kneeling-cable-crunch', 'mountain-climber'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'hanging-leg-raise',
@@ -771,7 +1032,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Hang from bar, raise legs to horizontal, control the descent.',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar']),
+    alternativeExercises: ['plank', 'crunch', 'reverse-crunch', 'v-up', 'kneeling-cable-crunch', 'mountain-climber'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'kneeling-cable-crunch',
@@ -781,7 +1045,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Kneel at cable machine, crunch down against resistance.',
     difficulty: 'intermediate',
     equipment: ['Cable Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Cable Machine']),
+    alternativeExercises: ['plank', 'crunch', 'reverse-crunch', 'v-up', 'hanging-leg-raise', 'mountain-climber'],
+    primaryEquipment: 'Cable Machine'
   },
   {
     id: 'mountain-climber',
@@ -792,7 +1059,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=kLh-uczlPLg',
     difficulty: 'intermediate',  
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['plank', 'crunch', 'reverse-crunch', 'v-up', 'hanging-leg-raise', 'kneeling-cable-crunch'],
+    primaryEquipment: 'Bodyweight'
   },
 
   // CARDIO EXERCISES
@@ -804,7 +1074,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Running or walking on treadmill, adjust speed and incline as needed.',
     difficulty: 'beginner',
     equipment: ['Treadmill'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Treadmill']),
+    alternativeExercises: ['stationary-bike', 'elliptical', 'rowing-machine'],
+    primaryEquipment: 'Treadmill'
   },
   {
     id: 'stationary-bike',
@@ -814,7 +1087,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Pedal at steady pace, adjust resistance for intensity.',
     difficulty: 'beginner',
     equipment: ['Stationary Bike'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Stationary Bike']),
+    alternativeExercises: ['rowing-machine', 'elliptical', 'jumping-rope', 'burpees', 'jumping-lunge', 'jump-squat'],
+    primaryEquipment: 'Stationary Bike'
   },
   {
     id: 'rowing-machine',
@@ -824,7 +1100,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Full body cardio, drive with legs, pull with back and arms.',
     difficulty: 'intermediate',
     equipment: ['Rowing Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Rowing Machine']),
+    alternativeExercises: ['elliptical', 'jumping-rope', 'burpees', 'jumping-lunge', 'jump-squat'],
+    primaryEquipment: 'Rowing Machine'
   },
   {
     id: 'elliptical',
@@ -834,7 +1113,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Low-impact cardio, smooth elliptical motion with arms.',
     difficulty: 'beginner',
     equipment: ['Elliptical Machine'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Elliptical Machine']),
+    alternativeExercises: ['jumping-rope', 'burpees', 'jumping-lunge', 'jump-squat'],
+    primaryEquipment: 'Elliptical Machine'
   },
   {
     id: 'jumping-rope',
@@ -844,7 +1126,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Jump rope for cardio, maintain rhythm and light foot contact.',
     difficulty: 'intermediate',
     equipment: ['Jump Rope'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Jump Rope']),
+    alternativeExercises: ['burpees', 'jumping-lunge', 'jump-squat'],
+    primaryEquipment: 'Jump Rope'
   },
   {
     id: 'burpees',
@@ -855,7 +1140,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=TU8QYVW0gDU',
     difficulty: 'intermediate',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['mountain-climber', 'jumping-lunge', 'jump-squat'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'jumping-lunge',
@@ -865,7 +1153,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Alternate jumping lunges, explosive movement, soft landing.',
     difficulty: 'intermediate',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['burpees', 'jump-squat'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'jump-squat',
@@ -875,7 +1166,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Squat down, jump up explosively, land softly into next squat.',
     difficulty: 'intermediate',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['burpees', 'jumping-lunge'],
+    primaryEquipment: 'Bodyweight'
   },
 
   // CROSSFIT WODS
@@ -887,7 +1181,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: '20 Pull-ups, 30 Push-ups, 40 Sit-ups, 50 Air Squats. 5 rounds for time. Rest 3 minutes between rounds.',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar', 'Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar', 'Bodyweight']),
+    alternativeExercises: ['chelsea', 'mary', 'cindy', 'annie', 'fran'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'chelsea',
@@ -897,7 +1194,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'Every minute on the minute for 30 minutes: 5 Pull-ups, 10 Push-ups, 15 Air Squats.',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar', 'Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar', 'Bodyweight']),
+    alternativeExercises: ['mary', 'cindy', 'annie', 'fran'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'mary',
@@ -907,7 +1207,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'AMRAP in 20 minutes: 5 Handstand Push-ups, 10 Pistol Squats, 15 Pull-ups.',
     difficulty: 'advanced',
     equipment: ['Pull-up Bar', 'Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar', 'Bodyweight']),
+    alternativeExercises: ['cindy', 'annie', 'fran'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'cindy',
@@ -917,7 +1220,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: 'AMRAP in 20 minutes: 5 Pull-ups, 10 Push-ups, 15 Air Squats.',
     difficulty: 'intermediate',
     equipment: ['Pull-up Bar', 'Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Pull-up Bar', 'Bodyweight']),
+    alternativeExercises: ['annie', 'fran'],
+    primaryEquipment: 'Pull-up Bar'
   },
   {
     id: 'annie',
@@ -927,7 +1233,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: '50-40-30-20-10 reps for time: Double-unders and Sit-ups.',
     difficulty: 'intermediate',
     equipment: ['Jump Rope', 'Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Jump Rope', 'Bodyweight']),
+    alternativeExercises: ['fran'],
+    primaryEquipment: 'Jump Rope'
   },
   {
     id: 'fran',
@@ -937,7 +1246,10 @@ export const exerciseDatabase: ExerciseData[] = [
     notes: '21-15-9 reps for time: Thrusters (95/65 lb) and Pull-ups.',
     difficulty: 'advanced',
     equipment: ['Barbell', 'Pull-up Bar'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Barbell', 'Pull-up Bar']),
+    alternativeExercises: [],
+    primaryEquipment: 'Barbell'
   },
 
   // STRETCHING EXERCISES
@@ -950,7 +1262,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=g6-t8E8TNDQ',
     difficulty: 'beginner',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['hip-flexor-stretch', 'shoulder-dislocates'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'hip-flexor-stretch',
@@ -961,7 +1276,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=UGEpQ1BRx-4',
     difficulty: 'beginner',
     equipment: ['Bodyweight'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Bodyweight']),
+    alternativeExercises: ['shoulder-dislocates'],
+    primaryEquipment: 'Bodyweight'
   },
   {
     id: 'shoulder-dislocates',
@@ -972,7 +1290,10 @@ export const exerciseDatabase: ExerciseData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=02HdChcpyBw',
     difficulty: 'beginner',
     equipment: ['Resistance Band'],
-    isCustom: false
+    isCustom: false,
+    equipmentImages: getEquipmentImages(['Resistance Band']),
+    alternativeExercises: [],
+    primaryEquipment: 'Resistance Band'
   }
 ];
 

@@ -4,8 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ExternalLink, Edit, Trash2, Play, Dumbbell, Settings } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ExternalLink, Edit, Trash2, Play, Dumbbell, Settings, Images, RotateCcw } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
+import { EquipmentImageGallery } from './EquipmentImageGallery';
+import { AlternativeExercisesList } from './AlternativeExercisesList';
 
 interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
@@ -97,22 +100,80 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
               {exercise.equipment.length > 0 && (
                 <div>
                   <p className="text-sm font-medium mb-1">Equipment:</p>
-                  <p className="text-sm text-muted-foreground">
-                    {exercise.equipment.join(', ')}
-                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {exercise.equipment.map((eq, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs">
+                        {eq}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Equipment Images Preview */}
+              {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Images className="h-4 w-4 text-blue-500" />
+                    <p className="text-sm font-medium">Equipment ({Object.keys(exercise.equipmentImages).length})</p>
+                  </div>
+                  <EquipmentImageGallery 
+                    equipmentImages={exercise.equipmentImages}
+                    className="h-32"
+                  />
+                </div>
+              )}
+
+              {/* Alternative Exercises Preview */}
+              {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                <div className="flex items-center gap-2 text-sm text-orange-600">
+                  <RotateCcw className="h-4 w-4" />
+                  <span>{exercise.alternativeExercises.length} alternatives available</span>
                 </div>
               )}
 
               {expandedCard === exercise.id && (
-                <div className="space-y-3 pt-3 border-t">
-                  <div>
-                    <p className="text-sm font-medium mb-1">Exercise Notes:</p>
-                    <p className="text-sm text-muted-foreground">
-                      {exercise.notes}
-                    </p>
-                  </div>
+                <div className="space-y-4 pt-3 border-t">
+                  <Tabs defaultValue="details" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="details">Details</TabsTrigger>
+                      <TabsTrigger value="equipment">Equipment</TabsTrigger>
+                      <TabsTrigger value="alternatives">Alternatives</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="details" className="space-y-3">
+                      <div>
+                        <p className="text-sm font-medium mb-1">Exercise Notes:</p>
+                        <p className="text-sm text-muted-foreground">
+                          {exercise.notes}
+                        </p>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="equipment" className="space-y-3">
+                      {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 ? (
+                        <EquipmentImageGallery equipmentImages={exercise.equipmentImages} />
+                      ) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Images className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No equipment images available</p>
+                        </div>
+                      )}
+                    </TabsContent>
+                    
+                    <TabsContent value="alternatives" className="space-y-3">
+                      {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 ? (
+                        <AlternativeExercisesList alternativeExerciseIds={exercise.alternativeExercises} />
+                      ) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <RotateCcw className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No alternative exercises available</p>
+                        </div>
+                      )}
+                    </TabsContent>
+                  </Tabs>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pt-2 border-t">
                     {exercise.videoUrl && (
                       <Button
                         size="sm"
