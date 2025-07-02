@@ -10,16 +10,14 @@ export function useExerciseLibraryManager() {
   const [difficultyFilter, setDifficultyFilter] = useState('');
   const [exercises, setExercises] = useState<ExerciseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 24; // Show 24 exercises per page
+  const itemsPerPage = 12; // Reduced for better mobile performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const loadExercises = useCallback(() => {
-    console.log('ExerciseLibraryDialog: Loading exercises');
-    console.log('exerciseDatabase length:', exerciseDatabase.length);
+    console.log('Loading exercises - Database count:', exerciseDatabase.length);
     
-    // Start with ALL database exercises - this should be 468 exercises
+    // Start with the complete database
     let processedExercises = [...exerciseDatabase];
-    console.log('Starting with processedExercises:', processedExercises.length);
     
     // Load localStorage data
     const customExercises = localStorage.getItem('trainer_custom_exercises');
@@ -30,7 +28,6 @@ export function useExerciseLibraryManager() {
     if (deletedExercises) {
       try {
         const deleted = JSON.parse(deletedExercises);
-        console.log('Deleted exercises:', deleted.length);
         processedExercises = processedExercises.filter(ex => !deleted.includes(ex.id));
       } catch (error) {
         console.error('Error parsing deleted exercises:', error);
@@ -41,7 +38,6 @@ export function useExerciseLibraryManager() {
     if (exerciseModifications) {
       try {
         const modifications = JSON.parse(exerciseModifications);
-        console.log('Modifications:', Object.keys(modifications).length);
         processedExercises = processedExercises.map(exercise => {
           const mods = modifications[exercise.id];
           if (mods) {
@@ -58,20 +54,13 @@ export function useExerciseLibraryManager() {
     if (customExercises) {
       try {
         const custom = JSON.parse(customExercises);
-        console.log('Custom exercises:', custom.length);
         processedExercises = [...processedExercises, ...custom];
       } catch (error) {
         console.error('Error parsing custom exercises:', error);
       }
     }
     
-    console.log('Final processed exercises count:', processedExercises.length);
-    console.log('Should be around 468 exercises if database is complete');
-    
-    // Log some sample exercises to verify
-    console.log('Sample exercises:', processedExercises.slice(0, 5).map(ex => ex.name));
-    console.log('Last few exercises:', processedExercises.slice(-5).map(ex => ex.name));
-    
+    console.log('Final exercise count:', processedExercises.length);
     setExercises(processedExercises);
   }, []);
 

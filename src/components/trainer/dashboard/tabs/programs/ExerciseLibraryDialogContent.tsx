@@ -15,6 +15,7 @@ import {
   PaginationNext, 
   PaginationPrevious 
 } from '@/components/ui/pagination';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExerciseLibraryDialogContentProps {
   exercises: ExerciseData[];
@@ -60,6 +61,7 @@ export function ExerciseLibraryDialogContent({
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [exerciseToEdit, setExerciseToEdit] = useState<ExerciseData | null>(null);
+  const isMobile = useIsMobile();
 
   const handleEditExercise = (exercise: ExerciseData) => {
     setExerciseToEdit(exercise);
@@ -70,16 +72,11 @@ export function ExerciseLibraryDialogContent({
     setShowCreateForm(true);
   };
 
-  const handleSaveNewExercise = (exerciseData: any) => {
-    onCreateExercise(exerciseData);
-    setShowCreateForm(false);
-  };
-
   return (
     <>
       <div className="flex-1 flex flex-col min-h-0">
         {/* Filters */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 mb-4">
           <ExerciseLibraryFilters
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
@@ -91,7 +88,7 @@ export function ExerciseLibraryDialogContent({
           />
         </div>
 
-        {/* Exercise List - Now with proper scroll */}
+        {/* Exercise List */}
         <div className="flex-1 min-h-0">
           <ExerciseLibraryList
             exercises={paginatedExercises}
@@ -100,7 +97,7 @@ export function ExerciseLibraryDialogContent({
           />
         </div>
 
-        {/* Pagination */}
+        {/* Pagination - Only show on mobile if more than 1 page */}
         {totalPages > 1 && (
           <div className="flex-shrink-0 mt-4 flex justify-center">
             <Pagination>
@@ -112,16 +109,17 @@ export function ExerciseLibraryDialogContent({
                   />
                 </PaginationItem>
                 
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                {/* Show fewer pages on mobile */}
+                {Array.from({ length: Math.min(isMobile ? 3 : 5, totalPages) }, (_, i) => {
                   let pageNum;
-                  if (totalPages <= 5) {
+                  if (totalPages <= (isMobile ? 3 : 5)) {
                     pageNum = i + 1;
-                  } else if (currentPage <= 3) {
+                  } else if (currentPage <= (isMobile ? 2 : 3)) {
                     pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
+                  } else if (currentPage >= totalPages - (isMobile ? 1 : 2)) {
+                    pageNum = totalPages - (isMobile ? 2 : 4) + i;
                   } else {
-                    pageNum = currentPage - 2 + i;
+                    pageNum = currentPage - (isMobile ? 1 : 2) + i;
                   }
                   
                   return (
@@ -151,7 +149,7 @@ export function ExerciseLibraryDialogContent({
 
       <div className="flex-shrink-0 mt-3 flex justify-between items-center border-t pt-3">
         <Badge variant="secondary" className="text-xs">
-          Showing {paginatedExercises.length} of {totalItems} exercises (Page {currentPage} of {totalPages})
+          {paginatedExercises.length} of {totalItems} exercises (Page {currentPage} of {totalPages})
         </Badge>
         <Button onClick={onClose} size="sm">Close</Button>
       </div>

@@ -92,125 +92,95 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
   return (
     <>
       <ScrollArea className="h-full w-full">
-        <div className={`p-2 ${
-          isMobile 
-            ? 'grid grid-cols-1 gap-2' 
-            : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'
-        }`}>
+        <div className="p-2 grid grid-cols-1 gap-2">
           {exercises.map((exercise) => (
             <Card 
               key={exercise.id} 
-              className={`relative transition-all duration-200 ${
-                hasCompleteData(exercise) ? 'ring-1 ring-blue-200' : ''
-              } ${isMobile ? 'shadow-sm' : ''}`}
+              className="relative transition-all duration-200 shadow-sm"
               data-exercise-id={exercise.id}
             >
-              <CardHeader className={isMobile ? "pb-1 px-2 py-1.5" : "pb-2"}>
+              <CardHeader className="pb-2 px-3 py-3">
                 <div className="flex justify-between items-start gap-2">
                   <div className="flex-1 min-w-0">
-                    <CardTitle className={`${
-                      isMobile ? 'text-xs leading-tight' : 'text-sm'
-                    } font-medium line-clamp-2`}>
+                    <CardTitle className="text-sm font-medium leading-tight">
                       {exercise.name}
                       {hasCompleteData(exercise) && (
-                        <Badge variant="secondary" className={`ml-1 ${
-                          isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                        }`}>
+                        <Badge variant="secondary" className="ml-1 text-xs px-1 py-0">
                           ✓
                         </Badge>
                       )}
                     </CardTitle>
                   </div>
-                  <div className="flex gap-0.5 flex-shrink-0">
+                  <div className="flex gap-1 flex-shrink-0">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => toggleExpanded(exercise.id)}
-                      className={isMobile ? "h-6 w-6 p-0" : "h-7 w-7 p-0"}
+                      className="h-6 w-6 p-0"
                     >
                       {isExpanded(exercise.id) ? 
-                        <ChevronUp className="h-2.5 w-2.5" /> : 
-                        <ChevronDown className="h-2.5 w-2.5" />
+                        <ChevronUp className="h-3 w-3" /> : 
+                        <ChevronDown className="h-3 w-3" />
                       }
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => onEdit(exercise)}
-                      className={isMobile ? "h-6 w-6 p-0" : "h-7 w-7 p-0"}
+                      className="h-6 w-6 p-0"
                     >
-                      <Edit className="h-2.5 w-2.5" />
+                      <Edit className="h-3 w-3" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => onDelete(exercise.id)}
-                      className={`${
-                        isMobile ? "h-6 w-6 p-0" : "h-7 w-7 p-0"
-                      } text-red-600 hover:text-red-700`}
+                      className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
                     >
-                      <Trash2 className="h-2.5 w-2.5" />
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
                 </div>
 
-                <div className={`flex gap-1 flex-wrap ${isMobile ? 'mt-0.5' : 'mt-1'}`}>
-                  <Badge className={`${getCategoryColor(exercise.category)} ${
-                    isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                  }`}>
+                <div className="flex gap-1 flex-wrap mt-1">
+                  <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
                     {exercise.category}
                   </Badge>
-                  <Badge className={`${getDifficultyColor(exercise.difficulty)} ${
-                    isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                  }`}>
+                  <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
                     {exercise.difficulty}
                   </Badge>
                   {exercise.isCustom && (
-                    <Badge variant="outline" className={`border-purple-200 text-purple-700 ${
-                      isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                    }`}>
+                    <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs px-1 py-0">
                       Custom
                     </Badge>
                   )}
                 </div>
               </CardHeader>
 
-              <CardContent className={`${isMobile ? 'px-2 py-1 space-y-1' : 'px-3 py-2 space-y-2'}`}>
-                {/* Muscle Groups - Always visible */}
+              <CardContent className="px-3 py-2 space-y-2">
+                {/* Muscle Groups */}
                 <div>
-                  <p className={`${
-                    isMobile ? 'text-xs' : 'text-sm'
-                  } font-medium text-gray-700 mb-0.5`}>
-                    Muscles:
-                  </p>
-                  <div className="flex flex-wrap gap-0.5">
-                    {exercise.muscleGroup.slice(0, isMobile && !isExpanded(exercise.id) ? 2 : undefined).map((muscle, index) => (
-                      <Badge key={index} variant="secondary" className={
-                        isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                      }>
+                  <p className="text-xs font-medium text-gray-700 mb-1">Muscles:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {exercise.muscleGroup.slice(0, isExpanded(exercise.id) ? undefined : 3).map((muscle, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs px-1 py-0">
                         {muscle}
                       </Badge>
                     ))}
-                    {isMobile && !isExpanded(exercise.id) && exercise.muscleGroup.length > 2 && (
-                      <Badge variant="secondary" className="text-xs px-1 py-0 text-xs">
-                        +{exercise.muscleGroup.length - 2}
+                    {!isExpanded(exercise.id) && exercise.muscleGroup.length > 3 && (
+                      <Badge variant="secondary" className="text-xs px-1 py-0">
+                        +{exercise.muscleGroup.length - 3}
                       </Badge>
                     )}
                   </div>
                 </div>
 
-                {/* Equipment - Always visible */}
+                {/* Equipment */}
                 <div>
-                  <p className={`${
-                    isMobile ? 'text-xs' : 'text-sm'
-                  } font-medium text-gray-700 mb-0.5`}>
-                    Equipment:
-                  </p>
-                  <div className="flex flex-wrap gap-0.5">
-                    {exercise.equipment.slice(0, isExpanded(exercise.id) ? undefined : (isMobile ? 1 : 2)).map((equip, index) => (
-                      <Badge key={index} variant="outline" className={`${
-                        isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                      } flex items-center gap-1`}>
+                  <p className="text-xs font-medium text-gray-700 mb-1">Equipment:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {exercise.equipment.slice(0, isExpanded(exercise.id) ? undefined : 2).map((equip, index) => (
+                      <Badge key={index} variant="outline" className="text-xs px-1 py-0 flex items-center gap-1">
                         {exercise.equipmentImages?.[equip] && (
                           <Image 
                             className="h-2 w-2 cursor-pointer" 
@@ -226,30 +196,26 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                         )}
                       </Badge>
                     ))}
-                    {!isExpanded(exercise.id) && exercise.equipment.length > (isMobile ? 1 : 2) && (
-                      <Badge variant="outline" className={isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'}>
-                        +{exercise.equipment.length - (isMobile ? 1 : 2)}
+                    {!isExpanded(exercise.id) && exercise.equipment.length > 2 && (
+                      <Badge variant="outline" className="text-xs px-1 py-0">
+                        +{exercise.equipment.length - 2}
                       </Badge>
                     )}
                   </div>
                 </div>
 
-                {/* Video - Always visible if available */}
+                {/* Video */}
                 {exercise.videoUrl && (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     <Video className="h-3 w-3 text-blue-600" />
-                    <span className={`${
-                      isMobile ? 'text-xs' : 'text-sm'
-                    } font-medium text-gray-700`}>
-                      Video
-                    </span>
+                    <span className="text-xs font-medium text-gray-700">Video</span>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setVideoPreview(videoPreview === exercise.id ? null : exercise.id)}
-                      className={`${isMobile ? 'text-xs h-5 px-1' : 'text-xs h-6 px-2'} ml-1`}
+                      className="text-xs h-5 px-2 ml-auto"
                     >
-                      <Play className="h-2 w-2 mr-0.5" />
+                      <Play className="h-2 w-2 mr-1" />
                       {videoPreview === exercise.id ? 'Hide' : 'Play'}
                     </Button>
                   </div>
@@ -260,7 +226,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                   <div className="w-full">
                     <iframe
                       width="100%"
-                      height={isMobile ? "100" : "120"}
+                      height="120"
                       src={getYouTubeEmbedUrl(exercise.videoUrl)}
                       title={exercise.name}
                       frameBorder="0"
@@ -277,23 +243,17 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                     {/* Equipment Images Grid */}
                     {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
                       <div>
-                        <p className={`${
-                          isMobile ? 'text-xs' : 'text-sm'
-                        } font-medium text-gray-700 mb-1`}>
-                          Equipment Images:
-                        </p>
-                        <div className="grid grid-cols-2 gap-1">
+                        <p className="text-xs font-medium text-gray-700 mb-1">Equipment Images:</p>
+                        <div className="grid grid-cols-3 gap-1">
                           {Object.entries(exercise.equipmentImages).map(([equip, imageUrl]) => (
                             <div key={equip} className="relative group">
                               <img
                                 src={imageUrl}
                                 alt={equip}
-                                className={`w-full object-cover rounded cursor-pointer hover:opacity-80 transition-opacity ${
-                                  isMobile ? 'h-12' : 'h-16'
-                                }`}
+                                className="w-full h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
                                 onClick={() => setImagePreview({ url: imageUrl, title: equip })}
                               />
-                              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-0.5 rounded-b">
+                              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-0.5 rounded-b truncate">
                                 {equip}
                               </div>
                             </div>
@@ -305,31 +265,24 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                     {/* Alternative Exercises */}
                     {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
                       <div>
-                        <p className={`${
-                          isMobile ? 'text-xs' : 'text-sm'
-                        } font-medium text-gray-700 mb-1`}>
+                        <p className="text-xs font-medium text-gray-700 mb-1">
                           Alternatives ({exercise.alternativeExercises.length}):
                         </p>
-                        <div className="flex flex-wrap gap-0.5">
-                          {exercise.alternativeExercises.slice(0, isMobile ? 2 : undefined).map((altId, index) => (
+                        <div className="flex flex-wrap gap-1">
+                          {exercise.alternativeExercises.slice(0, 3).map((altId, index) => (
                             <Badge 
                               key={index}
                               variant="outline" 
-                              className={`${
-                                isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
-                              } cursor-pointer hover:bg-blue-50 flex items-center gap-0.5`}
+                              className="text-xs px-1 py-0 cursor-pointer hover:bg-blue-50 flex items-center gap-1"
                               onClick={() => handleAlternativeClick(altId)}
                             >
                               <ExternalLink className="h-2 w-2" />
-                              {isMobile ? 
-                                getAlternativeExerciseName(altId).substring(0, 10) + '...' :
-                                getAlternativeExerciseName(altId).substring(0, 15) + '...'
-                              }
+                              {getAlternativeExerciseName(altId).substring(0, 12)}...
                             </Badge>
                           ))}
-                          {isMobile && exercise.alternativeExercises.length > 2 && (
-                            <Badge variant="outline" className="text-xs px-1 py-0 text-xs">
-                              +{exercise.alternativeExercises.length - 2}
+                          {exercise.alternativeExercises.length > 3 && (
+                            <Badge variant="outline" className="text-xs px-1 py-0">
+                              +{exercise.alternativeExercises.length - 3}
                             </Badge>
                           )}
                         </div>
@@ -338,16 +291,10 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                   </>
                 )}
 
-                {/* Notes - Always visible but truncated */}
+                {/* Instructions */}
                 <div>
-                  <p className={`${
-                    isMobile ? 'text-xs' : 'text-sm'
-                  } font-medium text-gray-700 mb-0.5`}>
-                    Instructions:
-                  </p>
-                  <p className={`${
-                    isMobile ? 'text-xs' : 'text-sm'
-                  } text-gray-600 ${isExpanded(exercise.id) ? '' : 'line-clamp-2'}`}>
+                  <p className="text-xs font-medium text-gray-700 mb-1">Instructions:</p>
+                  <p className={`text-xs text-gray-600 ${isExpanded(exercise.id) ? '' : 'line-clamp-2'}`}>
                     {exercise.notes}
                   </p>
                 </div>
@@ -358,7 +305,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
 
         {exercises.length === 0 && (
           <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500">No exercises found matching your criteria.</p>
+            <p className="text-gray-500 text-sm">No exercises found matching your criteria.</p>
           </div>
         )}
       </ScrollArea>
