@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ExerciseData, exerciseDatabase, searchExercises } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData, completeExerciseDatabase } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
 
 const CUSTOM_EXERCISES_KEY = 'trainer_custom_exercises';
@@ -59,7 +59,7 @@ export function useExerciseLibrary() {
 
   // Get all exercises (predefined + custom) with modifications applied, excluding deleted
   const getAllExercises = () => {
-    const predefinedWithModifications = exerciseDatabase
+    const predefinedWithModifications = completeExerciseDatabase
       .filter(exercise => !deletedExercises.includes(exercise.id))
       .map(exercise => {
         const modifications = exerciseModifications[exercise.id];
@@ -114,7 +114,6 @@ export function useExerciseLibrary() {
   const getExercisesByEquipment = (equipment: string) => {
     const allExercises = getAllExercises();
     return allExercises.filter(exercise => 
-      exercise.primaryEquipment === equipment || 
       exercise.equipment.includes(equipment)
     );
   };
@@ -218,7 +217,7 @@ export function useExerciseLibrary() {
 
   // Get deleted exercises (for potential restore functionality)
   const getDeletedExercises = () => {
-    return exerciseDatabase.filter(exercise => deletedExercises.includes(exercise.id));
+    return completeExerciseDatabase.filter(exercise => deletedExercises.includes(exercise.id));
   };
 
   return {
