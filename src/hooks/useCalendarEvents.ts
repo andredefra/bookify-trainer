@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-export interface CalendarEvent {
+export type CalendarEvent = {
   id: string;
   title: string;
   type: 'session' | 'sales_activity' | 'program_milestone' | 'deadline' | 'personal_task' | 'availability';
