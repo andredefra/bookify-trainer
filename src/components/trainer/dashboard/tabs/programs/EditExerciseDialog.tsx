@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -7,9 +6,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { X, Play, RotateCcw } from 'lucide-react';
+import { X, Play, RotateCcw, Camera } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
+import { EditEquipmentImagesDialog } from './EditEquipmentImagesDialog';
 
 interface EditExerciseDialogProps {
   open: boolean;
@@ -38,6 +38,8 @@ export function EditExerciseDialog({
   
   const [newMuscleGroup, setNewMuscleGroup] = useState('');
   const [newEquipment, setNewEquipment] = useState('');
+  const [showImageDialog, setShowImageDialog] = useState(false);
+  const [equipmentImages, setEquipmentImages] = useState<{ [equipment: string]: string }>({});
 
   const categories = [
     { value: 'chest', label: 'Chest' },
@@ -80,6 +82,7 @@ export function EditExerciseDialog({
         muscleGroups: [...exercise.muscleGroup],
         equipment: [...exercise.equipment],
       });
+      setEquipmentImages(exercise.equipmentImages || {});
     }
   }, [exercise]);
 
@@ -138,10 +141,16 @@ export function EditExerciseDialog({
       videoUrl: formData.videoUrl || undefined,
       muscleGroup: formData.muscleGroups,
       equipment: formData.equipment.length > 0 ? formData.equipment : ['Bodyweight'],
+      equipmentImages: equipmentImages,
     });
 
     toast.success('Exercise updated successfully!');
     onOpenChange(false);
+  };
+
+  const handleSaveImages = (images: { [equipment: string]: string }) => {
+    setEquipmentImages(images);
+    setShowImageDialog(false);
   };
 
   const handleReset = () => {
@@ -161,181 +170,212 @@ export function EditExerciseDialog({
   if (!exercise) return null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            <span>Edit Exercise</span>
-            {!exercise.isCustom && onReset && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleReset}
-                className="ml-2"
-              >
-                <RotateCcw className="h-3 w-3 mr-1" />
-                Reset to Original
-              </Button>
-            )}
-          </DialogTitle>
-        </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="name">Exercise Name *</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="e.g. Modified Bench Press"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="category">Category *</Label>
-              <Select
-                value={formData.category}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map(cat => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <Label htmlFor="difficulty">Difficulty *</Label>
-            <Select
-              value={formData.difficulty}
-              onValueChange={(value) => setFormData(prev => ({ ...prev, difficulty: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                {difficulties.map(diff => (
-                  <SelectItem key={diff.value} value={diff.value}>
-                    {diff.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="notes">Instructions/Notes *</Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-              placeholder="Describe how to perform the exercise..."
-              rows={4}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="videoUrl">Video URL</Label>
-            <div className="flex gap-2">
-              <Input
-                id="videoUrl"
-                type="url"
-                value={formData.videoUrl}
-                onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
-                placeholder="https://www.youtube.com/watch?v=..."
-                className="flex-1"
-              />
-              {formData.videoUrl && (
-                <Button type="button" variant="outline" onClick={previewVideo}>
-                  <Play className="h-4 w-4" />
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span>Edit Exercise</span>
+              {!exercise.isCustom && onReset && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleReset}
+                  className="ml-2"
+                >
+                  <RotateCcw className="h-3 w-3 mr-1" />
+                  Reset to Original
                 </Button>
               )}
-            </div>
-          </div>
+            </DialogTitle>
+          </DialogHeader>
 
-          <div>
-            <Label>Muscle Groups *</Label>
-            <div className="flex gap-2 mb-2">
-              <Select value={newMuscleGroup} onValueChange={setNewMuscleGroup}>
-                <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Select muscle group" />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name">Exercise Name *</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="e.g. Modified Bench Press"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category *</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map(cat => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="difficulty">Difficulty *</Label>
+              <Select
+                value={formData.difficulty}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, difficulty: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select difficulty" />
                 </SelectTrigger>
                 <SelectContent>
-                  {commonMuscleGroups.map(muscle => (
-                    <SelectItem key={muscle} value={muscle}>
-                      {muscle}
+                  {difficulties.map(diff => (
+                    <SelectItem key={diff.value} value={diff.value}>
+                      {diff.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <Button type="button" onClick={handleAddMuscleGroup}>
-                Add
+            </div>
+
+            <div>
+              <Label htmlFor="notes">Instructions/Notes *</Label>
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                placeholder="Describe how to perform the exercise..."
+                rows={4}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="videoUrl">Video URL</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="videoUrl"
+                  type="url"
+                  value={formData.videoUrl}
+                  onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  className="flex-1"
+                />
+                {formData.videoUrl && (
+                  <Button type="button" variant="outline" onClick={previewVideo}>
+                    <Play className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <Label>Muscle Groups *</Label>
+              <div className="flex gap-2 mb-2">
+                <Select value={newMuscleGroup} onValueChange={setNewMuscleGroup}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Select muscle group" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {commonMuscleGroups.map(muscle => (
+                      <SelectItem key={muscle} value={muscle}>
+                        {muscle}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button type="button" onClick={handleAddMuscleGroup}>
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {formData.muscleGroups.map(muscle => (
+                  <Badge key={muscle} variant="secondary" className="flex items-center gap-1">
+                    {muscle}
+                    <X
+                      className="h-3 w-3 cursor-pointer"
+                      onClick={() => removeMuscleGroup(muscle)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label>Equipment</Label>
+              <div className="flex gap-2 mb-2">
+                <Select value={newEquipment} onValueChange={setNewEquipment}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder="Select equipment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {commonEquipment.map(equip => (
+                      <SelectItem key={equip} value={equip}>
+                        {equip}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button type="button" onClick={handleAddEquipment}>
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {formData.equipment.map(equip => (
+                  <Badge key={equip} variant="outline" className="flex items-center gap-1">
+                    {equip}
+                    <X
+                      className="h-3 w-3 cursor-pointer"
+                      onClick={() => removeEquipment(equip)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <Label>Equipment Images</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowImageDialog(true)}
+                >
+                  <Camera className="h-3 w-3 mr-1" />
+                  Edit Images
+                </Button>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {Object.keys(equipmentImages).length > 0 
+                  ? `${Object.keys(equipmentImages).length} images configured`
+                  : 'No images configured'
+                }
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                Save Changes
               </Button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.muscleGroups.map(muscle => (
-                <Badge key={muscle} variant="secondary" className="flex items-center gap-1">
-                  {muscle}
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={() => removeMuscleGroup(muscle)}
-                  />
-                </Badge>
-              ))}
-            </div>
-          </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
-          <div>
-            <Label>Equipment</Label>
-            <div className="flex gap-2 mb-2">
-              <Select value={newEquipment} onValueChange={setNewEquipment}>
-                <SelectTrigger className="flex-1">
-                  <SelectValue placeholder="Select equipment" />
-                </SelectTrigger>
-                <SelectContent>
-                  {commonEquipment.map(equip => (
-                    <SelectItem key={equip} value={equip}>
-                      {equip}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button type="button" onClick={handleAddEquipment}>
-                Add
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.equipment.map(equip => (
-                <Badge key={equip} variant="outline" className="flex items-center gap-1">
-                  {equip}
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={() => removeEquipment(equip)}
-                  />
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit">
-              Save Changes
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <EditEquipmentImagesDialog
+        open={showImageDialog}
+        onOpenChange={setShowImageDialog}
+        equipment={formData.equipment}
+        currentImages={equipmentImages}
+        onSave={handleSaveImages}
+      />
+    </>
   );
 }

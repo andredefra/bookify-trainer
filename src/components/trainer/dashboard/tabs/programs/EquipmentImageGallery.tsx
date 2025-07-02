@@ -15,8 +15,8 @@ export function EquipmentImageGallery({ equipmentImages, className }: EquipmentI
   
   if (images.length === 0) {
     return (
-      <div className={cn("flex items-center justify-center p-4 bg-gray-50 rounded-md", className)}>
-        <ImageIcon className="h-6 w-6 text-gray-400 mr-2" />
+      <div className={cn("flex items-center justify-center p-8 bg-gray-50 rounded-md", className)}>
+        <ImageIcon className="h-8 w-8 text-gray-400 mr-2" />
         <span className="text-sm text-gray-500">No equipment images available</span>
       </div>
     );
@@ -33,12 +33,13 @@ export function EquipmentImageGallery({ equipmentImages, className }: EquipmentI
   const [currentEquipment, currentImageUrl] = images[currentIndex];
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("space-y-3", className)}>
+      {/* Main Image */}
       <div className="relative rounded-lg overflow-hidden bg-gray-100">
         <img
           src={currentImageUrl}
           alt={currentEquipment}
-          className="w-full h-48 object-cover"
+          className="w-full h-64 object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80';
@@ -66,28 +67,41 @@ export function EquipmentImageGallery({ equipmentImages, className }: EquipmentI
           </>
         )}
         
-        <div className="absolute bottom-2 left-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
+        <div className="absolute bottom-3 left-3 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
           {currentEquipment}
         </div>
         
         {images.length > 1 && (
-          <div className="absolute bottom-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
+          <div className="absolute bottom-3 right-3 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
             {currentIndex + 1} / {images.length}
           </div>
         )}
       </div>
       
+      {/* Thumbnail Navigation */}
       {images.length > 1 && (
-        <div className="flex justify-center mt-2 space-x-1">
-          {images.map((_, index) => (
+        <div className="flex justify-center space-x-2 overflow-x-auto pb-2">
+          {images.map(([equipment, imageUrl], index) => (
             <button
-              key={index}
+              key={equipment}
               className={cn(
-                "w-2 h-2 rounded-full transition-colors",
-                index === currentIndex ? "bg-primary" : "bg-gray-300"
+                "flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all",
+                index === currentIndex 
+                  ? "border-primary ring-2 ring-primary/20" 
+                  : "border-gray-200 hover:border-gray-300"
               )}
               onClick={() => setCurrentIndex(index)}
-            />
+            >
+              <img
+                src={imageUrl}
+                alt={equipment}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80';
+                }}
+              />
+            </button>
           ))}
         </div>
       )}
