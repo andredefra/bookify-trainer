@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Bug } from 'lucide-react';
 import { ExerciseData, exerciseDatabase, getExerciseById } from '@/data/exercises/exerciseDatabase';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { CreateExerciseDialog } from './CreateExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';
+import { ExerciseLibraryDiagnostics } from './ExerciseLibraryDiagnostics';
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ExerciseLibraryStatus } from './ExerciseLibraryStatus';
@@ -28,10 +29,71 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
   const [muscleGroupFilter, setMuscleGroupFilter] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [exerciseToEdit, setExerciseToEdit] = useState<ExerciseData | null>(null);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  const [exercises, setExercises] = useState<ExerciseData[]>(exerciseDatabase);
+  const [exercises, setExercises] = useState<ExerciseData[]>([]);
+
+  const loadExercises = useCallback(() => {
+    console.log('ExerciseLibraryDialog: Loading exercises');
+    console.log('exerciseDatabase length:', exerciseDatabase.length);
+    
+    // Start with all database exercises
+    let processedExercises = [...exerciseDatabase];
+    
+    // Load localStorage data
+    const customExercises = localStorage.getItem('trainer_custom_exercises');
+    const exerciseModifications = localStorage.getItem('trainer_exercise_modifications');
+    const deletedExercises = localStorage.getItem('trainer_deleted_exercises');
+    
+    // Apply deleted exercises filter
+    if (deletedExercises) {
+      try {
+        const deleted = JSON.parse(deletedExercises);
+        console.log('Deleted exercises:', deleted.length);
+        processedExercises = processedExercises.filter(ex => !deleted.includes(ex.id));
+      } catch (error) {
+        console.error('Error parsing deleted exercises:', error);
+      }
+    }
+    
+    // Apply modifications
+    if (exerciseModifications) {
+      try {
+        const modifications = JSON.parse(exerciseModifications);
+        console.log('Modifications:', Object.keys(modifications).length);
+        processedExercises = processedExercises.map(exercise => {
+          const mods = modifications[exercise.id];
+          if (mods) {
+            return { ...exercise, ...mods, isModified: true };
+          }
+          return exercise;
+        });
+      } catch (error) {
+        console.error('Error parsing exercise modifications:', error);
+      }
+    }
+    
+    // Add custom exercises
+    if (customExercises) {
+      try {
+        const custom = JSON.parse(customExercises);
+        console.log('Custom exercises:', custom.length);
+        processedExercises = [...processedExercises, ...custom];
+      } catch (error) {
+        console.error('Error parsing custom exercises:', error);
+      }
+    }
+    
+    console.log('Final processed exercises count:', processedExercises.length);
+    setExercises(processedExercises);
+  }, []);
+
+  // Initialize exercises
+  useEffect(() => {
+    loadExercises();
+  }, [loadExercises]);
 
   const handleCreateExercise = (newExercise: ExerciseData) => {
     setExercises(prevExercises => [...prevExercises, newExercise]);
@@ -90,10 +152,26 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Exercise Library ({exercises.length} exercises)</DialogTitle>
+          <DialogTitle className="flex items-center justify-between">
+            <span>Exercise Library ({exercises.length} exercises)</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDiagnostics(!showDiagnostics)}
+              className="text-xs"
+            >
+              <Bug className="h-3 w-3 mr-1" />
+              Debug
+            </Button>
+          </DialogTitle>
         </DialogHeader>
 
         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+          {/* Diagnostics Panel */}
+          {showDiagnostics && (
+            <ExerciseLibraryDiagnostics onRefresh={loadExercises} />
+          )}
+          
           {/* Status Overview */}
           <ExerciseLibraryStatus exercises={filteredExercises} />
           
@@ -134,6 +212,7 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="advanced">Advanced</option>
+              <option value="plyometric">Plyometric</option>
             </select>
 
             <Input
