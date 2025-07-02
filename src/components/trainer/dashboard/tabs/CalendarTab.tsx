@@ -5,15 +5,17 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCalendarEvents } from "@/hooks/useCalendarEvents";
-
-// Mock trainer ID - in real app this would come from auth context
-const MOCK_TRAINER_ID = "trainer-123";
+import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 
 export function CalendarTab() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [view, setView] = useState<'month' | 'week' | 'day'>('month');
+  const [view, setView<'month' | 'week' | 'day'>('month');
   
-  const { events, loading, error } = useCalendarEvents(MOCK_TRAINER_ID);
+  // Use dynamic trainer ID instead of hardcoded one
+  const trainerId = getCurrentDemoUserId();
+  const { events, loading, error } = useCalendarEvents(trainerId);
+
+  console.log('CalendarTab - Using trainer ID:', trainerId);
 
   const getEventTypeLabel = (type: string) => {
     switch (type) {

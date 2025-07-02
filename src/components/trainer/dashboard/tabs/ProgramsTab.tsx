@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PlusCircle, Settings } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -13,6 +12,7 @@ import { Exercise } from "@/data/training/types";
 import { ProgramProgressCard } from './programs/ProgramProgressCard';
 import { ProgramExpirationAlert } from './programs/ProgramExpirationAlert';
 import { useProgramAssignments } from '@/hooks/useProgramAssignments';
+import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 
 export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
@@ -22,7 +22,10 @@ export function ProgramsTab() {
   const [showEditProgram, setShowEditProgram] = useState(false);
   const [activeProgramId, setActiveProgramId] = useState<number | null>(null);
   
-  // Sample exercises we can use for our programs
+  // Get current demo user ID for data isolation
+  const currentUserId = getCurrentDemoUserId();
+  console.log('ProgramsTab - Using user ID:', currentUserId);
+  
   const sampleExercises: Exercise[] = currentProgram.sessions[0].exercises.map(ex => ({
     ...ex,
     id: Math.random().toString(36).substring(2, 9)

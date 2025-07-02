@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { toast } from "sonner";
+import { getDemoUserData } from "@/utils/demoUserUtils";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,11 +24,12 @@ const Login = () => {
 
     if (email && password) {
       toast.success("Demo login successful!");
-      localStorage.setItem('demo-user', JSON.stringify({
-        name,
-        email,
-        type: loginType
-      }));
+      
+      // Generate unique demo user data
+      const demoUserData = getDemoUserData(email, name, loginType);
+      console.log('Generated demo user:', demoUserData);
+      
+      localStorage.setItem('demo-user', JSON.stringify(demoUserData));
 
       if (loginType === 'client') {
         navigate('/client-dashboard');

@@ -4,6 +4,7 @@ import { ProfileImageUpload } from "./profile/ProfileImageUpload";
 import { PersonalInfoForm } from "./profile/PersonalInfoForm";
 import { CertificationsForm } from "./profile/CertificationsForm";
 import { AIAssistantSettings } from "./profile/AIAssistantSettings";
+import { getDefaultProfileImage } from "@/utils/demoUserUtils";
 
 interface ProfileSectionProps {
   user: {
@@ -16,8 +17,8 @@ interface ProfileSectionProps {
 }
 
 export function ProfileSection({ user }: ProfileSectionProps) {
-  // Use a general image of a man as default profile image
-  const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
+  // Use the default image from our utility
+  const defaultImage = getDefaultProfileImage();
   
   const [name, setName] = useState(user.name || "Demo Trainer");
   const [profileImage, setProfileImage] = useState<string>(user.profileImage || defaultImage);

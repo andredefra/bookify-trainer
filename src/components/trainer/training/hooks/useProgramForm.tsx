@@ -16,7 +16,7 @@ interface InitialProgramData {
 }
 
 export function useProgramForm(initialData?: InitialProgramData) {
-  const [program, setProgram] = useState<TrainingProgram>({
+  const [program, setProgram] = useState<TrainingProgram>(() => ({
     id: initialData?.id || Math.random().toString(36).substring(2, 9),
     title: initialData?.title || "Weekly Training Program",
     week: "",
@@ -30,7 +30,7 @@ export function useProgramForm(initialData?: InitialProgramData) {
     price: initialData?.price || 0,
     totalSessions: (initialData?.duration || 4) * (initialData?.targetFrequency || 3),
     sessions: [],
-  });
+  }));
 
   const [activeSession, setActiveSession] = useState<string>("1");
 
@@ -55,24 +55,30 @@ export function useProgramForm(initialData?: InitialProgramData) {
     return sessions;
   };
 
-  // Initialize sessions
+  // Initialize sessions safely
   useEffect(() => {
-    if (initialData?.sessions) {
+    if (initialData?.sessions && initialData.sessions.length > 0) {
       setProgram(prev => ({
         ...prev,
-        sessions: initialData.sessions,
+        sessions: initialData.sessions || [],
       }));
     } else {
+      // Only generate sessions if we don't have initial sessions
       const initialSessions = generateSessions(program.duration, program.targetFrequency);
       setProgram(prev => ({
         ...prev,
         sessions: initialSessions,
       }));
     }
-  }, []);
+  }, []); // Empty dependency array to run only once on mount
 
-  // Update sessions when duration or frequency changes
+  // Update sessions when duration or frequency changes (but not on initial load)
   const updateProgramStructure = (duration: number, targetFrequency: number) => {
+    if (!duration || !targetFrequency || duration <= 0 || targetFrequency <= 0) {
+      console.warn('Invalid duration or frequency values');
+      return;
+    }
+
     const totalSessions = duration * targetFrequency;
     const newSessions = generateSessions(duration, targetFrequency, program.sessions);
     
@@ -91,6 +97,11 @@ export function useProgramForm(initialData?: InitialProgramData) {
   };
 
   const handleAddExercise = (sessionId: string) => {
+    if (!sessionId) {
+      console.error('Session ID is required');
+      return;
+    }
+
     setProgram((prev) => {
       const updatedSessions = prev.sessions.map((session) => {
         if (session.id === sessionId) {
@@ -120,6 +131,11 @@ export function useProgramForm(initialData?: InitialProgramData) {
   };
 
   const handleUpdateExercise = (sessionId: string, exerciseId: string, field: string, value: any) => {
+    if (!sessionId || !exerciseId || !field) {
+      console.error('Invalid parameters for exercise update');
+      return;
+    }
+
     setProgram((prev) => {
       const updatedSessions = prev.sessions.map((session) => {
         if (session.id === sessionId) {
@@ -149,6 +165,11 @@ export function useProgramForm(initialData?: InitialProgramData) {
   };
 
   const handleRemoveExercise = (sessionId: string, exerciseId: string) => {
+    if (!sessionId || !exerciseId) {
+      console.error('Invalid parameters for exercise removal');
+      return;
+    }
+
     setProgram((prev) => {
       const updatedSessions = prev.sessions.map((session) => {
         if (session.id === sessionId) {

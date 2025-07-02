@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -20,6 +19,8 @@ export function useCalendarEvents(trainerId: string) {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  console.log('useCalendarEvents - Initializing with trainerId:', trainerId);
 
   // Mock events for demonstration (will be replaced with real data)
   const mockEvents: CalendarEvent[] = [
@@ -247,8 +248,16 @@ export function useCalendarEvents(trainerId: string) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        console.log('useCalendarEvents - Starting fetch for trainerId:', trainerId);
         setLoading(true);
         setError(null);
+
+        if (!trainerId) {
+          console.warn('useCalendarEvents - No trainerId provided');
+          setEvents([]);
+          setLoading(false);
+          return;
+        }
 
         // Try to fetch from database first
         const { data: dbEvents, error: dbError } = await supabase
@@ -258,11 +267,13 @@ export function useCalendarEvents(trainerId: string) {
           .order('start_datetime', { ascending: true });
 
         if (dbError) {
-          console.error('Error fetching calendar events:', dbError);
+          console.error('useCalendarEvents - Error fetching from database:', dbError);
           // Fall back to mock events
           const filteredMockEvents = mockEvents.filter(event => event.trainer_id === trainerId);
+          console.log('useCalendarEvents - Using mock events, count:', filteredMockEvents.length);
           setEvents(filteredMockEvents);
         } else if (dbEvents && dbEvents.length > 0) {
+          console.log('useCalendarEvents - Found database events, count:', dbEvents.length);
           // Convert database events to our format
           const formattedEvents: CalendarEvent[] = dbEvents.map(event => ({
             id: event.id,
@@ -279,12 +290,14 @@ export function useCalendarEvents(trainerId: string) {
           }));
           setEvents(formattedEvents);
         } else {
+          console.log('useCalendarEvents - No database events, using mock events');
           // No events in database, use mock events
           const filteredMockEvents = mockEvents.filter(event => event.trainer_id === trainerId);
+          console.log('useCalendarEvents - Mock events count:', filteredMockEvents.length);
           setEvents(filteredMockEvents);
         }
       } catch (err) {
-        console.error('Error in fetchEvents:', err);
+        console.error('useCalendarEvents - Unexpected error in fetchEvents:', err);
         setError('Failed to load calendar events');
         // Fall back to mock events
         const filteredMockEvents = mockEvents.filter(event => event.trainer_id === trainerId);
@@ -294,9 +307,7 @@ export function useCalendarEvents(trainerId: string) {
       }
     };
 
-    if (trainerId) {
-      fetchEvents();
-    }
+    fetchEvents();
   }, [trainerId]);
 
   const createEvent = async (eventData: Omit<CalendarEvent, 'id' | 'trainer_id'>) => {
