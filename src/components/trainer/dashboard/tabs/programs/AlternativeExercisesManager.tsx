@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { X, Plus, Search } from 'lucide-react';
+import { X, Plus, Search, Dumbbell } from 'lucide-react';
 import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 
