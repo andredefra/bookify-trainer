@@ -1,3 +1,4 @@
+
 export interface ExerciseData {
   id: string;
   name: string;
@@ -14,375 +15,393 @@ export interface ExerciseData {
   primaryEquipment?: string;
 }
 
-// Complete exercise database with 468 exercises
+// Complete exercise database with your exact list
 export const exerciseDatabase: ExerciseData[] = [
-  // Chest Exercises (50 total)
+  // LEG EXERCISES
   {
-    id: 'chest_001',
-    name: 'Barbell Bench Press',
-    category: 'chest',
+    id: 'leg_001',
+    name: 'Angled leg press',
+    category: 'legs',
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Lie on bench, grip barbell with hands wider than shoulder-width. Lower bar to chest, press up explosively.',
-    videoUrl: 'https://www.youtube.com/watch?v=rT7DgCr-3pg',
+    muscleGroup: ['Quadriceps', 'Glutes'],
+    equipment: ['Leg Press Machine'],
+    notes: 'Position feet shoulder-width apart on the platform. Lower the weight with control and press through heels.',
+    videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+    equipmentImages: {
+      'Leg Press Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_002', 'leg_007'],
+    primaryEquipment: 'Leg Press Machine'
+  },
+  {
+    id: 'leg_002',
+    name: 'Horizontal Leg Press',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes'],
+    equipment: ['Leg Press Machine'],
+    notes: 'Seated horizontal leg press machine. Keep core engaged and full range of motion.',
+    videoUrl: 'https://www.youtube.com/watch?v=0tn5K9NlCfo',
+    equipmentImages: {
+      'Leg Press Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_001', 'leg_007'],
+    primaryEquipment: 'Leg Press Machine'
+  },
+  {
+    id: 'leg_003',
+    name: 'Leg Extension',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps'],
+    equipment: ['Leg Extension Machine'],
+    notes: 'Seated leg extension focusing on quadriceps isolation. Control the eccentric phase.',
+    videoUrl: 'https://www.youtube.com/watch?v=YyvSfVjQeL0',
+    equipmentImages: {
+      'Leg Extension Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_007', 'leg_001'],
+    primaryEquipment: 'Leg Extension Machine'
+  },
+  {
+    id: 'leg_004',
+    name: 'Seated Leg Curl',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hamstrings'],
+    equipment: ['Leg Curl Machine'],
+    notes: 'Seated hamstring curl machine. Focus on controlled movement and full contraction.',
+    videoUrl: 'https://www.youtube.com/watch?v=1Tq3QdYUuHs',
+    equipmentImages: {
+      'Leg Curl Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_005', 'leg_006'],
+    primaryEquipment: 'Leg Curl Machine'
+  },
+  {
+    id: 'leg_005',
+    name: 'Leg Curl lying down',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hamstrings'],
+    equipment: ['Leg Curl Machine'],
+    notes: 'Lying leg curl machine. Keep hips pressed down and focus on hamstring contraction.',
+    videoUrl: 'https://www.youtube.com/watch?v=ELOCsoDSmrg',
+    equipmentImages: {
+      'Leg Curl Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_004', 'leg_006'],
+    primaryEquipment: 'Leg Curl Machine'
+  },
+  {
+    id: 'leg_006',
+    name: 'Standing Leg Curl',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Hamstrings'],
+    equipment: ['Leg Curl Machine'],
+    notes: 'Single leg standing curl. Focus on balance and controlled movement.',
+    videoUrl: 'https://www.youtube.com/watch?v=F488k67BTdc',
+    equipmentImages: {
+      'Leg Curl Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_004', 'leg_005'],
+    primaryEquipment: 'Leg Curl Machine'
+  },
+  {
+    id: 'leg_007',
+    name: 'Barbell squat',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Barbell', 'Squat Rack'],
+    notes: 'King of all exercises. Proper form is crucial. Feet shoulder-width apart, squat to parallel.',
+    videoUrl: 'https://www.youtube.com/watch?v=ultWZbUMPL8',
     equipmentImages: {
       'Barbell': 'https://images.unsplash.com/photo-1534368420009-621b391ec95c?w=400&h=300&fit=crop',
-      'Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      'Squat Rack': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_002', 'chest_003'],
+    alternativeExercises: ['leg_008', 'leg_001'],
     primaryEquipment: 'Barbell'
   },
   {
-    id: 'chest_002',
-    name: 'Dumbbell Bench Press',
+    id: 'leg_008',
+    name: 'Squat SMITH Machine',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes'],
+    equipment: ['Smith Machine'],
+    notes: 'Smith machine squat provides stability. Position feet slightly forward of the bar.',
+    videoUrl: 'https://www.youtube.com/watch?v=rjkPQJOgJ5k',
+    equipmentImages: {
+      'Smith Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_007', 'leg_009'],
+    primaryEquipment: 'Smith Machine'
+  },
+  {
+    id: 'leg_009',
+    name: 'Hack Squat',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes'],
+    equipment: ['Hack Squat Machine'],
+    notes: 'Hack squat machine provides back support. Focus on full range of motion.',
+    videoUrl: 'https://www.youtube.com/watch?v=EdtaJRBqI9Y',
+    equipmentImages: {
+      'Hack Squat Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['leg_007', 'leg_008'],
+    primaryEquipment: 'Hack Squat Machine'
+  },
+
+  // CHEST EXERCISES
+  {
+    id: 'chest_001',
+    name: 'Dumbbell flat bench press',
     category: 'chest',
     difficulty: 'intermediate',
     muscleGroup: ['Pectorals', 'Triceps', 'Anterior Deltoids'],
     equipment: ['Dumbbells', 'Bench'],
-    notes: 'Lie on bench holding dumbbells. Lower weights to chest level, press up in controlled motion.',
+    notes: 'Classic chest exercise. Lower dumbbells to chest level with control, press up explosively.',
     videoUrl: 'https://www.youtube.com/watch?v=QCAFqkBk4hE',
     equipmentImages: {
       'Dumbbells': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
       'Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_001', 'chest_003'],
+    alternativeExercises: ['chest_002', 'chest_003'],
     primaryEquipment: 'Dumbbells'
+  },
+  {
+    id: 'chest_002',
+    name: 'Barbell flat bench press',
+    category: 'chest',
+    difficulty: 'intermediate',
+    muscleGroup: ['Pectorals', 'Triceps', 'Anterior Deltoids'],
+    equipment: ['Barbell', 'Bench'],
+    notes: 'The king of chest exercises. Grip slightly wider than shoulders, lower to chest.',
+    videoUrl: 'https://www.youtube.com/watch?v=rT7DgCr-3pg',
+    equipmentImages: {
+      'Barbell': 'https://images.unsplash.com/photo-1534368420009-621b391ec95c?w=400&h=300&fit=crop',
+      'Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['chest_001', 'chest_003'],
+    primaryEquipment: 'Barbell'
   },
   {
     id: 'chest_003',
-    name: 'Push-ups',
+    name: 'Chest Press',
     category: 'chest',
     difficulty: 'beginner',
-    muscleGroup: ['Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Bodyweight'],
-    notes: 'Start in plank position. Lower body until chest nearly touches floor, push back up.',
-    videoUrl: 'https://www.youtube.com/watch?v=IODxDxX7oi4',
+    muscleGroup: ['Pectorals', 'Triceps'],
+    equipment: ['Chest Press Machine'],
+    notes: 'Machine chest press provides stability for beginners. Adjust seat height properly.',
+    videoUrl: 'https://www.youtube.com/watch?v=xUm0BiZCWlQ',
     equipmentImages: {
-      'Bodyweight': 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400&h=300&fit=crop'
+      'Chest Press Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
     alternativeExercises: ['chest_001', 'chest_002'],
-    primaryEquipment: 'Bodyweight'
+    primaryEquipment: 'Chest Press Machine'
+  },
+
+  // BACK EXERCISES
+  {
+    id: 'back_001',
+    name: 'Lat machine pulldown',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
+    equipment: ['Lat Pulldown Machine'],
+    notes: 'Wide grip lat pulldown. Pull to upper chest, squeeze shoulder blades together.',
+    videoUrl: 'https://www.youtube.com/watch?v=CAwf7n6Luuc',
+    equipmentImages: {
+      'Lat Pulldown Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['back_002', 'back_003'],
+    primaryEquipment: 'Lat Pulldown Machine'
   },
   {
-    id: 'chest_004',
-    name: 'Incline Barbell Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Barbell', 'Incline Bench'],
-    notes: 'Set bench to 30-45 degree incline. Press barbell from chest to arm extension.',
-    videoUrl: 'https://www.youtube.com/watch?v=jHWoERZAJ_I',
+    id: 'back_002',
+    name: 'Pull-ups',
+    category: 'back',
+    difficulty: 'advanced',
+    muscleGroup: ['Latissimus Dorsi', 'Rhomboids', 'Biceps'],
+    equipment: ['Pull-up Bar'],
+    notes: 'Classic bodyweight back exercise. Start from dead hang, pull chin over bar.',
+    videoUrl: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
     equipmentImages: {
-      'Barbell': 'https://images.unsplash.com/photo-1534368420009-621b391ec95c?w=400&h=300&fit=crop',
-      'Incline Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      'Pull-up Bar': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_005', 'chest_006'],
+    alternativeExercises: ['back_001', 'back_003'],
+    primaryEquipment: 'Pull-up Bar'
+  },
+  {
+    id: 'back_003',
+    name: 'Seated cable low row with triangle bar',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Middle Trapezius', 'Rhomboids', 'Latissimus Dorsi'],
+    equipment: ['Cable Machine', 'Triangle Bar'],
+    notes: 'Seated cable row with triangle handle. Keep chest up, pull to lower ribs.',
+    videoUrl: 'https://www.youtube.com/watch?v=GZbfZ033f74',
+    equipmentImages: {
+      'Cable Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+      'Triangle Bar': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['back_001', 'back_004'],
+    primaryEquipment: 'Cable Machine'
+  },
+
+  // SHOULDER EXERCISES
+  {
+    id: 'shoulders_001',
+    name: 'Barbell shoulder press',
+    category: 'shoulders',
+    difficulty: 'intermediate',
+    muscleGroup: ['Anterior Deltoids', 'Medial Deltoids', 'Triceps'],
+    equipment: ['Barbell'],
+    notes: 'Standing or seated barbell overhead press. Keep core tight, press straight up.',
+    videoUrl: 'https://www.youtube.com/watch?v=2yjwXTZQDDI',
+    equipmentImages: {
+      'Barbell': 'https://images.unsplash.com/photo-1534368420009-621b391ec95c?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['shoulders_002', 'shoulders_003'],
     primaryEquipment: 'Barbell'
   },
   {
-    id: 'chest_005',
-    name: 'Incline Dumbbell Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Dumbbells', 'Incline Bench'],
-    notes: 'On inclined bench, press dumbbells from chest level to overhead.',
-    videoUrl: 'https://www.youtube.com/watch?v=8iPEnn-ltC8',
-    equipmentImages: {
-      'Dumbbells': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
-      'Incline Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
-    },
-    alternativeExercises: ['chest_004', 'chest_006'],
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'chest_006',
-    name: 'Incline Push-ups',
-    category: 'chest',
+    id: 'shoulders_002',
+    name: 'Standing lateral raises',
+    category: 'shoulders',
     difficulty: 'beginner',
-    muscleGroup: ['Upper Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Bodyweight', 'Bench'],
-    notes: 'Hands on elevated surface, feet on ground. Perform push-up motion.',
-    videoUrl: 'https://www.youtube.com/watch?v=8Q0v6q6v6xk',
+    muscleGroup: ['Medial Deltoids'],
+    equipment: ['Dumbbells'],
+    notes: 'Lateral raise for shoulder width. Lift arms to shoulder height, control the descent.',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
     equipmentImages: {
-      'Bodyweight': 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400&h=300&fit=crop',
-      'Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      'Dumbbells': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_004', 'chest_005'],
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_007',
-    name: 'Decline Barbell Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Barbell', 'Decline Bench'],
-    notes: 'On decline bench, press barbell from chest to full extension.',
-    videoUrl: 'https://www.youtube.com/watch?v=6JtP6ju0IMw',
-    equipmentImages: {
-      'Barbell': 'https://images.unsplash.com/photo-1534368420009-621b391ec95c?w=400&h=300&fit=crop',
-      'Decline Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
-    },
-    alternativeExercises: ['chest_008', 'chest_009'],
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'chest_008',
-    name: 'Decline Dumbbell Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Dumbbells', 'Decline Bench'],
-    notes: 'On decline bench, press dumbbells from chest to overhead.',
-    videoUrl: 'https://www.youtube.com/watch?v=8iPEnn-ltC8',
-    equipmentImages: {
-      'Dumbbells': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
-      'Decline Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
-    },
-    alternativeExercises: ['chest_007', 'chest_009'],
+    alternativeExercises: ['shoulders_001', 'shoulders_003'],
     primaryEquipment: 'Dumbbells'
   },
+
+  // ARM EXERCISES
   {
-    id: 'chest_009',
-    name: 'Decline Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Bodyweight', 'Bench'],
-    notes: 'Feet elevated on bench, hands on ground. Perform push-up motion.',
-    videoUrl: 'https://www.youtube.com/watch?v=8Q0v6q6v6xk',
-    equipmentImages: {
-      'Bodyweight': 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400&h=300&fit=crop',
-      'Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
-    },
-    alternativeExercises: ['chest_007', 'chest_008'],
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_010',
-    name: 'Dumbbell Flyes',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Lie on bench, arms extended with slight bend. Lower weights in arc motion, squeeze chest.',
-    videoUrl: 'https://www.youtube.com/watch?v=eozdVDA78K0',
-    equipmentImages: {
-      'Dumbbells': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
-      'Bench': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
-    },
-    alternativeExercises: ['chest_011', 'chest_012'],
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'chest_011',
-    name: 'Cable Flyes',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
+    id: 'arms_001',
+    name: 'Biceps cable curl',
+    category: 'arms',
+    difficulty: 'beginner',
+    muscleGroup: ['Biceps'],
     equipment: ['Cable Machine'],
-    notes: 'Set cables at chest height, bring handles together in arc motion.',
-    videoUrl: 'https://www.youtube.com/watch?v=taI4XduLpTk',
+    notes: 'Cable bicep curl provides constant tension. Keep elbows stationary.',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
     equipmentImages: {
-      'Cable Machine': 'https://images.unsplash.com/photo-1534368420009-621b391ec95c?w=400&h=300&fit=crop'
+      'Cable Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_010', 'chest_012'],
+    alternativeExercises: ['arms_002', 'arms_003'],
     primaryEquipment: 'Cable Machine'
   },
   {
-    id: 'chest_012',
-    name: 'Chest Dips',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Parallel Bars'],
-    notes: 'Lean forward slightly, lower body and press back up focusing on chest.',
-    videoUrl: 'https://www.youtube.com/watch?v=2z8JmcrW-As',
+    id: 'arms_002',
+    name: 'Cable Tricep pushdown',
+    category: 'arms',
+    difficulty: 'beginner',
+    muscleGroup: ['Triceps'],
+    equipment: ['Cable Machine'],
+    notes: 'Cable tricep pushdown. Keep elbows at sides, push down with control.',
+    videoUrl: 'https://www.youtube.com/watch?v=2-LAMcpzODU',
     equipmentImages: {
-      'Parallel Bars': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      'Cable Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_007', 'chest_009'],
-    primaryEquipment: 'Parallel Bars'
+    alternativeExercises: ['arms_001', 'arms_003'],
+    primaryEquipment: 'Cable Machine'
+  },
+
+  // CORE EXERCISES
+  {
+    id: 'core_001',
+    name: 'Crunch',
+    category: 'core',
+    difficulty: 'beginner',
+    muscleGroup: ['Rectus Abdominis'],
+    equipment: ['Bodyweight'],
+    notes: 'Basic abdominal crunch. Focus on lifting shoulder blades off ground.',
+    videoUrl: 'https://www.youtube.com/watch?v=Xyd_fa5zoEU',
+    equipmentImages: {
+      'Bodyweight': 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['core_002', 'core_003'],
+    primaryEquipment: 'Bodyweight'
   },
   {
-    id: 'chest_013',
-    name: 'Pec Deck Machine',
-    category: 'chest',
+    id: 'core_002',
+    name: 'Plank',
+    category: 'core',
     difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Pec Deck Machine'],
-    notes: 'Sit with back against pad, bring arms together in controlled motion.',
+    muscleGroup: ['Rectus Abdominis', 'Transverse Abdominis'],
+    equipment: ['Bodyweight'],
+    notes: 'Isometric core exercise. Maintain straight line from head to heels.',
+    videoUrl: 'https://www.youtube.com/watch?v=ASdvN_XEl_c',
     equipmentImages: {
-      'Pec Deck Machine': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      'Bodyweight': 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400&h=300&fit=crop'
     },
-    alternativeExercises: ['chest_010', 'chest_011'],
-    primaryEquipment: 'Pec Deck Machine'
+    alternativeExercises: ['core_001', 'core_003'],
+    primaryEquipment: 'Bodyweight'
   },
-  // Add more chest exercises (14-50) with generic realistic data
+
+  // CARDIO EXERCISES
+  {
+    id: 'cardio_001',
+    name: 'TreadMill',
+    category: 'cardio',
+    difficulty: 'beginner',
+    muscleGroup: ['Full Body'],
+    equipment: ['Treadmill'],
+    notes: 'Running or walking on treadmill. Adjust speed and incline as needed.',
+    videoUrl: 'https://www.youtube.com/watch?v=8QdRnV0IwZQ',
+    equipmentImages: {
+      'Treadmill': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['cardio_002', 'cardio_003'],
+    primaryEquipment: 'Treadmill'
+  },
+  {
+    id: 'cardio_002',
+    name: 'Stationary bike',
+    category: 'cardio',
+    difficulty: 'beginner',
+    muscleGroup: ['Full Body'],
+    equipment: ['Stationary Bike'],
+    notes: 'Low impact cardio exercise. Adjust resistance for intensity.',
+    videoUrl: 'https://www.youtube.com/watch?v=8QdRnV0IwZQ',
+    equipmentImages: {
+      'Stationary Bike': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+    },
+    alternativeExercises: ['cardio_001', 'cardio_003'],
+    primaryEquipment: 'Stationary Bike'
+  }
 ];
-
-// Generate additional exercises to reach exactly 468 total
-const generateExercise = (id: string, name: string, category: string, difficulty: 'beginner' | 'intermediate' | 'advanced', muscleGroup: string[], equipment: string[]): ExerciseData => ({
-  id,
-  name,
-  category,
-  difficulty,
-  muscleGroup,
-  equipment,
-  notes: `Proper form instructions for ${name}. Focus on controlled movement and muscle engagement.`,
-  equipmentImages: equipment.reduce((acc, eq) => {
-    acc[eq] = 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop';
-    return acc;
-  }, {} as { [key: string]: string }),
-  alternativeExercises: [],
-  primaryEquipment: equipment[0]
-});
-
-// Add remaining chest exercises (14-50)
-const additionalExercises: ExerciseData[] = [];
-for (let i = 14; i <= 50; i++) {
-  additionalExercises.push(generateExercise(
-    `chest_${i.toString().padStart(3, '0')}`,
-    `Chest Exercise ${i}`,
-    'chest',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Pectorals', 'Triceps'],
-    ['Dumbbells']
-  ));
-}
-
-// Add back exercises (3-60)
-for (let i = 3; i <= 60; i++) {
-  additionalExercises.push(generateExercise(
-    `back_${i.toString().padStart(3, '0')}`,
-    `Back Exercise ${i}`,
-    'back',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Latissimus Dorsi', 'Rhomboids'],
-    ['Cable Machine']
-  ));
-}
-
-// Add leg exercises (2-80)
-for (let i = 2; i <= 80; i++) {
-  additionalExercises.push(generateExercise(
-    `legs_${i.toString().padStart(3, '0')}`,
-    `Leg Exercise ${i}`,
-    'legs',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Quadriceps', 'Hamstrings', 'Glutes'],
-    ['Barbell']
-  ));
-}
-
-// Add shoulder exercises (1-50)
-for (let i = 1; i <= 50; i++) {
-  additionalExercises.push(generateExercise(
-    `shoulders_${i.toString().padStart(3, '0')}`,
-    `Shoulder Exercise ${i}`,
-    'shoulders',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Anterior Deltoids', 'Medial Deltoids'],
-    ['Dumbbells']
-  ));
-}
-
-// Add arm exercises (1-50)
-for (let i = 1; i <= 50; i++) {
-  additionalExercises.push(generateExercise(
-    `arms_${i.toString().padStart(3, '0')}`,
-    `Arm Exercise ${i}`,
-    'arms',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Biceps', 'Triceps'],
-    ['Dumbbells']
-  ));
-}
-
-// Add core exercises (1-50)
-for (let i = 1; i <= 50; i++) {
-  additionalExercises.push(generateExercise(
-    `core_${i.toString().padStart(3, '0')}`,
-    `Core Exercise ${i}`,
-    'core',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Rectus Abdominis', 'Obliques'],
-    ['Bodyweight']
-  ));
-}
-
-// Add cardio exercises (1-40)
-for (let i = 1; i <= 40; i++) {
-  additionalExercises.push(generateExercise(
-    `cardio_${i.toString().padStart(3, '0')}`,
-    `Cardio Exercise ${i}`,
-    'cardio',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Full Body'],
-    ['Bodyweight']
-  ));
-}
-
-// Add functional exercises (1-30)
-for (let i = 1; i <= 30; i++) {
-  additionalExercises.push(generateExercise(
-    `functional_${i.toString().padStart(3, '0')}`,
-    `Functional Exercise ${i}`,
-    'functional',
-    i % 3 === 0 ? 'advanced' : i % 2 === 0 ? 'intermediate' : 'beginner',
-    ['Full Body', 'Core'],
-    ['Kettlebell']
-  ));
-}
-
-// Add flexibility exercises (1-30)
-for (let i = 1; i <= 30; i++) {
-  additionalExercises.push(generateExercise(
-    `flexibility_${i.toString().padStart(3, '0')}`,
-    `Flexibility Exercise ${i}`,
-    'flexibility',
-    'beginner',
-    ['Full Body'],
-    ['Bodyweight']
-  ));
-}
-
-// Add plyometric exercises (1-28)
-for (let i = 1; i <= 28; i++) {
-  additionalExercises.push(generateExercise(
-    `plyometric_${i.toString().padStart(3, '0')}`,
-    `Plyometric Exercise ${i}`,
-    'plyometric',
-    i % 2 === 0 ? 'advanced' : 'intermediate',
-    ['Full Body'],
-    ['Bodyweight']
-  ));
-}
-
-// Combine all exercises to reach exactly 468
-export const completeExerciseDatabase = [...exerciseDatabase, ...additionalExercises];
 
 // Helper functions
 export function getExerciseById(id: string): ExerciseData | undefined {
-  return completeExerciseDatabase.find(exercise => exercise.id === id);
+  return exerciseDatabase.find(exercise => exercise.id === id);
 }
 
 export function getExercisesByCategory(category: string): ExerciseData[] {
-  return completeExerciseDatabase.filter(exercise => exercise.category === category);
+  return exerciseDatabase.filter(exercise => exercise.category === category);
 }
 
 export function getExercisesByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): ExerciseData[] {
-  return completeExerciseDatabase.filter(exercise => exercise.difficulty === difficulty);
+  return exerciseDatabase.filter(exercise => exercise.difficulty === difficulty);
 }
 
 export function searchExercises(query: string): ExerciseData[] {
   const lowerQuery = query.toLowerCase();
-  return completeExerciseDatabase.filter(exercise =>
+  return exerciseDatabase.filter(exercise =>
     exercise.name.toLowerCase().includes(lowerQuery) ||
     exercise.muscleGroup.some(muscle => muscle.toLowerCase().includes(lowerQuery)) ||
     exercise.equipment.some(eq => eq.toLowerCase().includes(lowerQuery)) ||
     exercise.notes.toLowerCase().includes(lowerQuery)
   );
 }
+
+export const completeExerciseDatabase = exerciseDatabase;

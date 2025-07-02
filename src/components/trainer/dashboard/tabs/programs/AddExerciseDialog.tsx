@@ -25,7 +25,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
     difficulty: '',
     notes: '',
     videoUrl: '',
-    muscleGroup: [] as string[], // Fixed: was muscleGroups
+    muscleGroup: [] as string[],
     equipment: [] as string[],
     equipmentImages: {} as { [equipment: string]: string },
     alternativeExercises: [] as string[],
@@ -34,7 +34,6 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
   
   const [newMuscleGroup, setNewMuscleGroup] = useState('');
   const [newEquipment, setNewEquipment] = useState('');
-  const [newEquipmentImage, setNewEquipmentImage] = useState('');
   const [newAlternativeExercise, setNewAlternativeExercise] = useState('');
 
   const categories = [
@@ -68,7 +67,8 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
     'Bodyweight', 'Barbell', 'Dumbbells', 'Bench', 'Pull-up Bar', 
     'Cable Machine', 'Resistance Band', 'Medicine Ball', 'Kettlebell',
     'Incline Bench', 'Decline Bench', 'Squat Rack', 'Leg Press Machine',
-    'Leg Curl Machine', 'Preacher Bench', 'Hyperextension Bench'
+    'Leg Curl Machine', 'Preacher Bench', 'Hyperextension Bench', 'Smith Machine',
+    'Hack Squat Machine', 'Lat Pulldown Machine', 'Chest Press Machine'
   ];
 
   const handleAddMuscleGroup = () => {
@@ -86,22 +86,9 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
       setFormData(prev => ({
         ...prev,
         equipment: [...prev.equipment, newEquipment],
-        primaryEquipment: prev.primaryEquipment || newEquipment // Set first equipment as primary
+        primaryEquipment: prev.primaryEquipment || newEquipment
       }));
       setNewEquipment('');
-    }
-  };
-
-  const handleAddEquipmentImage = (equipment: string) => {
-    if (newEquipmentImage) {
-      setFormData(prev => ({
-        ...prev,
-        equipmentImages: {
-          ...prev.equipmentImages,
-          [equipment]: newEquipmentImage
-        }
-      }));
-      setNewEquipmentImage('');
     }
   };
 
@@ -196,24 +183,26 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="name">Exercise Name *</Label>
+          {/* Basic Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-medium">Exercise Name *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="e.g. Custom Squat Variation"
+                className="w-full"
               />
             </div>
 
-            <div>
-              <Label htmlFor="category">Category *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-sm font-medium">Category *</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -227,14 +216,14 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="difficulty">Difficulty *</Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="difficulty" className="text-sm font-medium">Difficulty *</Label>
               <Select
                 value={formData.difficulty}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, difficulty: value }))}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select difficulty" />
                 </SelectTrigger>
                 <SelectContent>
@@ -247,32 +236,36 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="videoUrl">Video URL (YouTube, etc.)</Label>
+            <div className="space-y-2">
+              <Label htmlFor="videoUrl" className="text-sm font-medium">Video URL (YouTube, etc.)</Label>
               <Input
                 id="videoUrl"
                 type="url"
                 value={formData.videoUrl}
                 onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
                 placeholder="https://www.youtube.com/watch?v=..."
+                className="w-full"
               />
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="notes">Notes/Instructions *</Label>
+          {/* Instructions */}
+          <div className="space-y-2">
+            <Label htmlFor="notes" className="text-sm font-medium">Notes/Instructions *</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Describe how to perform the exercise, position, movement, key points..."
               rows={4}
+              className="w-full resize-none"
             />
           </div>
 
-          <div>
-            <Label>Muscle Groups *</Label>
-            <div className="flex gap-2 mb-2">
+          {/* Muscle Groups */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Muscle Groups *</Label>
+            <div className="flex gap-2">
               <Select value={newMuscleGroup} onValueChange={setNewMuscleGroup}>
                 <SelectTrigger className="flex-1">
                   <SelectValue placeholder="Select muscle group" />
@@ -285,7 +278,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                   ))}
                 </SelectContent>
               </Select>
-              <Button type="button" onClick={handleAddMuscleGroup}>
+              <Button type="button" onClick={handleAddMuscleGroup} size="sm">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -294,7 +287,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                 <Badge key={muscle} variant="secondary" className="flex items-center gap-1">
                   {muscle}
                   <X
-                    className="h-3 w-3 cursor-pointer"
+                    className="h-3 w-3 cursor-pointer hover:text-red-500"
                     onClick={() => removeMuscleGroup(muscle)}
                   />
                 </Badge>
@@ -302,9 +295,10 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
             </div>
           </div>
 
-          <div>
-            <Label>Equipment</Label>
-            <div className="flex gap-2 mb-2">
+          {/* Equipment */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Equipment</Label>
+            <div className="flex gap-2">
               <Select value={newEquipment} onValueChange={setNewEquipment}>
                 <SelectTrigger className="flex-1">
                   <SelectValue placeholder="Select equipment" />
@@ -317,7 +311,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                   ))}
                 </SelectContent>
               </Select>
-              <Button type="button" onClick={handleAddEquipment}>
+              <Button type="button" onClick={handleAddEquipment} size="sm">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -325,9 +319,9 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
               {formData.equipment.map(equip => (
                 <Badge key={equip} variant="outline" className="flex items-center gap-1">
                   {equip}
-                  {formData.primaryEquipment === equip && <span className="text-xs">(Primary)</span>}
+                  {formData.primaryEquipment === equip && <span className="text-xs text-blue-600">(Primary)</span>}
                   <X
-                    className="h-3 w-3 cursor-pointer"
+                    className="h-3 w-3 cursor-pointer hover:text-red-500"
                     onClick={() => removeEquipment(equip)}
                   />
                 </Badge>
@@ -335,37 +329,43 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
             </div>
           </div>
 
+          {/* Equipment Images */}
           {formData.equipment.length > 0 && (
-            <div>
-              <Label>Equipment Images (Optional)</Label>
-              {formData.equipment.map(equip => (
-                <div key={equip} className="flex gap-2 mb-2">
-                  <span className="w-32 text-sm flex items-center">{equip}:</span>
-                  <Input
-                    placeholder="Image URL"
-                    value={formData.equipmentImages[equip] || ''}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      equipmentImages: {
-                        ...prev.equipmentImages,
-                        [equip]: e.target.value
-                      }
-                    }))}
-                  />
-                </div>
-              ))}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium">Equipment Images (Optional)</Label>
+              <div className="space-y-2">
+                {formData.equipment.map(equip => (
+                  <div key={equip} className="flex items-center gap-2">
+                    <Label className="w-32 text-sm">{equip}:</Label>
+                    <Input
+                      placeholder="Image URL"
+                      value={formData.equipmentImages[equip] || ''}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        equipmentImages: {
+                          ...prev.equipmentImages,
+                          [equip]: e.target.value
+                        }
+                      }))}
+                      className="flex-1"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
-          <div>
-            <Label>Alternative Exercises (Optional)</Label>
-            <div className="flex gap-2 mb-2">
+          {/* Alternative Exercises */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Alternative Exercises (Optional)</Label>
+            <div className="flex gap-2">
               <Input
-                placeholder="Exercise ID (e.g. chest_001)"
+                placeholder="Exercise ID (e.g. chest_001) or name"
                 value={newAlternativeExercise}
                 onChange={(e) => setNewAlternativeExercise(e.target.value)}
+                className="flex-1"
               />
-              <Button type="button" onClick={handleAddAlternativeExercise}>
+              <Button type="button" onClick={handleAddAlternativeExercise} size="sm">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -374,7 +374,7 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                 <Badge key={exercise} variant="outline" className="flex items-center gap-1">
                   {exercise}
                   <X
-                    className="h-3 w-3 cursor-pointer"
+                    className="h-3 w-3 cursor-pointer hover:text-red-500"
                     onClick={() => removeAlternativeExercise(exercise)}
                   />
                 </Badge>
@@ -382,7 +382,8 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
             </div>
           </div>
 
-          <div className="flex justify-end gap-3">
+          {/* Form Actions */}
+          <div className="flex justify-end gap-3 pt-4 border-t">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
