@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Play, Image, ExternalLink, BarChart3 } from 'lucide-react';
@@ -50,30 +49,33 @@ export function ExerciseLibraryStatus({ exercises }: ExerciseLibraryStatusProps)
   ];
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="h-5 w-5" />
+    <Card className="mb-4">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-base">
+          <BarChart3 className="h-4 w-4" />
           Exercise Library Status
+          <Badge variant="secondary" className="ml-auto text-xs">
+            {totalExercises} Total Exercises
+          </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <CardContent className="pt-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
           {stats.map((stat) => (
-            <div key={stat.label} className={`p-4 rounded-lg border ${stat.bgColor} ${stat.borderColor}`}>
+            <div key={stat.label} className={`p-3 rounded-lg border ${stat.bgColor} ${stat.borderColor}`}>
               <div className="flex items-center gap-2 mb-2">
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                <span className="text-sm font-medium">{stat.label}</span>
+                <stat.icon className={`h-3 w-3 ${stat.color}`} />
+                <span className="text-xs font-medium">{stat.label}</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold">{stat.count}</span>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xl font-bold">{stat.count}</span>
                 <Badge variant="secondary" className="text-xs">
                   {stat.percentage}%
                 </Badge>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div 
-                  className={`h-2 rounded-full ${stat.color === 'text-blue-600' ? 'bg-blue-600' : stat.color === 'text-purple-600' ? 'bg-purple-600' : 'bg-orange-600'}`}
+                  className={`h-1.5 rounded-full ${stat.color === 'text-blue-600' ? 'bg-blue-600' : stat.color === 'text-purple-600' ? 'bg-purple-600' : 'bg-orange-600'}`}
                   style={{ width: `${stat.percentage}%` }}
                 />
               </div>
@@ -81,9 +83,9 @@ export function ExerciseLibraryStatus({ exercises }: ExerciseLibraryStatusProps)
           ))}
         </div>
         
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          <span>Library enhanced with {totalExercises} exercises, complete with media and alternatives</span>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <CheckCircle className="h-3 w-3 text-green-600" />
+          <span>Complete exercise library with {totalExercises} exercises, multimedia content and alternatives</span>
         </div>
       </CardContent>
     </Card>

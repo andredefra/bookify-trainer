@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -87,28 +88,27 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Exercise Library</DialogTitle>
+          <DialogTitle>Exercise Library ({exercises.length} exercises)</DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex-1 overflow-hidden flex flex-col min-h-0">
           {/* Status Overview */}
           <ExerciseLibraryStatus exercises={filteredExercises} />
           
-          {/* Filters */}
-          <div className="flex flex-wrap gap-3 mb-4 p-4 bg-gray-50 rounded-lg">
+          {/* Filters - More Compact */}
+          <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-50 rounded-lg">
             <Input
               type="search"
               placeholder="Search exercises..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 min-w-[200px]"
+              className="flex-1 min-w-[200px] h-9"
             />
 
-            <Label className="text-sm font-medium">Category:</Label>
             <select
-              className="rounded px-2 py-1 bg-white border border-gray-300 text-sm"
+              className="rounded px-2 py-1 bg-white border border-gray-300 text-sm h-9"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
@@ -121,11 +121,12 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
               <option value="core">Core</option>
               <option value="cardio">Cardio</option>
               <option value="functional">Functional</option>
+              <option value="flexibility">Flexibility</option>
+              <option value="plyometric">Plyometric</option>
             </select>
 
-            <Label className="text-sm font-medium">Difficulty:</Label>
             <select
-              className="rounded px-2 py-1 bg-white border border-gray-300 text-sm"
+              className="rounded px-2 py-1 bg-white border border-gray-300 text-sm h-9"
               value={difficultyFilter}
               onChange={(e) => setDifficultyFilter(e.target.value)}
             >
@@ -135,26 +136,24 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
               <option value="advanced">Advanced</option>
             </select>
 
-            <Label className="text-sm font-medium">Equipment:</Label>
             <Input
               type="text"
-              placeholder="Filter by equipment..."
+              placeholder="Equipment..."
               value={equipmentFilter}
               onChange={(e) => setEquipmentFilter(e.target.value)}
-              className="w-40 text-sm"
+              className="w-32 text-sm h-9"
             />
 
-            <Label className="text-sm font-medium">Muscle Group:</Label>
             <Input
               type="text"
-              placeholder="Filter by muscle group..."
+              placeholder="Muscle group..."
               value={muscleGroupFilter}
               onChange={(e) => setMuscleGroupFilter(e.target.value)}
-              className="w-40 text-sm"
+              className="w-32 text-sm h-9"
             />
           </div>
 
-          {/* Exercise List */}
+          {/* Exercise List - Increased Height */}
           <div className="flex-1 overflow-hidden">
             <ExerciseLibraryList
               exercises={filteredExercises}
@@ -164,12 +163,15 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
           </div>
         </div>
 
-        <div className="mt-4 flex justify-between items-center">
-          <Button variant="outline" onClick={() => setShowCreateForm(true)}>
+        <div className="mt-3 flex justify-between items-center border-t pt-3">
+          <Button variant="outline" onClick={() => setShowCreateForm(true)} size="sm">
             <Plus className="h-4 w-4 mr-2" />
             Add Exercise
           </Button>
-          <Button onClick={() => onOpenChange(false)}>Close</Button>
+          <Badge variant="secondary" className="text-xs">
+            Showing {filteredExercises.length} of {exercises.length} exercises
+          </Badge>
+          <Button onClick={() => onOpenChange(false)} size="sm">Close</Button>
         </div>
       </DialogContent>
 

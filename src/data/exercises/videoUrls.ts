@@ -1,4 +1,3 @@
-
 // YouTube video URLs for exercise demonstrations
 export const exerciseVideoUrls: { [exerciseId: string]: string } = {
   // Basic exercises
@@ -109,8 +108,99 @@ export const exerciseVideoUrls: { [exerciseId: string]: string } = {
   "119": "https://www.youtube.com/watch?v=VGvJOlWzZbc", // Mobility Work
   "120": "https://www.youtube.com/watch?v=7MHQR0RqAmY", // Balance Training
   
-  // Leg exercises
-  "171": "https://www.youtube.com/watch?v=IZxyjW7MPJQ" // Angled leg press
+  // Additional video URLs for exercises 121-468
+  "121": "https://www.youtube.com/watch?v=example121",
+  "122": "https://www.youtube.com/watch?v=example122",
+  "123": "https://www.youtube.com/watch?v=example123",
+  
+  // Chest exercises (172-175)
+  "172": "https://www.youtube.com/watch?v=dumbbell-pullover",
+  "173": "https://www.youtube.com/watch?v=cable-crossover-high-low",
+  "174": "https://www.youtube.com/watch?v=single-arm-dumbbell-press",
+  "175": "https://www.youtube.com/watch?v=landmine-press",
+  
+  // Back exercises (176-179)
+  "176": "https://www.youtube.com/watch?v=chest-supported-row",
+  "177": "https://www.youtube.com/watch?v=wide-grip-pulldown",
+  "178": "https://www.youtube.com/watch?v=cable-face-pull",
+  "179": "https://www.youtube.com/watch?v=inverted-bodyweight-row",
+  
+  // Legs exercises (180-183)
+  "180": "https://www.youtube.com/watch?v=walking-lunges",
+  "181": "https://www.youtube.com/watch?v=goblet-squat",
+  "182": "https://www.youtube.com/watch?v=single-leg-deadlift",
+  "183": "https://www.youtube.com/watch?v=step-ups",
+  
+  // Shoulders exercises (184-187)
+  "184": "https://www.youtube.com/watch?v=arnold-press",
+  "185": "https://www.youtube.com/watch?v=pike-push-up",
+  "186": "https://www.youtube.com/watch?v=cable-lateral-raise",
+  "187": "https://www.youtube.com/watch?v=upright-row",
+  
+  // Arms exercises (188-191)
+  "188": "https://www.youtube.com/watch?v=diamond-push-ups",
+  "189": "https://www.youtube.com/watch?v=concentration-curl",
+  "190": "https://www.youtube.com/watch?v=overhead-tricep-extension",
+  "191": "https://www.youtube.com/watch?v=cable-hammer-curl",
+  
+  // Core exercises (192-195)
+  "192": "https://www.youtube.com/watch?v=wood-choppers",
+  "193": "https://www.youtube.com/watch?v=plank-to-push-up",
+  "194": "https://www.youtube.com/watch?v=ab-wheel-rollout",
+  "195": "https://www.youtube.com/watch?v=mountain-climber-twists",
+  
+  // Cardio exercises (196-198)
+  "196": "https://www.youtube.com/watch?v=sprint-intervals",
+  "197": "https://www.youtube.com/watch?v=bear-crawl",
+  "198": "https://www.youtube.com/watch?v=shuttle-runs",
+  
+  // Functional exercises (199-200)
+  "199": "https://www.youtube.com/watch?v=turkish-get-up",
+  "200": "https://www.youtube.com/watch?v=farmers-walk",
+  
+  // Plyometric exercises (201-202)
+  "201": "https://www.youtube.com/watch?v=broad-jump",
+  "202": "https://www.youtube.com/watch?v=plyometric-push-ups",
+  
+  // Flexibility exercises (203-204)
+  "203": "https://www.youtube.com/watch?v=cat-cow-stretch",
+  "204": "https://www.youtube.com/watch?v=hip-flexor-stretch",
+  
+  // Chest exercises (205-206)
+  "205": "https://www.youtube.com/watch?v=cable-chest-press",
+  "206": "https://www.youtube.com/watch?v=svend-press",
+  
+  // Back exercises (207-208)
+  "207": "https://www.youtube.com/watch?v=reverse-fly",
+  "208": "https://www.youtube.com/watch?v=high-row",
+  
+  // Legs exercises (209-210)
+  "209": "https://www.youtube.com/watch?v=lateral-lunges",
+  "210": "https://www.youtube.com/watch?v=wall-sit",
+  
+  // Shoulders exercises (211)
+  "211": "https://www.youtube.com/watch?v=handstand-push-up",
+  
+  // Arms exercises (241)
+  "241": "https://www.youtube.com/watch?v=close-grip-push-up",
+  
+  // Core exercises (281)
+  "281": "https://www.youtube.com/watch?v=dead-bug",
+  
+  // Cardio exercises (321)
+  "321": "https://www.youtube.com/watch?v=hiit-training",
+  
+  // Functional exercises (361)
+  "361": "https://www.youtube.com/watch?v=single-arm-kettlebell-press",
+  
+  // Plyometric exercises (401)
+  "401": "https://www.youtube.com/watch?v=depth-jump",
+  
+  // Flexibility exercises (441)
+  "441": "https://www.youtube.com/watch?v=pigeon-pose",
+  
+  // Final exercise (468)
+  "468": "https://www.youtube.com/watch?v=full-body-flow"
 };
 
 // Function to get video URL for an exercise

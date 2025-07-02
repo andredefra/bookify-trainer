@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -75,8 +76,8 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
 
   return (
     <>
-      <ScrollArea className="h-[500px]">
-        <div className="space-y-3">
+      <ScrollArea className="h-[calc(100vh-320px)] min-h-[600px]">
+        <div className="space-y-2 pr-2">
           {exercises.map((exercise) => {
             const isExpanded = expandedCards.has(exercise.id);
             const hasVideo = exercise.videoUrl;
@@ -89,15 +90,15 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                   open={isExpanded} 
                   onOpenChange={() => toggleCardExpansion(exercise.id)}
                 >
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-2">
                     <CollapsibleTrigger asChild>
                       <div className="flex items-start justify-between cursor-pointer">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-semibold text-base hover:text-primary transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-sm hover:text-primary transition-colors truncate">
                               {exercise.name}
                             </h3>
-                            <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform shrink-0 ${isExpanded ? 'rotate-180' : ''}`} />
                             {exercise.isCustom && (
                               <Badge variant="secondary" className="text-xs">Custom</Badge>
                             )}
@@ -106,51 +107,46 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                             )}
                           </div>
                           
-                          <div className="flex flex-wrap gap-2 mb-2">
+                          <div className="flex flex-wrap gap-1 mb-1">
                             <Badge variant="outline" className="text-xs capitalize font-medium">
                               {exercise.category}
                             </Badge>
                             <Badge variant="secondary" className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
                               {exercise.difficulty}
                             </Badge>
-                            {exercise.primaryEquipment && (
-                              <Badge variant="outline" className="text-xs">
-                                Primary: {exercise.primaryEquipment}
-                              </Badge>
-                            )}
                             
                             {/* Media indicators */}
                             <div className="flex gap-1">
                               {hasVideo && (
                                 <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
-                                  <Play className="h-3 w-3 mr-1" />
+                                  <Play className="h-2 w-2 mr-1" />
                                   Video
                                 </Badge>
                               )}
                               {hasImages && (
                                 <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
-                                  <Image className="h-3 w-3 mr-1" />
+                                  <Image className="h-2 w-2 mr-1" />
                                   Images
                                 </Badge>
                               )}
                               {hasAlternatives && (
                                 <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">
-                                  <ExternalLink className="h-3 w-3 mr-1" />
+                                  <ExternalLink className="h-2 w-2 mr-1" />
                                   Alternatives
                                 </Badge>
                               )}
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap gap-1 mb-2">
-                            {exercise.muscleGroup.slice(0, 3).map((muscle, idx) => (
+                          <div className="flex flex-wrap gap-1 mb-1">
+                            {exercise.muscleGroup.slice(0, 2).map((muscle, idx) => (
                               <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
                                 {muscle}
                               </Badge>
                             ))}
-                            {exercise.muscleGroup.length > 3 && (
+                            {exercise.muscleGroup.length > 2 && (
                               <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
-                                +{exercise.muscleGroup.length - 3} more
+                                +{exercise.muscleGroup.length - 2} more
                               </Badge>
                             )}
                           </div>
@@ -169,7 +165,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-1 ml-4">
+                        <div className="flex items-center gap-1 ml-2 shrink-0">
                           {hasVideo && (
                             <Button
                               size="sm"
@@ -178,7 +174,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                                 e.stopPropagation();
                                 previewVideo(exercise.videoUrl);
                               }}
-                              className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                              className="h-7 w-7 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                               title="Watch video"
                             >
                               <Play className="h-3 w-3" />
@@ -192,7 +188,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                               e.stopPropagation();
                               onEdit(exercise);
                             }}
-                            className="h-8 w-8 p-0"
+                            className="h-7 w-7 p-0"
                             title="Edit exercise"
                           >
                             <Edit className="h-3 w-3" />
@@ -206,7 +202,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                                 e.stopPropagation();
                                 handleDeleteClick(exercise);
                               }}
-                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                              className="h-7 w-7 p-0 text-destructive hover:text-destructive"
                               title="Delete exercise"
                             >
                               <Trash2 className="h-3 w-3" />
@@ -218,11 +214,11 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                   </CardHeader>
 
                   <CollapsibleContent>
-                    <CardContent className="pt-0 space-y-4">
+                    <CardContent className="pt-0 space-y-3">
                       {/* Exercise Instructions */}
                       <div>
-                        <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                          <Info className="h-4 w-4 text-blue-500" />
+                        <h4 className="font-medium text-sm mb-1 flex items-center gap-2">
+                          <Info className="h-3 w-3 text-blue-500" />
                           Instructions
                         </h4>
                         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -240,16 +236,16 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       {/* Video Tutorial */}
                       {hasVideo && (
                         <div>
-                          <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                            <Play className="h-4 w-4 text-blue-500" />
+                          <h4 className="font-medium text-sm mb-1 flex items-center gap-2">
+                            <Play className="h-3 w-3 text-blue-500" />
                             Video Tutorial
                           </h4>
-                          <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                            <div className="w-16 h-12 bg-blue-100 rounded flex items-center justify-center">
-                              <Play className="h-6 w-6 text-blue-600" />
+                          <div className="flex items-center gap-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
+                            <div className="w-12 h-9 bg-blue-100 rounded flex items-center justify-center shrink-0">
+                              <Play className="h-4 w-4 text-blue-600" />
                             </div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-blue-900">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-blue-900 truncate">
                                 Watch {exercise.name} demonstration
                               </p>
                               <p className="text-xs text-blue-700">
@@ -259,7 +255,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                             <Button
                               size="sm"
                               onClick={() => previewVideo(exercise.videoUrl)}
-                              className="bg-blue-600 hover:bg-blue-700"
+                              className="bg-blue-600 hover:bg-blue-700 h-8 text-xs shrink-0"
                             >
                               <Play className="h-3 w-3 mr-1" />
                               Watch
@@ -269,9 +265,9 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       )}
 
                       {/* Complete Muscle Groups */}
-                      {exercise.muscleGroup.length > 3 && (
+                      {exercise.muscleGroup.length > 2 && (
                         <div>
-                          <h4 className="font-medium text-sm mb-2">All Targeted Muscles</h4>
+                          <h4 className="font-medium text-sm mb-1">All Targeted Muscles</h4>
                           <div className="flex flex-wrap gap-1">
                             {exercise.muscleGroup.map((muscle, idx) => (
                               <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
@@ -285,7 +281,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       {/* Complete Equipment List */}
                       {exercise.equipment.length > 2 && (
                         <div>
-                          <h4 className="font-medium text-sm mb-2">Required Equipment</h4>
+                          <h4 className="font-medium text-sm mb-1">Required Equipment</h4>
                           <div className="flex flex-wrap gap-1">
                             {exercise.equipment.map((eq, idx) => (
                               <Badge key={idx} variant="outline" className="text-xs">
@@ -300,7 +296,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       {hasAlternatives && (
                         <AlternativeExercisesList
                           alternativeExerciseIds={exercise.alternativeExercises!}
-                          className="mt-4"
+                          className="mt-3"
                         />
                       )}
                     </CardContent>
