@@ -17,8 +17,9 @@ export function useExerciseLibraryManager() {
     console.log('ExerciseLibraryDialog: Loading exercises');
     console.log('exerciseDatabase length:', exerciseDatabase.length);
     
-    // Start with all database exercises
+    // Start with ALL database exercises - this should be 468 exercises
     let processedExercises = [...exerciseDatabase];
+    console.log('Starting with processedExercises:', processedExercises.length);
     
     // Load localStorage data
     const customExercises = localStorage.getItem('trainer_custom_exercises');
@@ -65,6 +66,12 @@ export function useExerciseLibraryManager() {
     }
     
     console.log('Final processed exercises count:', processedExercises.length);
+    console.log('Should be around 468 exercises if database is complete');
+    
+    // Log some sample exercises to verify
+    console.log('Sample exercises:', processedExercises.slice(0, 5).map(ex => ex.name));
+    console.log('Last few exercises:', processedExercises.slice(-5).map(ex => ex.name));
+    
     setExercises(processedExercises);
   }, []);
 
