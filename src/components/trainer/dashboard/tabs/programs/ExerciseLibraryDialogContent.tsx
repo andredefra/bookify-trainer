@@ -7,7 +7,6 @@ import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { CreateExerciseDialog } from './CreateExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';
-import { ExerciseLibraryStatus } from './ExerciseLibraryStatus';
 import { ExerciseLibraryFilters } from './ExerciseLibraryFilters';
 
 interface ExerciseLibraryDialogContentProps {
@@ -61,9 +60,6 @@ export function ExerciseLibraryDialogContent({
   return (
     <>
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-        {/* Status Overview */}
-        <ExerciseLibraryStatus exercises={filteredExercises} />
-        
         {/* Filters */}
         <ExerciseLibraryFilters
           searchTerm={searchTerm}
