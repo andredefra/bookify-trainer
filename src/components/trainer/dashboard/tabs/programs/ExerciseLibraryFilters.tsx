@@ -1,5 +1,7 @@
 
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 interface ExerciseLibraryFiltersProps {
   searchTerm: string;
@@ -8,10 +10,7 @@ interface ExerciseLibraryFiltersProps {
   setCategoryFilter: (category: string) => void;
   difficultyFilter: string;
   setDifficultyFilter: (difficulty: string) => void;
-  equipmentFilter: string;
-  setEquipmentFilter: (equipment: string) => void;
-  muscleGroupFilter: string;
-  setMuscleGroupFilter: (muscleGroup: string) => void;
+  onCreateExercise: () => void;
 }
 
 export function ExerciseLibraryFilters({
@@ -21,13 +20,10 @@ export function ExerciseLibraryFilters({
   setCategoryFilter,
   difficultyFilter,
   setDifficultyFilter,
-  equipmentFilter,
-  setEquipmentFilter,
-  muscleGroupFilter,
-  setMuscleGroupFilter,
+  onCreateExercise,
 }: ExerciseLibraryFiltersProps) {
   return (
-    <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-50 rounded-lg">
+    <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-50 rounded-lg items-center">
       <Input
         type="search"
         placeholder="Search exercises..."
@@ -63,24 +59,12 @@ export function ExerciseLibraryFilters({
         <option value="beginner">Beginner</option>
         <option value="intermediate">Intermediate</option>
         <option value="advanced">Advanced</option>
-        <option value="plyometric">Plyometric</option>
       </select>
 
-      <Input
-        type="text"
-        placeholder="Equipment..."
-        value={equipmentFilter}
-        onChange={(e) => setEquipmentFilter(e.target.value)}
-        className="w-32 text-sm h-9"
-      />
-
-      <Input
-        type="text"
-        placeholder="Muscle group..."
-        value={muscleGroupFilter}
-        onChange={(e) => setMuscleGroupFilter(e.target.value)}
-        className="w-32 text-sm h-9"
-      />
+      <Button onClick={onCreateExercise} size="sm" className="ml-2">
+        <Plus className="h-4 w-4 mr-2" />
+        Add Exercise
+      </Button>
     </div>
   );
 }

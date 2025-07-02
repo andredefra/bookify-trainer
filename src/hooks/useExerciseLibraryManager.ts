@@ -8,9 +8,9 @@ export function useExerciseLibraryManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('');
-  const [equipmentFilter, setEquipmentFilter] = useState('');
-  const [muscleGroupFilter, setMuscleGroupFilter] = useState('');
   const [exercises, setExercises] = useState<ExerciseData[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 24; // Show 24 exercises per page
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const loadExercises = useCallback(() => {
@@ -102,6 +102,7 @@ export function useExerciseLibraryManager() {
     toast.success('Exercise deleted successfully!');
   };
 
+  // Filter exercises based on search and filters
   const filteredExercises = exercises.filter(exercise => {
     const searchTermMatch =
       exercise.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
@@ -109,17 +110,20 @@ export function useExerciseLibraryManager() {
 
     const categoryMatch = categoryFilter === '' || exercise.category.toLowerCase() === categoryFilter.toLowerCase();
     const difficultyMatch = difficultyFilter === '' || exercise.difficulty === difficultyFilter;
-    
-    const equipmentMatch = equipmentFilter === '' || exercise.equipment.some(eq =>
-      eq.toLowerCase().includes(equipmentFilter.toLowerCase())
-    );
 
-    const muscleGroupMatch = muscleGroupFilter === '' || exercise.muscleGroup.some(muscle =>
-      muscle.toLowerCase().includes(muscleGroupFilter.toLowerCase())
-    );
-
-    return searchTermMatch && categoryMatch && difficultyMatch && equipmentMatch && muscleGroupMatch;
+    return searchTermMatch && categoryMatch && difficultyMatch;
   });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchTerm, categoryFilter, difficultyFilter]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredExercises.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedExercises = filteredExercises.slice(startIndex, endIndex);
 
   return {
     // State
@@ -129,12 +133,16 @@ export function useExerciseLibraryManager() {
     setCategoryFilter,
     difficultyFilter,
     setDifficultyFilter,
-    equipmentFilter,
-    setEquipmentFilter,
-    muscleGroupFilter,
-    setMuscleGroupFilter,
     exercises,
     filteredExercises,
+    paginatedExercises,
+    
+    // Pagination
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems: filteredExercises.length,
     
     // Actions
     handleCreateExercise,

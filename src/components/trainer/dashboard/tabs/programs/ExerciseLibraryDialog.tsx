@@ -16,12 +16,13 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     setCategoryFilter,
     difficultyFilter,
     setDifficultyFilter,
-    equipmentFilter,
-    setEquipmentFilter,
-    muscleGroupFilter,
-    setMuscleGroupFilter,
     exercises,
     filteredExercises,
+    paginatedExercises,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    totalItems,
     handleCreateExercise,
     handleSaveExercise,
     handleResetExercise,
@@ -33,23 +34,24 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
       <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>
-            Exercise Library ({exercises.length} exercises)
+            Exercise Library ({exercises.length} exercises total)
           </DialogTitle>
         </DialogHeader>
 
         <ExerciseLibraryDialogContent
           exercises={exercises}
           filteredExercises={filteredExercises}
+          paginatedExercises={paginatedExercises}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           categoryFilter={categoryFilter}
           setCategoryFilter={setCategoryFilter}
           difficultyFilter={difficultyFilter}
           setDifficultyFilter={setDifficultyFilter}
-          equipmentFilter={equipmentFilter}
-          setEquipmentFilter={setEquipmentFilter}
-          muscleGroupFilter={muscleGroupFilter}
-          setMuscleGroupFilter={setMuscleGroupFilter}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
           onCreateExercise={handleCreateExercise}
           onEditExercise={handleSaveExercise}
           onResetExercise={handleResetExercise}
