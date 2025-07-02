@@ -44,7 +44,7 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     { value: 'arms', label: 'Arms' },
     { value: 'core', label: 'Core' },
     { value: 'cardio', label: 'Cardio' },
-    { value: 'stretching', label: 'Stretching' }
+    { value: 'functional', label: 'Functional' }
   ];
 
   const allExercises = filteredExercises;
@@ -77,14 +77,19 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <span>Exercise Library</span>
-              <Button onClick={() => setShowAddDialog(true)} className="ml-4">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Exercise
-              </Button>
-            </DialogTitle>
+            <DialogTitle>Exercise Library</DialogTitle>
           </DialogHeader>
+
+          {/* Action Bar */}
+          <div className="flex items-center justify-between pb-4 border-b">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>Manage your exercise library</span>
+            </div>
+            <Button onClick={() => setShowAddDialog(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Exercise
+            </Button>
+          </div>
 
           <div className="space-y-4">
             {/* Search and Filter Bar */}
@@ -124,7 +129,7 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
                 <ExerciseLibraryList
                   exercises={allExercises}
                   onEdit={handleEditExercise}
-                  onDelete={null} // Can't delete predefined exercises
+                  onDelete={null}
                 />
               </TabsContent>
 

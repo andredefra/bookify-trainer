@@ -10,6 +10,7 @@ import { X, Play, RotateCcw, Camera } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
 import { EditEquipmentImagesDialog } from './EditEquipmentImagesDialog';
+import { AlternativeExercisesManager } from './AlternativeExercisesManager';
 
 interface EditExerciseDialogProps {
   open: boolean;
@@ -34,6 +35,7 @@ export function EditExerciseDialog({
     videoUrl: '',
     muscleGroups: [] as string[],
     equipment: [] as string[],
+    alternativeExercises: [] as string[],
   });
   
   const [newMuscleGroup, setNewMuscleGroup] = useState('');
@@ -49,7 +51,7 @@ export function EditExerciseDialog({
     { value: 'arms', label: 'Arms' },
     { value: 'core', label: 'Core' },
     { value: 'cardio', label: 'Cardio' },
-    { value: 'stretching', label: 'Stretching' }
+    { value: 'functional', label: 'Functional' }
   ];
 
   const difficulties = [
@@ -81,6 +83,7 @@ export function EditExerciseDialog({
         videoUrl: exercise.videoUrl || '',
         muscleGroups: [...exercise.muscleGroup],
         equipment: [...exercise.equipment],
+        alternativeExercises: [...(exercise.alternativeExercises || [])],
       });
       setEquipmentImages(exercise.equipmentImages || {});
     }
@@ -142,6 +145,7 @@ export function EditExerciseDialog({
       muscleGroup: formData.muscleGroups,
       equipment: formData.equipment.length > 0 ? formData.equipment : ['Bodyweight'],
       equipmentImages: equipmentImages,
+      alternativeExercises: formData.alternativeExercises,
     });
 
     toast.success('Exercise updated successfully!');
@@ -167,12 +171,19 @@ export function EditExerciseDialog({
     }
   };
 
+  const handleAlternativesUpdate = (alternativeIds: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      alternativeExercises: alternativeIds
+    }));
+  };
+
   if (!exercise) return null;
 
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
               <span>Edit Exercise</span>
@@ -192,6 +203,7 @@ export function EditExerciseDialog({
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Basic Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="name">Exercise Name *</Label>
@@ -272,6 +284,7 @@ export function EditExerciseDialog({
               </div>
             </div>
 
+            {/* Muscle Groups */}
             <div>
               <Label>Muscle Groups *</Label>
               <div className="flex gap-2 mb-2">
@@ -304,6 +317,7 @@ export function EditExerciseDialog({
               </div>
             </div>
 
+            {/* Equipment */}
             <div>
               <Label>Equipment</Label>
               <div className="flex gap-2 mb-2">
@@ -336,6 +350,17 @@ export function EditExerciseDialog({
               </div>
             </div>
 
+            {/* Alternative Exercises */}
+            <div>
+              <Label>Alternative Exercises</Label>
+              <AlternativeExercisesManager
+                currentExercise={exercise}
+                alternativeExerciseIds={formData.alternativeExercises}
+                onUpdate={handleAlternativesUpdate}
+              />
+            </div>
+
+            {/* Equipment Images */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <Label>Equipment Images</Label>
