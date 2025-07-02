@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { Edit, Trash2, Play, RotateCcw } from 'lucide-react';
+import { Edit, Trash2, Play, RotateCcw, ChevronDown, Info, Dumbbell } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
+import { AlternativeExercisesList } from './AlternativeExercisesList';
 
 interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
@@ -17,6 +19,7 @@ interface ExerciseLibraryListProps {
 export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLibraryListProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [exerciseToDelete, setExerciseToDelete] = useState<ExerciseData | null>(null);
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
 
   const handleDeleteClick = (exercise: ExerciseData) => {
     setExerciseToDelete(exercise);
@@ -37,12 +40,34 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
     }
   };
 
+  const toggleCardExpansion = (exerciseId: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(exerciseId)) {
+        newSet.delete(exerciseId);
+      } else {
+        newSet.add(exerciseId);
+      }
+      return newSet;
+    });
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'beginner': return 'bg-green-100 text-green-800';
+      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'advanced': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   if (exercises.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">No exercises found</p>
+        <Dumbbell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <p className="text-muted-foreground text-lg font-medium">No exercises found</p>
         <p className="text-sm text-muted-foreground mt-1">
-          Try adjusting your search filters
+          Try adjusting your search filters or add some custom exercises
         </p>
       </div>
     );
@@ -52,99 +77,188 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
     <>
       <ScrollArea className="h-[500px]">
         <div className="space-y-3">
-          {exercises.map((exercise) => (
-            <Card key={exercise.id} className="relative">
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-sm">{exercise.name}</h3>
-                      {exercise.isCustom && (
-                        <Badge variant="secondary" className="text-xs">Custom</Badge>
-                      )}
-                      {exercise.isModified && (
-                        <Badge variant="outline" className="text-xs">Modified</Badge>
-                      )}
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      <Badge variant="outline" className="text-xs capitalize">
-                        {exercise.category}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs capitalize">
-                        {exercise.difficulty}
-                      </Badge>
-                    </div>
+          {exercises.map((exercise) => {
+            const isExpanded = expandedCards.has(exercise.id);
+            
+            return (
+              <Card key={exercise.id} className="relative hover:shadow-md transition-shadow">
+                <Collapsible 
+                  open={isExpanded} 
+                  onOpenChange={() => toggleCardExpansion(exercise.id)}
+                >
+                  <CardHeader className="pb-3">
+                    <CollapsibleTrigger asChild>
+                      <div className="flex items-start justify-between cursor-pointer">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-semibold text-base hover:text-primary transition-colors">
+                              {exercise.name}
+                            </h3>
+                            <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                            {exercise.isCustom && (
+                              <Badge variant="secondary" className="text-xs">Custom</Badge>
+                            )}
+                            {exercise.isModified && (
+                              <Badge variant="outline" className="text-xs">Modified</Badge>
+                            )}
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            <Badge variant="outline" className="text-xs capitalize font-medium">
+                              {exercise.category}
+                            </Badge>
+                            <Badge variant="secondary" className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
+                              {exercise.difficulty}
+                            </Badge>
+                            {exercise.primaryEquipment && (
+                              <Badge variant="outline" className="text-xs">
+                                Primary: {exercise.primaryEquipment}
+                              </Badge>
+                            )}
+                          </div>
 
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      {exercise.muscleGroup.slice(0, 3).map((muscle, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
-                          {muscle}
-                        </Badge>
-                      ))}
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {exercise.muscleGroup.slice(0, 3).map((muscle, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
+                                {muscle}
+                              </Badge>
+                            ))}
+                            {exercise.muscleGroup.length > 3 && (
+                              <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
+                                +{exercise.muscleGroup.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
+
+                          <div className="flex flex-wrap gap-1">
+                            {exercise.equipment.slice(0, 2).map((eq, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {eq}
+                              </Badge>
+                            ))}
+                            {exercise.equipment.length > 2 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{exercise.equipment.length - 2} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1 ml-4">
+                          {exercise.videoUrl && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                previewVideo(exercise.videoUrl);
+                              }}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Play className="h-3 w-3" />
+                            </Button>
+                          )}
+                          
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onEdit(exercise);
+                            }}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Edit className="h-3 w-3" />
+                          </Button>
+
+                          {onDelete && (
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteClick(exercise);
+                              }}
+                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </CollapsibleTrigger>
+                  </CardHeader>
+
+                  <CollapsibleContent>
+                    <CardContent className="pt-0 space-y-4">
+                      {/* Exercise Instructions */}
+                      <div>
+                        <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                          <Info className="h-4 w-4 text-blue-500" />
+                          Instructions
+                        </h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {exercise.notes}
+                        </p>
+                      </div>
+
+                      {/* Complete Muscle Groups */}
                       {exercise.muscleGroup.length > 3 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{exercise.muscleGroup.length - 3} more
-                        </Badge>
+                        <div>
+                          <h4 className="font-medium text-sm mb-2">All Targeted Muscles</h4>
+                          <div className="flex flex-wrap gap-1">
+                            {exercise.muscleGroup.map((muscle, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
+                                {muscle}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       )}
-                    </div>
 
-                    <div className="flex flex-wrap gap-1">
-                      {exercise.equipment.slice(0, 2).map((eq, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs">
-                          {eq}
-                        </Badge>
-                      ))}
+                      {/* Complete Equipment List */}
                       {exercise.equipment.length > 2 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{exercise.equipment.length - 2} more
-                        </Badge>
+                        <div>
+                          <h4 className="font-medium text-sm mb-2">Required Equipment</h4>
+                          <div className="flex flex-wrap gap-1">
+                            {exercise.equipment.map((eq, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {eq}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       )}
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-1 ml-4">
-                    {exercise.videoUrl && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => previewVideo(exercise.videoUrl)}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Play className="h-3 w-3" />
-                      </Button>
-                    )}
-                    
-                    <Button 
-                      size="sm" 
-                      variant="ghost"
-                      onClick={() => onEdit(exercise)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Edit className="h-3 w-3" />
-                    </Button>
+                      {/* Alternative Exercises */}
+                      {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                        <AlternativeExercisesList
+                          alternativeExerciseIds={exercise.alternativeExercises}
+                          className="mt-4"
+                        />
+                      )}
 
-                    {onDelete && (
-                      <Button 
-                        size="sm" 
-                        variant="ghost"
-                        onClick={() => handleDeleteClick(exercise)}
-                        className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="pt-0">
-                <p className="text-xs text-muted-foreground line-clamp-2">
-                  {exercise.notes}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+                      {/* Video Link */}
+                      {exercise.videoUrl && (
+                        <div>
+                          <h4 className="font-medium text-sm mb-2">Video Tutorial</h4>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => previewVideo(exercise.videoUrl)}
+                            className="flex items-center gap-2"
+                          >
+                            <Play className="h-3 w-3" />
+                            Watch Tutorial
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </CollapsibleContent>
+                </Collapsible>
+              </Card>
+            );
+          })}
         </div>
       </ScrollArea>
 
