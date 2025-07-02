@@ -1,3 +1,4 @@
+
 export interface ExerciseData {
   id: string;
   name: string;
@@ -11,6 +12,7 @@ export interface ExerciseData {
   isModified?: boolean;
   primaryEquipment?: string;
   alternativeExercises?: string[];
+  equipmentImages?: { [equipment: string]: string };
 }
 
 export const exerciseDatabase: ExerciseData[] = [
