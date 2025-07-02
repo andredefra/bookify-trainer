@@ -10,6 +10,7 @@ export interface ExerciseData {
   notes: string;
   videoUrl?: string;
   isCustom?: boolean;
+  isModified?: boolean;
   equipmentImages?: { [equipment: string]: string };
   alternativeExercises?: string[];
   isDeleted?: boolean;
