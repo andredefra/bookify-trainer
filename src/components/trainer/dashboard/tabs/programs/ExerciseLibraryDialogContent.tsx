@@ -77,20 +77,22 @@ export function ExerciseLibraryDialogContent({
 
   return (
     <>
-      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Filters */}
-        <ExerciseLibraryFilters
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          categoryFilter={categoryFilter}
-          setCategoryFilter={setCategoryFilter}
-          difficultyFilter={difficultyFilter}
-          setDifficultyFilter={setDifficultyFilter}
-          onCreateExercise={handleCreateExercise}
-        />
+        <div className="flex-shrink-0">
+          <ExerciseLibraryFilters
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+            difficultyFilter={difficultyFilter}
+            setDifficultyFilter={setDifficultyFilter}
+            onCreateExercise={handleCreateExercise}
+          />
+        </div>
 
-        {/* Exercise List */}
-        <div className="flex-1 overflow-hidden">
+        {/* Exercise List - Now with proper scroll */}
+        <div className="flex-1 min-h-0">
           <ExerciseLibraryList
             exercises={paginatedExercises}
             onEdit={handleEditExercise}
@@ -100,7 +102,7 @@ export function ExerciseLibraryDialogContent({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-4 flex justify-center">
+          <div className="flex-shrink-0 mt-4 flex justify-center">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -147,7 +149,7 @@ export function ExerciseLibraryDialogContent({
         )}
       </div>
 
-      <div className="mt-3 flex justify-between items-center border-t pt-3">
+      <div className="flex-shrink-0 mt-3 flex justify-between items-center border-t pt-3">
         <Badge variant="secondary" className="text-xs">
           Showing {paginatedExercises.length} of {totalItems} exercises (Page {currentPage} of {totalPages})
         </Badge>

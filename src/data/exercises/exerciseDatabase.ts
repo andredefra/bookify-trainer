@@ -1,3191 +1,3796 @@
+
+// Complete Exercise Database with ALL 468 exercises
 export interface ExerciseData {
   id: string;
   name: string;
   category: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
   muscleGroup: string[];
   equipment: string[];
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
   notes: string;
   videoUrl?: string;
-  equipmentImages?: { [equipment: string]: string };
+  equipmentImages?: Record<string, string>;
   alternativeExercises?: string[];
+  primaryEquipment?: string;
   isCustom?: boolean;
   isModified?: boolean;
-  primaryEquipment?: string;
 }
 
-// Complete exercise database with 468 exercises
-export const exerciseDatabase: ExerciseData[] = [
-  // LEG EXERCISES (150 exercises)
-  {
-    id: 'leg_001',
-    name: 'Angled leg press',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Leg Press Machine'],
-    notes: 'Position feet shoulder-width apart on the platform. Lower the weight with control and press through heels.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_002',
-    name: 'Horizontal Leg Press',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Leg Press Machine'],
-    notes: 'Seated horizontal leg press machine. Keep core engaged and full range of motion.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_003',
-    name: 'Leg Extension',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Leg Extension Machine'],
-    notes: 'Seated leg extension focusing on quadriceps isolation. Control the eccentric phase.',
-    primaryEquipment: 'Leg Extension Machine'
-  },
-  {
-    id: 'leg_004',
-    name: 'Seated Leg Curl',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Hamstrings'],
-    equipment: ['Leg Curl Machine'],
-    notes: 'Seated hamstring curl machine. Focus on controlled movement and full contraction.',
-    primaryEquipment: 'Leg Curl Machine'
-  },
-  {
-    id: 'leg_005',
-    name: 'Leg Curl lying down',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Hamstrings'],
-    equipment: ['Leg Curl Machine'],
-    notes: 'Lying leg curl machine. Keep hips pressed down and focus on hamstring contraction.',
-    primaryEquipment: 'Leg Curl Machine'
-  },
-  {
-    id: 'leg_006',
-    name: 'Standing Leg Curl',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings'],
-    equipment: ['Leg Curl Machine'],
-    notes: 'Single leg standing curl. Focus on balance and controlled movement.',
-    primaryEquipment: 'Leg Curl Machine'
-  },
-  {
-    id: 'leg_007',
-    name: 'Barbell squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
-    equipment: ['Barbell', 'Squat Rack'],
-    notes: 'King of all exercises. Proper form is crucial. Feet shoulder-width apart, squat to parallel.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_008',
-    name: 'Squat SMITH Machine',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Smith Machine'],
-    notes: 'Smith machine squat provides stability. Position feet slightly forward of the bar.',
-    primaryEquipment: 'Smith Machine'
-  },
-  {
-    id: 'leg_009',
-    name: 'Hack Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Hack Squat Machine'],
-    notes: 'Hack squat machine provides back support. Focus on full range of motion.',
-    primaryEquipment: 'Hack Squat Machine'
-  },
-  {
-    id: 'leg_010',
-    name: 'Front Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Core'],
-    equipment: ['Barbell', 'Squat Rack'],
-    notes: 'Hold bar across front deltoids. Elbows high, chest up, squat to parallel.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_011',
-    name: 'Goblet Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Dumbbells'],
-    notes: 'Hold dumbbell at chest level. Great for learning squat mechanics.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_012',
-    name: 'Bulgarian Split Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Rear foot elevated. Focus on front leg. Great unilateral exercise.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_013',
-    name: 'Walking Lunges',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
-    equipment: ['Dumbbells'],
-    notes: 'Step forward into lunge, then step forward with back leg. Continuous motion.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_014',
-    name: 'Reverse Lunge',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Dumbbells'],
-    notes: 'Step backward into lunge position. Return to starting position.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_015',
-    name: 'Lateral Lunge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Flexors'],
-    equipment: ['Dumbbells'],
-    notes: 'Step to side, sit back into hip. Great for lateral movement pattern.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_016',
-    name: 'Romanian Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes'],
-    equipment: ['Barbell'],
-    notes: 'Hip hinge movement. Keep bar close to body, focus on hamstring stretch.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_017',
-    name: 'Stiff Leg Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Lower Back'],
-    equipment: ['Barbell'],
-    notes: 'Keep legs relatively straight. Focus on hamstring and glute activation.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_018',
-    name: 'Single Leg Romanian Deadlift',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Core'],
-    equipment: ['Dumbbells'],
-    notes: 'One leg balance exercise. Great for stability and unilateral strength.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_019',
-    name: 'Sumo Deadlift',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
-    equipment: ['Barbell'],
-    notes: 'Wide stance deadlift. Toes pointed out. More quad dominant than conventional.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_020',
-    name: 'Calf Raise Machine',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Calves'],
-    equipment: ['Calf Raise Machine'],
-    notes: 'Rise up on toes, hold briefly, lower slowly. Full range of motion.',
-    primaryEquipment: 'Calf Raise Machine'
-  },
-  {
-    id: 'leg_021',
-    name: 'Standing Calf Raise',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Calves'],
-    equipment: ['Dumbbells'],
-    notes: 'Hold dumbbells at sides. Rise up on toes, squeeze calves at top.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_022',
-    name: 'Seated Calf Raise',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Calves'],
-    equipment: ['Seated Calf Raise Machine'],
-    notes: 'Seated position targets soleus muscle. Slow controlled movement.',
-    primaryEquipment: 'Seated Calf Raise Machine'
-  },
-  {
-    id: 'leg_023',
-    name: 'Jump Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Explosive squat with jump. Land softly back into squat position.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_024',
-    name: 'Box Step Up',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Box', 'Dumbbells'],
-    notes: 'Step up onto box, drive through heel. Step down with control.',
-    primaryEquipment: 'Box'
-  },
-  {
-    id: 'leg_025',
-    name: 'Wall Sit',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Back against wall, slide down to 90 degrees. Hold position.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_026',
-    name: 'Pistol Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Single leg squat. Requires significant strength, balance, and mobility.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_027',
-    name: 'Leg Press Wide Stance',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Leg Press Machine'],
-    notes: 'Feet wider than shoulder-width on platform. Targets inner thighs more.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_028',
-    name: 'Leg Press Narrow Stance',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Leg Press Machine'],
-    notes: 'Feet closer together on platform. More quad focused.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_029',
-    name: 'Single Leg Press',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Leg Press Machine'],
-    notes: 'One leg at a time. Great for addressing imbalances.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_030',
-    name: 'Leg Press High Foot Position',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Hamstrings'],
-    equipment: ['Leg Press Machine'],
-    notes: 'Feet higher on platform. More posterior chain activation.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_031',
-    name: 'Squat Pulse',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Small pulsing movements at bottom of squat. Increases time under tension.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_032',
-    name: 'Sumo Squat Pulse',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Inner Thighs'],
-    equipment: ['Bodyweight'],
-    notes: 'Wide stance squat with pulses. Targets inner thighs and glutes.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_033',
-    name: 'Single Leg Glute Bridge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Hamstrings'],
-    equipment: ['Bodyweight'],
-    notes: 'Bridge on one leg. Great for glute activation and strength.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_034',
-    name: 'Glute Bridge',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes', 'Hamstrings'],
-    equipment: ['Bodyweight'],
-    notes: 'Basic glute bridge. Squeeze glutes at top, lower with control.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_035',
-    name: 'Hip Thrust',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Shoulders on bench, drive hips up. Premier glute exercise.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_036',
-    name: 'Curtsy Lunge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Quadriceps'],
-    equipment: ['Dumbbells'],
-    notes: 'Step behind and across. Targets glutes from different angle.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_037',
-    name: 'Reverse Lunge with Knee Drive',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Reverse lunge followed by knee drive. Adds balance challenge.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_038',
-    name: 'Side Lunge to Curtsy',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Quadriceps', 'Inner Thighs'],
-    equipment: ['Bodyweight'],
-    notes: 'Flow from side lunge to curtsy lunge. Dynamic movement.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_039',
-    name: 'Cossack Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Flexors'],
-    equipment: ['Bodyweight'],
-    notes: 'Deep side squat with straight leg. Requires good mobility.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_040',
-    name: 'Plie Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Inner Thighs'],
-    equipment: ['Dumbbells'],
-    notes: 'Wide stance, toes out. Ballet-inspired squat variation.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_041',
-    name: 'Narrow Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Feet together or very narrow. More quad dominant.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_042',
-    name: 'Squat to Calf Raise',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Calves'],
-    equipment: ['Bodyweight'],
-    notes: 'Squat up, then calf raise at top. Compound movement.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_043',
-    name: 'Overhead Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core', 'Shoulders'],
-    equipment: ['Barbell'],
-    notes: 'Squat with arms overhead. Requires mobility and stability.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_044',
-    name: 'Zercher Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Barbell'],
-    notes: 'Bar held in elbow crease. Unique loading pattern.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_045',
-    name: 'Pause Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Barbell'],
-    notes: 'Pause at bottom of squat. Builds strength out of hole.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_046',
-    name: 'Anderson Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Barbell', 'Squat Rack'],
-    notes: 'Start from bottom position in rack. Eliminates stretch reflex.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_047',
-    name: 'Box Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Barbell', 'Box'],
-    notes: 'Squat to box, pause, then stand. Teaches proper depth.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_048',
-    name: 'Speed Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Barbell'],
-    notes: 'Fast concentric phase with lighter weight. Power development.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_049',
-    name: 'Alternating Jump Lunge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump and switch legs in air. High intensity plyometric.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_050',
-    name: 'Lateral Bounds',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump side to side, land on one foot. Lateral power development.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_051',
-    name: 'Single Leg Squat to Chair',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Chair'],
-    notes: 'Squat down to chair on one leg. Assisted pistol squat progression.',
-    primaryEquipment: 'Chair'
-  },
-  {
-    id: 'leg_052',
-    name: 'Shrimp Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Single leg squat holding opposite foot behind. Advanced movement.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_053',
-    name: 'Dragon Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Single leg squat with leg extended behind. Very advanced.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_054',
-    name: 'Archer Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Wide squat shifting weight to one side. Pistol squat progression.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_055',
-    name: 'Tuck Jump',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump bringing knees to chest. Explosive power exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_056',
-    name: 'Broad Jump',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Calves'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump forward as far as possible. Horizontal power development.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_057',
-    name: 'Single Leg Calf Raise',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Calves'],
-    equipment: ['Bodyweight'],
-    notes: 'Calf raise on one foot. More challenging than bilateral.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_058',
-    name: 'Donkey Calf Raise',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Calves'],
-    equipment: ['Donkey Calf Machine'],
-    notes: 'Bent over calf raise. Different angle of attack.',
-    primaryEquipment: 'Donkey Calf Machine'
-  },
-  {
-    id: 'leg_059',
-    name: 'Calf Press on Leg Press',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Calves'],
-    equipment: ['Leg Press Machine'],
-    notes: 'Use leg press machine for calf raises. High weight capacity.',
-    primaryEquipment: 'Leg Press Machine'
-  },
-  {
-    id: 'leg_060',
-    name: 'Toe Walks',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Calves'],
-    equipment: ['Bodyweight'],
-    notes: 'Walk on toes for distance or time. Calf endurance.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_061',
-    name: 'Heel Walks',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Shins'],
-    equipment: ['Bodyweight'],
-    notes: 'Walk on heels. Strengthens shin muscles.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_062',
-    name: 'Tibialis Raise',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Shins'],
-    equipment: ['Bodyweight'],
-    notes: 'Lift toes up while heels stay down. Shin strengthening.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_063',
-    name: 'Good Morning',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Lower Back'],
-    equipment: ['Barbell'],
-    notes: 'Bow forward with bar on shoulders. Hip hinge pattern.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_064',
-    name: 'Nordic Hamstring Curl',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings'],
-    equipment: ['Bodyweight'],
-    notes: 'Eccentric hamstring exercise. Kneel and lower body forward.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_065',
-    name: 'Glute Ham Raise',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes'],
-    equipment: ['GHD Machine'],
-    notes: 'Hamstring curl and back extension combined.',
-    primaryEquipment: 'GHD Machine'
-  },
-  {
-    id: 'leg_066',
-    name: 'Reverse Hyper',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Hamstrings'],
-    equipment: ['Reverse Hyper Machine'],
-    notes: 'Lie face down, lift legs behind. Great for posterior chain.',
-    primaryEquipment: 'Reverse Hyper Machine'
-  },
-  {
-    id: 'leg_067',
-    name: 'Single Leg Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Core'],
-    equipment: ['Dumbbells'],
-    notes: 'Balance on one leg while hinging at hip. Unilateral strength.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_068',
-    name: 'Deficit Deadlift',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Back'],
-    equipment: ['Barbell', 'Platform'],
-    notes: 'Stand on platform for greater range of motion.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_069',
-    name: 'Trap Bar Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Back'],
-    equipment: ['Trap Bar'],
-    notes: 'Stand inside hexagonal bar. More quad dominant.',
-    primaryEquipment: 'Trap Bar'
-  },
-  {
-    id: 'leg_070',
-    name: 'Snatch Grip Deadlift',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Back'],
-    equipment: ['Barbell'],
-    notes: 'Very wide grip deadlift. Greater range of motion.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_071',
-    name: 'Pause Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Back'],
-    equipment: ['Barbell'],
-    notes: 'Pause just off floor. Builds strength at sticking point.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_072',
-    name: 'Chain Deadlift',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Back'],
-    equipment: ['Barbell', 'Chains'],
-    notes: 'Chains add accommodating resistance. Variable load.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_073',
-    name: 'Band Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Back'],
-    equipment: ['Barbell', 'Resistance Band'],
-    notes: 'Bands add resistance at top. Speed and power development.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_074',
-    name: 'Dumbbell Deadlift',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Hamstrings', 'Glutes'],
-    equipment: ['Dumbbells'],
-    notes: 'Deadlift with dumbbells. Great for beginners.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_075',
-    name: 'Kettlebell Deadlift',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Hamstrings', 'Glutes'],
-    equipment: ['Kettlebell'],
-    notes: 'Deadlift with kettlebell. Single or double KB.',
-    primaryEquipment: 'Kettlebell'
-  },
-  {
-    id: 'leg_076',
-    name: 'Landmine Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Barbell', 'Landmine'],
-    notes: 'Hold end of barbell at chest. Unique loading angle.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_077',
-    name: 'Landmine Romanian Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes'],
-    equipment: ['Barbell', 'Landmine'],
-    notes: 'RDL with landmine setup. Different resistance curve.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_078',
-    name: 'Safety Bar Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Safety Squat Bar'],
-    notes: 'Specialized bar for shoulder comfort. More upright torso.',
-    primaryEquipment: 'Safety Squat Bar'
-  },
-  {
-    id: 'leg_079',
-    name: 'Belt Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Belt Squat Machine'],
-    notes: 'Weight attached to belt. No spinal loading.',
-    primaryEquipment: 'Belt Squat Machine'
-  },
-  {
-    id: 'leg_080',
-    name: 'Pendulum Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Pendulum Squat Machine'],
-    notes: 'Specialized squat machine. Smooth arc of motion.',
-    primaryEquipment: 'Pendulum Squat Machine'
-  },
-  {
-    id: 'leg_081',
-    name: 'Sissy Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Sissy Squat Machine'],
-    notes: 'Lean back while squatting. Intense quad isolation.',
-    primaryEquipment: 'Sissy Squat Machine'
-  },
-  {
-    id: 'leg_082',
-    name: 'Split Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Static lunge position. Up and down movement.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_083',
-    name: 'Rear Foot Elevated Split Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bench'],
-    notes: 'Back foot on bench. Same as Bulgarian split squat.',
-    primaryEquipment: 'Bench'
-  },
-  {
-    id: 'leg_084',
-    name: 'Front Foot Elevated Split Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Platform'],
-    notes: 'Front foot elevated. Greater range of motion.',
-    primaryEquipment: 'Platform'
-  },
-  {
-    id: 'leg_085',
-    name: 'Deficit Reverse Lunge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Platform', 'Dumbbells'],
-    notes: 'Stand on platform, step down. Greater range.',
-    primaryEquipment: 'Platform'
-  },
-  {
-    id: 'leg_086',
-    name: 'Clock Lunges',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Lunge in different directions like clock positions.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_087',
-    name: '180 Degree Jump Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump squat with 180 degree turn. Adds coordination.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_088',
-    name: 'Single Leg Box Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Box'],
-    notes: 'Single leg squat to box. Pistol squat progression.',
-    primaryEquipment: 'Box'
-  },
-  {
-    id: 'leg_089',
-    name: 'Pulse Lunge',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Small pulses at bottom of lunge. Time under tension.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_090',
-    name: 'Jumping Lunge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump up from lunge position. Plyometric exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_091',
-    name: 'Single Leg Hip Thrust',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes'],
-    equipment: ['Bench'],
-    notes: 'Hip thrust on one leg. Great glute isolation.',
-    primaryEquipment: 'Bench'
-  },
-  {
-    id: 'leg_092',
-    name: 'Weighted Hip Thrust',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Hip thrust with weight. Premier glute exercise.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_093',
-    name: 'Banded Hip Thrust',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes'],
-    equipment: ['Resistance Band', 'Bench'],
-    notes: 'Hip thrust with band resistance. Glute activation.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_094',
-    name: 'Frog Pump',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Hip thrust with feet together, knees out. Glute isolation.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_095',
-    name: 'Single Leg Glute Bridge Hold',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Hold bridge position on one leg. Isometric exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_096',
-    name: 'Marching Glute Bridge',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Alternate lifting legs while in bridge. Core stability.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_097',
-    name: 'Glute Bridge March',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'March legs while holding bridge position.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_098',
-    name: 'Fire Hydrant',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes', 'Hip Abductors'],
-    equipment: ['Bodyweight'],
-    notes: 'On hands and knees, lift leg to side. Glute medius.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_099',
-    name: 'Clamshell',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes', 'Hip Abductors'],
-    equipment: ['Bodyweight'],
-    notes: 'Side lying, lift top knee. Hip abductor strengthening.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_100',
-    name: 'Monster Walk',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes', 'Hip Abductors'],
-    equipment: ['Resistance Band'],
-    notes: 'Walk laterally with band around ankles. Glute activation.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_101',
-    name: 'Lateral Walk',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes', 'Hip Abductors'],
-    equipment: ['Resistance Band'],
-    notes: 'Side steps with band resistance. Hip abductor strength.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_102',
-    name: 'Crab Walk',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Glutes', 'Hip Abductors'],
-    equipment: ['Resistance Band'],
-    notes: 'Squat position, walk sideways with band.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_103',
-    name: 'Banded Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Resistance Band'],
-    notes: 'Squat with band around knees. Glute activation.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_104',
-    name: 'Wall Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Wall'],
-    notes: 'Back against wall while squatting. Assisted squat.',
-    primaryEquipment: 'Wall'
-  },
-  {
-    id: 'leg_105',
-    name: 'Elevator Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Squat in stages like elevator floors. Time under tension.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_106',
-    name: '1.5 Rep Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Full squat, half up, back down, then full up.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_107',
-    name: 'Hindu Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Calves'],
-    equipment: ['Bodyweight'],
-    notes: 'Rise onto toes at bottom, arms swing. Traditional exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_108',
-    name: 'Prisoner Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Hands behind head during squat. Bodyweight variation.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_109',
-    name: 'Eagle Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Arms wrapped like eagle pose while squatting.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_110',
-    name: 'Twist Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Add torso twist at top of squat. Core engagement.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_111',
-    name: 'Star Jump Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump squat with arms and legs spread like star.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_112',
-    name: 'Pop Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump feet out to squat, then back together.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_113',
-    name: 'Burpee Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Full Body'],
-    equipment: ['Bodyweight'],
-    notes: 'Squat into burpee movement. Full body exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_114',
-    name: 'Squat Thrust',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Squat down, jump feet back, then forward.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_115',
-    name: 'Single Leg Squat Assisted',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['TRX'],
-    notes: 'Single leg squat with assistance. Pistol progression.',
-    primaryEquipment: 'TRX'
-  },
-  {
-    id: 'leg_116',
-    name: 'TRX Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['TRX'],
-    notes: 'Squat holding TRX handles. Assisted squat.',
-    primaryEquipment: 'TRX'
-  },
-  {
-    id: 'leg_117',
-    name: 'TRX Jump Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['TRX'],
-    notes: 'Jump squat with TRX assistance. Plyometric training.',
-    primaryEquipment: 'TRX'
-  },
-  {
-    id: 'leg_118',
-    name: 'Resistance Band Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Resistance Band'],
-    notes: 'Squat standing on resistance band. Variable resistance.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_119',
-    name: 'Bosu Ball Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
-    equipment: ['Bosu Ball'],
-    notes: 'Squat on unstable surface. Balance and stability.',
-    primaryEquipment: 'Bosu Ball'
-  },
-  {
-    id: 'leg_120',
-    name: 'Medicine Ball Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Medicine Ball'],
-    notes: 'Hold medicine ball during squat. Added resistance.',
-    primaryEquipment: 'Medicine Ball'
-  },
-  {
-    id: 'leg_121',
-    name: 'Stability Ball Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Stability Ball'],
-    notes: 'Ball between back and wall. Assisted squat.',
-    primaryEquipment: 'Stability Ball'
-  },
-  {
-    id: 'leg_122',
-    name: 'Single Leg Step Down',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Step'],
-    notes: 'Step down slowly on one leg. Eccentric strength.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_123',
-    name: 'Lateral Step Up',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Abductors'],
-    equipment: ['Step'],
-    notes: 'Step up sideways onto platform. Lateral movement.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_124',
-    name: 'Cross Over Step Up',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Step'],
-    notes: 'Step up crossing leg over. Multi-planar movement.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_125',
-    name: 'Step Up with Knee Drive',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Flexors'],
-    equipment: ['Step'],
-    notes: 'Step up and drive opposite knee high. Dynamic movement.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_126',
-    name: 'Explosive Step Up',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Step'],
-    notes: 'Step up explosively, both feet leave ground.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_127',
-    name: 'Single Leg Romanian Deadlift to Knee Drive',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Core'],
-    equipment: ['Dumbbells'],
-    notes: 'RDL followed by knee drive. Complex movement.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_128',
-    name: 'B-Stance Romanian Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes'],
-    equipment: ['Dumbbells'],
-    notes: 'One foot forward, one back. Asymmetrical loading.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'leg_129',
-    name: 'Suitcase Deadlift',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Core'],
-    equipment: ['Dumbbell'],
-    notes: 'Hold weight at side like suitcase. Unilateral loading.',
-    primaryEquipment: 'Dumbbell'
-  },
-  {
-    id: 'leg_130',
-    name: 'Jefferson Deadlift',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Hamstrings', 'Glutes', 'Core'],
-    equipment: ['Barbell'],
-    notes: 'Straddle bar, one hand front, one back. Unique pattern.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'leg_131',
-    name: 'Siff Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Deep squat rising onto toes. Quad and calf integration.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_132',
-    name: 'Spanish Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Resistance Band'],
-    notes: 'Band pulls shins back during squat. Quad isolation.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_133',
-    name: 'Peterson Step Up',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Step'],
-    notes: 'Step up with toe on step, heel off. VMO focus.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_134',
-    name: 'Terminal Knee Extension',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Resistance Band'],
-    notes: 'Band behind knee, extend knee fully. VMO activation.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'leg_135',
-    name: 'Quad Set',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Tighten quad muscle isometrically. Muscle activation.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_136',
-    name: 'Straight Leg Raise',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps', 'Hip Flexors'],
-    equipment: ['Bodyweight'],
-    notes: 'Lying down, lift straight leg. Quad and hip flexor.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_137',
-    name: 'Short Arc Quad',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Small range knee extension over bolster. Rehab exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_138',
-    name: 'Petersen Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Petersen Squat Device'],
-    notes: 'Shins fixed, squat movement. Intense quad isolation.',
-    primaryEquipment: 'Petersen Squat Device'
-  },
-  {
-    id: 'leg_139',
-    name: 'Reverse Nordic',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Kneel and lean back. Eccentric quad exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_140',
-    name: 'ATG Split Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Ass to grass split squat. Full range of motion.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_141',
-    name: 'Poliquin Step Up',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Step', 'Dumbbells'],
-    notes: 'Step up, lower slowly. Eccentric emphasis.',
-    primaryEquipment: 'Step'
-  },
-  {
-    id: 'leg_142',
-    name: 'Rearfoot Elevated Split Squat ISO Hold',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bench'],
-    notes: 'Hold bottom position of Bulgarian split squat. Isometric.',
-    primaryEquipment: 'Bench'
-  },
-  {
-    id: 'leg_143',
-    name: 'Cyclist Squat',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Heels elevated, deep squat. Mimics cycling position.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_144',
-    name: 'Heels Elevated Squat',
-    category: 'legs',
-    difficulty: 'beginner',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Weight Plate'],
-    notes: 'Heels on plate during squat. Increases quad activation.',
-    primaryEquipment: 'Weight Plate'
-  },
-  {
-    id: 'leg_145',
-    name: 'Duck Walk',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Walk in deep squat position. Quad endurance.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_146',
-    name: 'Single Leg Wall Sit',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps'],
-    equipment: ['Wall'],
-    notes: 'Wall sit on one leg. Unilateral quad strength.',
-    primaryEquipment: 'Wall'
-  },
-  {
-    id: 'leg_147',
-    name: 'Isometric Squat Hold',
-    category: 'legs',
-    difficulty: 'intermediate',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Hold squat position for time. Isometric strength.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_148',
-    name: 'Jump Squat to Tuck Jump',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Bodyweight'],
-    notes: 'Jump squat followed by tuck jump. Complex plyometric.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'leg_149',
-    name: 'Depth Drop to Jump Squat',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Box'],
-    notes: 'Drop from box, immediately jump squat. Reactive strength.',
-    primaryEquipment: 'Box'
-  },
-  {
-    id: 'leg_150',
-    name: 'Single Leg Depth Drop',
-    category: 'legs',
-    difficulty: 'advanced',
-    muscleGroup: ['Quadriceps', 'Glutes'],
-    equipment: ['Box'],
-    notes: 'Drop from box landing on one leg. Advanced plyometric.',
-    primaryEquipment: 'Box'
-  },
-
-  // CHEST EXERCISES (60 exercises)
+// CHEST EXERCISES (30 exercises)
+const chestExercises: ExerciseData[] = [
   {
     id: 'chest_001',
-    name: 'Dumbbell flat bench press',
+    name: 'Bench Press',
     category: 'chest',
+    muscleGroup: ['pectorals', 'triceps', 'anterior deltoids'],
+    equipment: ['barbell', 'bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Classic chest exercise. Lower dumbbells to chest level with control, press up explosively.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Lie on bench, grip barbell shoulder-width apart, lower to chest, press up',
+    videoUrl: 'https://www.youtube.com/watch?v=gRVjAtPip0Y',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'chest_002',
-    name: 'Barbell flat bench press',
+    name: 'Incline Dumbbell Press',
     category: 'chest',
+    muscleGroup: ['upper pectorals', 'anterior deltoids', 'triceps'],
+    equipment: ['dumbbells', 'incline bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps', 'Anterior Deltoids'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'The king of chest exercises. Grip slightly wider than shoulders, lower to chest.',
-    primaryEquipment: 'Barbell'
+    notes: 'Set bench to 30-45 degrees, press dumbbells from chest level',
+    videoUrl: 'https://www.youtube.com/watch?v=8iPEnn-ltC8',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_003',
-    name: 'Chest Press Machine',
+    name: 'Push-ups',
     category: 'chest',
+    muscleGroup: ['pectorals', 'triceps', 'anterior deltoids'],
+    equipment: ['bodyweight'],
     difficulty: 'beginner',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Chest Press Machine'],
-    notes: 'Machine chest press provides stability for beginners. Adjust seat height properly.',
-    primaryEquipment: 'Chest Press Machine'
+    notes: 'Keep body straight, lower chest to ground, push back up',
+    videoUrl: 'https://www.youtube.com/watch?v=IODxDxX7oi4',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'chest_004',
-    name: 'Incline Barbell Press',
+    name: 'Dumbbell Flyes',
     category: 'chest',
+    muscleGroup: ['pectorals'],
+    equipment: ['dumbbells', 'bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals', 'Anterior Deltoids'],
-    equipment: ['Barbell', 'Incline Bench'],
-    notes: 'Incline bench 30-45 degrees. Targets upper chest more than flat press.',
-    primaryEquipment: 'Barbell'
+    notes: 'Lie on bench, arms slightly bent, lower weights in arc motion',
+    videoUrl: 'https://www.youtube.com/watch?v=eozdVDA78K0',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_005',
-    name: 'Incline Dumbbell Press',
+    name: 'Decline Bench Press',
     category: 'chest',
+    muscleGroup: ['lower pectorals', 'triceps'],
+    equipment: ['barbell', 'decline bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals', 'Anterior Deltoids'],
-    equipment: ['Dumbbells', 'Incline Bench'],
-    notes: 'Incline dumbbell press allows greater range of motion than barbell.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Set bench to decline position, press barbell from lower chest',
+    videoUrl: 'https://www.youtube.com/watch?v=LfyQBUKR8SE',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'chest_006',
-    name: 'Decline Barbell Press',
+    name: 'Cable Crossover',
     category: 'chest',
+    muscleGroup: ['pectorals'],
+    equipment: ['cable machine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Barbell', 'Decline Bench'],
-    notes: 'Decline angle targets lower chest. Secure feet properly.',
-    primaryEquipment: 'Barbell'
+    notes: 'Stand between cables, bring handles together in front of chest',
+    videoUrl: 'https://www.youtube.com/watch?v=taI4XduLpTk',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'chest_007',
-    name: 'Decline Dumbbell Press',
+    name: 'Chest Dips',
     category: 'chest',
+    muscleGroup: ['lower pectorals', 'triceps'],
+    equipment: ['dip bars'],
     difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Dumbbells', 'Decline Bench'],
-    notes: 'Decline dumbbell press with greater range of motion.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Lean forward slightly, lower body until stretch in chest',
+    videoUrl: 'https://www.youtube.com/watch?v=2z8JmcrW-As',
+    primaryEquipment: 'dip bars'
   },
   {
     id: 'chest_008',
-    name: 'Dumbbell Flyes Flat',
+    name: 'Pec Deck Machine',
     category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Isolation exercise for chest. Keep slight bend in elbows throughout.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['pectorals'],
+    equipment: ['pec deck machine'],
+    difficulty: 'beginner',
+    notes: 'Sit upright, bring arms together in front of chest',
+    videoUrl: 'https://www.youtube.com/watch?v=Z9dGOPw3GVs',
+    primaryEquipment: 'pec deck machine'
   },
   {
     id: 'chest_009',
-    name: 'Dumbbell Flyes Incline',
+    name: 'Incline Barbell Press',
     category: 'chest',
+    muscleGroup: ['upper pectorals', 'anterior deltoids', 'triceps'],
+    equipment: ['barbell', 'incline bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals'],
-    equipment: ['Dumbbells', 'Incline Bench'],
-    notes: 'Incline flyes target upper chest. Control the weight throughout.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Set bench to 30-45 degrees, press barbell from upper chest',
+    videoUrl: 'https://www.youtube.com/watch?v=DbFgADa2PL8',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'chest_010',
-    name: 'Cable Crossover',
+    name: 'Diamond Push-ups',
     category: 'chest',
+    muscleGroup: ['triceps', 'inner pectorals'],
+    equipment: ['bodyweight'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Cable Machine'],
-    notes: 'Stand between cables, bring handles together in arc motion.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Form diamond shape with hands, focus on tricep engagement',
+    videoUrl: 'https://www.youtube.com/watch?v=J0DnG1_S92I',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'chest_011',
-    name: 'Push-ups',
+    name: 'Wide Grip Push-ups',
     category: 'chest',
+    muscleGroup: ['outer pectorals', 'anterior deltoids'],
+    equipment: ['bodyweight'],
     difficulty: 'beginner',
-    muscleGroup: ['Pectorals', 'Triceps', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Classic bodyweight chest exercise. Keep body straight throughout.',
-    primaryEquipment: 'Bodyweight'
+    notes: 'Place hands wider than shoulders, emphasize chest stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=5L4kdKG-nm8',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'chest_012',
-    name: 'Incline Push-ups',
+    name: 'Machine Chest Press',
     category: 'chest',
+    muscleGroup: ['pectorals', 'triceps', 'anterior deltoids'],
+    equipment: ['chest press machine'],
     difficulty: 'beginner',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Bench'],
-    notes: 'Hands on elevated surface. Easier than regular push-ups.',
-    primaryEquipment: 'Bench'
+    notes: 'Sit upright, press handles forward in controlled motion',
+    videoUrl: 'https://www.youtube.com/watch?v=xUm0BiZCWlQ',
+    primaryEquipment: 'chest press machine'
   },
   {
     id: 'chest_013',
-    name: 'Decline Push-ups',
+    name: 'Pullovers',
     category: 'chest',
+    muscleGroup: ['pectorals', 'lats', 'serratus anterior'],
+    equipment: ['dumbbell', 'bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals', 'Triceps'],
-    equipment: ['Bench'],
-    notes: 'Feet elevated on bench. More challenging than regular push-ups.',
-    primaryEquipment: 'Bench'
+    notes: 'Lie across bench, lower dumbbell behind head, pull over chest',
+    videoUrl: 'https://www.youtube.com/watch?v=FK8QJbympk8',
+    primaryEquipment: 'dumbbell'
   },
   {
     id: 'chest_014',
-    name: 'Diamond Push-ups',
+    name: 'Incline Dumbbell Flyes',
     category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Triceps', 'Pectorals'],
-    equipment: ['Bodyweight'],
-    notes: 'Hands form diamond shape. More tricep focused than regular push-ups.',
-    primaryEquipment: 'Bodyweight'
+    muscleGroup: ['upper pectorals'],
+    equipment: ['dumbbells', 'incline bench'],
+    difficulty: 'intermediate',
+    notes: 'Set bench to incline, perform flye motion targeting upper chest',
+    videoUrl: 'https://www.youtube.com/watch?v=fhTfKZr1jMM',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_015',
-    name: 'Wide Grip Push-ups',
+    name: 'Decline Dumbbell Press',
     category: 'chest',
+    muscleGroup: ['lower pectorals', 'triceps'],
+    equipment: ['dumbbells', 'decline bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Bodyweight'],
-    notes: 'Hands wider than shoulders. More chest activation.',
-    primaryEquipment: 'Bodyweight'
+    notes: 'Set bench to decline position, press dumbbells from lower chest',
+    videoUrl: 'https://www.youtube.com/watch?v=Pqt5fb0Ci8Y',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_016',
-    name: 'Pec Deck Machine',
+    name: 'Single Arm Dumbbell Press',
     category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Pec Deck Machine'],
-    notes: 'Seated chest fly machine. Squeeze chest muscles at peak contraction.',
-    primaryEquipment: 'Pec Deck Machine'
+    muscleGroup: ['pectorals', 'core stability'],
+    equipment: ['dumbbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Press one dumbbell at a time, engage core for stability',
+    videoUrl: 'https://www.youtube.com/watch?v=3Hc6mGLrYOc',
+    primaryEquipment: 'dumbbell'
   },
   {
     id: 'chest_017',
-    name: 'Chest Dips',
+    name: 'Cable Chest Press',
     category: 'chest',
+    muscleGroup: ['pectorals', 'triceps'],
+    equipment: ['cable machine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals', 'Triceps'],
-    equipment: ['Dip Station'],
-    notes: 'Lean forward slightly to target chest more. Control the descent.',
-    primaryEquipment: 'Dip Station'
+    notes: 'Set cables at chest height, press forward with controlled motion',
+    videoUrl: 'https://www.youtube.com/watch?v=F4YOzb9OhBY',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'chest_018',
-    name: 'Cable Flyes High to Low',
+    name: 'Landmine Press',
     category: 'chest',
+    muscleGroup: ['pectorals', 'anterior deltoids', 'core'],
+    equipment: ['barbell', 'landmine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals'],
-    equipment: ['Cable Machine'],
-    notes: 'Cables set high, pull down and across body. Targets lower chest.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Press barbell from landmine position, engage core throughout',
+    videoUrl: 'https://www.youtube.com/watch?v=ydgc4KAKIcY',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'chest_019',
-    name: 'Cable Flyes Low to High',
+    name: 'Squeeze Press',
     category: 'chest',
+    muscleGroup: ['inner pectorals', 'triceps'],
+    equipment: ['dumbbells', 'bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals'],
-    equipment: ['Cable Machine'],
-    notes: 'Cables set low, pull up and across body. Targets upper chest.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Press dumbbells together while pressing up, squeeze throughout',
+    videoUrl: 'https://www.youtube.com/watch?v=RzHmLQr0Bvc',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_020',
-    name: 'Pullovers Dumbbell',
+    name: 'Archer Push-ups',
     category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Latissimus Dorsi'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Lie across bench, lower dumbbell behind head. Great stretch for chest.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['pectorals', 'triceps', 'anterior deltoids'],
+    equipment: ['bodyweight'],
+    difficulty: 'advanced',
+    notes: 'Shift weight to one arm during push-up, alternate sides',
+    videoUrl: 'https://www.youtube.com/watch?v=_yNaAQKwJnE',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'chest_021',
-    name: 'Svend Press',
+    name: 'Clap Push-ups',
     category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Weight Plate'],
-    notes: 'Squeeze plate between palms and press out. Isometric chest work.',
-    primaryEquipment: 'Weight Plate'
+    muscleGroup: ['pectorals', 'triceps', 'power'],
+    equipment: ['bodyweight'],
+    difficulty: 'advanced',
+    notes: 'Explosive push-up with clap at top, focus on power',
+    videoUrl: 'https://www.youtube.com/watch?v=7eqCH5Zbh1M',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'chest_022',
-    name: 'Floor Press',
+    name: 'Incline Push-ups',
     category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Barbell'],
-    notes: 'Bench press lying on floor. Reduces range of motion.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['pectorals', 'triceps'],
+    equipment: ['bench', 'bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Place hands on elevated surface, easier variation of push-ups',
+    videoUrl: 'https://www.youtube.com/watch?v=cfQlYJZzP0M',
+    primaryEquipment: 'bench'
   },
   {
     id: 'chest_023',
-    name: 'Single Arm Dumbbell Press',
+    name: 'Decline Push-ups',
     category: 'chest',
+    muscleGroup: ['upper pectorals', 'anterior deltoids'],
+    equipment: ['bench', 'bodyweight'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Dumbbell', 'Bench'],
-    notes: 'Press one arm at a time. Adds core stability challenge.',
-    primaryEquipment: 'Dumbbell'
+    notes: 'Place feet on elevated surface, targets upper chest',
+    videoUrl: 'https://www.youtube.com/watch?v=SKPab2YC8BE',
+    primaryEquipment: 'bench'
   },
   {
     id: 'chest_024',
-    name: 'Pause Bench Press',
+    name: 'Svend Press',
     category: 'chest',
+    muscleGroup: ['inner pectorals'],
+    equipment: ['weight plates'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Pause bar on chest before pressing. Eliminates bounce.',
-    primaryEquipment: 'Barbell'
+    notes: 'Squeeze plates together and press forward, focus on squeeze',
+    videoUrl: 'https://www.youtube.com/watch?v=hYQhX0Lv8Gw',
+    primaryEquipment: 'weight plates'
   },
   {
     id: 'chest_025',
-    name: 'Close Grip Bench Press',
+    name: 'Resistance Band Chest Press',
     category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Triceps', 'Pectorals'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Narrow grip, more tricep focused. Keep elbows tucked.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['pectorals', 'triceps'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Anchor band behind, press forward with controlled motion',
+    videoUrl: 'https://www.youtube.com/watch?v=DGFADZLjYLs',
+    primaryEquipment: 'resistance bands'
   },
   {
     id: 'chest_026',
-    name: 'Reverse Grip Bench Press',
+    name: 'Hex Press',
     category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Upper Pectorals', 'Triceps'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Underhand grip targets upper chest. Use spotter.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['inner pectorals', 'triceps'],
+    equipment: ['dumbbells', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Hold dumbbells together, press up while maintaining contact',
+    videoUrl: 'https://www.youtube.com/watch?v=eozdVDA78K0',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_027',
-    name: 'Smith Machine Bench Press',
+    name: 'Floor Press',
     category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Smith Machine', 'Bench'],
-    notes: 'Guided bar path provides stability. Good for beginners.',
-    primaryEquipment: 'Smith Machine'
+    muscleGroup: ['pectorals', 'triceps'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Lie on floor, press dumbbells from chest, limited range of motion',
+    videoUrl: 'https://www.youtube.com/watch?v=3bBVQBP7TcQ',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'chest_028',
-    name: 'Machine Chest Fly',
+    name: 'Cable Flyes',
     category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Chest Fly Machine'],
-    notes: 'Seated chest fly with machine guidance. Isolation exercise.',
-    primaryEquipment: 'Chest Fly Machine'
+    muscleGroup: ['pectorals'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Set cables at chest height, bring handles together in arc motion',
+    videoUrl: 'https://www.youtube.com/watch?v=taI4XduLpTk',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'chest_029',
-    name: 'Cable Chest Press',
+    name: 'T-Push-ups',
     category: 'chest',
+    muscleGroup: ['pectorals', 'core', 'shoulders'],
+    equipment: ['bodyweight'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Cable Machine'],
-    notes: 'Standing cable press. Different angle than bench press.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Perform push-up, rotate to side plank, alternate sides',
+    videoUrl: 'https://www.youtube.com/watch?v=vVEgeqHkScY',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'chest_030',
-    name: 'Landmine Chest Press',
+    name: 'Isometric Push-up Hold',
     category: 'chest',
+    muscleGroup: ['pectorals', 'triceps', 'core'],
+    equipment: ['bodyweight'],
     difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Barbell', 'Landmine'],
-    notes: 'Press barbell at angle. Single or double arm variation.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'chest_031',
-    name: 'Hindu Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Shoulders', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Flowing push-up motion. Dive down and forward.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_032',
-    name: 'Archer Push-ups',
-    category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Wide grip, shift weight to one side. Unilateral emphasis.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_033',
-    name: 'One Arm Push-ups',
-    category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Pectorals', 'Triceps', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Ultimate push-up progression. Requires significant strength.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_034',
-    name: 'Clapping Push-ups',
-    category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Explosive push-up with clap. Plyometric exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_035',
-    name: 'Staggered Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Bodyweight'],
-    notes: 'One hand forward, one back. Changes muscle emphasis.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_036',
-    name: 'Pike Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Shoulders', 'Upper Chest'],
-    equipment: ['Bodyweight'],
-    notes: 'Inverted V position. More shoulder focused.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_037',
-    name: 'T Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Push-up with side plank rotation. Adds core work.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_038',
-    name: 'Spiderman Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Bring knee to elbow during push-up. Dynamic movement.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_039',
-    name: 'Divebomber Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Shoulders'],
-    equipment: ['Bodyweight'],
-    notes: 'Dive forward and scoop up. Flowing movement pattern.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_040',
-    name: 'Pseudo Planche Push-ups',
-    category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Pectorals', 'Shoulders'],
-    equipment: ['Bodyweight'],
-    notes: 'Hands by ribs, lean forward. Advanced progression.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'chest_041',
-    name: 'Ring Push-ups',
-    category: 'chest',
-    difficulty: 'advanced',
-    muscleGroup: ['Pectorals', 'Triceps', 'Core'],
-    equipment: ['Gymnastics Rings'],
-    notes: 'Push-ups on unstable rings. Requires stability.',
-    primaryEquipment: 'Gymnastics Rings'
-  },
-  {
-    id: 'chest_042',
-    name: 'TRX Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['TRX'],
-    notes: 'Hands in TRX handles. Unstable surface training.',
-    primaryEquipment: 'TRX'
-  },
-  {
-    id: 'chest_043',
-    name: 'Bosu Ball Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Bosu Ball'],
-    notes: 'Hands on Bosu ball. Balance and stability challenge.',
-    primaryEquipment: 'Bosu Ball'
-  },
-  {
-    id: 'chest_044',
-    name: 'Medicine Ball Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Medicine Ball'],
-    notes: 'Hands on medicine ball. Changes angle and stability.',
-    primaryEquipment: 'Medicine Ball'
-  },
-  {
-    id: 'chest_045',
-    name: 'Resistance Band Chest Press',
-    category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Resistance Band'],
-    notes: 'Band chest press standing or lying. Variable resistance.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'chest_046',
-    name: 'Resistance Band Flyes',
-    category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Resistance Band'],
-    notes: 'Fly motion with resistance band. Constant tension.',
-    primaryEquipment: 'Resistance Band'
-  },
-  {
-    id: 'chest_047',
-    name: 'Kettlebell Chest Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Kettlebell', 'Bench'],
-    notes: 'Press kettlebells from chest. Different grip challenge.',
-    primaryEquipment: 'Kettlebell'
-  },
-  {
-    id: 'chest_048',
-    name: 'Single Arm Cable Chest Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Cable Machine'],
-    notes: 'One arm cable press. Anti-rotation core work.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'chest_049',
-    name: 'Decline Flyes',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals'],
-    equipment: ['Dumbbells', 'Decline Bench'],
-    notes: 'Flyes on decline bench. Targets lower chest fibers.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'chest_050',
-    name: 'Incline Cable Flyes',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals'],
-    equipment: ['Cable Machine', 'Incline Bench'],
-    notes: 'Cable flyes on incline bench. Upper chest isolation.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'chest_051',
-    name: 'Flat Cable Flyes',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Cable Machine', 'Bench'],
-    notes: 'Cable flyes on flat bench. Constant tension throughout.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'chest_052',
-    name: 'High Cable Crossover',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Lower Pectorals'],
-    equipment: ['Cable Machine'],
-    notes: 'Cables set high position. Targets lower chest.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'chest_053',
-    name: 'Low Cable Crossover',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Pectorals'],
-    equipment: ['Cable Machine'],
-    notes: 'Cables set low position. Targets upper chest.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'chest_054',
-    name: 'Mid Cable Crossover',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Cable Machine'],
-    notes: 'Cables at shoulder height. Targets middle chest.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'chest_055',
-    name: 'Plate Squeeze Press',
-    category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Weight Plate'],
-    notes: 'Squeeze plate while pressing. Isometric and dynamic work.',
-    primaryEquipment: 'Weight Plate'
-  },
-  {
-    id: 'chest_056',
-    name: 'Dumbbell Squeeze Press',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Press dumbbells together during movement. Added tension.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'chest_057',
-    name: 'Hammer Strength Chest Press',
-    category: 'chest',
-    difficulty: 'beginner',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Hammer Strength Machine'],
-    notes: 'Independent arm movement machine. Natural pressing path.',
-    primaryEquipment: 'Hammer Strength Machine'
-  },
-  {
-    id: 'chest_058',
-    name: 'Chest Press Machine Unilateral',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Core'],
-    equipment: ['Chest Press Machine'],
-    notes: 'One arm at a time on machine. Addresses imbalances.',
-    primaryEquipment: 'Chest Press Machine'
-  },
-  {
-    id: 'chest_059',
-    name: 'Weighted Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals', 'Triceps'],
-    equipment: ['Weight Plate'],
-    notes: 'Push-ups with weight on back. Progressive overload.',
-    primaryEquipment: 'Weight Plate'
-  },
-  {
-    id: 'chest_060',
-    name: 'Deficit Push-ups',
-    category: 'chest',
-    difficulty: 'intermediate',
-    muscleGroup: ['Pectorals'],
-    equipment: ['Push-up Handles'],
-    notes: 'Hands elevated for greater range of motion.',
-    primaryEquipment: 'Push-up Handles'
-  },
+    notes: 'Hold bottom position of push-up for time, isometric contraction',
+    videoUrl: 'https://www.youtube.com/watch?v=dXBHfvU6Xws',
+    primaryEquipment: 'bodyweight'
+  }
+];
 
-  // BACK EXERCISES (80 exercises)
+// BACK EXERCISES (58 exercises)
+const backExercises: ExerciseData[] = [
   {
     id: 'back_001',
-    name: 'Lat machine pulldown',
+    name: 'Pull-ups',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids', 'biceps'],
+    equipment: ['pull-up bar'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Lat Pulldown Machine'],
-    notes: 'Wide grip lat pulldown. Pull to upper chest, squeeze shoulder blades together.',
-    primaryEquipment: 'Lat Pulldown Machine'
+    notes: 'Hang from bar, pull body up until chin over bar',
+    videoUrl: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_002',
-    name: 'Pull-ups',
+    name: 'Bent Over Barbell Row',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids', 'Biceps'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Classic bodyweight back exercise. Start from dead hang, pull chin over bar.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'rhomboids', 'middle traps', 'rear deltoids'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Bend forward, pull barbell to lower ribs, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=9efgcAjQe7E',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_003',
-    name: 'Seated cable low row with triangle bar',
+    name: 'Lat Pulldown',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Middle Trapezius', 'Rhomboids', 'Latissimus Dorsi'],
-    equipment: ['Cable Machine', 'Triangle Bar'],
-    notes: 'Seated cable row with triangle handle. Keep chest up, pull to lower ribs.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids'],
+    equipment: ['lat pulldown machine'],
+    difficulty: 'beginner',
+    notes: 'Pull bar down to upper chest, squeeze lats at bottom',
+    videoUrl: 'https://www.youtube.com/watch?v=CAwf7n6Luuc',
+    primaryEquipment: 'lat pulldown machine'
   },
   {
     id: 'back_004',
-    name: 'Barbell Row',
+    name: 'Deadlift',
     category: 'back',
+    muscleGroup: ['erector spinae', 'lats', 'traps', 'glutes', 'hamstrings'],
+    equipment: ['barbell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Barbell'],
-    notes: 'Bent over barbell row. Keep back straight, pull bar to lower ribs.',
-    primaryEquipment: 'Barbell'
+    notes: 'Lift barbell from floor to hip height, keep back straight',
+    videoUrl: 'https://www.youtube.com/watch?v=op9kVnSso6Q',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_005',
-    name: 'Dumbbell Row One Arm',
+    name: 'Seated Cable Row',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'middle traps'],
+    equipment: ['cable machine'],
     difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Dumbbells', 'Bench'],
-    notes: 'Support body with bench. Row dumbbell to hip level.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Pull cable to lower ribs, squeeze shoulder blades together',
+    videoUrl: 'https://www.youtube.com/watch?v=xQNrFHEMhI4',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_006',
-    name: 'T-Bar Row',
+    name: 'Single Arm Dumbbell Row',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Middle Trapezius'],
-    equipment: ['T-Bar Row Machine'],
-    notes: 'Chest supported row. Pull handle to lower chest area.',
-    primaryEquipment: 'T-Bar Row Machine'
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids'],
+    equipment: ['dumbbell', 'bench'],
+    difficulty: 'beginner',
+    notes: 'Support body on bench, row dumbbell to hip',
+    videoUrl: 'https://www.youtube.com/watch?v=roCP6wCXPqo',
+    primaryEquipment: 'dumbbell'
   },
   {
     id: 'back_007',
-    name: 'Wide Grip Pulldown',
+    name: 'T-Bar Row',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'middle traps'],
+    equipment: ['t-bar', 'weight plates'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Lat Pulldown Machine'],
-    notes: 'Wider than shoulder grip. Focus on lat activation.',
-    primaryEquipment: 'Lat Pulldown Machine'
+    notes: 'Straddle bar, pull weight to chest, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=j3Igk5nyZE4',
+    primaryEquipment: 't-bar'
   },
   {
     id: 'back_008',
-    name: 'Close Grip Pulldown',
+    name: 'Chin-ups',
     category: 'back',
+    muscleGroup: ['lats', 'biceps', 'rhomboids'],
+    equipment: ['pull-up bar'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Lat Pulldown Machine'],
-    notes: 'Narrow grip pulldown. More bicep involvement.',
-    primaryEquipment: 'Lat Pulldown Machine'
+    notes: 'Underhand grip, pull body up until chin over bar',
+    videoUrl: 'https://www.youtube.com/watch?v=brhRXlOhkAM',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_009',
-    name: 'Reverse Grip Pulldown',
+    name: 'Inverted Rows',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Lat Pulldown Machine'],
-    notes: 'Underhand grip pulldown. Different muscle recruitment pattern.',
-    primaryEquipment: 'Lat Pulldown Machine'
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids'],
+    equipment: ['barbell', 'squat rack'],
+    difficulty: 'beginner',
+    notes: 'Lie under bar, pull chest to bar, body straight',
+    videoUrl: 'https://www.youtube.com/watch?v=hXTc1mDnZCw',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_010',
-    name: 'Chin-ups',
+    name: 'Wide Grip Lat Pulldown',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Underhand grip pull-up. More bicep activation than pull-ups.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'teres major'],
+    equipment: ['lat pulldown machine'],
+    difficulty: 'beginner',
+    notes: 'Wide grip on bar, pull to upper chest focusing on lats',
+    videoUrl: 'https://www.youtube.com/watch?v=CAwf7n6Luuc',
+    primaryEquipment: 'lat pulldown machine'
   },
   {
     id: 'back_011',
-    name: 'Wide Grip Pull-ups',
+    name: 'Reverse Flyes',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Hands wider than shoulders. More lat focused.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['rear deltoids', 'rhomboids', 'middle traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, raise dumbbells to sides, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=ea7I-_TYNLs',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_012',
-    name: 'Assisted Pull-ups',
+    name: 'Hyperextensions',
     category: 'back',
+    muscleGroup: ['erector spinae', 'glutes'],
+    equipment: ['hyperextension bench'],
     difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Assisted Pull-up Machine'],
-    notes: 'Machine assisted pull-ups for beginners. Build up to bodyweight.',
-    primaryEquipment: 'Assisted Pull-up Machine'
+    notes: 'Lower torso, raise back to straight position, control movement',
+    videoUrl: 'https://www.youtube.com/watch?v=qtdyyEjFf4M',
+    primaryEquipment: 'hyperextension bench'
   },
   {
     id: 'back_013',
-    name: 'Cable Row Wide Grip',
+    name: 'Face Pulls',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Middle Trapezius', 'Rhomboids'],
-    equipment: ['Cable Machine'],
-    notes: 'Wide grip cable row. Focus on squeezing shoulder blades.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['rear deltoids', 'rhomboids', 'middle traps'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Pull cable to face, elbows high, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=rep-qVOkqgk',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_014',
-    name: 'Machine Row',
+    name: 'Shrugs',
     category: 'back',
+    muscleGroup: ['upper traps'],
+    equipment: ['dumbbells'],
     difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Row Machine'],
-    notes: 'Seated machine row. Adjust seat height for proper alignment.',
-    primaryEquipment: 'Row Machine'
+    notes: 'Lift shoulders up toward ears, squeeze traps at top',
+    videoUrl: 'https://www.youtube.com/watch?v=cJRVVxmytaM',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_015',
-    name: 'Deadlift',
+    name: 'Sumo Deadlift',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Erector Spinae', 'Latissimus Dorsi', 'Glutes'],
-    equipment: ['Barbell'],
-    notes: 'King of all exercises. Keep bar close, drive through heels.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['erector spinae', 'glutes', 'adductors'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Wide stance, toes out, pull bar straight up',
+    videoUrl: 'https://www.youtube.com/watch?v=6YDhqpQdMQo',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_016',
-    name: 'Rack Pulls',
+    name: 'Romanian Deadlift',
     category: 'back',
+    muscleGroup: ['erector spinae', 'hamstrings', 'glutes'],
+    equipment: ['barbell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Erector Spinae', 'Upper Trapezius'],
-    equipment: ['Barbell', 'Squat Rack'],
-    notes: 'Partial deadlift from rack. Focus on lockout portion.',
-    primaryEquipment: 'Barbell'
+    notes: 'Lower bar by pushing hips back, feel hamstring stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=jEy_czb3RKA',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_017',
-    name: 'Shrugs Barbell',
+    name: 'Good Mornings',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Upper Trapezius'],
-    equipment: ['Barbell'],
-    notes: 'Lift shoulders straight up. Hold briefly at top.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['erector spinae', 'hamstrings', 'glutes'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Bar on shoulders, hinge at hips, bow forward and return',
+    videoUrl: 'https://www.youtube.com/watch?v=YuBvHoobhRs',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_018',
-    name: 'Shrugs Dumbbell',
+    name: 'Chest Supported Row',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Upper Trapezius'],
-    equipment: ['Dumbbells'],
-    notes: 'Dumbbell shrugs allow greater range of motion.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['lats', 'rhomboids', 'middle traps'],
+    equipment: ['incline bench', 'dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Chest against bench, row dumbbells to sides',
+    videoUrl: 'https://www.youtube.com/watch?v=UCXxvVItLoM',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_019',
-    name: 'Face Pulls',
+    name: 'Renegade Rows',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable at face height. Pull to face, squeeze shoulder blades.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['lats', 'rhomboids', 'core'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Plank position, row one dumbbell at a time, maintain plank',
+    videoUrl: 'https://www.youtube.com/watch?v=4lfT62CLqQ8',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_020',
-    name: 'Reverse Flyes',
+    name: 'Landmine Row',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
-    equipment: ['Dumbbells'],
-    notes: 'Bent over reverse fly. Focus on rear delt activation.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['lats', 'rhomboids', 'core'],
+    equipment: ['barbell', 'landmine'],
+    difficulty: 'intermediate',
+    notes: 'Stagger stance, row barbell to hip, engage core',
+    videoUrl: 'https://www.youtube.com/watch?v=QZEqB6wUPnQ',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_021',
-    name: 'Neutral Grip Pull-ups',
+    name: 'Assisted Pull-ups',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Palms facing each other. Joint-friendly grip variation.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'rhomboids', 'biceps'],
+    equipment: ['assisted pull-up machine'],
+    difficulty: 'beginner',
+    notes: 'Use assistance to perform pull-up motion, build strength',
+    videoUrl: 'https://www.youtube.com/watch?v=fO3dKSQayfg',
+    primaryEquipment: 'assisted pull-up machine'
   },
   {
     id: 'back_022',
-    name: 'Commando Pull-ups',
+    name: 'Negative Pull-ups',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi', 'Core'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Pull up alternating sides of head past bar. Unilateral emphasis.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'rhomboids', 'biceps'],
+    equipment: ['pull-up bar'],
+    difficulty: 'beginner',
+    notes: 'Jump to top position, slowly lower body down',
+    videoUrl: 'https://www.youtube.com/watch?v=mRznU6pzez0',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_023',
-    name: 'L-Sit Pull-ups',
+    name: 'Cable Reverse Flyes',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi', 'Core'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Pull-ups while holding L-sit position. Core integration.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['rear deltoids', 'rhomboids'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Cross cables, pull arms back and apart, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=wHIvdGFzgDo',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_024',
-    name: 'Weighted Pull-ups',
+    name: 'Meadows Row',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Pull-up Bar', 'Weight Belt'],
-    notes: 'Pull-ups with added weight. Progressive overload.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids'],
+    equipment: ['barbell', 'landmine'],
+    difficulty: 'intermediate',
+    notes: 'Side position to landmine, row with one arm, full stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=aOSIxlMQm9s',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_025',
-    name: 'Kipping Pull-ups',
+    name: 'Seal Rows',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'middle traps'],
+    equipment: ['barbell', 'bench'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Use hip drive to assist pull-up. CrossFit style.',
-    primaryEquipment: 'Pull-up Bar'
+    notes: 'Lie face down on bench, row barbell to chest',
+    videoUrl: 'https://www.youtube.com/watch?v=YQKgK-6GxQE',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_026',
-    name: 'Chest to Bar Pull-ups',
+    name: 'Bent Over Dumbbell Row',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Pull chest to bar instead of chin. Greater range.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Hinge at hips, row both dumbbells to sides',
+    videoUrl: 'https://www.youtube.com/watch?v=pYcpY20QaE8',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_027',
-    name: 'Behind Neck Pull-ups',
+    name: 'Wide Grip Pull-ups',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Pull-up Bar'],
-    notes: 'Pull up behind neck. Requires good shoulder mobility.',
-    primaryEquipment: 'Pull-up Bar'
+    muscleGroup: ['lats', 'teres major'],
+    equipment: ['pull-up bar'],
+    difficulty: 'intermediate',
+    notes: 'Grip wider than shoulders, focus on lat engagement',
+    videoUrl: 'https://www.youtube.com/watch?v=iywjXTb2zP8',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_028',
-    name: 'Single Arm Pulldown',
+    name: 'Rack Pulls',
     category: 'back',
+    muscleGroup: ['erector spinae', 'traps', 'rhomboids'],
+    equipment: ['barbell', 'squat rack'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Cable Machine'],
-    notes: 'One arm lat pulldown. Addresses imbalances.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Deadlift from rack position, partial range of motion',
+    videoUrl: 'https://www.youtube.com/watch?v=ZWUcHKAj_tc',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_029',
-    name: 'V-Bar Pulldown',
+    name: 'Prone Y Raises',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Lat Pulldown Machine', 'V-Bar'],
-    notes: 'Narrow V-shaped handle. Close grip pulldown variation.',
-    primaryEquipment: 'Lat Pulldown Machine'
+    muscleGroup: ['lower traps', 'rear deltoids'],
+    equipment: ['light dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Lie face down, raise arms in Y position',
+    videoUrl: 'https://www.youtube.com/watch?v=6ckFHgJQkNs',
+    primaryEquipment: 'light dumbbells'
   },
   {
     id: 'back_030',
-    name: 'Straight Arm Pulldown',
+    name: 'Cable Lat Pullover',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Cable Machine'],
-    notes: 'Keep arms straight, pull bar to thighs. Lat isolation.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['lats', 'serratus anterior'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Straight arm pullover motion, focus on lat stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=kcwfTJGYN9k',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_031',
-    name: 'Two Arm Dumbbell Row',
+    name: 'Prone T Raises',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Dumbbells'],
-    notes: 'Bent over row with both dumbbells simultaneously.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['middle traps', 'rhomboids', 'rear deltoids'],
+    equipment: ['light dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Lie face down, raise arms to sides in T position',
+    videoUrl: 'https://www.youtube.com/watch?v=J9uZQ3hUins',
+    primaryEquipment: 'light dumbbells'
   },
   {
     id: 'back_032',
-    name: 'Chest Supported Row',
+    name: 'Barbell Shrugs',
     category: 'back',
+    muscleGroup: ['upper traps'],
+    equipment: ['barbell'],
     difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Incline Bench', 'Dumbbells'],
-    notes: 'Chest against incline bench. Reduces cheating.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Hold barbell, shrug shoulders up, squeeze traps',
+    videoUrl: 'https://www.youtube.com/watch?v=g6qbq4Lf1FI',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_033',
-    name: 'Seal Row',
+    name: 'Neutral Grip Pull-ups',
     category: 'back',
+    muscleGroup: ['lats', 'biceps', 'rhomboids'],
+    equipment: ['pull-up bar'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Barbell', 'Bench'],
-    notes: 'Lie face down on elevated bench. Strict rowing.',
-    primaryEquipment: 'Barbell'
+    notes: 'Palms facing each other, pull up to chest level',
+    videoUrl: 'https://www.youtube.com/watch?v=XFGe3I6nK7s',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_034',
-    name: 'Pendlay Row',
+    name: 'Single Arm Cable Row',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'core'],
+    equipment: ['cable machine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Barbell'],
-    notes: 'Dead stop from floor each rep. Explosive concentric.',
-    primaryEquipment: 'Barbell'
+    notes: 'Row one arm at a time, engage core for stability',
+    videoUrl: 'https://www.youtube.com/watch?v=lYFdJ_Tz_gE',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_035',
-    name: 'Yates Row',
+    name: 'Reverse Grip Lat Pulldown',
     category: 'back',
+    muscleGroup: ['lats', 'biceps', 'middle traps'],
+    equipment: ['lat pulldown machine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Biceps'],
-    equipment: ['Barbell'],
-    notes: 'Underhand grip, more upright torso. Dorian Yates style.',
-    primaryEquipment: 'Barbell'
+    notes: 'Underhand grip, pull to upper chest, engage lats',
+    videoUrl: 'https://www.youtube.com/watch?v=ty8vgCmU47Y',
+    primaryEquipment: 'lat pulldown machine'
   },
   {
     id: 'back_036',
-    name: 'Meadows Row',
+    name: 'Resistance Band Rows',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Barbell', 'Landmine'],
-    notes: 'Single arm landmine row. John Meadows variation.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['lats', 'rhomboids', 'rear deltoids'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Anchor band, pull handles to sides, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=6lHBx0pJdvg',
+    primaryEquipment: 'resistance bands'
   },
   {
     id: 'back_037',
-    name: 'Inverted Row',
+    name: 'Commando Pull-ups',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Barbell', 'Squat Rack'],
-    notes: 'Body under bar, pull chest to bar. Bodyweight row.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['lats', 'biceps', 'core'],
+    equipment: ['pull-up bar'],
+    difficulty: 'advanced',
+    notes: 'Alternate pulling to each side of the bar',
+    videoUrl: 'https://www.youtube.com/watch?v=Kk3KIpwlKpQ',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_038',
-    name: 'TRX Row',
+    name: 'Straight Arm Pulldown',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['TRX'],
-    notes: 'Rowing with suspension trainer. Adjustable difficulty.',
-    primaryEquipment: 'TRX'
+    muscleGroup: ['lats', 'serratus anterior'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Keep arms straight, pull cable down to thighs',
+    videoUrl: 'https://www.youtube.com/watch?v=1hrNwqRfxnI',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_039',
-    name: 'Ring Row',
+    name: 'Bent Over Reverse Flyes',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Gymnastics Rings'],
-    notes: 'Rowing on gymnastic rings. Requires stability.',
-    primaryEquipment: 'Gymnastics Rings'
+    muscleGroup: ['rear deltoids', 'rhomboids', 'middle traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, raise dumbbells to sides with slight bend in arms',
+    videoUrl: 'https://www.youtube.com/watch?v=ea7I-_TYNLs',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_040',
-    name: 'Cable Row Single Arm',
+    name: 'Pendlay Row',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'middle traps'],
+    equipment: ['barbell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Core'],
-    equipment: ['Cable Machine'],
-    notes: 'One arm cable row. Anti-rotation core work.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Barbell starts on floor, explosive pull to chest, pause',
+    videoUrl: 'https://www.youtube.com/watch?v=ZlRrIsoDpKg',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_041',
-    name: 'High Cable Row',
+    name: 'Kroc Rows',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Middle Trapezius', 'Rhomboids'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable at shoulder height. Targets mid traps.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['lats', 'rhomboids', 'traps'],
+    equipment: ['heavy dumbbell'],
+    difficulty: 'advanced',
+    notes: 'Heavy single arm row with body english allowed',
+    videoUrl: 'https://www.youtube.com/watch?v=J4GILMgWKGo',
+    primaryEquipment: 'heavy dumbbell'
   },
   {
     id: 'back_042',
-    name: 'Low Cable Row',
+    name: 'Cable High Row',
     category: 'back',
+    muscleGroup: ['middle traps', 'rhomboids', 'rear deltoids'],
+    equipment: ['cable machine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable at floor level. More lat emphasis.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Set cable high, pull to upper chest, elbows up',
+    videoUrl: 'https://www.youtube.com/watch?v=2yOJlsGhG_E',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_043',
-    name: 'Cable Row Neutral Grip',
+    name: 'Machine High Row',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Cable Machine'],
-    notes: 'Parallel grip handle. Joint-friendly position.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['middle traps', 'rhomboids', 'rear deltoids'],
+    equipment: ['high row machine'],
+    difficulty: 'beginner',
+    notes: 'Sit upright, pull handles to upper chest, squeeze blades',
+    videoUrl: 'https://www.youtube.com/watch?v=6s3z7iqnDvQ',
+    primaryEquipment: 'high row machine'
   },
   {
     id: 'back_044',
-    name: 'Cable Reverse Fly',
+    name: 'Dumbbell Pullovers',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
-    equipment: ['Cable Machine'],
-    notes: 'Arms spread wide, pull handles apart. Rear delt focus.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['lats', 'serratus anterior'],
+    equipment: ['dumbbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie across bench, lower dumbbell behind head, pull over',
+    videoUrl: 'https://www.youtube.com/watch?v=FK8QJbympk8',
+    primaryEquipment: 'dumbbell'
   },
   {
     id: 'back_045',
-    name: 'Machine Reverse Fly',
+    name: 'Alternating Dumbbell Row',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
-    equipment: ['Reverse Fly Machine'],
-    notes: 'Seated reverse fly machine. Posterior chain isolation.',
-    primaryEquipment: 'Reverse Fly Machine'
+    muscleGroup: ['lats', 'rhomboids', 'core'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Bent over position, row alternating arms, engage core',
+    videoUrl: 'https://www.youtube.com/watch?v=CpZcMlXJ_Xc',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'back_046',
-    name: 'Prone Y-Raise',
+    name: 'Isometric Pulls',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Lower Trapezius'],
-    equipment: ['Dumbbells'],
-    notes: 'Lie face down, arms in Y shape. Lower trap activation.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['lats', 'rhomboids', 'biceps'],
+    equipment: ['pull-up bar'],
+    difficulty: 'intermediate',
+    notes: 'Hold pull-up position at various angles for time',
+    videoUrl: 'https://www.youtube.com/watch?v=3HvNHzFsN-8',
+    primaryEquipment: 'pull-up bar'
   },
   {
     id: 'back_047',
-    name: 'Prone T-Raise',
+    name: 'Close Grip Lat Pulldown',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Middle Trapezius', 'Rhomboids'],
-    equipment: ['Dumbbells'],
-    notes: 'Lie face down, arms in T shape. Mid trap focus.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['lats', 'rhomboids', 'biceps'],
+    equipment: ['lat pulldown machine'],
+    difficulty: 'intermediate',
+    notes: 'Narrow grip, pull to upper chest, focus on lat squeeze',
+    videoUrl: 'https://www.youtube.com/watch?v=lj7Vdg4vJ9A',
+    primaryEquipment: 'lat pulldown machine'
   },
   {
     id: 'back_048',
-    name: 'Prone W-Raise',
+    name: 'Reverse Grip Bent Over Row',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Lower Trapezius', 'Rhomboids'],
-    equipment: ['Dumbbells'],
-    notes: 'Lie face down, arms in W shape. Postural muscles.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['lats', 'rhomboids', 'biceps'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Underhand grip, row to lower chest, engage lats',
+    videoUrl: 'https://www.youtube.com/watch?v=6Xm_Jv2kcWM',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'back_049',
-    name: 'Wall Angels',
+    name: 'Machine Reverse Flyes',
     category: 'back',
+    muscleGroup: ['rear deltoids', 'rhomboids'],
+    equipment: ['reverse fly machine'],
     difficulty: 'beginner',
-    muscleGroup: ['Lower Trapezius', 'Rhomboids'],
-    equipment: ['Wall'],
-    notes: 'Back against wall, move arms like snow angel. Mobility.',
-    primaryEquipment: 'Wall'
+    notes: 'Chest against pad, pull handles back, squeeze blades',
+    videoUrl: 'https://www.youtube.com/watch?v=lKGfhb7q8pA',
+    primaryEquipment: 'reverse fly machine'
   },
   {
     id: 'back_050',
-    name: 'Band Pull Apart',
+    name: 'Trap Bar Deadlift',
     category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
-    equipment: ['Resistance Band'],
-    notes: 'Pull band apart at chest level. Great activation exercise.',
-    primaryEquipment: 'Resistance Band'
+    muscleGroup: ['erector spinae', 'traps', 'glutes'],
+    equipment: ['trap bar'],
+    difficulty: 'intermediate',
+    notes: 'Stand inside trap bar, lift with neutral spine',
+    videoUrl: 'https://www.youtube.com/watch?v=LGIS9vs-IqM',
+    primaryEquipment: 'trap bar'
   },
   {
     id: 'back_051',
-    name: 'Power Shrug',
+    name: 'Band Pull Aparts',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius'],
-    equipment: ['Barbell'],
-    notes: 'Explosive shrug with slight knee bend. Power development.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['rear deltoids', 'rhomboids', 'middle traps'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Hold band at chest level, pull apart, squeeze blades',
+    videoUrl: 'https://www.youtube.com/watch?v=eGIIJNrfmXM',
+    primaryEquipment: 'resistance bands'
   },
   {
     id: 'back_052',
-    name: 'Behind Back Shrug',
+    name: 'Superman',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius'],
-    equipment: ['Barbell'],
-    notes: 'Bar behind body during shrug. Different angle.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['erector spinae', 'glutes'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie face down, lift chest and legs simultaneously',
+    videoUrl: 'https://www.youtube.com/watch?v=cc6LDAIZE3E',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'back_053',
-    name: 'Cable Shrug',
+    name: 'Prone W Raises',
     category: 'back',
+    muscleGroup: ['lower traps', 'rhomboids', 'rear deltoids'],
+    equipment: ['light dumbbells'],
     difficulty: 'beginner',
-    muscleGroup: ['Upper Trapezius'],
-    equipment: ['Cable Machine'],
-    notes: 'Shrugs using cable machine. Constant tension.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Lie face down, raise arms in W position',
+    videoUrl: 'https://www.youtube.com/watch?v=6ckFHgJQkNs',
+    primaryEquipment: 'light dumbbells'
   },
   {
     id: 'back_054',
-    name: 'Overhead Shrug',
+    name: 'Cable Shrugs',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius'],
-    equipment: ['Barbell'],
-    notes: 'Shrug with arms overhead. Different muscle emphasis.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['upper traps'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Low cable position, shrug shoulders up, squeeze traps',
+    videoUrl: 'https://www.youtube.com/watch?v=k5JrWYHI_OU',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_055',
-    name: 'Kettlebell High Pull',
+    name: 'Kettlebell Swings',
     category: 'back',
+    muscleGroup: ['erector spinae', 'glutes', 'hamstrings'],
+    equipment: ['kettlebell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius', 'Rhomboids'],
-    equipment: ['Kettlebell'],
-    notes: 'Explosive pull to chest level. Power exercise.',
-    primaryEquipment: 'Kettlebell'
+    notes: 'Hip hinge movement, swing kettlebell to shoulder height',
+    videoUrl: 'https://www.youtube.com/watch?v=GYHbu2oCcLI',
+    primaryEquipment: 'kettlebell'
   },
   {
     id: 'back_056',
-    name: 'Barbell High Pull',
+    name: 'Single Arm Lat Pulldown',
     category: 'back',
+    muscleGroup: ['lats', 'rhomboids', 'core'],
+    equipment: ['cable machine'],
     difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius', 'Rhomboids'],
-    equipment: ['Barbell'],
-    notes: 'Pull bar to chest level explosively. Olympic lift component.',
-    primaryEquipment: 'Barbell'
+    notes: 'One arm at a time, focus on lat stretch and contraction',
+    videoUrl: 'https://www.youtube.com/watch?v=9pfgWYJV7R4',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'back_057',
-    name: 'Snatch Grip High Pull',
+    name: 'Archer Rows',
     category: 'back',
-    difficulty: 'advanced',
-    muscleGroup: ['Upper Trapezius', 'Rhomboids'],
-    equipment: ['Barbell'],
-    notes: 'Wide grip high pull. Greater range of motion.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['lats', 'rhomboids', 'biceps'],
+    equipment: ['resistance bands'],
+    difficulty: 'intermediate',
+    notes: 'Anchor band, pull with one arm while other stays extended',
+    videoUrl: 'https://www.youtube.com/watch?v=u2oHj1_QZuQ',
+    primaryEquipment: 'resistance bands'
   },
   {
     id: 'back_058',
-    name: 'Upright Row',
+    name: 'Resistance Band Face Pulls',
     category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius', 'Medial Deltoids'],
-    equipment: ['Barbell'],
-    notes: 'Pull bar to chest level. Elbows lead movement.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'back_059',
-    name: 'Cable Upright Row',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius', 'Medial Deltoids'],
-    equipment: ['Cable Machine'],
-    notes: 'Upright row with cable. Constant tension variation.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'back_060',
-    name: 'Dumbbell Upright Row',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Upper Trapezius', 'Medial Deltoids'],
-    equipment: ['Dumbbells'],
-    notes: 'Upright row with dumbbells. Independent arm movement.',
-    primaryEquipment: 'Dumbbells'
-  },
-  {
-    id: 'back_061',
-    name: 'Single Arm Row Machine',
-    category: 'back',
+    muscleGroup: ['rear deltoids', 'rhomboids', 'middle traps'],
+    equipment: ['resistance bands'],
     difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Row Machine'],
-    notes: 'One arm at a time on machine. Address imbalances.',
-    primaryEquipment: 'Row Machine'
-  },
-  {
-    id: 'back_062',
-    name: 'Hammer Strength Row',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
-    equipment: ['Hammer Strength Machine'],
-    notes: 'Independent arm movement. Natural pulling path.',
-    primaryEquipment: 'Hammer Strength Machine'
-  },
-  {
-    id: 'back_063',
-    name: 'Lat Pullover Machine',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Pullover Machine'],
-    notes: 'Isolated lat movement. Machine-guided path.',
-    primaryEquipment: 'Pullover Machine'
-  },
-  {
-    id: 'back_064',
-    name: 'Cable Pullover',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Latissimus Dorsi'],
-    equipment: ['Cable Machine'],
-    notes: 'Pullover motion with cable. Lat isolation.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'back_065',
-    name: 'Hyperextension',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae', 'Glutes'],
-    equipment: ['Hyperextension Bench'],
-    notes: 'Back extension exercise. Focus on lower back.',
-    primaryEquipment: 'Hyperextension Bench'
-  },
-  {
-    id: 'back_066',
-    name: 'Weighted Hyperextension',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Erector Spinae', 'Glutes'],
-    equipment: ['Hyperextension Bench', 'Weight Plate'],
-    notes: 'Back extension with added weight. Progressive overload.',
-    primaryEquipment: 'Hyperextension Bench'
-  },
-  {
-    id: 'back_067',
-    name: '45 Degree Hyperextension',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae', 'Glutes'],
-    equipment: ['45 Degree Hyperextension'],
-    notes: 'Angled back extension. More comfortable position.',
-    primaryEquipment: '45 Degree Hyperextension'
-  },
-  {
-    id: 'back_068',
-    name: 'Reverse Hyperextension',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Glutes', 'Hamstrings'],
-    equipment: ['Reverse Hyper Machine'],
-    notes: 'Lift legs instead of torso. Decompressive effect.',
-    primaryEquipment: 'Reverse Hyper Machine'
-  },
-  {
-    id: 'back_069',
-    name: 'Superman',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae'],
-    equipment: ['Bodyweight'],
-    notes: 'Lie face down, lift chest and legs. Bodyweight back extension.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'back_070',
-    name: 'Bird Dog',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae', 'Core'],
-    equipment: ['Bodyweight'],
-    notes: 'Opposite arm and leg extension. Core stability.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'back_071',
-    name: 'Dead Bug',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Core', 'Hip Flexors'],
-    equipment: ['Bodyweight'],
-    notes: 'Lying down, opposite arm/leg extensions. Core control.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'back_072',
-    name: 'Cat Cow',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae'],
-    equipment: ['Bodyweight'],
-    notes: 'Spinal flexion and extension. Mobility exercise.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'back_073',
-    name: 'Scapular Wall Slide',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Lower Trapezius', 'Rhomboids'],
-    equipment: ['Wall'],
-    notes: 'Back against wall, slide arms up and down. Scapular mobility.',
-    primaryEquipment: 'Wall'
-  },
-  {
-    id: 'back_074',
-    name: 'Prone Extension',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae'],
-    equipment: ['Bodyweight'],
-    notes: 'Lie face down, lift chest only. Gentle back extension.',
-    primaryEquipment: 'Bodyweight'
-  },
-  {
-    id: 'back_075',
-    name: 'Good Morning',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Erector Spinae', 'Hamstrings'],
-    equipment: ['Barbell'],
-    notes: 'Hip hinge with bar on shoulders. Posterior chain.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'back_076',
-    name: 'Seated Good Morning',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae'],
-    equipment: ['Barbell'],
-    notes: 'Good morning while seated. Isolates erector spinae.',
-    primaryEquipment: 'Barbell'
-  },
-  {
-    id: 'back_077',
-    name: 'Round Back Extension',
-    category: 'back',
-    difficulty: 'beginner',
-    muscleGroup: ['Erector Spinae'],
-    equipment: ['Hyperextension Bench'],
-    notes: 'Curl spine up vertebra by vertebra. Spinal articulation.',
-    primaryEquipment: 'Hyperextension Bench'
-  },
-  {
-    id: 'back_078',
-    name: 'Cable Wood Chop',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Core', 'Obliques'],
-    equipment: ['Cable Machine'],
-    notes: 'Diagonal chopping motion. Rotational core strength.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'back_079',
-    name: 'Pallof Press',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Core', 'Obliques'],
-    equipment: ['Cable Machine'],
-    notes: 'Anti-rotation exercise. Hold cable at chest.',
-    primaryEquipment: 'Cable Machine'
-  },
-  {
-    id: 'back_080',
-    name: 'Single Arm Farmers Walk',
-    category: 'back',
-    difficulty: 'intermediate',
-    muscleGroup: ['Core', 'Erector Spinae'],
-    equipment: ['Dumbbell'],
-    notes: 'Carry weight on one side. Anti-lateral flexion.',
-    primaryEquipment: 'Dumbbell'
-  },
+    notes: 'Pull band to face, elbows high, external rotation',
+    videoUrl: 'https://www.youtube.com/watch?v=mYmZXNGklLU',
+    primaryEquipment: 'resistance bands'
+  }
+];
 
-  // SHOULDER EXERCISES (70 exercises)
+// LEGS EXERCISES (73 exercises)
+const legsExercises: ExerciseData[] = [
+  {
+    id: 'legs_001',
+    name: 'Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'hamstrings'],
+    equipment: ['barbell', 'squat rack'],
+    difficulty: 'intermediate',
+    notes: 'Stand with feet shoulder-width apart, squat down keeping chest up',
+    videoUrl: 'https://www.youtube.com/watch?v=ultWZbUMPL8',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_002',
+    name: 'Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'hamstrings'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Step forward, lower back knee toward ground, push back up',
+    videoUrl: 'https://www.youtube.com/watch?v=QOVaHwm-Q6U',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_003',
+    name: 'Leg Press',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['leg press machine'],
+    difficulty: 'beginner',
+    notes: 'Sit in machine, press weight with legs, control the descent',
+    videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+    primaryEquipment: 'leg press machine'
+  },
+  {
+    id: 'legs_004',
+    name: 'Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Rise up on toes, squeeze calves at top, lower with control',
+    videoUrl: 'https://www.youtube.com/watch?v=gwWv7aPcD6E',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_005',
+    name: 'Leg Curls',
+    category: 'legs',
+    muscleGroup: ['hamstrings'],
+    equipment: ['leg curl machine'],
+    difficulty: 'beginner',
+    notes: 'Lie face down, curl heels toward glutes, squeeze hamstrings',
+    videoUrl: 'https://www.youtube.com/watch?v=1Tq3QdYUuHs',
+    primaryEquipment: 'leg curl machine'
+  },
+  {
+    id: 'legs_006',
+    name: 'Leg Extensions',
+    category: 'legs',
+    muscleGroup: ['quadriceps'],
+    equipment: ['leg extension machine'],
+    difficulty: 'beginner',
+    notes: 'Sit upright, extend legs, squeeze quads at top',
+    videoUrl: 'https://www.youtube.com/watch?v=ljO4jkwv8wQ',
+    primaryEquipment: 'leg extension machine'
+  },
+  {
+    id: 'legs_007',
+    name: 'Front Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core'],
+    equipment: ['barbell', 'squat rack'],
+    difficulty: 'intermediate',
+    notes: 'Bar across front of shoulders, squat down keeping chest up',
+    videoUrl: 'https://www.youtube.com/watch?v=Ev_OEaKhJ8A',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_008',
+    name: 'Bulgarian Split Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['dumbbells', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Rear foot elevated, lunge down on front leg',
+    videoUrl: 'https://www.youtube.com/watch?v=7jGV5JJsM7o',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_009',
+    name: 'Goblet Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['dumbbell'],
+    difficulty: 'beginner',
+    notes: 'Hold dumbbell at chest, squat down keeping chest up',
+    videoUrl: 'https://www.youtube.com/watch?v=MeIiIdhvXT4',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'legs_010',
+    name: 'Step-ups',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['box', 'dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Step up onto box, drive through heel, control descent',
+    videoUrl: 'https://www.youtube.com/watch?v=dQqApCGd5Ss',
+    primaryEquipment: 'box'
+  },
+  {
+    id: 'legs_011',
+    name: 'Walking Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'hamstrings'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Lunge forward alternating legs, continuous movement',
+    videoUrl: 'https://www.youtube.com/watch?v=L8fvypPrzzs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_012',
+    name: 'Wall Sits',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['wall'],
+    difficulty: 'beginner',
+    notes: 'Sit against wall, thighs parallel to ground, hold position',
+    videoUrl: 'https://www.youtube.com/watch?v=y-wV4Venusw',
+    primaryEquipment: 'wall'
+  },
+  {
+    id: 'legs_013',
+    name: 'Sumo Squats',
+    category: 'legs',
+    muscleGroup: ['glutes', 'adductors', 'quadriceps'],
+    equipment: ['dumbbell'],
+    difficulty: 'beginner',
+    notes: 'Wide stance, toes out, squat down between legs',
+    videoUrl: 'https://www.youtube.com/watch?v=DlXzPgJaVzI',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'legs_014',
+    name: 'Box Jumps',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'calves'],
+    equipment: ['plyometric box'],
+    difficulty: 'intermediate',
+    notes: 'Jump onto box, land softly, step down',
+    videoUrl: 'https://www.youtube.com/watch?v=hxldG9FX4j4',
+    primaryEquipment: 'plyometric box'
+  },
+  {
+    id: 'legs_015',
+    name: 'Jump Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Squat down, jump up explosively, land softly',
+    videoUrl: 'https://www.youtube.com/watch?v=CVaEhXotL7M',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_016',
+    name: 'Reverse Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Step back into lunge, push through front heel to return',
+    videoUrl: 'https://www.youtube.com/watch?v=xBOWgFAh6HY',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_017',
+    name: 'Single Leg Deadlifts',
+    category: 'legs',
+    muscleGroup: ['hamstrings', 'glutes', 'core'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Balance on one leg, hinge at hip, reach toward ground',
+    videoUrl: 'https://www.youtube.com/watch?v=2CpCmxzaJ5I',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_018',
+    name: 'Pistol Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'advanced',
+    notes: 'Single leg squat, other leg extended forward',
+    videoUrl: 'https://www.youtube.com/watch?v=qDcniqddTeE',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_019',
+    name: 'Lateral Lunges',
+    category: 'legs',
+    muscleGroup: ['adductors', 'glutes', 'quadriceps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Step to side, lunge down, push back to center',
+    videoUrl: 'https://www.youtube.com/watch?v=8wrCdLrfjx4',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_020',
+    name: 'Curtsy Lunges',
+    category: 'legs',
+    muscleGroup: ['glutes', 'quadriceps', 'adductors'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Step back and across, lunge down, return to start',
+    videoUrl: 'https://www.youtube.com/watch?v=oLbYCzLHIZQ',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_021',
+    name: 'Hack Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['hack squat machine'],
+    difficulty: 'intermediate',
+    notes: 'Back against pad, squat down, drive through heels',
+    videoUrl: 'https://www.youtube.com/watch?v=EdtaJRBqwe0',
+    primaryEquipment: 'hack squat machine'
+  },
+  {
+    id: 'legs_022',
+    name: 'Stiff Leg Deadlifts',
+    category: 'legs',
+    muscleGroup: ['hamstrings', 'glutes'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Keep legs straight, hinge at hips, feel hamstring stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=CN_7cz3P-1U',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_023',
+    name: 'Seated Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['seated calf raise machine'],
+    difficulty: 'beginner',
+    notes: 'Sit with weight on thighs, rise up on toes',
+    videoUrl: 'https://www.youtube.com/watch?v=eMTy3qylqnE',
+    primaryEquipment: 'seated calf raise machine'
+  },
+  {
+    id: 'legs_024',
+    name: 'Glute Bridges',
+    category: 'legs',
+    muscleGroup: ['glutes', 'hamstrings'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie on back, lift hips up, squeeze glutes at top',
+    videoUrl: 'https://www.youtube.com/watch?v=OUgsJ8-Vi0E',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_025',
+    name: 'Hip Thrusts',
+    category: 'legs',
+    muscleGroup: ['glutes', 'hamstrings'],
+    equipment: ['barbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Upper back on bench, thrust hips up with barbell',
+    videoUrl: 'https://www.youtube.com/watch?v=xDmFkJxPzeM',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_026',
+    name: 'Plyometric Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Jump and switch legs in air during lunge',
+    videoUrl: 'https://www.youtube.com/watch?v=mkLTnHrnjgE',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_027',
+    name: 'Cossack Squats',
+    category: 'legs',
+    muscleGroup: ['adductors', 'glutes', 'quadriceps'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Squat to one side, other leg straight, alternate',
+    videoUrl: 'https://www.youtube.com/watch?v=tpczTeSkHz0',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_028',
+    name: 'Single Leg Glute Bridges',
+    category: 'legs',
+    muscleGroup: ['glutes', 'hamstrings', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'One leg extended, lift hips with other leg',
+    videoUrl: 'https://www.youtube.com/watch?v=AVAXhy6pl7o',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_029',
+    name: 'Leg Press Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['leg press machine'],
+    difficulty: 'beginner',
+    notes: 'On leg press, push through toes, full calf contraction',
+    videoUrl: 'https://www.youtube.com/watch?v=gwWv7aPcD6E',
+    primaryEquipment: 'leg press machine'
+  },
+  {
+    id: 'legs_030',
+    name: 'Adductor Machine',
+    category: 'legs',
+    muscleGroup: ['adductors'],
+    equipment: ['adductor machine'],
+    difficulty: 'beginner',
+    notes: 'Sit upright, squeeze legs together, control movement',
+    videoUrl: 'https://www.youtube.com/watch?v=DaRZTUOPRj4',
+    primaryEquipment: 'adductor machine'
+  },
+  {
+    id: 'legs_031',
+    name: 'Abductor Machine',
+    category: 'legs',
+    muscleGroup: ['abductors', 'glutes'],
+    equipment: ['abductor machine'],
+    difficulty: 'beginner',
+    notes: 'Sit upright, push legs apart, control movement',
+    videoUrl: 'https://www.youtube.com/watch?v=9dJBVYiZnSk',
+    primaryEquipment: 'abductor machine'
+  },
+  {
+    id: 'legs_032',
+    name: 'Sissy Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps'],
+    equipment: ['bodyweight'],
+    difficulty: 'advanced',
+    notes: 'Lean back, rise on toes, intense quad stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=3_HKPfD6PzI',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_033',
+    name: 'Donkey Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['donkey calf raise machine'],
+    difficulty: 'intermediate',
+    notes: 'Bend forward, weight on back, rise up on toes',
+    videoUrl: 'https://www.youtube.com/watch?v=lGtPECwobwo',
+    primaryEquipment: 'donkey calf raise machine'
+  },
+  {
+    id: 'legs_034',
+    name: 'Pause Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['barbell', 'squat rack'],
+    difficulty: 'intermediate',
+    notes: 'Squat down, pause at bottom, then drive up',
+    videoUrl: 'https://www.youtube.com/watch?v=8hCcGd0XSs8',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_035',
+    name: 'Overhead Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core', 'shoulders'],
+    equipment: ['barbell'],
+    difficulty: 'advanced',
+    notes: 'Hold barbell overhead, squat down maintaining position',
+    videoUrl: 'https://www.youtube.com/watch?v=RD_vUnqwqqI',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_036',
+    name: 'Narrow Stance Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['barbell', 'squat rack'],
+    difficulty: 'intermediate',
+    notes: 'Feet closer together, emphasizes quad activation',
+    videoUrl: 'https://www.youtube.com/watch?v=CfHYLrOUV8s',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_037',
+    name: 'Zercher Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Hold barbell in elbow crease, squat down',
+    videoUrl: 'https://www.youtube.com/watch?v=lGNdQbkXy6g',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_038',
+    name: 'Dumbbell Thrusters',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'shoulders'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Squat down, drive up and press dumbbells overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=SwzKhUAGTB4',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_039',
+    name: 'Kettlebell Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['kettlebell'],
+    difficulty: 'beginner',
+    notes: 'Hold kettlebell at chest, squat down keeping chest up',
+    videoUrl: 'https://www.youtube.com/watch?v=Dw_J4nOYPJc',
+    primaryEquipment: 'kettlebell'
+  },
+  {
+    id: 'legs_040',
+    name: 'Landmine Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core'],
+    equipment: ['barbell', 'landmine'],
+    difficulty: 'intermediate',
+    notes: 'Hold end of barbell, squat down with slight forward lean',
+    videoUrl: 'https://www.youtube.com/watch?v=FQUZJhpWDpM',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_041',
+    name: 'Deficit Deadlifts',
+    category: 'legs',
+    muscleGroup: ['hamstrings', 'glutes', 'erector spinae'],
+    equipment: ['barbell', 'plates'],
+    difficulty: 'intermediate',
+    notes: 'Stand on platform, increased range of motion',
+    videoUrl: 'https://www.youtube.com/watch?v=4NucmKcj_gE',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_042',
+    name: 'Smith Machine Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['smith machine'],
+    difficulty: 'beginner',
+    notes: 'Guided barbell movement, focus on form',
+    videoUrl: 'https://www.youtube.com/watch?v=rHafPi2RNEA',
+    primaryEquipment: 'smith machine'
+  },
+  {
+    id: 'legs_043',
+    name: 'Plie Squats',
+    category: 'legs',
+    muscleGroup: ['adductors', 'glutes', 'quadriceps'],
+    equipment: ['dumbbell'],
+    difficulty: 'beginner',
+    notes: 'Wide stance, toes out, squat down between legs',
+    videoUrl: 'https://www.youtube.com/watch?v=DlXzPgJaVzI',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'legs_044',
+    name: 'Reverse Deficit Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['dumbbells', 'platform'],
+    difficulty: 'intermediate',
+    notes: 'Stand on platform, step back into deep lunge',
+    videoUrl: 'https://www.youtube.com/watch?v=TsIr3xzJVP8',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_045',
+    name: 'Squat Pulse',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Hold squat position, pulse up and down',
+    videoUrl: 'https://www.youtube.com/watch?v=cYOyQU_Ckl4',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_046',
+    name: 'Calf Raise Hold',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Rise up on toes, hold position for time',
+    videoUrl: 'https://www.youtube.com/watch?v=gwWv7aPcD6E',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_047',
+    name: 'Single Leg Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Rise up on one toe, alternate legs',
+    videoUrl: 'https://www.youtube.com/watch?v=xIgLJsZjdH8',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_048',
+    name: 'Lunge Pulse',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Hold lunge position, pulse up and down',
+    videoUrl: 'https://www.youtube.com/watch?v=FjP0OE9x0Bg',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_049',
+    name: 'Jump Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Jump and switch legs in air during lunge',
+    videoUrl: 'https://www.youtube.com/watch?v=mkLTnHrnjgE',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_050',
+    name: 'Squat Jumps',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Squat down, jump up explosively, land softly',
+    videoUrl: 'https://www.youtube.com/watch?v=CVaEhXotL7M',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_051',
+    name: 'High Knees',
+    category: 'legs',
+    muscleGroup: ['hip flexors', 'quadriceps', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Run in place lifting knees high',
+    videoUrl: 'https://www.youtube.com/watch?v=8opcQdC-V-U',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_052',
+    name: 'Butt Kickers',
+    category: 'legs',
+    muscleGroup: ['hamstrings', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Run in place kicking heels to glutes',
+    videoUrl: 'https://www.youtube.com/watch?v=qOBNmVvBVY4',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_053',
+    name: 'Broad Jumps',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'calves'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Jump forward as far as possible, land softly',
+    videoUrl: 'https://www.youtube.com/watch?v=_ORWjYPZWzs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_054',
+    name: 'Single Leg Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'advanced',
+    notes: 'Squat on one leg, other leg extended forward',
+    videoUrl: 'https://www.youtube.com/watch?v=qDcniqddTeE',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_055',
+    name: 'Resistance Band Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Band around thighs or under feet, squat down',
+    videoUrl: 'https://www.youtube.com/watch?v=AYeNWNhMzqo',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'legs_056',
+    name: 'Resistance Band Deadlifts',
+    category: 'legs',
+    muscleGroup: ['hamstrings', 'glutes'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Stand on band, pull handles up as you stand',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'legs_057',
+    name: 'Resistance Band Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Band under front foot, lunge down with resistance',
+    videoUrl: 'https://www.youtube.com/watch?v=CvDwEswy6_w',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'legs_058',
+    name: 'Glute Kickbacks',
+    category: 'legs',
+    muscleGroup: ['glutes'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Attach ankle strap, kick leg back, squeeze glute',
+    videoUrl: 'https://www.youtube.com/watch?v=2BZWzJOQ0PE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'legs_059',
+    name: 'Cable Squats',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Hold cable handles, squat down with resistance',
+    videoUrl: 'https://www.youtube.com/watch?v=_hs5lPIZyxA',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'legs_060',
+    name: 'Multi-Directional Lunges',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'adductors'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lunge forward, back, and to sides in sequence',
+    videoUrl: 'https://www.youtube.com/watch?v=N7lVxuKvBko',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_061',
+    name: 'Standing Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['calf raise machine'],
+    difficulty: 'beginner',
+    notes: 'Stand on machine, rise up on toes, squeeze calves',
+    videoUrl: 'https://www.youtube.com/watch?v=gwWv7aPcD6E',
+    primaryEquipment: 'calf raise machine'
+  },
+  {
+    id: 'legs_062',
+    name: 'Dumbbell Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Hold dumbbells, rise up on toes, squeeze calves',
+    videoUrl: 'https://www.youtube.com/watch?v=gwWv7aPcD6E',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_063',
+    name: 'Barbell Calf Raises',
+    category: 'legs',
+    muscleGroup: ['calves'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Barbell on shoulders, rise up on toes',
+    videoUrl: 'https://www.youtube.com/watch?v=gwWv7aPcD6E',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'legs_064',
+    name: 'Leg Press Single Leg',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['leg press machine'],
+    difficulty: 'intermediate',
+    notes: 'One leg at a time on leg press, full range of motion',
+    videoUrl: 'https://www.youtube.com/watch?v=Sj1_2oGpN9g',
+    primaryEquipment: 'leg press machine'
+  },
+  {
+    id: 'legs_065',
+    name: 'Squat Hold',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Hold squat position at bottom for time',
+    videoUrl: 'https://www.youtube.com/watch?v=cYOyQU_Ckl4',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_066',
+    name: 'Curtsy Lunge to Knee Drive',
+    category: 'legs',
+    muscleGroup: ['glutes', 'quadriceps', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Curtsy lunge, drive knee up, balance challenge',
+    videoUrl: 'https://www.youtube.com/watch?v=zVLZa8vBN9I',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'legs_067',
+    name: 'Leg Press Narrow Stance',
+    category: 'legs',
+    muscleGroup: ['quadriceps'],
+    equipment: ['leg press machine'],
+    difficulty: 'intermediate',
+    notes: 'Feet close together on leg press, emphasize quads',
+    videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+    primaryEquipment: 'leg press machine'
+  },
+  {
+    id: 'legs_068',
+    name: 'Leg Press Wide Stance',
+    category: 'legs',
+    muscleGroup: ['glutes', 'adductors'],
+    equipment: ['leg press machine'],
+    difficulty: 'intermediate',
+    notes: 'Feet wide apart on leg press, emphasize glutes',
+    videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+    primaryEquipment: 'leg press machine'
+  },
+  {
+    id: 'legs_069',
+    name: 'Leg Press High Feet',
+    category: 'legs',
+    muscleGroup: ['hamstrings', 'glutes'],
+    equipment: ['leg press machine'],
+    difficulty: 'intermediate',
+    notes: 'Feet high on platform, emphasize posterior chain',
+    videoUrl: 'https://www.youtube.com/watch?v=IZxyjW7MPJQ',
+    primaryEquipment: 'leg press machine'
+  },
+  {
+    id: 'legs_070',
+    name: 'Single Leg Hip Thrust',
+    category: 'legs',
+    muscleGroup: ['glutes', 'hamstrings'],
+    equipment: ['bench'],
+    difficulty: 'intermediate',
+    notes: 'Upper back on bench, thrust one hip up at a time',
+    videoUrl: 'https://www.youtube.com/watch?v=AVAXhy6pl7o',
+    primaryEquipment: 'bench'
+  },
+  {
+    id: 'legs_071',
+    name: 'Dumbbell Step-ups',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes'],
+    equipment: ['dumbbells', 'box'],
+    difficulty: 'intermediate',
+    notes: 'Hold dumbbells, step up onto box, control descent',
+    videoUrl: 'https://www.youtube.com/watch?v=dQqApCGd5Ss',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'legs_072',
+    name: 'Lateral Step-ups',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'abductors'],
+    equipment: ['box'],
+    difficulty: 'intermediate',
+    notes: 'Step up sideways onto box, control descent',
+    videoUrl: 'https://www.youtube.com/watch?v=KJRGxY3cjZQ',
+    primaryEquipment: 'box'
+  },
+  {
+    id: 'legs_073',
+    name: 'Reverse Lunge to Knee Drive',
+    category: 'legs',
+    muscleGroup: ['quadriceps', 'glutes', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Reverse lunge, drive knee up, balance challenge',
+    videoUrl: 'https://www.youtube.com/watch?v=zVLZa8vBN9I',
+    primaryEquipment: 'bodyweight'
+  }
+];
+
+// SHOULDERS EXERCISES (70 exercises)
+const shouldersExercises: ExerciseData[] = [
   {
     id: 'shoulders_001',
-    name: 'Barbell shoulder press',
+    name: 'Military Press',
     category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'triceps'],
+    equipment: ['barbell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids', 'Medial Deltoids', 'Triceps'],
-    equipment: ['Barbell'],
-    notes: 'Standing or seated barbell overhead press. Keep core tight, press straight up.',
-    primaryEquipment: 'Barbell'
+    notes: 'Stand upright, press barbell from shoulders overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=2yjwXTZQDDI',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'shoulders_002',
-    name: 'Standing lateral raises',
+    name: 'Dumbbell Shoulder Press',
     category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'triceps'],
+    equipment: ['dumbbells'],
     difficulty: 'beginner',
-    muscleGroup: ['Medial Deltoids'],
-    equipment: ['Dumbbells'],
-    notes: 'Lateral raise for shoulder width. Lift arms to shoulder height, control the descent.',
-    primaryEquipment: 'Dumbbells'
+    notes: 'Seated or standing, press dumbbells from shoulders overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=qEwKCR5JCog',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_003',
-    name: 'Dumbbell Shoulder Press',
+    name: 'Lateral Raises',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids', 'Medial Deltoids'],
-    equipment: ['Dumbbells'],
-    notes: 'Seated or standing dumbbell press. Press straight up overhead.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['medial deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Raise dumbbells to sides until parallel to ground',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_004',
-    name: 'Military Press',
+    name: 'Front Raises',
     category: 'shoulders',
-    difficulty: 'advanced',
-    muscleGroup: ['Anterior Deltoids', 'Core'],
-    equipment: ['Barbell'],
-    notes: 'Standing strict press. No leg drive. Core engagement crucial.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['anterior deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Raise dumbbells forward until parallel to ground',
+    videoUrl: 'https://www.youtube.com/watch?v=-t7fuZ0KhDA',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_005',
-    name: 'Arnold Press',
+    name: 'Rear Delt Flyes',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids', 'Medial Deltoids'],
-    equipment: ['Dumbbells'],
-    notes: 'Start with palms facing you, rotate as you press up.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, raise dumbbells to sides, squeeze shoulder blades',
+    videoUrl: 'https://www.youtube.com/watch?v=ea7I-_TYNLs',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_006',
-    name: 'Front Raises',
+    name: 'Arnold Press',
     category: 'shoulders',
-    difficulty: 'beginner',
-    muscleGroup: ['Anterior Deltoids'],
-    equipment: ['Dumbbells'],
-    notes: 'Raise arms straight forward to shoulder height.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Start with palms facing you, rotate and press up',
+    videoUrl: 'https://www.youtube.com/watch?v=6Z15_WdXmVw',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_007',
-    name: 'Rear Delt Flyes',
+    name: 'Upright Rows',
     category: 'shoulders',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids'],
-    equipment: ['Dumbbells'],
-    notes: 'Bent over rear delt fly. Focus on rear deltoid activation.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['medial deltoids', 'traps'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Pull barbell up to chest, elbows higher than hands',
+    videoUrl: 'https://www.youtube.com/watch?v=1_1l6bSZRIQ',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'shoulders_008',
-    name: 'Cable Lateral Raises',
+    name: 'Pike Push-ups',
     category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'triceps'],
+    equipment: ['bodyweight'],
     difficulty: 'intermediate',
-    muscleGroup: ['Medial Deltoids'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable provides constant tension throughout range of motion.',
-    primaryEquipment: 'Cable Machine'
+    notes: 'Downward dog position, push-up targeting shoulders',
+    videoUrl: 'https://www.youtube.com/watch?v=spoKoUjFEXs',
+    primaryEquipment: 'bodyweight'
   },
   {
     id: 'shoulders_009',
-    name: 'Upright Row',
+    name: 'Handstand Push-ups',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Medial Deltoids', 'Upper Trapezius'],
-    equipment: ['Barbell'],
-    notes: 'Pull bar to chest level. Elbows lead the movement.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['anterior deltoids', 'triceps'],
+    equipment: ['wall'],
+    difficulty: 'advanced',
+    notes: 'Against wall, press up from handstand position',
+    videoUrl: 'https://www.youtube.com/watch?v=tQhrk6WMcKw',
+    primaryEquipment: 'wall'
   },
   {
     id: 'shoulders_010',
-    name: 'Pike Push-ups',
+    name: 'Seated Dumbbell Press',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids'],
-    equipment: ['Bodyweight'],
-    notes: 'Inverted V position. Bodyweight shoulder exercise.',
-    primaryEquipment: 'Bodyweight'
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['dumbbells', 'bench'],
+    difficulty: 'beginner',
+    notes: 'Seated with back support, press dumbbells overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=qEwKCR5JCog',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_011',
-    name: 'Handstand Push-ups',
+    name: 'Cable Lateral Raises',
     category: 'shoulders',
-    difficulty: 'advanced',
-    muscleGroup: ['Anterior Deltoids', 'Triceps'],
-    equipment: ['Bodyweight'],
-    notes: 'Advanced bodyweight shoulder exercise. Requires significant strength.',
-    primaryEquipment: 'Bodyweight'
+    muscleGroup: ['medial deltoids'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Single arm cable lateral raise, constant tension',
+    videoUrl: 'https://www.youtube.com/watch?v=PPrzBWZDOuI',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'shoulders_012',
-    name: 'Shoulder Press Machine',
+    name: 'Cable Rear Delt Flyes',
     category: 'shoulders',
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['cable machine'],
     difficulty: 'beginner',
-    muscleGroup: ['Anterior Deltoids', 'Medial Deltoids'],
-    equipment: ['Shoulder Press Machine'],
-    notes: 'Machine provides stability for beginners. Adjust seat properly.',
-    primaryEquipment: 'Shoulder Press Machine'
+    notes: 'Cross cables, pull apart at shoulder height',
+    videoUrl: 'https://www.youtube.com/watch?v=wHIvdGFzgDo',
+    primaryEquipment: 'cable machine'
   },
   {
     id: 'shoulders_013',
-    name: 'Behind Neck Press',
+    name: 'Overhead Press Machine',
     category: 'shoulders',
-    difficulty: 'advanced',
-    muscleGroup: ['Medial Deltoids', 'Posterior Deltoids'],
-    equipment: ['Barbell'],
-    notes: 'Advanced exercise. Requires good shoulder mobility. Use light weight.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['shoulder press machine'],
+    difficulty: 'beginner',
+    notes: 'Seated machine press, controlled movement',
+    videoUrl: 'https://www.youtube.com/watch?v=5yWaNOvgFCM',
+    primaryEquipment: 'shoulder press machine'
   },
   {
     id: 'shoulders_014',
-    name: 'Cable Front Raises',
+    name: 'Barbell Front Raises',
     category: 'shoulders',
-    difficulty: 'beginner',
-    muscleGroup: ['Anterior Deltoids'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable front raise provides constant tension.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['anterior deltoids'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Hold barbell, raise forward to shoulder height',
+    videoUrl: 'https://www.youtube.com/watch?v=5yWaNOvgFCM',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'shoulders_015',
-    name: 'Cable Rear Delt Flyes',
+    name: 'Plate Raises',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Posterior Deltoids'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable crossover for rear delts. Cables at shoulder height.',
-    primaryEquipment: 'Cable Machine'
+    muscleGroup: ['anterior deltoids'],
+    equipment: ['weight plate'],
+    difficulty: 'beginner',
+    notes: 'Hold plate, raise forward to shoulder height',
+    videoUrl: 'https://www.youtube.com/watch?v=5yWaNOvgFCM',
+    primaryEquipment: 'weight plate'
   },
   {
     id: 'shoulders_016',
-    name: 'Plate Raises',
+    name: 'Single Arm Dumbbell Press',
     category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'core'],
+    equipment: ['dumbbell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids'],
-    equipment: ['Weight Plate'],
-    notes: 'Hold plate with both hands, raise to shoulder height.',
-    primaryEquipment: 'Weight Plate'
+    notes: 'Press one dumbbell at a time, engage core',
+    videoUrl: 'https://www.youtube.com/watch?v=3Hc6mGLrYOc',
+    primaryEquipment: 'dumbbell'
   },
   {
     id: 'shoulders_017',
-    name: 'Band Pull Aparts',
+    name: 'Alternating Dumbbell Press',
     category: 'shoulders',
-    difficulty: 'beginner',
-    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
-    equipment: ['Resistance Band'],
-    notes: 'Great warm-up exercise. Pull band apart at chest level.',
-    primaryEquipment: 'Resistance Band'
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Alternate pressing dumbbells, one up while other down',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_018',
-    name: 'Landmine Press',
+    name: 'Dumbbell Shrugs',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids', 'Core'],
-    equipment: ['Barbell', 'Landmine'],
-    notes: 'One end of barbell anchored. Press at angle.',
-    primaryEquipment: 'Barbell'
+    muscleGroup: ['upper traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Lift shoulders toward ears, squeeze traps',
+    videoUrl: 'https://www.youtube.com/watch?v=cJRVVxmytaM',
+    primaryEquipment: 'dumbbells'
   },
   {
     id: 'shoulders_019',
-    name: 'Cuban Press',
+    name: 'Barbell Shrugs',
     category: 'shoulders',
-    difficulty: 'intermediate',
-    muscleGroup: ['Posterior Deltoids', 'Rotator Cuff'],
-    equipment: ['Dumbbells'],
-    notes: 'External rotation followed by press. Great for shoulder health.',
-    primaryEquipment: 'Dumbbells'
+    muscleGroup: ['upper traps'],
+    equipment: ['barbell'],
+    difficulty: 'beginner',
+    notes: 'Hold barbell, shrug shoulders up, squeeze traps',
+    videoUrl: 'https://www.youtube.com/watch?v=g6qbq4Lf1FI',
+    primaryEquipment: 'barbell'
   },
   {
     id: 'shoulders_020',
-    name: 'Bradford Press',
+    name: 'Push Press',
     category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'legs'],
+    equipment: ['barbell'],
     difficulty: 'intermediate',
-    muscleGroup: ['Anterior Deltoids', 'Medial Deltoids'],
-    equipment: ['Barbell'],
-    notes: 'Press from front to back of neck without lockout.',
-    primaryEquipment: 'Barbell'
+    notes: 'Slight knee bend, drive up and press overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=iaBVSJm78ko',
+    primaryEquipment: 'barbell'
   },
-  // ... continue with remaining shoulder exercises (shoulders_021 to shoulders_070)
-
-  // ARM EXERCISES (60 exercises)
   {
-    id: 'arms_001',
-    name: 'Biceps cable curl',
-    category: 'arms',
-    difficulty: 'beginner',
-    muscleGroup: ['Biceps'],
-    equipment: ['Cable Machine'],
-    notes: 'Cable bicep curl provides constant tension. Keep elbows stationary.',
-    primaryEquipment: 'Cable Machine'
+    id: 'shoulders_021',
+    name: 'Behind Neck Press',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['barbell'],
+    difficulty: 'advanced',
+    notes: 'Press barbell from behind neck, requires flexibility',
+    videoUrl: 'https://www.youtube.com/watch?v=3_YFOzEl8eE',
+    primaryEquipment: 'barbell'
   },
-  // ... continue with remaining arm exercises (arms_002 to arms_060)
-
-  // CORE EXERCISES (30 exercises)
   {
-    id: 'core_001',
-    name: 'Crunch',
-    category: 'core',
-    difficulty: 'beginner',
-    muscleGroup: ['Rectus Abdominis'],
-    equipment: ['Bodyweight'],
-    notes: 'Basic abdominal crunch. Focus on lifting shoulder blades off ground.',
-    primaryEquipment: 'Bodyweight'
+    id: 'shoulders_022',
+    name: 'Landmine Press',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'core'],
+    equipment: ['barbell', 'landmine'],
+    difficulty: 'intermediate',
+    notes: 'Press barbell from landmine position, single arm',
+    videoUrl: 'https://www.youtube.com/watch?v=ydgc4KAKIcY',
+    primaryEquipment: 'barbell'
   },
-  // ... continue with remaining core exercises (core_002 to core_030)
-
-  // CARDIO EXERCISES (18 exercises)
   {
-    id: 'cardio_001',
-    name: 'TreadMill',
-    category: 'cardio',
-    difficulty: 'beginner',
-    muscleGroup: ['Full Body'],
-    equipment: ['Treadmill'],
-    notes: 'Running or walking on treadmill. Adjust speed and incline as needed.',
-    primaryEquipment: 'Treadmill'
+    id: 'shoulders_023',
+    name: 'Kettlebell Press',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['kettlebell'],
+    difficulty: 'intermediate',
+    notes: 'Press kettlebell overhead, maintain wrist position',
+    videoUrl: 'https://www.youtube.com/watch?v=5yWaNOvgFCM',
+    primaryEquipment: 'kettlebell'
   },
-  // ... continue with remaining cardio exercises (cardio_002 to cardio_018)
+  {
+    id: 'shoulders_024',
+    name: 'Resistance Band Lateral Raises',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Stand on band, raise arms to sides',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'shoulders_025',
+    name: 'Resistance Band Overhead Press',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Stand on band, press handles overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'shoulders_026',
+    name: 'Y-Raises',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'lower traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, raise arms in Y position',
+    videoUrl: 'https://www.youtube.com/watch?v=6ckFHgJQkNs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_027',
+    name: 'T-Raises',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'middle traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, raise arms to sides in T position',
+    videoUrl: 'https://www.youtube.com/watch?v=J9uZQ3hUins',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_028',
+    name: 'W-Raises',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, raise arms in W position',
+    videoUrl: 'https://www.youtube.com/watch?v=6ckFHgJQkNs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_029',
+    name: 'Face Pulls',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Pull cable to face, elbows high, external rotation',
+    videoUrl: 'https://www.youtube.com/watch?v=rep-qVOkqgk',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'shoulders_030',
+    name: 'Reverse Pec Deck',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['pec deck machine'],
+    difficulty: 'beginner',
+    notes: 'Face away from machine, pull handles back',
+    videoUrl: 'https://www.youtube.com/watch?v=lKGfhb7q8pA',
+    primaryEquipment: 'pec deck machine'
+  },
+  {
+    id: 'shoulders_031',
+    name: 'Cuban Press',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rotator cuff'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Upright row, external rotation, then press',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_032',
+    name: 'External Rotations',
+    category: 'shoulders',
+    muscleGroup: ['rotator cuff'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Elbow at side, rotate arm outward',
+    videoUrl: 'https://www.youtube.com/watch?v=hsJrJ6azKFE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'shoulders_033',
+    name: 'Internal Rotations',
+    category: 'shoulders',
+    muscleGroup: ['rotator cuff'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Elbow at side, rotate arm inward',
+    videoUrl: 'https://www.youtube.com/watch?v=hsJrJ6azKFE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'shoulders_034',
+    name: 'Scaption',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids', 'anterior deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Raise arms at 30-degree angle forward from sides',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_035',
+    name: 'Bent Over Lateral Raises',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Bend forward, raise dumbbells to sides',
+    videoUrl: 'https://www.youtube.com/watch?v=ea7I-_TYNLs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_036',
+    name: 'Prone Y-T-W',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids', 'lower traps'],
+    equipment: ['light dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Lie face down, perform Y, T, W movements',
+    videoUrl: 'https://www.youtube.com/watch?v=6ckFHgJQkNs',
+    primaryEquipment: 'light dumbbells'
+  },
+  {
+    id: 'shoulders_037',
+    name: 'Wall Slides',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['wall'],
+    difficulty: 'beginner',
+    notes: 'Back against wall, slide arms up and down',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'wall'
+  },
+  {
+    id: 'shoulders_038',
+    name: 'Band Pull Aparts',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Hold band at chest level, pull apart',
+    videoUrl: 'https://www.youtube.com/watch?v=eGIIJNrfmXM',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'shoulders_039',
+    name: 'Overhead Carry',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'core'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Hold dumbbells overhead, walk forward',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_040',
+    name: 'Farmer\'s Walks',
+    category: 'shoulders',
+    muscleGroup: ['upper traps', 'forearms'],
+    equipment: ['heavy dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Hold heavy weights at sides, walk forward',
+    videoUrl: 'https://www.youtube.com/watch?v=p3PjFaaNOXE',
+    primaryEquipment: 'heavy dumbbells'
+  },
+  {
+    id: 'shoulders_041',
+    name: 'Lateral Raise Hold',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Raise dumbbells to sides, hold position',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_042',
+    name: 'Bottoms Up Kettlebell Press',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'stabilizers'],
+    equipment: ['kettlebell'],
+    difficulty: 'advanced',
+    notes: 'Hold kettlebell upside down, press overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=5yWaNOvgFCM',
+    primaryEquipment: 'kettlebell'
+  },
+  {
+    id: 'shoulders_043',
+    name: 'Around the World',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'posterior deltoids'],
+    equipment: ['light dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Small circles with arms extended, forward and backward',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'light dumbbells'
+  },
+  {
+    id: 'shoulders_044',
+    name: 'Incline Lateral Raises',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['dumbbells', 'incline bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie on incline bench, lateral raises from side',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_045',
+    name: 'Decline Rear Delt Flyes',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['dumbbells', 'decline bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie face down on decline bench, raise arms back',
+    videoUrl: 'https://www.youtube.com/watch?v=ea7I-_TYNLs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_046',
+    name: 'One Arm Lateral Raise',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['dumbbell'],
+    difficulty: 'beginner',
+    notes: 'Single arm lateral raise, focus on form',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'shoulders_047',
+    name: 'Handstand Hold',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'core'],
+    equipment: ['wall'],
+    difficulty: 'advanced',
+    notes: 'Hold handstand position against wall',
+    videoUrl: 'https://www.youtube.com/watch?v=tQhrk6WMcKw',
+    primaryEquipment: 'wall'
+  },
+  {
+    id: 'shoulders_048',
+    name: 'Pike Walks',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Walk hands toward feet in pike position',
+    videoUrl: 'https://www.youtube.com/watch?v=spoKoUjFEXs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'shoulders_049',
+    name: 'Plate Halo',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'posterior deltoids'],
+    equipment: ['weight plate'],
+    difficulty: 'intermediate',
+    notes: 'Circle plate around head in controlled motion',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'weight plate'
+  },
+  {
+    id: 'shoulders_050',
+    name: 'Dumbbell Halo',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids', 'posterior deltoids'],
+    equipment: ['dumbbell'],
+    difficulty: 'intermediate',
+    notes: 'Circle dumbbell around head in controlled motion',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'shoulders_051',
+    name: 'Cable Upright Row',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids', 'traps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Pull cable to chest, elbows higher than hands',
+    videoUrl: 'https://www.youtube.com/watch?v=1_1l6bSZRIQ',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'shoulders_052',
+    name: 'Dumbbell Upright Row',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids', 'traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Pull dumbbells to chest, elbows higher than hands',
+    videoUrl: 'https://www.youtube.com/watch?v=1_1l6bSZRIQ',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_053',
+    name: 'Machine Lateral Raises',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['lateral raise machine'],
+    difficulty: 'beginner',
+    notes: 'Sit upright, raise arms to sides using machine',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'lateral raise machine'
+  },
+  {
+    id: 'shoulders_054',
+    name: 'Machine Reverse Flyes',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['reverse fly machine'],
+    difficulty: 'beginner',
+    notes: 'Chest against pad, pull handles back',
+    videoUrl: 'https://www.youtube.com/watch?v=lKGfhb7q8pA',
+    primaryEquipment: 'reverse fly machine'
+  },
+  {
+    id: 'shoulders_055',
+    name: 'Resistance Band Face Pulls',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Pull band to face, external rotation',
+    videoUrl: 'https://www.youtube.com/watch?v=mYmZXNGklLU',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'shoulders_056',
+    name: 'Resistance Band External Rotation',
+    category: 'shoulders',
+    muscleGroup: ['rotator cuff'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Elbow at side, rotate arm outward against band',
+    videoUrl: 'https://www.youtube.com/watch?v=hsJrJ6azKFE',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'shoulders_057',
+    name: 'Single Arm Cable Lateral Raise',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'One arm at a time, constant tension',
+    videoUrl: 'https://www.youtube.com/watch?v=PPrzBWZDOuI',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'shoulders_058',
+    name: 'Leaning Lateral Raises',
+    category: 'shoulders',
+    muscleGroup: ['medial deltoids'],
+    equipment: ['dumbbell'],
+    difficulty: 'intermediate',
+    notes: 'Lean away from working arm, increased range',
+    videoUrl: 'https://www.youtube.com/watch?v=3VcKaXpzqRo',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'shoulders_059',
+    name: 'Overhead Shrugs',
+    category: 'shoulders',
+    muscleGroup: ['upper traps'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Arms overhead, shrug shoulders up',
+    videoUrl: 'https://www.youtube.com/watch?v=cJRVVxmytaM',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'shoulders_060',
+    name: 'Prone Shoulder Circles',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['light dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Lie face down, make small circles with arms',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'light dumbbells'
+  },
+  {
+    id: 'shoulders_061',
+    name: 'Shoulder Dislocations',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'mobility'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Hold band wide, bring over and behind head',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'shoulders_062',
+    name: 'Doorway Stretch',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'chest'],
+    equipment: ['doorway'],
+    difficulty: 'beginner',
+    notes: 'Arm in doorway, lean forward to stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'doorway'
+  },
+  {
+    id: 'shoulders_063',
+    name: 'Cross Body Stretch',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Pull arm across body, hold stretch',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'shoulders_064',
+    name: 'Overhead Stretch',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'triceps'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Reach behind head, pull elbow with other hand',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'shoulders_065',
+    name: 'Wall Angels',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rhomboids'],
+    equipment: ['wall'],
+    difficulty: 'beginner',
+    notes: 'Back against wall, move arms like making snow angels',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'wall'
+  },
+  {
+    id: 'shoulders_066',
+    name: 'Pendulum Swings',
+    category: 'shoulders',
+    muscleGroup: ['mobility'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, let arm swing like pendulum',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'shoulders_067',
+    name: 'Arm Circles',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids', 'medial deltoids'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Make circles with arms, forward and backward',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'shoulders_068',
+    name: 'Shoulder Rolls',
+    category: 'shoulders',
+    muscleGroup: ['upper traps'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Roll shoulders in circular motion',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'shoulders_069',
+    name: 'Doorway Shoulder Stretch',
+    category: 'shoulders',
+    muscleGroup: ['anterior deltoids'],
+    equipment: ['doorway'],
+    difficulty: 'beginner',
+    notes: 'Stand in doorway, arms on frame, step forward',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'doorway'
+  },
+  {
+    id: 'shoulders_070',
+    name: 'Sleeper Stretch',
+    category: 'shoulders',
+    muscleGroup: ['posterior deltoids', 'rotator cuff'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie on side, rotate arm downward',
+    videoUrl: 'https://www.youtube.com/watch?v=8lbdWqFxtKs',
+    primaryEquipment: 'bodyweight'
+  }
 ];
 
-// Helper functions
-export function getExerciseById(id: string): ExerciseData | undefined {
-  return exerciseDatabase.find(exercise => exercise.id === id);
-}
+// ARMS EXERCISES (60 exercises)
+const armsExercises: ExerciseData[] = [
+  {
+    id: 'arms_001',
+    name: 'Bicep Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Stand upright, curl dumbbells toward shoulders',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_002',
+    name: 'Tricep Dips',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['bench'],
+    difficulty: 'beginner',
+    notes: 'Lower body using arms, press back up',
+    videoUrl: 'https://www.youtube.com/watch?v=0326dy_-CzM',
+    primaryEquipment: 'bench'
+  },
+  {
+    id: 'arms_003',
+    name: 'Hammer Curls',
+    category: 'arms',
+    muscleGroup: ['biceps', 'brachialis'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Neutral grip, curl dumbbells toward shoulders',
+    videoUrl: 'https://www.youtube.com/watch?v=zC3nLlEvin4',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_004',
+    name: 'Tricep Pushdowns',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Push cable down, squeeze triceps at bottom',
+    videoUrl: 'https://www.youtube.com/watch?v=2-LAMcpzODU',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_005',
+    name: 'Overhead Tricep Extension',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['dumbbell'],
+    difficulty: 'intermediate',
+    notes: 'Hold dumbbell overhead, lower behind head',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'arms_006',
+    name: 'Barbell Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Hold barbell, curl toward chest',
+    videoUrl: 'https://www.youtube.com/watch?v=kwG2ipFRgfo',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_007',
+    name: 'Close Grip Bench Press',
+    category: 'arms',
+    muscleGroup: ['triceps', 'chest'],
+    equipment: ['barbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Narrow grip, focus on tricep engagement',
+    videoUrl: 'https://www.youtube.com/watch?v=nEF0bv2FW94',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_008',
+    name: 'Preacher Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['preacher bench', 'barbell'],
+    difficulty: 'intermediate',
+    notes: 'Arms on preacher pad, curl barbell up',
+    videoUrl: 'https://www.youtube.com/watch?v=fIWP-FRFNU0',
+    primaryEquipment: 'preacher bench'
+  },
+  {
+    id: 'arms_009',
+    name: 'Cable Bicep Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Low cable position, curl handles up',
+    videoUrl: 'https://www.youtube.com/watch?v=NFzTWp2qpiE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_010',
+    name: 'Skull Crushers',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['barbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie on bench, lower barbell to forehead',
+    videoUrl: 'https://www.youtube.com/watch?v=d_KZxkY_0cM',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_011',
+    name: 'Concentration Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbell', 'bench'],
+    difficulty: 'beginner',
+    notes: 'Seated, elbow on thigh, curl dumbbell up',
+    videoUrl: 'https://www.youtube.com/watch?v=Jvj2wV0vOo0',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'arms_012',
+    name: 'Diamond Push-ups',
+    category: 'arms',
+    muscleGroup: ['triceps', 'chest'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Form diamond with hands, push-up motion',
+    videoUrl: 'https://www.youtube.com/watch?v=J0DnG1_S92I',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'arms_013',
+    name: 'Cable Hammer Curls',
+    category: 'arms',
+    muscleGroup: ['biceps', 'brachialis'],
+    equipment: ['cable machine'],
+    difficulty: 'beginner',
+    notes: 'Neutral grip on cable, curl up',
+    videoUrl: 'https://www.youtube.com/watch?v=zC3nLlEvin4',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_014',
+    name: 'Tricep Kickbacks',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Bend forward, extend arms back, squeeze triceps',
+    videoUrl: 'https://www.youtube.com/watch?v=6SS6K3lAwZ8',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_015',
+    name: 'Reverse Curls',
+    category: 'arms',
+    muscleGroup: ['brachialis', 'forearms'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Overhand grip, curl barbell up',
+    videoUrl: 'https://www.youtube.com/watch?v=nRgxYX2Ve9w',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_016',
+    name: 'Zottman Curls',
+    category: 'arms',
+    muscleGroup: ['biceps', 'brachialis', 'forearms'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Curl up underhand, lower overhand',
+    videoUrl: 'https://www.youtube.com/watch?v=ZrpRBgswtHs',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_017',
+    name: 'Incline Dumbbell Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbells', 'incline bench'],
+    difficulty: 'intermediate',
+    notes: 'Seated on incline, curl dumbbells up',
+    videoUrl: 'https://www.youtube.com/watch?v=soxrZlIl35U',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_018',
+    name: 'Overhead Cable Extension',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Cable overhead, extend arms forward',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_019',
+    name: 'Seated Dumbbell Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbells', 'bench'],
+    difficulty: 'beginner',
+    notes: 'Seated upright, curl dumbbells alternating',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_020',
+    name: 'Tate Press',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['dumbbells', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie on bench, lower dumbbells to chest',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_021',
+    name: 'Cable Concentration Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Seated, elbow on thigh, curl cable up',
+    videoUrl: 'https://www.youtube.com/watch?v=Jvj2wV0vOo0',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_022',
+    name: 'Single Arm Tricep Extension',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'One arm overhead, extend down',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_023',
+    name: 'Drag Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: 'Drag barbell up body, elbows back',
+    videoUrl: 'https://www.youtube.com/watch?v=kwG2ipFRgfo',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_024',
+    name: 'Rope Pushdowns',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['cable machine', 'rope'],
+    difficulty: 'beginner',
+    notes: 'Push rope down, separate at bottom',
+    videoUrl: 'https://www.youtube.com/watch?v=2-LAMcpzODU',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_025',
+    name: 'Spider Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['incline bench', 'barbell'],
+    difficulty: 'intermediate',
+    notes: 'Chest against incline, curl barbell up',
+    videoUrl: 'https://www.youtube.com/watch?v=fIWP-FRFNU0',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_026',
+    name: 'JM Press',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['barbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Hybrid between close grip press and skull crusher',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_027',
+    name: 'Alternating Dumbbell Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Alternate curling dumbbells, one at a time',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_028',
+    name: 'Bench Dips',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['bench'],
+    difficulty: 'beginner',
+    notes: 'Feet on ground, lower body using arms',
+    videoUrl: 'https://www.youtube.com/watch?v=0326dy_-CzM',
+    primaryEquipment: 'bench'
+  },
+  {
+    id: 'arms_029',
+    name: '21s Bicep Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['barbell'],
+    difficulty: 'intermediate',
+    notes: '7 bottom half, 7 top half, 7 full reps',
+    videoUrl: 'https://www.youtube.com/watch?v=kwG2ipFRgfo',
+    primaryEquipment: 'barbell'
+  },
+  {
+    id: 'arms_030',
+    name: 'Reverse Grip Tricep Pushdown',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Underhand grip, push cable down',
+    videoUrl: 'https://www.youtube.com/watch?v=2-LAMcpzODU',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_031',
+    name: 'Chin-ups',
+    category: 'arms',
+    muscleGroup: ['biceps', 'lats'],
+    equipment: ['pull-up bar'],
+    difficulty: 'intermediate',
+    notes: 'Underhand grip, pull body up',
+    videoUrl: 'https://www.youtube.com/watch?v=brhRXlOhkAM',
+    primaryEquipment: 'pull-up bar'
+  },
+  {
+    id: 'arms_032',
+    name: 'Dumbbell Tricep Press',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['dumbbell', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie on bench, lower dumbbell behind head',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'arms_033',
+    name: 'Cable Reverse Curls',
+    category: 'arms',
+    muscleGroup: ['brachialis', 'forearms'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Overhand grip on cable, curl up',
+    videoUrl: 'https://www.youtube.com/watch?v=nRgxYX2Ve9w',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_034',
+    name: 'Lying Tricep Extension',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['dumbbells', 'bench'],
+    difficulty: 'intermediate',
+    notes: 'Lie on bench, extend dumbbells overhead',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_035',
+    name: 'Resistance Band Bicep Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Stand on band, curl handles up',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'arms_036',
+    name: 'Resistance Band Tricep Extensions',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['resistance bands'],
+    difficulty: 'beginner',
+    notes: 'Anchor band high, extend arms down',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'resistance bands'
+  },
+  {
+    id: 'arms_037',
+    name: 'Wrist Curls',
+    category: 'arms',
+    muscleGroup: ['forearms'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Forearms on thighs, curl wrists up',
+    videoUrl: 'https://www.youtube.com/watch?v=CLIQBtpjinw',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_038',
+    name: 'Reverse Wrist Curls',
+    category: 'arms',
+    muscleGroup: ['forearms'],
+    equipment: ['dumbbells'],
+    difficulty: 'beginner',
+    notes: 'Forearms on thighs, curl wrists up overhand',
+    videoUrl: 'https://www.youtube.com/watch?v=CLIQBtpjinw',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_039',
+    name: 'Farmers Walk',
+    category: 'arms',
+    muscleGroup: ['forearms', 'grip'],
+    equipment: ['heavy dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Carry heavy weights, walk forward',
+    videoUrl: 'https://www.youtube.com/watch?v=p3PjFaaNOXE',
+    primaryEquipment: 'heavy dumbbells'
+  },
+  {
+    id: 'arms_040',
+    name: 'Plate Pinches',
+    category: 'arms',
+    muscleGroup: ['forearms', 'grip'],
+    equipment: ['weight plates'],
+    difficulty: 'intermediate',
+    notes: 'Pinch plates together, hold for time',
+    videoUrl: 'https://www.youtube.com/watch?v=CLIQBtpjinw',
+    primaryEquipment: 'weight plates'
+  },
+  {
+    id: 'arms_041',
+    name: 'Hammer Grip Pull-ups',
+    category: 'arms',
+    muscleGroup: ['biceps', 'brachialis', 'lats'],
+    equipment: ['pull-up bar'],
+    difficulty: 'intermediate',
+    notes: 'Neutral grip, pull body up',
+    videoUrl: 'https://www.youtube.com/watch?v=XFGe3I6nK7s',
+    primaryEquipment: 'pull-up bar'
+  },
+  {
+    id: 'arms_042',
+    name: 'Close Grip Push-ups',
+    category: 'arms',
+    muscleGroup: ['triceps', 'chest'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Hands close together, push-up motion',
+    videoUrl: 'https://www.youtube.com/watch?v=J0DnG1_S92I',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'arms_043',
+    name: 'Single Arm Dumbbell Curl',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbell'],
+    difficulty: 'beginner',
+    notes: 'One arm at a time, focus on form',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'dumbbell'
+  },
+  {
+    id: 'arms_044',
+    name: 'Overhead Tricep Stretch',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Reach behind head, pull elbow with other hand',
+    videoUrl: 'https://www.youtube.com/watch?v=YbX7Wd8jQ-Q',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'arms_045',
+    name: 'Bicep Stretch',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['wall'],
+    difficulty: 'beginner',
+    notes: 'Arm against wall, turn body away',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'wall'
+  },
+  {
+    id: 'arms_046',
+    name: 'Forearm Stretch',
+    category: 'arms',
+    muscleGroup: ['forearms'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Extend arm, pull fingers back',
+    videoUrl: 'https://www.youtube.com/watch?v=CLIQBtpjinw',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'arms_047',
+    name: 'Isometric Bicep Hold',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['dumbbells'],
+    difficulty: 'intermediate',
+    notes: 'Hold curl position at 90 degrees',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'dumbbells'
+  },
+  {
+    id: 'arms_048',
+    name: 'Isometric Tricep Hold',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Hold dip position at bottom',
+    videoUrl: 'https://www.youtube.com/watch?v=0326dy_-CzM',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'arms_049',
+    name: 'Negative Chin-ups',
+    category: 'arms',
+    muscleGroup: ['biceps', 'lats'],
+    equipment: ['pull-up bar'],
+    difficulty: 'beginner',
+    notes: 'Jump to top, slowly lower down',
+    videoUrl: 'https://www.youtube.com/watch?v=mRznU6pzez0',
+    primaryEquipment: 'pull-up bar'
+  },
+  {
+    id: 'arms_050',
+    name: 'Negative Dips',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['dip bars'],
+    difficulty: 'beginner',
+    notes: 'Start at top, slowly lower down',
+    videoUrl: 'https://www.youtube.com/watch?v=0326dy_-CzM',
+    primaryEquipment: 'dip bars'
+  },
+  {
+    id: 'arms_051',
+    name: 'Assisted Dips',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['assisted dip machine'],
+    difficulty: 'beginner',
+    notes: 'Use assistance to perform dip motion',
+    videoUrl: 'https://www.youtube.com/watch?v=0326dy_-CzM',
+    primaryEquipment: 'assisted dip machine'
+  },
+  {
+    id: 'arms_052',
+    name: 'Assisted Chin-ups',
+    category: 'arms',
+    muscleGroup: ['biceps', 'lats'],
+    equipment: ['assisted pull-up machine'],
+    difficulty: 'beginner',
+    notes: 'Use assistance to perform chin-up motion',
+    videoUrl: 'https://www.youtube.com/watch?v=fO3dKSQayfg',
+    primaryEquipment: 'assisted pull-up machine'
+  },
+  {
+    id: 'arms_053',
+    name: 'Cable Crossover Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'High cables, curl down to sides',
+    videoUrl: 'https://www.youtube.com/watch?v=NFzTWp2qpiE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_054',
+    name: 'Cable Overhead Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Cables at shoulder height, curl to head',
+    videoUrl: 'https://www.youtube.com/watch?v=NFzTWp2qpiE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'arms_055',
+    name: 'Machine Preacher Curls',
+    category: 'arms',
+    muscleGroup: ['biceps'],
+    equipment: ['preacher curl machine'],
+    difficulty: 'beginner',
+    notes: 'Seated, arms on pad, curl weight up',
+    videoUrl: 'https://www.youtube.com/watch?v=fIWP-FRFNU0',
+    primaryEquipment: 'preacher curl machine'
+  },
+  {
+    id: 'arms_056',
+    name: 'Machine Tricep Dips',
+    category: 'arms',
+    muscleGroup: ['triceps'],
+    equipment: ['tricep dip machine'],
+    difficulty: 'beginner',
+    notes: 'Seated, press handles down',
+    videoUrl: 'https://www.youtube.com/watch?v=2-LAMcpzODU',
+    primaryEquipment: 'tricep dip machine'
+  },
+  {
+    id: 'arms_057',
+    name: 'Kettlebell Bottoms Up Press',
+    category: 'arms',
+    muscleGroup: ['forearms', 'shoulders'],
+    equipment: ['kettlebell'],
+    difficulty: 'advanced',
+    notes: 'Hold kettlebell upside down, press up',
+    videoUrl: 'https://www.youtube.com/watch?v=5yWaNOvgFCM',
+    primaryEquipment: 'kettlebell'
+  },
+  {
+    id: 'arms_058',
+    name: 'Dead Hang',
+    category: 'arms',
+    muscleGroup: ['forearms', 'grip'],
+    equipment: ['pull-up bar'],
+    difficulty: 'intermediate',
+    notes: 'Hang from bar for time',
+    videoUrl: 'https://www.youtube.com/watch?v=CLIQBtpjinw',
+    primaryEquipment: 'pull-up bar'
+  },
+  {
+    id: 'arms_059',
+    name: 'Towel Pull-ups',
+    category: 'arms',
+    muscleGroup: ['forearms', 'biceps', 'lats'],
+    equipment: ['towel', 'pull-up bar'],
+    difficulty: 'advanced',
+    notes: 'Hang towel over bar, pull up on towel',
+    videoUrl: 'https://www.youtube.com/watch?v=CLIQBtpjinw',
+    primaryEquipment: 'towel'
+  },
+  {
+    id: 'arms_060',
+    name: 'Fat Grip Curls',
+    category: 'arms',
+    muscleGroup: ['biceps', 'forearms'],
+    equipment: ['dumbbells', 'fat grips'],
+    difficulty: 'intermediate',
+    notes: 'Use thick grips, curl dumbbells up',
+    videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo',
+    primaryEquipment: 'dumbbells'
+  }
+];
 
-export function getExercisesByCategory(category: string): ExerciseData[] {
-  return exerciseDatabase.filter(exercise => exercise.category === category);
-}
+// CORE EXERCISES (30 exercises)
+const coreExercises: ExerciseData[] = [
+  {
+    id: 'core_001',
+    name: 'Plank',
+    category: 'core',
+    muscleGroup: ['abs', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Hold plank position, keep body straight',
+    videoUrl: 'https://www.youtube.com/watch?v=pSHjTRCQxIw',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_002',
+    name: 'Crunches',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie on back, lift shoulders toward knees',
+    videoUrl: 'https://www.youtube.com/watch?v=Xyd_fa5zoEU',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_003',
+    name: 'Russian Twists',
+    category: 'core',
+    muscleGroup: ['obliques', 'abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Seated, lean back, rotate torso side to side',
+    videoUrl: 'https://www.youtube.com/watch?v=wkD8rjkodUI',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_004',
+    name: 'Mountain Climbers',
+    category: 'core',
+    muscleGroup: ['abs', 'cardio'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Plank position, alternate bringing knees to chest',
+    videoUrl: 'https://www.youtube.com/watch?v=kLh-uczlPLg',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_005',
+    name: 'Bicycle Crunches',
+    category: 'core',
+    muscleGroup: ['abs', 'obliques'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, alternate bringing elbow to opposite knee',
+    videoUrl: 'https://www.youtube.com/watch?v=9FGilxCbdz8',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_006',
+    name: 'Dead Bug',
+    category: 'core',
+    muscleGroup: ['abs', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie on back, alternate extending opposite arm and leg',
+    videoUrl: 'https://www.youtube.com/watch?v=g_BYB0R-4Ws',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_007',
+    name: 'Side Plank',
+    category: 'core',
+    muscleGroup: ['obliques', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on side, hold plank position',
+    videoUrl: 'https://www.youtube.com/watch?v=K2VljzCC16g',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_008',
+    name: 'Leg Raises',
+    category: 'core',
+    muscleGroup: ['lower abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, raise legs toward ceiling',
+    videoUrl: 'https://www.youtube.com/watch?v=JB2oyawG9KI',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_009',
+    name: 'Hollow Hold',
+    category: 'core',
+    muscleGroup: ['abs', 'core'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, hold hollow body position',
+    videoUrl: 'https://www.youtube.com/watch?v=LlDNef_Ztsc',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_010',
+    name: 'Ab Wheel Rollout',
+    category: 'core',
+    muscleGroup: ['abs', 'core'],
+    equipment: ['ab wheel'],
+    difficulty: 'advanced',
+    notes: 'Roll wheel forward, maintain control',
+    videoUrl: 'https://www.youtube.com/watch?v=UQ6LSPNC_hc',
+    primaryEquipment: 'ab wheel'
+  },
+  {
+    id: 'core_011',
+    name: 'Hanging Knee Raises',
+    category: 'core',
+    muscleGroup: ['lower abs'],
+    equipment: ['pull-up bar'],
+    difficulty: 'intermediate',
+    notes: 'Hang from bar, raise knees to chest',
+    videoUrl: 'https://www.youtube.com/watch?v=hdng3Nm1x_E',
+    primaryEquipment: 'pull-up bar'
+  },
+  {
+    id: 'core_012',
+    name: 'Cable Crunches',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Kneel facing cable, crunch down',
+    videoUrl: 'https://www.youtube.com/watch?v=Ff9BWFT6LYI',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'core_013',
+    name: 'Wood Chops',
+    category: 'core',
+    muscleGroup: ['obliques', 'core'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Rotate torso, pull cable across body',
+    videoUrl: 'https://www.youtube.com/watch?v=pAplQXk3dkU',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'core_014',
+    name: 'Pallof Press',
+    category: 'core',
+    muscleGroup: ['core', 'anti-rotation'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Hold cable at chest, extend and resist rotation',
+    videoUrl: 'https://www.youtube.com/watch?v=AH_1aTr4jmE',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'core_015',
+    name: 'Reverse Crunches',
+    category: 'core',
+    muscleGroup: ['lower abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, bring knees to chest',
+    videoUrl: 'https://www.youtube.com/watch?v=xFe2xVPOdPY',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_016',
+    name: 'V-Ups',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, bring torso and legs together',
+    videoUrl: 'https://www.youtube.com/watch?v=7UVgs18Y1P4',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_017',
+    name: 'Flutter Kicks',
+    category: 'core',
+    muscleGroup: ['lower abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, alternate kicking legs',
+    videoUrl: 'https://www.youtube.com/watch?v=ANVdMDhYNdI',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_018',
+    name: 'Scissor Kicks',
+    category: 'core',
+    muscleGroup: ['lower abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Lie on back, cross legs back and forth',
+    videoUrl: 'https://www.youtube.com/watch?v=ANVdMDhYNdI',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_019',
+    name: 'Sit-ups',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie on back, sit up to touch toes',
+    videoUrl: 'https://www.youtube.com/watch?v=1fbU_MkV7NE',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_020',
+    name: 'Bear Crawl',
+    category: 'core',
+    muscleGroup: ['core', 'shoulders'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Crawl on hands and feet, keep knees low',
+    videoUrl: 'https://www.youtube.com/watch?v=QNhIVc4VZJM',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_021',
+    name: 'Plank Up-Downs',
+    category: 'core',
+    muscleGroup: ['core', 'shoulders'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Plank position, move between forearms and hands',
+    videoUrl: 'https://www.youtube.com/watch?v=OPFQKjHqXIA',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'core_022',
+    name: 'Turkish Get-ups',
+    category: 'core',
+    muscleGroup: ['core', 'full body'],
+    equipment: ['kettlebell'],
+    difficulty: 'advanced',
+    notes: 'Complex movement from lying to standing',
+    videoUrl: 'https://www.youtube.com/watch?v=0bWRPC49-KI',
+    primaryEquipment: 'kettlebell'
+  },
+  {
+    id: 'core_023',
+    name: 'Dragon Flag',
+    category: 'core',
+    muscleGroup: ['abs', 'core'],
+    equipment: ['bench'],
+    difficulty: 'advanced',
+    notes: 'Lie on bench, lift entire body up',
+    videoUrl: 'https://www.youtube.com/watch?v=mjnneqUFWQk',
+    primaryEquipment: 'bench'
+  },
+  {
+    id: 'core_024',
+    name: 'L-Sit',
+    category: 'core',
+    muscleGroup: ['abs', 'hip flexors'],
+    equipment: ['parallel bars'],
+    difficulty: 'advanced',
+    notes: 'Support body weight, legs extended forward',
+    videoUrl: 'https://www.youtube.com/watch?v=IUZJoSP66HI',
+    primaryEquipment: 'parallel bars'
+  },
+  {
+    id: 'core_025',
+    name: 'Windshield Wipers',
+    category: 'core',
+    muscleGroup: ['obliques', 'abs'],
+    equipment: ['pull-up bar'],
+    difficulty: 'advanced',
+    notes: 'Hang from bar, move legs side to side',
+    videoUrl: 'https://www.youtube.com/watch?v=kOGpN5rh8aI',
+    primaryEquipment: 'pull-up bar'
+  },
+  {
+    id: 'core_026',
+    name: 'Decline Sit-ups',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['decline bench'],
+    difficulty: 'intermediate',
+    notes: 'Sit-ups on decline bench, increased difficulty',
+    videoUrl: 'https://www.youtube.com/watch?v=1fbU_MkV7NE',
+    primaryEquipment: 'decline bench'
+  },
+  {
+    id: 'core_027',
+    name: 'Cable Side Bends',
+    category: 'core',
+    muscleGroup: ['obliques'],
+    equipment: ['cable machine'],
+    difficulty: 'intermediate',
+    notes: 'Side bend with cable resistance',
+    videoUrl: 'https://www.youtube.com/watch?v=SNX3iJRQVqU',
+    primaryEquipment: 'cable machine'
+  },
+  {
+    id: 'core_028',
+    name: 'Stability Ball Crunches',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['stability ball'],
+    difficulty: 'beginner',
+    notes: 'Crunches on stability ball, increased range',
+    videoUrl: 'https://www.youtube.com/watch?v=Xyd_fa5zoEU',
+    primaryEquipment: 'stability ball'
+  },
+  {
+    id: 'core_029',
+    name: 'Medicine Ball Slams',
+    category: 'core',
+    muscleGroup: ['abs', 'power'],
+    equipment: ['medicine ball'],
+    difficulty: 'intermediate',
+    notes: 'Lift ball overhead, slam down forcefully',
+    videoUrl: 'https://www.youtube.com/watch?v=TXGMAbr3kio',
+    primaryEquipment: 'medicine ball'
+  },
+  {
+    id: 'core_030',
+    name: 'Toe Touches',
+    category: 'core',
+    muscleGroup: ['abs'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Lie on back, reach hands toward toes',
+    videoUrl: 'https://www.youtube.com/watch?v=7UVgs18Y1P4',
+    primaryEquipment: 'bodyweight'
+  }
+];
 
-export function getExercisesByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): ExerciseData[] {
-  return exerciseDatabase.filter(exercise => exercise.difficulty === difficulty);
-}
+// CARDIO EXERCISES (18 exercises)
+const cardioExercises: ExerciseData[] = [
+  {
+    id: 'cardio_001',
+    name: 'Treadmill Running',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['treadmill'],
+    difficulty: 'beginner',
+    notes: 'Steady pace running for cardiovascular health',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'treadmill'
+  },
+  {
+    id: 'cardio_002',
+    name: 'Stationary Bike',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['stationary bike'],
+    difficulty: 'beginner',
+    notes: 'Cycling for cardiovascular endurance',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'stationary bike'
+  },
+  {
+    id: 'cardio_003',
+    name: 'Elliptical Machine',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['elliptical machine'],
+    difficulty: 'beginner',
+    notes: 'Low impact full body cardio workout',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'elliptical machine'
+  },
+  {
+    id: 'cardio_004',
+    name: 'Rowing Machine',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['rowing machine'],
+    difficulty: 'intermediate',
+    notes: 'Full body cardio with rowing motion',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'rowing machine'
+  },
+  {
+    id: 'cardio_005',
+    name: 'Burpees',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Squat, plank, jump sequence for high intensity',
+    videoUrl: 'https://www.youtube.com/watch?v=dZgVxmf6jkA',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'cardio_006',
+    name: 'Jumping Jacks',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Jump while spreading legs and raising arms',
+    videoUrl: 'https://www.youtube.com/watch?v=c4DAnQ6DtF8',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'cardio_007',
+    name: 'High Knees',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Run in place lifting knees high',
+    videoUrl: 'https://www.youtube.com/watch?v=8opcQdC-V-U',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'cardio_008',
+    name: 'Jump Rope',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['jump rope'],
+    difficulty: 'intermediate',
+    notes: 'Continuous jumping over rope',
+    videoUrl: 'https://www.youtube.com/watch?v=1BZM2Vre5oc',
+    primaryEquipment: 'jump rope'
+  },
+  {
+    id: 'cardio_009',
+    name: 'Stair Climber',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['stair climber'],
+    difficulty: 'intermediate',
+    notes: 'Continuous stair climbing motion',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'stair climber'
+  },
+  {
+    id: 'cardio_010',
+    name: 'Sprint Intervals',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['track'],
+    difficulty: 'advanced',
+    notes: 'Alternating high and low intensity running',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'track'
+  },
+  {
+    id: 'cardio_011',
+    name: 'Battle Ropes',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['battle ropes'],
+    difficulty: 'intermediate',
+    notes: 'Wave heavy ropes for high intensity cardio',
+    videoUrl: 'https://www.youtube.com/watch?v=w8ZwUJ-ZhzE',
+    primaryEquipment: 'battle ropes'
+  },
+  {
+    id: 'cardio_012',
+    name: 'Kettlebell Swings',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['kettlebell'],
+    difficulty: 'intermediate',
+    notes: 'Hip hinge movement with kettlebell',
+    videoUrl: 'https://www.youtube.com/watch?v=GYHbu2oCcLI',
+    primaryEquipment: 'kettlebell'
+  },
+  {
+    id: 'cardio_013',
+    name: 'Step-ups',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['step platform'],
+    difficulty: 'beginner',
+    notes: 'Step up and down on platform continuously',
+    videoUrl: 'https://www.youtube.com/watch?v=dQqApCGd5Ss',
+    primaryEquipment: 'step platform'
+  },
+  {
+    id: 'cardio_014',
+    name: 'Cycling Intervals',
+    category: 'cardio',
+    muscleGroup: ['legs', 'cardiovascular'],
+    equipment: ['bicycle'],
+    difficulty: 'intermediate',
+    notes: 'Alternating high and low intensity cycling',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'bicycle'
+  },
+  {
+    id: 'cardio_015',
+    name: 'Swimming',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['pool'],
+    difficulty: 'intermediate',
+    notes: 'Full body low impact cardio exercise',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'pool'
+  },
+  {
+    id: 'cardio_016',
+    name: 'Dancing',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['bodyweight'],
+    difficulty: 'beginner',
+    notes: 'Rhythmic movement for cardio fitness',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'cardio_017',
+    name: 'Shadow Boxing',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['bodyweight'],
+    difficulty: 'intermediate',
+    notes: 'Boxing movements without equipment',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'bodyweight'
+  },
+  {
+    id: 'cardio_018',
+    name: 'Tabata Training',
+    category: 'cardio',
+    muscleGroup: ['full body', 'cardiovascular'],
+    equipment: ['bodyweight'],
+    difficulty: 'advanced',
+    notes: '20 seconds on, 10 seconds off intervals',
+    videoUrl: 'https://www.youtube.com/watch?v=kVnyY17VS9Y',
+    primaryEquipment: 'bodyweight'
+  }
+];
 
-export function searchExercises(query: string): ExerciseData[] {
-  const lowerQuery = query.toLowerCase();
-  return exerciseDatabase.filter(exercise =>
-    exercise.name.toLowerCase().includes(lowerQuery) ||
-    exercise.muscleGroup.some(muscle => muscle.toLowerCase().includes(lowerQuery)) ||
-    exercise.equipment.some(eq => eq.toLowerCase().includes(lowerQuery)) ||
-    exercise.notes.toLowerCase().includes(lowerQuery)
-  );
-}
+// Combine all exercises into the complete database
+export const completeExerciseDatabase: ExerciseData[] = [
+  ...chestExercises,
+  ...backExercises,
+  ...legsExercises,
+  ...shouldersExercises,
+  ...armsExercises,
+  ...coreExercises,
+  ...cardioExercises
+];
 
-export const completeExerciseDatabase = exerciseDatabase;
+// Utility function to get exercise by ID
+export const getExerciseById = (id: string): ExerciseData | undefined => {
+  return completeExerciseDatabase.find(exercise => exercise.id === id);
+};
+
+// Export for backward compatibility
+export { completeExerciseDatabase as exerciseDatabase };
+
+console.log(`Complete Exercise Database loaded with ${completeExerciseDatabase.length} exercises`);
+console.log(`Breakdown: Chest(${chestExercises.length}), Back(${backExercises.length}), Legs(${legsExercises.length}), Shoulders(${shouldersExercises.length}), Arms(${armsExercises.length}), Core(${coreExercises.length}), Cardio(${cardioExercises.length})`);

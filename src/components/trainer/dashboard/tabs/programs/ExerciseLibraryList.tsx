@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExerciseData, getExerciseById } from '@/data/exercises/exerciseDatabase';
-import { Edit, Trash2, Video, Image, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Edit, Trash2, Video, Image, ChevronDown, ChevronUp, ExternalLink, Play } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -91,11 +91,11 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
 
   return (
     <>
-      <ScrollArea className={isMobile ? "h-[70vh] w-full" : "h-[600px] w-full"}>
-        <div className={`grid gap-3 p-3 ${
+      <ScrollArea className="h-full w-full">
+        <div className={`p-2 ${
           isMobile 
-            ? 'grid-cols-1' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'
+            ? 'grid grid-cols-1 gap-2' 
+            : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'
         }`}>
           {exercises.map((exercise) => (
             <Card 
@@ -105,101 +105,94 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
               } ${isMobile ? 'shadow-sm' : ''}`}
               data-exercise-id={exercise.id}
             >
-              <CardHeader className={isMobile ? "pb-2 px-3 py-2" : "pb-3"}>
-                <div className="flex justify-between items-start">
+              <CardHeader className={isMobile ? "pb-1 px-2 py-1.5" : "pb-2"}>
+                <div className="flex justify-between items-start gap-2">
                   <div className="flex-1 min-w-0">
                     <CardTitle className={`${
-                      isMobile ? 'text-sm' : 'text-lg'
-                    } font-semibold line-clamp-2`}>
+                      isMobile ? 'text-xs leading-tight' : 'text-sm'
+                    } font-medium line-clamp-2`}>
                       {exercise.name}
                       {hasCompleteData(exercise) && (
                         <Badge variant="secondary" className={`ml-1 ${
-                          isMobile ? 'text-xs px-1 py-0' : 'text-xs ml-2'
+                          isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
                         }`}>
-                          Enhanced
+                          ✓
                         </Badge>
                       )}
                     </CardTitle>
                   </div>
-                  <div className={`flex ${isMobile ? 'gap-0.5 ml-1' : 'gap-1 ml-2'}`}>
+                  <div className="flex gap-0.5 flex-shrink-0">
                     <Button
                       variant="ghost"
-                      size={isMobile ? "sm" : "sm"}
+                      size="sm"
                       onClick={() => toggleExpanded(exercise.id)}
-                      className={isMobile ? "h-7 w-7 p-0" : "h-8 w-8 p-0"}
+                      className={isMobile ? "h-6 w-6 p-0" : "h-7 w-7 p-0"}
                     >
                       {isExpanded(exercise.id) ? 
-                        <ChevronUp className="h-3 w-3" /> : 
-                        <ChevronDown className="h-3 w-3" />
+                        <ChevronUp className="h-2.5 w-2.5" /> : 
+                        <ChevronDown className="h-2.5 w-2.5" />
                       }
                     </Button>
                     <Button
                       variant="ghost"
-                      size={isMobile ? "sm" : "sm"}
+                      size="sm"
                       onClick={() => onEdit(exercise)}
-                      className={isMobile ? "h-7 w-7 p-0" : "h-8 w-8 p-0"}
+                      className={isMobile ? "h-6 w-6 p-0" : "h-7 w-7 p-0"}
                     >
-                      <Edit className="h-3 w-3" />
+                      <Edit className="h-2.5 w-2.5" />
                     </Button>
                     <Button
                       variant="ghost"
-                      size={isMobile ? "sm" : "sm"}
+                      size="sm"
                       onClick={() => onDelete(exercise.id)}
                       className={`${
-                        isMobile ? "h-7 w-7 p-0" : "h-8 w-8 p-0"
+                        isMobile ? "h-6 w-6 p-0" : "h-7 w-7 p-0"
                       } text-red-600 hover:text-red-700`}
                     >
-                      <Trash2 className="h-3 w-3" />
+                      <Trash2 className="h-2.5 w-2.5" />
                     </Button>
                   </div>
                 </div>
 
-                <div className={`flex gap-1 flex-wrap ${isMobile ? 'mt-1' : 'gap-2'}`}>
+                <div className={`flex gap-1 flex-wrap ${isMobile ? 'mt-0.5' : 'mt-1'}`}>
                   <Badge className={`${getCategoryColor(exercise.category)} ${
-                    isMobile ? 'text-xs px-1.5 py-0' : ''
+                    isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
                   }`}>
                     {exercise.category}
                   </Badge>
                   <Badge className={`${getDifficultyColor(exercise.difficulty)} ${
-                    isMobile ? 'text-xs px-1.5 py-0' : ''
+                    isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
                   }`}>
                     {exercise.difficulty}
                   </Badge>
                   {exercise.isCustom && (
                     <Badge variant="outline" className={`border-purple-200 text-purple-700 ${
-                      isMobile ? 'text-xs px-1.5 py-0' : ''
+                      isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
                     }`}>
                       Custom
-                    </Badge>
-                  )}
-                  {exercise.isModified && (
-                    <Badge variant="outline" className={`border-orange-200 text-orange-700 ${
-                      isMobile ? 'text-xs px-1.5 py-0' : ''
-                    }`}>
-                      Modified
                     </Badge>
                   )}
                 </div>
               </CardHeader>
 
-              <CardContent className={`space-y-2 ${isMobile ? 'px-3 py-2' : 'space-y-3'}`}>
+              <CardContent className={`${isMobile ? 'px-2 py-1 space-y-1' : 'px-3 py-2 space-y-2'}`}>
                 {/* Muscle Groups - Always visible */}
                 <div>
                   <p className={`${
                     isMobile ? 'text-xs' : 'text-sm'
-                  } font-medium text-gray-700 mb-1`}>
-                    Muscle Groups:
+                  } font-medium text-gray-700 mb-0.5`}>
+                    Muscles:
                   </p>
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-0.5">
                     {exercise.muscleGroup.slice(0, isMobile && !isExpanded(exercise.id) ? 2 : undefined).map((muscle, index) => (
                       <Badge key={index} variant="secondary" className={
-                        isMobile ? 'text-xs px-1 py-0' : 'text-xs'
+                        isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
                       }>
                         {muscle}
                       </Badge>
                     ))}
                     {isMobile && !isExpanded(exercise.id) && exercise.muscleGroup.length > 2 && (
-                      <Badge variant="secondary" className="text-xs px-1 py-0">
+                      <Badge variant="secondary" className="text-xs px-1 py-0 text-xs">
                         +{exercise.muscleGroup.length - 2}
                       </Badge>
                     )}
@@ -210,17 +203,17 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                 <div>
                   <p className={`${
                     isMobile ? 'text-xs' : 'text-sm'
-                  } font-medium text-gray-700 mb-1`}>
+                  } font-medium text-gray-700 mb-0.5`}>
                     Equipment:
                   </p>
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-0.5">
                     {exercise.equipment.slice(0, isExpanded(exercise.id) ? undefined : (isMobile ? 1 : 2)).map((equip, index) => (
                       <Badge key={index} variant="outline" className={`${
-                        isMobile ? 'text-xs px-1 py-0' : 'text-xs'
+                        isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
                       } flex items-center gap-1`}>
                         {exercise.equipmentImages?.[equip] && (
                           <Image 
-                            className="h-2.5 w-2.5 cursor-pointer" 
+                            className="h-2 w-2 cursor-pointer" 
                             onClick={() => setImagePreview({ 
                               url: exercise.equipmentImages![equip], 
                               title: equip 
@@ -234,12 +227,49 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       </Badge>
                     ))}
                     {!isExpanded(exercise.id) && exercise.equipment.length > (isMobile ? 1 : 2) && (
-                      <Badge variant="outline" className={isMobile ? 'text-xs px-1 py-0' : 'text-xs'}>
+                      <Badge variant="outline" className={isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'}>
                         +{exercise.equipment.length - (isMobile ? 1 : 2)}
                       </Badge>
                     )}
                   </div>
                 </div>
+
+                {/* Video - Always visible if available */}
+                {exercise.videoUrl && (
+                  <div className="flex items-center gap-1">
+                    <Video className="h-3 w-3 text-blue-600" />
+                    <span className={`${
+                      isMobile ? 'text-xs' : 'text-sm'
+                    } font-medium text-gray-700`}>
+                      Video
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setVideoPreview(videoPreview === exercise.id ? null : exercise.id)}
+                      className={`${isMobile ? 'text-xs h-5 px-1' : 'text-xs h-6 px-2'} ml-1`}
+                    >
+                      <Play className="h-2 w-2 mr-0.5" />
+                      {videoPreview === exercise.id ? 'Hide' : 'Play'}
+                    </Button>
+                  </div>
+                )}
+
+                {/* Video Preview */}
+                {videoPreview === exercise.id && getYouTubeEmbedUrl(exercise.videoUrl) && (
+                  <div className="w-full">
+                    <iframe
+                      width="100%"
+                      height={isMobile ? "100" : "120"}
+                      src={getYouTubeEmbedUrl(exercise.videoUrl)}
+                      title={exercise.name}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="rounded-md"
+                    />
+                  </div>
+                )}
 
                 {/* Expanded Content */}
                 {isExpanded(exercise.id) && (
@@ -249,23 +279,21 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       <div>
                         <p className={`${
                           isMobile ? 'text-xs' : 'text-sm'
-                        } font-medium text-gray-700 mb-2`}>
+                        } font-medium text-gray-700 mb-1`}>
                           Equipment Images:
                         </p>
-                        <div className={`grid gap-2 ${
-                          isMobile ? 'grid-cols-1' : 'grid-cols-2'
-                        }`}>
+                        <div className="grid grid-cols-2 gap-1">
                           {Object.entries(exercise.equipmentImages).map(([equip, imageUrl]) => (
                             <div key={equip} className="relative group">
                               <img
                                 src={imageUrl}
                                 alt={equip}
                                 className={`w-full object-cover rounded cursor-pointer hover:opacity-80 transition-opacity ${
-                                  isMobile ? 'h-16' : 'h-20'
+                                  isMobile ? 'h-12' : 'h-16'
                                 }`}
                                 onClick={() => setImagePreview({ url: imageUrl, title: equip })}
                               />
-                              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b">
+                              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-0.5 rounded-b">
                                 {equip}
                               </div>
                             </div>
@@ -274,103 +302,55 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       </div>
                     )}
 
-                    {/* Video Preview */}
-                    {exercise.videoUrl && (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <Video className="h-4 w-4 text-blue-600" />
-                          <span className={`${
-                            isMobile ? 'text-xs' : 'text-sm'
-                          } font-medium text-gray-700`}>
-                            Video Available
-                          </span>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setVideoPreview(videoPreview === exercise.id ? null : exercise.id)}
-                            className="text-xs h-6 px-2"
-                          >
-                            {videoPreview === exercise.id ? 'Hide' : 'Preview'}
-                          </Button>
-                        </div>
-                        
-                        {videoPreview === exercise.id && getYouTubeEmbedUrl(exercise.videoUrl) && (
-                          <div className="w-full">
-                            <iframe
-                              width="100%"
-                              height={isMobile ? "120" : "150"}
-                              src={getYouTubeEmbedUrl(exercise.videoUrl)}
-                              title={exercise.name}
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              className="rounded-md"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    )}
-
                     {/* Alternative Exercises */}
                     {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
                       <div>
                         <p className={`${
                           isMobile ? 'text-xs' : 'text-sm'
-                        } font-medium text-gray-700 mb-2`}>
-                          Alternative Exercises ({exercise.alternativeExercises.length}):
+                        } font-medium text-gray-700 mb-1`}>
+                          Alternatives ({exercise.alternativeExercises.length}):
                         </p>
-                        <div className={isMobile ? 'flex flex-wrap gap-1' : 'space-y-1'}>
-                          {exercise.alternativeExercises.map((altId, index) => (
+                        <div className="flex flex-wrap gap-0.5">
+                          {exercise.alternativeExercises.slice(0, isMobile ? 2 : undefined).map((altId, index) => (
                             <Badge 
                               key={index}
                               variant="outline" 
                               className={`${
-                                isMobile ? 'text-xs px-1.5 py-0' : 'text-xs'
-                              } cursor-pointer hover:bg-blue-50 flex items-center gap-1`}
+                                isMobile ? 'text-xs px-1 py-0 text-xs' : 'text-xs'
+                              } cursor-pointer hover:bg-blue-50 flex items-center gap-0.5`}
                               onClick={() => handleAlternativeClick(altId)}
                             >
-                              <ExternalLink className="h-2.5 w-2.5" />
+                              <ExternalLink className="h-2 w-2" />
                               {isMobile ? 
-                                getAlternativeExerciseName(altId).substring(0, 15) + '...' :
-                                getAlternativeExerciseName(altId)
+                                getAlternativeExerciseName(altId).substring(0, 10) + '...' :
+                                getAlternativeExerciseName(altId).substring(0, 15) + '...'
                               }
                             </Badge>
                           ))}
+                          {isMobile && exercise.alternativeExercises.length > 2 && (
+                            <Badge variant="outline" className="text-xs px-1 py-0 text-xs">
+                              +{exercise.alternativeExercises.length - 2}
+                            </Badge>
+                          )}
                         </div>
                       </div>
                     )}
-
-                    {/* Full Notes */}
-                    <div>
-                      <p className={`${
-                        isMobile ? 'text-xs' : 'text-sm'
-                      } font-medium text-gray-700 mb-1`}>
-                        Instructions:
-                      </p>
-                      <p className={`${
-                        isMobile ? 'text-xs' : 'text-sm'
-                      } text-gray-600`}>
-                        {exercise.notes}
-                      </p>
-                    </div>
                   </>
                 )}
 
-                {/* Collapsed Notes Preview */}
-                {!isExpanded(exercise.id) && (
-                  <div>
-                    <p className={`${
-                      isMobile ? 'text-xs' : 'text-sm'
-                    } font-medium text-gray-700 mb-1`}>
-                      Instructions:
-                    </p>
-                    <p className={`${
-                      isMobile ? 'text-xs' : 'text-sm'
-                    } text-gray-600 line-clamp-2`}>
-                      {exercise.notes}
-                    </p>
-                  </div>
-                )}
+                {/* Notes - Always visible but truncated */}
+                <div>
+                  <p className={`${
+                    isMobile ? 'text-xs' : 'text-sm'
+                  } font-medium text-gray-700 mb-0.5`}>
+                    Instructions:
+                  </p>
+                  <p className={`${
+                    isMobile ? 'text-xs' : 'text-sm'
+                  } text-gray-600 ${isExpanded(exercise.id) ? '' : 'line-clamp-2'}`}>
+                    {exercise.notes}
+                  </p>
+                </div>
               </CardContent>
             </Card>
           ))}
