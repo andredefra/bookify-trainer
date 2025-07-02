@@ -16,11 +16,11 @@ interface ModificationRequestDialogProps {
 }
 
 const modificationReasons = [
-  { value: 'inappropriate_language', label: 'Linguaggio inappropriato' },
-  { value: 'false_information', label: 'Informazioni false' },
-  { value: 'spam', label: 'Spam o contenuto promozionale' },
-  { value: 'off_topic', label: 'Fuori argomento' },
-  { value: 'other', label: 'Altro' }
+  { value: 'inappropriate_language', label: 'Inappropriate language' },
+  { value: 'false_information', label: 'False information' },
+  { value: 'spam', label: 'Spam or promotional content' },
+  { value: 'off_topic', label: 'Off topic' },
+  { value: 'other', label: 'Other' }
 ];
 
 export function ModificationRequestDialog({
@@ -57,18 +57,18 @@ export function ModificationRequestDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Richiedi Modifica Recensione</DialogTitle>
+          <DialogTitle>Request Review Modification</DialogTitle>
           <p className="text-sm text-muted-foreground">
-            Stai richiedendo una modifica alla recensione di <strong>{clientName}</strong>
+            You are requesting a modification to the review by <strong>{clientName}</strong>
           </p>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="reason">Motivo della richiesta</Label>
+            <Label htmlFor="reason">Reason for request</Label>
             <Select value={reason} onValueChange={(value: ModificationRequest['reason']) => setReason(value)}>
               <SelectTrigger>
-                <SelectValue placeholder="Seleziona un motivo" />
+                <SelectValue placeholder="Select a reason" />
               </SelectTrigger>
               <SelectContent>
                 {modificationReasons.map((reasonOption) => (
@@ -82,12 +82,12 @@ export function ModificationRequestDialog({
 
           {reason === 'other' && (
             <div className="space-y-2">
-              <Label htmlFor="customReason">Specifica il motivo</Label>
+              <Label htmlFor="customReason">Specify the reason</Label>
               <Textarea
                 id="customReason"
                 value={customReason}
                 onChange={(e) => setCustomReason(e.target.value)}
-                placeholder="Descrivi il motivo della richiesta..."
+                placeholder="Describe the reason for your request..."
                 rows={2}
                 required
               />
@@ -95,12 +95,12 @@ export function ModificationRequestDialog({
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="message">Messaggio per il cliente</Label>
+            <Label htmlFor="message">Message to client</Label>
             <Textarea
               id="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Scrivi un messaggio educato spiegando perché stai richiedendo questa modifica..."
+              placeholder="Write a polite message explaining why you're requesting this modification..."
               rows={4}
               required
             />
@@ -108,10 +108,10 @@ export function ModificationRequestDialog({
 
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annulla
+              Cancel
             </Button>
             <Button type="submit" disabled={!message.trim()}>
-              Invia Richiesta
+              Send Request
             </Button>
           </div>
         </form>

@@ -20,7 +20,7 @@ export function ReviewsFilter({ filter, onFilterChange }: ReviewsFilterProps) {
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Cerca per nome cliente o contenuto recensione..."
+          placeholder="Search by client name or review content..."
           value={filter.search}
           onChange={(e) => onFilterChange({ search: e.target.value })}
           className="pl-10"
@@ -32,15 +32,15 @@ export function ReviewsFilter({ filter, onFilterChange }: ReviewsFilterProps) {
         onValueChange={(value) => onFilterChange({ rating: value })}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Filtra per rating" />
+          <SelectValue placeholder="Filter by rating" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">Tutte le valutazioni</SelectItem>
-          <SelectItem value="5">5 stelle</SelectItem>
-          <SelectItem value="4">4 stelle</SelectItem>
-          <SelectItem value="3">3 stelle</SelectItem>
-          <SelectItem value="2">2 stelle</SelectItem>
-          <SelectItem value="1">1 stella</SelectItem>
+          <SelectItem value="all">All ratings</SelectItem>
+          <SelectItem value="5">5 stars</SelectItem>
+          <SelectItem value="4">4 stars</SelectItem>
+          <SelectItem value="3">3 stars</SelectItem>
+          <SelectItem value="2">2 stars</SelectItem>
+          <SelectItem value="1">1 star</SelectItem>
         </SelectContent>
       </Select>
 
@@ -49,13 +49,13 @@ export function ReviewsFilter({ filter, onFilterChange }: ReviewsFilterProps) {
         onValueChange={(value) => onFilterChange({ status: value })}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Filtra per stato" />
+          <SelectValue placeholder="Filter by status" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">Tutti gli stati</SelectItem>
-          <SelectItem value="active">Attive</SelectItem>
-          <SelectItem value="pending_modification">Modifica Richiesta</SelectItem>
-          <SelectItem value="hidden">Nascoste</SelectItem>
+          <SelectItem value="all">All statuses</SelectItem>
+          <SelectItem value="active">Active</SelectItem>
+          <SelectItem value="pending_modification">Modification Requested</SelectItem>
+          <SelectItem value="hidden">Hidden</SelectItem>
         </SelectContent>
       </Select>
     </div>

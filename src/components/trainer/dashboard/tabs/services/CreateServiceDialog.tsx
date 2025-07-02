@@ -45,27 +45,27 @@ export function CreateServiceDialog({ open, onOpenChange, onSubmit }: CreateServ
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Crea Nuovo Servizio</DialogTitle>
+          <DialogTitle>Create New Service</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nome del servizio</Label>
+            <Label htmlFor="name">Service name</Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="es. Supporto WhatsApp 24/7"
+              placeholder="e.g. 24/7 WhatsApp Support"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Descrizione</Label>
+            <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Descrivi il servizio che offri..."
+              placeholder="Describe the service you offer..."
               rows={3}
               required
             />
@@ -73,7 +73,7 @@ export function CreateServiceDialog({ open, onOpenChange, onSubmit }: CreateServ
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="price">Prezzo (€)</Label>
+              <Label htmlFor="price">Price (€)</Label>
               <Input
                 id="price"
                 type="number"
@@ -86,28 +86,28 @@ export function CreateServiceDialog({ open, onOpenChange, onSubmit }: CreateServ
             </div>
 
             <div className="space-y-2">
-              <Label>Categoria</Label>
+              <Label>Category</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value: AdditionalService['category']) => 
                   setFormData({ ...formData, category: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Seleziona categoria" />
+                  <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="consultation">Consulenza</SelectItem>
-                  <SelectItem value="nutrition">Nutrizione</SelectItem>
-                  <SelectItem value="support">Supporto</SelectItem>
-                  <SelectItem value="wellness">Benessere</SelectItem>
-                  <SelectItem value="other">Altro</SelectItem>
+                  <SelectItem value="consultation">Consultation</SelectItem>
+                  <SelectItem value="nutrition">Nutrition</SelectItem>
+                  <SelectItem value="support">Support</SelectItem>
+                  <SelectItem value="wellness">Wellness</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Icona</Label>
+            <Label>Icon</Label>
             <ServiceIconSelector
               value={formData.icon}
               onChange={(icon) => setFormData({ ...formData, icon })}
@@ -116,9 +116,9 @@ export function CreateServiceDialog({ open, onOpenChange, onSubmit }: CreateServ
 
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annulla
+              Cancel
             </Button>
-            <Button type="submit">Crea Servizio</Button>
+            <Button type="submit">Create Service</Button>
           </div>
         </form>
       </DialogContent>

@@ -51,11 +51,11 @@ export function EditServiceDialog({ open, onOpenChange, service, onSubmit }: Edi
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Modifica Servizio</DialogTitle>
+          <DialogTitle>Edit Service</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nome del servizio</Label>
+            <Label htmlFor="name">Service name</Label>
             <Input
               id="name"
               value={formData.name}
@@ -65,7 +65,7 @@ export function EditServiceDialog({ open, onOpenChange, service, onSubmit }: Edi
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Descrizione</Label>
+            <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
               value={formData.description}
@@ -77,7 +77,7 @@ export function EditServiceDialog({ open, onOpenChange, service, onSubmit }: Edi
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="price">Prezzo (€)</Label>
+              <Label htmlFor="price">Price (€)</Label>
               <Input
                 id="price"
                 type="number"
@@ -90,7 +90,7 @@ export function EditServiceDialog({ open, onOpenChange, service, onSubmit }: Edi
             </div>
 
             <div className="space-y-2">
-              <Label>Categoria</Label>
+              <Label>Category</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value: AdditionalService['category']) => 
@@ -100,18 +100,18 @@ export function EditServiceDialog({ open, onOpenChange, service, onSubmit }: Edi
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="consultation">Consulenza</SelectItem>
-                  <SelectItem value="nutrition">Nutrizione</SelectItem>
-                  <SelectItem value="support">Supporto</SelectItem>
-                  <SelectItem value="wellness">Benessere</SelectItem>
-                  <SelectItem value="other">Altro</SelectItem>
+                  <SelectItem value="consultation">Consultation</SelectItem>
+                  <SelectItem value="nutrition">Nutrition</SelectItem>
+                  <SelectItem value="support">Support</SelectItem>
+                  <SelectItem value="wellness">Wellness</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Icona</Label>
+            <Label>Icon</Label>
             <ServiceIconSelector
               value={formData.icon}
               onChange={(icon) => setFormData({ ...formData, icon })}
@@ -124,14 +124,14 @@ export function EditServiceDialog({ open, onOpenChange, service, onSubmit }: Edi
               checked={formData.isActive}
               onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
             />
-            <Label htmlFor="isActive">Servizio attivo</Label>
+            <Label htmlFor="isActive">Active service</Label>
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annulla
+              Cancel
             </Button>
-            <Button type="submit">Salva Modifiche</Button>
+            <Button type="submit">Save Changes</Button>
           </div>
         </form>
       </DialogContent>

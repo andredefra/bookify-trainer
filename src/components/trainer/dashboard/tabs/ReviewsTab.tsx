@@ -49,14 +49,14 @@ export function ReviewsTab() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Recensioni Clienti</h1>
+          <h1 className="text-2xl font-bold">Client Reviews</h1>
           <p className="text-muted-foreground">
-            Gestisci le recensioni dei tuoi clienti e richiedi modifiche se necessario
+            Manage your client reviews and request modifications if needed
           </p>
         </div>
         <Button variant="outline" size="sm">
           <RefreshCw className="h-4 w-4 mr-2" />
-          Aggiorna
+          Refresh
         </Button>
       </div>
 
@@ -71,11 +71,11 @@ export function ReviewsTab() {
         {reviews.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-muted-foreground">
-              <p className="text-lg mb-2">Nessuna recensione trovata</p>
+              <p className="text-lg mb-2">No reviews found</p>
               <p className="text-sm">
                 {filter.search || filter.rating !== 'all' || filter.status !== 'all'
-                  ? 'Prova a modificare i filtri di ricerca'
-                  : 'Le recensioni dei tuoi clienti appariranno qui'}
+                  ? 'Try adjusting your search filters'
+                  : 'Your client reviews will appear here'}
               </p>
             </div>
           </div>

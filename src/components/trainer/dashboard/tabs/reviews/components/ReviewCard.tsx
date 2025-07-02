@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Star, MoreHorizontal, AlertCircle, Eye, EyeOff, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
-import { it } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { TrainerReview } from "../types";
 
 interface ReviewCardProps {
@@ -25,11 +25,11 @@ export function ReviewCard({
   const getStatusBadge = (status: TrainerReview['status']) => {
     switch (status) {
       case 'active':
-        return <Badge variant="default" className="bg-green-100 text-green-800">Attiva</Badge>;
+        return <Badge variant="default" className="bg-green-100 text-green-800">Active</Badge>;
       case 'pending_modification':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Modifica Richiesta</Badge>;
+        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Modification Requested</Badge>;
       case 'hidden':
-        return <Badge variant="outline" className="bg-gray-100 text-gray-600">Nascosta</Badge>;
+        return <Badge variant="outline" className="bg-gray-100 text-gray-600">Hidden</Badge>;
       default:
         return null;
     }
@@ -60,7 +60,7 @@ export function ReviewCard({
                   ))}
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {format(review.createdAt, "dd MMM yyyy", { locale: it })}
+                  {format(review.createdAt, "dd MMM yyyy", { locale: enUS })}
                 </span>
               </div>
             </div>
@@ -78,23 +78,23 @@ export function ReviewCard({
                   <>
                     <DropdownMenuItem onClick={() => onRequestModification(review.id)}>
                       <AlertCircle className="h-4 w-4 mr-2" />
-                      Richiedi Modifica
+                      Request Modification
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onHideReview(review.id)}>
                       <EyeOff className="h-4 w-4 mr-2" />
-                      Nascondi
+                      Hide
                     </DropdownMenuItem>
                   </>
                 )}
                 {review.status === 'hidden' && (
                   <DropdownMenuItem onClick={() => onUnhideReview(review.id)}>
                     <Eye className="h-4 w-4 mr-2" />
-                    Mostra
+                    Show
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem>
                   <MessageSquare className="h-4 w-4 mr-2" />
-                  Rispondi
+                  Reply
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -108,22 +108,22 @@ export function ReviewCard({
           <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <AlertCircle className="h-4 w-4 text-yellow-600" />
-              <span className="text-sm font-medium text-yellow-800">Richiesta di Modifica</span>
+              <span className="text-sm font-medium text-yellow-800">Modification Request</span>
               <Badge variant="outline" className="text-xs">
-                {review.modificationRequest.status === 'pending' ? 'In Attesa' : 
-                 review.modificationRequest.status === 'approved' ? 'Approvata' : 'Rifiutata'}
+                {review.modificationRequest.status === 'pending' ? 'Pending' : 
+                 review.modificationRequest.status === 'approved' ? 'Approved' : 'Rejected'}
               </Badge>
             </div>
             <p className="text-xs text-yellow-700">{review.modificationRequest.reason}</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Richiesta il {format(review.modificationRequest.requestedAt, "dd MMM yyyy", { locale: it })}
+              Requested on {format(review.modificationRequest.requestedAt, "dd MMM yyyy", { locale: enUS })}
             </p>
           </div>
         )}
         
         <div className="flex justify-between text-xs text-muted-foreground mt-3 pt-3 border-t">
-          <span>Ultima sessione: {format(review.sessionDate, "dd MMM yyyy", { locale: it })}</span>
-          <span>Aggiornata: {format(review.updatedAt, "dd MMM yyyy", { locale: it })}</span>
+          <span>Last session: {format(review.sessionDate, "dd MMM yyyy", { locale: enUS })}</span>
+          <span>Updated: {format(review.updatedAt, "dd MMM yyyy", { locale: enUS })}</span>
         </div>
       </CardContent>
     </Card>

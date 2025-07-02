@@ -45,12 +45,12 @@ export function ServicesTab() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold">I miei servizi</h2>
-          <p className="text-muted-foreground">Gestisci i servizi aggiuntivi per i tuoi packages</p>
+          <h2 className="text-2xl font-bold">My Services</h2>
+          <p className="text-muted-foreground">Manage additional services for your packages</p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Aggiungi Servizio
+          Add Service
         </Button>
       </div>
 
@@ -58,7 +58,7 @@ export function ServicesTab() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Totale Servizi</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Services</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{services.length}</div>
@@ -66,7 +66,7 @@ export function ServicesTab() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Servizi Attivi</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Active Services</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">{activeServicesCount}</div>
@@ -74,7 +74,7 @@ export function ServicesTab() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Valore Totale</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Value</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">€{totalRevenue}</div>
@@ -87,7 +87,7 @@ export function ServicesTab() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Cerca servizi..."
+            placeholder="Search services..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -95,25 +95,25 @@ export function ServicesTab() {
         </div>
         <Select value={filterCategory} onValueChange={setFilterCategory}>
           <SelectTrigger className="w-full sm:w-48">
-            <SelectValue placeholder="Categoria" />
+            <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutte le categorie</SelectItem>
-            <SelectItem value="consultation">Consulenza</SelectItem>
-            <SelectItem value="nutrition">Nutrizione</SelectItem>
-            <SelectItem value="support">Supporto</SelectItem>
-            <SelectItem value="wellness">Benessere</SelectItem>
-            <SelectItem value="other">Altro</SelectItem>
+            <SelectItem value="all">All categories</SelectItem>
+            <SelectItem value="consultation">Consultation</SelectItem>
+            <SelectItem value="nutrition">Nutrition</SelectItem>
+            <SelectItem value="support">Support</SelectItem>
+            <SelectItem value="wellness">Wellness</SelectItem>
+            <SelectItem value="other">Other</SelectItem>
           </SelectContent>
         </Select>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-full sm:w-32">
-            <SelectValue placeholder="Stato" />
+            <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti</SelectItem>
-            <SelectItem value="active">Attivi</SelectItem>
-            <SelectItem value="inactive">Inattivi</SelectItem>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -123,12 +123,12 @@ export function ServicesTab() {
         <Card>
           <CardContent className="p-8 text-center">
             <div className="text-muted-foreground mb-4">
-              {services.length === 0 ? "Nessun servizio creato" : "Nessun servizio trovato con i filtri attuali"}
+              {services.length === 0 ? "No services created" : "No services found with current filters"}
             </div>
             {services.length === 0 && (
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Crea il tuo primo servizio
+                Create your first service
               </Button>
             )}
           </CardContent>
@@ -172,7 +172,7 @@ export function ServicesTab() {
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-lg font-semibold text-primary">€{service.price}</span>
                   <Badge variant={service.isActive ? "default" : "secondary"}>
-                    {service.isActive ? "Attivo" : "Inattivo"}
+                    {service.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </div>
                 <div className="flex gap-2">
@@ -183,7 +183,7 @@ export function ServicesTab() {
                     className="flex-1"
                   >
                     <Edit className="h-3 w-3 mr-1" />
-                    Modifica
+                    Edit
                   </Button>
                   <Button
                     variant="outline"
