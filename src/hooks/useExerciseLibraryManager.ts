@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ExerciseData, completeExerciseDatabase as exerciseDatabase, getExerciseById } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function useExerciseLibraryManager() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,7 +11,8 @@ export function useExerciseLibraryManager() {
   const [difficultyFilter, setDifficultyFilter] = useState('');
   const [exercises, setExercises] = useState<ExerciseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // Reduced for better mobile performance
+  const isMobile = useIsMobile();
+  const itemsPerPage = isMobile ? 6 : 12; // Fewer items on mobile for better performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const loadExercises = useCallback(() => {

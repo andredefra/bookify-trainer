@@ -92,220 +92,244 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
   return (
     <>
       <ScrollArea className="h-full w-full">
-        <div className="p-2 grid grid-cols-1 gap-2">
+        <div className={`${isMobile ? 'p-1' : 'p-2'} grid grid-cols-1 ${isMobile ? 'gap-1' : 'gap-2'}`}>
           {exercises.map((exercise) => (
             <Card 
               key={exercise.id} 
-              className="relative transition-all duration-200 shadow-sm"
+              className={`relative transition-all duration-200 shadow-sm ${
+                isMobile ? 'text-xs' : ''
+              } ${isExpanded(exercise.id) ? (isMobile ? 'max-h-96 overflow-y-auto' : '') : (isMobile ? 'max-h-24' : '')}`}
               data-exercise-id={exercise.id}
             >
-              <CardHeader className="pb-2 px-3 py-3">
-                <div className="flex justify-between items-start gap-2">
+              <CardHeader className={`${isMobile ? 'pb-1 px-2 py-1' : 'pb-2 px-3 py-3'}`}>
+                <div className="flex justify-between items-start gap-1">
                   <div className="flex-1 min-w-0">
-                    <CardTitle className="text-sm font-medium leading-tight">
-                      {exercise.name}
+                    <CardTitle className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium leading-tight`}>
+                      {isMobile ? exercise.name.substring(0, 25) + (exercise.name.length > 25 ? '...' : '') : exercise.name}
                       {hasCompleteData(exercise) && (
-                        <Badge variant="secondary" className="ml-1 text-xs px-1 py-0">
+                        <Badge variant="secondary" className={`ml-1 ${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'}`}>
                           ✓
                         </Badge>
                       )}
                     </CardTitle>
                   </div>
-                  <div className="flex gap-1 flex-shrink-0">
+                  <div className="flex gap-0.5 flex-shrink-0">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => toggleExpanded(exercise.id)}
-                      className="h-6 w-6 p-0"
+                      className={`${isMobile ? 'h-4 w-4 p-0' : 'h-6 w-6 p-0'}`}
                     >
                       {isExpanded(exercise.id) ? 
-                        <ChevronUp className="h-3 w-3" /> : 
-                        <ChevronDown className="h-3 w-3" />
+                        <ChevronUp className={`${isMobile ? 'h-2 w-2' : 'h-3 w-3'}`} /> : 
+                        <ChevronDown className={`${isMobile ? 'h-2 w-2' : 'h-3 w-3'}`} />
                       }
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => onEdit(exercise)}
-                      className="h-6 w-6 p-0"
+                      className={`${isMobile ? 'h-4 w-4 p-0' : 'h-6 w-6 p-0'}`}
                     >
-                      <Edit className="h-3 w-3" />
+                      <Edit className={`${isMobile ? 'h-2 w-2' : 'h-3 w-3'}`} />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => onDelete(exercise.id)}
-                      className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
+                      className={`${isMobile ? 'h-4 w-4 p-0' : 'h-6 w-6 p-0'} text-red-600 hover:text-red-700`}
                     >
-                      <Trash2 className="h-3 w-3" />
+                      <Trash2 className={`${isMobile ? 'h-2 w-2' : 'h-3 w-3'}`} />
                     </Button>
                   </div>
                 </div>
 
-                <div className="flex gap-1 flex-wrap mt-1">
-                  <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
-                    {exercise.category}
-                  </Badge>
-                  <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
-                    {exercise.difficulty}
-                  </Badge>
-                  {exercise.isCustom && (
-                    <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs px-1 py-0">
-                      Custom
+                {!isMobile && (
+                  <div className="flex gap-1 flex-wrap mt-1">
+                    <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
+                      {exercise.category}
                     </Badge>
-                  )}
-                </div>
+                    <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
+                      {exercise.difficulty}
+                    </Badge>
+                    {exercise.isCustom && (
+                      <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs px-1 py-0">
+                        Custom
+                      </Badge>
+                    )}
+                  </div>
+                )}
               </CardHeader>
 
-              <CardContent className="px-3 py-2 space-y-2">
-                {/* Muscle Groups */}
-                <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1">Muscles:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {exercise.muscleGroup.slice(0, isExpanded(exercise.id) ? undefined : 3).map((muscle, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs px-1 py-0">
-                        {muscle}
+              {/* Mobile compact view or desktop/expanded view */}
+              {(!isMobile || isExpanded(exercise.id)) && (
+                <CardContent className={`${isMobile ? 'px-2 py-1 space-y-1' : 'px-3 py-2 space-y-2'}`}>
+                  {/* Mobile badges when expanded */}
+                  {isMobile && (
+                    <div className="flex gap-1 flex-wrap">
+                      <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
+                        {exercise.category}
                       </Badge>
-                    ))}
-                    {!isExpanded(exercise.id) && exercise.muscleGroup.length > 3 && (
-                      <Badge variant="secondary" className="text-xs px-1 py-0">
-                        +{exercise.muscleGroup.length - 3}
+                      <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
+                        {exercise.difficulty}
                       </Badge>
-                    )}
+                    </div>
+                  )}
+
+                  {/* Muscle Groups */}
+                  <div>
+                    <p className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-700 mb-1`}>
+                      {isMobile ? 'Muscles:' : 'Muscles:'}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {exercise.muscleGroup.slice(0, isMobile ? (isExpanded(exercise.id) ? undefined : 2) : (isExpanded(exercise.id) ? undefined : 3)).map((muscle, index) => (
+                        <Badge key={index} variant="secondary" className={`${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'}`}>
+                          {muscle}
+                        </Badge>
+                      ))}
+                      {!isExpanded(exercise.id) && exercise.muscleGroup.length > (isMobile ? 2 : 3) && (
+                        <Badge variant="secondary" className={`${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'}`}>
+                          +{exercise.muscleGroup.length - (isMobile ? 2 : 3)}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                {/* Equipment */}
-                <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1">Equipment:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {exercise.equipment.slice(0, isExpanded(exercise.id) ? undefined : 2).map((equip, index) => (
-                      <Badge key={index} variant="outline" className="text-xs px-1 py-0 flex items-center gap-1">
-                        {exercise.equipmentImages?.[equip] && (
-                          <Image 
-                            className="h-2 w-2 cursor-pointer" 
-                            onClick={() => setImagePreview({ 
-                              url: exercise.equipmentImages![equip], 
-                              title: equip 
-                            })}
-                          />
-                        )}
-                        {equip}
-                        {exercise.primaryEquipment === equip && (
-                          <span className="text-blue-600">*</span>
-                        )}
-                      </Badge>
-                    ))}
-                    {!isExpanded(exercise.id) && exercise.equipment.length > 2 && (
-                      <Badge variant="outline" className="text-xs px-1 py-0">
-                        +{exercise.equipment.length - 2}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                {/* Video */}
-                {exercise.videoUrl && (
-                  <div className="flex items-center gap-2">
-                    <Video className="h-3 w-3 text-blue-600" />
-                    <span className="text-xs font-medium text-gray-700">Video</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setVideoPreview(videoPreview === exercise.id ? null : exercise.id)}
-                      className="text-xs h-5 px-2 ml-auto"
-                    >
-                      <Play className="h-2 w-2 mr-1" />
-                      {videoPreview === exercise.id ? 'Hide' : 'Play'}
-                    </Button>
-                  </div>
-                )}
-
-                {/* Video Preview */}
-                {videoPreview === exercise.id && getYouTubeEmbedUrl(exercise.videoUrl) && (
-                  <div className="w-full">
-                    <iframe
-                      width="100%"
-                      height="120"
-                      src={getYouTubeEmbedUrl(exercise.videoUrl)}
-                      title={exercise.name}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="rounded-md"
-                    />
-                  </div>
-                )}
-
-                {/* Expanded Content */}
-                {isExpanded(exercise.id) && (
-                  <>
-                    {/* Equipment Images Grid */}
-                    {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                      <div>
-                        <p className="text-xs font-medium text-gray-700 mb-1">Equipment Images:</p>
-                        <div className="grid grid-cols-3 gap-1">
-                          {Object.entries(exercise.equipmentImages).map(([equip, imageUrl]) => (
-                            <div key={equip} className="relative group">
-                              <img
-                                src={imageUrl}
-                                alt={equip}
-                                className="w-full h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-                                onClick={() => setImagePreview({ url: imageUrl, title: equip })}
-                              />
-                              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-0.5 rounded-b truncate">
-                                {equip}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Alternative Exercises */}
-                    {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
-                      <div>
-                        <p className="text-xs font-medium text-gray-700 mb-1">
-                          Alternatives ({exercise.alternativeExercises.length}):
-                        </p>
-                        <div className="flex flex-wrap gap-1">
-                          {exercise.alternativeExercises.slice(0, 3).map((altId, index) => (
-                            <Badge 
-                              key={index}
-                              variant="outline" 
-                              className="text-xs px-1 py-0 cursor-pointer hover:bg-blue-50 flex items-center gap-1"
-                              onClick={() => handleAlternativeClick(altId)}
-                            >
-                              <ExternalLink className="h-2 w-2" />
-                              {getAlternativeExerciseName(altId).substring(0, 12)}...
-                            </Badge>
-                          ))}
-                          {exercise.alternativeExercises.length > 3 && (
-                            <Badge variant="outline" className="text-xs px-1 py-0">
-                              +{exercise.alternativeExercises.length - 3}
-                            </Badge>
+                  {/* Equipment */}
+                  <div>
+                    <p className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-700 mb-1`}>Equipment:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {exercise.equipment.slice(0, isMobile ? (isExpanded(exercise.id) ? undefined : 1) : (isExpanded(exercise.id) ? undefined : 2)).map((equip, index) => (
+                        <Badge key={index} variant="outline" className={`${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'} flex items-center gap-1`}>
+                          {exercise.equipmentImages?.[equip] && (
+                            <Image 
+                              className={`${isMobile ? 'h-2 w-2' : 'h-2 w-2'} cursor-pointer`} 
+                              onClick={() => setImagePreview({ 
+                                url: exercise.equipmentImages![equip], 
+                                title: equip 
+                              })}
+                            />
                           )}
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
+                          {isMobile ? equip.substring(0, 8) + (equip.length > 8 ? '...' : '') : equip}
+                          {exercise.primaryEquipment === equip && (
+                            <span className="text-blue-600">*</span>
+                          )}
+                        </Badge>
+                      ))}
+                      {!isExpanded(exercise.id) && exercise.equipment.length > (isMobile ? 1 : 2) && (
+                        <Badge variant="outline" className={`${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'}`}>
+                          +{exercise.equipment.length - (isMobile ? 1 : 2)}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
 
-                {/* Instructions */}
-                <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1">Instructions:</p>
-                  <p className={`text-xs text-gray-600 ${isExpanded(exercise.id) ? '' : 'line-clamp-2'}`}>
-                    {exercise.notes}
-                  </p>
-                </div>
-              </CardContent>
+                  {/* Video */}
+                  {exercise.videoUrl && (
+                    <div className="flex items-center gap-1">
+                      <Video className={`${isMobile ? 'h-2 w-2' : 'h-3 w-3'} text-blue-600`} />
+                      <span className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-700`}>Video</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setVideoPreview(videoPreview === exercise.id ? null : exercise.id)}
+                        className={`${isMobile ? 'text-xs h-4 px-1' : 'text-xs h-5 px-2'} ml-auto`}
+                      >
+                        <Play className={`${isMobile ? 'h-1 w-1 mr-0.5' : 'h-2 w-2 mr-1'}`} />
+                        {videoPreview === exercise.id ? 'Hide' : 'Play'}
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Video Preview */}
+                  {videoPreview === exercise.id && getYouTubeEmbedUrl(exercise.videoUrl) && (
+                    <div className="w-full">
+                      <iframe
+                        width="100%"
+                        height={isMobile ? "80" : "120"}
+                        src={getYouTubeEmbedUrl(exercise.videoUrl)}
+                        title={exercise.name}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="rounded-md"
+                      />
+                    </div>
+                  )}
+
+                  {/* Expanded Content */}
+                  {isExpanded(exercise.id) && (
+                    <>
+                      {/* Equipment Images Grid */}
+                      {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
+                        <div>
+                          <p className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-700 mb-1`}>Equipment Images:</p>
+                          <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-1`}>
+                            {Object.entries(exercise.equipmentImages).slice(0, isMobile ? 2 : 6).map(([equip, imageUrl]) => (
+                              <div key={equip} className="relative group">
+                                <img
+                                  src={imageUrl}
+                                  alt={equip}
+                                  className={`w-full ${isMobile ? 'h-8' : 'h-12'} object-cover rounded cursor-pointer hover:opacity-80 transition-opacity`}
+                                  onClick={() => setImagePreview({ url: imageUrl, title: equip })}
+                                />
+                                <div className={`absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white ${isMobile ? 'text-xs p-0.5' : 'text-xs p-0.5'} rounded-b truncate`}>
+                                  {isMobile ? equip.substring(0, 6) : equip}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Alternative Exercises */}
+                      {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                        <div>
+                          <p className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-700 mb-1`}>
+                            Alternatives ({exercise.alternativeExercises.length}):
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {exercise.alternativeExercises.slice(0, isMobile ? 2 : 3).map((altId, index) => (
+                              <Badge 
+                                key={index}
+                                variant="outline" 
+                                className={`${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'} cursor-pointer hover:bg-blue-50 flex items-center gap-1`}
+                                onClick={() => handleAlternativeClick(altId)}
+                              >
+                                <ExternalLink className={`${isMobile ? 'h-1 w-1' : 'h-2 w-2'}`} />
+                                {getAlternativeExerciseName(altId).substring(0, isMobile ? 8 : 12)}...
+                              </Badge>
+                            ))}
+                            {exercise.alternativeExercises.length > (isMobile ? 2 : 3) && (
+                              <Badge variant="outline" className={`${isMobile ? 'text-xs px-0.5 py-0' : 'text-xs px-1 py-0'}`}>
+                                +{exercise.alternativeExercises.length - (isMobile ? 2 : 3)}
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {/* Instructions */}
+                  <div>
+                    <p className={`${isMobile ? 'text-xs' : 'text-xs'} font-medium text-gray-700 mb-1`}>Instructions:</p>
+                    <p className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-600 ${isExpanded(exercise.id) ? '' : 'line-clamp-1'}`}>
+                      {isMobile && !isExpanded(exercise.id) ? 
+                        exercise.notes.substring(0, 40) + (exercise.notes.length > 40 ? '...' : '') : 
+                        exercise.notes
+                      }
+                    </p>
+                  </div>
+                </CardContent>
+              )}
             </Card>
           ))}
         </div>
 
         {exercises.length === 0 && (
           <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500 text-sm">No exercises found matching your criteria.</p>
+            <p className={`text-gray-500 ${isMobile ? 'text-xs' : 'text-sm'}`}>No exercises found matching your criteria.</p>
           </div>
         )}
       </ScrollArea>

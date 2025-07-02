@@ -76,7 +76,7 @@ export function ExerciseLibraryDialogContent({
     <>
       <div className="flex-1 flex flex-col min-h-0">
         {/* Filters */}
-        <div className="flex-shrink-0 mb-4">
+        <div className="flex-shrink-0 mb-2 sm:mb-4">
           <ExerciseLibraryFilters
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
@@ -97,29 +97,35 @@ export function ExerciseLibraryDialogContent({
           />
         </div>
 
-        {/* Pagination - Only show on mobile if more than 1 page */}
+        {/* Mobile-optimized Pagination */}
         {totalPages > 1 && (
-          <div className="flex-shrink-0 mt-4 flex justify-center">
+          <div className="flex-shrink-0 mt-2 sm:mt-4 flex justify-center">
             <Pagination>
-              <PaginationContent>
+              <PaginationContent className={isMobile ? "gap-1" : "gap-2"}>
                 <PaginationItem>
                   <PaginationPrevious 
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                  />
+                    className={`${currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'} ${
+                      isMobile ? 'h-8 px-2 text-xs' : ''
+                    }`}
+                  >
+                    {isMobile ? 'Prev' : 'Previous'}
+                  </PaginationPrevious>
                 </PaginationItem>
                 
-                {/* Show fewer pages on mobile */}
+                {/* Show only 3 pages on mobile, 5 on desktop */}
                 {Array.from({ length: Math.min(isMobile ? 3 : 5, totalPages) }, (_, i) => {
                   let pageNum;
-                  if (totalPages <= (isMobile ? 3 : 5)) {
+                  const maxVisible = isMobile ? 3 : 5;
+                  
+                  if (totalPages <= maxVisible) {
                     pageNum = i + 1;
-                  } else if (currentPage <= (isMobile ? 2 : 3)) {
+                  } else if (currentPage <= Math.ceil(maxVisible / 2)) {
                     pageNum = i + 1;
-                  } else if (currentPage >= totalPages - (isMobile ? 1 : 2)) {
-                    pageNum = totalPages - (isMobile ? 2 : 4) + i;
+                  } else if (currentPage >= totalPages - Math.floor(maxVisible / 2)) {
+                    pageNum = totalPages - maxVisible + 1 + i;
                   } else {
-                    pageNum = currentPage - (isMobile ? 1 : 2) + i;
+                    pageNum = currentPage - Math.floor(maxVisible / 2) + i;
                   }
                   
                   return (
@@ -127,7 +133,9 @@ export function ExerciseLibraryDialogContent({
                       <PaginationLink
                         onClick={() => setCurrentPage(pageNum)}
                         isActive={currentPage === pageNum}
-                        className="cursor-pointer"
+                        className={`cursor-pointer ${
+                          isMobile ? 'h-8 w-8 text-xs' : ''
+                        }`}
                       >
                         {pageNum}
                       </PaginationLink>
@@ -138,8 +146,12 @@ export function ExerciseLibraryDialogContent({
                 <PaginationItem>
                   <PaginationNext 
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                    className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                  />
+                    className={`${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'} ${
+                      isMobile ? 'h-8 px-2 text-xs' : ''
+                    }`}
+                  >
+                    {isMobile ? 'Next' : 'Next'}
+                  </PaginationNext>
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
@@ -147,11 +159,13 @@ export function ExerciseLibraryDialogContent({
         )}
       </div>
 
-      <div className="flex-shrink-0 mt-3 flex justify-between items-center border-t pt-3">
-        <Badge variant="secondary" className="text-xs">
-          {paginatedExercises.length} of {totalItems} exercises (Page {currentPage} of {totalPages})
+      <div className="flex-shrink-0 mt-2 sm:mt-3 flex justify-between items-center border-t pt-2 sm:pt-3">
+        <Badge variant="secondary" className={isMobile ? "text-xs px-1 py-0" : "text-xs"}>
+          {paginatedExercises.length} of {totalItems} filtered ({exercises.length} total)
         </Badge>
-        <Button onClick={onClose} size="sm">Close</Button>
+        <Button onClick={onClose} size="sm" className={isMobile ? "h-7 px-2 text-xs" : ""}>
+          Close
+        </Button>
       </div>
 
       <AddExerciseDialog
