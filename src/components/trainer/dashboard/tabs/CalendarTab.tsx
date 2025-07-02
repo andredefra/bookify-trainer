@@ -9,7 +9,7 @@ import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 
 export function CalendarTab() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [view, setView<'month' | 'week' | 'day'>('month');
+  const [view, setView] = useState<'month' | 'week' | 'day'>('month');
   
   // Use dynamic trainer ID instead of hardcoded one
   const trainerId = getCurrentDemoUserId();
