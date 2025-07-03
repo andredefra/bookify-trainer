@@ -1,3 +1,4 @@
+
 import { ExerciseData } from './types';
 
 // Complete exercise database with realistic alternatives based on PT expertise
@@ -458,7 +459,7 @@ export function getAlternativeExercises(exerciseId: string): ExerciseData[] {
 
 // Legacy export for backward compatibility
 export const exerciseDatabase = completeExerciseDatabase;
-export { ExerciseData } from './types';
+export type { ExerciseData } from './types';
 
 // Debug logging
 console.log('Exercise Database loaded:', completeExerciseDatabase.length, 'exercises');
