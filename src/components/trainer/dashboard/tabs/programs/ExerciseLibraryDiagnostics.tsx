@@ -1,9 +1,8 @@
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RefreshCw, AlertTriangle, CheckCircle } from 'lucide-react';
-import { exerciseDatabase } from '@/data/exercises/exerciseDatabase';
+import { completeExerciseDatabase } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
 
 interface ExerciseLibraryDiagnosticsProps {
@@ -24,8 +23,8 @@ export function ExerciseLibraryDiagnostics({ onRefresh }: ExerciseLibraryDiagnos
       customCount,
       modificationsCount,
       deletedCount,
-      totalDatabaseExercises: exerciseDatabase.length,
-      expectedTotal: exerciseDatabase.length + customCount - deletedCount
+      totalDatabaseExercises: completeExerciseDatabase.length,
+      expectedTotal: completeExerciseDatabase.length + customCount - deletedCount
     };
   };
 

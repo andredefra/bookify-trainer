@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -7,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { X, Play, RotateCcw, Camera } from 'lucide-react';
-import { ExerciseData } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData } from '@/data/exercises/types';
 import { toast } from 'sonner';
 import { EditEquipmentImagesDialog } from './EditEquipmentImagesDialog';
 import { AlternativeExercisesManager } from './AlternativeExercisesManager';

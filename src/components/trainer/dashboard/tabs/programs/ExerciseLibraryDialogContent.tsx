@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { ExerciseData } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData } from '@/data/exercises/types';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { AddExerciseDialog } from './AddExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';

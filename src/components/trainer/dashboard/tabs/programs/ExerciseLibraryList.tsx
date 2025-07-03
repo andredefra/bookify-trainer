@@ -1,8 +1,9 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { ExerciseData } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData } from '@/data/exercises/types';
 import { Edit, Trash2, ChevronDown, ChevronUp, Play, Image, ArrowRightLeft } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';

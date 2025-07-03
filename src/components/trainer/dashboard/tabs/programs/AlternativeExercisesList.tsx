@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, RotateCcw, Info, Dumbbell } from 'lucide-react';
 import { useState } from 'react';
-import { ExerciseData } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData } from '@/data/exercises/types';
 import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
 
 interface AlternativeExercisesListProps {
