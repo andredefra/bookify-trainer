@@ -114,6 +114,7 @@ export function useProgramForm(initialData?: InitialProgramData) {
                 name: "",
                 sets: 3,
                 reps: "10",
+                repsUnit: "reps" as const,
                 weight: 0,
                 notes: "",
               },

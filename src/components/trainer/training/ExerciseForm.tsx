@@ -44,12 +44,28 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
             />
           </div>
           <div>
-            <FormLabel>Reps</FormLabel>
-            <Input
-              value={exercise.reps}
-              onChange={(e) => onUpdate("reps", e.target.value)}
-              placeholder="e.g. 10, 8-12, etc."
-            />
+            <FormLabel>Reps / Time</FormLabel>
+            <div className="flex gap-1">
+              <Input
+                value={exercise.reps}
+                onChange={(e) => onUpdate("reps", e.target.value)}
+                placeholder="e.g. 10, 8-12, 30"
+                className="flex-1"
+              />
+              <Select
+                value={exercise.repsUnit || "reps"}
+                onValueChange={(value) => onUpdate("repsUnit", value)}
+              >
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="reps">Reps</SelectItem>
+                  <SelectItem value="sec">Sec</SelectItem>
+                  <SelectItem value="min">Min</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </div>
