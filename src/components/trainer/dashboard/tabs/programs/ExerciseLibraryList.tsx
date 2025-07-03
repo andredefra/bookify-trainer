@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
-import { Edit, Trash2, ChevronDown, ChevronUp, Play, Image } from 'lucide-react';
+import { Edit, Trash2, ChevronDown, ChevronUp, Play, Image, ArrowRightLeft } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -206,6 +206,28 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                       )}
                     </div>
                   </div>
+
+                  {/* Alternative Exercises */}
+                  {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                    <div>
+                      <p className="text-xs font-medium text-gray-700 mb-1 flex items-center gap-1">
+                        <ArrowRightLeft className="h-3 w-3 text-blue-600" />
+                        Alternatives:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {exercise.alternativeExercises.slice(0, isMobile ? 2 : 3).map((alt, index) => (
+                          <Badge key={index} variant="outline" className="text-xs px-1 py-0 border-blue-200 text-blue-700">
+                            {isMobile && alt.length > 12 ? alt.substring(0, 12) + '...' : alt}
+                          </Badge>
+                        ))}
+                        {exercise.alternativeExercises.length > (isMobile ? 2 : 3) && (
+                          <Badge variant="outline" className="text-xs px-1 py-0 border-blue-200 text-blue-700">
+                            +{exercise.alternativeExercises.length - (isMobile ? 2 : 3)}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Video */}
                   {exercise.videoUrl && (
