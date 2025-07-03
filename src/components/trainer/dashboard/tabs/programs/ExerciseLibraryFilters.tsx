@@ -26,7 +26,7 @@ export function ExerciseLibraryFilters({
   hideCreateButton = false,
 }: ExerciseLibraryFiltersProps) {
   const categories = [
-    { value: '', label: 'All Categories' },
+    { value: 'all', label: 'All Categories' },
     { value: 'chest', label: 'Chest' },
     { value: 'back', label: 'Back' },
     { value: 'legs', label: 'Legs' },
@@ -40,11 +40,19 @@ export function ExerciseLibraryFilters({
   ];
 
   const difficulties = [
-    { value: '', label: 'All Levels' },
+    { value: 'all', label: 'All Levels' },
     { value: 'beginner', label: 'Beginner' },
     { value: 'intermediate', label: 'Intermediate' },
     { value: 'advanced', label: 'Advanced' },
   ];
+
+  const handleCategoryChange = (value: string) => {
+    setCategoryFilter(value === 'all' ? '' : value);
+  };
+
+  const handleDifficultyChange = (value: string) => {
+    setDifficultyFilter(value === 'all' ? '' : value);
+  };
 
   return (
     <div className="space-y-3 p-4 border-b">
@@ -69,7 +77,7 @@ export function ExerciseLibraryFilters({
 
       {/* Filters Row */}
       <div className="flex gap-2">
-        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+        <Select value={categoryFilter || 'all'} onValueChange={handleCategoryChange}>
           <SelectTrigger className="flex-1">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
@@ -82,7 +90,7 @@ export function ExerciseLibraryFilters({
           </SelectContent>
         </Select>
 
-        <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+        <Select value={difficultyFilter || 'all'} onValueChange={handleDifficultyChange}>
           <SelectTrigger className="flex-1">
             <SelectValue placeholder="Difficulty" />
           </SelectTrigger>

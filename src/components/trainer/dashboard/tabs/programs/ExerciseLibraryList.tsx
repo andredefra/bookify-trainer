@@ -1,22 +1,10 @@
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+
+import { memo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { 
-  ChevronDown, 
-  Edit2, 
-  Trash2, 
-  Play, 
-  Camera,
-  Dumbbell,
-  Users,
-  Target,
-  Check
-} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Edit, Trash2, Plus } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/types';
-import { AlternativeExercisesList } from './AlternativeExercisesList';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExerciseLibraryListProps {
@@ -27,340 +15,219 @@ interface ExerciseLibraryListProps {
   onSelect?: (exercise: ExerciseData) => void;
 }
 
-export function ExerciseLibraryList({ 
-  exercises, 
+// Memoized exercise item component for better performance
+const ExerciseItem = memo(({ 
+  exercise, 
   onEdit, 
   onDelete, 
-  selectionMode = false,
-  onSelect 
-}: ExerciseLibraryListProps) {
-  const [expandedExercises, setExpandedExercises] = useState<Set<string>>(new Set());
-  const isMobile = useIsMobile();
-
-  const toggleExpanded = (exerciseId: string) => {
-    const newExpanded = new Set(expandedExercises);
-    if (newExpanded.has(exerciseId)) {
-      newExpanded.delete(exerciseId);
-    } else {
-      newExpanded.add(exerciseId);
-    }
-    setExpandedExercises(newExpanded);
+  selectionMode, 
+  onSelect,
+  isMobile 
+}: {
+  exercise: ExerciseData;
+  onEdit: (exercise: ExerciseData) => void;
+  onDelete: (id: string) => void;
+  selectionMode?: boolean;
+  onSelect?: (exercise: ExerciseData) => void;
+  isMobile: boolean;
+}) => {
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      chest: 'bg-red-100 text-red-800 border-red-200',
+      back: 'bg-blue-100 text-blue-800 border-blue-200', 
+      legs: 'bg-green-100 text-green-800 border-green-200',
+      shoulders: 'bg-orange-100 text-orange-800 border-orange-200',
+      arms: 'bg-purple-100 text-purple-800 border-purple-200',
+      core: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+      cardio: 'bg-pink-100 text-pink-800 border-pink-200',
+      functional: 'bg-teal-100 text-teal-800 border-teal-200',
+      flexibility: 'bg-cyan-100 text-cyan-800 border-cyan-200',
+      plyometric: 'bg-amber-100 text-amber-800 border-amber-200'
+    };
+    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800 border-green-200';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'beginner': return 'bg-green-100 text-green-800';
+      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'advanced': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      chest: 'bg-red-50 text-red-700 border-red-200',
-      back: 'bg-blue-50 text-blue-700 border-blue-200', 
-      legs: 'bg-green-50 text-green-700 border-green-200',
-      shoulders: 'bg-orange-50 text-orange-700 border-orange-200',
-      arms: 'bg-purple-50 text-purple-700 border-purple-200',
-      core: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-      cardio: 'bg-pink-50 text-pink-700 border-pink-200',
-      functional: 'bg-teal-50 text-teal-700 border-teal-200',
-      flexibility: 'bg-cyan-50 text-cyan-700 border-cyan-200',
-      plyometric: 'bg-amber-50 text-amber-700 border-amber-200'
-    };
-    return colors[category as keyof typeof colors] || 'bg-gray-50 text-gray-700 border-gray-200';
-  };
-
-  const previewVideo = (videoUrl: string) => {
-    if (videoUrl) {
-      window.open(videoUrl, '_blank');
-    }
-  };
-
-  const handleCardClick = (exercise: ExerciseData, event: React.MouseEvent) => {
-    // Don't trigger selection if clicking on action buttons
-    if ((event.target as HTMLElement).closest('button')) {
-      return;
-    }
-    
+  const handleClick = () => {
     if (selectionMode && onSelect) {
       onSelect(exercise);
     } else {
-      toggleExpanded(exercise.id);
+      onEdit(exercise);
     }
   };
 
-  if (exercises.length === 0) {
+  if (!exercise) return null;
+
+  return (
+    <Card 
+      className={`${selectionMode ? 'cursor-pointer hover:bg-muted/50' : ''} transition-colors`}
+      onClick={selectionMode ? handleClick : undefined}
+    >
+      <CardHeader className={`${isMobile ? 'p-3' : 'p-4'} pb-2`}>
+        <div className="flex items-start justify-between gap-2">
+          <CardTitle className={`${isMobile ? 'text-sm' : 'text-base'} leading-tight`}>
+            {exercise.name || 'Unnamed Exercise'}
+          </CardTitle>
+          {!selectionMode && (
+            <div className="flex gap-1 flex-shrink-0">
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(exercise);
+                }}
+                className={`${isMobile ? 'h-7 w-7 p-0' : 'h-8 w-8 p-0'}`}
+              >
+                <Edit className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
+              </Button>
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(exercise.id);
+                }}
+                className={`${isMobile ? 'h-7 w-7 p-0' : 'h-8 w-8 p-0'} text-destructive hover:text-destructive`}
+              >
+                <Trash2 className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
+              </Button>
+            </div>
+          )}
+          {selectionMode && (
+            <Button size="sm" variant="ghost" className={`${isMobile ? 'h-7 w-7 p-0' : 'h-8 w-8 p-0'}`}>
+              <Plus className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className={`${isMobile ? 'p-3' : 'p-4'} pt-0 space-y-3`}>
+        {/* Badges */}
+        <div className="flex flex-wrap gap-1">
+          {exercise.category && (
+            <Badge className={`${getCategoryColor(exercise.category)} ${isMobile ? 'text-xs' : 'text-xs'}`}>
+              {exercise.category}
+            </Badge>
+          )}
+          {exercise.difficulty && (
+            <Badge className={`${getDifficultyColor(exercise.difficulty)} ${isMobile ? 'text-xs' : 'text-xs'}`}>
+              {exercise.difficulty}
+            </Badge>
+          )}
+          {exercise.isCustom && (
+            <Badge variant="outline" className={isMobile ? 'text-xs' : 'text-xs'}>
+              Custom
+            </Badge>
+          )}
+          {exercise.isModified && (
+            <Badge variant="secondary" className={isMobile ? 'text-xs' : 'text-xs'}>
+              Modified
+            </Badge>
+          )}
+        </div>
+
+        {/* Muscle Groups */}
+        {exercise.muscleGroup && exercise.muscleGroup.length > 0 && (
+          <div>
+            <p className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-muted-foreground mb-1`}>
+              Target Muscles:
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {exercise.muscleGroup.slice(0, 3).map((muscle, idx) => (
+                <Badge key={idx} variant="secondary" className={`${isMobile ? 'text-xs' : 'text-xs'} bg-blue-50 text-blue-700`}>
+                  {muscle}
+                </Badge>
+              ))}
+              {exercise.muscleGroup.length > 3 && (
+                <Badge variant="secondary" className={`${isMobile ? 'text-xs' : 'text-xs'}`}>
+                  +{exercise.muscleGroup.length - 3} more
+                </Badge>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Equipment */}
+        {exercise.equipment && exercise.equipment.length > 0 && (
+          <div>
+            <p className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-muted-foreground mb-1`}>
+              Equipment:
+            </p>
+            <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+              {exercise.equipment.slice(0, 2).join(', ')}
+              {exercise.equipment.length > 2 && ` +${exercise.equipment.length - 2} more`}
+            </p>
+          </div>
+        )}
+
+        {/* Notes Preview */}
+        {exercise.notes && (
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground line-clamp-2`}>
+            {exercise.notes}
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+});
+
+ExerciseItem.displayName = 'ExerciseItem';
+
+export function ExerciseLibraryList({
+  exercises,
+  onEdit,
+  onDelete,
+  selectionMode = false,
+  onSelect,
+}: ExerciseLibraryListProps) {
+  const isMobile = useIsMobile();
+
+  console.log('ExerciseLibraryList - Rendering:', {
+    exerciseCount: exercises?.length || 0,
+    selectionMode,
+    isMobile
+  });
+
+  if (!exercises || exercises.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Dumbbell className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">No exercises found</h3>
-        <p className="text-muted-foreground">
-          Try adjusting your search criteria or filters
-        </p>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center space-y-2">
+          <p className="text-muted-foreground">No exercises found</p>
+          <p className="text-sm text-muted-foreground">
+            {selectionMode ? 'Try adjusting your search filters' : 'Create your first exercise to get started'}
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <ScrollArea className="h-full">
-      <div className="space-y-3 p-1">
-        {exercises.map((exercise) => {
-          const isExpanded = expandedExercises.has(exercise.id);
-          
-          return (
-            <Card 
-              key={exercise.id} 
-              className={`hover:shadow-md transition-shadow ${selectionMode ? 'cursor-pointer hover:bg-muted/50' : ''}`}
-            >
-              <Collapsible open={isExpanded} onOpenChange={() => toggleExpanded(exercise.id)}>
-                <CollapsibleTrigger asChild>
-                  <CardContent 
-                    className="p-4 cursor-pointer"
-                    onClick={(e) => handleCardClick(exercise, e)}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        {/* Header */}
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-medium text-sm truncate">{exercise.name}</h3>
-                          {exercise.isCustom && (
-                            <Badge variant="secondary" className="text-xs">Custom</Badge>
-                          )}
-                          {exercise.isModified && (
-                            <Badge variant="outline" className="text-xs">Modified</Badge>
-                          )}
-                          {selectionMode && (
-                            <Badge variant="default" className="text-xs bg-green-600">
-                              <Check className="h-3 w-3 mr-1" />
-                              Select
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Categories and Difficulty */}
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          <Badge 
-                            variant="outline" 
-                            className={`text-xs capitalize ${getCategoryColor(exercise.category)}`}
-                          >
-                            {exercise.category}
-                          </Badge>
-                          <Badge 
-                            variant="secondary" 
-                            className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
-                          >
-                            {exercise.difficulty}
-                          </Badge>
-                        </div>
-
-                        {/* Muscle Groups */}
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          {exercise.muscleGroup.slice(0, isMobile ? 2 : 3).map((muscle, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
-                              {muscle}
-                            </Badge>
-                          ))}
-                          {exercise.muscleGroup.length > (isMobile ? 2 : 3) && (
-                            <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
-                              +{exercise.muscleGroup.length - (isMobile ? 2 : 3)} more
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Equipment */}
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {exercise.equipment.slice(0, 2).map((eq, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
-                              {eq}
-                            </Badge>
-                          ))}
-                          {exercise.equipment.length > 2 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{exercise.equipment.length - 2} more
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Notes Preview */}
-                        <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                          {exercise.notes}
-                        </p>
-
-                        {/* Quick Stats */}
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Target className="h-3 w-3" />
-                            <span>{exercise.muscleGroup.length} muscles</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Dumbbell className="h-3 w-3" />
-                            <span>{exercise.equipment.length} equipment</span>
-                          </div>
-                          {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Users className="h-3 w-3" />
-                              <span>{exercise.alternativeExercises.length} alternatives</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Actions and Expand Button */}
-                      <div className="flex items-center gap-2 ml-3">
-                        {!selectionMode && (
-                          <div className="flex gap-1">
-                            {exercise.videoUrl && (
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  previewVideo(exercise.videoUrl!);
-                                }}
-                                className="h-7 w-7 p-0"
-                              >
-                                <Play className="h-3 w-3" />
-                              </Button>
-                            )}
-                            
-                            {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-7 w-7 p-0"
-                              >
-                                <Camera className="h-3 w-3" />
-                              </Button>
-                            )}
-                            
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onEdit(exercise);
-                              }}
-                              className="h-7 w-7 p-0"
-                            >
-                              <Edit2 className="h-3 w-3" />
-                            </Button>
-                            
-                            {/* Show delete button for all exercises now */}
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDelete(exercise.id);
-                              }}
-                              className="h-7 w-7 p-0 text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        )}
-                        
-                        {!selectionMode && (
-                          <ChevronDown 
-                            className={`h-4 w-4 text-muted-foreground transition-transform ${
-                              isExpanded ? 'rotate-180' : ''
-                            }`} 
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </CollapsibleTrigger>
-
-                {!selectionMode && (
-                  <CollapsibleContent>
-                    <div className="px-4 pb-4 space-y-4 border-t bg-muted/20">
-                      {/* Full Description */}
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Instructions</h4>
-                        <p className="text-sm text-muted-foreground">{exercise.notes}</p>
-                      </div>
-
-                      {/* Complete Muscle Groups */}
-                      {exercise.muscleGroup.length > (isMobile ? 2 : 3) && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Target Muscles</h4>
-                          <div className="flex flex-wrap gap-1">
-                            {exercise.muscleGroup.map((muscle, idx) => (
-                              <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
-                                {muscle}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Complete Equipment List */}
-                      {exercise.equipment.length > 2 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Required Equipment</h4>
-                          <div className="flex flex-wrap gap-1">
-                            {exercise.equipment.map((eq, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {eq}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Alternative Exercises - Using the proper component */}
-                      {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
-                        <AlternativeExercisesList
-                          alternativeExerciseIds={exercise.alternativeExercises}
-                          className="mt-4"
-                        />
-                      )}
-
-                      {/* Video Link */}
-                      {exercise.videoUrl && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Video Demonstration</h4>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => previewVideo(exercise.videoUrl!)}
-                            className="flex items-center gap-2"
-                          >
-                            <Play className="h-3 w-3" />
-                            Watch Video
-                          </Button>
-                        </div>
-                      )}
-
-                      {/* Equipment Images */}
-                      {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Equipment Images</h4>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                            {Object.entries(exercise.equipmentImages).map(([equipment, imageUrl]) => (
-                              <div key={equipment} className="text-center">
-                                <img 
-                                  src={imageUrl} 
-                                  alt={equipment}
-                                  className="w-full h-16 object-cover rounded-md border"
-                                />
-                                <p className="text-xs text-muted-foreground mt-1">{equipment}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </CollapsibleContent>
-                )}
-              </Collapsible>
-            </Card>
-          );
-        })}
+    <div className="h-full overflow-auto">
+      <div className={`grid gap-3 p-4 ${
+        isMobile 
+          ? 'grid-cols-1' 
+          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+      }`}>
+        {exercises.map((exercise) => (
+          <ExerciseItem
+            key={exercise.id}
+            exercise={exercise}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            selectionMode={selectionMode}
+            onSelect={onSelect}
+            isMobile={isMobile}
+          />
+        ))}
       </div>
-    </ScrollArea>
+    </div>
   );
 }

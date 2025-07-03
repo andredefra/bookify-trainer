@@ -13,6 +13,7 @@ import { ProgramProgressCard } from './programs/ProgramProgressCard';
 import { ProgramExpirationAlert } from './programs/ProgramExpirationAlert';
 import { useProgramAssignments } from '@/hooks/useProgramAssignments';
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
+import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 
 export function ProgramsTab() {
   const [showProgramForm, setShowProgramForm] = useState(false);
@@ -26,6 +27,7 @@ export function ProgramsTab() {
   const currentUserId = getCurrentDemoUserId();
   console.log('ProgramsTab - Using user ID:', currentUserId);
   
+  // Mock programs with extended data and exercises
   const sampleExercises: Exercise[] = currentProgram.sessions[0].exercises.map(ex => ({
     ...ex,
     id: Math.random().toString(36).substring(2, 9)
@@ -141,93 +143,97 @@ export function ProgramsTab() {
   };
   
   return (
-    <Card>
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 overflow-visible">
-        <div>
-          <CardTitle>Training Programs</CardTitle>
-          <CardDescription>Create and manage training programs for your clients</CardDescription>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Button 
-            variant="outline"
-            className="flex items-center w-full sm:w-auto"
-            onClick={() => setShowExerciseLibrary(true)}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            Manage Exercises
-          </Button>
-          <Button 
-            className="flex items-center w-full sm:w-auto"
-            onClick={() => setShowProgramForm(true)}
-          >
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create Program
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Expiration Alert */}
-        <ProgramExpirationAlert expiringPrograms={expiringPrograms} />
-        
-        {/* Program Progress Cards */}
-        {programProgress.length > 0 && (
+    <ErrorBoundary>
+      <Card>
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 overflow-visible">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Client Progress Monitoring</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              {programProgress.map((progress) => (
-                <ProgramProgressCard
-                  key={progress.id}
-                  progress={progress}
-                  onUpdateSessions={updateSessionsCompleted}
-                  onContactClient={handleContactClient}
-                />
-              ))}
-            </div>
+            <CardTitle>Training Programs</CardTitle>
+            <CardDescription>Create and manage training programs for your clients</CardDescription>
           </div>
-        )}
-        
-        <Tabs defaultValue="programs" className="w-full">
-          <TabsList className="mb-6 w-full sm:w-auto">
-            <TabsTrigger value="programs" className="flex-1 sm:flex-none">My Programs</TabsTrigger>
-            <TabsTrigger value="assigned" className="flex-1 sm:flex-none">Assigned Programs</TabsTrigger>
-          </TabsList>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Button 
+              variant="outline"
+              className="flex items-center w-full sm:w-auto"
+              onClick={() => setShowExerciseLibrary(true)}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Manage Exercises
+            </Button>
+            <Button 
+              className="flex items-center w-full sm:w-auto"
+              onClick={() => setShowProgramForm(true)}
+            >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Create Program
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Expiration Alert */}
+          <ProgramExpirationAlert expiringPrograms={expiringPrograms} />
           
-          <ProgramsTabContent
-            programs={programs}
-            clients={clients}
-            setShowAssignDialog={setShowAssignDialog}
-            setActiveClient={setActiveClient}
-            setShowEditProgram={setShowEditProgram}
-            setActiveProgramId={setActiveProgramId}
+          {/* Program Progress Cards */}
+          {programProgress.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Client Progress Monitoring</h3>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                {programProgress.map((progress) => (
+                  <ProgramProgressCard
+                    key={progress.id}
+                    progress={progress}
+                    onUpdateSessions={updateSessionsCompleted}
+                    onContactClient={handleContactClient}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <Tabs defaultValue="programs" className="w-full">
+            <TabsList className="mb-6 w-full sm:w-auto">
+              <TabsTrigger value="programs" className="flex-1 sm:flex-none">My Programs</TabsTrigger>
+              <TabsTrigger value="assigned" className="flex-1 sm:flex-none">Assigned Programs</TabsTrigger>
+            </TabsList>
+            
+            <ProgramsTabContent
+              programs={programs}
+              clients={clients}
+              setShowAssignDialog={setShowAssignDialog}
+              setActiveClient={setActiveClient}
+              setShowEditProgram={setShowEditProgram}
+              setActiveProgramId={setActiveProgramId}
+            />
+          </Tabs>
+          
+          {/* Dialogs */}
+          <CreateProgramDialog 
+            open={showProgramForm} 
+            onOpenChange={setShowProgramForm} 
           />
-        </Tabs>
-        
-        {/* Dialogs */}
-        <CreateProgramDialog 
-          open={showProgramForm} 
-          onOpenChange={setShowProgramForm} 
-        />
 
-        <ExerciseLibraryDialog
-          open={showExerciseLibrary}
-          onOpenChange={setShowExerciseLibrary}
-        />
-        
-        <AssignProgramDialog 
-          open={showAssignDialog} 
-          onOpenChange={setShowAssignDialog}
-          activeClient={activeClient}
-          clients={clients}
-          programs={programs}
-        />
-        
-        <CreateProgramDialog 
-          open={showEditProgram} 
-          onOpenChange={setShowEditProgram}
-          editMode={true}
-          program={activeProgram}
-        />
-      </CardContent>
-    </Card>
+          <ErrorBoundary>
+            <ExerciseLibraryDialog
+              open={showExerciseLibrary}
+              onOpenChange={setShowExerciseLibrary}
+            />
+          </ErrorBoundary>
+          
+          <AssignProgramDialog 
+            open={showAssignDialog} 
+            onOpenChange={setShowAssignDialog}
+            activeClient={activeClient}
+            clients={clients}
+            programs={programs}
+          />
+          
+          <CreateProgramDialog 
+            open={showEditProgram} 
+            onOpenChange={setShowEditProgram}
+            editMode={true}
+            program={activeProgram}
+          />
+        </CardContent>
+      </Card>
+    </ErrorBoundary>
   );
 }

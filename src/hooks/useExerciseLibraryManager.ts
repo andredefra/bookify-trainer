@@ -11,77 +11,92 @@ export function useExerciseLibraryManager() {
   const [difficultyFilter, setDifficultyFilter] = useState('');
   const [exercises, setExercises] = useState<ExerciseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
   
-  // Increased items per page for mobile since cards are more compact now
   const itemsPerPage = isMobile ? 8 : 12;
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  console.log('🔍 useExerciseLibraryManager - Mobile:', isMobile, 'Items per page:', itemsPerPage);
+  console.log('📊 useExerciseLibraryManager - Starting with:', {
+    mobile: isMobile,
+    itemsPerPage,
+    databaseSize: exerciseDatabase?.length || 0
+  });
 
-  const loadExercises = useCallback(() => {
-    console.log('📚 Loading exercises - Database count:', exerciseDatabase.length);
-    
-    // Start with the complete database
-    let processedExercises = [...exerciseDatabase];
-    
-    // Load localStorage data
-    const customExercises = localStorage.getItem('trainer_custom_exercises');
-    const exerciseModifications = localStorage.getItem('trainer_exercise_modifications');
-    const deletedExercises = localStorage.getItem('trainer_deleted_exercises');
-    
-    console.log('💾 LocalStorage state:', {
-      customExercises: customExercises ? JSON.parse(customExercises).length : 0,
-      modifications: exerciseModifications ? Object.keys(JSON.parse(exerciseModifications)).length : 0,
-      deleted: deletedExercises ? JSON.parse(deletedExercises).length : 0
-    });
-    
-    // Apply deleted exercises filter
-    if (deletedExercises) {
-      try {
-        const deleted = JSON.parse(deletedExercises);
-        const beforeCount = processedExercises.length;
-        processedExercises = processedExercises.filter(ex => !deleted.includes(ex.id));
-        console.log('🗑️ Filtered deleted exercises:', beforeCount, '->', processedExercises.length);
-      } catch (error) {
-        console.error('Error parsing deleted exercises:', error);
+  const loadExercises = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      console.log('🔄 Loading exercises - Start');
+      
+      // Verify database is available
+      if (!exerciseDatabase || !Array.isArray(exerciseDatabase)) {
+        throw new Error('Exercise database is not available or invalid');
       }
-    }
-    
-    // Apply modifications
-    if (exerciseModifications) {
+
+      console.log('✅ Database verified - Count:', exerciseDatabase.length);
+      
+      // Start with the complete database (limit for performance)
+      let processedExercises = [...exerciseDatabase.slice(0, 200)]; // Limit to first 200 for performance
+      
+      // Load localStorage data safely
       try {
-        const modifications = JSON.parse(exerciseModifications);
-        processedExercises = processedExercises.map(exercise => {
-          const mods = modifications[exercise.id];
-          if (mods) {
-            return { ...exercise, ...mods, isModified: true };
-          }
-          return exercise;
+        const customExercises = localStorage.getItem('trainer_custom_exercises');
+        const exerciseModifications = localStorage.getItem('trainer_exercise_modifications');
+        const deletedExercises = localStorage.getItem('trainer_deleted_exercises');
+        
+        console.log('💾 LocalStorage state:', {
+          customExercises: customExercises ? JSON.parse(customExercises).length : 0,
+          modifications: exerciseModifications ? Object.keys(JSON.parse(exerciseModifications)).length : 0,
+          deleted: deletedExercises ? JSON.parse(deletedExercises).length : 0
         });
-        console.log('✏️ Applied modifications to exercises');
-      } catch (error) {
-        console.error('Error parsing exercise modifications:', error);
+        
+        // Apply deleted exercises filter
+        if (deletedExercises) {
+          const deleted = JSON.parse(deletedExercises);
+          const beforeCount = processedExercises.length;
+          processedExercises = processedExercises.filter(ex => !deleted.includes(ex.id));
+          console.log('🗑️ Filtered deleted exercises:', beforeCount, '->', processedExercises.length);
+        }
+        
+        // Apply modifications
+        if (exerciseModifications) {
+          const modifications = JSON.parse(exerciseModifications);
+          processedExercises = processedExercises.map(exercise => {
+            const mods = modifications[exercise.id];
+            if (mods) {
+              return { ...exercise, ...mods, isModified: true };
+            }
+            return exercise;
+          });
+          console.log('✏️ Applied modifications to exercises');
+        }
+        
+        // Add custom exercises
+        if (customExercises) {
+          const custom = JSON.parse(customExercises);
+          processedExercises = [...processedExercises, ...custom];
+          console.log('➕ Added custom exercises:', custom.length);
+        }
+      } catch (localStorageError) {
+        console.warn('⚠️ Error loading localStorage data:', localStorageError);
+        // Continue with base exercises if localStorage fails
       }
+      
+      console.log('✅ Final exercise count:', processedExercises.length);
+      setExercises(processedExercises);
+      setIsLoading(false);
+      
+    } catch (error) {
+      console.error('❌ Error loading exercises:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load exercises');
+      setIsLoading(false);
+      
+      // Fallback to empty array
+      setExercises([]);
+      toast.error('Failed to load exercise library. Please try refreshing the page.');
     }
-    
-    // Add custom exercises
-    if (customExercises) {
-      try {
-        const custom = JSON.parse(customExercises);
-        processedExercises = [...processedExercises, ...custom];
-        console.log('➕ Added custom exercises:', custom.length);
-      } catch (error) {
-        console.error('Error parsing custom exercises:', error);
-      }
-    }
-    
-    console.log('✅ Final exercise count:', processedExercises.length);
-    console.log('🎯 Sample exercises with alternatives:', 
-      processedExercises.filter(ex => ex.alternativeExercises && ex.alternativeExercises.length > 0).length
-    );
-    
-    setExercises(processedExercises);
   }, []);
 
   // Initialize exercises
@@ -89,22 +104,22 @@ export function useExerciseLibraryManager() {
     loadExercises();
   }, [loadExercises]);
 
-  const handleCreateExercise = (newExercise: ExerciseData) => {
+  const handleCreateExercise = useCallback((newExercise: ExerciseData) => {
     console.log('➕ Creating new exercise:', newExercise.name);
     setExercises(prevExercises => [...prevExercises, newExercise]);
     toast.success('Exercise created successfully!');
-  };
+  }, []);
 
-  const handleSaveExercise = (id: string, updates: Partial<ExerciseData>) => {
+  const handleSaveExercise = useCallback((id: string, updates: Partial<ExerciseData>) => {
     console.log('💾 Saving exercise updates:', id, updates);
     setExercises(prevExercises =>
       prevExercises.map(exercise =>
         exercise.id === id ? { ...exercise, ...updates, isModified: true } : exercise
       )
     );
-  };
+  }, []);
 
-  const handleResetExercise = (id: string) => {
+  const handleResetExercise = useCallback((id: string) => {
     console.log('🔄 Resetting exercise:', id);
     const originalExercise = getExerciseById(id);
     if (originalExercise) {
@@ -114,47 +129,59 @@ export function useExerciseLibraryManager() {
         )
       );
     }
-  };
+  }, []);
 
-  const handleDeleteExercise = (id: string) => {
+  const handleDeleteExercise = useCallback((id: string) => {
     console.log('🗑️ Deleting exercise:', id);
     setExercises(prevExercises => prevExercises.filter(exercise => exercise.id !== id));
     toast.success('Exercise deleted successfully!');
-  };
+  }, []);
 
-  // Filter exercises based on search and filters
-  const filteredExercises = exercises.filter(exercise => {
-    const searchTermMatch =
-      exercise.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-      exercise.notes.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+  // Filter exercises with error handling
+  const filteredExercises = useState(() => {
+    try {
+      if (!exercises || exercises.length === 0) return [];
+      
+      return exercises.filter(exercise => {
+        if (!exercise) return false;
+        
+        const searchTermMatch = !debouncedSearchTerm || 
+          (exercise.name && exercise.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())) ||
+          (exercise.notes && exercise.notes.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
 
-    const categoryMatch = categoryFilter === '' || exercise.category.toLowerCase() === categoryFilter.toLowerCase();
-    const difficultyMatch = difficultyFilter === '' || exercise.difficulty === difficultyFilter;
+        const categoryMatch = !categoryFilter || 
+          (exercise.category && exercise.category.toLowerCase() === categoryFilter.toLowerCase());
+          
+        const difficultyMatch = !difficultyFilter || exercise.difficulty === difficultyFilter;
 
-    return searchTermMatch && categoryMatch && difficultyMatch;
-  });
+        return searchTermMatch && categoryMatch && difficultyMatch;
+      });
+    } catch (filterError) {
+      console.error('❌ Error filtering exercises:', filterError);
+      return [];
+    }
+  })[0];
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearchTerm, categoryFilter, difficultyFilter]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredExercises.length / itemsPerPage);
+  // Calculate pagination safely
+  const totalPages = Math.max(1, Math.ceil((filteredExercises?.length || 0) / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedExercises = filteredExercises.slice(startIndex, endIndex);
+  const paginatedExercises = filteredExercises?.slice(startIndex, endIndex) || [];
 
   console.log('📊 Pagination stats:', {
     totalExercises: exercises.length,
-    filteredCount: filteredExercises.length,
+    filteredCount: filteredExercises?.length || 0,
     paginatedCount: paginatedExercises.length,
     currentPage,
     totalPages,
     itemsPerPage,
-    searchTerm: debouncedSearchTerm,
-    categoryFilter,
-    difficultyFilter
+    isLoading,
+    error
   });
 
   return {
@@ -166,20 +193,25 @@ export function useExerciseLibraryManager() {
     difficultyFilter,
     setDifficultyFilter,
     exercises,
-    filteredExercises,
+    filteredExercises: filteredExercises || [],
     paginatedExercises,
+    isLoading,
+    error,
     
     // Pagination
     currentPage,
     setCurrentPage,
     totalPages,
     itemsPerPage,
-    totalItems: filteredExercises.length,
+    totalItems: filteredExercises?.length || 0,
     
     // Actions
     handleCreateExercise,
     handleSaveExercise,
     handleResetExercise,
     handleDeleteExercise,
+    
+    // Utilities
+    retry: loadExercises,
   };
 }
