@@ -128,7 +128,7 @@ export function ExerciseAutocomplete({
         </div>
 
         {isOpen && suggestions.length > 0 && (
-          <Card className="absolute z-50 w-full mt-1 p-2 max-h-64 overflow-y-auto border shadow-lg">
+          <Card className="absolute z-[100] w-full mt-1 p-2 max-h-64 overflow-y-auto border shadow-lg bg-background backdrop-blur-sm">
             <div className="space-y-1">
               {suggestions.map((exercise) => (
                 <div
