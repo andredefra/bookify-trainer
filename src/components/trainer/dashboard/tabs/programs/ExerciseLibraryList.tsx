@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +21,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
   const [imagePreview, setImagePreview] = useState<{ url: string; title: string } | null>(null);
 
   console.log('ExerciseLibraryList - Rendering:', exercises.length, 'exercises, mobile:', isMobile);
+  console.log('ExerciseLibraryList - Sample exercise with alternatives:', exercises[0]?.alternativeExercises);
 
   const toggleExpanded = (exerciseId: string) => {
     console.log('Toggling expansion for exercise:', exerciseId);
