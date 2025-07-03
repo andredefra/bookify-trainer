@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/types';
+import { AlternativeExercisesList } from './AlternativeExercisesList';
 
 interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
@@ -160,6 +161,15 @@ const ExerciseItem = memo(({
             </p>
           </div>
         )}
+
+        {/* Alternative Exercises */}
+        {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+          <AlternativeExercisesList
+            alternativeExerciseIds={exercise.alternativeExercises}
+            onSelectAlternative={selectionMode ? onSelect : undefined}
+            className="mt-4"
+          />
+        )}
       </CardContent>
     </Card>
   );
@@ -194,7 +204,7 @@ export function ExerciseLibraryList({
 
   return (
     <div className="h-full overflow-auto">
-      <div className="grid gap-4 p-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-3 p-2 sm:p-4 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {exercises.map((exercise) => (
           <ExerciseItem
             key={exercise.id}

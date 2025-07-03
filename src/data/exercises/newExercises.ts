@@ -501,5 +501,206 @@ export const newExercises: ExerciseData[] = [
     equipment: ['Cable Machine', 'Single Handle'],
     notes: 'One arm at a time, curl up and squeeze biceps',
     alternativeExercises: ['Dumbbell Curl', 'Cable Curl']
+  },
+  // Next batch - Pull-ups and variations
+  {
+    id: 'reverse-grip-pull-ups',
+    name: 'Reverse Grip Pull-ups',
+    category: 'back',
+    difficulty: 'advanced',
+    muscleGroup: ['Latissimus Dorsi', 'Biceps', 'Rhomboids'],
+    equipment: ['Pull-up Bar'],
+    notes: 'Chin-up variation with palms facing you, emphasizes biceps',
+    alternativeExercises: ['Pull-ups', 'Lat Pulldown', 'Chin-ups']
+  },
+  {
+    id: 'pull-ups',
+    name: 'Pull-ups',
+    category: 'back',
+    difficulty: 'advanced',
+    muscleGroup: ['Latissimus Dorsi', 'Rhomboids', 'Biceps'],
+    equipment: ['Pull-up Bar'],
+    notes: 'Classic bodyweight back exercise with palms facing away',
+    alternativeExercises: ['Lat Pulldown', 'Assisted Pull-ups', 'Reverse Grip Pull-ups']
+  },
+  {
+    id: 'neutral-grip-pull-ups',
+    name: 'Neutral Grip Pull-ups',
+    category: 'back',
+    difficulty: 'advanced',
+    muscleGroup: ['Latissimus Dorsi', 'Rhomboids', 'Biceps'],
+    equipment: ['Pull-up Bar with Parallel Handles'],
+    notes: 'Pull-ups with palms facing each other, easier on wrists',
+    alternativeExercises: ['Pull-ups', 'Lat Pulldown', 'Hammer Grip Pull-ups']
+  },
+  {
+    id: 'rope-pulldown',
+    name: 'Rope Pulldown',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
+    equipment: ['Cable Machine', 'Rope Attachment'],
+    notes: 'Lat pulldown with rope for different grip angle',
+    alternativeExercises: ['Lat Pulldown', 'Wide Grip Pulldown', 'Triangle Bar Pulldown']
+  },
+  {
+    id: 'standing-lat-pushdown',
+    name: 'Standing Lat Pushdown',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Latissimus Dorsi'],
+    equipment: ['Cable Machine', 'Straight Bar'],
+    notes: 'Standing lat pushdown for lat isolation',
+    alternativeExercises: ['Lat Pulldown', 'Straight Arm Pushdown', 'Cable Pullover']
+  },
+  {
+    id: 'vertical-row-neutral-grip',
+    name: 'Vertical Row Neutral Grip',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Rhomboids', 'Middle Traps', 'Latissimus Dorsi'],
+    equipment: ['Cable Machine', 'Neutral Grip Handle'],
+    notes: 'Vertical rowing motion with neutral grip',
+    alternativeExercises: ['Seated Cable Row', 'T-Bar Row', 'Single Arm Row']
+  },
+  {
+    id: 'single-arm-neutral-grip-low-row',
+    name: 'Single Arm Neutral Grip Low Row',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Rhomboids', 'Latissimus Dorsi', 'Rear Deltoids'],
+    equipment: ['Cable Machine', 'Single Handle'],
+    notes: 'Unilateral rowing for balanced development',
+    alternativeExercises: ['Dumbbell Row', 'Cable Row', 'T-Bar Row']
+  },
+  {
+    id: 'low-row',
+    name: 'Low Row',
+    category: 'back',
+    difficulty: 'beginner',
+    muscleGroup: ['Rhomboids', 'Middle Traps', 'Latissimus Dorsi'],
+    equipment: ['Cable Machine', 'Wide Grip Bar'],
+    notes: 'Basic cable rowing exercise for back development',
+    alternativeExercises: ['Seated Cable Row', 'Barbell Row', 'T-Bar Row']
+  },
+  {
+    id: 'single-arm-vertical-row',
+    name: 'Single Arm Vertical Row',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Rhomboids', 'Latissimus Dorsi', 'Rear Deltoids'],
+    equipment: ['Cable Machine', 'Single Handle'],
+    notes: 'Vertical rowing motion with single arm',
+    alternativeExercises: ['Seated Cable Row', 'Dumbbell Row', 'Cable Row']
+  },
+  {
+    id: 'lat-machine-trazy-bar',
+    name: 'Lat Machine Trazy Bar',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Latissimus Dorsi', 'Rhomboids'],
+    equipment: ['Lat Pulldown Machine', 'Trazy Bar'],
+    notes: 'Lat pulldown with specialized bar attachment',
+    alternativeExercises: ['Lat Pulldown', 'Wide Grip Pulldown', 'Triangle Bar Pulldown']
+  },
+  {
+    id: 'hyperextension',
+    name: 'Hyperextension',
+    category: 'back',
+    difficulty: 'beginner',
+    muscleGroup: ['Erector Spinae', 'Glutes', 'Hamstrings'],
+    equipment: ['Hyperextension Bench'],
+    notes: 'Lower back strengthening exercise',
+    alternativeExercises: ['Good Mornings', 'Romanian Deadlift', 'Back Extension']
+  },
+  {
+    id: 'seated-cable-low-row-trazy-bar',
+    name: 'Seated Cable Low Row with Trazy Bar',
+    category: 'back',
+    difficulty: 'intermediate',
+    muscleGroup: ['Rhomboids', 'Middle Traps', 'Latissimus Dorsi'],
+    equipment: ['Cable Machine', 'Trazy Bar'],
+    notes: 'Cable row with specialized bar attachment',
+    alternativeExercises: ['Seated Cable Row', 'Triangle Bar Row', 'Wide Grip Row']
+  },
+  {
+    id: 'barbell-preacher-curl',
+    name: 'Barbell Preacher Curl',
+    category: 'arms',
+    difficulty: 'intermediate',
+    muscleGroup: ['Biceps'],
+    equipment: ['Barbell', 'Preacher Bench'],
+    notes: 'Isolated bicep curl on preacher bench',
+    alternativeExercises: ['Dumbbell Preacher Curl', 'Cable Preacher Curl', 'Barbell Curl']
+  },
+  {
+    id: 'dumbbell-preacher-curl',
+    name: 'Dumbbell Preacher Curl',
+    category: 'arms',
+    difficulty: 'intermediate',
+    muscleGroup: ['Biceps'],
+    equipment: ['Dumbbells', 'Preacher Bench'],
+    notes: 'Single or double arm preacher curl with dumbbells',
+    alternativeExercises: ['Barbell Preacher Curl', 'Cable Preacher Curl', 'Hammer Preacher Curl']
+  },
+  {
+    id: 'seated-rear-delt-machine',
+    name: 'Seated Rear Delt Machine',
+    category: 'shoulders',
+    difficulty: 'beginner',
+    muscleGroup: ['Posterior Deltoids', 'Rhomboids'],
+    equipment: ['Rear Delt Machine'],
+    notes: 'Machine-based rear deltoid isolation',
+    alternativeExercises: ['Rear Delt Fly', 'Face Pulls', 'Bent Over Lateral Raise']
+  },
+  {
+    id: '45-degrees-cables-donkey-kick',
+    name: '45° Cables Donkey Kick',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Glutes'],
+    equipment: ['Cable Machine', 'Ankle Strap'],
+    notes: 'Glute kickbacks using cable at 45-degree angle',
+    alternativeExercises: ['Machine Hip Thrust', 'Glute Bridge', 'Hip Thrust']
+  },
+  {
+    id: 'cable-pull-through',
+    name: 'Cable Pull Through',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Glutes', 'Hamstrings'],
+    equipment: ['Cable Machine', 'Rope Attachment'],
+    notes: 'Hip hinge movement with cable resistance',
+    alternativeExercises: ['Romanian Deadlift', 'Hip Thrust', 'Good Mornings']
+  },
+  {
+    id: 'kneeling-cable-crunch',
+    name: 'Kneeling Cable Crunch',
+    category: 'core',
+    difficulty: 'intermediate',
+    muscleGroup: ['Rectus Abdominis'],
+    equipment: ['Cable Machine', 'Rope Attachment'],
+    notes: 'Kneeling abdominal crunch with cable resistance',
+    alternativeExercises: ['Cable Crunch', 'Weighted Crunch', 'Ab Wheel']
+  },
+  {
+    id: 'dips',
+    name: 'Dips',
+    category: 'chest',
+    difficulty: 'intermediate',
+    muscleGroup: ['Triceps', 'Pectorals', 'Anterior Deltoids'],
+    equipment: ['Dip Station'],
+    notes: 'Bodyweight tricep and chest exercise',
+    alternativeExercises: ['Assisted Dips', 'Close Grip Bench Press', 'Diamond Push-ups']
+  },
+  {
+    id: 'parallel-bar-leg-raises',
+    name: 'Parallel Bar Leg Raises',
+    category: 'core',
+    difficulty: 'advanced',
+    muscleGroup: ['Hip Flexors', 'Rectus Abdominis'],
+    equipment: ['Parallel Bars'],
+    notes: 'Hanging leg raises on parallel bars',
+    alternativeExercises: ['Hanging Leg Raises', 'Knee Raises', 'V-ups']
   }
 ];
