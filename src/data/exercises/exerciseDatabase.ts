@@ -480,7 +480,7 @@ const plyometricExercises: ExerciseData[] = [
   },
 ];
 
-export { ExerciseData };
+export type { ExerciseData };
 
 export const completeExerciseDatabase: ExerciseData[] = [
   ...chestExercises,
