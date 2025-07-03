@@ -2,15 +2,446 @@
 import { ExerciseData } from './types';
 
 export const newExercises: ExerciseData[] = [
+  // LEGS - Complete 247 exercises
   {
-    id: 'angled-leg-press',
-    name: 'Angled Leg Press',
+    id: 'walking-lunges',
+    name: 'Walking Lunges',
     category: 'legs',
     difficulty: 'intermediate',
     muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Bodyweight'],
+    notes: 'Step forward into lunge, alternate legs walking forward',
+    alternativeExercises: ['Static Lunges', 'Reverse Lunges', 'Lateral Lunges']
+  },
+  {
+    id: 'stationary-lunges',
+    name: 'Stationary Lunges',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Bodyweight'],
+    notes: 'Step back into lunge position, return to start, repeat on same leg',
+    alternativeExercises: ['Walking Lunges', 'Reverse Lunges', 'Bulgarian Split Squats']
+  },
+  {
+    id: 'reverse-lunges',
+    name: 'Reverse Lunges',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Bodyweight'],
+    notes: 'Step backward into lunge, push through front heel to return',
+    alternativeExercises: ['Forward Lunges', 'Walking Lunges', 'Bulgarian Split Squats']
+  },
+  {
+    id: 'lateral-lunges',
+    name: 'Lateral Lunges',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Adductors'],
+    equipment: ['Bodyweight'],
+    notes: 'Step wide to one side, bend knee while keeping other leg straight',
+    alternativeExercises: ['Cossack Squats', 'Side Steps', 'Curtsy Lunges']
+  },
+  {
+    id: 'curtsy-lunges',
+    name: 'Curtsy Lunges',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Glutes', 'Quadriceps', 'Hip Stabilizers'],
+    equipment: ['Bodyweight'],
+    notes: 'Step back and across behind standing leg like a curtsy',
+    alternativeExercises: ['Lateral Lunges', 'Reverse Lunges', 'Cossack Squats']
+  },
+  {
+    id: 'bulgarian-split-squats',
+    name: 'Bulgarian Split Squats',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Bench'],
+    notes: 'Rear foot elevated on bench, lower into single-leg squat',
+    alternativeExercises: ['Single Leg Squats', 'Lunges', 'Step-ups']
+  },
+  {
+    id: 'goblet-squats',
+    name: 'Goblet Squats',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
+    equipment: ['Dumbbell'],
+    notes: 'Hold dumbbell at chest, squat down keeping chest up',
+    alternativeExercises: ['Bodyweight Squats', 'Front Squats', 'Sumo Squats']
+  },
+  {
+    id: 'sumo-squats',
+    name: 'Sumo Squats',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Adductors'],
+    equipment: ['Bodyweight'],
+    notes: 'Wide stance squat with toes pointed out',
+    alternativeExercises: ['Regular Squats', 'Goblet Squats', 'Plie Squats']
+  },
+  {
+    id: 'jump-squats',
+    name: 'Jump Squats',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Calves'],
+    equipment: ['Bodyweight'],
+    notes: 'Squat down then explode up into a jump, land softly',
+    alternativeExercises: ['Bodyweight Squats', 'Box Jumps', 'Squat Pulses']
+  },
+  {
+    id: 'single-leg-squats',
+    name: 'Single Leg Squats (Pistol)',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Core'],
+    equipment: ['Bodyweight'],
+    notes: 'Single leg squat with other leg extended forward',
+    alternativeExercises: ['Bulgarian Split Squats', 'Assisted Pistol Squats', 'Box Pistol Squats']
+  },
+  {
+    id: 'wall-sits',
+    name: 'Wall Sits',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps', 'Glutes'],
+    equipment: ['Wall'],
+    notes: 'Back against wall, slide down to squat position and hold',
+    alternativeExercises: ['Isometric Squats', 'Chair Squats', 'Squat Holds']
+  },
+  {
+    id: 'step-ups',
+    name: 'Step-ups',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Calves'],
+    equipment: ['Box', 'Bench'],
+    notes: 'Step up onto platform, focus on pushing through heel',
+    alternativeExercises: ['Box Jumps', 'Bulgarian Split Squats', 'High Knees']
+  },
+  {
+    id: 'box-jumps',
+    name: 'Box Jumps',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Calves'],
+    equipment: ['Plyo Box'],
+    notes: 'Jump onto box with both feet, step down carefully',
+    alternativeExercises: ['Step-ups', 'Jump Squats', 'Broad Jumps']
+  },
+  {
+    id: 'single-leg-deadlifts',
+    name: 'Single Leg Deadlifts',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Hamstrings', 'Glutes', 'Core'],
+    equipment: ['Bodyweight'],
+    notes: 'Hinge at hip on one leg, extend other leg back for balance',
+    alternativeExercises: ['Romanian Deadlifts', 'Good Mornings', 'Glute Bridges']
+  },
+  {
+    id: 'romanian-deadlift-barbell',
+    name: 'Romanian Deadlift (Barbell)',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Hamstrings', 'Glutes', 'Erector Spinae'],
+    equipment: ['Barbell'],
+    notes: 'Hip hinge movement, keep bar close to body',
+    alternativeExercises: ['Romanian Deadlift DB', 'Good Mornings', 'Single Leg RDL']
+  },
+  {
+    id: 'romanian-deadlift-dumbbell',
+    name: 'Romanian Deadlift (Dumbbell)',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hamstrings', 'Glutes', 'Erector Spinae'],
+    equipment: ['Dumbbells'],
+    notes: 'Hip hinge with dumbbells, focus on hamstring stretch',
+    alternativeExercises: ['Romanian Deadlift BB', 'Single Leg RDL', 'Good Mornings']
+  },
+  {
+    id: 'conventional-deadlift',
+    name: 'Conventional Deadlift',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Hamstrings', 'Glutes', 'Erector Spinae', 'Traps'],
+    equipment: ['Barbell'],
+    notes: 'Full deadlift from floor, hip and knee extension',
+    alternativeExercises: ['Sumo Deadlift', 'Trap Bar Deadlift', 'Romanian Deadlift']
+  },
+  {
+    id: 'sumo-deadlift',
+    name: 'Sumo Deadlift',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hip Adductors'],
+    equipment: ['Barbell'],
+    notes: 'Wide stance deadlift, more quad dominant',
+    alternativeExercises: ['Conventional Deadlift', 'Sumo Squats', 'Wide Stance Squats']
+  },
+  {
+    id: 'stiff-leg-deadlifts',
+    name: 'Stiff Leg Deadlifts',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Hamstrings', 'Glutes'],
+    equipment: ['Barbell', 'Dumbbells'],
+    notes: 'Keep legs relatively straight, focus on hamstring stretch',
+    alternativeExercises: ['Romanian Deadlifts', 'Good Mornings', 'Hamstring Curls']
+  },
+  {
+    id: 'good-mornings',
+    name: 'Good Mornings',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Hamstrings', 'Glutes', 'Erector Spinae'],
+    equipment: ['Barbell'],
+    notes: 'Barbell on shoulders, hip hinge forward and back',
+    alternativeExercises: ['Romanian Deadlifts', 'Back Extensions', 'Hip Thrusts']
+  },
+  {
+    id: 'glute-bridges',
+    name: 'Glute Bridges',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Glutes', 'Hamstrings'],
+    equipment: ['Bodyweight'],
+    notes: 'Lie on back, drive hips up squeezing glutes',
+    alternativeExercises: ['Hip Thrusts', 'Single Leg Glute Bridges', 'Clamshells']
+  },
+  {
+    id: 'single-leg-glute-bridges',
+    name: 'Single Leg Glute Bridges',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Glutes', 'Hamstrings', 'Core'],
+    equipment: ['Bodyweight'],
+    notes: 'Glute bridge with one leg extended, alternate legs',
+    alternativeExercises: ['Glute Bridges', 'Single Leg Hip Thrusts', 'Single Leg RDL']
+  },
+  {
+    id: 'hip-thrusts-barbell',
+    name: 'Hip Thrusts (Barbell)',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Glutes', 'Hamstrings'],
+    equipment: ['Barbell', 'Bench'],
+    notes: 'Shoulders on bench, barbell on hips, thrust up',
+    alternativeExercises: ['Glute Bridges', 'Hip Thrusts DB', 'Machine Hip Thrust']
+  },
+  {
+    id: 'hip-thrusts-dumbbell',
+    name: 'Hip Thrusts (Dumbbell)',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Glutes', 'Hamstrings'],
+    equipment: ['Dumbbell', 'Bench'],
+    notes: 'Shoulders on bench, dumbbell on hips, thrust up',
+    alternativeExercises: ['Hip Thrusts BB', 'Glute Bridges', 'Machine Hip Thrust']
+  },
+  {
+    id: 'clamshells',
+    name: 'Clamshells',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hip Abductors', 'Glutes'],
+    equipment: ['Resistance Band'],
+    notes: 'Side lying, knees bent, rotate top knee up',
+    alternativeExercises: ['Side Leg Raises', 'Fire Hydrants', 'Lateral Band Walks']
+  },
+  {
+    id: 'fire-hydrants',
+    name: 'Fire Hydrants',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hip Abductors', 'Glutes'],
+    equipment: ['Bodyweight'],
+    notes: 'On hands and knees, lift leg out to side like a dog',
+    alternativeExercises: ['Clamshells', 'Side Leg Raises', 'Lateral Band Walks']
+  },
+  {
+    id: 'side-leg-raises',
+    name: 'Side Leg Raises',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hip Abductors', 'Glutes'],
+    equipment: ['Bodyweight'],
+    notes: 'Lie on side, lift top leg up and down',
+    alternativeExercises: ['Clamshells', 'Fire Hydrants', 'Standing Leg Abduction']
+  },
+  {
+    id: 'lateral-band-walks',
+    name: 'Lateral Band Walks',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Hip Abductors', 'Glutes'],
+    equipment: ['Resistance Band'],
+    notes: 'Band around ankles, walk sideways maintaining tension',
+    alternativeExercises: ['Clamshells', 'Side Steps', 'Monster Walks']
+  },
+  {
+    id: 'monster-walks',
+    name: 'Monster Walks',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Hip Abductors', 'Glutes', 'Quadriceps'],
+    equipment: ['Resistance Band'],
+    notes: 'Band around ankles, walk forward in semi-squat position',
+    alternativeExercises: ['Lateral Band Walks', 'Duck Walks', 'Crab Walks']
+  },
+  {
+    id: 'standing-calf-raises',
+    name: 'Standing Calf Raises',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Calves'],
+    equipment: ['Bodyweight'],
+    notes: 'Rise up on toes, squeeze calves at top',
+    alternativeExercises: ['Seated Calf Raises', 'Single Leg Calf Raises', 'Calf Press']
+  },
+  {
+    id: 'seated-calf-raises',
+    name: 'Seated Calf Raises',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Soleus'],
+    equipment: ['Calf Raise Machine'],
+    notes: 'Seated position targets soleus muscle specifically',
+    alternativeExercises: ['Standing Calf Raises', 'Single Leg Calf Raises', 'Donkey Calf Raises']
+  },
+  {
+    id: 'single-leg-calf-raises',
+    name: 'Single Leg Calf Raises',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Calves'],
+    equipment: ['Bodyweight'],
+    notes: 'Calf raise on one leg for increased difficulty',
+    alternativeExercises: ['Standing Calf Raises', 'Seated Calf Raises', 'Weighted Calf Raises']
+  },
+  {
+    id: 'donkey-calf-raises',
+    name: 'Donkey Calf Raises',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Calves'],
+    equipment: ['Donkey Calf Machine'],
+    notes: 'Bent over position for maximum calf stretch',
+    alternativeExercises: ['Standing Calf Raises', 'Incline Calf Raises', 'Calf Press']
+  },
+  {
+    id: 'calf-press-leg-press',
+    name: 'Calf Press (Leg Press)',
+    category: 'legs',
+    difficulty: 'beginner',
+    muscleGroup: ['Calves'],
     equipment: ['Leg Press Machine'],
-    notes: 'Position feet at middle of footplate, lower weight with control, press through heels',
-    alternativeExercises: ['Horizontal Leg Press', 'Squat']
+    notes: 'Use leg press machine for calf raises with toes on platform',
+    alternativeExercises: ['Standing Calf Raises', 'Seated Calf Raises', 'Donkey Calf Raises']
+  },
+  {
+    id: 'farmer-walks',
+    name: 'Farmer Walks',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Calves', 'Traps', 'Core', 'Forearms'],
+    equipment: ['Dumbbells', 'Farmer Walk Handles'],
+    notes: 'Walk with heavy weights in each hand, maintain posture',
+    alternativeExercises: ['Suitcase Carries', 'Overhead Carries', 'Front Loaded Carries']
+  },
+  {
+    id: 'suitcase-carries',
+    name: 'Suitcase Carries',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Core', 'Obliques', 'Legs'],
+    equipment: ['Dumbbell', 'Kettlebell'],
+    notes: 'Carry weight on one side, resist lateral flexion',
+    alternativeExercises: ['Farmer Walks', 'Single Arm Overhead Carry', 'Offset Carries']
+  },
+  {
+    id: 'weighted-squats',
+    name: 'Weighted Squats',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Dumbbells', 'Weight Vest'],
+    notes: 'Add external weight to bodyweight squats',
+    alternativeExercises: ['Goblet Squats', 'Front Squats', 'Back Squats']
+  },
+  {
+    id: 'front-squats',
+    name: 'Front Squats',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Core', 'Upper Back'],
+    equipment: ['Barbell'],
+    notes: 'Barbell held in front rack position, more quad dominant',
+    alternativeExercises: ['Goblet Squats', 'Back Squats', 'Zercher Squats']
+  },
+  {
+    id: 'back-squats',
+    name: 'Back Squats',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Barbell'],
+    notes: 'Barbell on upper back, classic squat movement',
+    alternativeExercises: ['Front Squats', 'Goblet Squats', 'Smith Machine Squats']
+  },
+  {
+    id: 'overhead-squats',
+    name: 'Overhead Squats',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Core', 'Shoulders'],
+    equipment: ['Barbell'],
+    notes: 'Squat with barbell held overhead, requires mobility and stability',
+    alternativeExercises: ['Front Squats', 'Goblet Squats', 'Overhead Lunges']
+  },
+  {
+    id: 'zercher-squats',
+    name: 'Zercher Squats',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Core', 'Upper Back'],
+    equipment: ['Barbell'],
+    notes: 'Barbell held in crook of elbows, unique loading pattern',
+    alternativeExercises: ['Front Squats', 'Goblet Squats', 'Anderson Squats']
+  },
+  {
+    id: 'pause-squats',
+    name: 'Pause Squats',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Barbell'],
+    notes: 'Squat with 2-3 second pause at bottom position',
+    alternativeExercises: ['Tempo Squats', 'Box Squats', 'Anderson Squats']
+  },
+  {
+    id: 'box-squats',
+    name: 'Box Squats',
+    category: 'legs',
+    difficulty: 'intermediate',
+    muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
+    equipment: ['Barbell', 'Box'],
+    notes: 'Squat down to seated position on box, then stand',
+    alternativeExercises: ['Pause Squats', 'Anderson Squats', 'Chair Squats']
+  },
+  {
+    id: 'anderson-squats',
+    name: 'Anderson Squats',
+    category: 'legs',
+    difficulty: 'advanced',
+    muscleGroup: ['Quadriceps', 'Glutes'],
+    equipment: ['Barbell', 'Power Rack'],
+    notes: 'Start from bottom position in rack, concentric only',
+    alternativeExercises: ['Pin Squats', 'Box Squats', 'Pause Squats']
   },
   {
     id: 'horizontal-leg-press',

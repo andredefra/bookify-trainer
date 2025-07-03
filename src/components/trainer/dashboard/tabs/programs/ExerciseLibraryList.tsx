@@ -204,7 +204,7 @@ export function ExerciseLibraryList({
 
   return (
     <div className="h-full overflow-auto">
-      <div className="grid gap-3 p-2 sm:p-4 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid gap-2 p-1 sm:gap-3 sm:p-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {exercises.map((exercise) => (
           <ExerciseItem
             key={exercise.id}
