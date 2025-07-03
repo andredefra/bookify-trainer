@@ -1,7 +1,5 @@
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ExerciseData } from '@/data/exercises/exerciseDatabase';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { AddExerciseDialog } from './AddExerciseDialog';
@@ -56,7 +54,6 @@ export function ExerciseLibraryDialogContent({
   onEditExercise,
   onResetExercise,
   onDeleteExercise,
-  onClose,
 }: ExerciseLibraryDialogContentProps) {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -77,8 +74,8 @@ export function ExerciseLibraryDialogContent({
 
   return (
     <>
-      <div className="flex-1 flex flex-col min-h-0 space-y-2 sm:space-y-4">
-        {/* Mobile-optimized Filters */}
+      <div className="flex-1 flex flex-col min-h-0 space-y-2">
+        {/* Filters - More compact */}
         <div className="flex-shrink-0">
           <ExerciseLibraryFilters
             searchTerm={searchTerm}
@@ -91,7 +88,7 @@ export function ExerciseLibraryDialogContent({
           />
         </div>
 
-        {/* Exercise List - Optimized for mobile */}
+        {/* Exercise List - Takes most of the space */}
         <div className="flex-1 min-h-0 overflow-hidden">
           <ExerciseLibraryList
             exercises={paginatedExercises}
@@ -100,22 +97,22 @@ export function ExerciseLibraryDialogContent({
           />
         </div>
 
-        {/* Mobile-optimized Pagination */}
+        {/* Pagination - Compact at bottom */}
         {totalPages > 1 && (
-          <div className="flex-shrink-0 flex justify-center py-2">
+          <div className="flex-shrink-0 flex justify-center py-1">
             <Pagination>
               <PaginationContent className="gap-1">
                 <PaginationItem>
                   <PaginationPrevious 
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     className={`${currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'} 
-                      ${isMobile ? 'h-10 px-3 text-sm' : 'h-9 px-4'}`}
+                      h-8 px-2 text-xs`}
                   >
-                    {isMobile ? 'Prev' : 'Previous'}
+                    {isMobile ? '‹' : 'Previous'}
                   </PaginationPrevious>
                 </PaginationItem>
                 
-                {/* Show fewer page numbers on mobile */}
+                {/* Show only 3 page numbers on mobile, 5 on desktop */}
                 {Array.from({ length: Math.min(isMobile ? 3 : 5, totalPages) }, (_, i) => {
                   let pageNum;
                   const maxVisible = isMobile ? 3 : 5;
@@ -135,9 +132,7 @@ export function ExerciseLibraryDialogContent({
                       <PaginationLink
                         onClick={() => setCurrentPage(pageNum)}
                         isActive={currentPage === pageNum}
-                        className={`cursor-pointer ${
-                          isMobile ? 'h-10 w-10 text-sm' : 'h-9 w-9'
-                        }`}
+                        className="cursor-pointer h-8 w-8 text-xs"
                       >
                         {pageNum}
                       </PaginationLink>
@@ -149,29 +144,15 @@ export function ExerciseLibraryDialogContent({
                   <PaginationNext 
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     className={`${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'} 
-                      ${isMobile ? 'h-10 px-3 text-sm' : 'h-9 px-4'}`}
+                      h-8 px-2 text-xs`}
                   >
-                    {isMobile ? 'Next' : 'Next'}
+                    {isMobile ? '›' : 'Next'}
                   </PaginationNext>
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
           </div>
         )}
-      </div>
-
-      {/* Footer with stats and close button */}
-      <div className="flex-shrink-0 flex justify-between items-center border-t pt-2 mt-2">
-        <Badge variant="secondary" className={isMobile ? "text-xs px-2 py-1" : "text-sm px-3 py-1"}>
-          {paginatedExercises.length} of {totalItems} filtered ({exercises.length} total)
-        </Badge>
-        <Button 
-          onClick={onClose} 
-          size={isMobile ? "sm" : "default"}
-          className={isMobile ? "h-8 px-3 text-xs" : ""}
-        >
-          Close
-        </Button>
       </div>
 
       {/* Dialogs */}

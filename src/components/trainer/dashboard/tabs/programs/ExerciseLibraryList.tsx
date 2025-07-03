@@ -24,12 +24,15 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
   console.log('ExerciseLibraryList - Rendering:', exercises.length, 'exercises, mobile:', isMobile);
 
   const toggleExpanded = (exerciseId: string) => {
+    console.log('Toggling expansion for exercise:', exerciseId);
     setExpandedCards(prev => {
       const newSet = new Set(prev);
       if (newSet.has(exerciseId)) {
         newSet.delete(exerciseId);
+        console.log('Collapsed exercise:', exerciseId);
       } else {
         newSet.add(exerciseId);
+        console.log('Expanded exercise:', exerciseId);
       }
       return newSet;
     });
@@ -70,7 +73,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
 
   if (exercises.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center h-32">
         <p className="text-gray-500 text-sm">No exercises found matching your criteria.</p>
       </div>
     );
@@ -84,42 +87,46 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
             <Card 
               key={exercise.id} 
               className={`transition-all duration-200 shadow-sm
-                ${isMobile ? 'min-h-[60px]' : 'min-h-[80px]'}
-                ${isExpanded(exercise.id) && isMobile ? 'max-h-80 overflow-y-auto' : ''}
+                ${isMobile ? 'min-h-[50px]' : 'min-h-[60px]'}
               `}
               data-exercise-id={exercise.id}
             >
-              {/* Compact Header */}
-              <CardHeader className={`${isMobile ? 'p-2' : 'p-3'} pb-1`}>
-                <div className="flex justify-between items-start gap-2">
+              {/* Compact Header - Only Essential Info */}
+              <CardHeader className={`${isMobile ? 'p-2' : 'p-3'} pb-2`}>
+                <div className="flex justify-between items-center gap-2">
                   <div className="flex-1 min-w-0">
-                    <h3 className={`font-medium leading-tight ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                      {isMobile && exercise.name.length > 30 ? 
-                        exercise.name.substring(0, 30) + '...' : 
-                        exercise.name
-                      }
+                    {/* Exercise Name */}
+                    <h3 className={`font-medium leading-tight ${isMobile ? 'text-sm' : 'text-base'} mb-1`}>
+                      {exercise.name}
                     </h3>
                     
-                    {/* Mobile: Show basic info inline */}
-                    {isMobile && !isExpanded(exercise.id) && (
-                      <div className="flex gap-1 mt-1">
-                        <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
-                          {exercise.category}
+                    {/* Essential Info: Difficulty + Category */}
+                    <div className="flex gap-1">
+                      <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
+                        {exercise.difficulty}
+                      </Badge>
+                      <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
+                        {exercise.category}
+                      </Badge>
+                      {exercise.isCustom && (
+                        <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs px-1 py-0">
+                          Custom
                         </Badge>
-                        <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
-                          {exercise.difficulty}
-                        </Badge>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                   
-                  {/* Action buttons - smaller on mobile */}
+                  {/* Action buttons */}
                   <div className="flex gap-1 flex-shrink-0">
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleExpanded(exercise.id)}
-                      className={isMobile ? 'h-6 w-6 p-0' : 'h-7 w-7 p-0'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleExpanded(exercise.id);
+                      }}
+                      className={isMobile ? 'h-7 w-7 p-0' : 'h-8 w-8 p-0'}
                     >
                       {isExpanded(exercise.id) ? 
                         <ChevronUp className={isMobile ? 'h-3 w-3' : 'h-4 w-4'} /> : 
@@ -129,16 +136,24 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onEdit(exercise)}
-                      className={isMobile ? 'h-6 w-6 p-0' : 'h-7 w-7 p-0'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onEdit(exercise);
+                      }}
+                      className={isMobile ? 'h-7 w-7 p-0' : 'h-8 w-8 p-0'}
                     >
                       <Edit className={isMobile ? 'h-3 w-3' : 'h-4 w-4'} />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onDelete(exercise.id)}
-                      className={`${isMobile ? 'h-6 w-6 p-0' : 'h-7 w-7 p-0'} text-red-600 hover:text-red-700`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onDelete(exercise.id);
+                      }}
+                      className={`${isMobile ? 'h-7 w-7 p-0' : 'h-8 w-8 p-0'} text-red-600 hover:text-red-700`}
                     >
                       <Trash2 className={isMobile ? 'h-3 w-3' : 'h-4 w-4'} />
                     </Button>
@@ -146,27 +161,10 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                 </div>
               </CardHeader>
 
-              {/* Expanded content or desktop content */}
-              {(!isMobile || isExpanded(exercise.id)) && (
+              {/* Expanded Content - Only show when expanded */}
+              {isExpanded(exercise.id) && (
                 <CardContent className={`${isMobile ? 'p-2' : 'p-3'} pt-0 space-y-2`}>
-                  {/* Show badges on desktop or mobile when expanded */}
-                  {(!isMobile || isExpanded(exercise.id)) && (
-                    <div className="flex gap-1 flex-wrap">
-                      <Badge className={`${getCategoryColor(exercise.category)} text-xs px-1 py-0`}>
-                        {exercise.category}
-                      </Badge>
-                      <Badge className={`${getDifficultyColor(exercise.difficulty)} text-xs px-1 py-0`}>
-                        {exercise.difficulty}
-                      </Badge>
-                      {exercise.isCustom && (
-                        <Badge variant="outline" className="border-purple-200 text-purple-700 text-xs px-1 py-0">
-                          Custom
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Muscle Groups - Compact */}
+                  {/* Muscle Groups */}
                   <div>
                     <p className="text-xs font-medium text-gray-700 mb-1">Muscles:</p>
                     <div className="flex flex-wrap gap-1">
@@ -183,7 +181,7 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                     </div>
                   </div>
 
-                  {/* Equipment - Compact */}
+                  {/* Equipment */}
                   <div>
                     <p className="text-xs font-medium text-gray-700 mb-1">Equipment:</p>
                     <div className="flex flex-wrap gap-1">
@@ -243,10 +241,10 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                     </div>
                   )}
 
-                  {/* Instructions - Compact */}
+                  {/* Instructions */}
                   <div>
                     <p className="text-xs font-medium text-gray-700 mb-1">Instructions:</p>
-                    <p className="text-xs text-gray-600 line-clamp-2">
+                    <p className="text-xs text-gray-600">
                       {exercise.notes}
                     </p>
                   </div>

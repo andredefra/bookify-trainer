@@ -26,23 +26,23 @@ export function ExerciseLibraryFilters({
   const isMobile = useIsMobile();
 
   return (
-    <div className={`${isMobile ? 'p-2' : 'p-3'} bg-gray-50 rounded-lg space-y-2`}>
-      {/* Search Input - Full width on mobile */}
+    <div className={`${isMobile ? 'p-1' : 'p-2'} bg-gray-50 rounded-lg space-y-1`}>
+      {/* Search Input - Compact */}
       <Input
         type="search"
         placeholder="Search exercises..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className={`w-full ${isMobile ? 'h-10 text-sm' : 'h-9'}`}
+        className={`w-full ${isMobile ? 'h-8 text-sm' : 'h-9'}`}
       />
 
-      {/* Filters and Add Button */}
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-2`}>
+      {/* Filters and Add Button - More compact layout */}
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-1`}>
         {/* Filter Selects */}
-        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-2 ${isMobile ? 'w-full' : 'flex-1'}`}>
+        <div className={`flex ${isMobile ? 'flex-row' : 'flex-row'} gap-1 ${isMobile ? 'w-full' : 'flex-1'}`}>
           <select
-            className={`rounded px-3 py-2 bg-white border border-gray-300 text-sm 
-              ${isMobile ? 'h-10 w-full' : 'h-9 min-w-[120px]'}`}
+            className={`rounded px-2 py-1 bg-white border border-gray-300 text-sm 
+              ${isMobile ? 'h-8 flex-1' : 'h-9 min-w-[120px]'}`}
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
@@ -60,8 +60,8 @@ export function ExerciseLibraryFilters({
           </select>
 
           <select
-            className={`rounded px-3 py-2 bg-white border border-gray-300 text-sm 
-              ${isMobile ? 'h-10 w-full' : 'h-9 min-w-[120px]'}`}
+            className={`rounded px-2 py-1 bg-white border border-gray-300 text-sm 
+              ${isMobile ? 'h-8 flex-1' : 'h-9 min-w-[120px]'}`}
             value={difficultyFilter}
             onChange={(e) => setDifficultyFilter(e.target.value)}
           >
@@ -70,17 +70,17 @@ export function ExerciseLibraryFilters({
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
           </select>
-        </div>
 
-        {/* Add Exercise Button */}
-        <Button 
-          onClick={onCreateExercise} 
-          size={isMobile ? "default" : "sm"}
-          className={`${isMobile ? 'h-10 w-full' : 'h-9'} flex items-center justify-center gap-2`}
-        >
-          <Plus className="h-4 w-4" />
-          {isMobile ? 'Add New Exercise' : 'Add Exercise'}
-        </Button>
+          {/* Add Exercise Button - Inline on mobile for space efficiency */}
+          <Button 
+            onClick={onCreateExercise} 
+            size="sm"
+            className={`${isMobile ? 'h-8 px-2' : 'h-9 px-3'} flex items-center justify-center gap-1 flex-shrink-0`}
+          >
+            <Plus className="h-3 w-3" />
+            {isMobile ? 'Add' : 'Add Exercise'}
+          </Button>
+        </div>
       </div>
     </div>
   );

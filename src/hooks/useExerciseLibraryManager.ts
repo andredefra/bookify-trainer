@@ -13,8 +13,8 @@ export function useExerciseLibraryManager() {
   const [currentPage, setCurrentPage] = useState(1);
   const isMobile = useIsMobile();
   
-  // Reduce items per page significantly on mobile for better performance
-  const itemsPerPage = isMobile ? 4 : 12;
+  // Increased items per page for mobile since cards are more compact now
+  const itemsPerPage = isMobile ? 8 : 12;
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   console.log('useExerciseLibraryManager - Mobile:', isMobile, 'Items per page:', itemsPerPage);
