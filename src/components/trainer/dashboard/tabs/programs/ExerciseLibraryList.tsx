@@ -62,11 +62,16 @@ const ExerciseItem = memo(({
   };
 
   const videoUrl = getExerciseVideoUrl(exercise.id);
+  
+  // Debug video URL
+  console.log('Exercise:', exercise.name, 'ID:', exercise.id, 'Video URL:', videoUrl);
 
   const handleVideoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (videoUrl) {
       window.open(videoUrl, '_blank');
+    } else {
+      console.log('No video URL found for exercise:', exercise.id);
     }
   };
 
@@ -85,18 +90,23 @@ const ExerciseItem = memo(({
               <h3 className="text-base font-semibold text-foreground mb-1">
                 {exercise.name || 'Unnamed Exercise'}
               </h3>
-              {/* Video section */}
-              {videoUrl && (
-                <div className="flex items-center gap-2 mb-2">
-                  <Play className="h-4 w-4 text-primary" />
+              {/* Video section - Make it more prominent */}
+              {videoUrl ? (
+                <div className="flex items-center gap-2 mb-2 p-2 bg-primary/10 rounded-md border border-primary/20">
+                  <Video className="h-5 w-5 text-primary" />
                   <Button 
                     variant="link" 
                     size="sm" 
                     onClick={handleVideoClick}
-                    className="h-auto p-0 text-primary hover:text-primary/80"
+                    className="h-auto p-0 text-primary hover:text-primary/80 font-medium"
                   >
-                    Guarda video dimostrativo
+                    🎥 Guarda video dimostrativo
                   </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 mb-2 p-2 bg-gray-50 rounded-md border border-gray-200">
+                  <Video className="h-5 w-5 text-gray-400" />
+                  <span className="text-sm text-gray-500">Nessun video disponibile</span>
                 </div>
               )}
             </div>
