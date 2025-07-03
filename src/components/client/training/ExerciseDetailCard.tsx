@@ -15,7 +15,8 @@ import {
   Youtube,
   Video
 } from 'lucide-react';
-import { ExerciseData, getExerciseById } from '@/data/exercises/exerciseDatabase';
+import { ExerciseData } from '@/data/exercises/types';
+import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExerciseDetailCardProps {
@@ -37,21 +38,10 @@ export function ExerciseDetailCard({
 }: ExerciseDetailCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useIsMobile();
+  const { getExerciseById, getExerciseByName } = useExerciseLibrary();
   
   // Try to find the exercise in the database
-  const exerciseData = getExerciseById(exerciseName) || 
-    // If not found by ID, try to find by name
-    (() => {
-      try {
-        const { completeExerciseDatabase } = require('@/data/exercises/exerciseDatabase');
-        return completeExerciseDatabase.find((ex: ExerciseData) => 
-          ex.name.toLowerCase() === exerciseName.toLowerCase()
-        );
-      } catch (error) {
-        console.warn('Could not load exercise database:', error);
-        return null;
-      }
-    })();
+  const exerciseData = getExerciseById(exerciseName) || getExerciseByName(exerciseName);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -87,16 +77,10 @@ export function ExerciseDetailCard({
   const getAlternativeExercises = (alternativeIds: string[]) => {
     if (!alternativeIds || alternativeIds.length === 0) return [];
     
-    try {
-      const { completeExerciseDatabase } = require('@/data/exercises/exerciseDatabase');
-      return alternativeIds
-        .map(id => completeExerciseDatabase.find((ex: ExerciseData) => ex.id === id))
-        .filter(Boolean)
-        .slice(0, 3); // Show max 3 alternatives
-    } catch (error) {
-      console.warn('Could not load alternative exercises:', error);
-      return [];
-    }
+    return alternativeIds
+      .map(id => getExerciseById(id))
+      .filter((ex): ex is ExerciseData => ex !== undefined)
+      .slice(0, 3); // Show max 3 alternatives
   };
 
   return (
@@ -243,7 +227,7 @@ export function ExerciseDetailCard({
                       Alternative Exercises
                     </h4>
                     <div className="space-y-2">
-                      {getAlternativeExercises(exerciseData.alternativeExercises).map((altExercise: ExerciseData, idx) => (
+                      {getAlternativeExercises(exerciseData.alternativeExercises).map((altExercise, idx) => (
                         <div key={idx} className="p-2 bg-background rounded border">
                           <div className="flex items-center justify-between">
                             <div>
@@ -296,7 +280,7 @@ export function ExerciseDetailCard({
                       {Object.entries(exerciseData.equipmentImages).map(([equipment, imageUrl]) => (
                         <div key={equipment} className="text-center">
                           <img 
-                            src={imageUrl} 
+                            src={imageUrl as string} 
                             alt={equipment}
                             className="w-full h-16 object-cover rounded-md border"
                           />
