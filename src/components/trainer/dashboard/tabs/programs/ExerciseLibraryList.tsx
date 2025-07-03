@@ -73,140 +73,163 @@ const ExerciseItem = memo(({
   if (!exercise) return null;
 
   return (
-    <Card 
-      className={`${selectionMode ? 'cursor-pointer hover:bg-muted/50' : ''} transition-colors h-full flex flex-col`}
+    <div 
+      className={`${selectionMode ? 'cursor-pointer hover:bg-muted/50' : ''} transition-colors p-4 border-b border-border`}
       onClick={selectionMode ? handleClick : undefined}
     >
-      {/* Video Section - Prominent at top */}
-      {videoUrl && (
-        <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 p-4 border-b">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-full">
-                <Play className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm font-medium">Video Dimostrativo</p>
-                <p className="text-xs text-muted-foreground">Clicca per guardare</p>
-              </div>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 space-y-3">
+          {/* Header with title and video */}
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-foreground mb-1">
+                {exercise.name || 'Unnamed Exercise'}
+              </h3>
+              {/* Video section */}
+              {videoUrl && (
+                <div className="flex items-center gap-2 mb-2">
+                  <Play className="h-4 w-4 text-primary" />
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    onClick={handleVideoClick}
+                    className="h-auto p-0 text-primary hover:text-primary/80"
+                  >
+                    Guarda video dimostrativo
+                  </Button>
+                </div>
+              )}
             </div>
-            <Button 
-              variant="default" 
-              size="sm" 
-              onClick={handleVideoClick}
-              className="px-4 py-2 text-sm"
-            >
-              <Video className="h-4 w-4 mr-2" />
-              Guarda
-            </Button>
-          </div>
-        </div>
-      )}
-
-      <CardHeader className="pb-3 px-4 pt-4">
-        <div className="flex items-start justify-between gap-3">
-          <CardTitle className="text-base font-semibold line-clamp-2 flex-1">
-            {exercise.name || 'Unnamed Exercise'}
-          </CardTitle>
-          <div className="flex gap-2 shrink-0">
-            {!selectionMode && (
-              <>
+            
+            {/* Actions */}
+            <div className="flex gap-1 shrink-0">
+              {videoUrl && (
                 <Button 
                   size="sm" 
                   variant="ghost" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEdit(exercise);
-                  }}
-                  className="h-8 w-8 p-0"
+                  onClick={handleVideoClick}
+                  className="h-8 w-8 p-0 text-primary hover:text-primary/80"
+                  title="Guarda video dimostrativo"
                 >
-                  <Edit className="h-4 w-4" />
+                  <Video className="h-4 w-4" />
                 </Button>
-                <Button 
-                  size="sm" 
-                  variant="ghost" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(exercise.id);
-                  }}
-                  className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
+              )}
+              {!selectionMode && (
+                <>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(exercise);
+                    }}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(exercise.id);
+                    }}
+                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
+              {selectionMode && (
+                <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                  <Plus className="h-4 w-4" />
                 </Button>
-              </>
+              )}
+            </div>
+          </div>
+
+          {/* Category and Difficulty Badges */}
+          <div className="flex flex-wrap gap-2">
+            {exercise.category && (
+              <Badge className={`${getCategoryColor(exercise.category)} text-sm py-1 px-2`} variant="secondary">
+                {exercise.category}
+              </Badge>
             )}
-            {selectionMode && (
-              <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                <Plus className="h-4 w-4" />
-              </Button>
+            {exercise.difficulty && (
+              <Badge className={`${getDifficultyColor(exercise.difficulty)} text-sm py-1 px-2`} variant="secondary">
+                {exercise.difficulty}
+              </Badge>
+            )}
+            {exercise.isCustom && (
+              <Badge variant="outline" className="text-sm py-1 px-2">Custom</Badge>
+            )}
+            {exercise.isModified && (
+              <Badge variant="secondary" className="text-sm py-1 px-2">Modified</Badge>
             )}
           </div>
-        </div>
-      </CardHeader>
-      
-      <CardContent className="px-4 pt-0 pb-4 space-y-4 flex-1 flex flex-col">
-        {/* Category and Difficulty Badges */}
-        <div className="flex flex-wrap gap-2">
-          {exercise.category && (
-            <Badge className={`${getCategoryColor(exercise.category)} text-sm py-1 px-2`} variant="secondary">
-              {exercise.category}
-            </Badge>
-          )}
-          {exercise.difficulty && (
-            <Badge className={`${getDifficultyColor(exercise.difficulty)} text-sm py-1 px-2`} variant="secondary">
-              {exercise.difficulty}
-            </Badge>
-          )}
-          {exercise.isCustom && (
-            <Badge variant="outline" className="text-sm py-1 px-2">Custom</Badge>
-          )}
-          {exercise.isModified && (
-            <Badge variant="secondary" className="text-sm py-1 px-2">Modified</Badge>
-          )}
-        </div>
 
-        {/* Muscle Groups */}
-        {exercise.muscleGroup && exercise.muscleGroup.length > 0 && (
-          <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground mb-2">Muscoli:</p>
+          {/* Muscle Groups */}
+          {exercise.muscleGroup && exercise.muscleGroup.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {exercise.muscleGroup.slice(0, 4).map((muscle, idx) => (
+              {exercise.muscleGroup.map((muscle, idx) => (
                 <Badge key={idx} variant="outline" className="text-sm py-1 px-2 bg-blue-50 text-blue-700 border-blue-200">
                   {muscle}
                 </Badge>
               ))}
-              {exercise.muscleGroup.length > 4 && (
-                <Badge variant="outline" className="text-sm py-1 px-2">
-                  +{exercise.muscleGroup.length - 4}
-                </Badge>
-              )}
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Equipment */}
-        {exercise.equipment && exercise.equipment.length > 0 && (
-          <div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">Attrezzatura:</p>
-            <p className="text-sm text-foreground">
-              {exercise.equipment.slice(0, 3).join(', ')}
-              {exercise.equipment.length > 3 && ` e ${exercise.equipment.length - 3} altri`}
+          {/* Equipment */}
+          {exercise.equipment && exercise.equipment.length > 0 && (
+            <div>
+              <p className="text-sm font-medium text-foreground">
+                {exercise.equipment.join(', ')}
+              </p>
+            </div>
+          )}
+
+          {/* Description if available */}
+          {exercise.notes && (
+            <p className="text-sm text-muted-foreground">
+              {exercise.notes}
             </p>
-          </div>
-        )}
+          )}
 
-        {/* Alternative Exercises */}
-        {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
-          <div className="mt-auto">
-            <AlternativeExercisesList
-              alternativeExerciseIds={exercise.alternativeExercises}
-              onSelectAlternative={selectionMode ? onSelect : undefined}
-              className="mt-2"
-            />
+          {/* Metadata row */}
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            {exercise.muscleGroup && exercise.muscleGroup.length > 0 && (
+              <div className="flex items-center gap-1">
+                <span className="h-4 w-4">💪</span>
+                <span>{exercise.muscleGroup.length} muscles</span>
+              </div>
+            )}
+            {exercise.equipment && exercise.equipment.length > 0 && (
+              <div className="flex items-center gap-1">
+                <span className="h-4 w-4">🏋️</span>
+                <span>{exercise.equipment.length} equipment</span>
+              </div>
+            )}
+            {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+              <div className="flex items-center gap-1">
+                <span className="h-4 w-4">🔄</span>
+                <span>{exercise.alternativeExercises.length} alternatives</span>
+              </div>
+            )}
           </div>
-        )}
-      </CardContent>
-    </Card>
+
+          {/* Alternative Exercises */}
+          {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+            <div>
+              <AlternativeExercisesList
+                alternativeExerciseIds={exercise.alternativeExercises}
+                onSelectAlternative={selectionMode ? onSelect : undefined}
+                className="mt-2"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 });
 
@@ -239,7 +262,7 @@ export function ExerciseLibraryList({
 
   return (
     <div className="h-full overflow-auto">
-      <div className="grid gap-4 p-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="divide-y divide-border">
         {exercises.map((exercise) => (
           <ExerciseItem
             key={exercise.id}
