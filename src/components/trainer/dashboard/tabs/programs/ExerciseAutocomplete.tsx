@@ -54,16 +54,19 @@ export function ExerciseAutocomplete({
   }, []);
 
   const handleSuggestionClick = (exercise: any) => {
+    console.log('ExerciseAutocomplete - Suggestion clicked:', exercise.name);
     onChange(exercise.name);
     setIsOpen(false);
     
     // Auto-fill notes if callback provided
     if (onExerciseSelect) {
+      console.log('ExerciseAutocomplete - Calling onExerciseSelect with notes:', exercise.notes);
       onExerciseSelect(exercise.notes);
     }
     
     // Provide full exercise data if callback provided
     if (onExerciseDataSelect) {
+      console.log('ExerciseAutocomplete - Calling onExerciseDataSelect');
       onExerciseDataSelect(exercise);
     }
   };

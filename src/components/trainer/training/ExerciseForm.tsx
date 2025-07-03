@@ -16,10 +16,16 @@ interface ExerciseFormProps {
 
 export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps) {
   const handleExerciseSelect = (notes: string) => {
+    console.log('ExerciseForm - Exercise selected with notes:', notes);
     // Auto-fill notes when an exercise is selected from the library
     if (!exercise.notes || exercise.notes.trim() === '') {
       onUpdate("notes", notes);
     }
+  };
+
+  const handleValueUpdate = (field: string, value: any) => {
+    console.log('ExerciseForm - Updating field:', field, 'with value:', value);
+    onUpdate(field, value);
   };
 
   return (
@@ -29,7 +35,7 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
           <FormLabel>Exercise Name</FormLabel>
           <ExerciseAutocomplete
             value={exercise.name}
-            onChange={(value) => onUpdate("name", value)}
+            onChange={(value) => handleValueUpdate("name", value)}
             onExerciseSelect={handleExerciseSelect}
             placeholder="es. Bench Press, Squat, etc."
           />
@@ -40,7 +46,7 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
             <Input
               type="number"
               value={exercise.sets}
-              onChange={(e) => onUpdate("sets", parseInt(e.target.value))}
+              onChange={(e) => handleValueUpdate("sets", parseInt(e.target.value))}
             />
           </div>
           <div>
@@ -48,13 +54,13 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
             <div className="flex gap-1">
               <Input
                 value={exercise.reps}
-                onChange={(e) => onUpdate("reps", e.target.value)}
+                onChange={(e) => handleValueUpdate("reps", e.target.value)}
                 placeholder="e.g. 10, 8-12, 30"
                 className="flex-1"
               />
               <Select
                 value={exercise.repsUnit || "reps"}
-                onValueChange={(value) => onUpdate("repsUnit", value)}
+                onValueChange={(value) => handleValueUpdate("repsUnit", value)}
               >
                 <SelectTrigger className="w-20">
                   <SelectValue />
@@ -74,7 +80,7 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
         <FormLabel>Notes</FormLabel>
         <Textarea
           value={exercise.notes || ""}
-          onChange={(e) => onUpdate("notes", e.target.value)}
+          onChange={(e) => handleValueUpdate("notes", e.target.value)}
           placeholder="Instructions, tempo, rest periods, etc."
           rows={2}
         />
@@ -85,7 +91,7 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
           <FormLabel>Video Source</FormLabel>
           <Select
             value={exercise.videoSource || "none"}
-            onValueChange={(value) => onUpdate("videoSource", value === "none" ? undefined : value)}
+            onValueChange={(value) => handleValueUpdate("videoSource", value === "none" ? undefined : value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select source" />
@@ -106,7 +112,7 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
               {exercise.videoSource === "vimeo" && <Video className="h-4 w-4 text-blue-500" />}
               <Input
                 value={exercise.videoUrl || ""}
-                onChange={(e) => onUpdate("videoUrl", e.target.value)}
+                onChange={(e) => handleValueUpdate("videoUrl", e.target.value)}
                 placeholder={`Enter ${exercise.videoSource} video URL`}
               />
             </div>
