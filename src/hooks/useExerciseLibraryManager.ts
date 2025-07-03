@@ -12,8 +12,12 @@ export function useExerciseLibraryManager() {
   const [exercises, setExercises] = useState<ExerciseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const isMobile = useIsMobile();
-  const itemsPerPage = isMobile ? 6 : 12; // Fewer items on mobile for better performance
+  
+  // Reduce items per page significantly on mobile for better performance
+  const itemsPerPage = isMobile ? 4 : 12;
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  console.log('useExerciseLibraryManager - Mobile:', isMobile, 'Items per page:', itemsPerPage);
 
   const loadExercises = useCallback(() => {
     console.log('Loading exercises - Database count:', exerciseDatabase.length);
@@ -122,6 +126,15 @@ export function useExerciseLibraryManager() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedExercises = filteredExercises.slice(startIndex, endIndex);
+
+  console.log('useExerciseLibraryManager - Pagination:', {
+    totalExercises: exercises.length,
+    filteredCount: filteredExercises.length,
+    paginatedCount: paginatedExercises.length,
+    currentPage,
+    totalPages,
+    itemsPerPage
+  });
 
   return {
     // State

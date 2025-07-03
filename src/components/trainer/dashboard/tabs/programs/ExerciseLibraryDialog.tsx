@@ -29,11 +29,15 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
     handleDeleteExercise,
   } = useExerciseLibraryManager();
 
+  console.log('ExerciseLibraryDialog - Exercises loaded:', exercises.length);
+  console.log('ExerciseLibraryDialog - Filtered:', filteredExercises.length);
+  console.log('ExerciseLibraryDialog - Paginated:', paginatedExercises.length);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="w-full max-w-md sm:max-w-7xl h-[95vh] max-h-screen overflow-hidden flex flex-col p-3 sm:p-6">
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className="text-base sm:text-lg">
             Exercise Library ({exercises.length} exercises total)
           </DialogTitle>
         </DialogHeader>
