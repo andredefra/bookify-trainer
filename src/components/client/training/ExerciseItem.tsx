@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Youtube, Video, Save, Edit3, Weight, StickyNote } from "lucide-react";
+import { Save, Weight, StickyNote } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Exercise } from "@/data/training/types";
+import { ExerciseDetailCard } from "./ExerciseDetailCard";
 
 interface ExerciseItemProps {
   exercise: Exercise;
@@ -41,52 +42,25 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
     setShowUserNotes(false);
   };
 
-  const openVideoLink = () => {
-    if (exercise.videoUrl) {
-      window.open(exercise.videoUrl, '_blank');
-    }
-  };
-
   return (
-    <div className={`${isMobile ? 'p-3' : 'p-4'} border-b`}>
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <h4 className="font-medium">{exercise.name}</h4>
-            {exercise.exerciseType && (
-              <Badge variant={exercise.exerciseType === 'strength' ? 'default' : 'secondary'} className="text-xs">
-                {exercise.exerciseType}
-              </Badge>
-            )}
-            {exercise.videoUrl && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0"
-                onClick={openVideoLink}
-              >
-                {exercise.videoSource === 'youtube' ? (
-                  <Youtube className="h-4 w-4 text-red-500" />
-                ) : (
-                  <Video className="h-4 w-4 text-blue-500" />
-                )}
-              </Button>
-            )}
-          </div>
-          
-          <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-2 text-sm text-muted-foreground mb-2`}>
-            <span>{exercise.sets} sets</span>
-            <span>{exercise.reps} reps</span>
-            {exercise.weight && <span>{exercise.weight}kg</span>}
-          </div>
-          
-          {exercise.notes && (
-            <p className="text-sm text-muted-foreground mb-2">
-              <strong>Coach notes:</strong> {exercise.notes}
-            </p>
-          )}
+    <div className={`${isMobile ? 'p-3' : 'p-4'} border-b space-y-4`}>
+      {/* Enhanced Exercise Display */}
+      <ExerciseDetailCard
+        exerciseName={exercise.name}
+        exerciseNotes={exercise.notes}
+        sets={exercise.sets?.toString()}
+        reps={exercise.reps}
+        weight={exercise.weight}
+      />
+
+      {/* Exercise Type Badge */}
+      {exercise.exerciseType && (
+        <div className="flex justify-start">
+          <Badge variant={exercise.exerciseType === 'strength' ? 'default' : 'secondary'} className="text-xs">
+            {exercise.exerciseType}
+          </Badge>
         </div>
-      </div>
+      )}
 
       {/* Weight tracking for current session */}
       <div className="space-y-3">

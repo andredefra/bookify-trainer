@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { ExerciseData, completeExerciseDatabase } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
@@ -220,6 +219,12 @@ export function useExerciseLibrary() {
     return completeExerciseDatabase.filter(exercise => deletedExercises.includes(exercise.id));
   };
 
+  // Get exercise by ID
+  const getExerciseById = (id: string) => {
+    const allExercises = getAllExercises();
+    return allExercises.find(exercise => exercise.id === id);
+  };
+
   return {
     // Data
     allExercises: getAllExercises(),
@@ -243,6 +248,7 @@ export function useExerciseLibrary() {
     restoreExercise,
     getExerciseSuggestions,
     getExerciseByName,
+    getExerciseById, // New method
     
     // Utility functions
     findAlternativesByEquipment,

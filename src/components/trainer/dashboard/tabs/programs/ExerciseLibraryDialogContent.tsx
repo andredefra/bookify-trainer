@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ExerciseData } from '@/data/exercises/types';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
@@ -33,6 +34,8 @@ interface ExerciseLibraryDialogContentProps {
   onResetExercise: (id: string) => void;
   onDeleteExercise: (id: string) => void;
   onClose: () => void;
+  selectionMode?: boolean;
+  onExerciseSelect?: (exercise: ExerciseData) => void;
 }
 
 export function ExerciseLibraryDialogContent({
@@ -53,6 +56,8 @@ export function ExerciseLibraryDialogContent({
   onEditExercise,
   onResetExercise,
   onDeleteExercise,
+  selectionMode = false,
+  onExerciseSelect,
 }: ExerciseLibraryDialogContentProps) {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -61,14 +66,25 @@ export function ExerciseLibraryDialogContent({
 
   console.log('ExerciseLibraryDialogContent - Mobile:', isMobile);
   console.log('ExerciseLibraryDialogContent - Paginated exercises:', paginatedExercises.length);
+  console.log('ExerciseLibraryDialogContent - Selection mode:', selectionMode);
 
   const handleEditExercise = (exercise: ExerciseData) => {
+    if (selectionMode && onExerciseSelect) {
+      onExerciseSelect(exercise);
+      return;
+    }
     setExerciseToEdit(exercise);
     setShowEditForm(true);
   };
 
   const handleCreateExercise = () => {
     setShowCreateForm(true);
+  };
+
+  const handleExerciseSelection = (exercise: ExerciseData) => {
+    if (selectionMode && onExerciseSelect) {
+      onExerciseSelect(exercise);
+    }
   };
 
   return (
@@ -84,6 +100,7 @@ export function ExerciseLibraryDialogContent({
             difficultyFilter={difficultyFilter}
             setDifficultyFilter={setDifficultyFilter}
             onCreateExercise={handleCreateExercise}
+            hideCreateButton={selectionMode}
           />
         </div>
 
@@ -93,6 +110,8 @@ export function ExerciseLibraryDialogContent({
             exercises={paginatedExercises}
             onEdit={handleEditExercise}
             onDelete={onDeleteExercise}
+            selectionMode={selectionMode}
+            onSelect={handleExerciseSelection}
           />
         </div>
 
@@ -154,20 +173,24 @@ export function ExerciseLibraryDialogContent({
         )}
       </div>
 
-      {/* Dialogs */}
-      <AddExerciseDialog
-        open={showCreateForm}
-        onOpenChange={setShowCreateForm}
-      />
+      {/* Dialogs - Only show in management mode */}
+      {!selectionMode && (
+        <>
+          <AddExerciseDialog
+            open={showCreateForm}
+            onOpenChange={setShowCreateForm}
+          />
 
-      {exerciseToEdit && (
-        <EditExerciseDialog
-          open={showEditForm}
-          onOpenChange={setShowEditForm}
-          exercise={exerciseToEdit}
-          onSave={onEditExercise}
-          onReset={onResetExercise}
-        />
+          {exerciseToEdit && (
+            <EditExerciseDialog
+              open={showEditForm}
+              onOpenChange={setShowEditForm}
+              exercise={exerciseToEdit}
+              onSave={onEditExercise}
+              onReset={onResetExercise}
+            />
+          )}
+        </>
       )}
     </>
   );

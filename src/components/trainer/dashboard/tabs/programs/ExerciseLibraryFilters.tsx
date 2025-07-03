@@ -1,8 +1,8 @@
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, Plus } from 'lucide-react';
 
 interface ExerciseLibraryFiltersProps {
   searchTerm: string;
@@ -12,6 +12,7 @@ interface ExerciseLibraryFiltersProps {
   difficultyFilter: string;
   setDifficultyFilter: (difficulty: string) => void;
   onCreateExercise: () => void;
+  hideCreateButton?: boolean;
 }
 
 export function ExerciseLibraryFilters({
@@ -22,65 +23,77 @@ export function ExerciseLibraryFilters({
   difficultyFilter,
   setDifficultyFilter,
   onCreateExercise,
+  hideCreateButton = false,
 }: ExerciseLibraryFiltersProps) {
-  const isMobile = useIsMobile();
+  const categories = [
+    { value: '', label: 'All Categories' },
+    { value: 'chest', label: 'Chest' },
+    { value: 'back', label: 'Back' },
+    { value: 'legs', label: 'Legs' },
+    { value: 'shoulders', label: 'Shoulders' },
+    { value: 'arms', label: 'Arms' },
+    { value: 'core', label: 'Core' },
+    { value: 'cardio', label: 'Cardio' },
+    { value: 'functional', label: 'Functional' },
+    { value: 'flexibility', label: 'Flexibility' },
+    { value: 'plyometric', label: 'Plyometric' },
+  ];
+
+  const difficulties = [
+    { value: '', label: 'All Levels' },
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' },
+  ];
 
   return (
-    <div className={`${isMobile ? 'p-1' : 'p-2'} bg-gray-50 rounded-lg space-y-1`}>
-      {/* Search Input - Compact */}
-      <Input
-        type="search"
-        placeholder="Search exercises..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className={`w-full ${isMobile ? 'h-8 text-sm' : 'h-9'}`}
-      />
-
-      {/* Filters and Add Button - More compact layout */}
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-1`}>
-        {/* Filter Selects */}
-        <div className={`flex ${isMobile ? 'flex-row' : 'flex-row'} gap-1 ${isMobile ? 'w-full' : 'flex-1'}`}>
-          <select
-            className={`rounded px-2 py-1 bg-white border border-gray-300 text-sm 
-              ${isMobile ? 'h-8 flex-1' : 'h-9 min-w-[120px]'}`}
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            <option value="chest">Chest</option>
-            <option value="back">Back</option>
-            <option value="legs">Legs</option>
-            <option value="shoulders">Shoulders</option>
-            <option value="arms">Arms</option>
-            <option value="core">Core</option>
-            <option value="cardio">Cardio</option>
-            <option value="functional">Functional</option>
-            <option value="flexibility">Flexibility</option>
-            <option value="plyometric">Plyometric</option>
-          </select>
-
-          <select
-            className={`rounded px-2 py-1 bg-white border border-gray-300 text-sm 
-              ${isMobile ? 'h-8 flex-1' : 'h-9 min-w-[120px]'}`}
-            value={difficultyFilter}
-            onChange={(e) => setDifficultyFilter(e.target.value)}
-          >
-            <option value="">All Difficulties</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-          </select>
-
-          {/* Add Exercise Button - Inline on mobile for space efficiency */}
-          <Button 
-            onClick={onCreateExercise} 
-            size="sm"
-            className={`${isMobile ? 'h-8 px-2' : 'h-9 px-3'} flex items-center justify-center gap-1 flex-shrink-0`}
-          >
-            <Plus className="h-3 w-3" />
-            {isMobile ? 'Add' : 'Add Exercise'}
-          </Button>
+    <div className="space-y-3 p-4 border-b">
+      {/* Search and Create Button Row */}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search exercises..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
         </div>
+        {!hideCreateButton && (
+          <Button onClick={onCreateExercise} className="flex items-center gap-2 whitespace-nowrap">
+            <Plus className="h-4 w-4" />
+            Add Exercise
+          </Button>
+        )}
+      </div>
+
+      {/* Filters Row */}
+      <div className="flex gap-2">
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="flex-1">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map((category) => (
+              <SelectItem key={category.value} value={category.value}>
+                {category.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+          <SelectTrigger className="flex-1">
+            <SelectValue placeholder="Difficulty" />
+          </SelectTrigger>
+          <SelectContent>
+            {difficulties.map((difficulty) => (
+              <SelectItem key={difficulty.value} value={difficulty.value}>
+                {difficulty.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

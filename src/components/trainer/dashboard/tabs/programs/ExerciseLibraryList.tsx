@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,8 +11,8 @@ import {
   Camera,
   Dumbbell,
   Users,
-  Clock,
-  Target
+  Target,
+  Check
 } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/types';
 import { AlternativeExercisesList } from './AlternativeExercisesList';
@@ -24,9 +23,17 @@ interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
   onEdit: (exercise: ExerciseData) => void;
   onDelete: (id: string) => void;
+  selectionMode?: boolean;
+  onSelect?: (exercise: ExerciseData) => void;
 }
 
-export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLibraryListProps) {
+export function ExerciseLibraryList({ 
+  exercises, 
+  onEdit, 
+  onDelete, 
+  selectionMode = false,
+  onSelect 
+}: ExerciseLibraryListProps) {
   const [expandedExercises, setExpandedExercises] = useState<Set<string>>(new Set());
   const isMobile = useIsMobile();
 
@@ -71,6 +78,19 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
     }
   };
 
+  const handleCardClick = (exercise: ExerciseData, event: React.MouseEvent) => {
+    // Don't trigger selection if clicking on action buttons
+    if ((event.target as HTMLElement).closest('button')) {
+      return;
+    }
+    
+    if (selectionMode && onSelect) {
+      onSelect(exercise);
+    } else {
+      toggleExpanded(exercise.id);
+    }
+  };
+
   if (exercises.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -90,10 +110,16 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
           const isExpanded = expandedExercises.has(exercise.id);
           
           return (
-            <Card key={exercise.id} className="hover:shadow-md transition-shadow">
+            <Card 
+              key={exercise.id} 
+              className={`hover:shadow-md transition-shadow ${selectionMode ? 'cursor-pointer hover:bg-muted/50' : ''}`}
+            >
               <Collapsible open={isExpanded} onOpenChange={() => toggleExpanded(exercise.id)}>
                 <CollapsibleTrigger asChild>
-                  <CardContent className="p-4 cursor-pointer">
+                  <CardContent 
+                    className="p-4 cursor-pointer"
+                    onClick={(e) => handleCardClick(exercise, e)}
+                  >
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
                         {/* Header */}
@@ -104,6 +130,12 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                           )}
                           {exercise.isModified && (
                             <Badge variant="outline" className="text-xs">Modified</Badge>
+                          )}
+                          {selectionMode && (
+                            <Badge variant="default" className="text-xs bg-green-600">
+                              <Check className="h-3 w-3 mr-1" />
+                              Select
+                            </Badge>
                           )}
                         </div>
 
@@ -177,45 +209,45 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
 
                       {/* Actions and Expand Button */}
                       <div className="flex items-center gap-2 ml-3">
-                        <div className="flex gap-1">
-                          {exercise.videoUrl && (
+                        {!selectionMode && (
+                          <div className="flex gap-1">
+                            {exercise.videoUrl && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  previewVideo(exercise.videoUrl!);
+                                }}
+                                className="h-7 w-7 p-0"
+                              >
+                                <Play className="h-3 w-3" />
+                              </Button>
+                            )}
+                            
+                            {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-7 w-7 p-0"
+                              >
+                                <Camera className="h-3 w-3" />
+                              </Button>
+                            )}
+                            
                             <Button
                               size="sm"
                               variant="ghost"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                previewVideo(exercise.videoUrl!);
+                                onEdit(exercise);
                               }}
                               className="h-7 w-7 p-0"
                             >
-                              <Play className="h-3 w-3" />
+                              <Edit2 className="h-3 w-3" />
                             </Button>
-                          )}
-                          
-                          {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-7 w-7 p-0"
-                            >
-                              <Camera className="h-3 w-3" />
-                            </Button>
-                          )}
-                          
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onEdit(exercise);
-                            }}
-                            className="h-7 w-7 p-0"
-                          >
-                            <Edit2 className="h-3 w-3" />
-                          </Button>
-                          
-                          {/* Show delete button if exercise is deletable (custom exercises or marked as deletable) */}
-                          {(exercise.isCustom || exercise.isDeletable) && (
+                            
+                            {/* Show delete button for all exercises now */}
                             <Button
                               size="sm"
                               variant="ghost"
@@ -227,99 +259,103 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
-                          )}
-                        </div>
+                          </div>
+                        )}
                         
-                        <ChevronDown 
-                          className={`h-4 w-4 text-muted-foreground transition-transform ${
-                            isExpanded ? 'rotate-180' : ''
-                          }`} 
-                        />
+                        {!selectionMode && (
+                          <ChevronDown 
+                            className={`h-4 w-4 text-muted-foreground transition-transform ${
+                              isExpanded ? 'rotate-180' : ''
+                            }`} 
+                          />
+                        )}
                       </div>
                     </div>
                   </CardContent>
                 </CollapsibleTrigger>
 
-                <CollapsibleContent>
-                  <div className="px-4 pb-4 space-y-4 border-t bg-muted/20">
-                    {/* Full Description */}
-                    <div>
-                      <h4 className="text-sm font-medium mb-2">Instructions</h4>
-                      <p className="text-sm text-muted-foreground">{exercise.notes}</p>
+                {!selectionMode && (
+                  <CollapsibleContent>
+                    <div className="px-4 pb-4 space-y-4 border-t bg-muted/20">
+                      {/* Full Description */}
+                      <div>
+                        <h4 className="text-sm font-medium mb-2">Instructions</h4>
+                        <p className="text-sm text-muted-foreground">{exercise.notes}</p>
+                      </div>
+
+                      {/* Complete Muscle Groups */}
+                      {exercise.muscleGroup.length > (isMobile ? 2 : 3) && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Target Muscles</h4>
+                          <div className="flex flex-wrap gap-1">
+                            {exercise.muscleGroup.map((muscle, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
+                                {muscle}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Complete Equipment List */}
+                      {exercise.equipment.length > 2 && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Required Equipment</h4>
+                          <div className="flex flex-wrap gap-1">
+                            {exercise.equipment.map((eq, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {eq}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Alternative Exercises - Using the proper component */}
+                      {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+                        <AlternativeExercisesList
+                          alternativeExerciseIds={exercise.alternativeExercises}
+                          className="mt-4"
+                        />
+                      )}
+
+                      {/* Video Link */}
+                      {exercise.videoUrl && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Video Demonstration</h4>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => previewVideo(exercise.videoUrl!)}
+                            className="flex items-center gap-2"
+                          >
+                            <Play className="h-3 w-3" />
+                            Watch Video
+                          </Button>
+                        </div>
+                      )}
+
+                      {/* Equipment Images */}
+                      {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Equipment Images</h4>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {Object.entries(exercise.equipmentImages).map(([equipment, imageUrl]) => (
+                              <div key={equipment} className="text-center">
+                                <img 
+                                  src={imageUrl} 
+                                  alt={equipment}
+                                  className="w-full h-16 object-cover rounded-md border"
+                                />
+                                <p className="text-xs text-muted-foreground mt-1">{equipment}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-
-                    {/* Complete Muscle Groups */}
-                    {exercise.muscleGroup.length > (isMobile ? 2 : 3) && (
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Target Muscles</h4>
-                        <div className="flex flex-wrap gap-1">
-                          {exercise.muscleGroup.map((muscle, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs bg-blue-50 text-blue-700">
-                              {muscle}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Complete Equipment List */}
-                    {exercise.equipment.length > 2 && (
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Required Equipment</h4>
-                        <div className="flex flex-wrap gap-1">
-                          {exercise.equipment.map((eq, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
-                              {eq}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Alternative Exercises - Using the proper component */}
-                    {exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
-                      <AlternativeExercisesList
-                        alternativeExerciseIds={exercise.alternativeExercises}
-                        className="mt-4"
-                      />
-                    )}
-
-                    {/* Video Link */}
-                    {exercise.videoUrl && (
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Video Demonstration</h4>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => previewVideo(exercise.videoUrl!)}
-                          className="flex items-center gap-2"
-                        >
-                          <Play className="h-3 w-3" />
-                          Watch Video
-                        </Button>
-                      </div>
-                    )}
-
-                    {/* Equipment Images */}
-                    {exercise.equipmentImages && Object.keys(exercise.equipmentImages).length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Equipment Images</h4>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                          {Object.entries(exercise.equipmentImages).map(([equipment, imageUrl]) => (
-                            <div key={equipment} className="text-center">
-                              <img 
-                                src={imageUrl} 
-                                alt={equipment}
-                                className="w-full h-16 object-cover rounded-md border"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">{equipment}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </CollapsibleContent>
+                  </CollapsibleContent>
+                )}
               </Collapsible>
             </Card>
           );

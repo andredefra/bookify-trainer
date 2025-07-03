@@ -2,13 +2,21 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useExerciseLibraryManager } from '@/hooks/useExerciseLibraryManager';
 import { ExerciseLibraryDialogContent } from './ExerciseLibraryDialogContent';
+import { ExerciseData } from '@/data/exercises/types';
 
 interface ExerciseLibraryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  selectionMode?: boolean;
+  onExerciseSelect?: (exercise: ExerciseData) => void;
 }
 
-export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDialogProps) {
+export function ExerciseLibraryDialog({ 
+  open, 
+  onOpenChange, 
+  selectionMode = false,
+  onExerciseSelect 
+}: ExerciseLibraryDialogProps) {
   const {
     searchTerm,
     setSearchTerm,
@@ -32,13 +40,14 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
   console.log('ExerciseLibraryDialog - Exercises loaded:', exercises.length);
   console.log('ExerciseLibraryDialog - Filtered:', filteredExercises.length);
   console.log('ExerciseLibraryDialog - Paginated:', paginatedExercises.length);
+  console.log('ExerciseLibraryDialog - Selection mode:', selectionMode);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-md sm:max-w-7xl h-[95vh] max-h-screen overflow-hidden flex flex-col p-3 sm:p-6">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-base sm:text-lg">
-            Exercise Library ({exercises.length} exercises total)
+            {selectionMode ? 'Select Exercise' : 'Exercise Library'} ({exercises.length} exercises total)
           </DialogTitle>
         </DialogHeader>
 
@@ -61,6 +70,8 @@ export function ExerciseLibraryDialog({ open, onOpenChange }: ExerciseLibraryDia
           onResetExercise={handleResetExercise}
           onDeleteExercise={handleDeleteExercise}
           onClose={() => onOpenChange(false)}
+          selectionMode={selectionMode}
+          onExerciseSelect={onExerciseSelect}
         />
       </DialogContent>
     </Dialog>
