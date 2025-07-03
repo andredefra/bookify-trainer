@@ -1,5 +1,5 @@
-
 import { ExerciseData } from './types';
+import { newExercises } from './newExercises';
 
 // Complete exercise database with realistic alternatives based on PT expertise
 export const completeExerciseDatabase: ExerciseData[] = [
@@ -1705,7 +1705,8 @@ export const completeExerciseDatabase: ExerciseData[] = [
     notes: "Lateral bounds for lateral power and agility.",
     alternativeExercises: ["lateral-lunges", "side-shuffles", "skater-hops", "lateral-jumps"],
     isDeletable: true
-  }
+  },
+  ...newExercises
 ];
 
 export function getExerciseById(id: string): ExerciseData | undefined {

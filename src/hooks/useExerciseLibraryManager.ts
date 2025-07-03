@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ExerciseData, completeExerciseDatabase as exerciseDatabase, getExerciseById } from '@/data/exercises/exerciseDatabase';
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -37,8 +37,8 @@ export function useExerciseLibraryManager() {
 
       console.log('✅ Database verified - Count:', exerciseDatabase.length);
       
-      // Start with the complete database (limit for performance)
-      let processedExercises = [...exerciseDatabase.slice(0, 200)]; // Limit to first 200 for performance
+      // Start with the complete database (no artificial limit)
+      let processedExercises = [...exerciseDatabase];
       
       // Load localStorage data safely
       try {
@@ -137,12 +137,19 @@ export function useExerciseLibraryManager() {
     toast.success('Exercise deleted successfully!');
   }, []);
 
-  // Filter exercises with error handling
-  const filteredExercises = useState(() => {
+  // Filter exercises with proper memoization - THIS IS THE CRITICAL FIX!
+  const filteredExercises = useMemo(() => {
     try {
       if (!exercises || exercises.length === 0) return [];
       
-      return exercises.filter(exercise => {
+      console.log('🔍 Filtering exercises:', {
+        total: exercises.length,
+        searchTerm: debouncedSearchTerm,
+        categoryFilter,
+        difficultyFilter
+      });
+      
+      const filtered = exercises.filter(exercise => {
         if (!exercise) return false;
         
         const searchTermMatch = !debouncedSearchTerm || 
@@ -156,11 +163,18 @@ export function useExerciseLibraryManager() {
 
         return searchTermMatch && categoryMatch && difficultyMatch;
       });
+
+      console.log('🔍 Filtering result:', {
+        input: exercises.length,
+        output: filtered.length
+      });
+
+      return filtered;
     } catch (filterError) {
       console.error('❌ Error filtering exercises:', filterError);
       return [];
     }
-  })[0];
+  }, [exercises, debouncedSearchTerm, categoryFilter, difficultyFilter]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
