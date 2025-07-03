@@ -12,4 +12,5 @@ export interface ExerciseData {
   alternativeExercises?: string[];
   isCustom?: boolean;
   isModified?: boolean;
+  isDeletable?: boolean;
 }

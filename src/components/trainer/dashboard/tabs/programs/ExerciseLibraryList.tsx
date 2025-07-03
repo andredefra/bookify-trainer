@@ -214,7 +214,8 @@ export function ExerciseLibraryList({ exercises, onEdit, onDelete }: ExerciseLib
                             <Edit2 className="h-3 w-3" />
                           </Button>
                           
-                          {exercise.isCustom && (
+                          {/* Show delete button if exercise is deletable (custom exercises or marked as deletable) */}
+                          {(exercise.isCustom || exercise.isDeletable) && (
                             <Button
                               size="sm"
                               variant="ghost"

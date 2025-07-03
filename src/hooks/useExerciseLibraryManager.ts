@@ -17,10 +17,10 @@ export function useExerciseLibraryManager() {
   const itemsPerPage = isMobile ? 8 : 12;
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  console.log('useExerciseLibraryManager - Mobile:', isMobile, 'Items per page:', itemsPerPage);
+  console.log('🔍 useExerciseLibraryManager - Mobile:', isMobile, 'Items per page:', itemsPerPage);
 
   const loadExercises = useCallback(() => {
-    console.log('Loading exercises - Database count:', exerciseDatabase.length);
+    console.log('📚 Loading exercises - Database count:', exerciseDatabase.length);
     
     // Start with the complete database
     let processedExercises = [...exerciseDatabase];
@@ -30,11 +30,19 @@ export function useExerciseLibraryManager() {
     const exerciseModifications = localStorage.getItem('trainer_exercise_modifications');
     const deletedExercises = localStorage.getItem('trainer_deleted_exercises');
     
+    console.log('💾 LocalStorage state:', {
+      customExercises: customExercises ? JSON.parse(customExercises).length : 0,
+      modifications: exerciseModifications ? Object.keys(JSON.parse(exerciseModifications)).length : 0,
+      deleted: deletedExercises ? JSON.parse(deletedExercises).length : 0
+    });
+    
     // Apply deleted exercises filter
     if (deletedExercises) {
       try {
         const deleted = JSON.parse(deletedExercises);
+        const beforeCount = processedExercises.length;
         processedExercises = processedExercises.filter(ex => !deleted.includes(ex.id));
+        console.log('🗑️ Filtered deleted exercises:', beforeCount, '->', processedExercises.length);
       } catch (error) {
         console.error('Error parsing deleted exercises:', error);
       }
@@ -51,6 +59,7 @@ export function useExerciseLibraryManager() {
           }
           return exercise;
         });
+        console.log('✏️ Applied modifications to exercises');
       } catch (error) {
         console.error('Error parsing exercise modifications:', error);
       }
@@ -61,12 +70,17 @@ export function useExerciseLibraryManager() {
       try {
         const custom = JSON.parse(customExercises);
         processedExercises = [...processedExercises, ...custom];
+        console.log('➕ Added custom exercises:', custom.length);
       } catch (error) {
         console.error('Error parsing custom exercises:', error);
       }
     }
     
-    console.log('Final exercise count:', processedExercises.length);
+    console.log('✅ Final exercise count:', processedExercises.length);
+    console.log('🎯 Sample exercises with alternatives:', 
+      processedExercises.filter(ex => ex.alternativeExercises && ex.alternativeExercises.length > 0).length
+    );
+    
     setExercises(processedExercises);
   }, []);
 
@@ -76,11 +90,13 @@ export function useExerciseLibraryManager() {
   }, [loadExercises]);
 
   const handleCreateExercise = (newExercise: ExerciseData) => {
+    console.log('➕ Creating new exercise:', newExercise.name);
     setExercises(prevExercises => [...prevExercises, newExercise]);
     toast.success('Exercise created successfully!');
   };
 
   const handleSaveExercise = (id: string, updates: Partial<ExerciseData>) => {
+    console.log('💾 Saving exercise updates:', id, updates);
     setExercises(prevExercises =>
       prevExercises.map(exercise =>
         exercise.id === id ? { ...exercise, ...updates, isModified: true } : exercise
@@ -89,6 +105,7 @@ export function useExerciseLibraryManager() {
   };
 
   const handleResetExercise = (id: string) => {
+    console.log('🔄 Resetting exercise:', id);
     const originalExercise = getExerciseById(id);
     if (originalExercise) {
       setExercises(prevExercises =>
@@ -100,6 +117,7 @@ export function useExerciseLibraryManager() {
   };
 
   const handleDeleteExercise = (id: string) => {
+    console.log('🗑️ Deleting exercise:', id);
     setExercises(prevExercises => prevExercises.filter(exercise => exercise.id !== id));
     toast.success('Exercise deleted successfully!');
   };
@@ -127,13 +145,16 @@ export function useExerciseLibraryManager() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedExercises = filteredExercises.slice(startIndex, endIndex);
 
-  console.log('useExerciseLibraryManager - Pagination:', {
+  console.log('📊 Pagination stats:', {
     totalExercises: exercises.length,
     filteredCount: filteredExercises.length,
     paginatedCount: paginatedExercises.length,
     currentPage,
     totalPages,
-    itemsPerPage
+    itemsPerPage,
+    searchTerm: debouncedSearchTerm,
+    categoryFilter,
+    difficultyFilter
   });
 
   return {
