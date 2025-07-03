@@ -16,72 +16,6 @@ export const completeExerciseDatabase: ExerciseData[] = [
     isDeletable: true
   },
   {
-    id: "horizontal-leg-press",
-    name: "Horizontal Leg Press", 
-    category: "legs",
-    difficulty: "beginner",
-    muscleGroup: ["Quadriceps", "Glutes", "Hamstrings"],
-    equipment: ["Leg Press Machine"],
-    notes: "Horizontal leg press machine variation for quad and glute development.",
-    alternativeExercises: ["angled-leg-press", "hack-squat", "barbell-squat", "45-degree-leg-press"],
-    isDeletable: true
-  },
-  {
-    id: "leg-extension",
-    name: "Leg Extension",
-    category: "legs", 
-    difficulty: "beginner",
-    muscleGroup: ["Quadriceps"],
-    equipment: ["Leg Extension Machine"],
-    notes: "Isolated quadriceps exercise performed on leg extension machine.",
-    alternativeExercises: ["single-leg-leg-extension", "barbell-squat", "front-squat", "bulgarian-squat"],
-    isDeletable: true
-  },
-  {
-    id: "seated-leg-curl",
-    name: "Seated Leg Curl",
-    category: "legs",
-    difficulty: "beginner", 
-    muscleGroup: ["Hamstrings"],
-    equipment: ["Leg Curl Machine"],
-    notes: "Seated hamstring curl for isolated hamstring development.",
-    alternativeExercises: ["leg-curl-lying-down", "standing-leg-curl", "romanian-deadlift-dumbbell", "single-leg-rdl"],
-    isDeletable: true
-  },
-  {
-    id: "leg-curl-lying-down",
-    name: "Leg Curl lying down",
-    category: "legs",
-    difficulty: "beginner",
-    muscleGroup: ["Hamstrings"],
-    equipment: ["Leg Curl Machine"],
-    notes: "Prone leg curl for hamstring isolation and development.",
-    alternativeExercises: ["seated-leg-curl", "standing-leg-curl", "romanian-deadlift-dumbbell", "single-leg-cable-curl"],
-    isDeletable: true
-  },
-  {
-    id: "standing-leg-curl",
-    name: "Standing Leg Curl", 
-    category: "legs",
-    difficulty: "intermediate",
-    muscleGroup: ["Hamstrings"],
-    equipment: ["Cable Machine"],
-    notes: "Standing single-leg hamstring curl using cable machine.",
-    alternativeExercises: ["seated-leg-curl", "leg-curl-lying-down", "romanian-deadlift-dumbbell", "single-leg-rdl"],
-    isDeletable: true
-  },
-  {
-    id: "machine-hip-thrust",
-    name: "Machine Hip Thrust",
-    category: "legs",
-    difficulty: "intermediate",
-    muscleGroup: ["Glutes", "Hamstrings"],
-    equipment: ["Hip Thrust Machine"],
-    notes: "Machine-assisted hip thrust for glute development and power.",
-    alternativeExercises: ["barbell-hip-thrust", "glute-bridge-dumbbell", "hip-thrust-smith", "single-leg-hip-thrust"],
-    isDeletable: true
-  },
-  {
     id: "standing-abductor-machine",
     name: "Standing Abductor Machine",
     category: "legs",
@@ -148,17 +82,6 @@ export const completeExerciseDatabase: ExerciseData[] = [
     isDeletable: true
   },
   {
-    id: "barbell-squat",
-    name: "Barbell squat",
-    category: "legs",
-    difficulty: "advanced",
-    muscleGroup: ["Quadriceps", "Glutes", "Hamstrings", "Core"],
-    equipment: ["Barbell", "Squat Rack"],
-    notes: "Free weight barbell back squat - the king of leg exercises.",
-    alternativeExercises: ["squat-smith-machine", "front-squat", "goblet-squat", "hack-squat"],
-    isDeletable: true
-  },
-  {
     id: "calf-machine",
     name: "Calf Machine",
     category: "legs",
@@ -200,17 +123,6 @@ export const completeExerciseDatabase: ExerciseData[] = [
     equipment: ["Leg Extension Machine"],
     notes: "Unilateral leg extension for balanced quad development.",
     alternativeExercises: ["leg-extension", "bulgarian-squat", "single-leg-squat", "step-ups"],
-    isDeletable: true
-  },
-  {
-    id: "romanian-deadlift-dumbbell",
-    name: "Romanian Deadlift with Dumbbells",
-    category: "legs",
-    difficulty: "intermediate",
-    muscleGroup: ["Hamstrings", "Glutes", "Lower Back"],
-    equipment: ["Dumbbells"],
-    notes: "RDL with dumbbells for hamstring and glute development.",
-    alternativeExercises: ["romanian-deadlift-barbell", "stiff-leg-deadlift", "good-mornings", "seated-leg-curl"],
     isDeletable: true
   },
   {
@@ -325,17 +237,6 @@ export const completeExerciseDatabase: ExerciseData[] = [
     alternativeExercises: ["incline-dumbbell-press", "smith-incline-press", "incline-chest-press", "dumbbell-fly-incline"],
     isDeletable: true
   },
-  {
-    id: "push-ups",
-    name: "Push-ups",
-    category: "chest",
-    difficulty: "beginner",
-    muscleGroup: ["Pectorals", "Triceps", "Anterior Deltoids"],
-    equipment: ["Bodyweight"],
-    notes: "Classic bodyweight chest exercise for strength and endurance.",
-    alternativeExercises: ["dumbbell-flat-press", "chest-press-machine", "diamond-push-ups", "incline-push-ups"],
-    isDeletable: true
-  },
 
   // BACK CATEGORY - 78 exercises
   {
@@ -369,17 +270,6 @@ export const completeExerciseDatabase: ExerciseData[] = [
     equipment: ["Cable Machine", "Triangle Bar"],
     notes: "Neutral grip lat pulldown using triangle bar for back thickness.",
     alternativeExercises: ["lat-pulldown", "neutral-grip-pullups", "seated-cable-row-triangle", "single-arm-pulldown"],
-    isDeletable: true
-  },
-  {
-    id: "pull-ups",
-    name: "Pull-ups",
-    category: "back",
-    difficulty: "advanced",
-    muscleGroup: ["Latissimus Dorsi", "Rhomboids", "Biceps"],
-    equipment: ["Pull-up Bar"],
-    notes: "Bodyweight pull-up for back strength and width development.",
-    alternativeExercises: ["lat-pulldown", "assisted-pull-ups", "chin-ups", "wide-grip-pullups"],
     isDeletable: true
   },
   {
@@ -1173,28 +1063,6 @@ export const completeExerciseDatabase: ExerciseData[] = [
     equipment: ["Barbell"],
     notes: "Conventional deadlift for posterior chain strength and power.",
     alternativeExercises: ["sumo-deadlift", "trap-bar-deadlift", "romanian-deadlift-barbell", "rack-pulls"],
-    isDeletable: true
-  },
-  {
-    id: "romanian-deadlift-barbell",
-    name: "Romanian Deadlift Barbell",
-    category: "back",
-    difficulty: "intermediate",
-    muscleGroup: ["Hamstrings", "Glutes", "Erector Spinae"],
-    equipment: ["Barbell"],
-    notes: "Romanian deadlift with barbell for hamstring and glute development.",
-    alternativeExercises: ["romanian-deadlift-dumbbell", "stiff-leg-deadlift", "good-mornings", "deadlift"],
-    isDeletable: true
-  },
-  {
-    id: "good-mornings",
-    name: "Good Mornings",
-    category: "back",
-    difficulty: "intermediate",
-    muscleGroup: ["Erector Spinae", "Hamstrings", "Glutes"],
-    equipment: ["Barbell"],
-    notes: "Good morning exercise for posterior chain and spinal erectors.",
-    alternativeExercises: ["romanian-deadlift-barbell", "hyperextensions", "back-extensions", "glute-ham-raise"],
     isDeletable: true
   },
 
