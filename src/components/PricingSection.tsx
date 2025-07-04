@@ -4,7 +4,7 @@ import { plans } from '@/components/trainer/dashboard/tabs/settings/membership/p
 import { PricingHeader } from './pricing/PricingHeader';
 import { PlanCard } from './pricing/PlanCard';
 import { PricingFooter } from './pricing/PricingFooter';
-import { ContactFormDialog } from './shared/ContactFormDialog';
+import { ContactFormDialog } from './contact/ContactFormDialog';
 
 const PricingSection = () => {
   const [annual, setAnnual] = useState(false);
