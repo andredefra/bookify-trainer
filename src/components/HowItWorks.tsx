@@ -87,7 +87,14 @@ const HowItWorks = () => {
                 <p className="text-muted-foreground mb-6">
                   {t('howItWorks.cta.description')}
                 </p>
-                <button className="w-full md:w-auto px-6 py-3 bg-primary text-white rounded-full text-base font-medium button-hover">
+                <button 
+                  onClick={() => {
+                    document.getElementById('pricing')?.scrollIntoView({ 
+                      behavior: 'smooth' 
+                    });
+                  }}
+                  className="w-full md:w-auto px-6 py-3 bg-primary text-white rounded-full text-base font-medium button-hover"
+                >
                   {t('howItWorks.cta.button')}
                 </button>
               </div>
