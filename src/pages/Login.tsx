@@ -1,18 +1,15 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { toast } from "sonner";
 import { getDemoUserData } from "@/utils/demoUserUtils";
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginType, setLoginType] = useState('trainer');
   const [name, setName] = useState('Andrea');
   const navigate = useNavigate();
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Login attempted with:", {
@@ -21,16 +18,13 @@ const Login = () => {
       loginType,
       name
     });
-
     if (email && password) {
       toast.success("Demo login successful!");
-      
+
       // Generate unique demo user data
       const demoUserData = getDemoUserData(email, name, loginType);
       console.log('Generated demo user:', demoUserData);
-      
       localStorage.setItem('demo-user', JSON.stringify(demoUserData));
-
       if (loginType === 'client') {
         navigate('/client-dashboard');
       } else if (loginType === 'gym') {
@@ -42,7 +36,6 @@ const Login = () => {
       toast.error("Please enter both email and password");
     }
   };
-
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       
@@ -50,7 +43,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8 mt-6">
             <h1 className="text-3xl font-display font-bold text-primary mb-2">Demo Login</h1>
-            <p className="text-muted-foreground">Try our platform features with a demo account</p>
+            <p className="text-muted-foreground">Try our platform features with a demo account. If you are you interested in the live app, please get in touch via this email andrea.mypersonal.fit@gmail.com</p>
           </div>
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
@@ -87,9 +80,7 @@ const Login = () => {
               </div>
               
               <button type="submit" className="w-full py-3 bg-primary text-white rounded-full font-medium button-hover">
-                {loginType === 'client' ? 'Access Client Demo' : 
-                 loginType === 'gym' ? 'Access Gym Demo' : 
-                 'Access Trainer Demo'}
+                {loginType === 'client' ? 'Access Client Demo' : loginType === 'gym' ? 'Access Gym Demo' : 'Access Trainer Demo'}
               </button>
             </form>
             
@@ -108,5 +99,4 @@ const Login = () => {
       <Footer />
     </div>;
 };
-
 export default Login;
