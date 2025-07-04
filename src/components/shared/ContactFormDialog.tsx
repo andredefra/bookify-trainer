@@ -33,6 +33,7 @@ interface ContactFormData {
   subject: string;
   firstName: string;
   lastName: string;
+  email: string;
   gym: string;
   city: string;
   message: string;
@@ -52,6 +53,7 @@ export function ContactFormDialog({ open, onOpenChange }: ContactFormDialogProps
       subject: "",
       firstName: "",
       lastName: "",
+      email: "",
       gym: "",
       city: "",
       message: "",
@@ -156,6 +158,27 @@ export function ContactFormDialog({ open, onOpenChange }: ContactFormDialogProps
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="email"
+              rules={{ 
+                required: "L'email è obbligatoria",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Inserisci un'email valida"
+                }
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email palestra *</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="email@palestra.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
