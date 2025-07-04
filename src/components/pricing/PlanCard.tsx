@@ -94,6 +94,8 @@ export const PlanCard = ({
       ) : (
         <Link 
           to={ctaLink}
+          target={isGymPlan ? "_blank" : undefined}
+          rel={isGymPlan ? "noopener noreferrer" : undefined}
           className={`w-full px-6 py-3 ${
             isPopular 
               ? 'bg-primary text-white' 
