@@ -43,7 +43,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8 mt-6">
             <h1 className="text-3xl font-display font-bold text-primary mb-2">Demo Login</h1>
-            <p className="text-muted-foreground">Try our platform features with a demo account. If you are you interested in the live app, please get in touch via this email andrea.mypersonal.fit@gmail.com</p>
+            <p className="text-muted-foreground">Try our platform features with a demo account. If you are interested in the live app, please get in touch via this email andrea.mypersonal.fit@gmail.com</p>
           </div>
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
