@@ -25,9 +25,7 @@ export const previousProgram: TrainingProgram = {
           name: "Bodyweight Squats",
           sets: 3,
           reps: "15",
-          notes: "Focus on form",
-          videoUrl: "https://www.youtube.com/watch?v=YaXPRqUwItQ",
-          videoSource: "youtube"
+          notes: "Focus on form"
         },
         {
           id: "ex-2-prev",

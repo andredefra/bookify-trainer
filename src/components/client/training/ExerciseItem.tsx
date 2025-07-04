@@ -47,7 +47,7 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
       {/* Enhanced Exercise Display */}
       <ExerciseDetailCard
         exerciseName={exercise.name}
-        exerciseNotes={exercise.notes}
+        trainerNotes={exercise.notes}
         sets={exercise.sets?.toString()}
         reps={exercise.reps}
         weight={exercise.weight}

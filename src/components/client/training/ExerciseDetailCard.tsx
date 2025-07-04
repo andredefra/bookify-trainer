@@ -13,7 +13,8 @@ import {
   Users,
   Info,
   Youtube,
-  Video
+  Video,
+  MessageSquare
 } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/types';
 import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
@@ -21,7 +22,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExerciseDetailCardProps {
   exerciseName: string;
-  exerciseNotes?: string;
+  trainerNotes?: string; // Trainer-specific notes
   sets?: string;
   reps?: string;
   weight?: number;
@@ -30,7 +31,7 @@ interface ExerciseDetailCardProps {
 
 export function ExerciseDetailCard({ 
   exerciseName, 
-  exerciseNotes, 
+  trainerNotes, 
   sets, 
   reps, 
   weight,
@@ -176,16 +177,43 @@ export function ExerciseDetailCard({
 
         <CollapsibleContent>
           <CardContent className="pt-0 space-y-4 border-t bg-muted/20">
-            {/* Instructions */}
-            <div>
-              <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                <Info className="h-4 w-4" />
-                Instructions
-              </h4>
-              <p className="text-sm text-muted-foreground">
-                {exerciseData?.notes || exerciseNotes || "No specific instructions provided."}
-              </p>
-            </div>
+            {/* General Exercise Instructions */}
+            {exerciseData?.notes && (
+              <div>
+                <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                  <Info className="h-4 w-4" />
+                  Exercise Instructions
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  {exerciseData.notes}
+                </p>
+              </div>
+            )}
+
+            {/* Trainer-Specific Notes */}
+            {trainerNotes && (
+              <div>
+                <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  Trainer Notes
+                </h4>
+                <p className="text-sm text-muted-foreground bg-blue-50 p-3 rounded-md border-l-4 border-blue-200">
+                  {trainerNotes}
+                </p>
+              </div>
+            )}
+
+            {!exerciseData?.notes && !trainerNotes && (
+              <div>
+                <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                  <Info className="h-4 w-4" />
+                  Instructions
+                </h4>
+                <p className="text-sm text-muted-foreground">
+                  No specific instructions provided.
+                </p>
+              </div>
+            )}
 
             {exerciseData && (
               <>

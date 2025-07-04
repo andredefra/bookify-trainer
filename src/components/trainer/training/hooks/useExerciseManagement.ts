@@ -31,8 +31,6 @@ export function useExerciseManagement(
     onUpdate("sets", 3);
     onUpdate("reps", "10");
     onUpdate("repsUnit", "reps");
-    onUpdate("videoSource", undefined);
-    onUpdate("videoUrl", "");
     setIsExerciseSelected(false);
   }, [onUpdate]);
 

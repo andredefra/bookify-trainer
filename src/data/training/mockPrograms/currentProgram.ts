@@ -28,9 +28,7 @@ export const currentProgram: TrainingProgram = {
           reps: "8-10",
           weight: 70,
           notes: "Focus on controlled movement",
-          exerciseType: "strength",
-          videoUrl: "https://www.youtube.com/watch?v=rT7DgCr-3pg",
-          videoSource: "youtube"
+          exerciseType: "strength"
         },
         {
           id: "ex-2",
@@ -38,9 +36,7 @@ export const currentProgram: TrainingProgram = {
           sets: 3,
           reps: "6-8",
           notes: "Use assistance if needed",
-          exerciseType: "strength",
-          videoUrl: "https://www.youtube.com/watch?v=eGo4IYlbE5g",
-          videoSource: "youtube"
+          exerciseType: "strength"
         },
         {
           id: "ex-3",
@@ -49,9 +45,7 @@ export const currentProgram: TrainingProgram = {
           reps: "8-10",
           weight: 45,
           notes: "Keep core tight",
-          exerciseType: "strength",
-          videoUrl: "https://www.youtube.com/watch?v=2yjwXTZQDDI",
-          videoSource: "youtube"
+          exerciseType: "strength"
         }
       ]
     },
@@ -69,9 +63,7 @@ export const currentProgram: TrainingProgram = {
           reps: "6-8",
           weight: 80,
           notes: "Go below parallel",
-          exerciseType: "strength",
-          videoUrl: "https://www.youtube.com/watch?v=YaXPRqUwItQ",
-          videoSource: "youtube"
+          exerciseType: "strength"
         },
         {
           id: "ex-5",

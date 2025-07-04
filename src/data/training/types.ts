@@ -6,9 +6,7 @@ export interface Exercise {
   reps: string;
   repsUnit?: 'reps' | 'sec' | 'min';
   weight?: number;
-  notes?: string;
-  videoUrl?: string;
-  videoSource?: 'youtube' | 'vimeo';
+  notes?: string; // Trainer-specific notes for the client
   // User tracking fields
   userNotes?: string;
   maxWeight?: number; // For strength exercises

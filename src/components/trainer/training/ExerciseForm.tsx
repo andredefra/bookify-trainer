@@ -3,7 +3,7 @@ import { FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Trash2, Youtube, Video, RotateCcw } from "lucide-react";
+import { Trash2, RotateCcw } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Exercise } from "@/data/training/types";
 import { ExerciseSelector } from "./ExerciseSelector";
@@ -85,49 +85,14 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
       </div>
       
       <div>
-        <FormLabel>Notes & Instructions</FormLabel>
+        <FormLabel>Trainer-Specific Notes</FormLabel>
         <Textarea
           value={exercise.notes || ""}
           onChange={(e) => handleFieldUpdate("notes", e.target.value)}
-          placeholder="Exercise instructions, tempo, rest periods, form cues, etc."
+          placeholder="Special instructions for your client: form adjustments, tempo, rest periods, modifications, etc."
           rows={3}
           className="resize-none"
         />
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <FormLabel>Video Source (Optional)</FormLabel>
-          <Select
-            value={exercise.videoSource || "none"}
-            onValueChange={(value) => handleFieldUpdate("videoSource", value === "none" ? undefined : value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="None" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No Video</SelectItem>
-              <SelectItem value="youtube">YouTube</SelectItem>
-              <SelectItem value="vimeo">Vimeo</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        {exercise.videoSource && (
-          <div className="md:col-span-2">
-            <FormLabel>Video URL</FormLabel>
-            <div className="flex items-center gap-2">
-              {exercise.videoSource === "youtube" && <Youtube className="h-4 w-4 text-red-500 flex-shrink-0" />}
-              {exercise.videoSource === "vimeo" && <Video className="h-4 w-4 text-blue-500 flex-shrink-0" />}
-              <Input
-                value={exercise.videoUrl || ""}
-                onChange={(e) => handleFieldUpdate("videoUrl", e.target.value)}
-                placeholder={`Enter ${exercise.videoSource} video URL`}
-                className="flex-1"
-              />
-            </div>
-          </div>
-        )}
       </div>
       
       <div className="flex justify-end pt-3 border-t">
