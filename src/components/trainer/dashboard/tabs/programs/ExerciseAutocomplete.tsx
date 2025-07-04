@@ -54,8 +54,14 @@ export function ExerciseAutocomplete({
   }, []);
 
   const handleSuggestionClick = (exercise: any) => {
-    onChange(exercise.name);
+    // Force close dropdown first
     setIsOpen(false);
+    
+    // Clear suggestions to prevent interference
+    setSuggestions([]);
+    
+    // Update the exercise name
+    onChange(exercise.name);
     
     // Auto-fill notes if callback provided
     if (onExerciseSelect) {
@@ -66,11 +72,23 @@ export function ExerciseAutocomplete({
     if (onExerciseDataSelect) {
       onExerciseDataSelect(exercise);
     }
+    
+    // Blur the input to lose focus
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
   };
 
   const handleLibrarySelection = (exercise: ExerciseData) => {
-    onChange(exercise.name);
+    // Close dialog first
     setShowLibraryDialog(false);
+    
+    // Force close dropdown
+    setIsOpen(false);
+    setSuggestions([]);
+    
+    // Update exercise name
+    onChange(exercise.name);
     
     if (onExerciseSelect) {
       onExerciseSelect(exercise.notes);
@@ -78,6 +96,11 @@ export function ExerciseAutocomplete({
     
     if (onExerciseDataSelect) {
       onExerciseDataSelect(exercise);
+    }
+    
+    // Blur input
+    if (inputRef.current) {
+      inputRef.current.blur();
     }
   };
 
@@ -128,13 +151,18 @@ export function ExerciseAutocomplete({
         </div>
 
         {isOpen && suggestions.length > 0 && (
-          <Card className="absolute z-[100] w-full mt-1 p-2 max-h-64 overflow-y-auto border shadow-lg bg-background backdrop-blur-sm">
+          <Card className="absolute z-[9999] w-full mt-1 p-2 max-h-64 overflow-y-auto border shadow-lg bg-background backdrop-blur-sm">
             <div className="space-y-1">
               {suggestions.map((exercise) => (
                 <div
                   key={exercise.id}
                   className="p-3 hover:bg-muted rounded cursor-pointer transition-colors"
-                  onClick={() => handleSuggestionClick(exercise)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleSuggestionClick(exercise);
+                  }}
+                  onMouseDown={(e) => e.preventDefault()}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium">{exercise.name}</span>
