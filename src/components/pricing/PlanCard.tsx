@@ -15,6 +15,8 @@ interface PlanCardProps {
   Icon?: LucideIcon;
   isGymPlan?: boolean;
   transactionFeeNote?: string;
+  showContactForm?: boolean;
+  onContactClick?: () => void;
 }
 
 export const PlanCard = ({
@@ -29,7 +31,9 @@ export const PlanCard = ({
   isDelayed = false,
   Icon,
   isGymPlan = false,
-  transactionFeeNote
+  transactionFeeNote,
+  showContactForm = false,
+  onContactClick
 }: PlanCardProps) => {
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
   
@@ -74,18 +78,33 @@ export const PlanCard = ({
         ))}
       </ul>
 
-      <Link 
-        to={ctaLink}
-        className={`w-full px-6 py-3 ${
-          isPopular 
-            ? 'bg-primary text-white' 
-            : isGymPlan
-              ? 'bg-gray-800 text-white hover:bg-gray-900'
-              : 'bg-white text-primary border border-primary/20'
-        } rounded-full text-center font-medium button-hover`}
-      >
-        {ctaText}
-      </Link>
+      {showContactForm ? (
+        <button
+          onClick={onContactClick}
+          className={`w-full px-6 py-3 ${
+            isPopular 
+              ? 'bg-primary text-white' 
+              : isGymPlan
+                ? 'bg-gray-800 text-white hover:bg-gray-900'
+                : 'bg-white text-primary border border-primary/20'
+          } rounded-full text-center font-medium button-hover`}
+        >
+          {ctaText}
+        </button>
+      ) : (
+        <Link 
+          to={ctaLink}
+          className={`w-full px-6 py-3 ${
+            isPopular 
+              ? 'bg-primary text-white' 
+              : isGymPlan
+                ? 'bg-gray-800 text-white hover:bg-gray-900'
+                : 'bg-white text-primary border border-primary/20'
+          } rounded-full text-center font-medium button-hover`}
+        >
+          {ctaText}
+        </Link>
+      )}
     </div>
   );
 };

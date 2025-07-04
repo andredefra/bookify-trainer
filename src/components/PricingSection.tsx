@@ -4,9 +4,11 @@ import { plans } from '@/components/trainer/dashboard/tabs/settings/membership/p
 import { PricingHeader } from './pricing/PricingHeader';
 import { PlanCard } from './pricing/PlanCard';
 import { PricingFooter } from './pricing/PricingFooter';
+import { ContactFormDialog } from './shared/ContactFormDialog';
 
 const PricingSection = () => {
   const [annual, setAnnual] = useState(false);
+  const [contactFormOpen, setContactFormOpen] = useState(false);
   const { t } = useLanguage();
   
   useEffect(() => {
@@ -175,6 +177,8 @@ const PricingSection = () => {
               isGymPlan={true}
               isDelayed={false}
               Icon={plans[3].icon}
+              showContactForm={true}
+              onContactClick={() => setContactFormOpen(true)}
             />
           </div>
         </div>
@@ -182,6 +186,11 @@ const PricingSection = () => {
         <PricingFooter
           disclaimerText={t('pricing.disclaimer1').replace('All plans', 'Pro plan')}
           clientsAccessText={t('pricing.disclaimer2')}
+        />
+
+        <ContactFormDialog 
+          open={contactFormOpen} 
+          onOpenChange={setContactFormOpen} 
         />
       </div>
     </section>
