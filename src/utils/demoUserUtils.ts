@@ -7,9 +7,9 @@ export function generateDemoUserId(email: string): string {
     return a & a;
   }, 0);
   
-  const hashString = Math.abs(hash).toString(16).padStart(8, '0');
+  const hashString = Math.abs(hash).toString(16).padStart(12, '0');
   // Create a valid UUID v4 format for demo users
-  return `${hashString.slice(0,8)}-${hashString.slice(0,4)}-4${hashString.slice(1,4)}-a${hashString.slice(1,4)}-${hashString}${hashString.slice(0,4)}`;
+  return `${hashString.slice(0,8)}-${hashString.slice(8,12)}-4${hashString.slice(0,3)}-a${hashString.slice(3,6)}-${hashString}`.slice(0, 36);
 }
 
 export function getDemoUserData(email: string, name: string, type: string) {

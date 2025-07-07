@@ -59,25 +59,39 @@ export function SessionList({
         // Check if the video session can be started
         const canStartVideo = isVideo && session.status === 'scheduled' && onStartVideoSession;
         
-        // Check if session can be postponed (12 hours before) - IMPROVED PARSING
-        const sessionDate = typeof session.date === 'string' ? session.date : session.date.toISOString().split('T')[0];
-        const sessionTime = session.time.split(' - ')[0];
-        const sessionDateTime = new Date(`${sessionDate}T${sessionTime}:00`);
-        const canPostpone = canPostponeSession(sessionDateTime) && onPostponeSession;
-        const now = new Date();
-        const hoursUntilSession = (sessionDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+        // Check if session can be postponed (12 hours before) - SAFE PARSING
+        let canPostpone = false;
+        let hoursUntilSession = 0;
         
-        // Enhanced debug logging
-        console.log('🔍 Session Debug Info:', {
-          sessionName: session.name,
-          sessionDate,
-          sessionTime,
-          sessionDateTime: sessionDateTime.toISOString(),
-          now: now.toISOString(),
-          hoursUntilSession: hoursUntilSession.toFixed(2),
-          canPostpone,
-          hasOnPostponeSession: !!onPostponeSession
-        });
+        try {
+          const sessionDate = typeof session.date === 'string' ? session.date : session.date.toISOString().split('T')[0];
+          const sessionTime = session.time.split(' - ')[0];
+          const sessionDateTime = new Date(`${sessionDate}T${sessionTime}:00`);
+          
+          // Validate the date is not invalid
+          if (!isNaN(sessionDateTime.getTime())) {
+            const now = new Date();
+            hoursUntilSession = (sessionDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+            canPostpone = canPostponeSession(sessionDateTime) && !!onPostponeSession;
+            
+            // Enhanced debug logging
+            console.log('🔍 Session Debug Info:', {
+              sessionName: session.name,
+              sessionDate,
+              sessionTime,
+              sessionDateTime: sessionDateTime.toISOString(),
+              now: now.toISOString(),
+              hoursUntilSession: hoursUntilSession.toFixed(2),
+              canPostpone,
+              hasOnPostponeSession: !!onPostponeSession
+            });
+          } else {
+            console.warn('⚠️ Invalid session date:', session.name, sessionDate, sessionTime);
+          }
+        } catch (error) {
+          console.error('❌ Error parsing session date:', error, session.name);
+          canPostpone = false;
+        }
 
         return (
           <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">

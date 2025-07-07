@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { SessionFormValues } from "../dialogs/session/SessionFormSchema";
 import { CalendarEvent } from "@/hooks/useCalendarEvents";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 // Sample participants data
 const sampleParticipants: SessionParticipant[] = [
@@ -189,73 +190,75 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   };
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader>
-        <SessionHeader 
-          viewMode={viewMode} 
-          setViewMode={setViewMode} 
-          onCreateSession={() => setShowCreateSessionDialog(true)} 
-        />
-      </CardHeader>
-      <CardContent className="overflow-x-hidden">
-        {viewMode === "calendar" ? (
-          <CalendarView 
-            sessions={sessionsToDisplay}
-            onEditSession={handleEditSession}
-            onCancelSession={handleCancelSession}
-            onStartVideoSession={handleStartVideoSession}
+    <ErrorBoundary>
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <SessionHeader 
+            viewMode={viewMode} 
+            setViewMode={setViewMode} 
+            onCreateSession={() => setShowCreateSessionDialog(true)} 
           />
-        ) : (
-          <SessionList 
-            sessions={sessionsToDisplay} 
-            onEditSession={handleEditSession} 
-            onCancelSession={handleCancelSession}
-            onStartVideoSession={handleStartVideoSession}
-            onPostponeSession={handlePostponeSession}
+        </CardHeader>
+        <CardContent className="overflow-x-hidden">
+          {viewMode === "calendar" ? (
+            <CalendarView 
+              sessions={sessionsToDisplay}
+              onEditSession={handleEditSession}
+              onCancelSession={handleCancelSession}
+              onStartVideoSession={handleStartVideoSession}
+            />
+          ) : (
+            <SessionList 
+              sessions={sessionsToDisplay} 
+              onEditSession={handleEditSession} 
+              onCancelSession={handleCancelSession}
+              onStartVideoSession={handleStartVideoSession}
+              onPostponeSession={handlePostponeSession}
+            />
+          )}
+          
+          <CreateSessionDialog 
+            open={showCreateSessionDialog} 
+            onOpenChange={setShowCreateSessionDialog}
+            onSubmit={handleCreateSession}
           />
-        )}
-        
-        <CreateSessionDialog 
-          open={showCreateSessionDialog} 
-          onOpenChange={setShowCreateSessionDialog}
-          onSubmit={handleCreateSession}
-        />
-        
-        <EditSessionDialog
-          open={showEditSessionDialog}
-          onOpenChange={setShowEditSessionDialog}
-          session={selectedSession}
-          onSubmit={handleUpdateSession}
-        />
+          
+          <EditSessionDialog
+            open={showEditSessionDialog}
+            onOpenChange={setShowEditSessionDialog}
+            session={selectedSession}
+            onSubmit={handleUpdateSession}
+          />
 
-        <CancelSessionDialog
-          open={showCancelSessionDialog}
-          onOpenChange={setShowCancelSessionDialog}
-          sessionName={selectedSession?.name || ""}
-          onConfirm={confirmCancelSession}
-        />
+          <CancelSessionDialog
+            open={showCancelSessionDialog}
+            onOpenChange={setShowCancelSessionDialog}
+            sessionName={selectedSession?.name || ""}
+            onConfirm={confirmCancelSession}
+          />
 
-        <PostponeSessionDialog
-          open={showPostponeSessionDialog}
-          onOpenChange={setShowPostponeSessionDialog}
-          event={selectedSession ? {
-            id: selectedSession.id.toString(),
-            start: new Date(`${selectedSession.date} ${selectedSession.time.split(' - ')[0]}`),
-            end: new Date(`${selectedSession.date} ${selectedSession.time.split(' - ')[1]}`),
-            title: selectedSession.name,
-            type: 'session' as const,
-            color: '#3B82F6',
-            status: 'scheduled',
-            trainer_id: getCurrentDemoUserId()
-          } : null}
-          participants={selectedSession?.participantDetails?.map(p => ({
-            id: p.id,
-            email: p.email,
-            name: p.name,
-            paid_amount: p.paymentStatus === 'paid' ? 50 : undefined // Mock amount
-          })) || []}
-        />
-      </CardContent>
-    </Card>
+          <PostponeSessionDialog
+            open={showPostponeSessionDialog}
+            onOpenChange={setShowPostponeSessionDialog}
+            event={selectedSession ? {
+              id: selectedSession.id.toString(),
+              start: new Date(`${selectedSession.date} ${selectedSession.time.split(' - ')[0]}`),
+              end: new Date(`${selectedSession.date} ${selectedSession.time.split(' - ')[1]}`),
+              title: selectedSession.name,
+              type: 'session' as const,
+              color: '#3B82F6',
+              status: 'scheduled',
+              trainer_id: getCurrentDemoUserId()
+            } : null}
+            participants={selectedSession?.participantDetails?.map(p => ({
+              id: p.id,
+              email: p.email,
+              name: p.name,
+              paid_amount: p.paymentStatus === 'paid' ? 50 : undefined // Mock amount
+            })) || []}
+          />
+        </CardContent>
+      </Card>
+    </ErrorBoundary>
   );
 }
