@@ -1,14 +1,18 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Save, Weight, StickyNote } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown, ChevronUp, Play, Shuffle, TrendingUp, Info } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Exercise } from "@/data/training/types";
-import { ExerciseDetailCard } from "./ExerciseDetailCard";
-
+import { SetTracker } from "./SetTracker";
+import { ExerciseVideoPlayer } from "./ExerciseVideoPlayer";
+import { AlternativeExercises } from "./AlternativeExercises";
+import { useExerciseTracking } from "@/hooks/useExerciseTracking";
+import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
+import { exerciseVideoUrls } from "@/data/exercises/videoUrls";
 interface ExerciseItemProps {
   exercise: Exercise;
   dayId: string;
@@ -17,147 +21,179 @@ interface ExerciseItemProps {
 
 export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProps) {
   const isMobile = useIsMobile();
-  const [weight, setWeight] = useState(exercise.weight?.toString() || "");
-  const [maxWeight, setMaxWeight] = useState(exercise.maxWeight?.toString() || "");
-  const [userNotes, setUserNotes] = useState(exercise.userNotes || "");
-  const [showUserNotes, setShowUserNotes] = useState(false);
-  const [showMaxWeight, setShowMaxWeight] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { trackingData, initializeExercise, updateSet, completeExercise, getExerciseProgress } = useExerciseTracking();
 
-  const handleSaveWeight = () => {
-    const weightValue = parseFloat(weight);
-    if (!isNaN(weightValue)) {
-      onSaveWeight(exercise.id, dayId, weightValue);
+  const exerciseTrackingId = `${exercise.id}-${dayId}`;
+  
+  // Get exercise details from database
+  const exerciseDetails = completeExerciseDatabase.find(ex => ex.name.toLowerCase() === exercise.name.toLowerCase());
+  const videoUrl = exerciseDetails ? exerciseVideoUrls[exerciseDetails.id] : undefined;
+  
+  // Initialize exercise tracking
+  useEffect(() => {
+    initializeExercise(exercise, dayId);
+  }, [exercise.id, dayId]);
+
+  const currentTracking = trackingData[exerciseTrackingId];
+  const progress = getExerciseProgress(exercise.id);
+
+  const handleSetUpdate = (setNumber: number, data: any) => {
+    updateSet(exerciseTrackingId, setNumber, data);
+  };
+
+  const handleCompleteExercise = () => {
+    completeExercise(exerciseTrackingId, dayId);
+    
+    // Calculate average weight from completed sets for backward compatibility
+    const completedSets = currentTracking?.currentSets.filter(set => set.completed && set.weight) || [];
+    if (completedSets.length > 0) {
+      const avgWeight = completedSets.reduce((sum, set) => sum + (set.weight || 0), 0) / completedSets.length;
+      onSaveWeight(exercise.id, dayId, avgWeight);
     }
   };
 
-  const handleSaveMaxWeight = () => {
-    const maxWeightValue = parseFloat(maxWeight);
-    if (!isNaN(maxWeightValue)) {
-      console.log(`Saved max weight ${maxWeightValue} for exercise ${exercise.id}`);
-    }
-  };
-
-  const handleSaveUserNotes = () => {
-    console.log(`Saved user notes for exercise ${exercise.id}: ${userNotes}`);
-    setShowUserNotes(false);
+  const getPreviousPerformance = (setNumber: number) => {
+    const history = trackingData[exercise.id]?.history;
+    if (!history || history.length === 0) return null;
+    
+    const lastSession = history[history.length - 1];
+    const previousSet = lastSession.sets.find(set => set.setNumber === setNumber);
+    
+    return previousSet ? { weight: previousSet.weight || 0, reps: previousSet.actualReps || 0 } : null;
   };
 
   return (
-    <div className={`${isMobile ? 'p-3' : 'p-4'} border-b space-y-4`}>
-      {/* Enhanced Exercise Display */}
-      <ExerciseDetailCard
-        exerciseName={exercise.name}
-        trainerNotes={exercise.notes}
-        sets={exercise.sets?.toString()}
-        reps={exercise.reps}
-        weight={exercise.weight}
-      />
-
-      {/* Exercise Type Badge */}
-      {exercise.exerciseType && (
-        <div className="flex justify-start">
-          <Badge variant={exercise.exerciseType === 'strength' ? 'default' : 'secondary'} className="text-xs">
-            {exercise.exerciseType}
-          </Badge>
-        </div>
-      )}
-
-      {/* Weight tracking for current session */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            placeholder="Weight used (kg)"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            className="w-32"
-            step="0.5"
-          />
-          <Button onClick={handleSaveWeight} size="sm" variant="outline">
-            <Save className="mr-1 h-3 w-3" />
-            Save
-          </Button>
-        </div>
-
-        {/* Max weight tracking for strength exercises */}
-        {exercise.exerciseType === 'strength' && (
-          <div className="space-y-2">
-            {!showMaxWeight ? (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowMaxWeight(true)}
-                className="text-blue-600 p-0 h-auto"
-              >
-                <Weight className="mr-1 h-3 w-3" />
-                Track Max Weight
-              </Button>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  placeholder="Max weight (kg)"
-                  value={maxWeight}
-                  onChange={(e) => setMaxWeight(e.target.value)}
-                  className="w-32"
-                  step="0.5"
-                />
-                <Button onClick={handleSaveMaxWeight} size="sm" variant="outline">
-                  <Save className="mr-1 h-3 w-3" />
-                  Save Max
-                </Button>
-                <Button onClick={() => setShowMaxWeight(false)} size="sm" variant="ghost">
-                  Cancel
-                </Button>
-              </div>
+    <Card className="mb-4">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <CardTitle className="text-lg font-semibold">{exercise.name}</CardTitle>
+            <div className="flex items-center gap-2 mt-1">
+              <Badge variant="outline" className="text-xs">
+                {exercise.sets} sets × {exercise.reps}
+              </Badge>
+              {exercise.weight && (
+                <Badge variant="secondary" className="text-xs">
+                  Suggested: {exercise.weight}kg
+                </Badge>
+              )}
+              {exerciseDetails && (
+                <Badge variant={exerciseDetails.difficulty === 'advanced' ? 'destructive' : exerciseDetails.difficulty === 'intermediate' ? 'default' : 'secondary'} className="text-xs">
+                  {exerciseDetails.difficulty}
+                </Badge>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {videoUrl && (
+              <ExerciseVideoPlayer
+                videoUrl={videoUrl}
+                exerciseName={exercise.name}
+                triggerButton={
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Play className="h-4 w-4" />
+                  </Button>
+                }
+              />
             )}
-            {exercise.maxWeight && (
-              <p className="text-xs text-muted-foreground">
-                Current max: {exercise.maxWeight}kg
-              </p>
+            
+            {exerciseDetails?.alternativeExercises && (
+              <AlternativeExercises
+                currentExercise={exercise.name}
+                alternativeIds={exerciseDetails.alternativeExercises}
+              />
             )}
           </div>
-        )}
+        </div>
 
-        {/* User notes */}
-        <div className="space-y-2">
-          {!showUserNotes ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowUserNotes(true)}
-              className="text-green-600 p-0 h-auto"
-            >
-              <StickyNote className="mr-1 h-3 w-3" />
-              {exercise.userNotes ? 'Edit My Notes' : 'Add My Notes'}
-            </Button>
-          ) : (
-            <div className="space-y-2">
-              <Textarea
-                placeholder="Add your personal notes about this exercise..."
-                value={userNotes}
-                onChange={(e) => setUserNotes(e.target.value)}
-                rows={2}
-                className="text-sm"
-              />
-              <div className="flex gap-2">
-                <Button onClick={handleSaveUserNotes} size="sm" variant="outline">
-                  <Save className="mr-1 h-3 w-3" />
-                  Save Notes
-                </Button>
-                <Button onClick={() => setShowUserNotes(false)} size="sm" variant="ghost">
-                  Cancel
+        {/* Progress indicator */}
+        {progress && (
+          <div className="flex items-center gap-2 mt-2 text-sm">
+            <TrendingUp className={`h-4 w-4 ${progress.weightProgress > 0 ? 'text-green-600' : 'text-red-500'}`} />
+            <span className={progress.weightProgress > 0 ? 'text-green-600' : 'text-red-500'}>
+              {progress.weightProgress > 0 ? '+' : ''}{progress.weightProgress.toFixed(1)}kg
+              {progress.improvementPercentage !== 0 && (
+                <span className="text-muted-foreground">
+                  ({progress.improvementPercentage > 0 ? '+' : ''}{progress.improvementPercentage.toFixed(1)}%)
+                </span>
+              )}
+            </span>
+          </div>
+        )}
+      </CardHeader>
+
+      <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" className="w-full justify-between p-3 h-auto">
+            <span className="text-sm font-medium">
+              {isExpanded ? 'Hide Details' : 'Show Set Tracking'}
+            </span>
+            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+        </CollapsibleTrigger>
+        
+        <CollapsibleContent>
+          <CardContent className="space-y-4">
+            {/* Trainer notes */}
+            {exercise.notes && (
+              <div className="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-200">
+                <div className="flex items-start gap-2">
+                  <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-blue-800">Trainer Notes:</p>
+                    <p className="text-sm text-blue-700">{exercise.notes}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Exercise details from database */}
+            {exerciseDetails && (
+              <div className="bg-muted/50 p-3 rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">
+                  <strong>Muscles:</strong> {exerciseDetails.muscleGroup.join(', ')}
+                </p>
+                {exerciseDetails.equipment.length > 0 && (
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <strong>Equipment:</strong> {exerciseDetails.equipment.join(', ')}
+                  </p>
+                )}
+                <p className="text-sm text-muted-foreground">
+                  {exerciseDetails.notes}
+                </p>
+              </div>
+            )}
+
+            {/* Set tracking */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium">Set Tracking</h4>
+                <Button
+                  onClick={handleCompleteExercise}
+                  size="sm"
+                  variant="default"
+                  disabled={!currentTracking?.currentSets.some(set => set.completed)}
+                >
+                  Complete Exercise
                 </Button>
               </div>
+              
+              {currentTracking?.currentSets.map((setData, index) => (
+                <SetTracker
+                  key={index}
+                  setData={setData}
+                  suggestedWeight={currentTracking.suggestedWeight}
+                  onUpdate={(data) => handleSetUpdate(setData.setNumber, data)}
+                  previousPerformance={getPreviousPerformance(setData.setNumber)}
+                  showProgress={true}
+                />
+              ))}
             </div>
-          )}
-          {exercise.userNotes && !showUserNotes && (
-            <p className="text-sm bg-green-50 p-2 rounded border-l-4 border-green-200">
-              <strong>My notes:</strong> {exercise.userNotes}
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
+          </CardContent>
+        </CollapsibleContent>
+      </Collapsible>
+    </Card>
   );
 }

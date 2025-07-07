@@ -1,16 +1,46 @@
 
+// Set tracking data for individual sets
+export interface SetData {
+  setNumber: number;
+  targetReps: string;
+  actualReps?: number;
+  weight?: number;
+  completed?: boolean;
+  notes?: string;
+}
+
+// Historical performance tracking
+export interface ExerciseHistory {
+  sessionId: string;
+  date: string;
+  sets: SetData[];
+  totalVolume: number; // weight * reps * sets
+  averageWeight: number;
+  maxWeight: number;
+}
+
 export interface Exercise {
   id: string;
   name: string;
   sets: number;
   reps: string;
   repsUnit?: 'reps' | 'sec' | 'min';
-  weight?: number;
+  weight?: number; // Suggested/average weight
   notes?: string; // Trainer-specific notes for the client
   // User tracking fields
   userNotes?: string;
   maxWeight?: number; // For strength exercises
   exerciseType?: 'strength' | 'cardio';
+  // Enhanced tracking
+  setsData?: SetData[]; // Individual set tracking
+  history?: ExerciseHistory[]; // Historical performance
+  // Exercise database integration
+  exerciseDbId?: string; // Link to exercise database
+  videoUrl?: string;
+  alternativeExercises?: string[];
+  muscleGroups?: string[];
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  equipment?: string[];
 }
 
 export interface WorkoutSession {
