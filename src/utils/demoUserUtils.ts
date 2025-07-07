@@ -31,8 +31,17 @@ export function getDefaultProfileImage(): string {
 export function getCurrentDemoUserId(): string {
   const demoUser = localStorage.getItem('demo-user');
   if (demoUser) {
-    const userData = JSON.parse(demoUser);
-    return userData.id || generateDemoUserId(userData.email || 'default@demo.com');
+    try {
+      const userData = JSON.parse(demoUser);
+      // Check if the ID is already a valid UUID format
+      if (userData.id && userData.id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+        return userData.id;
+      }
+      // If not a valid UUID, generate one from the email
+      return generateDemoUserId(userData.email || 'default@demo.com');
+    } catch (error) {
+      console.error('Error parsing demo user data:', error);
+    }
   }
   // Return a valid UUID format for demo users
   return generateDemoUserId('default@demo.com');

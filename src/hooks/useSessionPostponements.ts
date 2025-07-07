@@ -47,6 +47,14 @@ export function useSessionPostponements() {
   const fetchPostponements = async () => {
     try {
       setLoading(true);
+      
+      // Validate trainer ID format before querying
+      if (!trainerId || !trainerId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+        console.warn('Invalid trainer ID format, skipping postponements fetch:', trainerId);
+        setPostponements([]);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('session_postponements')
         .select('*')

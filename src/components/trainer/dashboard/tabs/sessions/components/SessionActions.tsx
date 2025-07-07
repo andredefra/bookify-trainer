@@ -35,21 +35,23 @@ export function SessionActions({
     const sessionTime = session.time.split(' - ')[0];
     const sessionDateTime = new Date(`${sessionDate}T${sessionTime}:00`);
     
-    // Debug logging
+    // Debug logging with safe handling
     const now = new Date();
+    const isValidDate = !isNaN(sessionDateTime.getTime());
+    
     console.log(`🔍 Postponement check for "${session.name}":`, {
       sessionDate,
       sessionTime,
-      sessionDateTime: sessionDateTime.toISOString(),
+      sessionDateTime: isValidDate ? sessionDateTime.toISOString() : 'INVALID DATE',
       currentTime: now.toISOString(),
-      sessionDateTimeValid: !isNaN(sessionDateTime.getTime()),
-      timeDiffMs: sessionDateTime.getTime() - now.getTime(),
-      timeDiffHours: (sessionDateTime.getTime() - now.getTime()) / (1000 * 60 * 60),
+      sessionDateTimeValid: isValidDate,
+      timeDiffMs: isValidDate ? sessionDateTime.getTime() - now.getTime() : 'N/A',
+      timeDiffHours: isValidDate ? (sessionDateTime.getTime() - now.getTime()) / (1000 * 60 * 60) : 'N/A',
       onPostponeSessionAvailable: !!onPostponeSession
     });
     
-    // Validate the date is not invalid
-    if (!isNaN(sessionDateTime.getTime())) {
+    // Only proceed if date is valid
+    if (isValidDate) {
       const postponementResult = canPostponeSession(sessionDateTime);
       canPostpone = postponementResult && !!onPostponeSession;
       
