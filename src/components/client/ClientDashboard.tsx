@@ -13,6 +13,8 @@ import { MyPackagesTab } from "./tabs/packages/MyPackagesTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SessionItem } from "@/types/sessions";
 import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
+import { PostponementNotifications } from "./notifications/PostponementNotifications";
+import { useClientPostponements } from "@/hooks/useClientPostponements";
 
 // Sample upcoming sessions data
 const upcomingSessions: SessionItem[] = [
@@ -97,10 +99,16 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const isMobile = useIsMobile();
-
+  const { getPendingPostponements } = useClientPostponements();
+  
   const handleLogout = () => {
     console.log("Logout clicked");
   };
+
+  const pendingPostponements = getPendingPostponements();
+  // For now, use 0 as base unread count since we don't have message notifications implemented
+  const baseUnreadCount = trainerMessages.filter(m => !m.read).length;
+  const totalUnreadCount = baseUnreadCount + pendingPostponements.length;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -123,6 +131,11 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
         
         <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-6xl space-y-6">
+            {/* Postponement Notifications - Show at the top when there are pending ones */}
+            {pendingPostponements.length > 0 && (
+              <PostponementNotifications />
+            )}
+            
             {activeTab === "overview" && (
               <Overview 
                 progressData={progressData}

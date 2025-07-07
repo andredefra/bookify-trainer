@@ -195,18 +195,6 @@ export function ClientSidebar({
             })}
           </nav>
 
-          {/* Updated notification bell to show same count as header */}
-          <div className="p-4 border-t border-border">
-            <Button variant="outline" size="sm" className="w-full justify-center gap-2">
-              <Bell className="h-4 w-4" />
-              <span>Notifications</span>
-              {unreadCount > 0 && (
-                <Badge variant="destructive" className="h-4 w-4 flex items-center justify-center p-0 text-xs">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </Badge>
-              )}
-            </Button>
-          </div>
         </div>
       </aside>
     </>
