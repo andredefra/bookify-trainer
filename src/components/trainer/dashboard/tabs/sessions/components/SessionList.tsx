@@ -62,6 +62,9 @@ export function SessionList({
         // Check if session can be postponed (12 hours before)
         const sessionDateTime = new Date(`${session.date} ${session.time.split(' - ')[0]}`);
         const canPostpone = canPostponeSession(sessionDateTime) && onPostponeSession;
+        
+        // Debug logging
+        console.log('Session:', session.name, 'DateTime:', sessionDateTime, 'CanPostpone:', canPostpone);
 
         return (
           <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">

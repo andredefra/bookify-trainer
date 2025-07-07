@@ -34,5 +34,6 @@ export function getCurrentDemoUserId(): string {
     const userData = JSON.parse(demoUser);
     return userData.id || generateDemoUserId(userData.email || 'default@demo.com');
   }
-  return 'demo-user-default';
+  // Return a valid UUID format for demo users
+  return generateDemoUserId('default@demo.com');
 }

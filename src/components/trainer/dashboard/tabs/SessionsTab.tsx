@@ -78,7 +78,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 1,
     name: "Morning HIIT",
     time: "09:00 - 10:00",
-    date: "06/01/2025",
+    date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 2 days from now
     participants: 5,
     maxParticipants: 10,
     paymentStatus: { paid: 4, pending: 1, total: 5 },
@@ -89,7 +89,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 2,
     name: "Personal Training",
     time: "13:00 - 14:00",
-    date: "06/02/2025",
+    date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 3 days from now
     participants: 1,
     maxParticipants: 1,
     paymentStatus: { paid: 1, pending: 0, total: 1 },
@@ -100,7 +100,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 3,
     name: "Yoga Basics",
     time: "17:30 - 18:30",
-    date: "06/03/2025",
+    date: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 4 days from now
     participants: 8,
     maxParticipants: 12,
     paymentStatus: { paid: 6, pending: 2, total: 8 },
@@ -112,7 +112,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 4,
     name: "Core Strength Video Class",
     time: "19:00 - 20:00",
-    date: "06/04/2025",
+    date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 5 days from now
     participants: 15,
     maxParticipants: 30,
     paymentStatus: { paid: 12, pending: 3, total: 15 },
@@ -125,7 +125,7 @@ const sampleSessions: TrainerSessionItem[] = [
     id: 5,
     name: "Mindfulness Yoga Session",
     time: "10:30 - 11:30",
-    date: new Date().toLocaleDateString(),
+    date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 1 day from now
     participants: 6,
     maxParticipants: 20,
     paymentStatus: { paid: 5, pending: 1, total: 6 },
