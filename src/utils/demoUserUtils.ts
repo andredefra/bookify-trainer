@@ -1,13 +1,15 @@
 
 // Utility functions for demo user management
 export function generateDemoUserId(email: string): string {
-  // Create a consistent but unique ID based on email
+  // Create a consistent UUID-like string based on email
   const hash = email.split('').reduce((a, b) => {
     a = ((a << 5) - a) + b.charCodeAt(0);
     return a & a;
   }, 0);
   
-  return `demo-user-${Math.abs(hash).toString(36)}`;
+  const hashString = Math.abs(hash).toString(16).padStart(8, '0');
+  // Create a valid UUID v4 format for demo users
+  return `${hashString.slice(0,8)}-${hashString.slice(0,4)}-4${hashString.slice(1,4)}-a${hashString.slice(1,4)}-${hashString}${hashString.slice(0,4)}`;
 }
 
 export function getDemoUserData(email: string, name: string, type: string) {

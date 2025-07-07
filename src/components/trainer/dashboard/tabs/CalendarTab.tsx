@@ -6,14 +6,16 @@ import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settin
 import { cn } from "@/lib/utils";
 import { useCalendarEvents } from "@/hooks/useCalendarEvents";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
+import { CreateEventDialog } from "../dialogs/CreateEventDialog";
 
 export function CalendarTab() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
+  const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
   
   // Use dynamic trainer ID instead of hardcoded one
   const trainerId = getCurrentDemoUserId();
-  const { events, loading, error } = useCalendarEvents(trainerId);
+  const { events, loading, error, createEvent } = useCalendarEvents(trainerId);
 
   console.log('CalendarTab - Using trainer ID:', trainerId);
 
@@ -150,7 +152,7 @@ export function CalendarTab() {
               <Settings className="h-4 w-4 mr-2" />
               Google Calendar
             </Button>
-            <Button size="sm">
+            <Button size="sm" onClick={() => setShowCreateEventDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add Event
             </Button>
@@ -340,6 +342,18 @@ export function CalendarTab() {
           </Card>
         </div>
       </div>
+
+      {/* Create Event Dialog */}
+      <CreateEventDialog
+        open={showCreateEventDialog}
+        onOpenChange={setShowCreateEventDialog}
+        onSubmit={async (eventData) => {
+          const result = await createEvent(eventData);
+          if (result.success) {
+            setShowCreateEventDialog(false);
+          }
+        }}
+      />
     </div>
   );
 }
