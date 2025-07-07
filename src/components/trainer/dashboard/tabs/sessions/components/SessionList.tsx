@@ -59,12 +59,25 @@ export function SessionList({
         // Check if the video session can be started
         const canStartVideo = isVideo && session.status === 'scheduled' && onStartVideoSession;
         
-        // Check if session can be postponed (12 hours before)
-        const sessionDateTime = new Date(`${session.date} ${session.time.split(' - ')[0]}`);
+        // Check if session can be postponed (12 hours before) - IMPROVED PARSING
+        const sessionDate = typeof session.date === 'string' ? session.date : session.date.toISOString().split('T')[0];
+        const sessionTime = session.time.split(' - ')[0];
+        const sessionDateTime = new Date(`${sessionDate}T${sessionTime}:00`);
         const canPostpone = canPostponeSession(sessionDateTime) && onPostponeSession;
+        const now = new Date();
+        const hoursUntilSession = (sessionDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
         
-        // Debug logging
-        console.log('Session:', session.name, 'DateTime:', sessionDateTime, 'CanPostpone:', canPostpone);
+        // Enhanced debug logging
+        console.log('🔍 Session Debug Info:', {
+          sessionName: session.name,
+          sessionDate,
+          sessionTime,
+          sessionDateTime: sessionDateTime.toISOString(),
+          now: now.toISOString(),
+          hoursUntilSession: hoursUntilSession.toFixed(2),
+          canPostpone,
+          hasOnPostponeSession: !!onPostponeSession
+        });
 
         return (
           <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
