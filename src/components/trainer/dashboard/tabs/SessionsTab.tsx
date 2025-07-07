@@ -9,8 +9,11 @@ import { CalendarView } from "./sessions/components/CalendarView";
 import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
 import { EditSessionDialog } from "./sessions/EditSessionDialog";
 import { CancelSessionDialog } from "./sessions/components/CancelSessionDialog";
+import { PostponeSessionDialog } from "../dialogs/PostponeSessionDialog";
 import { toast } from "sonner";
 import { SessionFormValues } from "../dialogs/session/SessionFormSchema";
+import { CalendarEvent } from "@/hooks/useCalendarEvents";
+import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 
 // Sample participants data
 const sampleParticipants: SessionParticipant[] = [
@@ -142,6 +145,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
   const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
   const [showCancelSessionDialog, setShowCancelSessionDialog] = useState(false);
+  const [showPostponeSessionDialog, setShowPostponeSessionDialog] = useState(false);
   const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
 
   // Ensure we have data by combining props with sample data if needed
@@ -155,6 +159,11 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   const handleCancelSession = (session: TrainerSessionItem) => {
     setSelectedSession(session);
     setShowCancelSessionDialog(true);
+  };
+
+  const handlePostponeSession = (session: TrainerSessionItem) => {
+    setSelectedSession(session);
+    setShowPostponeSessionDialog(true);
   };
 
   const confirmCancelSession = () => {
@@ -202,6 +211,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             onEditSession={handleEditSession} 
             onCancelSession={handleCancelSession}
             onStartVideoSession={handleStartVideoSession}
+            onPostponeSession={handlePostponeSession}
           />
         )}
         
@@ -223,6 +233,27 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
           onOpenChange={setShowCancelSessionDialog}
           sessionName={selectedSession?.name || ""}
           onConfirm={confirmCancelSession}
+        />
+
+        <PostponeSessionDialog
+          open={showPostponeSessionDialog}
+          onOpenChange={setShowPostponeSessionDialog}
+          event={selectedSession ? {
+            id: selectedSession.id.toString(),
+            start: new Date(`${selectedSession.date} ${selectedSession.time.split(' - ')[0]}`),
+            end: new Date(`${selectedSession.date} ${selectedSession.time.split(' - ')[1]}`),
+            title: selectedSession.name,
+            type: 'session' as const,
+            color: '#3B82F6',
+            status: 'scheduled',
+            trainer_id: getCurrentDemoUserId()
+          } : null}
+          participants={selectedSession?.participantDetails?.map(p => ({
+            id: p.id,
+            email: p.email,
+            name: p.name,
+            paid_amount: p.paymentStatus === 'paid' ? 50 : undefined // Mock amount
+          })) || []}
         />
       </CardContent>
     </Card>

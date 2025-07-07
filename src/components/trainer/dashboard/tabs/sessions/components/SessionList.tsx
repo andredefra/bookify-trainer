@@ -2,31 +2,36 @@
 import { TrainerSessionItem } from "@/types/sessions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Video, Users } from "lucide-react";
+import { Video, Users, Clock } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { useState } from "react";
 import { VideoSessionDialog } from "./VideoSessionDialog";
 import { SessionParticipantsDialog } from "./SessionParticipantsDialog";
 import { InviteLinkButton } from "./InviteLinkButton";
+import { useSessionPostponements } from "@/hooks/useSessionPostponements";
 
 interface SessionListProps {
   sessions: TrainerSessionItem[];
   onEditSession: (session: TrainerSessionItem) => void;
   onCancelSession: (session: TrainerSessionItem) => void;
   onStartVideoSession?: (session: TrainerSessionItem) => void;
+  onPostponeSession?: (session: TrainerSessionItem) => void;
 }
 
 export function SessionList({ 
   sessions, 
   onEditSession, 
   onCancelSession,
-  onStartVideoSession
+  onStartVideoSession,
+  onPostponeSession
 }: SessionListProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [showParticipantsDialog, setShowParticipantsDialog] = useState(false);
   const [selectedVideoSession, setSelectedVideoSession] = useState<TrainerSessionItem | null>(null);
   const [selectedParticipantsSession, setSelectedParticipantsSession] = useState<TrainerSessionItem | null>(null);
+  
+  const { canPostponeSession } = useSessionPostponements();
 
   const handleStartVideo = (session: TrainerSessionItem) => {
     setSelectedVideoSession(session);
@@ -53,6 +58,10 @@ export function SessionList({
         const isVideo = session.mode === 'video' || session.name.toLowerCase().includes('hiit');
         // Check if the video session can be started
         const canStartVideo = isVideo && session.status === 'scheduled' && onStartVideoSession;
+        
+        // Check if session can be postponed (12 hours before)
+        const sessionDateTime = new Date(`${session.date} ${session.time.split(' - ')[0]}`);
+        const canPostpone = canPostponeSession(sessionDateTime) && onPostponeSession;
 
         return (
           <div key={session.id} className="flex flex-col p-3 sm:p-4 bg-gray-50 rounded-lg">
@@ -128,6 +137,18 @@ export function SessionList({
                       onClick={() => onEditSession(session)}
                     >
                       <span className="text-sm">Details</span>
+                    </Button>
+                  )}
+                  
+                  {canPostpone && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 flex items-center min-w-0 flex-shrink-0"
+                      onClick={() => onPostponeSession!(session)}
+                    >
+                      <Clock className="h-4 w-4 sm:mr-1" />
+                      <span className="hidden sm:inline ml-1">Postpone</span>
                     </Button>
                   )}
                   
