@@ -3,11 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settings, Eye } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settings, Eye, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCalendarEvents, CalendarEvent } from "@/hooks/useCalendarEvents";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 import { CreateEventDialog } from "../dialogs/CreateEventDialog";
+import { PostponeSessionDialog } from "../dialogs/PostponeSessionDialog";
 
 export function CalendarTab() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -17,6 +18,7 @@ export function CalendarTab() {
   const [showDayEventsDialog, setShowDayEventsDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [showEventDetailsDialog, setShowEventDetailsDialog] = useState(false);
+  const [showPostponeDialog, setShowPostponeDialog] = useState(false);
   
   // Use dynamic trainer ID instead of hardcoded one
   const trainerId = getCurrentDemoUserId();
@@ -130,9 +132,35 @@ export function CalendarTab() {
     setShowDayEventsDialog(true);
   };
 
+  // Mock participants data for sessions
+  const getMockParticipants = (event: CalendarEvent) => {
+    if (event.type !== 'session') return [];
+    
+    return [
+      { 
+        id: '1', 
+        email: 'sarah@example.com', 
+        name: 'Sarah Johnson', 
+        paid_amount: event.client ? 50 : undefined 
+      },
+      { 
+        id: '2', 
+        email: 'mike@example.com', 
+        name: 'Mike Peterson', 
+        paid_amount: event.client ? 50 : undefined 
+      }
+    ];
+  };
+
   const showEventDetails = (event: CalendarEvent) => {
     setSelectedEvent(event);
     setShowEventDetailsDialog(true);
+  };
+
+  const handlePostponeSession = (event: CalendarEvent) => {
+    setSelectedEvent(event);
+    setShowPostponeDialog(true);
+    setShowEventDetailsDialog(false);
   };
 
   const getTimeSlots = () => {
@@ -635,16 +663,39 @@ export function CalendarTab() {
                   </div>
                 )}
                 
-                {selectedEvent.description && (
-                  <div className="pt-2 border-t">
-                    <p className="text-sm text-muted-foreground">{selectedEvent.description}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
+                 {selectedEvent.description && (
+                   <div className="pt-2 border-t">
+                     <p className="text-sm text-muted-foreground">{selectedEvent.description}</p>
+                   </div>
+                 )}
+               </div>
+               
+               {/* Action buttons for sessions */}
+               {selectedEvent.type === 'session' && (
+                 <div className="flex gap-2 pt-4 border-t">
+                   <Button 
+                     variant="outline" 
+                     size="sm"
+                     onClick={() => handlePostponeSession(selectedEvent)}
+                     className="flex items-center gap-2"
+                   >
+                     <AlertCircle className="h-4 w-4" />
+                     Postpone Session
+                   </Button>
+                 </div>
+               )}
+             </div>
+           )}
+         </DialogContent>
+       </Dialog>
+
+       {/* Postpone Session Dialog */}
+       <PostponeSessionDialog
+         open={showPostponeDialog}
+         onOpenChange={setShowPostponeDialog}
+         event={selectedEvent}
+         participants={selectedEvent ? getMockParticipants(selectedEvent) : []}
+       />
+     </div>
+   );
+ }

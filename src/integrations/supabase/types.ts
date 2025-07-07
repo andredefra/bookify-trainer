@@ -514,6 +514,150 @@ export type Database = {
           },
         ]
       }
+      session_postponement_responses: {
+        Row: {
+          created_at: string
+          id: string
+          participant_email: string
+          participant_id: string
+          participant_name: string
+          postponement_id: string
+          refund_amount: number | null
+          refund_processed: boolean
+          requires_refund: boolean
+          responded_at: string | null
+          response: string
+          response_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          participant_email: string
+          participant_id: string
+          participant_name: string
+          postponement_id: string
+          refund_amount?: number | null
+          refund_processed?: boolean
+          requires_refund?: boolean
+          responded_at?: string | null
+          response: string
+          response_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          participant_email?: string
+          participant_id?: string
+          participant_name?: string
+          postponement_id?: string
+          refund_amount?: number | null
+          refund_processed?: boolean
+          requires_refund?: boolean
+          responded_at?: string | null
+          response?: string
+          response_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      session_postponements: {
+        Row: {
+          accepted_count: number
+          calendar_event_id: string
+          created_at: string
+          deadline_for_responses: string
+          declined_count: number
+          id: string
+          new_end_datetime: string
+          new_start_datetime: string
+          original_end_datetime: string
+          original_start_datetime: string
+          reason: string | null
+          status: string
+          total_participants: number
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_count?: number
+          calendar_event_id: string
+          created_at?: string
+          deadline_for_responses: string
+          declined_count?: number
+          id?: string
+          new_end_datetime: string
+          new_start_datetime: string
+          original_end_datetime: string
+          original_start_datetime: string
+          reason?: string | null
+          status?: string
+          total_participants?: number
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_count?: number
+          calendar_event_id?: string
+          created_at?: string
+          deadline_for_responses?: string
+          declined_count?: number
+          id?: string
+          new_end_datetime?: string
+          new_start_datetime?: string
+          original_end_datetime?: string
+          original_start_datetime?: string
+          reason?: string | null
+          status?: string
+          total_participants?: number
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      session_refunds: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          participant_id: string
+          payment_method: string
+          postponement_response_id: string
+          processed_at: string | null
+          status: string
+          stripe_refund_id: string | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          participant_id: string
+          payment_method?: string
+          postponement_response_id: string
+          processed_at?: string | null
+          status?: string
+          stripe_refund_id?: string | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          participant_id?: string
+          payment_method?: string
+          postponement_response_id?: string
+          processed_at?: string | null
+          status?: string
+          stripe_refund_id?: string | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       trainer_notifications: {
         Row: {
           created_at: string
@@ -576,6 +720,14 @@ export type Database = {
       package_type: "sessions_only" | "program_only" | "hybrid" | "service"
       payment_method: "cash" | "stripe" | "installments"
       payment_status: "pending" | "paid" | "overdue" | "cancelled"
+      postponement_status:
+        | "pending"
+        | "collecting_responses"
+        | "partially_accepted"
+        | "fully_accepted"
+        | "rejected"
+        | "cancelled"
+        | "confirmed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -702,6 +854,15 @@ export const Constants = {
       package_type: ["sessions_only", "program_only", "hybrid", "service"],
       payment_method: ["cash", "stripe", "installments"],
       payment_status: ["pending", "paid", "overdue", "cancelled"],
+      postponement_status: [
+        "pending",
+        "collecting_responses",
+        "partially_accepted",
+        "fully_accepted",
+        "rejected",
+        "cancelled",
+        "confirmed",
+      ],
     },
   },
 } as const
