@@ -26,8 +26,18 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
 
   const exerciseTrackingId = `${exercise.id}-${dayId}`;
   
-  // Get exercise details from database
-  const exerciseDetails = completeExerciseDatabase.find(ex => ex.name.toLowerCase() === exercise.name.toLowerCase());
+  // Get exercise details from database with flexible matching
+  const findExerciseDetails = (exerciseName: string) => {
+    const normalizedName = exerciseName.toLowerCase().replace(/[-\s]/g, '');
+    return completeExerciseDatabase.find(ex => {
+      const dbName = ex.name.toLowerCase().replace(/[-\s]/g, '');
+      return dbName === normalizedName || 
+             dbName.includes(normalizedName) || 
+             normalizedName.includes(dbName);
+    });
+  };
+  
+  const exerciseDetails = findExerciseDetails(exercise.name);
   const videoUrl = exerciseDetails ? exerciseVideoUrls[exerciseDetails.id] : undefined;
   
   // Initialize exercise tracking
@@ -87,7 +97,8 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
           </div>
           
           <div className="flex items-center gap-2">
-            {videoUrl && (
+            {/* Video button - always show with fallback */}
+            {videoUrl ? (
               <ExerciseVideoPlayer
                 videoUrl={videoUrl}
                 exerciseName={exercise.name}
@@ -97,13 +108,23 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
                   </Button>
                 }
               />
+            ) : (
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" disabled>
+                <Play className="h-4 w-4 opacity-50" />
+              </Button>
             )}
             
-            {exerciseDetails?.alternativeExercises && (
+            {/* Alternatives button - always show with fallback */}
+            {exerciseDetails?.alternativeExercises && exerciseDetails.alternativeExercises.length > 0 ? (
               <AlternativeExercises
                 currentExercise={exercise.name}
                 alternativeIds={exerciseDetails.alternativeExercises}
               />
+            ) : (
+              <Button variant="outline" size="sm" className="h-8" disabled>
+                <Shuffle className="h-3 w-3 mr-1 opacity-50" />
+                No alternatives
+              </Button>
             )}
           </div>
         </div>

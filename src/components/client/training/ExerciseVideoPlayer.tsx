@@ -12,8 +12,15 @@ interface ExerciseVideoPlayerProps {
 export function ExerciseVideoPlayer({ videoUrl, exerciseName, triggerButton }: ExerciseVideoPlayerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const noVideoTrigger = (
+    <Button variant="outline" size="sm" className="h-8" disabled>
+      <Play className="h-3 w-3 mr-1 opacity-50" />
+      No video available
+    </Button>
+  );
+
   if (!videoUrl) {
-    return null;
+    return triggerButton || noVideoTrigger;
   }
 
   // Extract YouTube video ID from URL

@@ -49,6 +49,7 @@ export const exerciseVideoUrls: { [exerciseId: string]: string } = {
   // BACK EXERCISES
   "seated-cable-row": "https://www.youtube.com/watch?v=GZbfZ033f74",
   "single-arm-pulldown": "https://www.youtube.com/watch?v=CAwf7n6Luuc",
+  "bent-over-row": "https://www.youtube.com/watch?v=UCXxvVItLoM",
   
   // SHOULDER EXERCISES  
   "barbell-shoulder-press": "https://www.youtube.com/watch?v=FWDXsqHo14A",
