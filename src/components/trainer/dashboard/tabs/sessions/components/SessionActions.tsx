@@ -27,7 +27,7 @@ export function SessionActions({
   
   const canStartVideo = isVideo && session.status === 'scheduled' && onStartVideoSession;
   
-  // Check if session can be postponed (12 hours before) - SAFE PARSING
+  // Check if session can be postponed (12 hours before) - ENHANCED DEBUGGING
   let canPostpone = false;
   
   try {
@@ -35,9 +35,30 @@ export function SessionActions({
     const sessionTime = session.time.split(' - ')[0];
     const sessionDateTime = new Date(`${sessionDate}T${sessionTime}:00`);
     
+    // Debug logging
+    const now = new Date();
+    console.log(`🔍 Postponement check for "${session.name}":`, {
+      sessionDate,
+      sessionTime,
+      sessionDateTime: sessionDateTime.toISOString(),
+      currentTime: now.toISOString(),
+      sessionDateTimeValid: !isNaN(sessionDateTime.getTime()),
+      timeDiffMs: sessionDateTime.getTime() - now.getTime(),
+      timeDiffHours: (sessionDateTime.getTime() - now.getTime()) / (1000 * 60 * 60),
+      onPostponeSessionAvailable: !!onPostponeSession
+    });
+    
     // Validate the date is not invalid
     if (!isNaN(sessionDateTime.getTime())) {
-      canPostpone = canPostponeSession(sessionDateTime) && !!onPostponeSession;
+      const postponementResult = canPostponeSession(sessionDateTime);
+      canPostpone = postponementResult && !!onPostponeSession;
+      
+      console.log(`${canPostpone ? '✅' : '❌'} Session "${session.name}" ${canPostpone ? 'CAN' : 'CANNOT'} be postponed`, {
+        canPostponeSessionResult: postponementResult,
+        finalCanPostpone: canPostpone
+      });
+    } else {
+      console.log(`❌ Invalid session date for "${session.name}"`);
     }
   } catch (error) {
     console.error('❌ Error parsing session date for postponement:', error, session.name);

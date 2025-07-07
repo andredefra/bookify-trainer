@@ -67,6 +67,17 @@ export function useSessionPostponements() {
     const now = new Date();
     const timeDiff = sessionStartTime.getTime() - now.getTime();
     const hoursDiff = timeDiff / (1000 * 60 * 60);
+    
+    // Enhanced debugging
+    console.log('⏰ canPostponeSession detailed check:', {
+      sessionStartTime: sessionStartTime.toISOString(),
+      currentTime: now.toISOString(),
+      timeDiffMs: timeDiff,
+      hoursDiff: hoursDiff,
+      requiresMinHours: 12,
+      canPostpone: hoursDiff >= 12
+    });
+    
     return hoursDiff >= 12; // Must be at least 12 hours before session
   };
 
