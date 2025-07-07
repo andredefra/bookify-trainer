@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settings } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Calendar, ChevronLeft, ChevronRight, Plus, Users, Clock, MapPin, Settings, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCalendarEvents } from "@/hooks/useCalendarEvents";
+import { useCalendarEvents, CalendarEvent } from "@/hooks/useCalendarEvents";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 import { CreateEventDialog } from "../dialogs/CreateEventDialog";
 
@@ -12,6 +13,10 @@ export function CalendarTab() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
   const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
+  const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>([]);
+  const [showDayEventsDialog, setShowDayEventsDialog] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [showEventDetailsDialog, setShowEventDetailsDialog] = useState(false);
   
   // Use dynamic trainer ID instead of hardcoded one
   const trainerId = getCurrentDemoUserId();
@@ -56,6 +61,86 @@ export function CalendarTab() {
       newDate.setMonth(currentDate.getMonth() + 1);
     }
     setCurrentDate(newDate);
+  };
+
+  const navigateWeek = (direction: 'prev' | 'next') => {
+    const newDate = new Date(currentDate);
+    if (direction === 'prev') {
+      newDate.setDate(currentDate.getDate() - 7);
+    } else {
+      newDate.setDate(currentDate.getDate() + 7);
+    }
+    setCurrentDate(newDate);
+  };
+
+  const navigateDay = (direction: 'prev' | 'next') => {
+    const newDate = new Date(currentDate);
+    if (direction === 'prev') {
+      newDate.setDate(currentDate.getDate() - 1);
+    } else {
+      newDate.setDate(currentDate.getDate() + 1);
+    }
+    setCurrentDate(newDate);
+  };
+
+  const getNavigationFunction = () => {
+    switch (view) {
+      case 'week': return navigateWeek;
+      case 'day': return navigateDay;
+      default: return navigateMonth;
+    }
+  };
+
+  const getHeaderTitle = () => {
+    switch (view) {
+      case 'week':
+        const weekStart = new Date(currentDate);
+        weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        return `${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+      case 'day':
+        return currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      default:
+        return currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    }
+  };
+
+  const getWeekDays = () => {
+    const weekStart = new Date(currentDate);
+    weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(weekStart);
+      day.setDate(weekStart.getDate() + i);
+      days.push(day);
+    }
+    return days;
+  };
+
+  const getEventsForDate = (date: Date) => {
+    return events.filter(event => {
+      const eventDate = new Date(event.start);
+      return eventDate.toDateString() === date.toDateString();
+    });
+  };
+
+  const showDayEvents = (dayEvents: CalendarEvent[], day: number | Date) => {
+    setSelectedDayEvents(dayEvents);
+    setShowDayEventsDialog(true);
+  };
+
+  const showEventDetails = (event: CalendarEvent) => {
+    setSelectedEvent(event);
+    setShowEventDetailsDialog(true);
+  };
+
+  const getTimeSlots = () => {
+    const slots = [];
+    for (let hour = 6; hour <= 22; hour++) {
+      slots.push(`${hour}:00`);
+    }
+    return slots;
   };
 
   const getDaysInMonth = () => {
@@ -166,21 +251,22 @@ export function CalendarTab() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-xl">
-                {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                {getHeaderTitle()}
               </CardTitle>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => navigateMonth('prev')}>
+                <Button variant="outline" size="sm" onClick={() => getNavigationFunction()('prev')}>
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())}>
                   Today
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => navigateMonth('next')}>
+                <Button variant="outline" size="sm" onClick={() => getNavigationFunction()('next')}>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
+              {/* Month View */}
               {view === 'month' && (
                 <div className="space-y-4">
                   {/* Day headers */}
@@ -196,44 +282,157 @@ export function CalendarTab() {
                   
                   {/* Calendar grid */}
                   <div className="grid grid-cols-7 gap-1">
-                    {getDaysInMonth().map((day, index) => (
-                      <div
-                        key={index}
-                        className={cn(
-                          "min-h-[80px] p-1 border rounded-md",
-                          day ? "bg-white hover:bg-gray-50" : "bg-gray-50",
-                          day === new Date().getDate() && 
-                          currentDate.getMonth() === new Date().getMonth() &&
-                          currentDate.getFullYear() === new Date().getFullYear() &&
-                          "bg-blue-50 border-blue-200"
-                        )}
-                      >
-                        {day && (
-                          <>
-                            <div className="text-sm font-medium mb-1">{day}</div>
-                            <div className="space-y-1">
-                              {getEventsForDay(day).slice(0, 2).map((event) => (
+                    {getDaysInMonth().map((day, index) => {
+                      const dayEvents = day ? getEventsForDay(day) : [];
+                      return (
+                        <div
+                          key={index}
+                          className={cn(
+                            "min-h-[80px] p-1 border rounded-md",
+                            day ? "bg-white hover:bg-gray-50" : "bg-gray-50",
+                            day === new Date().getDate() && 
+                            currentDate.getMonth() === new Date().getMonth() &&
+                            currentDate.getFullYear() === new Date().getFullYear() &&
+                            "bg-blue-50 border-blue-200"
+                          )}
+                        >
+                          {day && (
+                            <>
+                              <div className="text-sm font-medium mb-1">{day}</div>
+                              <div className="space-y-1">
+                                {dayEvents.slice(0, 2).map((event) => (
+                                  <div
+                                    key={event.id}
+                                    className={cn(
+                                      "text-xs p-1 rounded text-white truncate cursor-pointer hover:opacity-80",
+                                      event.color
+                                    )}
+                                    title={event.title}
+                                    onClick={() => showEventDetails(event)}
+                                  >
+                                    {event.title}
+                                  </div>
+                                ))}
+                                {dayEvents.length > 2 && (
+                                  <button
+                                    className="text-xs text-muted-foreground hover:text-primary cursor-pointer underline"
+                                    onClick={() => showDayEvents(dayEvents, day)}
+                                  >
+                                    +{dayEvents.length - 2} more
+                                  </button>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Week View */}
+              {view === 'week' && (
+                <div className="space-y-4">
+                  {/* Day headers */}
+                  <div className="grid grid-cols-8 gap-1 text-center text-sm font-medium text-muted-foreground">
+                    <div></div>
+                    {getWeekDays().map((day, index) => (
+                      <div key={index} className={cn(
+                        "p-2",
+                        day.toDateString() === new Date().toDateString() && "text-primary font-bold"
+                      )}>
+                        <div>{day.toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                        <div className="text-lg">{day.getDate()}</div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Time slots */}
+                  <div className="grid grid-cols-8 gap-1 max-h-96 overflow-y-auto">
+                    {getTimeSlots().map((time) => (
+                      <div key={time} className="contents">
+                        <div className="text-xs text-muted-foreground p-2 border-r">{time}</div>
+                        {getWeekDays().map((day, dayIndex) => {
+                          const dayEvents = getEventsForDate(day);
+                          const timeHour = parseInt(time.split(':')[0]);
+                          const eventsAtTime = dayEvents.filter(event => {
+                            const eventHour = new Date(event.start).getHours();
+                            return eventHour === timeHour;
+                          });
+                          
+                          return (
+                            <div key={dayIndex} className="min-h-[60px] p-1 border border-gray-100">
+                              {eventsAtTime.map((event) => (
                                 <div
                                   key={event.id}
                                   className={cn(
-                                    "text-xs p-1 rounded text-white truncate",
+                                    "text-xs p-1 rounded text-white mb-1 cursor-pointer hover:opacity-80",
                                     event.color
                                   )}
-                                  title={event.title}
+                                  onClick={() => showEventDetails(event)}
                                 >
                                   {event.title}
                                 </div>
                               ))}
-                              {getEventsForDay(day).length > 2 && (
-                                <div className="text-xs text-muted-foreground">
-                                  +{getEventsForDay(day).length - 2} more
-                                </div>
-                              )}
                             </div>
-                          </>
-                        )}
+                          );
+                        })}
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Day View */}
+              {view === 'day' && (
+                <div className="space-y-4">
+                  <div className="text-center text-lg font-medium">
+                    {currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                  </div>
+                  
+                  <div className="space-y-2 max-h-96 overflow-y-auto">
+                    {getTimeSlots().map((time) => {
+                      const timeHour = parseInt(time.split(':')[0]);
+                      const dayEvents = getEventsForDate(currentDate);
+                      const eventsAtTime = dayEvents.filter(event => {
+                        const eventHour = new Date(event.start).getHours();
+                        return eventHour === timeHour;
+                      });
+                      
+                      return (
+                        <div key={time} className="flex gap-4 min-h-[60px] border-b border-gray-100">
+                          <div className="w-16 text-sm text-muted-foreground p-2">{time}</div>
+                          <div className="flex-1 p-2">
+                            {eventsAtTime.map((event) => (
+                              <div
+                                key={event.id}
+                                className={cn(
+                                  "p-3 rounded-lg text-white mb-2 cursor-pointer hover:opacity-80",
+                                  event.color
+                                )}
+                                onClick={() => showEventDetails(event)}
+                              >
+                                <div className="font-medium">{event.title}</div>
+                                <div className="text-sm opacity-90">
+                                  {formatTime(event.start)} - {formatTime(event.end)}
+                                </div>
+                                {event.client && (
+                                  <div className="text-sm opacity-90">
+                                    Client: {event.client}
+                                  </div>
+                                )}
+                                {event.location && (
+                                  <div className="text-sm opacity-90">
+                                    Location: {event.location}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -354,6 +553,98 @@ export function CalendarTab() {
           }
         }}
       />
+
+      {/* Day Events Dialog */}
+      <Dialog open={showDayEventsDialog} onOpenChange={setShowDayEventsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Events for this day</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {selectedDayEvents.map((event) => (
+              <div key={event.id} className="flex items-start gap-3 p-3 rounded-lg border cursor-pointer hover:bg-gray-50" onClick={() => showEventDetails(event)}>
+                <div className={cn("w-3 h-3 rounded-full mt-1", event.color)} />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm">{event.title}</p>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                    <Clock className="h-3 w-3" />
+                    <span>{formatTime(event.start)} - {formatTime(event.end)}</span>
+                  </div>
+                  {event.location && (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                      <MapPin className="h-3 w-3" />
+                      <span>{event.location}</span>
+                    </div>
+                  )}
+                  {event.client && (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                      <Users className="h-3 w-3" />
+                      <span>{event.client}</span>
+                    </div>
+                  )}
+                  <Badge variant="outline" className="text-xs mt-1">
+                    {getEventTypeLabel(event.type)}
+                  </Badge>
+                </div>
+                <Button variant="ghost" size="sm">
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Event Details Dialog */}
+      <Dialog open={showEventDetailsDialog} onOpenChange={setShowEventDetailsDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Event Details</DialogTitle>
+          </DialogHeader>
+          {selectedEvent && (
+            <div className="space-y-4">
+              <div className={cn("p-4 rounded-lg text-white", selectedEvent.color)}>
+                <h3 className="font-medium text-lg">{selectedEvent.title}</h3>
+                <Badge variant="secondary" className="mt-2 text-xs">
+                  {getEventTypeLabel(selectedEvent.type)}
+                </Badge>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span>{formatTime(selectedEvent.start)} - {formatTime(selectedEvent.end)}</span>
+                </div>
+                
+                <div className="flex items-center gap-2 text-sm">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span>{formatDate(selectedEvent.start)}</span>
+                </div>
+                
+                {selectedEvent.client && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <span>{selectedEvent.client}</span>
+                  </div>
+                )}
+                
+                {selectedEvent.location && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span>{selectedEvent.location}</span>
+                  </div>
+                )}
+                
+                {selectedEvent.description && (
+                  <div className="pt-2 border-t">
+                    <p className="text-sm text-muted-foreground">{selectedEvent.description}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
