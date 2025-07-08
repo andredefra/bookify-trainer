@@ -21,27 +21,27 @@ export function EnhancedSummaryCards({ data, revenueBreakdown }: EnhancedSummary
 
   const cards = [
     {
-      title: "Fatturato Totale (6 mesi)",
+      title: "Total Revenue (6 months)",
       value: `€${totalRevenue.toLocaleString()}`,
-      subtitle: `Media mensile: €${Math.round(monthlyAverage).toLocaleString()}`,
+      subtitle: `Monthly average: €${Math.round(monthlyAverage).toLocaleString()}`,
       color: "bg-blue-50 border-blue-200"
     },
     {
-      title: "Clienti Ricorrenti",
+      title: "Recurring Clients",
       value: `€${revenueBreakdown.clientsRevenue.toLocaleString()}`,
-      subtitle: `${Math.round((revenueBreakdown.clientsRevenue / totalRevenue) * 100)}% del totale`,
+      subtitle: `${Math.round((revenueBreakdown.clientsRevenue / totalRevenue) * 100)}% of total`,
       color: "bg-green-50 border-green-200"
     },
     {
-      title: "Partecipanti Occasionali", 
+      title: "Occasional Participants", 
       value: `€${revenueBreakdown.occasionalParticipantsRevenue.toLocaleString()}`,
-      subtitle: `${Math.round((revenueBreakdown.occasionalParticipantsRevenue / totalRevenue) * 100)}% del totale`,
+      subtitle: `${Math.round((revenueBreakdown.occasionalParticipantsRevenue / totalRevenue) * 100)}% of total`,
       color: "bg-purple-50 border-purple-200"
     },
     {
-      title: "Valore Medio Cliente",
+      title: "Average Client Value",
       value: `€${Math.round(revenueBreakdown.averageClientValue)}`,
-      subtitle: `Crescita media: ${avgMonthlyGrowth > 0 ? '+' : ''}${avgMonthlyGrowth.toFixed(1)}%/mese`,
+      subtitle: `Average growth: ${avgMonthlyGrowth > 0 ? '+' : ''}${avgMonthlyGrowth.toFixed(1)}%/month`,
       color: "bg-orange-50 border-orange-200"
     }
   ];

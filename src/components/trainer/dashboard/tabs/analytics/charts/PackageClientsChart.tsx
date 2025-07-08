@@ -122,12 +122,12 @@ export function PackageClientsChart() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-sm">{pkg.packageTitle}</h3>
-                    <Badge variant="outline">{metrics.totalClients} clienti</Badge>
+                    <Badge variant="outline">{metrics.totalClients} clients</Badge>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <span className="text-muted-foreground">Attivi:</span>
+                      <span className="text-muted-foreground">Active:</span>
                       <p className="font-medium">{metrics.activeClients}</p>
                     </div>
                     <div>
@@ -135,18 +135,18 @@ export function PackageClientsChart() {
                       <p className="font-medium">€{metrics.totalRevenue}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Utilizzo medio:</span>
+                      <span className="text-muted-foreground">Avg Usage:</span>
                       <p className="font-medium">{metrics.avgUtilization}%</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Prezzo:</span>
+                      <span className="text-muted-foreground">Price:</span>
                       <p className="font-medium">€{packageInfo?.avgValue || 0}</p>
                     </div>
                   </div>
 
                   <Button variant="ghost" size="sm" className="w-full h-8">
                     <Eye className="h-3 w-3 mr-1" />
-                    {selectedPackage === pkg.packageId ? 'Nascondi' : 'Visualizza'} Dettagli
+                    {selectedPackage === pkg.packageId ? 'Hide' : 'View'} Details
                   </Button>
                 </div>
               </CardContent>
@@ -161,7 +161,7 @@ export function PackageClientsChart() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Clienti in {packageClientsData.find(p => p.packageId === selectedPackage)?.packageTitle}
+              Clients in {packageClientsData.find(p => p.packageId === selectedPackage)?.packageTitle}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -197,24 +197,24 @@ export function PackageClientsChart() {
 
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
-                          <span className="text-muted-foreground">Acquistato:</span>
+                          <span className="text-muted-foreground">Purchased:</span>
                           <p className="font-medium flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             {new Date(client.purchaseDate).toLocaleDateString()}
                           </p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Scadenza:</span>
+                          <span className="text-muted-foreground">Expires:</span>
                           <p className="font-medium">
                             {new Date(client.expiryDate).toLocaleDateString()}
                           </p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Sessioni:</span>
+                          <span className="text-muted-foreground">Sessions:</span>
                           <p className="font-medium">{client.sessionsUsed}/{client.sessionTotal}</p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Utilizzo:</span>
+                          <span className="text-muted-foreground">Usage:</span>
                           <p className="font-medium flex items-center gap-1">
                             <TrendingUp className="h-3 w-3" />
                             {Math.round(progressPercentage)}%
@@ -225,7 +225,7 @@ export function PackageClientsChart() {
                       {client.sessionTotal > 0 && (
                         <div className="space-y-1">
                           <div className="flex justify-between items-center text-sm">
-                            <span>Progresso sessioni</span>
+                            <span>Session Progress</span>
                             <span>{Math.round(progressPercentage)}%</span>
                           </div>
                           <Progress value={progressPercentage} className="h-2" />
@@ -244,7 +244,7 @@ export function PackageClientsChart() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Euro className="h-5 w-5" />
-            Riepilogo Clienti e Revenue
+            Clients and Revenue Summary
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -253,7 +253,7 @@ export function PackageClientsChart() {
               <div className="text-2xl font-bold text-primary">
                 {packageClientsData.reduce((sum, pkg) => sum + pkg.clients.length, 0)}
               </div>
-              <div className="text-sm text-muted-foreground">Clienti Totali</div>
+              <div className="text-sm text-muted-foreground">Total Clients</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-primary">
@@ -261,7 +261,7 @@ export function PackageClientsChart() {
                   sum + pkg.clients.filter(c => c.status === 'active').length, 0
                 )}
               </div>
-              <div className="text-sm text-muted-foreground">Clienti Attivi</div>
+              <div className="text-sm text-muted-foreground">Active Clients</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-primary">
@@ -269,7 +269,7 @@ export function PackageClientsChart() {
                   sum + pkg.clients.reduce((clientSum, c) => clientSum + c.totalPaid, 0), 0
                 ).toLocaleString()}
               </div>
-              <div className="text-sm text-muted-foreground">Revenue Totale</div>
+              <div className="text-sm text-muted-foreground">Total Revenue</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-primary">
@@ -284,7 +284,7 @@ export function PackageClientsChart() {
                   }, 0) / packageClientsData.length
                 )}%
               </div>
-              <div className="text-sm text-muted-foreground">Utilizzo Medio</div>
+              <div className="text-sm text-muted-foreground">Average Usage</div>
             </div>
           </div>
         </CardContent>

@@ -21,12 +21,12 @@ export function RevenueBreakdownChart({ data, colors, revenueBreakdown }: Revenu
   // Create real data from transactions
   const realData = [
     { 
-      name: 'Clienti Ricorrenti', 
+      name: 'Recurring Clients', 
       value: revenueBreakdown.clientsRevenue,
       percentage: (revenueBreakdown.clientsRevenue / revenueBreakdown.totalRevenue * 100).toFixed(1)
     },
     { 
-      name: 'Partecipanti Occasionali', 
+      name: 'Occasional Participants', 
       value: revenueBreakdown.occasionalParticipantsRevenue,
       percentage: (revenueBreakdown.occasionalParticipantsRevenue / revenueBreakdown.totalRevenue * 100).toFixed(1)
     }

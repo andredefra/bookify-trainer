@@ -31,7 +31,7 @@ function EnhancedRevenueAnalyticsContent() {
       <div>
         <h3 className="text-lg font-semibold">Client Type Analytics</h3>
         <p className="text-sm text-muted-foreground">
-          Distinzione revenue tra clienti ricorrenti e partecipanti occasionali
+          Revenue breakdown between recurring clients and occasional participants
         </p>
       </div>
       

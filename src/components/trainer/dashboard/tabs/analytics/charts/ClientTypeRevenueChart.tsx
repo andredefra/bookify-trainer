@@ -21,7 +21,7 @@ export function ClientTypeRevenueChart({ data }: ClientTypeRevenueChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Fatturato per Tipologia Cliente</CardTitle>
+        <CardTitle>Revenue by Client Type</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-80">
@@ -32,18 +32,18 @@ export function ClientTypeRevenueChart({ data }: ClientTypeRevenueChartProps) {
               <YAxis />
               <Tooltip 
                 formatter={(value, name) => [`€${value}`, name]}
-                labelFormatter={(label) => `Mese: ${label}`}
+                labelFormatter={(label) => `Month: ${label}`}
               />
               <Legend />
               <Bar 
                 dataKey="clientRevenue" 
-                name="Clienti Ricorrenti" 
+                name="Recurring Clients" 
                 fill="#0088FE" 
                 stackId="client-type"
               />
               <Bar 
                 dataKey="occasionalRevenue" 
-                name="Partecipanti Occasionali" 
+                name="Occasional Participants" 
                 fill="#00C49F" 
                 stackId="client-type"
               />
