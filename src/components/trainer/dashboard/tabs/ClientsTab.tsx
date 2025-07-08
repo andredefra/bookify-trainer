@@ -10,7 +10,7 @@ import { ClientCard } from "./clients/ClientCard";
 import { ClientProfileDialog } from "./clients/ClientProfileDialog";
 import { ClientPerformance } from "./analytics/ClientPerformance";
 import { MessageClientDialog } from "./clients/dialogs/MessageClientDialog";
-import { ScheduleSessionDialog } from "./clients/dialogs/ScheduleSessionDialog";
+import { EnhancedScheduleSessionDialog } from "./clients/dialogs/EnhancedScheduleSessionDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ClientItem {
@@ -152,7 +152,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         clientName={messageClientName}
       />
       
-      <ScheduleSessionDialog
+      <EnhancedScheduleSessionDialog
         open={showScheduleDialog}
         onOpenChange={setShowScheduleDialog}
         clientName={messageClientName}
