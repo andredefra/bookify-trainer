@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Package, TrendingUp, Users, DollarSign } from "lucide-react";
 import { TopPerformingPackagesChart } from "./TopPerformingPackagesChart";
+import { PackageClientsChart } from "./PackageClientsChart";
 import { packageData, packageTypeData, CHART_COLORS, getAnalyticsMetrics } from "../data/packageAnalyticsData";
 
 export function PackageAnalyticsChart() {
@@ -117,6 +118,9 @@ export function PackageAnalyticsChart() {
           </ResponsiveContainer>
         </CardContent>
       </Card>
+
+      {/* Package Clients Analysis */}
+      <PackageClientsChart />
     </div>
   );
 }
