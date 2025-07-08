@@ -3,23 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Package, TrendingUp, Users, DollarSign } from "lucide-react";
 import { TopPerformingPackagesChart } from "./TopPerformingPackagesChart";
-
-const packageData = [
-  { name: 'Personal Training', sold: 12, revenue: 6000, avgValue: 500 },
-  { name: 'Transformation', sold: 8, revenue: 6000, avgValue: 750 },
-  { name: 'Beginner', sold: 15, revenue: 3600, avgValue: 240 },
-  { name: 'Group Training', sold: 6, revenue: 1800, avgValue: 300 },
-];
-
-const packageTypeData = [
-  { name: 'Sessions Only', value: 45, color: '#0088FE' },
-  { name: 'Hybrid', value: 35, color: '#00C49F' },
-  { name: 'Program Only', value: 20, color: '#FFBB28' },
-];
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+import { packageData, packageTypeData, CHART_COLORS, getAnalyticsMetrics } from "../data/packageAnalyticsData";
 
 export function PackageAnalyticsChart() {
+  const metrics = getAnalyticsMetrics();
+  
+  // Create chart data from unified source
+  const chartData = packageData.map(pkg => ({
+    name: pkg.title.replace(' Package', '').replace("'s Program", ''),
+    sold: pkg.salesCount,
+    revenue: pkg.revenue,
+    avgValue: pkg.avgValue
+  }));
+  
   return (
     <div className="space-y-6">
       {/* Top Performing Packages Ranking */}
@@ -32,7 +28,7 @@ export function PackageAnalyticsChart() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Packages Sold</p>
-                <p className="text-2xl font-bold">41</p>
+                <p className="text-2xl font-bold">{metrics.totalSales}</p>
               </div>
               <Package className="h-8 w-8 text-muted-foreground" />
             </div>
@@ -44,7 +40,7 @@ export function PackageAnalyticsChart() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Package Revenue</p>
-                <p className="text-2xl font-bold">€17,400</p>
+                <p className="text-2xl font-bold">€{metrics.totalRevenue.toLocaleString()}</p>
               </div>
               <DollarSign className="h-8 w-8 text-muted-foreground" />
             </div>
@@ -56,7 +52,7 @@ export function PackageAnalyticsChart() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Avg Package Value</p>
-                <p className="text-2xl font-bold">€424</p>
+                <p className="text-2xl font-bold">€{metrics.avgValue}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-muted-foreground" />
             </div>
@@ -68,7 +64,7 @@ export function PackageAnalyticsChart() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Package Clients</p>
-                <p className="text-2xl font-bold">24</p>
+                <p className="text-2xl font-bold">{metrics.estimatedClients}</p>
               </div>
               <Users className="h-8 w-8 text-muted-foreground" />
             </div>
@@ -83,7 +79,7 @@ export function PackageAnalyticsChart() {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={packageData}>
+            <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
@@ -113,7 +109,7 @@ export function PackageAnalyticsChart() {
                 label={({ name, value }) => `${name}: ${value}%`}
               >
                 {packageTypeData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
