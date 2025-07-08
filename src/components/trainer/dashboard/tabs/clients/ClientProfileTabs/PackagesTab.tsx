@@ -32,6 +32,13 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
     }
   };
 
+  // Separate active and historical packages
+  const activePackages = packages.filter(pkg => pkg.status === 'active');
+  const historicalPackages = packages.filter(pkg => pkg.status !== 'active');
+  
+  // Get the latest active package (should be only one)
+  const currentPackage = activePackages.length > 0 ? activePackages[0] : null;
+
   const filteredPackages = packages.filter(pkg => {
     if (!searchQuery) return true;
     const searchLower = searchQuery.toLowerCase();
@@ -56,26 +63,21 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
       <Card>
         <CardContent className="pt-6">
           <div className="text-center text-muted-foreground">
-            Errore nel caricamento dei pacchetti: {error}
+            Error loading packages: {error}
           </div>
         </CardContent>
       </Card>
     );
   }
 
-  if (filteredPackages.length === 0) {
+  if (packages.length === 0) {
     return (
       <Card>
         <CardContent className="pt-6">
           <div className="text-center text-muted-foreground">
             <Package className="mx-auto h-12 w-12 mb-4 opacity-50" />
-            <h3 className="text-lg font-medium mb-2">Nessun pacchetto trovato</h3>
-            <p>
-              {searchQuery 
-                ? "Nessun pacchetto corrisponde ai criteri di ricerca."
-                : "Questo cliente non ha ancora acquistato pacchetti."
-              }
-            </p>
+            <h3 className="text-lg font-medium mb-2">No packages found</h3>
+            <p>This client has not purchased any packages yet.</p>
           </div>
         </CardContent>
       </Card>
@@ -83,16 +85,102 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
   }
 
   return (
-    <div className="space-y-4">
-      {/* Summary Cards */}
+    <div className="space-y-6">
+      {/* Active Package Section */}
+      {currentPackage && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Current Package</h3>
+          <Card className="border-2 border-green-200 bg-green-50/50">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <CardTitle className="text-lg">{currentPackage.package.title}</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Badge className={getPackageTypeColor(currentPackage.package.package_type)}>
+                      {currentPackage.package.package_type.replace('_', ' ')}
+                    </Badge>
+                    <Badge className="bg-green-100 text-green-800">
+                      Active
+                    </Badge>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg font-bold">€{currentPackage.total_paid}</div>
+                  <div className="text-sm text-muted-foreground">Paid</div>
+                </div>
+              </div>
+            </CardHeader>
+            
+            <CardContent>
+              <div className="space-y-4">
+                {currentPackage.package.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {currentPackage.package.description}
+                  </p>
+                )}
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Purchased:</span>
+                    <p className="font-medium flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {currentPackage.purchase_date 
+                        ? new Date(currentPackage.purchase_date).toLocaleDateString()
+                        : 'N/A'
+                      }
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Expires:</span>
+                    <p className="font-medium">
+                      {currentPackage.expiry_date 
+                        ? new Date(currentPackage.expiry_date).toLocaleDateString()
+                        : 'N/A'
+                      }
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Sessions:</span>
+                    <p className="font-medium">
+                      {currentPackage.sessions_used}/{currentPackage.sessions_total}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Trainer:</span>
+                    <p className="font-medium">{currentPackage.trainer_name}</p>
+                  </div>
+                </div>
+
+                {currentPackage.sessions_total > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-sm">
+                      <span>Session Progress</span>
+                      <span>{Math.round((currentPackage.sessions_used / currentPackage.sessions_total) * 100)}%</span>
+                    </div>
+                    <Progress value={(currentPackage.sessions_used / currentPackage.sessions_total) * 100} className="h-2" />
+                  </div>
+                )}
+
+                <div className="flex gap-2 pt-2">
+                  <Button variant="outline" size="sm">
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Package Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Package className="h-4 w-4 text-muted-foreground" />
               <div>
-                <div className="text-2xl font-bold">{filteredPackages.length}</div>
-                <div className="text-xs text-muted-foreground">Pacchetti Totali</div>
+                <div className="text-2xl font-bold">{packages.length}</div>
+                <div className="text-xs text-muted-foreground">Total Packages</div>
               </div>
             </div>
           </CardContent>
@@ -104,9 +192,9 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
               <TrendingUp className="h-4 w-4 text-green-600" />
               <div>
                 <div className="text-2xl font-bold text-green-600">
-                  {filteredPackages.filter(p => p.status === 'active').length}
+                  {activePackages.length}
                 </div>
-                <div className="text-xs text-muted-foreground">Attivi</div>
+                <div className="text-xs text-muted-foreground">Active</div>
               </div>
             </div>
           </CardContent>
@@ -118,9 +206,9 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
               <Euro className="h-4 w-4 text-muted-foreground" />
               <div>
                 <div className="text-2xl font-bold">
-                  €{filteredPackages.reduce((sum, p) => sum + p.total_paid, 0).toLocaleString()}
+                  €{packages.reduce((sum, p) => sum + p.total_paid, 0).toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">Speso Totale</div>
+                <div className="text-xs text-muted-foreground">Total Spent</div>
               </div>
             </div>
           </CardContent>
@@ -132,110 +220,111 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
               <Clock className="h-4 w-4 text-muted-foreground" />
               <div>
                 <div className="text-2xl font-bold">
-                  {filteredPackages.reduce((sum, p) => sum + p.sessions_used, 0)}
+                  {packages.reduce((sum, p) => sum + p.sessions_used, 0)}
                 </div>
-                <div className="text-xs text-muted-foreground">Sessioni Usate</div>
+                <div className="text-xs text-muted-foreground">Sessions Used</div>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Package Details */}
-      <div className="space-y-4">
-        {filteredPackages.map((packageAssignment) => {
-          const progressPercentage = packageAssignment.sessions_total > 0 
-            ? (packageAssignment.sessions_used / packageAssignment.sessions_total) * 100 
-            : 0;
+      {/* Historical Packages */}
+      {historicalPackages.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Package History</h3>
+          <div className="space-y-4">
+            {historicalPackages.map((packageAssignment) => {
+              const progressPercentage = packageAssignment.sessions_total > 0 
+                ? (packageAssignment.sessions_used / packageAssignment.sessions_total) * 100 
+                : 0;
 
-          return (
-            <Card key={packageAssignment.id}>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <CardTitle className="text-lg">{packageAssignment.package.title}</CardTitle>
-                    <div className="flex items-center gap-2">
-                      <Badge className={getPackageTypeColor(packageAssignment.package.package_type)}>
-                        {packageAssignment.package.package_type.replace('_', ' ')}
-                      </Badge>
-                      <Badge className={getStatusColor(packageAssignment.status)}>
-                        {packageAssignment.status}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold">€{packageAssignment.total_paid}</div>
-                    <div className="text-sm text-muted-foreground">Pagato</div>
-                  </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent>
-                <div className="space-y-4">
-                  {packageAssignment.package.description && (
-                    <p className="text-sm text-muted-foreground">
-                      {packageAssignment.package.description}
-                    </p>
-                  )}
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-muted-foreground">Acquistato:</span>
-                      <p className="font-medium flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        {packageAssignment.purchase_date 
-                          ? new Date(packageAssignment.purchase_date).toLocaleDateString()
-                          : 'N/A'
-                        }
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Scadenza:</span>
-                      <p className="font-medium">
-                        {packageAssignment.expiry_date 
-                          ? new Date(packageAssignment.expiry_date).toLocaleDateString()
-                          : 'N/A'
-                        }
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Sessioni:</span>
-                      <p className="font-medium">
-                        {packageAssignment.sessions_used}/{packageAssignment.sessions_total}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Trainer:</span>
-                      <p className="font-medium">{packageAssignment.trainer_name}</p>
-                    </div>
-                  </div>
-
-                  {packageAssignment.sessions_total > 0 && (
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-sm">
-                        <span>Progresso sessioni</span>
-                        <span>{Math.round(progressPercentage)}%</span>
+              return (
+                <Card key={packageAssignment.id} className="opacity-75">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <CardTitle className="text-lg">{packageAssignment.package.title}</CardTitle>
+                        <div className="flex items-center gap-2">
+                          <Badge className={getPackageTypeColor(packageAssignment.package.package_type)}>
+                            {packageAssignment.package.package_type.replace('_', ' ')}
+                          </Badge>
+                          <Badge className={getStatusColor(packageAssignment.status)}>
+                            {packageAssignment.status}
+                          </Badge>
+                        </div>
                       </div>
-                      <Progress value={progressPercentage} className="h-2" />
+                      <div className="text-right">
+                        <div className="text-lg font-bold">€{packageAssignment.total_paid}</div>
+                        <div className="text-sm text-muted-foreground">Paid</div>
+                      </div>
                     </div>
-                  )}
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Purchased:</span>
+                          <p className="font-medium flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {packageAssignment.purchase_date 
+                              ? new Date(packageAssignment.purchase_date).toLocaleDateString()
+                              : 'N/A'
+                            }
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">
+                            {packageAssignment.status === 'expired' ? 'Expired:' : 'Completed:'}
+                          </span>
+                          <p className="font-medium">
+                            {packageAssignment.expiry_date 
+                              ? new Date(packageAssignment.expiry_date).toLocaleDateString()
+                              : 'N/A'
+                            }
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Sessions:</span>
+                          <p className="font-medium">
+                            {packageAssignment.sessions_used}/{packageAssignment.sessions_total}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Trainer:</span>
+                          <p className="font-medium">{packageAssignment.trainer_name}</p>
+                        </div>
+                      </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button variant="outline" size="sm">
-                      Visualizza Dettagli
-                    </Button>
-                    {packageAssignment.status === 'expired' && (
-                      <Button variant="outline" size="sm">
-                        Rinnova Pacchetto
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                      {packageAssignment.sessions_total > 0 && (
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center text-sm">
+                            <span>Session Progress</span>
+                            <span>{Math.round(progressPercentage)}%</span>
+                          </div>
+                          <Progress value={progressPercentage} className="h-2" />
+                        </div>
+                      )}
+
+                      <div className="flex gap-2 pt-2">
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                        {packageAssignment.status === 'expired' && (
+                          <Button variant="outline" size="sm">
+                            Renew Package
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

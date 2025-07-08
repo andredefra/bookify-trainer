@@ -137,7 +137,15 @@ export function useClientPackages() {
       }) || [];
 
       console.log('Transformed assignments:', transformedAssignments);
-      setPackages(transformedAssignments);
+      
+      // Sort packages: active first, then by purchase date (newest first)
+      const sortedPackages = transformedAssignments.sort((a, b) => {
+        if (a.status === 'active' && b.status !== 'active') return -1;
+        if (a.status !== 'active' && b.status === 'active') return 1;
+        return new Date(b.purchase_date).getTime() - new Date(a.purchase_date).getTime();
+      });
+      
+      setPackages(sortedPackages);
       
       // Get trainer IDs for this client's packages to filter available packages
       const clientTrainerIds = transformedAssignments.map(pkg => pkg.trainer_id);

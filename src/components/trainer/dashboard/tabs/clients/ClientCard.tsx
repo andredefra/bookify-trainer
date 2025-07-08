@@ -39,9 +39,9 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
                   <Dumbbell className="h-3 w-3 mr-1" />
                   Strength Program
                 </Badge>
-                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                   <Package className="h-3 w-3 mr-1" />
-                  2 Active Packages
+                  1 Active Package
                 </Badge>
               </>
             )}
