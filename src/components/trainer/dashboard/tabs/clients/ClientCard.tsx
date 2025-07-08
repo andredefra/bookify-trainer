@@ -1,5 +1,5 @@
 
-import { Target, Dumbbell, Eye, TrendingUp } from "lucide-react";
+import { Target, Dumbbell, Eye, TrendingUp, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +27,7 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
             {client.sessions} sessions • Last: {client.lastSession}
           </div>
           
-          {/* Sample goals and programs for demo */}
+          {/* Sample goals, programs and packages for demo */}
           <div className="flex flex-wrap gap-1 mt-2">
             {client.id === 1 && (
               <>
@@ -39,13 +39,23 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
                   <Dumbbell className="h-3 w-3 mr-1" />
                   Strength Program
                 </Badge>
+                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                  <Package className="h-3 w-3 mr-1" />
+                  2 Pacchetti Attivi
+                </Badge>
               </>
             )}
             {client.id === 2 && (
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                <Target className="h-3 w-3 mr-1" />
-                Run 10K
-              </Badge>
+              <>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <Target className="h-3 w-3 mr-1" />
+                  Run 10K
+                </Badge>
+                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                  <Package className="h-3 w-3 mr-1" />
+                  1 Pacchetto
+                </Badge>
+              </>
             )}
           </div>
         </div>
