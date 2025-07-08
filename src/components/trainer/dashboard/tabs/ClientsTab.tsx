@@ -9,6 +9,8 @@ import { ClientGoalsDialog } from "./clients/ClientGoalsDialog";
 import { ClientCard } from "./clients/ClientCard";
 import { ClientProfileDialog } from "./clients/ClientProfileDialog";
 import { ClientPerformance } from "./analytics/ClientPerformance";
+import { MessageClientDialog } from "./clients/dialogs/MessageClientDialog";
+import { ScheduleSessionDialog } from "./clients/dialogs/ScheduleSessionDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ClientItem {
@@ -30,6 +32,9 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [activeClient, setActiveClient] = useState<ClientItem | null>(null);
   const [activeTab, setActiveTab] = useState("clients");
   const [analyticsClientFilter, setAnalyticsClientFilter] = useState<string>("all");
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [messageClientName, setMessageClientName] = useState("");
   
   const handleSetGoals = (clientName: string) => {
     setSelectedClient(clientName);
@@ -44,6 +49,16 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const handleViewAnalytics = (client: ClientItem) => {
     setAnalyticsClientFilter(client.id.toString());
     setActiveTab("analytics");
+  };
+
+  const handleMessage = (clientName: string) => {
+    setMessageClientName(clientName);
+    setShowMessageDialog(true);
+  };
+
+  const handleScheduleSession = (clientName: string) => {
+    setMessageClientName(clientName);
+    setShowScheduleDialog(true);
   };
   
   return (
@@ -127,6 +142,20 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         client={activeClient}
         open={showProfileDialog}
         onOpenChange={setShowProfileDialog}
+        onMessage={handleMessage}
+        onScheduleSession={handleScheduleSession}
+      />
+      
+      <MessageClientDialog
+        open={showMessageDialog}
+        onOpenChange={setShowMessageDialog}
+        clientName={messageClientName}
+      />
+      
+      <ScheduleSessionDialog
+        open={showScheduleDialog}
+        onOpenChange={setShowScheduleDialog}
+        clientName={messageClientName}
       />
     </div>
   );

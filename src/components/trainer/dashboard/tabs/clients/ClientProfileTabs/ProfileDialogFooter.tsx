@@ -5,17 +5,19 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 interface ProfileDialogFooterProps {
   onClose: () => void;
+  onMessage: () => void;
+  onScheduleSession: () => void;
 }
 
-export function ProfileDialogFooter({ onClose }: ProfileDialogFooterProps) {
+export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession }: ProfileDialogFooterProps) {
   return (
     <div className="flex justify-between mt-4">
       <div className="flex space-x-2">
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" onClick={onMessage}>
           <MessageSquare className="h-4 w-4 mr-2" />
           Message
         </Button>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" onClick={onScheduleSession}>
           <Calendar className="h-4 w-4 mr-2" />
           Schedule Session
         </Button>

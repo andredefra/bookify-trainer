@@ -31,9 +31,11 @@ interface ClientProfileDialogProps {
   } | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onMessage?: (clientName: string) => void;
+  onScheduleSession?: (clientName: string) => void;
 }
 
-export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfileDialogProps) {
+export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onScheduleSession }: ClientProfileDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
   
   if (!client) return null;
@@ -90,7 +92,11 @@ export function ClientProfileDialog({ client, open, onOpenChange }: ClientProfil
           </div>
         </div>
         
-        <ProfileDialogFooter onClose={() => onOpenChange(false)} />
+        <ProfileDialogFooter 
+          onClose={() => onOpenChange(false)}
+          onMessage={() => onMessage?.(client.name)}
+          onScheduleSession={() => onScheduleSession?.(client.name)}
+        />
       </DialogContent>
     </Dialog>
   );

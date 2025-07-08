@@ -4,6 +4,8 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Package, Calendar, Clock, Euro, TrendingUp } from "lucide-react";
 import { useClientPackages } from "@/hooks/useClientPackages";
+import { PackageDetailsDialog } from "../dialogs/PackageDetailsDialog";
+import { useState } from "react";
 
 interface PackagesTabProps {
   clientId: number;
@@ -12,6 +14,8 @@ interface PackagesTabProps {
 
 export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
   const { packages, loading, error } = useClientPackages();
+  const [selectedPackage, setSelectedPackage] = useState<any>(null);
+  const [showPackageDetails, setShowPackageDetails] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -162,7 +166,14 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
                 )}
 
                 <div className="flex gap-2 pt-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      setSelectedPackage(currentPackage);
+                      setShowPackageDetails(true);
+                    }}
+                  >
                     View Details
                   </Button>
                 </div>
@@ -278,7 +289,14 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
                       )}
 
                       <div className="flex gap-2 pt-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedPackage(packageAssignment);
+                            setShowPackageDetails(true);
+                          }}
+                        >
                           View Details
                         </Button>
                         {packageAssignment.status === 'expired' && (
@@ -295,6 +313,13 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
           </div>
         </div>
       )}
+
+      {/* Package Details Dialog */}
+      <PackageDetailsDialog
+        open={showPackageDetails}
+        onOpenChange={setShowPackageDetails}
+        packageAssignment={selectedPackage}
+      />
     </div>
   );
 }
