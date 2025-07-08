@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Package, TrendingUp, Users, DollarSign } from "lucide-react";
+import { TopPerformingPackagesChart } from "./TopPerformingPackagesChart";
 
 const packageData = [
   { name: 'Personal Training', sold: 12, revenue: 6000, avgValue: 500 },
@@ -21,6 +22,9 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 export function PackageAnalyticsChart() {
   return (
     <div className="space-y-6">
+      {/* Top Performing Packages Ranking */}
+      <TopPerformingPackagesChart />
+      
       {/* Package Performance Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
