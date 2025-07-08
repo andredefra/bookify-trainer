@@ -173,14 +173,16 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
       )}
 
       {/* Package Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <Package className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <div className="text-2xl font-bold">{packages.length}</div>
-                <div className="text-xs text-muted-foreground">Total Packages</div>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-muted rounded-lg">
+                <Package className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xl font-semibold truncate">{packages.length}</div>
+                <div className="text-sm text-muted-foreground">Total Packages</div>
               </div>
             </div>
           </CardContent>
@@ -188,13 +190,15 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
         
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <div>
-                <div className="text-2xl font-bold text-green-600">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-50 rounded-lg">
+                <TrendingUp className="h-4 w-4 text-green-600" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xl font-semibold text-green-600 truncate">
                   {activePackages.length}
                 </div>
-                <div className="text-xs text-muted-foreground">Active</div>
+                <div className="text-sm text-muted-foreground">Active</div>
               </div>
             </div>
           </CardContent>
@@ -202,13 +206,15 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
 
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <Euro className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <div className="text-2xl font-bold">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <Euro className="h-4 w-4 text-blue-600" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xl font-semibold truncate">
                   €{packages.reduce((sum, p) => sum + p.total_paid, 0).toLocaleString()}
                 </div>
-                <div className="text-xs text-muted-foreground">Total Spent</div>
+                <div className="text-sm text-muted-foreground">Total Spent</div>
               </div>
             </div>
           </CardContent>
@@ -216,13 +222,15 @@ export function PackagesTab({ clientId, searchQuery }: PackagesTabProps) {
 
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <div className="text-2xl font-bold">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-50 rounded-lg">
+                <Clock className="h-4 w-4 text-purple-600" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xl font-semibold truncate">
                   {packages.reduce((sum, p) => sum + p.sessions_used, 0)}
                 </div>
-                <div className="text-xs text-muted-foreground">Sessions Used</div>
+                <div className="text-sm text-muted-foreground">Sessions Used</div>
               </div>
             </div>
           </CardContent>
