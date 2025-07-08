@@ -41,7 +41,7 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
                 </Badge>
                 <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
                   <Package className="h-3 w-3 mr-1" />
-                  2 Pacchetti Attivi
+                  2 Active Packages
                 </Badge>
               </>
             )}
@@ -53,7 +53,7 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
                 </Badge>
                 <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
                   <Package className="h-3 w-3 mr-1" />
-                  1 Pacchetto
+                  1 Package
                 </Badge>
               </>
             )}
