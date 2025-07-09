@@ -79,84 +79,86 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isVeryNarrow = useMediaQuery("(max-width: 480px)");
   
   const chartConfig = {
     leads: {
       label: "Leads",
       theme: {
-        light: "#3b82f6",  // blue-500
-        dark: "#60a5fa"    // blue-400
+        light: "#3b82f6",
+        dark: "#60a5fa"
       }
     },
     prospects: {
-      label: "Prospects",
+      label: "Prospects", 
       theme: {
-        light: "#10b981",  // emerald-500
-        dark: "#34d399"    // emerald-400
+        light: "#10b981",
+        dark: "#34d399"
       }
     },
     clients: {
       label: "Clients",
       theme: {
-        light: "#f59e0b",  // amber-500
-        dark: "#fbbf24"    // amber-400
+        light: "#f59e0b",
+        dark: "#fbbf24"
       }
     }
   };
 
   const renderTimeframeChart = () => {
-    // Use mock data instead of analytics.timeSeriesData
     const data = mockTimeSeriesData[timeFrame];
     
     return (
       <BarChart 
         data={data} 
         margin={{ 
-          right: isMobile ? 5 : isTablet ? 10 : 20, 
-          left: isMobile ? 5 : 10, 
-          bottom: isMobile ? 20 : 10,
-          top: 10
+          right: isVeryNarrow ? 2 : isMobile ? 4 : isTablet ? 8 : 15, 
+          left: isVeryNarrow ? 2 : isMobile ? 4 : 8, 
+          bottom: isVeryNarrow ? 15 : isMobile ? 18 : 8,
+          top: isVeryNarrow ? 5 : 8
         }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis 
           dataKey="name" 
           stroke="#6b7280" 
-          fontSize={isMobile ? 10 : 12}
+          fontSize={isVeryNarrow ? 8 : isMobile ? 9 : 11}
           tickLine={false}
           axisLine={{ stroke: "#d1d5db" }}
-          interval={isMobile ? 'preserveStartEnd' : 0}
+          interval={isVeryNarrow ? 'preserveStartEnd' : isMobile ? 'preserveStartEnd' : 0}
+          tick={{ fontSize: isVeryNarrow ? 8 : isMobile ? 9 : 11 }}
         />
         <YAxis 
           stroke="#6b7280" 
-          fontSize={isMobile ? 10 : 12}
+          fontSize={isVeryNarrow ? 8 : isMobile ? 9 : 11}
           tickLine={false}
           axisLine={{ stroke: "#d1d5db" }}
           tickFormatter={(value) => `${value}`}
-          width={isMobile ? 30 : 40}
+          width={isVeryNarrow ? 20 : isMobile ? 25 : 35}
+          tick={{ fontSize: isVeryNarrow ? 8 : isMobile ? 9 : 11 }}
         />
         <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-        {!isMobile && <Legend />}
+        {!isMobile && <Legend fontSize={10} />}
         <Bar 
           dataKey="leads" 
           name="Leads" 
           fill="var(--color-leads)" 
-          radius={[2, 2, 0, 0]} 
-          barSize={isMobile ? 12 : isTablet ? 16 : 20} 
+          radius={[1, 1, 0, 0]} 
+          barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
         />
         <Bar 
           dataKey="prospects" 
           name="Prospects" 
           fill="var(--color-prospects)" 
-          radius={[2, 2, 0, 0]} 
-          barSize={isMobile ? 12 : isTablet ? 16 : 20} 
+          radius={[1, 1, 0, 0]} 
+          barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
         />
         <Bar 
           dataKey="clients" 
           name="Clients" 
           fill="var(--color-clients)" 
-          radius={[2, 2, 0, 0]} 
-          barSize={isMobile ? 12 : isTablet ? 16 : 20} 
+          radius={[1, 1, 0, 0]} 
+          barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
         />
       </BarChart>
     );
@@ -171,28 +173,40 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   );
 
   return (
-    <div className="w-full mt-4">
+    <div className="w-full mt-2 md:mt-4">
       <div className={cn(
-        "relative w-full",
-        isMobile && "h-[280px]",
-        isTablet && "h-[350px]", 
-        isDesktop && "h-[400px]",
-        "min-h-[250px] max-h-[60vh]"
+        "relative w-full border border-border/20 rounded-lg bg-card/50 p-2",
+        isVeryNarrow && "h-[200px] min-h-[200px]",
+        isMobile && !isVeryNarrow && "h-[240px] min-h-[240px]",
+        isTablet && "h-[300px] min-h-[300px]", 
+        isDesktop && "h-[350px] min-h-[350px]"
       )}>
-        {isMobile ? (
-          <ScrollArea className="h-full w-full" orientation="horizontal">
-            <div className="h-full min-w-[500px] pr-4">
-              {chartContent}
-            </div>
-          </ScrollArea>
+        {isVeryNarrow ? (
+          <div className="h-full w-full overflow-hidden">
+            <ScrollArea className="h-full w-full" orientation="horizontal">
+              <div className="h-full min-w-[320px] pr-2">
+                {chartContent}
+              </div>
+            </ScrollArea>
+          </div>
+        ) : isMobile ? (
+          <div className="h-full w-full overflow-hidden">
+            <ScrollArea className="h-full w-full" orientation="horizontal">
+              <div className="h-full min-w-[420px] pr-3">
+                {chartContent}
+              </div>
+            </ScrollArea>
+          </div>
         ) : isTablet ? (
-          <ScrollArea className="h-full w-full" orientation="horizontal">
-            <div className="h-full min-w-[700px] pr-4">
-              {chartContent}
-            </div>
-          </ScrollArea>
+          <div className="h-full w-full overflow-hidden">
+            <ScrollArea className="h-full w-full" orientation="horizontal">
+              <div className="h-full min-w-[600px] pr-4">
+                {chartContent}
+              </div>
+            </ScrollArea>
+          </div>
         ) : (
-          <div className="h-full w-full">
+          <div className="h-full w-full max-w-full">
             {chartContent}
           </div>
         )}
