@@ -108,14 +108,20 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   const renderTimeframeChart = () => {
     const data = mockTimeSeriesData[timeFrame];
     
+    // Calculate dynamic dimensions based on screen size
+    const chartWidth = isVeryNarrow ? 300 : isMobile ? 400 : isTablet ? 580 : 800;
+    const chartHeight = isVeryNarrow ? 180 : isMobile ? 220 : isTablet ? 280 : 330;
+    
     return (
       <BarChart 
-        data={data} 
+        data={data}
+        width={chartWidth}
+        height={chartHeight}
         margin={{ 
-          right: isVeryNarrow ? 2 : isMobile ? 4 : isTablet ? 8 : 15, 
-          left: isVeryNarrow ? 2 : isMobile ? 4 : 8, 
-          bottom: isVeryNarrow ? 15 : isMobile ? 18 : 8,
-          top: isVeryNarrow ? 5 : 8
+          right: isVeryNarrow ? 5 : isMobile ? 8 : isTablet ? 12 : 20, 
+          left: isVeryNarrow ? 5 : isMobile ? 8 : 12, 
+          bottom: isVeryNarrow ? 20 : isMobile ? 25 : 15,
+          top: isVeryNarrow ? 10 : 15
         }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -165,10 +171,8 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   };
 
   const chartContent = (
-    <ChartContainer className="h-full" config={chartConfig}>
-      <ResponsiveContainer width="100%" height="100%">
-        {renderTimeframeChart()}
-      </ResponsiveContainer>
+    <ChartContainer className="w-full h-full" config={chartConfig}>
+      {renderTimeframeChart()}
     </ChartContainer>
   );
 
