@@ -156,6 +156,11 @@ const PricingSection = () => {
             />
           ))}
         </div>
+
+        <PricingFooter
+          disclaimerText={t('pricing.disclaimer1').replace('All plans', 'Pro plan')}
+          clientsAccessText={t('pricing.disclaimer2')}
+        />
         
         {/* Gym Plan - Separate section with different styling */}
         <div id="gym-pricing" className="mt-20 pt-12 border-t border-gray-100">
@@ -182,11 +187,6 @@ const PricingSection = () => {
             />
           </div>
         </div>
-
-        <PricingFooter
-          disclaimerText={t('pricing.disclaimer1').replace('All plans', 'Pro plan')}
-          clientsAccessText={t('pricing.disclaimer2')}
-        />
       </div>
     </section>
   );
