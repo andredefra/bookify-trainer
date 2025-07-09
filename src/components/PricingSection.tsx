@@ -73,6 +73,7 @@ const PricingSection = () => {
     {
       name: t('pricing.standard.title'),
       price: t('pricing.standard.price'),
+      originalPrice: t('pricing.standard.originalPrice'),
       priceAnnual: t('pricing.standard.price'),
       period: t('pricing.standard.period'),
       fee: t('pricing.standard.fee'),
@@ -80,7 +81,8 @@ const PricingSection = () => {
       ctaText: t('pricing.standard.cta'),
       ctaLink: '/register?plan=standard',
       isPopular: false,
-      isGymPlan: false
+      isGymPlan: false,
+      isLaunchOffer: true
     },
     {
       name: t('pricing.freemium.title'),
@@ -140,6 +142,7 @@ const PricingSection = () => {
               key={index}
               name={plan.name}
               price={plan.price}
+              originalPrice={plan.originalPrice}
               period={plan.period}
               fee={plan.fee}
               features={plan.features}
@@ -147,6 +150,7 @@ const PricingSection = () => {
               ctaLink={plan.ctaLink}
               isPopular={plan.isPopular}
               isGymPlan={plan.isGymPlan}
+              isLaunchOffer={plan.isLaunchOffer}
               isDelayed={index > 1}
               Icon={index < plans.length ? plans[index].icon : undefined}
             />

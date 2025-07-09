@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 interface PlanCardProps {
   name: string;
   price: string;
+  originalPrice?: string;
   period: string;
   fee: string;
   features: string[];
@@ -17,11 +18,13 @@ interface PlanCardProps {
   transactionFeeNote?: string;
   showContactForm?: boolean;
   onContactClick?: () => void;
+  isLaunchOffer?: boolean;
 }
 
 export const PlanCard = ({
   name,
   price,
+  originalPrice,
   period,
   fee,
   features,
@@ -33,7 +36,8 @@ export const PlanCard = ({
   isGymPlan = false,
   transactionFeeNote,
   showContactForm = false,
-  onContactClick
+  onContactClick,
+  isLaunchOffer = false
 }: PlanCardProps) => {
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
   
@@ -43,7 +47,13 @@ export const PlanCard = ({
       isGymPlan ? 'border-2 border-gray-800 shadow-lg' : 
       'border-border shadow-sm'
     } ${isGymPlan ? 'bg-gray-50' : 'bg-white'} relative`}>
-      {isPopular && (
+      {isLaunchOffer && (
+        <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold py-1 px-3 rounded-full animate-pulse">
+          🚀 LAUNCH OFFER
+        </div>
+      )}
+      
+      {isPopular && !isLaunchOffer && (
         <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs font-medium py-1 px-3 rounded-full">
           RECOMMENDED
         </div>
@@ -58,8 +68,20 @@ export const PlanCard = ({
       <div className="mb-6">
         <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
         <div className="flex items-baseline mb-1">
-          <span className="text-4xl font-display font-bold">{price}</span>
-          <span className="text-muted-foreground ml-2">{period}</span>
+          {originalPrice && isLaunchOffer ? (
+            <div className="flex flex-col">
+              <span className="text-lg text-muted-foreground line-through">{originalPrice}</span>
+              <div className="flex items-baseline">
+                <span className="text-4xl font-display font-bold text-green-600">{price}</span>
+                <span className="text-muted-foreground ml-2">{period}</span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <span className="text-4xl font-display font-bold">{price}</span>
+              <span className="text-muted-foreground ml-2">{period}</span>
+            </>
+          )}
         </div>
         {fee && (
           <p className="text-muted-foreground text-sm">
