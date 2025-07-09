@@ -45,15 +45,15 @@ export function AdditionalServicesStep({ data, onChange }: AdditionalServicesSte
   return (
     <div className="space-y-4">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Servizi Aggiuntivi</h3>
+        <h3 className="text-lg font-semibold">Additional Services</h3>
         <p className="text-sm text-muted-foreground">
-          Aggiungi servizi extra per aumentare il valore del tuo package
+          Add extra services to increase the value of your package
         </p>
       </div>
 
       {data.additionalServices.length > 0 && (
         <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-          <h4 className="font-medium text-blue-800 mb-2">Servizi Selezionati:</h4>
+          <h4 className="font-medium text-blue-800 mb-2">Selected Services:</h4>
           <div className="flex flex-wrap gap-2">
             {data.additionalServices.map(service => (
               <Badge key={service.id} variant="secondary" className="bg-blue-100 text-blue-800">
@@ -66,7 +66,7 @@ export function AdditionalServicesStep({ data, onChange }: AdditionalServicesSte
 
       {availableServices.length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
-          <p>Nessun servizio disponibile. Vai alla sezione "Servizi" per crearne alcuni.</p>
+          <p>No services available. Go to the "Services" section to create some.</p>
         </div>
       )}
 
@@ -110,7 +110,7 @@ export function AdditionalServicesStep({ data, onChange }: AdditionalServicesSte
 
       {data.additionalServices.length === 0 && availableServices.length > 0 && (
         <div className="text-center py-8 text-muted-foreground">
-          <p>Nessun servizio aggiuntivo selezionato. I servizi sono opzionali.</p>
+          <p>No additional services selected. Services are optional.</p>
         </div>
       )}
     </div>

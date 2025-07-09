@@ -32,11 +32,11 @@ export function PackageSummary({ data }: PackageSummaryProps) {
     return (
       <Card className="sticky top-4">
         <CardHeader>
-          <CardTitle className="text-base">Riepilogo Package</CardTitle>
+          <CardTitle className="text-base">Package Summary</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground text-center py-4">
-            Inizia compilando le informazioni base per vedere il riepilogo
+            Start by filling in the basic information to see the summary
           </p>
         </CardContent>
       </Card>
@@ -46,7 +46,7 @@ export function PackageSummary({ data }: PackageSummaryProps) {
   return (
     <Card className="sticky top-4">
       <CardHeader>
-        <CardTitle className="text-base">Riepilogo Package</CardTitle>
+        <CardTitle className="text-base">Package Summary</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Basic Info */}
@@ -66,7 +66,7 @@ export function PackageSummary({ data }: PackageSummaryProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">{data.calculatedDuration} settimane</span>
+            <span className="text-sm">{data.calculatedDuration} weeks</span>
           </div>
           <div className="text-right">
             <div className="text-lg font-bold text-primary">€{data.finalPrice.toFixed(2)}</div>
@@ -78,7 +78,7 @@ export function PackageSummary({ data }: PackageSummaryProps) {
         
         {data.discount > 0 && (
           <Badge variant="secondary" className="bg-green-100 text-green-800">
-            Sconto {data.discount}%
+            Discount {data.discount}%
           </Badge>
         )}
 
@@ -87,13 +87,13 @@ export function PackageSummary({ data }: PackageSummaryProps) {
         {/* Sessions */}
         {totalSessions > 0 && (
           <div>
-            <h5 className="text-sm font-medium mb-2">Sessioni ({totalSessions})</h5>
+            <h5 className="text-sm font-medium mb-2">Sessions ({totalSessions})</h5>
             <div className="space-y-1">
               {data.sessions.individual.count > 0 && (
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1">
                     <User className="h-3 w-3" />
-                    <span>Individuali</span>
+                    <span>Individual</span>
                   </div>
                   <span>{data.sessions.individual.count}</span>
                 </div>
@@ -102,7 +102,7 @@ export function PackageSummary({ data }: PackageSummaryProps) {
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1">
                     <Users className="h-3 w-3" />
-                    <span>Gruppo</span>
+                    <span>Group</span>
                   </div>
                   <span>{data.sessions.group.count}</span>
                 </div>
@@ -123,12 +123,12 @@ export function PackageSummary({ data }: PackageSummaryProps) {
         {/* Programs */}
         {data.selectedPrograms.length > 0 && (
           <div>
-            <h5 className="text-sm font-medium mb-2">Programmi ({data.selectedPrograms.length})</h5>
+            <h5 className="text-sm font-medium mb-2">Programs ({data.selectedPrograms.length})</h5>
             <div className="space-y-1">
               {data.selectedPrograms.map((program, index) => (
                 <div key={index} className="text-xs">
                   <div className="font-medium">{program.title}</div>
-                  <div className="text-muted-foreground">{program.duration} settimane - €{program.price}</div>
+                  <div className="text-muted-foreground">{program.duration} weeks - €{program.price}</div>
                 </div>
               ))}
             </div>
@@ -138,7 +138,7 @@ export function PackageSummary({ data }: PackageSummaryProps) {
         {/* Services */}
         {data.additionalServices.length > 0 && (
           <div>
-            <h5 className="text-sm font-medium mb-2">Servizi ({data.additionalServices.length})</h5>
+            <h5 className="text-sm font-medium mb-2">Services ({data.additionalServices.length})</h5>
             <div className="space-y-1">
               {data.additionalServices.map((service, index) => (
                 <div key={index} className="flex justify-between text-xs">
@@ -154,7 +154,7 @@ export function PackageSummary({ data }: PackageSummaryProps) {
         {data.finalPrice > 0 && data.calculatedDuration > 0 && (
           <div className="pt-2 border-t">
             <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span>Prezzo per settimana:</span>
+              <span>Price per week:</span>
               <span>€{(data.finalPrice / data.calculatedDuration).toFixed(2)}</span>
             </div>
           </div>

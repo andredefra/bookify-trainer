@@ -35,30 +35,30 @@ export function SessionsStep({ data, onChange }: SessionsStepProps) {
   const sessionTypes = [
     {
       key: 'individual' as const,
-      title: 'Sessioni Individuali',
+      title: 'Individual Sessions',
       icon: User,
-      description: 'Allenamento 1-on-1 personalizzato'
+      description: 'Personalized 1-on-1 training'
     },
     {
       key: 'group' as const,
-      title: 'Sessioni di Gruppo',
+      title: 'Group Sessions',
       icon: Users,
-      description: 'Allenamento in piccoli gruppi (2-4 persone)'
+      description: 'Small group training (2-4 people)'
     },
     {
       key: 'online' as const,
-      title: 'Sessioni Online',
+      title: 'Online Sessions',
       icon: Video,
-      description: 'Allenamento tramite videochiamata'
+      description: 'Training via video call'
     }
   ];
 
   return (
     <div className="space-y-4">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Configura le Sessioni</h3>
+        <h3 className="text-lg font-semibold">Configure Sessions</h3>
         <p className="text-sm text-muted-foreground">
-          Seleziona il numero di sessioni e il prezzo per ogni tipologia
+          Select the number of sessions and price for each type
         </p>
       </div>
 
@@ -73,7 +73,7 @@ export function SessionsStep({ data, onChange }: SessionsStepProps) {
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor={`${key}-count`}>Numero di Sessioni</Label>
+              <Label htmlFor={`${key}-count`}>Number of Sessions</Label>
               <Input
                 id={`${key}-count`}
                 type="number"
@@ -84,7 +84,7 @@ export function SessionsStep({ data, onChange }: SessionsStepProps) {
               />
             </div>
             <div>
-              <Label htmlFor={`${key}-price`}>Prezzo per Sessione (€)</Label>
+              <Label htmlFor={`${key}-price`}>Price per Session (€)</Label>
               <Input
                 id={`${key}-price`}
                 type="number"
@@ -101,8 +101,8 @@ export function SessionsStep({ data, onChange }: SessionsStepProps) {
 
       <div className="mt-4 p-3 bg-blue-50 rounded-lg">
         <p className="text-sm text-blue-800">
-          <strong>Tip:</strong> La durata del package sarà calcolata automaticamente basandosi sul numero di sessioni 
-          (assumendo 2 sessioni a settimana) e sulla durata dei programmi selezionati.
+          <strong>Tip:</strong> Package duration will be calculated automatically based on the number of sessions 
+          (assuming 2 sessions per week) and the duration of selected programs.
         </p>
       </div>
     </div>

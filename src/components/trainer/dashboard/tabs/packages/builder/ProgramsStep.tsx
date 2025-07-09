@@ -78,19 +78,19 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
   return (
     <div className="space-y-4">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Seleziona Programmi di Allenamento</h3>
+        <h3 className="text-lg font-semibold">Select Training Programs</h3>
         <p className="text-sm text-muted-foreground">
-          Aggiungi programmi di allenamento strutturati al tuo package
+          Add structured training programs to your package
         </p>
       </div>
 
       {data.selectedPrograms.length > 0 && (
         <div className="mb-4 p-4 bg-green-50 rounded-lg">
-          <h4 className="font-medium text-green-800 mb-2">Programmi Selezionati:</h4>
+          <h4 className="font-medium text-green-800 mb-2">Selected Programs:</h4>
           <div className="flex flex-wrap gap-2">
             {data.selectedPrograms.map(program => (
               <Badge key={program.id} variant="secondary" className="bg-green-100 text-green-800">
-                {program.title} ({program.duration} settimane - €{program.price})
+                {program.title} ({program.duration} weeks - €{program.price})
               </Badge>
             ))}
           </div>
@@ -119,7 +119,7 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
                     <div>
                       <CardTitle className="text-base">{program.title}</CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Programma di {program.duration} settimane
+                        {program.duration} weeks program
                       </p>
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
-                    <span>{program.duration} settimane</span>
+                    <span>{program.duration} weeks</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Euro className="h-4 w-4" />
@@ -144,7 +144,7 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
 
       {data.selectedPrograms.length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
-          <p>Nessun programma selezionato. I programmi sono opzionali.</p>
+          <p>No programs selected. Programs are optional.</p>
         </div>
       )}
     </div>

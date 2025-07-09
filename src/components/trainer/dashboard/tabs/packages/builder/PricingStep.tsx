@@ -32,9 +32,9 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
   return (
     <div className="space-y-6">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Prezzo e Sconto</h3>
+        <h3 className="text-lg font-semibold">Price and Discount</h3>
         <p className="text-sm text-muted-foreground">
-          Rivedi il prezzo calcolato e applica uno sconto se necessario
+          Review the calculated price and apply a discount if needed
         </p>
       </div>
 
@@ -43,13 +43,13 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Calculator className="h-4 w-4" />
-            Riepilogo Prezzo
+            Price Summary
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span>Sessioni di allenamento:</span>
+              <span>Training sessions:</span>
               <span>€{(
                 (data.sessions?.individual?.count || 0) * (data.sessions?.individual?.pricePerSession || 0) +
                 (data.sessions?.group?.count || 0) * (data.sessions?.group?.pricePerSession || 0) +
@@ -59,14 +59,14 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
             
             {data.selectedPrograms?.length > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Programmi di allenamento:</span>
+                <span>Training programs:</span>
                 <span>€{data.selectedPrograms.reduce((sum: number, program: any) => sum + program.price, 0).toFixed(2)}</span>
               </div>
             )}
             
             {data.additionalServices?.length > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Servizi aggiuntivi:</span>
+                <span>Additional services:</span>
                 <span>€{data.additionalServices.reduce((sum: number, service: any) => sum + service.price, 0).toFixed(2)}</span>
               </div>
             )}
@@ -75,7 +75,7 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
           <Separator />
           
           <div className="flex justify-between font-medium">
-            <span>Prezzo base:</span>
+            <span>Base price:</span>
             <span>€{data.basePrice.toFixed(2)}</span>
           </div>
         </CardContent>
@@ -86,12 +86,12 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Percent className="h-4 w-4" />
-            Sconto
+            Discount
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="discount">Percentuale di sconto (0-50%)</Label>
+            <Label htmlFor="discount">Discount percentage (0-50%)</Label>
             <div className="mt-2 space-y-4">
               <Slider
                 value={[data.discount]}
@@ -119,7 +119,7 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
           {data.discount > 0 && (
             <div className="p-3 bg-green-50 rounded-lg">
               <div className="flex justify-between text-sm">
-                <span>Sconto applicato:</span>
+                <span>Applied discount:</span>
                 <span className="text-green-600">-€{(data.basePrice * data.discount / 100).toFixed(2)}</span>
               </div>
             </div>
@@ -132,7 +132,7 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg text-primary">
             <Euro className="h-5 w-5" />
-            Prezzo Finale
+            Final Price
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -140,9 +140,9 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
             <div className="text-3xl font-bold text-primary">€{data.finalPrice.toFixed(2)}</div>
             {data.calculatedDuration > 0 && (
               <div className="text-sm text-muted-foreground mt-1">
-                Durata: {data.calculatedDuration} settimane
+                Duration: {data.calculatedDuration} weeks
                 <br />
-                €{(data.finalPrice / data.calculatedDuration).toFixed(2)} per settimana
+                €{(data.finalPrice / data.calculatedDuration).toFixed(2)} per week
               </div>
             )}
           </div>
@@ -152,7 +152,7 @@ export function PricingStep({ data, onChange }: PricingStepProps) {
       {data.finalPrice === 0 && (
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <p className="text-amber-800 text-sm">
-            <strong>Attenzione:</strong> Il prezzo risulta €0. Assicurati di aver selezionato almeno una sessione o un programma.
+            <strong>Warning:</strong> The price is €0. Make sure you have selected at least one session or program.
           </p>
         </div>
       )}

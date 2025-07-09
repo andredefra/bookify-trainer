@@ -138,46 +138,46 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
 
   const handleSubmit = async () => {
     if (!packageData.title.trim()) {
-      toast.error("Il titolo del package è obbligatorio");
+      toast.error("Package title is required");
       setCurrentStep("basic");
       return;
     }
 
     // Validate based on package type
-    const validateByType = () => {
-      switch (packageData.type) {
-        case 'sessions_only':
-          const totalSessions = packageData.sessions.individual.count + 
-                               packageData.sessions.group.count + 
-                               packageData.sessions.online.count;
-          return totalSessions > 0;
-        case 'program_only':
-          return packageData.selectedPrograms.length > 0;
-        case 'service':
-          return packageData.additionalServices.length > 0;
-        case 'hybrid':
-          const hasSessions = (packageData.sessions.individual.count + 
-                              packageData.sessions.group.count + 
-                              packageData.sessions.online.count) > 0;
-          const hasPrograms = packageData.selectedPrograms.length > 0;
-          return hasSessions || hasPrograms;
-        default:
-          return false;
-      }
-    };
+      const validateByType = () => {
+        switch (packageData.type) {
+          case 'sessions_only':
+            const totalSessions = packageData.sessions.individual.count + 
+                                 packageData.sessions.group.count + 
+                                 packageData.sessions.online.count;
+            return totalSessions > 0;
+          case 'program_only':
+            return packageData.selectedPrograms.length > 0;
+          case 'service':
+            return packageData.additionalServices.length > 0;
+          case 'hybrid':
+            const hasSessions = (packageData.sessions.individual.count + 
+                                packageData.sessions.group.count + 
+                                packageData.sessions.online.count) > 0;
+            const hasPrograms = packageData.selectedPrograms.length > 0;
+            return hasSessions || hasPrograms;
+          default:
+            return false;
+        }
+      };
 
-    if (!validateByType()) {
-      toast.error("Seleziona almeno un componente in base al tipo di package scelto");
-      return;
-    }
+      if (!validateByType()) {
+        toast.error("Please select at least one component based on the chosen package type");
+        return;
+      }
 
     setIsLoading(true);
     try {
       await onSubmit(packageData);
-      toast.success(editData ? "Package aggiornato con successo!" : "Package creato con successo!");
+      toast.success(editData ? "Package updated successfully!" : "Package created successfully!");
       onOpenChange(false);
     } catch (error) {
-      toast.error("Errore durante il salvataggio del package");
+      toast.error("Error saving package");
     } finally {
       setIsLoading(false);
     }
@@ -235,7 +235,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {editData ? "Modifica Package" : "Crea Nuovo Package"}
+            {editData ? "Edit Package" : "Create New Package"}
           </DialogTitle>
         </DialogHeader>
 
@@ -244,17 +244,17 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
           <div className="lg:col-span-2">
             <Tabs value={currentStep} onValueChange={setCurrentStep}>
               <TabsList className={`grid w-full grid-cols-${availableSteps.length}`}>
-                <TabsTrigger value="basic" disabled={false}>Base</TabsTrigger>
+                <TabsTrigger value="basic" disabled={false}>Basic</TabsTrigger>
                 {availableSteps.includes("sessions") && (
-                  <TabsTrigger value="sessions" disabled={!isStepValid("basic")}>Sessioni</TabsTrigger>
+                  <TabsTrigger value="sessions" disabled={!isStepValid("basic")}>Sessions</TabsTrigger>
                 )}
                 {availableSteps.includes("programs") && (
-                  <TabsTrigger value="programs" disabled={!isStepValid("basic")}>Programmi</TabsTrigger>
+                  <TabsTrigger value="programs" disabled={!isStepValid("basic")}>Programs</TabsTrigger>
                 )}
                 {availableSteps.includes("services") && (
-                  <TabsTrigger value="services" disabled={!isStepValid("basic")}>Servizi</TabsTrigger>
+                  <TabsTrigger value="services" disabled={!isStepValid("basic")}>Services</TabsTrigger>
                 )}
-                <TabsTrigger value="pricing" disabled={!isStepValid("basic")}>Prezzo</TabsTrigger>
+                <TabsTrigger value="pricing" disabled={!isStepValid("basic")}>Pricing</TabsTrigger>
               </TabsList>
 
               <div className="mt-6">
@@ -311,7 +311,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
                   }}
                   disabled={!getPrevStep(currentStep)}
                 >
-                  Indietro
+                  Back
                 </Button>
 
                 <div className="flex gap-2">
@@ -320,7 +320,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
                     variant="outline"
                     onClick={() => onOpenChange(false)}
                   >
-                    Annulla
+                    Cancel
                   </Button>
 
                   {currentStep === "pricing" ? (
@@ -328,7 +328,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
                       onClick={handleSubmit}
                       disabled={isLoading || !isStepValid(currentStep)}
                     >
-                      {isLoading ? "Salvando..." : editData ? "Aggiorna Package" : "Crea Package"}
+                      {isLoading ? "Saving..." : editData ? "Update Package" : "Create Package"}
                     </Button>
                   ) : (
                     <Button
@@ -338,7 +338,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
                       }}
                       disabled={!isStepValid(currentStep) || !getNextStep(currentStep)}
                     >
-                      Avanti
+                      Next
                     </Button>
                   )}
                 </div>
