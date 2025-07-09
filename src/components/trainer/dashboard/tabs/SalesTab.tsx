@@ -25,16 +25,16 @@ export function SalesTab() {
     <div className="space-y-4 max-w-full overflow-hidden">
       <Card className="w-full">
         <SalesHeader onAddLead={() => setShowAddLeadDialog(true)} />
-        <CardContent className="p-4 space-y-6">
+        <CardContent className="p-3 md:p-4 lg:p-6 space-y-4 md:space-y-6">
           {/* Time-based Analytics */}
           <div className="w-full">
             <SalesTimeAnalytics contacts={contacts} />
           </div>
           
           {/* Sales Funnel Section */}
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Sales Funnel</h3>
+              <h3 className="text-base md:text-lg font-semibold">Sales Funnel</h3>
             </div>
             
             {/* Client and Prospect Metrics */}
@@ -45,7 +45,7 @@ export function SalesTab() {
             )}
             
             {/* Kanban Board */}
-            <div className="w-full">
+            <div className="w-full overflow-hidden">
               <DndProvider backend={HTML5Backend}>
                 <SalesKanban 
                   contacts={contacts} 

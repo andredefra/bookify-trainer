@@ -15,6 +15,7 @@ import {
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 const mockTimeSeriesData = {
   day: [
@@ -76,6 +77,8 @@ const mockTimeSeriesData = {
 
 export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   
   const chartConfig = {
     leads: {
@@ -106,27 +109,55 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     const data = mockTimeSeriesData[timeFrame];
     
     return (
-      <BarChart data={data} margin={{ right: 10, left: 0, bottom: 10 }}>
+      <BarChart 
+        data={data} 
+        margin={{ 
+          right: isMobile ? 5 : isTablet ? 10 : 20, 
+          left: isMobile ? 5 : 10, 
+          bottom: isMobile ? 20 : 10,
+          top: 10
+        }}
+      >
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis 
           dataKey="name" 
           stroke="#6b7280" 
-          fontSize={12}
+          fontSize={isMobile ? 10 : 12}
           tickLine={false}
           axisLine={{ stroke: "#d1d5db" }}
+          interval={isMobile ? 'preserveStartEnd' : 0}
         />
         <YAxis 
           stroke="#6b7280" 
-          fontSize={12}
+          fontSize={isMobile ? 10 : 12}
           tickLine={false}
           axisLine={{ stroke: "#d1d5db" }}
           tickFormatter={(value) => `${value}`}
+          width={isMobile ? 30 : 40}
         />
         <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
-        <Legend />
-        <Bar dataKey="leads" name="Leads" fill="var(--color-leads)" radius={[4, 4, 0, 0]} barSize={20} />
-        <Bar dataKey="prospects" name="Prospects" fill="var(--color-prospects)" radius={[4, 4, 0, 0]} barSize={20} />
-        <Bar dataKey="clients" name="Clients" fill="var(--color-clients)" radius={[4, 4, 0, 0]} barSize={20} />
+        {!isMobile && <Legend />}
+        <Bar 
+          dataKey="leads" 
+          name="Leads" 
+          fill="var(--color-leads)" 
+          radius={[2, 2, 0, 0]} 
+          barSize={isMobile ? 12 : isTablet ? 16 : 20} 
+        />
+        <Bar 
+          dataKey="prospects" 
+          name="Prospects" 
+          fill="var(--color-prospects)" 
+          radius={[2, 2, 0, 0]} 
+          barSize={isMobile ? 12 : isTablet ? 16 : 20} 
+        />
+        <Bar 
+          dataKey="clients" 
+          name="Clients" 
+          fill="var(--color-clients)" 
+          radius={[2, 2, 0, 0]} 
+          barSize={isMobile ? 12 : isTablet ? 16 : 20} 
+        />
       </BarChart>
     );
   };
@@ -141,15 +172,29 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
 
   return (
     <div className="w-full mt-4">
-      <div className={`${isMobile ? 'h-[300px]' : 'h-[400px]'} max-h-[50vh]`}>
+      <div className={cn(
+        "relative w-full",
+        isMobile && "h-[280px]",
+        isTablet && "h-[350px]", 
+        isDesktop && "h-[400px]",
+        "min-h-[250px] max-h-[60vh]"
+      )}>
         {isMobile ? (
           <ScrollArea className="h-full w-full" orientation="horizontal">
-            <div className="h-full min-w-[600px] pr-4">
+            <div className="h-full min-w-[500px] pr-4">
+              {chartContent}
+            </div>
+          </ScrollArea>
+        ) : isTablet ? (
+          <ScrollArea className="h-full w-full" orientation="horizontal">
+            <div className="h-full min-w-[700px] pr-4">
               {chartContent}
             </div>
           </ScrollArea>
         ) : (
-          chartContent
+          <div className="h-full w-full">
+            {chartContent}
+          </div>
         )}
       </div>
     </div>

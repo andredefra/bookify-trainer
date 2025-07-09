@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import { SalesContact } from "./types";
 import { SalesCard } from "./SalesCard";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface SalesColumnProps {
   title: string;
@@ -20,6 +21,7 @@ export function SalesColumn({
   onUpdateContact
 }: SalesColumnProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
   
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'contact',
@@ -34,17 +36,40 @@ export function SalesColumn({
   return (
     <div 
       ref={drop} 
-      className={`${isMobile ? 'min-w-[200px] w-[200px]' : 'min-w-[280px] w-[280px]'} flex flex-col rounded-md h-full ${isOver ? 'bg-muted/80' : 'bg-muted/30'}`}
+      className={cn(
+        "flex flex-col rounded-md h-full transition-colors duration-200",
+        isMobile && "min-w-[180px] w-[180px]",
+        isTablet && "min-w-[220px] w-[220px]",
+        !isMobile && !isTablet && "min-w-[280px] w-[280px]",
+        isOver ? "bg-muted/80" : "bg-muted/30"
+      )}
     >
       <div className="p-3 font-medium border-b bg-muted/50 sticky top-0 z-10 rounded-t-md flex justify-between items-center">
-        <span className={`text-sm font-semibold ${isMobile ? 'text-xs' : 'text-sm'}`}>{title}</span>
+        <span className={cn(
+          "font-semibold",
+          isMobile && "text-xs",
+          isTablet && "text-sm",
+          !isMobile && !isTablet && "text-sm"
+        )}>
+          {title}
+        </span>
         <span className="text-xs font-normal px-2 py-1 bg-background rounded-full">
           {contacts.length}
         </span>
       </div>
       
-      <div className={`flex-1 overflow-y-auto ${isMobile ? 'p-1.5' : 'p-2'}`}>
-        <div className={`flex flex-col ${isMobile ? 'gap-2' : 'gap-3'} min-h-full`}>
+      <div className={cn(
+        "flex-1 overflow-y-auto",
+        isMobile && "p-1.5",
+        isTablet && "p-2",
+        !isMobile && !isTablet && "p-2"
+      )}>
+        <div className={cn(
+          "flex flex-col min-h-full",
+          isMobile && "gap-2",
+          isTablet && "gap-2.5",
+          !isMobile && !isTablet && "gap-3"
+        )}>
           {contacts.map(contact => (
             <SalesCard 
               key={contact.id} 
@@ -54,8 +79,11 @@ export function SalesColumn({
           ))}
           
           {contacts.length === 0 && (
-            <div className="flex items-center justify-center h-24 text-muted-foreground text-sm border border-dashed rounded-md">
-              Drag contacts here
+            <div className={cn(
+              "flex items-center justify-center h-24 text-muted-foreground text-sm border border-dashed rounded-md",
+              isMobile && "h-16 text-xs"
+            )}>
+              {isMobile ? "Drag here" : "Drag contacts here"}
             </div>
           )}
         </div>

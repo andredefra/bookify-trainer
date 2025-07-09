@@ -99,8 +99,8 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
           upcomingSessions={sampleSessions}
         />
         
-        <main className="flex-1 overflow-y-auto bg-muted/20 p-3 sm:p-4 md:p-6 lg:p-8">
-          <div className="mx-auto max-w-6xl space-y-4 sm:space-y-6">
+        <main className="flex-1 overflow-y-auto bg-muted/20 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
+          <div className="mx-auto max-w-full xl:max-w-7xl space-y-3 sm:space-y-4 md:space-y-6">
             {activeTab === "overview" && (
               <OverviewTab
                 upcomingSessions={sampleSessions}

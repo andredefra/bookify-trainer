@@ -19,22 +19,24 @@ export function DesktopSidebar({ activeTab, handleTabClick, upcomingSessions = [
   return (
     <div
       className={cn(
-        "pb-12 w-20 md:w-60 flex-shrink-0 bg-white border-r hidden lg:block relative"
+        // Responsive width: icon-only on tablet, full width on desktop
+        "pb-12 w-16 md:w-20 lg:w-60 xl:w-64 flex-shrink-0 bg-white border-r hidden md:block relative",
+        "transition-all duration-200 ease-in-out"
       )}
     >
       <ScrollArea className="py-6 h-full">
-        <div className="flex flex-col flex-1 space-y-1 px-2 md:px-6">
+        <div className="flex flex-col flex-1 space-y-1 px-2 lg:px-6">
           <SidebarNavigation 
             activeTab={activeTab} 
             handleTabClick={handleTabClick} 
           />
         </div>
-        <Separator className="my-4 md:mb-4 md:mt-6" />
-        <div className="px-2 md:px-6">
-          <div className="text-xs md:text-sm font-medium text-muted-foreground hidden md:block mb-2">
+        <Separator className="my-4 lg:mb-4 lg:mt-6" />
+        <div className="px-2 lg:px-6">
+          <div className="text-xs lg:text-sm font-medium text-muted-foreground hidden lg:block mb-2">
             Upcoming
           </div>
-          <div className="md:flex flex-col space-y-1 hidden">
+          <div className="lg:flex flex-col space-y-1 hidden">
             {nextSessions.length > 0 ? (
               nextSessions.map((session) => {
                 // Format date if it's a Date object

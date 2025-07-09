@@ -26,6 +26,7 @@ interface SidebarNavigationProps {
 
 export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigationProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
 
   const navigationItems = [
     {
@@ -104,17 +105,29 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
           key={item.href}
           variant={activeTab === item.href ? "default" : "ghost"}
           className={cn(
-            "justify-start relative",
-            !isDesktop && "justify-center md:justify-start"
+            "justify-start relative transition-all duration-200",
+            // Tablet: center icons, Desktop: full layout
+            isTablet && "justify-center w-12 h-12 p-0",
+            isDesktop && "justify-start",
+            !isDesktop && !isTablet && "justify-center md:justify-start"
           )}
           onClick={() => handleTabClick(item.href)}
           type="button" 
           tabIndex={0}
           data-lpignore="true"
         >
-          <item.icon className="w-5 h-5 md:mr-2" />
-          <span className="hidden md:inline-flex">{item.title}</span>
-          {item.badge && (
+          <item.icon className={cn(
+            "w-5 h-5",
+            isDesktop && "lg:mr-2",
+            !isTablet && "md:mr-2"
+          )} />
+          <span className={cn(
+            "truncate",
+            isTablet ? "hidden" : "hidden lg:inline-flex"
+          )}>
+            {item.title}
+          </span>
+          {item.badge && isDesktop && (
             <Badge className="ml-auto">{item.badge}</Badge>
           )}
         </Button>
