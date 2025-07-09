@@ -112,6 +112,17 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     const chartWidth = isVeryNarrow ? 300 : isMobile ? 400 : isTablet ? 580 : 800;
     const chartHeight = isVeryNarrow ? 180 : isMobile ? 220 : isTablet ? 280 : 330;
     
+    console.log('SalesChart Debug:', {
+      timeFrame,
+      data: data?.length,
+      chartWidth,
+      chartHeight,
+      isVeryNarrow,
+      isMobile,
+      isTablet,
+      isDesktop
+    });
+    
     return (
       <BarChart 
         data={data}
@@ -143,26 +154,26 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
           width={isVeryNarrow ? 20 : isMobile ? 25 : 35}
           tick={{ fontSize: isVeryNarrow ? 8 : isMobile ? 9 : 11 }}
         />
-        <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+        <Tooltip />
         {!isMobile && <Legend fontSize={10} />}
         <Bar 
           dataKey="leads" 
           name="Leads" 
-          fill="var(--color-leads)" 
+          fill="#3b82f6"
           radius={[1, 1, 0, 0]} 
           barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
         />
         <Bar 
           dataKey="prospects" 
           name="Prospects" 
-          fill="var(--color-prospects)" 
+          fill="#10b981"
           radius={[1, 1, 0, 0]} 
           barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
         />
         <Bar 
           dataKey="clients" 
           name="Clients" 
-          fill="var(--color-clients)" 
+          fill="#f59e0b"
           radius={[1, 1, 0, 0]} 
           barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
         />
@@ -170,11 +181,8 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     );
   };
 
-  const chartContent = (
-    <ChartContainer className="w-full h-full" config={chartConfig}>
-      {renderTimeframeChart()}
-    </ChartContainer>
-  );
+  // Render chart directly without containers
+  const chartContent = renderTimeframeChart();
 
   return (
     <div className="w-full mt-2 md:mt-4">
