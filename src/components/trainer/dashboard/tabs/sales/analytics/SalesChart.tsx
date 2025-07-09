@@ -108,9 +108,9 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   const renderTimeframeChart = () => {
     const data = mockTimeSeriesData[timeFrame];
     
-    // Calculate dynamic dimensions based on screen size
-    const chartWidth = isVeryNarrow ? 300 : isMobile ? 400 : isTablet ? 580 : 800;
-    const chartHeight = isVeryNarrow ? 180 : isMobile ? 220 : isTablet ? 280 : 330;
+    // Calculate dynamic dimensions based on screen size - optimized for mobile visibility
+    const chartWidth = isVeryNarrow ? 360 : isMobile ? 480 : isTablet ? 580 : 800;
+    const chartHeight = isVeryNarrow ? 240 : isMobile ? 280 : isTablet ? 320 : 360;
     
     console.log('SalesChart Debug:', {
       timeFrame,
@@ -129,30 +129,30 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
         width={chartWidth}
         height={chartHeight}
         margin={{ 
-          right: isVeryNarrow ? 5 : isMobile ? 8 : isTablet ? 12 : 20, 
-          left: isVeryNarrow ? 5 : isMobile ? 8 : 12, 
-          bottom: isVeryNarrow ? 20 : isMobile ? 25 : 15,
-          top: isVeryNarrow ? 10 : 15
+          right: isVeryNarrow ? 8 : isMobile ? 12 : isTablet ? 16 : 24, 
+          left: isVeryNarrow ? 8 : isMobile ? 12 : 16, 
+          bottom: isVeryNarrow ? 25 : isMobile ? 30 : 20,
+          top: isVeryNarrow ? 15 : 20
         }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis 
           dataKey="name" 
           stroke="#6b7280" 
-          fontSize={isVeryNarrow ? 8 : isMobile ? 9 : 11}
+          fontSize={isVeryNarrow ? 10 : isMobile ? 11 : 12}
           tickLine={false}
           axisLine={{ stroke: "#d1d5db" }}
           interval={isVeryNarrow ? 'preserveStartEnd' : isMobile ? 'preserveStartEnd' : 0}
-          tick={{ fontSize: isVeryNarrow ? 8 : isMobile ? 9 : 11 }}
+          tick={{ fontSize: isVeryNarrow ? 10 : isMobile ? 11 : 12 }}
         />
         <YAxis 
           stroke="#6b7280" 
-          fontSize={isVeryNarrow ? 8 : isMobile ? 9 : 11}
+          fontSize={isVeryNarrow ? 10 : isMobile ? 11 : 12}
           tickLine={false}
           axisLine={{ stroke: "#d1d5db" }}
           tickFormatter={(value) => `${value}`}
-          width={isVeryNarrow ? 20 : isMobile ? 25 : 35}
-          tick={{ fontSize: isVeryNarrow ? 8 : isMobile ? 9 : 11 }}
+          width={isVeryNarrow ? 25 : isMobile ? 30 : 40}
+          tick={{ fontSize: isVeryNarrow ? 10 : isMobile ? 11 : 12 }}
         />
         <Tooltip />
         {!isMobile && <Legend fontSize={10} />}
@@ -161,21 +161,21 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
           name="Leads" 
           fill="#3b82f6"
           radius={[1, 1, 0, 0]} 
-          barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
+          barSize={isVeryNarrow ? 12 : isMobile ? 14 : isTablet ? 16 : 20}
         />
         <Bar 
           dataKey="prospects" 
           name="Prospects" 
           fill="#10b981"
           radius={[1, 1, 0, 0]} 
-          barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
+          barSize={isVeryNarrow ? 12 : isMobile ? 14 : isTablet ? 16 : 20} 
         />
         <Bar 
           dataKey="clients" 
           name="Clients" 
           fill="#f59e0b"
           radius={[1, 1, 0, 0]} 
-          barSize={isVeryNarrow ? 8 : isMobile ? 10 : isTablet ? 14 : 18} 
+          barSize={isVeryNarrow ? 12 : isMobile ? 14 : isTablet ? 16 : 20} 
         />
       </BarChart>
     );
@@ -188,10 +188,10 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
     <div className="w-full mt-2 md:mt-4">
       <div className={cn(
         "relative w-full border border-border/20 rounded-lg bg-card/50 p-2",
-        isVeryNarrow && "h-[200px] min-h-[200px]",
-        isMobile && !isVeryNarrow && "h-[240px] min-h-[240px]",
-        isTablet && "h-[300px] min-h-[300px]", 
-        isDesktop && "h-[350px] min-h-[350px]"
+        isVeryNarrow && "h-[260px] min-h-[260px]",
+        isMobile && !isVeryNarrow && "h-[300px] min-h-[300px]",
+        isTablet && "h-[340px] min-h-[340px]", 
+        isDesktop && "h-[380px] min-h-[380px]"
       )}>
         {isVeryNarrow ? (
           <div className="h-full w-full overflow-hidden">
