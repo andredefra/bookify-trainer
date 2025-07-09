@@ -34,7 +34,7 @@ export function SalesColumn({
   return (
     <div 
       ref={drop} 
-      className={`${isMobile ? 'w-[240px]' : 'w-[300px]'} flex flex-col rounded-md ${isOver ? 'bg-muted/80' : 'bg-muted/30'}`}
+      className={`${isMobile ? 'min-w-[200px] w-[200px]' : 'min-w-[280px] w-[280px]'} flex flex-col rounded-md h-full ${isOver ? 'bg-muted/80' : 'bg-muted/30'}`}
     >
       <div className="p-3 font-medium border-b bg-muted/50 sticky top-0 z-10 rounded-t-md flex justify-between items-center">
         <span className={`text-sm font-semibold ${isMobile ? 'text-xs' : 'text-sm'}`}>{title}</span>
@@ -43,8 +43,8 @@ export function SalesColumn({
         </span>
       </div>
       
-      <div className={`flex-1 ${isMobile ? 'p-1.5' : 'p-2'}`}>
-        <div className={`flex flex-col ${isMobile ? 'gap-2' : 'gap-3'}`}>
+      <div className={`flex-1 overflow-y-auto ${isMobile ? 'p-1.5' : 'p-2'}`}>
+        <div className={`flex flex-col ${isMobile ? 'gap-2' : 'gap-3'} min-h-full`}>
           {contacts.map(contact => (
             <SalesCard 
               key={contact.id} 

@@ -28,9 +28,9 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesK
   });
   
   return (
-    <div className="w-full h-[calc(100vh-200px)] flex flex-col overflow-hidden bg-background/50 rounded-md border">
+    <div className={`w-full ${isMobile ? 'h-[60vh]' : 'h-[70vh]'} max-h-[800px] min-h-[400px] flex flex-col overflow-hidden bg-background/50 rounded-md border`}>
       <ScrollArea className="w-full h-full" orientation="both">
-        <div className={`flex gap-3 p-3 min-w-max h-full ${isMobile ? 'gap-2 p-2' : 'gap-4 p-3'}`}>
+        <div className={`flex ${isMobile ? 'gap-2 p-2' : 'gap-4 p-3'} min-w-max h-full`}>
           <SalesColumn 
             title="Lead" 
             contacts={grouped.lead} 

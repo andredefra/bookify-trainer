@@ -22,34 +22,39 @@ export function SalesTab() {
   } = useSalesContacts();
 
   return (
-    <div className="space-y-4">
-      <Card>
+    <div className="space-y-4 max-w-full overflow-hidden">
+      <Card className="w-full">
         <SalesHeader onAddLead={() => setShowAddLeadDialog(true)} />
-        <CardContent>
+        <CardContent className="p-4 space-y-6">
           {/* Time-based Analytics */}
-          <div className="mb-6">
+          <div className="w-full">
             <SalesTimeAnalytics contacts={contacts} />
           </div>
           
-          {/* Sales Funnel Title */}
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold">Sales Funnel</h3>
-          </div>
-          
-          {/* Client and Prospect Metrics */}
-          {(clientContacts.length > 0 || prospectContacts.length > 0) && (
-            <div className="mb-4">
-              <SalesMetrics clients={clientContacts} prospects={prospectContacts} />
+          {/* Sales Funnel Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Sales Funnel</h3>
             </div>
-          )}
-          
-          <DndProvider backend={HTML5Backend}>
-            <SalesKanban 
-              contacts={contacts} 
-              onMoveContact={handleMoveContact}
-              onUpdateContact={handleUpdateContact} 
-            />
-          </DndProvider>
+            
+            {/* Client and Prospect Metrics */}
+            {(clientContacts.length > 0 || prospectContacts.length > 0) && (
+              <div className="w-full">
+                <SalesMetrics clients={clientContacts} prospects={prospectContacts} />
+              </div>
+            )}
+            
+            {/* Kanban Board */}
+            <div className="w-full">
+              <DndProvider backend={HTML5Backend}>
+                <SalesKanban 
+                  contacts={contacts} 
+                  onMoveContact={handleMoveContact}
+                  onUpdateContact={handleUpdateContact} 
+                />
+              </DndProvider>
+            </div>
+          </div>
         </CardContent>
       </Card>
 

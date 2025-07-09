@@ -45,23 +45,23 @@ const mockTimeSeriesData = {
     { name: "30", leads: 52, prospects: 35, clients: 22 },
   ],
   quarter: [
-    { name: "Gen", leads: 150, prospects: 60, clients: 20 },
+    { name: "Jan", leads: 150, prospects: 60, clients: 20 },
     { name: "Feb", leads: 180, prospects: 75, clients: 35 },
     { name: "Mar", leads: 210, prospects: 90, clients: 45 },
   ],
   year: [
-    { name: "Gen", leads: 180, prospects: 75, clients: 35 },
+    { name: "Jan", leads: 180, prospects: 75, clients: 35 },
     { name: "Feb", leads: 160, prospects: 70, clients: 30 },
     { name: "Mar", leads: 210, prospects: 95, clients: 45 },
     { name: "Apr", leads: 240, prospects: 110, clients: 50 },
-    { name: "Mag", leads: 280, prospects: 130, clients: 65 },
-    { name: "Giu", leads: 320, prospects: 150, clients: 80 },
-    { name: "Lug", leads: 360, prospects: 180, clients: 90 },
-    { name: "Ago", leads: 340, prospects: 165, clients: 85 },
-    { name: "Set", leads: 380, prospects: 190, clients: 100 },
-    { name: "Ott", leads: 400, prospects: 210, clients: 110 },
+    { name: "May", leads: 280, prospects: 130, clients: 65 },
+    { name: "Jun", leads: 320, prospects: 150, clients: 80 },
+    { name: "Jul", leads: 360, prospects: 180, clients: 90 },
+    { name: "Aug", leads: 340, prospects: 165, clients: 85 },
+    { name: "Sep", leads: 380, prospects: 190, clients: 100 },
+    { name: "Oct", leads: 400, prospects: 210, clients: 110 },
     { name: "Nov", leads: 420, prospects: 220, clients: 120 },
-    { name: "Dic", leads: 450, prospects: 240, clients: 130 },
+    { name: "Dec", leads: 450, prospects: 240, clients: 130 },
   ],
   custom: [
     { name: "1/4", leads: 25, prospects: 10, clients: 5 },
@@ -140,16 +140,18 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   );
 
   return (
-    <div className="w-full h-[500px] mt-4">
-      {isMobile ? (
-        <ScrollArea className="h-full w-full overflow-visible pb-4" orientation="horizontal">
-          <div className="h-[94%] min-w-[800px]">
-            {chartContent}
-          </div>
-        </ScrollArea>
-      ) : (
-        chartContent
-      )}
+    <div className="w-full mt-4">
+      <div className={`${isMobile ? 'h-[300px]' : 'h-[400px]'} max-h-[50vh]`}>
+        {isMobile ? (
+          <ScrollArea className="h-full w-full" orientation="horizontal">
+            <div className="h-full min-w-[600px] pr-4">
+              {chartContent}
+            </div>
+          </ScrollArea>
+        ) : (
+          chartContent
+        )}
+      </div>
     </div>
   );
 }
