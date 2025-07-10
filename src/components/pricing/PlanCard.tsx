@@ -1,6 +1,9 @@
 
 import { CheckCircle2, LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { PlanDetailsDialog } from './PlanDetailsDialog';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface PlanCardProps {
   name: string;
@@ -19,6 +22,7 @@ interface PlanCardProps {
   showContactForm?: boolean;
   onContactClick?: () => void;
   isLaunchOffer?: boolean;
+  planType?: 'basic' | 'essential' | 'pro';
 }
 
 export const PlanCard = ({
@@ -37,8 +41,10 @@ export const PlanCard = ({
   transactionFeeNote,
   showContactForm = false,
   onContactClick,
-  isLaunchOffer = false
+  isLaunchOffer = false,
+  planType
 }: PlanCardProps) => {
+  const { t } = useLanguage();
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
   
   return (
@@ -100,35 +106,48 @@ export const PlanCard = ({
         ))}
       </ul>
 
-      {showContactForm ? (
-        <button
-          onClick={onContactClick}
-          className={`w-full px-6 py-3 ${
-            isPopular 
-              ? 'bg-primary text-white' 
-              : isGymPlan
-                ? 'bg-gray-800 text-white hover:bg-gray-900'
-                : 'bg-white text-primary border border-primary/20'
-          } rounded-full text-center font-medium button-hover`}
-        >
-          {ctaText}
-        </button>
-      ) : (
-        <Link 
-          to={ctaLink}
-          target={isGymPlan ? "_blank" : undefined}
-          rel={isGymPlan ? "noopener noreferrer" : undefined}
-          className={`w-full px-6 py-3 ${
-            isPopular 
-              ? 'bg-primary text-white' 
-              : isGymPlan
-                ? 'bg-gray-800 text-white hover:bg-gray-900'
-                : 'bg-white text-primary border border-primary/20'
-          } rounded-full text-center font-medium button-hover`}
-        >
-          {ctaText}
-        </Link>
-      )}
+      <div className="space-y-3">
+        {showContactForm ? (
+          <button
+            onClick={onContactClick}
+            className={`w-full px-6 py-3 ${
+              isPopular 
+                ? 'bg-primary text-white' 
+                : isGymPlan
+                  ? 'bg-gray-800 text-white hover:bg-gray-900'
+                  : 'bg-white text-primary border border-primary/20'
+            } rounded-full text-center font-medium button-hover`}
+          >
+            {ctaText}
+          </button>
+        ) : (
+          <Link 
+            to={ctaLink}
+            target={isGymPlan ? "_blank" : undefined}
+            rel={isGymPlan ? "noopener noreferrer" : undefined}
+            className={`w-full px-6 py-3 ${
+              isPopular 
+                ? 'bg-primary text-white' 
+                : isGymPlan
+                  ? 'bg-gray-800 text-white hover:bg-gray-900'
+                  : 'bg-white text-primary border border-primary/20'
+            } rounded-full text-center font-medium button-hover`}
+          >
+            {ctaText}
+          </Link>
+        )}
+        
+        {planType && !isGymPlan && (
+          <PlanDetailsDialog 
+            planType={planType}
+            triggerText={t('pricing.discoverDetails')}
+          >
+            <Button variant="outline" size="sm" className="w-full">
+              {t('pricing.discoverDetails')}
+            </Button>
+          </PlanDetailsDialog>
+        )}
+      </div>
     </div>
   );
 };

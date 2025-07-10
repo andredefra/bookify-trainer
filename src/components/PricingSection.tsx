@@ -82,7 +82,8 @@ const PricingSection = () => {
       ctaLink: '/register?plan=standard',
       isPopular: false,
       isGymPlan: false,
-      isLaunchOffer: true
+      isLaunchOffer: true,
+      planType: 'basic' as const
     },
     {
       name: t('pricing.freemium.title'),
@@ -93,7 +94,8 @@ const PricingSection = () => {
       ctaText: t('pricing.freemium.cta'),
       ctaLink: '/register',
       isPopular: false,
-      isGymPlan: false
+      isGymPlan: false,
+      planType: 'essential' as const
     },
     {
       name: t('pricing.pro.title'),
@@ -104,7 +106,8 @@ const PricingSection = () => {
       ctaText: t('pricing.pro.cta'),
       ctaLink: '/register?plan=pro',
       isPopular: true,
-      isGymPlan: false
+      isGymPlan: false,
+      planType: 'pro' as const
     }
   ];
 
@@ -153,6 +156,7 @@ const PricingSection = () => {
               isLaunchOffer={plan.isLaunchOffer}
               isDelayed={index > 1}
               Icon={index < plans.length ? plans[index].icon : undefined}
+              planType={plan.planType}
             />
           ))}
         </div>
