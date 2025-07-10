@@ -49,6 +49,7 @@ const PricingSection = () => {
     t('pricing.features.customPrograms'),
     t('pricing.features.waitlistManagement'),
     t('pricing.features.sessionAnalytics'),
+    t('pricing.features.packageAnalytics'),
   ];
 
   const proFeatures = [

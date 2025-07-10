@@ -140,6 +140,7 @@ export const it = {
   'pricing.features.customPrograms': 'Programmi Personalizzati',
   'pricing.features.waitlistManagement': 'Gestione Liste d\'Attesa',
   'pricing.features.sessionAnalytics': 'Analisi Sessioni',
+  'pricing.features.packageAnalytics': 'Analisi Pacchetti',
   'pricing.features.everythingEssential': 'Tutto di Essenziale',
   'pricing.features.digitalCashPayments': 'Pagamenti Digitali e in Contanti',
   'pricing.features.paymentInstallments': 'Paga in 3 Rate',

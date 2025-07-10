@@ -140,6 +140,7 @@ export const en = {
   'pricing.features.customPrograms': 'Custom Training Programs',
   'pricing.features.waitlistManagement': 'Waitlist Management',
   'pricing.features.sessionAnalytics': 'Session Analytics',
+  'pricing.features.packageAnalytics': 'Package Analytics',
   'pricing.features.everythingEssential': 'Everything in Essential',
   'pricing.features.digitalCashPayments': 'Digital & Cash Payments',
   'pricing.features.paymentInstallments': 'Payment Installments (Pay in 3)',
