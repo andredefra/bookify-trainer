@@ -43,6 +43,10 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
           description: t('pricing.detailedFeatures.basic.calendar.description')
         },
         {
+          name: t('pricing.detailedFeatures.basic.reviews.name'),
+          description: t('pricing.detailedFeatures.basic.reviews.description')
+        },
+        {
           name: t('pricing.detailedFeatures.basic.analytics.name'),
           description: t('pricing.detailedFeatures.basic.analytics.description')
         }
@@ -54,8 +58,8 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
       // Add Essential-specific features
       features.push(
         {
-          name: t('pricing.detailedFeatures.essential.unlimitedSessions.name'),
-          description: t('pricing.detailedFeatures.essential.unlimitedSessions.description')
+          name: t('pricing.detailedFeatures.essential.sessions.name'),
+          description: t('pricing.detailedFeatures.essential.sessions.description')
         },
         {
           name: t('pricing.detailedFeatures.essential.googleCalendar.name'),
@@ -68,10 +72,6 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
         {
           name: t('pricing.detailedFeatures.essential.programs.name'),
           description: t('pricing.detailedFeatures.essential.programs.description')
-        },
-        {
-          name: t('pricing.detailedFeatures.essential.unlimitedMessaging.name'),
-          description: t('pricing.detailedFeatures.essential.unlimitedMessaging.description')
         },
         {
           name: t('pricing.detailedFeatures.essential.sessionAnalytics.name'),
@@ -109,12 +109,8 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
           description: t('pricing.detailedFeatures.pro.transactions.description')
         },
         {
-          name: t('pricing.detailedFeatures.pro.salesCrm.name'),
-          description: t('pricing.detailedFeatures.pro.salesCrm.description')
-        },
-        {
-          name: t('pricing.detailedFeatures.pro.reviews.name'),
-          description: t('pricing.detailedFeatures.pro.reviews.description')
+          name: t('pricing.detailedFeatures.pro.businessDashboard.name'),
+          description: t('pricing.detailedFeatures.pro.businessDashboard.description')
         },
         {
           name: t('pricing.detailedFeatures.pro.advancedAnalytics.name'),

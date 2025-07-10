@@ -106,56 +106,62 @@ export const PlanCard = ({
         ))}
       </ul>
 
-      <div className="space-y-4">
-        {showContactForm ? (
-          <Button
-            onClick={onContactClick}
-            className={`w-full ${
-              isPopular 
-                ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                : isGymPlan
-                  ? 'bg-gray-800 hover:bg-gray-900 text-white'
-                  : 'bg-primary hover:bg-primary/90 text-primary-foreground'
-            }`}
-            size="lg"
-          >
-            {ctaText}
-          </Button>
-        ) : (
-          <Button
-            asChild
-            className={`w-full ${
-              isPopular 
-                ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                : isGymPlan
-                  ? 'bg-gray-800 hover:bg-gray-900 text-white'
-                  : 'bg-primary hover:bg-primary/90 text-primary-foreground'
-            }`}
-            size="lg"
-          >
-            <Link 
-              to={ctaLink}
-              target={isGymPlan ? "_blank" : undefined}
-              rel={isGymPlan ? "noopener noreferrer" : undefined}
+      <div className="space-y-4 pt-2">
+        {/* Primary CTA Button */}
+        <div>
+          {showContactForm ? (
+            <Button
+              onClick={onContactClick}
+              className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
+                isPopular 
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                  : isGymPlan
+                    ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+              }`}
+              size="lg"
             >
               {ctaText}
-            </Link>
-          </Button>
-        )}
-        
-        {planType && !isGymPlan && (
-          <PlanDetailsDialog 
-            planType={planType}
-            triggerText={t('pricing.discoverDetails')}
-          >
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="w-full text-muted-foreground hover:text-foreground border border-muted hover:border-border"
-            >
-              {t('pricing.discoverDetails')}
             </Button>
-          </PlanDetailsDialog>
+          ) : (
+            <Button
+              asChild
+              className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
+                isPopular 
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                  : isGymPlan
+                    ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+              }`}
+              size="lg"
+            >
+              <Link 
+                to={ctaLink}
+                target={isGymPlan ? "_blank" : undefined}
+                rel={isGymPlan ? "noopener noreferrer" : undefined}
+              >
+                {ctaText}
+              </Link>
+            </Button>
+          )}
+        </div>
+        
+        {/* Discover Details Button */}
+        {planType && !isGymPlan && (
+          <div className="flex justify-center">
+            <PlanDetailsDialog 
+              planType={planType}
+              triggerText={t('pricing.discoverDetails')}
+            >
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-muted-foreground hover:text-foreground border border-muted hover:border-border px-4 py-2"
+              >
+                {t('pricing.discoverDetails')}
+              </Button>
+            </PlanDetailsDialog>
+          </div>
         )}
       </div>
     </div>

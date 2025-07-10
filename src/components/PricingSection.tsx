@@ -36,17 +36,16 @@ const PricingSection = () => {
   // Plan features
   const standardFeatures = [
     t('pricing.features.personalTrainerPage'),
-    t('pricing.features.upTo10Clients'),
+    t('pricing.features.clientManagement'),
     t('pricing.features.basicCalendar'),
-    t('pricing.features.limitedMessaging'),
-    t('pricing.features.sessionPostponement'),
+    t('pricing.features.messaging'),
     t('pricing.features.salesManagement'),
+    t('pricing.features.reviewsManagement'),
   ];
   
   const freemiumFeatures = [
-    t('pricing.features.unlimitedClients'),
+    t('pricing.features.sessions'),
     t('pricing.features.googleCalendar'),
-    t('pricing.features.unlimitedMessaging'),
     t('pricing.features.customPrograms'),
     t('pricing.features.waitlistManagement'),
     t('pricing.features.sessionAnalytics'),
@@ -59,8 +58,7 @@ const PricingSection = () => {
     t('pricing.features.digitalCashPayments'),
     t('pricing.features.paymentInstallments'),
     t('pricing.features.electronicInvoicing'),
-    t('pricing.features.advancedCRM'),
-    t('pricing.features.reviewsManagement'),
+    t('pricing.features.businessDashboard'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
   ];
