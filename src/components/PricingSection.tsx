@@ -55,7 +55,6 @@ const PricingSection = () => {
   ];
 
   const proFeatures = [
-    t('pricing.features.everythingEssential'),
     t('pricing.features.packageManagement'),
     t('pricing.features.additionalServices'),
     t('pricing.features.digitalCashPayments'),
