@@ -36,29 +36,38 @@ const PricingSection = () => {
   // Plan features
   const standardFeatures = [
     t('pricing.features.personalTrainerPage'),
-    t('pricing.features.clientMessaging'),
-    t('pricing.features.clientManagement'),
+    t('pricing.features.upTo10Clients'),
+    t('pricing.features.basicCalendar'),
+    t('pricing.features.limitedMessaging'),
+    t('pricing.features.sessionPostponement'),
     t('pricing.features.salesManagement'),
   ];
   
   const freemiumFeatures = [
-    t('pricing.features.everythingFree'),
-    t('pricing.features.unlimitedSessions'),
+    t('pricing.features.unlimitedClients'),
     t('pricing.features.googleCalendar'),
+    t('pricing.features.unlimitedMessaging'),
     t('pricing.features.customPrograms'),
+    t('pricing.features.waitlistManagement'),
+    t('pricing.features.sessionAnalytics'),
   ];
 
   const proFeatures = [
     t('pricing.features.everythingEssential'),
+    t('pricing.features.packageManagement'),
+    t('pricing.features.additionalServices'),
     t('pricing.features.digitalCashPayments'),
     t('pricing.features.paymentInstallments'),
+    t('pricing.features.electronicInvoicing'),
+    t('pricing.features.advancedCRM'),
+    t('pricing.features.reviewsManagement'),
     t('pricing.features.prioritySupport'),
     t('pricing.features.advancedAnalytics'),
   ];
   
   const gymFeatures = [
     t('pricing.features.unlimitedTrainers'),
-    t('pricing.features.unlimitedClients'),
+    t('pricing.features.gymUnlimitedClients'),
     t('pricing.features.reducedProPricing'),
     t('pricing.features.directClientChat'),
     t('pricing.features.clientResults'),

@@ -106,35 +106,41 @@ export const PlanCard = ({
         ))}
       </ul>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {showContactForm ? (
-          <button
+          <Button
             onClick={onContactClick}
-            className={`w-full px-6 py-3 ${
+            className={`w-full ${
               isPopular 
-                ? 'bg-primary text-white' 
+                ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
                 : isGymPlan
-                  ? 'bg-gray-800 text-white hover:bg-gray-900'
-                  : 'bg-white text-primary border border-primary/20'
-            } rounded-full text-center font-medium button-hover`}
+                  ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                  : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+            }`}
+            size="lg"
           >
             {ctaText}
-          </button>
+          </Button>
         ) : (
-          <Link 
-            to={ctaLink}
-            target={isGymPlan ? "_blank" : undefined}
-            rel={isGymPlan ? "noopener noreferrer" : undefined}
-            className={`w-full px-6 py-3 ${
+          <Button
+            asChild
+            className={`w-full ${
               isPopular 
-                ? 'bg-primary text-white' 
+                ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
                 : isGymPlan
-                  ? 'bg-gray-800 text-white hover:bg-gray-900'
-                  : 'bg-white text-primary border border-primary/20'
-            } rounded-full text-center font-medium button-hover`}
+                  ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                  : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+            }`}
+            size="lg"
           >
-            {ctaText}
-          </Link>
+            <Link 
+              to={ctaLink}
+              target={isGymPlan ? "_blank" : undefined}
+              rel={isGymPlan ? "noopener noreferrer" : undefined}
+            >
+              {ctaText}
+            </Link>
+          </Button>
         )}
         
         {planType && !isGymPlan && (
@@ -142,7 +148,11 @@ export const PlanCard = ({
             planType={planType}
             triggerText={t('pricing.discoverDetails')}
           >
-            <Button variant="outline" size="sm" className="w-full">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-muted-foreground hover:text-foreground border border-muted hover:border-border"
+            >
               {t('pricing.discoverDetails')}
             </Button>
           </PlanDetailsDialog>
