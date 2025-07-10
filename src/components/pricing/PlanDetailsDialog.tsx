@@ -12,6 +12,7 @@ interface PlanDetailsDialogProps {
 interface FeatureDetail {
   name: string;
   description: string;
+  isInheritedFeature?: boolean;
 }
 
 export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetailsDialogProps) => {
@@ -52,8 +53,12 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
         }
       );
     } else if (plan === 'essential') {
-      // Include Basic features
-      features.push(...getFeatureDetails('basic'));
+      // Add "Everything in Basic" first
+      features.push({
+        name: t('pricing.detailedFeatures.everythingInBasic.name'),
+        description: t('pricing.detailedFeatures.everythingInBasic.description'),
+        isInheritedFeature: true
+      });
       
       // Add Essential-specific features
       features.push(
@@ -79,8 +84,12 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
         }
       );
     } else if (plan === 'pro') {
-      // Include Essential features (which includes Basic)
-      features.push(...getFeatureDetails('essential'));
+      // Add "Everything in Essential" first
+      features.push({
+        name: t('pricing.detailedFeatures.everythingInEssential.name'),
+        description: t('pricing.detailedFeatures.everythingInEssential.description'),
+        isInheritedFeature: true
+      });
       
       // Add Pro-specific features
       features.push(
@@ -152,15 +161,23 @@ export const PlanDetailsDialog = ({ planType, triggerText, children }: PlanDetai
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="border border-border rounded-lg p-6 hover:shadow-md transition-shadow"
+              className={`border border-border rounded-lg p-6 hover:shadow-md transition-shadow ${
+                feature.isInheritedFeature ? 'bg-primary/5 border-primary/20' : ''
+              }`}
             >
               <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-emerald-600 mt-1 flex-shrink-0" />
+                <CheckCircle className={`w-5 h-5 mt-1 flex-shrink-0 ${
+                  feature.isInheritedFeature ? 'text-primary' : 'text-emerald-600'
+                }`} />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg text-foreground mb-2">
+                  <h3 className={`font-semibold text-lg mb-2 ${
+                    feature.isInheritedFeature ? 'text-primary' : 'text-foreground'
+                  }`}>
                     {feature.name}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className={`leading-relaxed ${
+                    feature.isInheritedFeature ? 'text-primary/80' : 'text-muted-foreground'
+                  }`}>
                     {feature.description}
                   </p>
                 </div>

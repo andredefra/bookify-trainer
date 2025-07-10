@@ -219,5 +219,9 @@ export const it = {
   'footer.description': 'La piattaforma all-in-one per personal trainer.',
   'footer.copyright': '© {year} mypersonalai ltd. Tutti i diritti riservati.',
   'footer.product': 'Prodotto',
-  'footer.legal': 'Legale'
+  'footer.legal': 'Legale',
+  'pricing.detailedFeatures.everythingInBasic.name': 'Tutto quello del Basic',
+  'pricing.detailedFeatures.everythingInBasic.description': 'Tutte le funzionalità del piano Basic sono incluse',
+  'pricing.detailedFeatures.everythingInEssential.name': 'Tutto quello dell\'Essential',
+  'pricing.detailedFeatures.everythingInEssential.description': 'Tutte le funzionalità del piano Essential sono incluse'
 };
