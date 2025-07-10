@@ -98,6 +98,19 @@ export const PlanCard = ({
       </div>
 
       <ul className="space-y-3 mb-8 flex-grow">
+        {/* Show inherited features for Essential and Pro plans */}
+        {planType === 'essential' && (
+          <li className="flex items-start">
+            <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+            <span className="text-primary font-medium">{t('pricing.detailedFeatures.everythingInBasic.name')}</span>
+          </li>
+        )}
+        {planType === 'pro' && (
+          <li className="flex items-start">
+            <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+            <span className="text-primary font-medium">{t('pricing.detailedFeatures.everythingInEssential.name')}</span>
+          </li>
+        )}
         {features.map((feature, index) => (
           <li key={index} className="flex items-start">
             <CheckCircle2 className={`h-5 w-5 ${isGymPlan ? 'text-gray-700' : 'text-emerald-500'} mr-2 flex-shrink-0 mt-0.5`} />
