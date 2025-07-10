@@ -63,6 +63,18 @@ export const getFeatureDetails = (plan: string, t: (key: string) => string): Fea
       {
         name: t('pricing.detailedFeatures.essential.sessionAnalytics.name'),
         description: t('pricing.detailedFeatures.essential.sessionAnalytics.description')
+      },
+      {
+        name: t('pricing.detailedFeatures.essential.programsAnalytics.name'),
+        description: t('pricing.detailedFeatures.essential.programsAnalytics.description')
+      },
+      {
+        name: t('pricing.detailedFeatures.essential.exerciseList.name'),
+        description: t('pricing.detailedFeatures.essential.exerciseList.description')
+      },
+      {
+        name: t('pricing.detailedFeatures.essential.exerciseManagement.name'),
+        description: t('pricing.detailedFeatures.essential.exerciseManagement.description')
       }
     );
   } else if (plan === 'pro') {
