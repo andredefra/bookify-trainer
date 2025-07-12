@@ -261,6 +261,140 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_notifications: {
+        Row: {
+          created_at: string
+          gym_id: string
+          id: string
+          message: string
+          read: boolean
+          recipient_id: string
+          recipient_type: string
+          related_assignment_id: string | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          gym_id: string
+          id?: string
+          message: string
+          read?: boolean
+          recipient_id: string
+          recipient_type?: string
+          related_assignment_id?: string | null
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          gym_id?: string
+          id?: string
+          message?: string
+          read?: boolean
+          recipient_id?: string
+          recipient_type?: string
+          related_assignment_id?: string | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_notifications_related_assignment_id_fkey"
+            columns: ["related_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "gym_trainer_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gym_trainer_assignments: {
+        Row: {
+          assigned_at: string
+          assignment_type: string
+          client_id: string
+          created_at: string
+          gym_id: string
+          id: string
+          notes: string | null
+          status: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_at?: string
+          assignment_type?: string
+          client_id: string
+          created_at?: string
+          gym_id: string
+          id?: string
+          notes?: string | null
+          status?: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_at?: string
+          assignment_type?: string
+          client_id?: string
+          created_at?: string
+          gym_id?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      gym_trainer_contracts: {
+        Row: {
+          base_salary: number | null
+          commission_rate: number | null
+          contract_type: string
+          created_at: string
+          end_date: string | null
+          gym_id: string
+          id: string
+          start_date: string
+          status: string
+          terms: string | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          base_salary?: number | null
+          commission_rate?: number | null
+          contract_type?: string
+          created_at?: string
+          end_date?: string | null
+          gym_id: string
+          id?: string
+          start_date?: string
+          status?: string
+          terms?: string | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          base_salary?: number | null
+          commission_rate?: number | null
+          contract_type?: string
+          created_at?: string
+          end_date?: string | null
+          gym_id?: string
+          id?: string
+          start_date?: string
+          status?: string
+          terms?: string | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           client_user_id: string | null
