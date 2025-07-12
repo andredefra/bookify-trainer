@@ -20,6 +20,13 @@ const GymDashboard = () => {
         } else if (userData.type === 'trainer') {
           navigate('/dashboard');
         }
+      } else {
+        // Ensure demo gym user has the correct ID to match existing data
+        const updatedUserData = {
+          ...userData,
+          id: '11111111-1111-1111-1111-111111111111'
+        };
+        localStorage.setItem('demo-user', JSON.stringify(updatedUserData));
       }
     }
   }, [navigate]);

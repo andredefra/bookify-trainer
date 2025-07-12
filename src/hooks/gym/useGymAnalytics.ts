@@ -34,7 +34,7 @@ export function useGymAnalytics() {
       setLoading(true);
       
       // Get current gym ID from demo utils
-      const DEMO_GYM_ID = '550e8400-e29b-41d4-a716-446655440000';
+      const DEMO_GYM_ID = '11111111-1111-1111-1111-111111111111';
       
       // Fetch real data from database
       const [assignmentsResult, contractsResult] = await Promise.all([
