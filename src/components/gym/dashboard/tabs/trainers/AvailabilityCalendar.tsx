@@ -2,65 +2,43 @@
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Circle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-// Sample trainer data
-const trainers = [
-  { 
-    id: 1, 
-    name: "Marco Rossi", 
-    image: "https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-    availability: {
-      "2025-04-06": ["9:00 AM - 12:00 PM", "2:00 PM - 5:00 PM"],
-      "2025-04-07": ["10:00 AM - 1:00 PM", "3:00 PM - 6:00 PM"],
-      "2025-04-08": ["8:00 AM - 12:00 PM"],
-      "2025-04-09": ["1:00 PM - 6:00 PM"],
-      "2025-04-10": ["9:00 AM - 12:00 PM", "2:00 PM - 5:00 PM"],
-    },
-    status: "online"
-  },
-  { 
-    id: 2, 
-    name: "Laura Bianchi",  
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-    availability: {
-      "2025-04-06": ["8:00 AM - 11:00 AM", "1:00 PM - 3:00 PM"],
-      "2025-04-07": ["9:00 AM - 1:00 PM"],
-      "2025-04-08": ["2:00 PM - 6:00 PM"],
-      "2025-04-09": ["9:00 AM - 11:00 AM", "1:00 PM - 4:00 PM"],
-      "2025-04-11": ["10:00 AM - 5:00 PM"],
-    },
-    status: "away"
-  },
-  { 
-    id: 3, 
-    name: "Giovanni Verdi", 
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-    availability: {
-      "2025-04-07": ["9:00 AM - 12:00 PM"],
-      "2025-04-08": ["1:00 PM - 6:00 PM"],
-      "2025-04-10": ["10:00 AM - 2:00 PM"],
-      "2025-04-11": ["9:00 AM - 12:00 PM", "2:00 PM - 5:00 PM"],
-      "2025-04-12": ["10:00 AM - 3:00 PM"],
-    },
-    status: "offline"
-  }
-];
+import { useGymTrainersData } from "@/hooks/gym/useGymTrainersData";
+import { useTrainerRealTimeStatus } from "@/hooks/gym/useTrainerRealTimeStatus";
 
 export function AvailabilityCalendar() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  
-  const formattedDate = selectedDate ? selectedDate.toISOString().split('T')[0] : "";
+  const { trainers, loading } = useGymTrainersData();
+  const { getTrainerStatus } = useTrainerRealTimeStatus();
   
   const getStatusColor = (status: string) => {
     switch(status) {
-      case "online": return "bg-green-500";
-      case "away": return "bg-amber-500";
+      case "available": return "bg-green-500";
+      case "busy": return "bg-red-500";
       default: return "bg-slate-400";
     }
   };
+
+  const getStatusText = (trainerId: string) => {
+    const status = getTrainerStatus(trainerId);
+    if (!status) return "Unknown";
+    
+    if (status.status === "busy" && status.currentSession) {
+      const endTime = new Date(status.currentSession.endTime).toLocaleTimeString('it-IT', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      return `Busy until ${endTime}`;
+    }
+    
+    return status.status === "available" ? "Available" : "Busy";
+  };
+
+  if (loading) {
+    return <div className="p-4">Loading trainers...</div>;
+  }
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -78,37 +56,50 @@ export function AvailabilityCalendar() {
           Trainers available on {selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </h3>
         <div className="space-y-4">
-          {trainers.filter(trainer => trainer.availability[formattedDate])
-            .map(trainer => (
+          {trainers.map(trainer => {
+            const realtimeStatus = getTrainerStatus(trainer.id);
+            const statusColor = getStatusColor(realtimeStatus?.status || 'offline');
+            
+            return (
               <Card key={trainer.id} className="p-4">
                 <div className="flex items-center space-x-4">
                   <Avatar>
-                    <AvatarImage src={trainer.image} alt={trainer.name} />
                     <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
                   </Avatar>
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h4 className="font-medium">{trainer.name}</h4>
                       <div className="flex items-center">
-                        <Circle className={`h-2 w-2 ${getStatusColor(trainer.status)} mr-1`} />
-                        <span className="text-xs text-muted-foreground capitalize">{trainer.status}</span>
+                        <Circle className={`h-2 w-2 ${statusColor} mr-1`} />
+                        <span className="text-xs text-muted-foreground">{getStatusText(trainer.id)}</span>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {trainer.availability[formattedDate]?.map((timeSlot, index) => (
-                        <Badge key={index} variant="outline" className="bg-primary/10 text-primary">
-                          {timeSlot}
-                        </Badge>
-                      ))}
+                    <div className="flex items-center gap-2 mt-2">
+                      <Badge variant="outline" className={
+                        realtimeStatus?.status === "available" 
+                          ? "bg-green-50 text-green-700 border-green-200" 
+                          : "bg-red-50 text-red-700 border-red-200"
+                      }>
+                        {realtimeStatus?.status === "busy" ? "Busy" : "Available"}
+                      </Badge>
+                      {realtimeStatus?.nextAvailableTime && (
+                        <span className="text-xs text-muted-foreground">
+                          Next available: {new Date(realtimeStatus.nextAvailableTime).toLocaleTimeString('it-IT', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
               </Card>
-            ))}
+            );
+          })}
           
-          {trainers.filter(trainer => trainer.availability[formattedDate]).length === 0 && (
+          {trainers.length === 0 && (
             <div className="text-center py-6 text-muted-foreground">
-              No trainers available on this date
+              No trainers found
             </div>
           )}
         </div>

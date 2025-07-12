@@ -8,6 +8,8 @@ import {
   Activity,
   DollarSign
 } from "lucide-react";
+import { useGymAnalytics } from "@/hooks/gym/useGymAnalytics";
+import { useGymTrainersData } from "@/hooks/gym/useGymTrainersData";
 
 interface OverviewTabProps {
   user: {
@@ -22,6 +24,16 @@ interface OverviewTabProps {
 
 export function OverviewTab({ user }: OverviewTabProps) {
   const gymName = user?.gymName || "Your Gym";
+  const { analytics, loading: analyticsLoading } = useGymAnalytics();
+  const { trainers, loading: trainersLoading } = useGymTrainersData();
+
+  if (analyticsLoading || trainersLoading) {
+    return <div className="p-4">Loading dashboard...</div>;
+  }
+
+  const topTrainers = trainers
+    .sort((a, b) => b.totalSessions - a.totalSessions)
+    .slice(0, 5);
   
   return (
     <div className="space-y-8">
@@ -37,8 +49,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">187</div>
-            <p className="text-xs text-muted-foreground">+12 from last month</p>
+            <div className="text-2xl font-bold">{analytics?.totalMembers || 0}</div>
+            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.membersChange}</p>
           </CardContent>
         </Card>
         
@@ -48,8 +60,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Dumbbell className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">14</div>
-            <p className="text-xs text-muted-foreground">+2 new trainers this month</p>
+            <div className="text-2xl font-bold">{analytics?.activeTrainers || 0}</div>
+            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.trainersChange}</p>
           </CardContent>
         </Card>
         
@@ -59,8 +71,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">542</div>
-            <p className="text-xs text-muted-foreground">+18% from last week</p>
+            <div className="text-2xl font-bold">{analytics?.sessionsBooked || 0}</div>
+            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.sessionsChange}</p>
           </CardContent>
         </Card>
         
@@ -70,8 +82,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">€12,750</div>
-            <p className="text-xs text-muted-foreground">+8% from last month</p>
+            <div className="text-2xl font-bold">€{analytics?.monthlyRevenue?.toLocaleString() || 0}</div>
+            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.revenueChange}</p>
           </CardContent>
         </Card>
         
@@ -81,7 +93,7 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">92%</div>
+            <div className="text-2xl font-bold">{analytics?.memberRetention || 0}%</div>
             <p className="text-xs text-muted-foreground">+3% from last quarter</p>
           </CardContent>
         </Card>
@@ -92,7 +104,7 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">78%</div>
+            <div className="text-2xl font-bold">{analytics?.memberActivity || 0}%</div>
             <p className="text-xs text-muted-foreground">of members active this week</p>
           </CardContent>
         </Card>
@@ -105,21 +117,17 @@ export function OverviewTab({ user }: OverviewTabProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                { name: "Marco Rossi", sessions: 32, rating: 4.9 },
-                { name: "Laura Bianchi", sessions: 28, rating: 4.8 },
-                { name: "Giovanni Verdi", sessions: 24, rating: 4.7 },
-                { name: "Anna Neri", sessions: 22, rating: 4.9 },
-                { name: "Paolo Esposito", sessions: 18, rating: 4.6 }
-              ].map((trainer, i) => (
-                <div key={i} className="flex items-center justify-between">
+              {topTrainers.map((trainer, i) => (
+                <div key={trainer.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="text-sm font-medium">{trainer.name}</p>
-                      <p className="text-xs text-muted-foreground">{trainer.sessions} sessions</p>
+                      <p className="text-xs text-muted-foreground">
+                        {trainer.totalSessions} sessions • {trainer.activeClients} clients
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center">
