@@ -130,8 +130,8 @@ export function SessionCalendar({ sessions, onScheduleSession }: SessionCalendar
                         </div>
                         
                         <div className="text-xs">
-                          <Badge variant="outline" className="text-xs">
-                            ${schedule.session.price_per_participant}
+                          <Badge variant="outline" className="text-xs text-green-600">
+                            Included in package
                           </Badge>
                         </div>
                       </div>

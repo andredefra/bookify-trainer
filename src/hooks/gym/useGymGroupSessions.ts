@@ -9,7 +9,6 @@ export interface GymGroupSession {
   description?: string;
   max_participants: number;
   duration_minutes: number;
-  price_per_participant: number;
   session_type: string;
   difficulty_level: string;
   requirements?: string;
@@ -106,7 +105,6 @@ export function useGymGroupSessions() {
           description: 'High-intensity interval training to start your day with energy',
           max_participants: 15,
           duration_minutes: 45,
-          price_per_participant: 25.00,
           session_type: 'hiit',
           difficulty_level: 'intermediate',
           requirements: 'Basic fitness level required',
@@ -128,7 +126,6 @@ export function useGymGroupSessions() {
           description: 'Relaxing yoga session focusing on flexibility and mindfulness',
           max_participants: 20,
           duration_minutes: 60,
-          price_per_participant: 20.00,
           session_type: 'yoga',
           difficulty_level: 'beginner',
           requirements: 'No experience required',

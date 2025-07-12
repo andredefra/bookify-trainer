@@ -273,7 +273,6 @@ export type Database = {
           is_recurring: boolean
           location: string | null
           max_participants: number
-          price_per_participant: number
           recurrence_pattern: string | null
           requirements: string | null
           session_type: string
@@ -292,7 +291,6 @@ export type Database = {
           is_recurring?: boolean
           location?: string | null
           max_participants?: number
-          price_per_participant?: number
           recurrence_pattern?: string | null
           requirements?: string | null
           session_type?: string
@@ -311,7 +309,6 @@ export type Database = {
           is_recurring?: boolean
           location?: string | null
           max_participants?: number
-          price_per_participant?: number
           recurrence_pattern?: string | null
           requirements?: string | null
           session_type?: string
@@ -480,11 +477,11 @@ export type Database = {
       }
       gym_session_participants: {
         Row: {
-          amount_paid: number | null
           attendance_status: string
           created_at: string
           id: string
           notes: string | null
+          package_assignment_id: string | null
           participant_id: string
           payment_status: string
           registered_at: string
@@ -492,11 +489,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          amount_paid?: number | null
           attendance_status?: string
           created_at?: string
           id?: string
           notes?: string | null
+          package_assignment_id?: string | null
           participant_id: string
           payment_status?: string
           registered_at?: string
@@ -504,11 +501,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          amount_paid?: number | null
           attendance_status?: string
           created_at?: string
           id?: string
           notes?: string | null
+          package_assignment_id?: string | null
           participant_id?: string
           payment_status?: string
           registered_at?: string
@@ -516,6 +513,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "gym_session_participants_package_assignment_id_fkey"
+            columns: ["package_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "gym_package_assignments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "gym_session_participants_session_schedule_id_fkey"
             columns: ["session_schedule_id"]

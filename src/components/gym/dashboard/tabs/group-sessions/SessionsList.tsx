@@ -110,8 +110,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: S
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <span className="text-muted-foreground">$</span>
-                  <span>${session.price_per_participant}</span>
+                  <span className="text-green-600 text-xs font-medium">Included in package</span>
                 </div>
                 
                 {session.location && (

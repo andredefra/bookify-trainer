@@ -20,7 +20,6 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
     description: "",
     max_participants: 20,
     duration_minutes: 60,
-    price_per_participant: 25,
     session_type: "group_class",
     difficulty_level: "intermediate",
     requirements: "",
@@ -41,7 +40,6 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
       description: "",
       max_participants: 20,
       duration_minutes: 60,
-      price_per_participant: 25,
       session_type: "group_class",
       difficulty_level: "intermediate",
       requirements: "",
@@ -104,7 +102,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="max_participants">Max Participants</Label>
               <Input
@@ -128,18 +126,13 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
                 max="180"
               />
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="price_per_participant">Price per Person ($)</Label>
-              <Input
-                id="price_per_participant"
-                type="number"
-                step="0.01"
-                value={formData.price_per_participant}
-                onChange={(e) => setFormData({ ...formData, price_per_participant: parseFloat(e.target.value) })}
-                min="0"
-              />
-            </div>
+          </div>
+
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Note:</strong> Group sessions are included in customer packages. 
+              Customers with active packages can join sessions without additional payment.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
