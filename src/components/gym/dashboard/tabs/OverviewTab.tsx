@@ -171,6 +171,5 @@ export function OverviewTab({ user }: OverviewTabProps) {
   );
 }
 
-// Import missing components
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star } from "lucide-react";

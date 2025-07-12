@@ -5,6 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { GymPackage } from '@/hooks/gym/useGymPackages';
 import { useGymTrainerAssignments } from '@/hooks/gym/useGymTrainerAssignments';
+import { useGymNotifications } from '@/hooks/gym/useGymNotifications';
+import { toast } from 'sonner';
 
 interface AssignPackageDialogProps {
   open: boolean;
@@ -25,6 +27,7 @@ export function AssignPackageDialog({
   const [selectedTrainer, setSelectedTrainer] = useState<string>('');
   
   const { availableTrainers, availableClients } = useGymTrainerAssignments();
+  const { createNotification } = useGymNotifications();
 
   // Use consistent demo data
   const clients = availableClients.length > 0 ? availableClients : [
@@ -47,12 +50,28 @@ export function AssignPackageDialog({
     setLoading(true);
     try {
       await onAssign(selectedPackage, selectedClient, selectedTrainer);
+      
+      // Create notification for successful assignment
+      const selectedClientName = clients.find(c => c.id === selectedClient)?.name || 'Client';
+      const selectedTrainerName = trainers.find(t => t.id === selectedTrainer)?.name || 'Trainer';
+      const packageName = selectedPackageData?.title || 'Package';
+      
+      await createNotification(
+        selectedTrainer,
+        'trainer',
+        'package_assigned',
+        'New Package Assignment',
+        `${packageName} assigned to ${selectedClientName}`
+      );
+      
+      toast.success('Package assigned successfully!');
       setSelectedPackage('');
       setSelectedClient('');
       setSelectedTrainer('');
       onOpenChange(false);
     } catch (error) {
       console.error('Error assigning package:', error);
+      toast.error('Failed to assign package');
     } finally {
       setLoading(false);
     }

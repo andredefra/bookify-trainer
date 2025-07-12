@@ -21,11 +21,8 @@ export function useGymNotifications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Get current gym ID (in demo mode, we'll use a fixed ID)
-  const getCurrentGymId = () => {
-    // In real implementation, this would come from auth
-    return 'demo-gym-id';
-  };
+  // Use consistent demo gym ID
+  const getCurrentGymId = () => '550e8400-e29b-41d4-a716-446655440000';
 
   const fetchNotifications = useCallback(async () => {
     try {
