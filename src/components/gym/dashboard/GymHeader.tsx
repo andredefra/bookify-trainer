@@ -6,6 +6,7 @@ import { Menu, LogOut, Building } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { toast } from "sonner";
+import { GymNotificationBell } from "./header/GymNotificationBell";
 
 interface GymHeaderProps {
   user: {
@@ -70,6 +71,7 @@ export function GymHeader({
             </div>
             
             <div className="flex items-center space-x-3">
+              <GymNotificationBell />
               <Avatar className="h-9 w-9 border border-primary/10">
                 <AvatarImage src={user?.profileImage || defaultImage} alt={displayName} />
                 <AvatarFallback className="bg-primary/10 text-primary">

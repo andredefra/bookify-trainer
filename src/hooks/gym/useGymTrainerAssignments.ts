@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useGymNotifications } from './useGymNotifications';
 
 export interface GymTrainerAssignment {
   id: string;
@@ -36,6 +37,7 @@ export function useGymTrainerAssignments() {
   const [availableClients, setAvailableClients] = useState<ClientOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { createNotification } = useGymNotifications();
 
   useEffect(() => {
     fetchAssignments();
@@ -172,6 +174,21 @@ export function useGymTrainerAssignments() {
       
       // Create notifications for trainer and client
       await createNotifications(trainerId, clientId, newAssignment.id);
+      
+      // Create gym notification using the notification system
+      const trainer = availableTrainers.find(t => t.id === trainerId);
+      const client = availableClients.find(c => c.id === clientId);
+      
+      if (trainer && client) {
+        await createNotification(
+          trainerId,
+          'trainer',
+          'trainer_assigned',
+          'New Client Assignment',
+          `You have been assigned to client ${client.name} (${assignmentType} plan)`,
+          newAssignment.id
+        );
+      }
       
       toast.success('Trainer assegnato con successo');
     } catch (err) {

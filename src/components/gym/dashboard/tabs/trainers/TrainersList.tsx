@@ -8,8 +8,11 @@ import {
   MoreHorizontal, 
   Phone, 
   Mail, 
-  Calendar, 
-  Circle
+  Calendar,
+  DollarSign,
+  FileText,
+  MessageSquare,
+  UserPlus
 } from "lucide-react";
 import { 
   DropdownMenu, 
@@ -19,43 +22,11 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-
-// Sample trainer data
-const trainers = [
-  { 
-    id: 1, 
-    name: "Marco Rossi", 
-    image: "https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-    email: "marco.rossi@example.com",
-    phone: "+1 (555) 123-4567",
-    specialties: ["Strength Training", "HIIT"],
-    status: "online",
-    clientCount: 18
-  },
-  { 
-    id: 2, 
-    name: "Laura Bianchi",  
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-    email: "laura.bianchi@example.com",
-    phone: "+1 (555) 987-6543",
-    specialties: ["Yoga", "Pilates"],
-    status: "away",
-    clientCount: 24
-  },
-  { 
-    id: 3, 
-    name: "Giovanni Verdi", 
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-    email: "giovanni.verdi@example.com",
-    phone: "+1 (555) 234-5678",
-    specialties: ["Bodybuilding", "Nutrition"],
-    status: "offline",
-    clientCount: 15
-  }
-];
+import { useTrainerContracts } from "@/hooks/gym/useTrainerContracts";
 
 export function TrainersList() {
   const [filter, setFilter] = useState("all");
+  const { trainersWithContracts, loading } = useTrainerContracts();
   
   const getStatusColor = (status: string) => {
     switch(status) {
@@ -66,8 +37,12 @@ export function TrainersList() {
   };
   
   const filteredTrainers = filter === "all" 
-    ? trainers 
-    : trainers.filter(trainer => trainer.status === filter);
+    ? trainersWithContracts 
+    : trainersWithContracts.filter(trainer => trainer.status === filter);
+
+  if (loading) {
+    return <div className="flex justify-center p-8">Loading trainers...</div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -110,7 +85,10 @@ export function TrainersList() {
                 <div className="flex gap-4">
                   <div className="relative">
                     <Avatar className="h-12 w-12">
-                      <AvatarImage src={trainer.image} alt={trainer.name} />
+                      <AvatarImage 
+                        src={`https://images.unsplash.com/photo-${trainer.id === 'trainer-1' ? '1597223557154-721c1cecc4b0' : trainer.id === 'trainer-2' ? '1494790108377-be9c29b29330' : '1506794778202-cad84cf45f1d'}?ixlib=rb-4.0.3&auto=format&fit=crop&w=160&h=160&q=80`} 
+                        alt={trainer.name} 
+                      />
                       <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background ${getStatusColor(trainer.status)}`}></span>
@@ -136,9 +114,18 @@ export function TrainersList() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Edit Trainer</DropdownMenuItem>
-                    <DropdownMenuItem>View Schedule</DropdownMenuItem>
-                    <DropdownMenuItem>View Clients</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Assign Client
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Calendar className="h-4 w-4 mr-2" />
+                      View Schedule
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <FileText className="h-4 w-4 mr-2" />
+                      {trainer.contract ? 'Edit Contract' : 'Create Contract'}
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-600">Deactivate</DropdownMenuItem>
                   </DropdownMenuContent>
@@ -151,21 +138,34 @@ export function TrainersList() {
                   <span>{trainer.email}</span>
                 </div>
                 <div className="flex items-center text-muted-foreground">
-                  <Phone className="h-4 w-4 mr-2" />
-                  <span>{trainer.phone}</span>
-                </div>
-                <div className="flex items-center text-muted-foreground">
                   <Calendar className="h-4 w-4 mr-2" />
                   <span>{trainer.clientCount} active clients</span>
                 </div>
+                <div className="flex items-center text-muted-foreground">
+                  <DollarSign className="h-4 w-4 mr-2" />
+                  <span>€{trainer.monthlyEarnings}/month</span>
+                </div>
+                {trainer.contract && (
+                  <div className="flex items-center text-muted-foreground">
+                    <FileText className="h-4 w-4 mr-2" />
+                    <span className="capitalize">{trainer.contract.contract_type}</span>
+                    {trainer.contract.commission_rate && (
+                      <Badge variant="outline" className="ml-2 text-xs">
+                        {trainer.contract.commission_rate}% commission
+                      </Badge>
+                    )}
+                  </div>
+                )}
               </div>
               
               <div className="mt-4 flex flex-wrap gap-2">
                 <Button size="sm" variant="outline">
+                  <MessageSquare className="h-4 w-4 mr-1" />
                   Message
                 </Button>
                 <Button size="sm" variant="outline">
-                  Schedule
+                  <UserPlus className="h-4 w-4 mr-1" />
+                  Assign
                 </Button>
                 <Button size="sm">
                   View Profile
