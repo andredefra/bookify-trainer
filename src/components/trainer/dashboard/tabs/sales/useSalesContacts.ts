@@ -88,21 +88,37 @@ export const useSalesContacts = () => {
   const [contacts, setContacts] = useState<SalesContact[]>(INITIAL_CONTACTS);
 
   const handleMoveContact = (id: string, newStatus: SalesContact['status']) => {
+    // Check if moving to client status - this will be handled by ProspectToClientDialog
+    if (newStatus === 'client') {
+      return; // Let the dialog handle this conversion
+    }
+    
     setContacts(prevContacts => 
       prevContacts.map(contact => {
         if (contact.id === id) {
           const now = new Date().toISOString();
           
-          // If moving to client status, set clientSince if not already set
-          const clientSince = newStatus === 'client' && !contact.clientSince 
-            ? now 
-            : contact.clientSince;
-            
           return { 
             ...contact, 
             status: newStatus, 
+            lastUpdated: now
+          };
+        }
+        return contact;
+      })
+    );
+  };
+
+  const handleConfirmClientConversion = (id: string) => {
+    setContacts(prevContacts => 
+      prevContacts.map(contact => {
+        if (contact.id === id) {
+          const now = new Date().toISOString();
+          return { 
+            ...contact, 
+            status: 'client', 
             lastUpdated: now,
-            clientSince
+            clientSince: contact.clientSince || now
           };
         }
         return contact;
@@ -168,6 +184,7 @@ export const useSalesContacts = () => {
     prospectContacts,
     handleMoveContact,
     handleUpdateContact,
-    handleAddContact
+    handleAddContact,
+    handleConfirmClientConversion
   };
 };

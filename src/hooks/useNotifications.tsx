@@ -5,12 +5,13 @@ import { supabase } from '@/integrations/supabase/client';
 export interface TrainerNotification {
   id: string;
   trainer_id: string;
-  type: 'program_expiring' | 'client_behind_schedule' | 'program_completed';
+  type: 'program_expiring' | 'client_behind_schedule' | 'program_completed' | 'client_invitation_response' | 'new_client_invitation';
   message: string;
   read: boolean;
   created_at: string;
   related_program_assignment_id?: string;
   related_client_id?: string;
+  invitation_id?: string;
 }
 
 export function useNotifications() {

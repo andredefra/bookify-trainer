@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 
 export interface ClientNotification {
   id: string;
-  type: 'message' | 'session_confirmed' | 'session_reminder' | 'program_update' | 'achievement' | 'payment';
+  type: 'message' | 'session_confirmed' | 'session_reminder' | 'program_update' | 'achievement' | 'payment' | 'trainer_invitation';
   title: string;
   message: string;
   read: boolean;
   created_at: string;
   related_id?: string;
   action_url?: string;
+  invitation_id?: string;
 }
 
 // Mock data for client notifications
@@ -89,6 +90,7 @@ export function useClientNotifications() {
       case 'program_update': return 'Dumbbell';
       case 'achievement': return 'Trophy';
       case 'payment': return 'CreditCard';
+      case 'trainer_invitation': return 'User';
       default: return 'Bell';
     }
   };

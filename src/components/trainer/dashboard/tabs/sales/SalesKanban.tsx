@@ -1,18 +1,23 @@
 
-import { useMemo } from "react";
+import { useState } from "react";
 import { SalesContact } from "./types";
 import { SalesColumn } from "./SalesColumn";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { ProspectToClientDialog } from "./ProspectToClientDialog";
 
 interface SalesKanbanProps {
   contacts: SalesContact[];
   onMoveContact: (id: string, status: SalesContact['status']) => void;
   onUpdateContact: (updatedContact: SalesContact) => void;
+  onConfirmClientConversion?: (id: string) => void;
 }
 
-export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesKanbanProps) {
+export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfirmClientConversion }: SalesKanbanProps) {
+  const [showProspectDialog, setShowProspectDialog] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<SalesContact | null>(null);
+  
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
   
@@ -28,6 +33,25 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesK
   contacts.forEach(contact => {
     grouped[contact.status].push(contact);
   });
+
+  const handleMoveContact = (id: string, status: SalesContact['status']) => {
+    // If moving to client, show confirmation dialog
+    if (status === 'client') {
+      const contact = contacts.find(c => c.id === id);
+      if (contact) {
+        setSelectedContact(contact);
+        setShowProspectDialog(true);
+        return;
+      }
+    }
+    onMoveContact(id, status);
+  };
+
+  const handleConfirmConversion = () => {
+    if (selectedContact && onConfirmClientConversion) {
+      onConfirmClientConversion(selectedContact.id);
+    }
+  };
   
   return (
     <div className={cn(
@@ -47,39 +71,46 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact }: SalesK
             title="Lead" 
             contacts={grouped.lead} 
             status="lead"
-            onMoveContact={onMoveContact}
+            onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
           />
           <SalesColumn 
             title="Prospect" 
             contacts={grouped.prospect} 
             status="prospect"
-            onMoveContact={onMoveContact}
+            onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
           />
           <SalesColumn 
             title="Client" 
             contacts={grouped.client} 
             status="client"
-            onMoveContact={onMoveContact}
+            onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
           />
           <SalesColumn 
             title="Lost" 
             contacts={grouped.lost} 
             status="lost"
-            onMoveContact={onMoveContact}
+            onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
           />
           <SalesColumn 
             title="Terminated" 
             contacts={grouped.terminated} 
             status="terminated"
-            onMoveContact={onMoveContact}
+            onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
           />
         </div>
       </ScrollArea>
+      
+      <ProspectToClientDialog
+        open={showProspectDialog}
+        onOpenChange={setShowProspectDialog}
+        contact={selectedContact}
+        onConfirm={handleConfirmConversion}
+      />
     </div>
   );
 }

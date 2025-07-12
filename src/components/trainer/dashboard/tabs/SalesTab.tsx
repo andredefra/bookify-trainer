@@ -18,7 +18,8 @@ export function SalesTab() {
     prospectContacts,
     handleMoveContact, 
     handleUpdateContact, 
-    handleAddContact 
+    handleAddContact,
+    handleConfirmClientConversion
   } = useSalesContacts();
 
   return (
@@ -50,7 +51,8 @@ export function SalesTab() {
                 <SalesKanban 
                   contacts={contacts} 
                   onMoveContact={handleMoveContact}
-                  onUpdateContact={handleUpdateContact} 
+                  onUpdateContact={handleUpdateContact}
+                  onConfirmClientConversion={handleConfirmClientConversion}
                 />
               </DndProvider>
             </div>

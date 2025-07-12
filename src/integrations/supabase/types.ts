@@ -74,6 +74,51 @@ export type Database = {
         }
         Relationships: []
       }
+      client_invitations: {
+        Row: {
+          client_email: string
+          client_name: string
+          created_at: string
+          expires_at: string
+          id: string
+          lead_id: string | null
+          message: string | null
+          responded_at: string | null
+          response_message: string | null
+          status: Database["public"]["Enums"]["invitation_status"]
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          lead_id?: string | null
+          message?: string | null
+          responded_at?: string | null
+          response_message?: string | null
+          status?: Database["public"]["Enums"]["invitation_status"]
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          lead_id?: string | null
+          message?: string | null
+          responded_at?: string | null
+          response_message?: string | null
+          status?: Database["public"]["Enums"]["invitation_status"]
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       client_package_assignments: {
         Row: {
           client_id: string
@@ -218,11 +263,13 @@ export type Database = {
       }
       leads: {
         Row: {
+          client_user_id: string | null
           conversion_date: string | null
           created_at: string
           email: string | null
           first_contact_date: string | null
           id: string
+          invitation_id: string | null
           last_activity_date: string | null
           name: string
           notes: string | null
@@ -230,14 +277,17 @@ export type Database = {
           source: string | null
           status: string | null
           trainer_id: string
+          transitioned_to_client: boolean | null
           updated_at: string
         }
         Insert: {
+          client_user_id?: string | null
           conversion_date?: string | null
           created_at?: string
           email?: string | null
           first_contact_date?: string | null
           id?: string
+          invitation_id?: string | null
           last_activity_date?: string | null
           name: string
           notes?: string | null
@@ -245,14 +295,17 @@ export type Database = {
           source?: string | null
           status?: string | null
           trainer_id: string
+          transitioned_to_client?: boolean | null
           updated_at?: string
         }
         Update: {
+          client_user_id?: string | null
           conversion_date?: string | null
           created_at?: string
           email?: string | null
           first_contact_date?: string | null
           id?: string
+          invitation_id?: string | null
           last_activity_date?: string | null
           name?: string
           notes?: string | null
@@ -260,9 +313,18 @@ export type Database = {
           source?: string | null
           status?: string | null
           trainer_id?: string
+          transitioned_to_client?: boolean | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_invitation_id_fkey"
+            columns: ["invitation_id"]
+            isOneToOne: false
+            referencedRelation: "client_invitations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       package_assignments: {
         Row: {
@@ -663,6 +725,44 @@ export type Database = {
         }
         Relationships: []
       }
+      trainer_client_relationships: {
+        Row: {
+          client_id: string
+          created_at: string
+          id: string
+          invitation_id: string | null
+          status: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          id?: string
+          invitation_id?: string | null
+          status?: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          id?: string
+          invitation_id?: string | null
+          status?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trainer_client_relationships_invitation_id_fkey"
+            columns: ["invitation_id"]
+            isOneToOne: false
+            referencedRelation: "client_invitations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trainer_notifications: {
         Row: {
           created_at: string
@@ -709,6 +809,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      expire_old_invitations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       generate_expiring_program_notifications: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -722,6 +826,7 @@ export type Database = {
         | "personal_task"
         | "deadline"
         | "availability"
+      invitation_status: "pending" | "accepted" | "declined" | "expired"
       package_type: "sessions_only" | "program_only" | "hybrid" | "service"
       payment_method: "cash" | "stripe" | "installments"
       payment_status: "pending" | "paid" | "overdue" | "cancelled"
@@ -868,6 +973,7 @@ export const Constants = {
         "deadline",
         "availability",
       ],
+      invitation_status: ["pending", "accepted", "declined", "expired"],
       package_type: ["sessions_only", "program_only", "hybrid", "service"],
       payment_method: ["cash", "stripe", "installments"],
       payment_status: ["pending", "paid", "overdue", "cancelled"],
