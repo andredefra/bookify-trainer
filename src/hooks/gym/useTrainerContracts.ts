@@ -53,30 +53,42 @@ export function useTrainerContracts() {
     } catch (err) {
       console.error('Error fetching contracts:', err);
       setError('Failed to fetch contracts');
-      // Demo data fallback
+      // Demo data fallback with English names and consistent IDs
       const mockContracts: TrainerContract[] = [
         {
-          id: '1',
-          gym_id: 'demo-gym-id',
-          trainer_id: 'trainer-1',
+          id: 'contract-1',
+          gym_id: getCurrentGymId(),
+          trainer_id: '22222222-2222-2222-2222-222222222222',
           contract_type: 'partnership',
-          commission_rate: 20,
+          commission_rate: 25,
           start_date: '2024-01-01',
           status: 'active',
-          terms: 'Partnership agreement with 20% commission rate',
+          terms: 'Partnership agreement with 25% commission rate',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         },
         {
-          id: '2',
-          gym_id: 'demo-gym-id',
-          trainer_id: 'trainer-2',
+          id: 'contract-2',
+          gym_id: getCurrentGymId(),
+          trainer_id: '33333333-3333-3333-3333-333333333333',
           contract_type: 'employee',
-          base_salary: 3000,
-          commission_rate: 10,
+          base_salary: 3500,
+          commission_rate: 15,
           start_date: '2024-01-15',
           status: 'active',
           terms: 'Full-time employee with base salary and commission',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: 'contract-3',
+          gym_id: getCurrentGymId(),
+          trainer_id: '77777777-1111-1111-1111-777777777777',
+          contract_type: 'freelance',
+          commission_rate: 30,
+          start_date: '2024-02-01',
+          status: 'active',
+          terms: 'Freelance contract with 30% commission rate',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }
@@ -88,40 +100,94 @@ export function useTrainerContracts() {
   }, []);
 
   const fetchTrainersWithContracts = useCallback(async () => {
-    // Demo data - in real app this would fetch from database
-    const mockTrainers: TrainerWithContract[] = [
-      {
-        id: 'trainer-1',
-        name: 'Marco Rossi',
-        email: 'marco.rossi@example.com',
-        specialties: ['Strength Training', 'HIIT'],
-        status: 'online',
-        clientCount: 18,
-        monthlyEarnings: 2400,
-        contract: contracts.find(c => c.trainer_id === 'trainer-1')
-      },
-      {
-        id: 'trainer-2',
-        name: 'Laura Bianchi',
-        email: 'laura.bianchi@example.com',
-        specialties: ['Yoga', 'Pilates'],
-        status: 'away',
-        clientCount: 24,
-        monthlyEarnings: 3200,
-        contract: contracts.find(c => c.trainer_id === 'trainer-2')
-      },
-      {
-        id: 'trainer-3',
-        name: 'Giovanni Verdi',
-        email: 'giovanni.verdi@example.com',
-        specialties: ['Bodybuilding', 'Nutrition'],
-        status: 'offline',
-        clientCount: 15,
-        monthlyEarnings: 1800
-      }
-    ];
-    
-    setTrainersWithContracts(mockTrainers);
+    try {
+      setLoading(true);
+      const gymId = getCurrentGymId();
+      
+      // Try to fetch real trainer data from contracts table
+      const { data: contractsData, error } = await supabase
+        .from('gym_trainer_contracts')
+        .select('*')
+        .eq('gym_id', gymId)
+        .eq('status', 'active');
+
+      if (error) throw error;
+
+      // For now, use enhanced demo data with English names that matches existing trainer IDs
+      const mockTrainers: TrainerWithContract[] = [
+        {
+          id: '22222222-2222-2222-2222-222222222222',
+          name: 'Alex Johnson',
+          email: 'alex.johnson@fitlifegym.com',
+          specialties: ['Personal Training', 'Weight Loss', 'Strength Training'],
+          status: 'online',
+          clientCount: 18,
+          monthlyEarnings: 2400,
+          contract: contracts.find(c => c.trainer_id === '22222222-2222-2222-2222-222222222222')
+        },
+        {
+          id: '33333333-3333-3333-3333-333333333333',
+          name: 'Sarah Wilson',
+          email: 'sarah.wilson@fitlifegym.com',
+          specialties: ['Yoga', 'Pilates', 'Group Fitness'],
+          status: 'away',
+          clientCount: 24,
+          monthlyEarnings: 3200,
+          contract: contracts.find(c => c.trainer_id === '33333333-3333-3333-3333-333333333333')
+        },
+        {
+          id: '77777777-1111-1111-1111-777777777777',
+          name: 'Mike Rodriguez',
+          email: 'mike.rodriguez@fitlifegym.com',
+          specialties: ['CrossFit', 'HIIT', 'Athletic Performance'],
+          status: 'offline',
+          clientCount: 15,
+          monthlyEarnings: 1800,
+          contract: contracts.find(c => c.trainer_id === '77777777-1111-1111-1111-777777777777')
+        },
+        {
+          id: '550e8400-e29b-41d4-a716-446655440001',
+          name: 'Emma Davis',
+          email: 'emma.davis@fitlifegym.com',
+          specialties: ['Nutrition', 'Weight Management', 'Functional Training'],
+          status: 'online',
+          clientCount: 20,
+          monthlyEarnings: 2800,
+          contract: contracts.find(c => c.trainer_id === '550e8400-e29b-41d4-a716-446655440001')
+        },
+        {
+          id: '550e8400-e29b-41d4-a716-446655440002',
+          name: 'Marcus Thompson',
+          email: 'marcus.thompson@fitlifegym.com',
+          specialties: ['Powerlifting', 'Sports Performance', 'Rehabilitation'],
+          status: 'away',
+          clientCount: 12,
+          monthlyEarnings: 2100,
+          contract: contracts.find(c => c.trainer_id === '550e8400-e29b-41d4-a716-446655440002')
+        }
+      ];
+      
+      setTrainersWithContracts(mockTrainers);
+    } catch (err) {
+      console.error('Error fetching trainers:', err);
+      setError('Failed to fetch trainers');
+      
+      // Fallback demo data
+      const fallbackTrainers: TrainerWithContract[] = [
+        {
+          id: '22222222-2222-2222-2222-222222222222',
+          name: 'Alex Johnson',
+          email: 'alex.johnson@fitlifegym.com',
+          specialties: ['Personal Training', 'Weight Loss'],
+          status: 'online',
+          clientCount: 15,
+          monthlyEarnings: 2000
+        }
+      ];
+      setTrainersWithContracts(fallbackTrainers);
+    } finally {
+      setLoading(false);
+    }
   }, [contracts]);
 
   const createContract = useCallback(async (

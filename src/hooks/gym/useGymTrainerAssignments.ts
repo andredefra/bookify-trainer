@@ -216,9 +216,9 @@ export function useGymTrainerAssignments() {
         );
       }
       
-      toast.success('Trainer assegnato con successo');
+      toast.success('Trainer assigned successfully');
     } catch (err) {
-      toast.error('Errore nell\'assegnazione del trainer');
+      toast.error('Error assigning trainer');
       throw err;
     }
   };
@@ -234,8 +234,8 @@ export function useGymTrainerAssignments() {
         recipient_id: trainerId,
         recipient_type: 'trainer',
         type: 'client_assigned',
-        title: 'Nuovo Cliente Assegnato',
-        message: 'Ti è stato assegnato un nuovo cliente dalla palestra',
+        title: 'New Client Assigned',
+        message: 'You have been assigned a new client by the gym',
         related_assignment_id: assignmentId
       };
 
@@ -245,8 +245,8 @@ export function useGymTrainerAssignments() {
         recipient_id: clientId,
         recipient_type: 'client',
         type: 'trainer_assigned',
-        title: 'Personal Trainer Assegnato',
-        message: 'La palestra ti ha assegnato un personal trainer',
+        title: 'Personal Trainer Assigned',
+        message: 'The gym has assigned you a personal trainer',
         related_assignment_id: assignmentId
       };
 
@@ -266,9 +266,9 @@ export function useGymTrainerAssignments() {
         )
       );
       
-      toast.success('Status aggiornato');
+      toast.success('Status updated');
     } catch (err) {
-      toast.error('Errore nell\'aggiornamento dello status');
+      toast.error('Error updating status');
       throw err;
     }
   };
