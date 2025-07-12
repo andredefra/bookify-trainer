@@ -49,13 +49,13 @@ export function AnalyticsTab() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-        <p className="text-gray-700 mt-1">Analizza le performance e i trend della tua palestra</p>
+        <p className="text-gray-700 mt-1">Analyze your gym's performance and trends</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="col-span-1 bg-white shadow-md border border-gray-200">
           <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Crescita Membri</CardTitle>
+            <CardTitle className="text-xl font-semibold text-gray-900">Member Growth</CardTitle>
           </CardHeader>
           <CardContent className="p-6 bg-white">
             <div className="h-80">
@@ -75,8 +75,8 @@ export function AnalyticsTab() {
                       color: '#111827'
                     }} 
                   />
-                  <Bar dataKey="premium" name="Membri Premium" stackId="a" fill="#3b82f6" />
-                  <Bar dataKey="standard" name="Membri Standard" stackId="a" fill="#10b981" />
+                  <Bar dataKey="premium" name="Premium Members" stackId="a" fill="#3b82f6" />
+                  <Bar dataKey="standard" name="Standard Members" stackId="a" fill="#10b981" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -85,7 +85,7 @@ export function AnalyticsTab() {
         
         <Card className="col-span-1 bg-white shadow-md border border-gray-200">
           <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Fatturato Mensile</CardTitle>
+            <CardTitle className="text-xl font-semibold text-gray-900">Monthly Revenue</CardTitle>
           </CardHeader>
           <CardContent className="p-6 bg-white">
             <div className="h-80">
@@ -98,7 +98,7 @@ export function AnalyticsTab() {
                   <XAxis dataKey="name" tick={{ fill: '#374151', fontSize: 12 }} />
                   <YAxis tick={{ fill: '#374151', fontSize: 12 }} />
                   <Tooltip 
-                    formatter={(value) => [`€${value}`, 'Fatturato']} 
+                    formatter={(value) => [`€${value}`, 'Revenue']} 
                     contentStyle={{ 
                       backgroundColor: '#ffffff', 
                       border: '1px solid #d1d5db',
@@ -121,7 +121,7 @@ export function AnalyticsTab() {
 
         <Card className="col-span-1 bg-white shadow-md border border-gray-200">
           <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Suddivisione Fatturato</CardTitle>
+            <CardTitle className="text-xl font-semibold text-gray-900">Revenue Breakdown</CardTitle>
           </CardHeader>
           <CardContent className="p-6 bg-white">
             <div className="flex items-center justify-center min-h-[300px] gap-6">
@@ -176,44 +176,44 @@ export function AnalyticsTab() {
         
         <Card className="col-span-1 bg-white shadow-md border border-gray-200">
           <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Metriche Chiave</CardTitle>
+            <CardTitle className="text-xl font-semibold text-gray-900">Key Metrics</CardTitle>
           </CardHeader>
           <CardContent className="p-6 bg-white">
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Check-in Giornalieri Medi</p>
+                  <p className="text-sm font-medium text-gray-600">Average Daily Check-ins</p>
                   <h3 className="text-2xl font-bold mt-1 text-gray-900">78</h3>
                   <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📈</span>
-                    +12% dal mese scorso
+                    +12% from last month
                   </p>
                 </div>
                 
                 <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Conversione Nuovi Membri</p>
+                  <p className="text-sm font-medium text-gray-600">New Member Conversion</p>
                   <h3 className="text-2xl font-bold mt-1 text-gray-900">32%</h3>
                   <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📈</span>
-                    +5% dal mese scorso
+                    +5% from last month
                   </p>
                 </div>
                 
                 <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Partecipazione ai Corsi</p>
+                  <p className="text-sm font-medium text-gray-600">Class Participation</p>
                   <h3 className="text-2xl font-bold mt-1 text-gray-900">68%</h3>
                   <p className="text-xs text-amber-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📉</span>
-                    -2% dal mese scorso
+                    -2% from last month
                   </p>
                 </div>
                 
                 <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Retention Membri</p>
+                  <p className="text-sm font-medium text-gray-600">Member Retention</p>
                   <h3 className="text-2xl font-bold mt-1 text-gray-900">92%</h3>
                   <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
                     <span className="mr-1">📈</span>
-                    +3% dal mese scorso
+                    +3% from last month
                   </p>
                 </div>
               </div>
