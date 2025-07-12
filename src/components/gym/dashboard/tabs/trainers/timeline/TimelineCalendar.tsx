@@ -1,7 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { WeekNavigation } from "./WeekNavigation";
 import { TimelineGrid } from "./TimelineGrid";
-import { SessionBlock } from "./SessionBlock";
 import { useCalendarEvents } from "@/hooks/useCalendarEvents";
 import { useGymTrainersData } from "@/hooks/gym/useGymTrainersData";
 import { startOfWeek, addDays, format, isSameDay } from "date-fns";
@@ -21,53 +20,47 @@ export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
     return { trainerId, events, loading };
   });
 
-  const weekStart = useMemo(() => startOfWeek(currentWeek, { weekStartsOn: 1 }), [currentWeek.getTime()]);
-  const weekDays = useMemo(() => 
-    Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), 
-    [weekStart.getTime()]
-  );
+  // Calculate week data without useMemo for now
+  const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
+  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
-  // Filter events for current week and aggregate by day/hour
-  const weekEvents = useMemo(() => {
-    const eventsByDay: Record<string, Array<{
-      id: string;
-      trainerId: string;
-      trainerName: string;
-      title: string;
-      start: Date;
-      end: Date;
-      color: string;
-      type: string;
-    }>> = {};
+  // Filter events for current week and aggregate by day/hour - simplified
+  const weekEvents: Record<string, Array<{
+    id: string;
+    trainerId: string;
+    trainerName: string;
+    title: string;
+    start: Date;
+    end: Date;
+    color: string;
+    type: string;
+  }>> = {};
 
-    trainerEvents.forEach(({ trainerId, events }) => {
-      const trainer = trainers.find(t => t.id === trainerId);
-      if (!trainer) return;
+  trainerEvents.forEach(({ trainerId, events }) => {
+    const trainer = trainers.find(t => t.id === trainerId);
+    if (!trainer) return;
 
-      events.forEach(event => {
-        weekDays.forEach(day => {
-          if (isSameDay(event.start, day)) {
-            const dayKey = format(day, 'yyyy-MM-dd');
-            if (!eventsByDay[dayKey]) {
-              eventsByDay[dayKey] = [];
-            }
-            eventsByDay[dayKey].push({
-              id: event.id,
-              trainerId,
-              trainerName: trainer.name,
-              title: event.title,
-              start: event.start,
-              end: event.end,
-              color: event.color,
-              type: event.type
-            });
+    events.forEach(event => {
+      weekDays.forEach(day => {
+        if (isSameDay(event.start, day)) {
+          const dayKey = format(day, 'yyyy-MM-dd');
+          if (!weekEvents[dayKey]) {
+            weekEvents[dayKey] = [];
           }
-        });
+          weekEvents[dayKey].push({
+            id: event.id,
+            trainerId,
+            trainerName: trainer.name,
+            title: event.title,
+            start: event.start,
+            end: event.end,
+            color: event.color,
+            type: event.type
+          });
+        }
       });
     });
-
-    return eventsByDay;
-  }, [weekStart.getTime(), selectedTrainers.length, trainers.length]);
+  });
 
   const handlePrevWeek = () => {
     setCurrentWeek(prev => addDays(prev, -7));
@@ -105,7 +98,7 @@ export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
             Orario
           </div>
           {weekDays.map(day => (
-            <div key={day.toISOString()} className="p-3 text-center border-r last:border-r-0">
+            <div key={day.getTime()} className="p-3 text-center border-r last:border-r-0">
               <div className="text-sm font-medium">
                 {format(day, 'EEE', { locale: it })}
               </div>
