@@ -27,6 +27,7 @@ const myTrainers = [
     hourlyRate: 50,
     nextAvailability: "Today at 4:00 PM",
     location: "New York, NY",
+    plan: "pro",
     education: "Bachelor's in Exercise Science, University of California",
     bio: "Dedicated fitness professional with 8+ years of experience helping clients achieve their health and fitness goals. Specialized in strength training, weight loss, and nutrition coaching.",
     certifications: ["NASM CPT", "ACE Nutrition Specialist", "Precision Nutrition Level 1"],
@@ -66,6 +67,7 @@ const myTrainers = [
     hourlyRate: 45,
     nextAvailability: "Available now",
     location: "Los Angeles, CA",
+    plan: "freemium",
     education: "Master's in Kinesiology, UCLA",
     bio: "High-energy trainer focused on HIIT and cardiovascular fitness. I believe in pushing limits while maintaining proper form and safety. Specialized in helping clients break through plateaus.",
     certifications: ["CrossFit Level 2", "HIIT Certified", "First Aid CPR"],
@@ -100,7 +102,7 @@ export function TrainersTab() {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number} | null>(null);
+  const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number, plan?: string} | null>(null);
   
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
   const userPlan = localStorage.getItem('user-plan') || "freemium";
@@ -119,8 +121,8 @@ export function TrainersTab() {
     }
   }, [followedTrainers]);
   
-  const handlePayTrainer = (trainer: string, amount: number = 45) => {
-    setSelectedTrainer({ name: trainer, amount });
+  const handlePayTrainer = (trainer: string, amount: number = 45, trainerPlan: string = "freemium") => {
+    setSelectedTrainer({ name: trainer, amount, plan: trainerPlan });
     setShowPaymentDialog(true);
   };
 
@@ -167,8 +169,8 @@ export function TrainersTab() {
             onPaymentComplete={handlePaymentComplete}
             title={`Pay ${selectedTrainer.name}`}
             description="Complete payment for trainer services"
-            isPremiumFeature={true}
-            userPlan={userPlan}
+            isClientPayment={true}
+            trainerPlan={selectedTrainer.plan || "freemium"}
           />
         )}
       </Card>

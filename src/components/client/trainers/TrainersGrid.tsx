@@ -17,11 +17,12 @@ interface Trainer {
   hourlyRate?: number;
   nextAvailability?: string;
   location?: string;
+  plan?: string;
 }
 
 interface TrainersGridProps {
   trainers: Trainer[];
-  onPayClick: (trainer: string, amount: number) => void;
+  onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
   followedTrainers: number[];
   onFollowToggle: (id: number, name: string) => void;
 }
@@ -91,6 +92,7 @@ export function TrainersGrid({
             hourlyRate={trainer.hourlyRate}
             nextAvailability={trainer.nextAvailability}
             location={trainer.location}
+            plan={trainer.plan}
             onPayClick={onPayClick}
             isFollowing={followedTrainers.includes(trainer.id)}
             onFollowToggle={onFollowToggle}

@@ -5,10 +5,11 @@ import { DollarSign, Star, User } from "lucide-react";
 interface TrainerCardActionsProps {
   id: number;
   name: string;
-  onPayClick: (trainer: string, amount: number) => void;
+  onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
   onViewProfile: (id: number, name: string) => void;
   onLeaveReview: (id: number, name: string) => void;
   hourlyRate?: number;
+  plan?: string;
 }
 
 export function TrainerCardActions({ 
@@ -17,7 +18,8 @@ export function TrainerCardActions({
   onPayClick,
   onViewProfile,
   onLeaveReview,
-  hourlyRate
+  hourlyRate,
+  plan = "freemium"
 }: TrainerCardActionsProps) {
   const paymentAmount = hourlyRate || (id === 1 ? 50 : 45);
   
@@ -47,7 +49,7 @@ export function TrainerCardActions({
           variant="outline" 
           size="sm"
           className="flex items-center justify-center gap-1 hover:bg-green-50 hover:border-green-200 hover:text-green-700 h-8 text-xs"
-          onClick={() => onPayClick(name, paymentAmount)}
+          onClick={() => onPayClick(name, paymentAmount, plan)}
         >
           <DollarSign className="h-3 w-3 shrink-0" />
           <span className="truncate">${paymentAmount}</span>

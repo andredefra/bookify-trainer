@@ -15,7 +15,7 @@ interface Trainer {
 interface FollowedTrainersSectionProps {
   followedTrainers: number[];
   allTrainers: Trainer[];
-  onPayClick: (trainer: string, amount: number) => void;
+  onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
   onFollowToggle: (id: number, name: string) => void;
   onBrowseTrainers: () => void;
 }

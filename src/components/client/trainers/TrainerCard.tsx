@@ -15,7 +15,8 @@ interface TrainerCardProps {
   hourlyRate?: number;
   nextAvailability?: string;
   location?: string;
-  onPayClick: (trainer: string, amount: number) => void;
+  plan?: string;
+  onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
   isFollowing: boolean;
   onFollowToggle: (id: number, name: string) => void;
   onViewProfile: (id: number, name: string) => void;
@@ -33,6 +34,7 @@ export function TrainerCard({
   hourlyRate,
   nextAvailability,
   location,
+  plan = "freemium",
   onPayClick,
   isFollowing,
   onFollowToggle,
@@ -70,6 +72,7 @@ export function TrainerCard({
           onViewProfile={onViewProfile}
           onLeaveReview={onLeaveReview}
           hourlyRate={hourlyRate}
+          plan={plan}
         />
       </div>
     </Card>

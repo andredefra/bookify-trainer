@@ -18,6 +18,7 @@ interface Trainer {
   hourlyRate?: number;
   nextAvailability?: string;
   location?: string;
+  plan?: string;
   education?: string;
   bio?: string;
   certifications?: string[];
@@ -52,7 +53,7 @@ interface TrainersTabContentProps {
   myTrainers: Trainer[];
   paymentHistory: Payment[];
   followedTrainers: number[];
-  onPayClick: (trainer: string, amount: number) => void;
+  onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
   onFollowToggle: (id: number, name: string) => void;
   onTabChange: (tab: "trainers" | "payments" | "marketplace" | "followed") => void;
 }

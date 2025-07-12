@@ -34,6 +34,8 @@ interface PaymentDialogProps {
   description?: string;
   isPremiumFeature?: boolean;
   userPlan?: string;
+  isClientPayment?: boolean;
+  trainerPlan?: string;
 }
 
 // PayPal payment form mockup
@@ -94,10 +96,14 @@ export function PaymentDialog({
   title = "Complete Payment",
   description = "Enter your payment details",
   isPremiumFeature = false,
-  userPlan = "freemium"
+  userPlan = "freemium",
+  isClientPayment = false,
+  trainerPlan = "freemium"
 }: PaymentDialogProps) {
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash' | 'paypal' | 'klarna'>('card');
+  // Default to cash if client payment and trainer doesn't have pro plan
+  const defaultPaymentMethod = (isClientPayment && trainerPlan !== "pro") ? 'cash' : 'card';
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash' | 'paypal' | 'klarna'>(defaultPaymentMethod);
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -106,13 +112,19 @@ export function PaymentDialog({
   const isMobile = useMediaQuery("(max-width: 640px)");
   
   // Check if direct payment is available based on plan
-  const isDirectPaymentAllowed = !isPremiumFeature || userPlan === "pro";
+  // For client payments, check trainer's plan; for trainer features, check user's plan
+  const isDirectPaymentAllowed = isClientPayment 
+    ? trainerPlan === "pro"
+    : (!isPremiumFeature || userPlan === "pro");
+    
+  // Show premium card only for trainers, not clients
+  const showPremiumCard = !isClientPayment && isPremiumFeature && userPlan !== "pro";
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (isPremiumFeature && userPlan !== "pro") {
-      // Premium feature check
+    // For trainer premium features, check user plan
+    if (!isClientPayment && isPremiumFeature && userPlan !== "pro") {
       return;
     }
     
@@ -190,8 +202,8 @@ export function PaymentDialog({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         
-        {/* Show premium feature card for direct payments if not on pro plan */}
-        {isPremiumFeature && userPlan !== "pro" ? (
+        {/* Show premium feature card only for trainers, not clients */}
+        {showPremiumCard ? (
           <PremiumFeatureCard />
         ) : (
           <form onSubmit={handleSubmit}>
@@ -216,7 +228,9 @@ export function PaymentDialog({
               
               <PaymentMethodSelector 
                 selectedMethod={paymentMethod} 
-                onMethodChange={setPaymentMethod} 
+                onMethodChange={setPaymentMethod}
+                isClientPayment={isClientPayment}
+                trainerPlan={trainerPlan}
               />
               
               {renderPaymentForm()}
