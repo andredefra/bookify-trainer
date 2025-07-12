@@ -49,7 +49,7 @@ export function useTrainerContracts() {
 
       if (error) throw error;
       
-      setContracts(data || []);
+      setContracts((data || []) as TrainerContract[]);
     } catch (err) {
       console.error('Error fetching contracts:', err);
       setError('Failed to fetch contracts');

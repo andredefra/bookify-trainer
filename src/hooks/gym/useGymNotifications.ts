@@ -40,7 +40,7 @@ export function useGymNotifications() {
 
       if (error) throw error;
       
-      setNotifications(data || []);
+      setNotifications((data || []) as GymNotification[]);
     } catch (err) {
       console.error('Error fetching gym notifications:', err);
       setError('Failed to fetch notifications');
