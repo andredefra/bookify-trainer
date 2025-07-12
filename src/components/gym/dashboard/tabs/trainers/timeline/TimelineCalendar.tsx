@@ -21,10 +21,10 @@ export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
     return { trainerId, events, loading };
   });
 
-  const weekStart = useMemo(() => startOfWeek(currentWeek, { weekStartsOn: 1 }), [currentWeek]);
+  const weekStart = useMemo(() => startOfWeek(currentWeek, { weekStartsOn: 1 }), [currentWeek.getTime()]);
   const weekDays = useMemo(() => 
     Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), 
-    [weekStart]
+    [weekStart.getTime()]
   );
 
   // Filter events for current week and aggregate by day/hour
