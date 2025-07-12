@@ -13,7 +13,24 @@ export function generateDemoUserId(email: string): string {
 }
 
 export function getDemoUserData(email: string, name: string, type: string) {
-  const userId = generateDemoUserId(email);
+  // Use consistent UUIDs for specific demo users
+  let userId: string;
+  
+  if (type === 'gym' && email === 'gym@demo.com') {
+    userId = '11111111-1111-1111-1111-111111111111';
+  } else if (type === 'trainer' && email === 'trainer1@demo.com') {
+    userId = '22222222-2222-2222-2222-222222222222';
+  } else if (type === 'trainer' && email === 'trainer2@demo.com') {
+    userId = '33333333-3333-3333-3333-333333333333';
+  } else if (type === 'client' && email === 'client1@demo.com') {
+    userId = '44444444-4444-4444-4444-444444444444';
+  } else if (type === 'client' && email === 'client2@demo.com') {
+    userId = '55555555-5555-5555-5555-555555555555';
+  } else if (type === 'client' && email === 'client3@demo.com') {
+    userId = '66666666-6666-6666-6666-666666666666';
+  } else {
+    userId = generateDemoUserId(email);
+  }
   
   return {
     id: userId,
@@ -33,6 +50,12 @@ export function getCurrentDemoUserId(): string {
   if (demoUser) {
     try {
       const userData = JSON.parse(demoUser);
+      
+      // For gym type users, use the consistent demo gym UUID
+      if (userData.type === 'gym') {
+        return '11111111-1111-1111-1111-111111111111';
+      }
+      
       // Check if the ID is already a valid UUID format
       if (userData.id && userData.id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
         return userData.id;
