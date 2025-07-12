@@ -67,7 +67,12 @@ export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
     });
 
     return eventsByDay;
-  }, [trainerEvents, trainers, weekDays]);
+  }, [
+    selectedTrainers.join(','), 
+    trainers.map(t => t.id).join(','), 
+    weekDays.map(d => d.toISOString()).join(','),
+    trainerEvents.map(te => te.events.length).join(',')
+  ]);
 
   const handlePrevWeek = () => {
     setCurrentWeek(prev => addDays(prev, -7));
