@@ -14,21 +14,22 @@ export interface GymTrainerAssignment {
   notes?: string;
   trainer_name?: string;
   client_name?: string;
+  client_email?: string;
 }
 
 export interface TrainerOption {
   id: string;
   name: string;
   email: string;
-  status: 'online' | 'away' | 'offline';
-  activeClients: number;
+  specialties?: string[];
 }
 
 export interface ClientOption {
   id: string;
   name: string;
   email: string;
-  status: 'active' | 'inactive';
+  phone?: string;
+  membership_status: string;
 }
 
 export function useGymTrainerAssignments() {
@@ -48,39 +49,55 @@ export function useGymTrainerAssignments() {
   const fetchAssignments = async () => {
     try {
       setLoading(true);
-      
-      // Mock data for demo - replace with real Supabase query
+      setError(null);
+
+      // Use consistent demo data with proper UUIDs
       const mockAssignments: GymTrainerAssignment[] = [
         {
-          id: '1',
-          gym_id: 'gym-1',
-          trainer_id: '550e8400-e29b-41d4-a716-446655440001',
-          client_id: 'client-1',
-          assigned_at: '2024-01-15T10:00:00Z',
+          id: '00000000-0000-0000-0000-000000000004',
+          gym_id: '11111111-1111-1111-1111-111111111111',
+          trainer_id: '22222222-2222-2222-2222-222222222222',
+          client_id: '44444444-4444-4444-4444-444444444444',
+          assigned_at: '2025-01-01T10:00:00Z',
           status: 'active',
           assignment_type: 'premium',
-          notes: 'Cliente premium assegnato per programma personalizzato',
+          notes: 'Premium client with personal training focus',
           trainer_name: 'Alex Johnson',
-          client_name: 'Marco Rossi'
+          client_name: 'Maria Rodriguez',
+          client_email: 'maria@example.com'
         },
         {
-          id: '2',
-          gym_id: 'gym-1',
-          trainer_id: '550e8400-e29b-41d4-a716-446655440002',
-          client_id: 'client-2',
-          assigned_at: '2024-01-20T14:30:00Z',
+          id: '00000000-0000-0000-0000-000000000005',
+          gym_id: '11111111-1111-1111-1111-111111111111',
+          trainer_id: '22222222-2222-2222-2222-222222222222',
+          client_id: '55555555-5555-5555-5555-555555555555',
+          assigned_at: '2025-01-05T14:00:00Z',
           status: 'active',
           assignment_type: 'standard',
-          trainer_name: 'Emma Davis',
-          client_name: 'Laura Bianchi'
+          notes: 'Regular personal training sessions',
+          trainer_name: 'Alex Johnson',
+          client_name: 'John Smith',
+          client_email: 'john@example.com'
+        },
+        {
+          id: '00000000-0000-0000-0000-000000000006',
+          gym_id: '11111111-1111-1111-1111-111111111111',
+          trainer_id: '33333333-3333-3333-3333-333333333333',
+          client_id: '66666666-6666-6666-6666-666666666666',
+          assigned_at: '2025-01-10T09:00:00Z',
+          status: 'active',
+          assignment_type: 'trial',
+          notes: 'Trial period for new member',
+          trainer_name: 'Sarah Wilson',
+          client_name: 'Lisa Brown',
+          client_email: 'lisa@example.com'
         }
       ];
 
       setAssignments(mockAssignments);
-      setError(null);
     } catch (err) {
-      setError('Errore nel caricamento delle assegnazioni');
       console.error('Error fetching assignments:', err);
+      setError('Failed to fetch trainer assignments');
     } finally {
       setLoading(false);
     }
@@ -88,64 +105,73 @@ export function useGymTrainerAssignments() {
 
   const fetchAvailableTrainers = async () => {
     try {
-      // Mock data - replace with real query
+      // Use consistent demo trainers
       const mockTrainers: TrainerOption[] = [
         {
-          id: '550e8400-e29b-41d4-a716-446655440001',
+          id: '22222222-2222-2222-2222-222222222222',
           name: 'Alex Johnson',
-          email: 'alex.johnson@email.com',
-          status: 'online',
-          activeClients: 15
+          email: 'alex@fitlifegym.com',
+          specialties: ['Personal Training', 'Weight Loss', 'Strength Training']
         },
         {
-          id: '550e8400-e29b-41d4-a716-446655440002',
-          name: 'Emma Davis',
-          email: 'emma.davis@email.com',
-          status: 'away',
-          activeClients: 12
+          id: '33333333-3333-3333-3333-333333333333',
+          name: 'Sarah Wilson',
+          email: 'sarah@fitlifegym.com',
+          specialties: ['Yoga', 'Pilates', 'Group Fitness']
         },
         {
-          id: '550e8400-e29b-41d4-a716-446655440003',
-          name: 'Marcus Thompson',
-          email: 'marcus.thompson@email.com',
-          status: 'offline',
-          activeClients: 8
+          id: '77777777-1111-1111-1111-777777777777',
+          name: 'Mike Rodriguez',
+          email: 'mike@fitlifegym.com',
+          specialties: ['CrossFit', 'HIIT', 'Athletic Performance']
         }
       ];
 
       setAvailableTrainers(mockTrainers);
     } catch (err) {
       console.error('Error fetching trainers:', err);
+      setError('Failed to fetch available trainers');
     }
   };
 
   const fetchAvailableClients = async () => {
     try {
-      // Mock data - replace with real query
+      // Use consistent demo clients
       const mockClients: ClientOption[] = [
         {
-          id: 'client-3',
-          name: 'Giuseppe Verdi',
-          email: 'giuseppe.verdi@email.com',
-          status: 'active'
+          id: '44444444-4444-4444-4444-444444444444',
+          name: 'Maria Rodriguez',
+          email: 'maria@example.com',
+          phone: '+1 (555) 123-4567',
+          membership_status: 'active'
         },
         {
-          id: 'client-4',
-          name: 'Francesca Neri',
-          email: 'francesca.neri@email.com',
-          status: 'active'
+          id: '55555555-5555-5555-5555-555555555555',
+          name: 'John Smith',
+          email: 'john@example.com',
+          phone: '+1 (555) 234-5678',
+          membership_status: 'active'
         },
         {
-          id: 'client-5',
-          name: 'Roberto Blu',
-          email: 'roberto.blu@email.com',
-          status: 'inactive'
+          id: '66666666-6666-6666-6666-666666666666',
+          name: 'Lisa Brown',
+          email: 'lisa@example.com',
+          phone: '+1 (555) 345-6789',
+          membership_status: 'trial'
+        },
+        {
+          id: '77777777-8888-8888-8888-777777777777',
+          name: 'David Wilson',
+          email: 'david@example.com',
+          phone: '+1 (555) 456-7890',
+          membership_status: 'pending'
         }
       ];
 
       setAvailableClients(mockClients);
     } catch (err) {
       console.error('Error fetching clients:', err);
+      setError('Failed to fetch available clients');
     }
   };
 

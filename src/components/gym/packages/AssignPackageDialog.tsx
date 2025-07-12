@@ -24,11 +24,21 @@ export function AssignPackageDialog({
   const [selectedClient, setSelectedClient] = useState<string>('');
   const [selectedTrainer, setSelectedTrainer] = useState<string>('');
   
-  const { assignments } = useGymTrainerAssignments();
+  const { availableTrainers, availableClients } = useGymTrainerAssignments();
 
-  // Get unique clients and trainers from assignments
-  const clients = assignments.map(a => ({ id: a.client_id, name: `Client ${a.client_id.slice(0, 8)}` }));
-  const trainers = assignments.map(a => ({ id: a.trainer_id, name: `Trainer ${a.trainer_id.slice(0, 8)}` }));
+  // Use consistent demo data
+  const clients = availableClients.length > 0 ? availableClients : [
+    { id: '44444444-4444-4444-4444-444444444444', name: 'Maria Rodriguez', email: 'maria@example.com' },
+    { id: '55555555-5555-5555-5555-555555555555', name: 'John Smith', email: 'john@example.com' },
+    { id: '66666666-6666-6666-6666-666666666666', name: 'Lisa Brown', email: 'lisa@example.com' },
+    { id: '77777777-8888-8888-8888-777777777777', name: 'David Wilson', email: 'david@example.com' }
+  ];
+  
+  const trainers = availableTrainers.length > 0 ? availableTrainers : [
+    { id: '22222222-2222-2222-2222-222222222222', name: 'Alex Johnson', email: 'alex@fitlifegym.com' },
+    { id: '33333333-3333-3333-3333-333333333333', name: 'Sarah Wilson', email: 'sarah@fitlifegym.com' },
+    { id: '77777777-1111-1111-1111-777777777777', name: 'Mike Rodriguez', email: 'mike@fitlifegym.com' }
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

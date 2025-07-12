@@ -116,11 +116,15 @@ export function CreateAssignmentDialog({
                             <div className="flex-1">
                               <div className="flex items-center gap-2">
                                 <span className="font-medium">{trainer.name}</span>
-                                <div className={`w-2 h-2 rounded-full ${statusColors[trainer.status]}`} />
                               </div>
                               <div className="text-xs text-muted-foreground">
-                                {trainer.activeClients} clienti attivi
+                                {trainer.email}
                               </div>
+                              {trainer.specialties && (
+                                <div className="text-xs text-muted-foreground">
+                                  {trainer.specialties.join(', ')}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </SelectItem>
@@ -138,14 +142,15 @@ export function CreateAssignmentDialog({
                         <div>
                           <p className="font-medium">{selectedTrainer.name}</p>
                           <p className="text-sm text-muted-foreground">{selectedTrainer.email}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className="text-xs">
-                              {selectedTrainer.activeClients} clienti attivi
-                            </Badge>
-                            <Badge variant={selectedTrainer.status === 'online' ? 'default' : 'secondary'} className="text-xs">
-                              {selectedTrainer.status}
-                            </Badge>
-                          </div>
+                          {selectedTrainer.specialties && (
+                            <div className="flex gap-1 mt-1">
+                              {selectedTrainer.specialties.map((specialty, index) => (
+                                <Badge key={index} variant="outline" className="text-xs">
+                                  {specialty}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -183,13 +188,18 @@ export function CreateAssignmentDialog({
                             <div className="flex-1">
                               <div className="flex items-center gap-2">
                                 <span className="font-medium">{client.name}</span>
-                                <Badge variant={client.status === 'active' ? 'default' : 'secondary'} className="text-xs">
-                                  {client.status}
+                                <Badge variant={client.membership_status === 'active' ? 'default' : 'secondary'} className="text-xs">
+                                  {client.membership_status}
                                 </Badge>
                               </div>
                               <div className="text-xs text-muted-foreground">
                                 {client.email}
                               </div>
+                              {client.phone && (
+                                <div className="text-xs text-muted-foreground">
+                                  {client.phone}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </SelectItem>
@@ -207,8 +217,11 @@ export function CreateAssignmentDialog({
                         <div>
                           <p className="font-medium">{selectedClient.name}</p>
                           <p className="text-sm text-muted-foreground">{selectedClient.email}</p>
-                          <Badge variant={selectedClient.status === 'active' ? 'default' : 'secondary'} className="text-xs">
-                            {selectedClient.status}
+                          {selectedClient.phone && (
+                            <p className="text-sm text-muted-foreground">{selectedClient.phone}</p>
+                          )}
+                          <Badge variant={selectedClient.membership_status === 'active' ? 'default' : 'secondary'} className="text-xs">
+                            {selectedClient.membership_status}
                           </Badge>
                         </div>
                       </div>
