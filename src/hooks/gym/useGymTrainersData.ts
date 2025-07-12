@@ -26,13 +26,12 @@ export function useGymTrainersData() {
     try {
       setLoading(true);
       
-      // For now, using mock data but prepared for real database integration
-      // This would query trainer_client_relationships, calendar_events, etc.
+      // Mock data with proper UUIDs matching the database calendar events
       const mockData: GymTrainerData[] = [
         {
-          id: '1',
-          name: 'Marco Rossi',
-          email: 'marco.rossi@email.com',
+          id: '550e8400-e29b-41d4-a716-446655440001',
+          name: 'Alex Johnson',
+          email: 'alex.johnson@email.com',
           status: 'online',
           activeClients: 15,
           totalSessions: 120,
@@ -41,9 +40,9 @@ export function useGymTrainersData() {
           joinDate: '2024-01-15'
         },
         {
-          id: '2', 
-          name: 'Laura Bianchi',
-          email: 'laura.bianchi@email.com',
+          id: '550e8400-e29b-41d4-a716-446655440002', 
+          name: 'Emma Davis',
+          email: 'emma.davis@email.com',
           status: 'away',
           activeClients: 12,
           totalSessions: 95,
@@ -52,9 +51,9 @@ export function useGymTrainersData() {
           joinDate: '2024-02-20'
         },
         {
-          id: '3',
-          name: 'Giovanni Verdi',
-          email: 'giovanni.verdi@email.com', 
+          id: '550e8400-e29b-41d4-a716-446655440003',
+          name: 'Marcus Thompson',
+          email: 'marcus.thompson@email.com', 
           status: 'offline',
           activeClients: 8,
           totalSessions: 60,

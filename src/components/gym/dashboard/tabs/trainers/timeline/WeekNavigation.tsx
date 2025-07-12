@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import { format, startOfWeek, endOfWeek } from "date-fns";
-import { it } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 interface WeekNavigationProps {
   currentWeek: Date;
@@ -47,7 +47,7 @@ export function WeekNavigation({
         </Button>
 
         <div className="text-lg font-semibold ml-4">
-          {format(weekStart, 'd MMM', { locale: it })} - {format(weekEnd, 'd MMM yyyy', { locale: it })}
+          {format(weekStart, 'd MMM', { locale: enUS })} - {format(weekEnd, 'd MMM yyyy', { locale: enUS })}
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export function WeekNavigation({
             className="gap-2"
           >
             <Calendar className="h-4 w-4" />
-            Oggi
+            Today
           </Button>
         )}
       </div>

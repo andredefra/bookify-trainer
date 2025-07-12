@@ -9,9 +9,11 @@ import { useGymTrainersData } from "@/hooks/gym/useGymTrainersData";
 import { useTrainerRealTimeStatus } from "@/hooks/gym/useTrainerRealTimeStatus";
 import { TimelineCalendar } from "./timeline/TimelineCalendar";
 import { TrainerSelector } from "./timeline/TrainerSelector";
+import { AppointmentListView } from "./timeline/AppointmentListView";
 
 export function AvailabilityCalendar() {
   const [selectedTrainers, setSelectedTrainers] = useState<string[]>([]);
+  const [currentWeek, setCurrentWeek] = useState(new Date());
   const { trainers, loading } = useGymTrainersData();
   const { getTrainerStatus } = useTrainerRealTimeStatus();
 
@@ -35,7 +37,7 @@ export function AvailabilityCalendar() {
     if (!status) return "Unknown";
     
     if (status.status === "busy" && status.currentSession) {
-      const endTime = new Date(status.currentSession.endTime).toLocaleTimeString('it-IT', {
+      const endTime = new Date(status.currentSession.endTime).toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit'
       });
@@ -53,9 +55,9 @@ export function AvailabilityCalendar() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Calendario Trainers</h2>
+          <h2 className="text-2xl font-bold">Trainer Schedule & Availability</h2>
           <p className="text-muted-foreground">
-            Visualizza disponibilità e sessioni dei trainers
+            View trainer schedules, appointments, and available booking slots
           </p>
         </div>
         <TrainerSelector 
@@ -72,75 +74,39 @@ export function AvailabilityCalendar() {
           </TabsTrigger>
           <TabsTrigger value="list" className="gap-2">
             <CalendarIcon className="h-4 w-4" />
-            Lista
+            List View
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="timeline" className="mt-6">
           {selectedTrainers.length > 0 ? (
-            <TimelineCalendar selectedTrainers={selectedTrainers} />
+            <TimelineCalendar 
+              selectedTrainers={selectedTrainers} 
+              currentWeek={currentWeek}
+              onWeekChange={setCurrentWeek}
+            />
           ) : (
             <Card className="p-8 text-center">
               <div className="text-muted-foreground">
-                Seleziona almeno un trainer per visualizzare il calendario
+                Select at least one trainer to view their schedule
               </div>
             </Card>
           )}
         </TabsContent>
 
         <TabsContent value="list" className="mt-6">
-          <div className="space-y-4">
-            {trainers
-              .filter(trainer => selectedTrainers.includes(trainer.id))
-              .map(trainer => {
-                const realtimeStatus = getTrainerStatus(trainer.id);
-                const statusColor = getStatusColor(realtimeStatus?.status || 'offline');
-                
-                return (
-                  <Card key={trainer.id} className="p-4">
-                    <div className="flex items-center space-x-4">
-                      <Avatar>
-                        <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-medium">{trainer.name}</h4>
-                          <div className="flex items-center">
-                            <Circle className={`h-2 w-2 ${statusColor} mr-1`} />
-                            <span className="text-xs text-muted-foreground">{getStatusText(trainer.id)}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2">
-                          <Badge variant="outline" className={
-                            realtimeStatus?.status === "available" 
-                              ? "bg-green-50 text-green-700 border-green-200" 
-                              : "bg-red-50 text-red-700 border-red-200"
-                          }>
-                            {realtimeStatus?.status === "busy" ? "Occupato" : "Disponibile"}
-                          </Badge>
-                          {realtimeStatus?.nextAvailableTime && (
-                            <span className="text-xs text-muted-foreground">
-                              Prossima disponibilità: {new Date(realtimeStatus.nextAvailableTime).toLocaleTimeString('it-IT', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            
-            {selectedTrainers.length === 0 && (
-              <Card className="p-8 text-center">
-                <div className="text-muted-foreground">
-                  Seleziona dei trainers per visualizzare la loro disponibilità
-                </div>
-              </Card>
-            )}
-          </div>
+          {selectedTrainers.length > 0 ? (
+            <AppointmentListView 
+              selectedTrainers={selectedTrainers}
+              currentWeek={currentWeek}
+            />
+          ) : (
+            <Card className="p-8 text-center">
+              <div className="text-muted-foreground">
+                Select trainers to view their availability and appointments
+              </div>
+            </Card>
+          )}
         </TabsContent>
       </Tabs>
     </div>

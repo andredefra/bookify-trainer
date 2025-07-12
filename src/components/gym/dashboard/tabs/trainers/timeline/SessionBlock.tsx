@@ -24,12 +24,12 @@ export function SessionBlock({ event, isCompact = false }: SessionBlockProps) {
   
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'session': return 'Sessione';
-      case 'sales_activity': return 'Vendita';
-      case 'program_milestone': return 'Milestone';
-      case 'deadline': return 'Scadenza';
-      case 'personal_task': return 'Task';
-      case 'availability': return 'Disponibile';
+      case 'session': return 'Training Session';
+      case 'sales_activity': return 'Sales Activity';
+      case 'program_milestone': return 'Program Milestone';
+      case 'deadline': return 'Deadline';
+      case 'personal_task': return 'Personal Task';
+      case 'availability': return 'Available';
       default: return type;
     }
   };

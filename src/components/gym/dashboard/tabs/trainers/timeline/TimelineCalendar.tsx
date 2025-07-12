@@ -4,14 +4,21 @@ import { TimelineGrid } from "./TimelineGrid";
 import { useCalendarEvents } from "@/hooks/useCalendarEvents";
 import { useGymTrainersData } from "@/hooks/gym/useGymTrainersData";
 import { startOfWeek, addDays, format, isSameDay } from "date-fns";
-import { it } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 interface TimelineCalendarProps {
   selectedTrainers: string[];
+  currentWeek?: Date;
+  onWeekChange?: (date: Date) => void;
 }
 
-export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
-  const [currentWeek, setCurrentWeek] = useState(new Date());
+export function TimelineCalendar({ 
+  selectedTrainers, 
+  currentWeek: externalCurrentWeek, 
+  onWeekChange 
+}: TimelineCalendarProps) {
+  const [internalCurrentWeek, setInternalCurrentWeek] = useState(new Date());
+  const currentWeek = externalCurrentWeek || internalCurrentWeek;
   const { trainers, loading: trainersLoading } = useGymTrainersData();
   
   // Get events for selected trainers
@@ -63,15 +70,30 @@ export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
   });
 
   const handlePrevWeek = () => {
-    setCurrentWeek(prev => addDays(prev, -7));
+    const newWeek = addDays(currentWeek, -7);
+    if (onWeekChange) {
+      onWeekChange(newWeek);
+    } else {
+      setInternalCurrentWeek(newWeek);
+    }
   };
 
   const handleNextWeek = () => {
-    setCurrentWeek(prev => addDays(prev, 7));
+    const newWeek = addDays(currentWeek, 7);
+    if (onWeekChange) {
+      onWeekChange(newWeek);
+    } else {
+      setInternalCurrentWeek(newWeek);
+    }
   };
 
   const handleToday = () => {
-    setCurrentWeek(new Date());
+    const today = new Date();
+    if (onWeekChange) {
+      onWeekChange(today);
+    } else {
+      setInternalCurrentWeek(today);
+    }
   };
 
   if (trainersLoading || trainerEvents.some(t => t.loading)) {
@@ -95,12 +117,12 @@ export function TimelineCalendar({ selectedTrainers }: TimelineCalendarProps) {
       <div className="border rounded-lg overflow-hidden bg-background">
         <div className="grid grid-cols-8 border-b bg-muted/30">
           <div className="p-3 text-sm font-medium text-muted-foreground border-r">
-            Orario
+            Time
           </div>
           {weekDays.map(day => (
             <div key={day.getTime()} className="p-3 text-center border-r last:border-r-0">
               <div className="text-sm font-medium">
-                {format(day, 'EEE', { locale: it })}
+                {format(day, 'EEE', { locale: enUS })}
               </div>
               <div className="text-lg font-semibold mt-1">
                 {format(day, 'd')}
