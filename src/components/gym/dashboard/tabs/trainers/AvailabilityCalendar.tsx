@@ -36,6 +36,12 @@ export function AvailabilityCalendar() {
     return status.status === "available" ? "Available" : "Busy";
   };
 
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
+
   if (loading) {
     return <div className="p-4">Loading trainers...</div>;
   }
@@ -46,7 +52,7 @@ export function AvailabilityCalendar() {
         <Calendar
           mode="single"
           selected={selectedDate}
-          onSelect={setSelectedDate}
+          onSelect={handleDateSelect}
           className="rounded-md border shadow p-3 pointer-events-auto"
           initialFocus
         />
