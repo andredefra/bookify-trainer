@@ -13,8 +13,8 @@ import * as z from "zod";
 import { type TrainerOption, type ClientOption } from "@/hooks/gym/useGymTrainerAssignments";
 
 const formSchema = z.object({
-  trainerId: z.string().min(1, "Seleziona un trainer"),
-  clientId: z.string().min(1, "Seleziona un cliente"),
+  trainerId: z.string().min(1, "Please select a trainer"),
+  clientId: z.string().min(1, "Please select a client"),
   assignmentType: z.enum(["standard", "premium", "trial"]),
   notes: z.string().optional(),
 });
@@ -75,14 +75,14 @@ export function CreateAssignmentDialog({
       <DialogTrigger asChild>
         <Button>
           <UserPlus className="h-4 w-4 mr-2" />
-          Assegna Trainer
+          Assign Trainer
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Assegna Personal Trainer</DialogTitle>
+          <DialogTitle>Assign Personal Trainer</DialogTitle>
           <DialogDescription>
-            Assegna un personal trainer a un cliente della palestra
+            Assign a personal trainer to a gym client
           </DialogDescription>
         </DialogHeader>
 
@@ -101,7 +101,7 @@ export function CreateAssignmentDialog({
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Seleziona un trainer" />
+                        <SelectValue placeholder="Select a trainer" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -168,12 +168,12 @@ export function CreateAssignmentDialog({
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    Cliente
+                    Client
                   </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Seleziona un cliente" />
+                        <SelectValue placeholder="Select a client" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -238,7 +238,7 @@ export function CreateAssignmentDialog({
               name="assignmentType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tipo di Assegnazione</FormLabel>
+                  <FormLabel>Assignment Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -246,13 +246,13 @@ export function CreateAssignmentDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="trial">Trial - Periodo di prova</SelectItem>
-                      <SelectItem value="standard">Standard - Servizio base</SelectItem>
-                      <SelectItem value="premium">Premium - Servizio completo</SelectItem>
+                      <SelectItem value="trial">Trial - Trial Period</SelectItem>
+                      <SelectItem value="standard">Standard - Basic Service</SelectItem>
+                      <SelectItem value="premium">Premium - Full Service</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Seleziona il tipo di servizio per questa assegnazione
+                    Select the service type for this assignment
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -265,15 +265,15 @@ export function CreateAssignmentDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Note (opzionali)</FormLabel>
+                  <FormLabel>Notes (optional)</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Aggiungi note o istruzioni specifiche..."
+                      placeholder="Add notes or specific instructions..."
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Note che saranno visibili sia al trainer che al cliente
+                    Notes that will be visible to both trainer and client
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -286,10 +286,10 @@ export function CreateAssignmentDialog({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Annulla
+                Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? "Assegnazione..." : "Crea Assegnazione"}
+                {loading ? "Creating..." : "Create Assignment"}
               </Button>
             </div>
           </form>

@@ -104,16 +104,10 @@ export function useTrainerContracts() {
       setLoading(true);
       const gymId = getCurrentGymId();
       
-      // Try to fetch real trainer data from contracts table
-      const { data: contractsData, error } = await supabase
-        .from('gym_trainer_contracts')
-        .select('*')
-        .eq('gym_id', gymId)
-        .eq('status', 'active');
-
-      if (error) throw error;
-
-      // For now, use enhanced demo data with English names that matches existing trainer IDs
+      // For demo, always use mock data but keep it consistent
+      console.log('Fetching trainers with contracts for gym:', gymId);
+      
+      // Enhanced demo data with English names that matches existing trainer IDs
       const mockTrainers: TrainerWithContract[] = [
         {
           id: '22222222-2222-2222-2222-222222222222',
@@ -167,6 +161,7 @@ export function useTrainerContracts() {
         }
       ];
       
+      console.log('Mock trainers loaded:', mockTrainers.length);
       setTrainersWithContracts(mockTrainers);
     } catch (err) {
       console.error('Error fetching trainers:', err);
@@ -270,9 +265,8 @@ export function useTrainerContracts() {
   }, [fetchContracts]);
 
   useEffect(() => {
-    if (contracts.length > 0) {
-      fetchTrainersWithContracts();
-    }
+    // Always fetch trainers, regardless of contracts
+    fetchTrainersWithContracts();
   }, [contracts, fetchTrainersWithContracts]);
 
   return {

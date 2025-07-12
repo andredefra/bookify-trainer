@@ -32,7 +32,7 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">
-                Assegnazione #{assignment.id.slice(-6)}
+                Assignment #{assignment.id.slice(-6)}
               </CardTitle>
               <div className="flex items-center gap-2">
                 <Badge className={statusColors[assignment.status]}>
@@ -69,7 +69,7 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <User className="h-4 w-4" />
-                  Cliente
+                  Client
                 </div>
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
@@ -91,10 +91,10 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                 <div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                     <CalendarDays className="h-4 w-4" />
-                    Data Assegnazione
+                    Assignment Date
                   </div>
                   <p className="text-sm">
-                    {new Date(assignment.assigned_at).toLocaleDateString('it-IT', {
+                    {new Date(assignment.assigned_at).toLocaleDateString('en-US', {
                       day: '2-digit',
                       month: '2-digit',
                       year: 'numeric',
@@ -118,9 +118,9 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="active">Attivo</SelectItem>
-                      <SelectItem value="pending">In Attesa</SelectItem>
-                      <SelectItem value="inactive">Inattivo</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -130,7 +130,7 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                 <div className="mt-4">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                     <MessageSquare className="h-4 w-4" />
-                    Note
+                    Notes
                   </div>
                   <p className="text-sm bg-muted p-3 rounded-md">{assignment.notes}</p>
                 </div>
@@ -147,13 +147,13 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    Visualizza Dettagli
+                    View Details
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    Invia Messaggio
+                    Send Message
                   </DropdownMenuItem>
                   <DropdownMenuItem className="text-red-600">
-                    Rimuovi Assegnazione
+                    Remove Assignment
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
