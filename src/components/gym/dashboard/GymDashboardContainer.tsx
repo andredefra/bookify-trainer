@@ -4,6 +4,7 @@ import { GymHeader } from "./GymHeader";
 import { GymSidebar } from "./GymSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
 import { TrainersManagementTab } from "./tabs/TrainersManagementTab";
+import { GroupSessionsTab } from "./tabs/GroupSessionsTab";
 import { AvailabilityTab } from "./tabs/AvailabilityTab";
 import { PerformanceTab } from "./tabs/PerformanceTab";
 import { CalendarTab } from "./tabs/CalendarTab";
@@ -79,6 +80,7 @@ export function GymDashboardContainer() {
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
           {activeTab === "overview" && <OverviewTab user={user} />}
           {activeTab === "trainers-management" && <TrainersManagementTab />}
+          {activeTab === "group-sessions" && <GroupSessionsTab />}
           {activeTab === "availability" && <AvailabilityTab />}
           {activeTab === "performance" && <PerformanceTab />}
           {activeTab === "calendar" && <CalendarTab />}

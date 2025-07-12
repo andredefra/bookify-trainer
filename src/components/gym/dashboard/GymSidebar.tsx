@@ -64,6 +64,15 @@ export function GymSidebar({
               <span>Trainers Management</span>
             </button>
             
+            {/* Group Sessions */}
+            <button 
+              onClick={() => { setActiveTab("group-sessions"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "group-sessions" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Dumbbell className="w-5 h-5 mr-3" />
+              <span>Group Sessions</span>
+            </button>
+            
             {/* Availability & Shifts */}
             <button 
               onClick={() => { setActiveTab("availability"); if (isMobile) setShowSidebar(false); }}

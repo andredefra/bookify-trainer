@@ -261,6 +261,66 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_group_sessions: {
+        Row: {
+          created_at: string
+          description: string | null
+          difficulty_level: string
+          duration_minutes: number
+          equipment_needed: string | null
+          gym_id: string
+          id: string
+          is_recurring: boolean
+          location: string | null
+          max_participants: number
+          price_per_participant: number
+          recurrence_pattern: string | null
+          requirements: string | null
+          session_type: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string
+          duration_minutes?: number
+          equipment_needed?: string | null
+          gym_id: string
+          id?: string
+          is_recurring?: boolean
+          location?: string | null
+          max_participants?: number
+          price_per_participant?: number
+          recurrence_pattern?: string | null
+          requirements?: string | null
+          session_type?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string
+          duration_minutes?: number
+          equipment_needed?: string | null
+          gym_id?: string
+          id?: string
+          is_recurring?: boolean
+          location?: string | null
+          max_participants?: number
+          price_per_participant?: number
+          recurrence_pattern?: string | null
+          requirements?: string | null
+          session_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gym_notifications: {
         Row: {
           created_at: string
@@ -417,6 +477,144 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      gym_session_participants: {
+        Row: {
+          amount_paid: number | null
+          attendance_status: string
+          created_at: string
+          id: string
+          notes: string | null
+          participant_id: string
+          payment_status: string
+          registered_at: string
+          session_schedule_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number | null
+          attendance_status?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          participant_id: string
+          payment_status?: string
+          registered_at?: string
+          session_schedule_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number | null
+          attendance_status?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          participant_id?: string
+          payment_status?: string
+          registered_at?: string
+          session_schedule_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_session_participants_session_schedule_id_fkey"
+            columns: ["session_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "gym_session_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gym_session_schedules: {
+        Row: {
+          actual_participants: number
+          assigned_trainer_id: string | null
+          created_at: string
+          end_datetime: string
+          gym_group_session_id: string
+          id: string
+          notes: string | null
+          start_datetime: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          actual_participants?: number
+          assigned_trainer_id?: string | null
+          created_at?: string
+          end_datetime: string
+          gym_group_session_id: string
+          id?: string
+          notes?: string | null
+          start_datetime: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          actual_participants?: number
+          assigned_trainer_id?: string | null
+          created_at?: string
+          end_datetime?: string
+          gym_group_session_id?: string
+          id?: string
+          notes?: string | null
+          start_datetime?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_session_schedules_gym_group_session_id_fkey"
+            columns: ["gym_group_session_id"]
+            isOneToOne: false
+            referencedRelation: "gym_group_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gym_session_trainers: {
+        Row: {
+          assigned_at: string
+          compensation_amount: number | null
+          compensation_type: string
+          created_at: string
+          id: string
+          role: string
+          session_schedule_id: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_at?: string
+          compensation_amount?: number | null
+          compensation_type?: string
+          created_at?: string
+          id?: string
+          role?: string
+          session_schedule_id: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_at?: string
+          compensation_amount?: number | null
+          compensation_type?: string
+          created_at?: string
+          id?: string
+          role?: string
+          session_schedule_id?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_session_trainers_session_schedule_id_fkey"
+            columns: ["session_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "gym_session_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       gym_trainer_assignments: {
         Row: {

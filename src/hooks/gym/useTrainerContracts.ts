@@ -34,8 +34,8 @@ export function useTrainerContracts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Use consistent demo gym ID
-  const getCurrentGymId = () => '550e8400-e29b-41d4-a716-446655440000';
+  // Use consistent demo gym ID that matches the DB
+  const getCurrentGymId = () => '11111111-1111-1111-1111-111111111111';
 
   const fetchContracts = useCallback(async () => {
     try {

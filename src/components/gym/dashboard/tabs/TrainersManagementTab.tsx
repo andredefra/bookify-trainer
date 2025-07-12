@@ -23,8 +23,8 @@ export function TrainersManagementTab() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">Gestione Personal Trainers</h1>
-        <p className="text-muted-foreground">Gestisci i tuoi personal trainers e le loro assegnazioni</p>
+        <h1 className="text-2xl font-bold">Trainer Management</h1>
+        <p className="text-muted-foreground">Manage your personal trainers and their assignments</p>
       </div>
       
       <div className="flex flex-col md:flex-row justify-between gap-4">
@@ -32,7 +32,7 @@ export function TrainersManagementTab() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Cerca trainers..."
+            placeholder="Search trainers..."
             className="pl-9 w-full md:w-[300px]"
           />
         </div>
@@ -45,7 +45,7 @@ export function TrainersManagementTab() {
           />
           <Button variant="outline">
             <UserPlus className="h-4 w-4 mr-2" />
-            Invita Trainer
+            Invite Trainer
           </Button>
         </div>
       </div>
@@ -53,7 +53,7 @@ export function TrainersManagementTab() {
       <Card>
         <CardHeader>
           <CardTitle>Personal Trainers</CardTitle>
-          <CardDescription>Visualizza e gestisci i tuoi personal trainers e le loro assegnazioni</CardDescription>
+          <CardDescription>View and manage your personal trainers and their assignments</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -64,7 +64,7 @@ export function TrainersManagementTab() {
               </TabsTrigger>
               <TabsTrigger value="assignments" className="flex items-center gap-2">
                 <UserPlus className="h-4 w-4" />
-                Assegnazioni
+                Assignments
               </TabsTrigger>
               <TabsTrigger value="performance" className="flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
@@ -78,7 +78,7 @@ export function TrainersManagementTab() {
             
             <TabsContent value="assignments">
               {loading ? (
-                <div className="text-center py-8">Caricamento assegnazioni...</div>
+                <div className="text-center py-8">Loading assignments...</div>
               ) : (
                 <TrainerAssignmentsList 
                   assignments={assignments}
@@ -89,7 +89,7 @@ export function TrainersManagementTab() {
             
             <TabsContent value="performance">
               <div className="text-center py-8 text-muted-foreground">
-                Performance analytics in sviluppo...
+                Performance analytics coming soon...
               </div>
             </TabsContent>
           </Tabs>
