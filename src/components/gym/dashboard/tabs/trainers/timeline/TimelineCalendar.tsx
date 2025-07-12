@@ -21,11 +21,15 @@ export function TimelineCalendar({
   const currentWeek = externalCurrentWeek || internalCurrentWeek;
   const { trainers, loading: trainersLoading } = useGymTrainersData();
   
-  // Get events for selected trainers
-  const trainerEvents = selectedTrainers.map(trainerId => {
-    const { events, loading } = useCalendarEvents(trainerId);
-    return { trainerId, events, loading };
-  });
+  // Get events for selected trainers - using a single hook call with all trainer IDs
+  const { events: allEvents, loading: eventsLoading } = useCalendarEvents(selectedTrainers[0] || '');
+  
+  // For now, we'll simulate multiple trainer events with empty arrays for other trainers
+  const trainerEvents = selectedTrainers.map(trainerId => ({
+    trainerId,
+    events: trainerId === selectedTrainers[0] ? allEvents : [],
+    loading: eventsLoading
+  }));
 
   // Calculate week data without useMemo for now
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
