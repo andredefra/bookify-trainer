@@ -6,7 +6,13 @@ import {
   Dumbbell, 
   BarChart2, 
   Settings, 
-  MessageSquare
+  MessageSquare,
+  Calendar,
+  UserCheck,
+  Clock,
+  Star,
+  Package,
+  CreditCard
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -48,13 +54,44 @@ export function GymSidebar({
               <LayoutDashboard className="w-5 h-5 mr-3" />
               <span>Overview</span>
             </button>
+            
+            {/* Trainers Management Section */}
             <button 
-              onClick={() => { setActiveTab("trainers"); if (isMobile) setShowSidebar(false); }}
-              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "trainers" ? "bg-primary/5 text-primary" : ""}`}
+              onClick={() => { setActiveTab("trainers-management"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "trainers-management" ? "bg-primary/5 text-primary" : ""}`}
             >
-              <Dumbbell className="w-5 h-5 mr-3" />
-              <span>Trainers</span>
+              <UserCheck className="w-5 h-5 mr-3" />
+              <span>Trainers Management</span>
             </button>
+            
+            {/* Availability & Shifts */}
+            <button 
+              onClick={() => { setActiveTab("availability"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "availability" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Clock className="w-5 h-5 mr-3" />
+              <span>Availability & Shifts</span>
+            </button>
+            
+            {/* Performance & Reviews */}
+            <button 
+              onClick={() => { setActiveTab("performance"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "performance" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Star className="w-5 h-5 mr-3" />
+              <span>Performance & Reviews</span>
+            </button>
+            
+            {/* Calendar */}
+            <button 
+              onClick={() => { setActiveTab("calendar"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "calendar" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Calendar className="w-5 h-5 mr-3" />
+              <span>Calendar</span>
+            </button>
+            
+            {/* Members */}
             <button 
               onClick={() => { setActiveTab("members"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "members" ? "bg-primary/5 text-primary" : ""}`}
@@ -62,6 +99,25 @@ export function GymSidebar({
               <Users className="w-5 h-5 mr-3" />
               <span>Members</span>
             </button>
+            
+            {/* Gym Packages */}
+            <button 
+              onClick={() => { setActiveTab("packages"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "packages" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Package className="w-5 h-5 mr-3" />
+              <span>Gym Packages</span>
+            </button>
+            
+            {/* Transactions */}
+            <button 
+              onClick={() => { setActiveTab("transactions"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "transactions" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <CreditCard className="w-5 h-5 mr-3" />
+              <span>Transactions</span>
+            </button>
+            
             <button 
               onClick={() => { setActiveTab("messages"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center justify-between p-4 hover:bg-gray-50 transition-colors ${activeTab === "messages" ? "bg-primary/5 text-primary" : ""}`}
@@ -74,6 +130,7 @@ export function GymSidebar({
                 <Badge className="bg-primary ml-2">{unreadMessagesCount}</Badge>
               )}
             </button>
+            
             <button 
               onClick={() => { setActiveTab("analytics"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "analytics" ? "bg-primary/5 text-primary" : ""}`}
@@ -81,6 +138,7 @@ export function GymSidebar({
               <BarChart2 className="w-5 h-5 mr-3" />
               <span>Analytics</span>
             </button>
+            
             <button 
               onClick={() => { setActiveTab("settings"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "settings" ? "bg-primary/5 text-primary" : ""}`}

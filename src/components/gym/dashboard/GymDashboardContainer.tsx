@@ -3,8 +3,13 @@ import { useState, useEffect } from "react";
 import { GymHeader } from "./GymHeader";
 import { GymSidebar } from "./GymSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
-import { TrainersTab } from "./tabs/TrainersTab";
+import { TrainersManagementTab } from "./tabs/TrainersManagementTab";
+import { AvailabilityTab } from "./tabs/AvailabilityTab";
+import { PerformanceTab } from "./tabs/PerformanceTab";
+import { CalendarTab } from "./tabs/CalendarTab";
 import { MembersTab } from "./tabs/MembersTab";
+import { PackagesTab } from "./tabs/PackagesTab";
+import { TransactionsTab } from "./tabs/TransactionsTab";
 import { MessagesTab } from "./tabs/messages"; // Updated import path
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
@@ -73,8 +78,13 @@ export function GymDashboardContainer() {
         
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
           {activeTab === "overview" && <OverviewTab user={user} />}
-          {activeTab === "trainers" && <TrainersTab />}
+          {activeTab === "trainers-management" && <TrainersManagementTab />}
+          {activeTab === "availability" && <AvailabilityTab />}
+          {activeTab === "performance" && <PerformanceTab />}
+          {activeTab === "calendar" && <CalendarTab />}
           {activeTab === "members" && <MembersTab />}
+          {activeTab === "packages" && <PackagesTab />}
+          {activeTab === "transactions" && <TransactionsTab />}
           {activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "settings" && <SettingsTab user={user} />}
