@@ -311,6 +311,113 @@ export type Database = {
           },
         ]
       }
+      gym_package_assignments: {
+        Row: {
+          client_id: string
+          created_at: string
+          end_date: string | null
+          gym_id: string
+          id: string
+          package_id: string
+          payment_status: string | null
+          purchase_date: string
+          sessions_total: number | null
+          sessions_used: number | null
+          start_date: string
+          status: string | null
+          total_paid: number
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          end_date?: string | null
+          gym_id: string
+          id?: string
+          package_id: string
+          payment_status?: string | null
+          purchase_date?: string
+          sessions_total?: number | null
+          sessions_used?: number | null
+          start_date?: string
+          status?: string | null
+          total_paid: number
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          end_date?: string | null
+          gym_id?: string
+          id?: string
+          package_id?: string
+          payment_status?: string | null
+          purchase_date?: string
+          sessions_total?: number | null
+          sessions_used?: number | null
+          start_date?: string
+          status?: string | null
+          total_paid?: number
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_package_assignments_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "gym_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gym_packages: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_days: number | null
+          gym_id: string
+          id: string
+          is_active: boolean | null
+          package_type: string
+          price: number
+          session_limit: number | null
+          title: string
+          trainer_commission_percentage: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          gym_id: string
+          id?: string
+          is_active?: boolean | null
+          package_type?: string
+          price: number
+          session_limit?: number | null
+          title: string
+          trainer_commission_percentage?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          gym_id?: string
+          id?: string
+          is_active?: boolean | null
+          package_type?: string
+          price?: number
+          session_limit?: number | null
+          title?: string
+          trainer_commission_percentage?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gym_trainer_assignments: {
         Row: {
           assigned_at: string
