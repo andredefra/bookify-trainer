@@ -74,25 +74,29 @@ export function TrainersList() {
       <div className="flex flex-wrap gap-2">
         <Badge 
           onClick={() => setFilter("all")} 
-          className={`cursor-pointer ${filter === "all" ? "bg-primary" : "bg-secondary hover:bg-secondary/80"}`}
+          variant={filter === "all" ? "default" : "secondary"}
+          className="cursor-pointer"
         >
           All Trainers
         </Badge>
         <Badge 
           onClick={() => setFilter("online")} 
-          className={`cursor-pointer ${filter === "online" ? "bg-primary" : "bg-secondary hover:bg-secondary/80"}`}
+          variant={filter === "online" ? "default" : "secondary"}
+          className="cursor-pointer"
         >
           Online
         </Badge>
         <Badge 
           onClick={() => setFilter("away")} 
-          className={`cursor-pointer ${filter === "away" ? "bg-primary" : "bg-secondary hover:bg-secondary/80"}`}
+          variant={filter === "away" ? "default" : "secondary"}
+          className="cursor-pointer"
         >
           Away
         </Badge>
         <Badge 
           onClick={() => setFilter("offline")} 
-          className={`cursor-pointer ${filter === "offline" ? "bg-primary" : "bg-secondary hover:bg-secondary/80"}`}
+          variant={filter === "offline" ? "default" : "secondary"}
+          className="cursor-pointer"
         >
           Offline
         </Badge>
