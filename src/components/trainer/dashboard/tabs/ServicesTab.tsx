@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CreateServiceDialog } from "./services/CreateServiceDialog";
 import { EditServiceDialog } from "./services/EditServiceDialog";
-import { Plus, Search, Edit, Trash2, Copy, Eye, ToggleLeft, ToggleRight } from "lucide-react";
+import { ServiceClientsDialog } from "./services/ServiceClientsDialog";
+import { ServicePackagesDialog } from "./services/ServicePackagesDialog";
+import { Plus, Search, Edit, Trash2, Copy, Eye, ToggleLeft, ToggleRight, Trophy, Users, Package, TrendingUp } from "lucide-react";
 import { useServices } from "./services/hooks/useServices";
 
 export function ServicesTab() {
@@ -17,7 +19,11 @@ export function ServicesTab() {
     updateService,
     deleteService,
     duplicateService,
-    toggleServiceStatus
+    toggleServiceStatus,
+    getServiceAnalytics,
+    getMostSoldService,
+    getTotalServiceRevenue,
+    getTotalActiveClients
   } = useServices();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,6 +31,8 @@ export function ServicesTab() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
+  const [showClientsDialog, setShowClientsDialog] = useState<{show: boolean, serviceId: string, serviceName: string}>({ show: false, serviceId: '', serviceName: '' });
+  const [showPackagesDialog, setShowPackagesDialog] = useState<{show: boolean, serviceId: string, serviceName: string}>({ show: false, serviceId: '', serviceName: '' });
 
   const filteredServices = services.filter(service => {
     const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -38,7 +46,9 @@ export function ServicesTab() {
   });
 
   const activeServicesCount = services.filter(s => s.isActive).length;
-  const totalRevenue = services.reduce((sum, s) => sum + s.price, 0);
+  const totalRevenue = getTotalServiceRevenue();
+  const totalActiveClients = getTotalActiveClients();
+  const mostSoldService = getMostSoldService();
 
   return (
     <div className="space-y-6">
@@ -55,7 +65,7 @@ export function ServicesTab() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Services</CardTitle>
@@ -74,13 +84,55 @@ export function ServicesTab() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Value</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">€{totalRevenue}</div>
+            <div className="text-2xl font-bold">€{totalRevenue.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Active Clients</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-600">{totalActiveClients}</div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Most Sold Service Card */}
+      {mostSoldService && (
+        <Card className="border-2 border-amber-200 bg-amber-50/50">
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-amber-600" />
+              <CardTitle className="text-lg text-amber-800">Most Sold Service</CardTitle>
+              <Badge variant="secondary" className="bg-amber-100 text-amber-800">
+                🏆 Best Seller
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-lg">{mostSoldService.service.name}</h3>
+                <p className="text-sm text-muted-foreground mb-2">{mostSoldService.service.description}</p>
+                <div className="flex gap-4 text-sm">
+                  <span className="flex items-center gap-1">
+                    <TrendingUp className="h-3 w-3" />
+                    {mostSoldService.analytics.salesCount} sales
+                  </span>
+                  <span>€{mostSoldService.analytics.totalRevenue.toLocaleString()} revenue</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-primary">€{mostSoldService.service.price}</div>
+                <div className="text-sm text-muted-foreground">per service</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
@@ -135,75 +187,130 @@ export function ServicesTab() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredServices.map((service) => (
-            <Card key={service.id} className={`relative ${!service.isActive ? 'opacity-60' : ''}`}>
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <service.icon className="h-4 w-4 text-primary" />
+          {filteredServices.map((service) => {
+            const analytics = getServiceAnalytics(service.id);
+            const isBestSeller = mostSoldService?.service.id === service.id;
+            
+            return (
+              <Card key={service.id} className={`relative ${!service.isActive ? 'opacity-60' : ''} ${isBestSeller ? 'ring-2 ring-amber-400' : ''}`}>
+                {isBestSeller && (
+                  <div className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-1 rounded-full z-10">
+                    🏆 Best Seller
+                  </div>
+                )}
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <service.icon className="h-4 w-4 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-base">{service.name}</CardTitle>
+                        <Badge variant="secondary" className="text-xs mt-1">
+                          {service.category}
+                        </Badge>
+                      </div>
                     </div>
-                    <div>
-                      <CardTitle className="text-base">{service.name}</CardTitle>
-                      <Badge variant="secondary" className="text-xs mt-1">
-                        {service.category}
-                      </Badge>
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleServiceStatus(service.id)}
+                      >
+                        {service.isActive ? (
+                          <ToggleRight className="h-4 w-4 text-green-600" />
+                        ) : (
+                          <ToggleLeft className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                    {service.description}
+                  </p>
+                  
+                  {/* Analytics Data */}
+                  {analytics && (
+                    <div className="mb-3 space-y-2">
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="bg-blue-50 p-2 rounded">
+                          <div className="font-semibold text-blue-700">{analytics.salesCount}</div>
+                          <div className="text-blue-600">Sales</div>
+                        </div>
+                        <div className="bg-green-50 p-2 rounded">
+                          <div className="font-semibold text-green-700">€{analytics.totalRevenue.toLocaleString()}</div>
+                          <div className="text-green-600">Revenue</div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs flex-1"
+                          onClick={() => setShowClientsDialog({ 
+                            show: true, 
+                            serviceId: service.id, 
+                            serviceName: service.name 
+                          })}
+                        >
+                          <Users className="h-3 w-3 mr-1" />
+                          {analytics.activeClients.length} Clients
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs flex-1"
+                          onClick={() => setShowPackagesDialog({ 
+                            show: true, 
+                            serviceId: service.id, 
+                            serviceName: service.name 
+                          })}
+                        >
+                          <Package className="h-3 w-3 mr-1" />
+                          {analytics.linkedPackages.length} Packages
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-lg font-semibold text-primary">€{service.price}</span>
+                    <Badge variant={service.isActive ? "default" : "secondary"}>
+                      {service.isActive ? "Active" : "Inactive"}
+                    </Badge>
+                  </div>
+                  <div className="flex gap-2">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
-                      onClick={() => toggleServiceStatus(service.id)}
+                      onClick={() => setEditingService(service)}
+                      className="flex-1"
                     >
-                      {service.isActive ? (
-                        <ToggleRight className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <ToggleLeft className="h-4 w-4 text-muted-foreground" />
-                      )}
+                      <Edit className="h-3 w-3 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => duplicateService(service.id)}
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => deleteService(service.id)}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                  {service.description}
-                </p>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-lg font-semibold text-primary">€{service.price}</span>
-                  <Badge variant={service.isActive ? "default" : "secondary"}>
-                    {service.isActive ? "Active" : "Inactive"}
-                  </Badge>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setEditingService(service)}
-                    className="flex-1"
-                  >
-                    <Edit className="h-3 w-3 mr-1" />
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => duplicateService(service.id)}
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => deleteService(service.id)}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
 
@@ -225,6 +332,20 @@ export function ServicesTab() {
           }}
         />
       )}
+
+      <ServiceClientsDialog
+        open={showClientsDialog.show}
+        onOpenChange={(open) => setShowClientsDialog(prev => ({ ...prev, show: open }))}
+        serviceName={showClientsDialog.serviceName}
+        clients={showClientsDialog.serviceId ? getServiceAnalytics(showClientsDialog.serviceId)?.activeClients || [] : []}
+      />
+
+      <ServicePackagesDialog
+        open={showPackagesDialog.show}
+        onOpenChange={(open) => setShowPackagesDialog(prev => ({ ...prev, show: open }))}
+        serviceName={showPackagesDialog.serviceName}
+        packages={showPackagesDialog.serviceId ? getServiceAnalytics(showPackagesDialog.serviceId)?.linkedPackages || [] : []}
+      />
     </div>
   );
 }

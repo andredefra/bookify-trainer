@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { AdditionalService } from "../types";
+import { AdditionalService, ServiceAnalytics } from "../types";
 import { 
   MessageCircle, 
   FileText, 
@@ -32,6 +32,7 @@ const iconMap = {
 };
 
 const STORAGE_KEY = 'trainer-services';
+const ANALYTICS_STORAGE_KEY = 'trainer-services-analytics';
 
 const defaultServices: AdditionalService[] = [
   {
@@ -69,8 +70,54 @@ const defaultServices: AdditionalService[] = [
   }
 ];
 
+// Mock analytics data
+const mockAnalytics: ServiceAnalytics[] = [
+  {
+    serviceId: "1",
+    salesCount: 45,
+    totalRevenue: 2250,
+    lastSaleDate: new Date('2024-12-01'),
+    activeClients: [
+      { id: '1', name: 'Marco Rossi', email: 'marco@email.com', phone: '+39 123 456 789', startDate: new Date('2024-11-15'), packageName: 'Premium Training', status: 'active' },
+      { id: '2', name: 'Laura Bianchi', email: 'laura@email.com', startDate: new Date('2024-11-20'), packageName: 'Transformation Program', status: 'active' },
+      { id: '3', name: 'Andrea Verdi', email: 'andrea@email.com', startDate: new Date('2024-12-01'), packageName: 'Basic Package', status: 'active' }
+    ],
+    linkedPackages: [
+      { id: 'pkg1', name: 'Premium Training', type: 'hybrid', price: 150, clientsCount: 8 },
+      { id: 'pkg2', name: 'Transformation Program', type: 'sessions_only', price: 120, clientsCount: 5 }
+    ]
+  },
+  {
+    serviceId: "2",
+    salesCount: 32,
+    totalRevenue: 2560,
+    lastSaleDate: new Date('2024-11-28'),
+    activeClients: [
+      { id: '4', name: 'Giulia Neri', email: 'giulia@email.com', startDate: new Date('2024-11-10'), packageName: 'Nutrition Plus', status: 'active' },
+      { id: '5', name: 'Roberto Blu', email: 'roberto@email.com', startDate: new Date('2024-11-25'), packageName: 'Complete Wellness', status: 'active' }
+    ],
+    linkedPackages: [
+      { id: 'pkg3', name: 'Nutrition Plus', type: 'service', price: 90, clientsCount: 12 },
+      { id: 'pkg4', name: 'Complete Wellness', type: 'hybrid', price: 200, clientsCount: 6 }
+    ]
+  },
+  {
+    serviceId: "3",
+    salesCount: 28,
+    totalRevenue: 1680,
+    lastSaleDate: new Date('2024-12-02'),
+    activeClients: [
+      { id: '6', name: 'Francesca Rosa', email: 'francesca@email.com', startDate: new Date('2024-11-18'), packageName: 'Starter Package', status: 'active' }
+    ],
+    linkedPackages: [
+      { id: 'pkg5', name: 'Starter Package', type: 'sessions_only', price: 80, clientsCount: 15 }
+    ]
+  }
+];
+
 export function useServices() {
   const [services, setServices] = useState<AdditionalService[]>([]);
+  const [analytics, setAnalytics] = useState<ServiceAnalytics[]>(mockAnalytics);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -158,6 +205,30 @@ export function useServices() {
     }));
   };
 
+  const getServiceAnalytics = (serviceId: string) => {
+    return analytics.find(a => a.serviceId === serviceId);
+  };
+
+  const getMostSoldService = () => {
+    const serviceWithMostSales = analytics.reduce((prev, current) => 
+      prev.salesCount > current.salesCount ? prev : current
+    );
+    const service = services.find(s => s.id === serviceWithMostSales.serviceId);
+    return service ? { service, analytics: serviceWithMostSales } : null;
+  };
+
+  const getTotalServiceRevenue = () => {
+    return analytics.reduce((sum, a) => sum + a.totalRevenue, 0);
+  };
+
+  const getTotalActiveClients = () => {
+    const uniqueClients = new Set();
+    analytics.forEach(a => {
+      a.activeClients.forEach(client => uniqueClients.add(client.id));
+    });
+    return uniqueClients.size;
+  };
+
   return {
     services: services.map(service => ({
       ...service,
@@ -168,6 +239,11 @@ export function useServices() {
     deleteService,
     duplicateService,
     toggleServiceStatus,
-    getActiveServices
+    getActiveServices,
+    getServiceAnalytics,
+    getMostSoldService,
+    getTotalServiceRevenue,
+    getTotalActiveClients,
+    analytics
   };
 }
