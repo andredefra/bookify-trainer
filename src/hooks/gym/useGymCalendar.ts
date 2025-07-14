@@ -46,11 +46,7 @@ export function useGymCalendar() {
       // Fetch all calendar events for trainers associated with this gym
       const { data: gymEvents, error: eventsError } = await supabase
         .from('calendar_events')
-        .select(`
-          *,
-          trainer:trainer_id (id),
-          client:client_id (id)
-        `)
+        .select('*')
         .gte('start_datetime', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString())
         .lte('start_datetime', new Date(new Date().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString())
         .order('start_datetime', { ascending: true });
