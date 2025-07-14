@@ -24,10 +24,6 @@ export function useGymMembers() {
     } catch (err) {
       console.error('Error fetching members:', err);
       setError('Failed to fetch members');
-      
-      // Demo data fallback only if error
-      const demoMembers = getDemoMembers();
-      setMembers(demoMembers);
     } finally {
       setLoading(false);
     }
