@@ -228,10 +228,12 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       setSelectedSessionForTrainer(session);
                       setShowAssignTrainerDialog(true);
                     }}
-                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[120px]" : ""}
+                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[100px]" : ""}
                   >
                     <UserCog className="h-4 w-4 mr-1" />
-                    <span className={isTablet ? "truncate" : ""}>Assign Trainer</span>
+                    <span className={isTablet ? "text-xs truncate" : ""}>
+                      {isMobile ? "Assegna Trainer" : isTablet ? "Trainer" : "Assign Trainer"}
+                    </span>
                   </Button>
                   <Button 
                     variant="outline" 
@@ -248,19 +250,26 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       setSelectedSchedule(mockSchedule);
                       setShowBookingDialog(true);
                     }}
-                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[120px]" : ""}
+                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[100px]" : ""}
                   >
                     <UserPlus className="h-4 w-4 mr-1" />
-                    <span className={isTablet ? "truncate" : ""}>Book Participant</span>
+                    <span className={isTablet ? "text-xs truncate" : ""}>
+                      {isMobile ? "Prenota Partecipante" : isTablet ? "Prenota" : "Book Participant"}
+                    </span>
                   </Button>
                   <Button 
                     variant="outline" 
                     size={isMobile ? "default" : "sm"}
                     onClick={() => setShowParticipants(showParticipants === session.id ? null : session.id)}
-                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[120px]" : ""}
+                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[100px]" : ""}
                   >
                     <Users className="h-4 w-4 mr-1" />
-                    <span className={isTablet ? "truncate" : ""}>{showParticipants === session.id ? 'Hide' : 'Show'} Participants</span>
+                    <span className={isTablet ? "text-xs truncate" : ""}>
+                      {showParticipants === session.id ? 
+                        (isMobile ? 'Nascondi Partecipanti' : isTablet ? 'Nascondi' : 'Hide') : 
+                        (isMobile ? 'Mostra Partecipanti' : isTablet ? 'Mostra' : 'Show Participants')
+                      }
+                    </span>
                   </Button>
                 </div>
               </div>

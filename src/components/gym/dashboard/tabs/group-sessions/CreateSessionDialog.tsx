@@ -54,7 +54,8 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto">
+        <div className="p-1">
         <DialogHeader>
           <DialogTitle>Create New Group Session</DialogTitle>
         </DialogHeader>
@@ -126,10 +127,10 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
           </div>
 
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <p className="text-sm text-blue-800">
-              <strong>Note:</strong> Group sessions are included in customer packages. 
-              Customers with active packages can join sessions without additional payment.
+          <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              <strong>Nota:</strong> Le sessioni di gruppo sono incluse nei pacchetti clienti. 
+              I clienti con pacchetti attivi possono partecipare senza costi aggiuntivi.
             </p>
           </div>
 
@@ -217,6 +218,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </Button>
           </div>
         </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
