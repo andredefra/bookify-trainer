@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
+import { getDemoCalendarEvents } from "@/services/gym/calendarService";
 
 export interface GymTrainer {
   id: string;
@@ -64,22 +65,42 @@ export function useGymCalendar() {
 
       const trainerIds = gymTrainers?.map(t => t.trainer_id) || [];
       
-      // Create trainer objects (in a real app, you'd fetch from a trainers table)
-      const trainersData: GymTrainer[] = trainerIds.map(id => ({
-        id,
-        name: `Trainer ${id.slice(-4)}`,
-        status: 'active'
-      }));
+      // Create trainer objects or use demo trainers
+      let trainersData: GymTrainer[] = [];
+      
+      if (trainerIds.length > 0) {
+        trainersData = trainerIds.map(id => ({
+          id,
+          name: `Trainer ${id.slice(-4)}`,
+          status: 'active'
+        }));
+      } else {
+        // Use demo trainers when no real trainers exist
+        trainersData = [
+          { id: 'demo-trainer-1', name: 'Trainer Mike', status: 'active' },
+          { id: 'demo-trainer-2', name: 'Trainer Sarah', status: 'active' },
+          { id: 'demo-trainer-3', name: 'Trainer Emma', status: 'active' }
+        ];
+      }
+      
       setTrainers(trainersData);
 
-      // Fetch calendar events for these trainers
-      const { data: gymEvents, error: eventsError } = await supabase
-        .from('calendar_events')
-        .select('*')
-        .in('trainer_id', trainerIds.length > 0 ? trainerIds : ['no-trainers'])
-        .gte('start_datetime', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .lte('start_datetime', new Date(new Date().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString())
-        .order('start_datetime', { ascending: true });
+      // Fetch calendar events for these trainers (skip if no trainers)
+      let gymEvents = null;
+      let eventsError = null;
+      
+      if (trainerIds.length > 0) {
+        const result = await supabase
+          .from('calendar_events')
+          .select('*')
+          .in('trainer_id', trainerIds)
+          .gte('start_datetime', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString())
+          .lte('start_datetime', new Date(new Date().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString())
+          .order('start_datetime', { ascending: true });
+        
+        gymEvents = result.data;
+        eventsError = result.error;
+      }
 
       if (eventsError) {
         console.error('Error fetching gym calendar events:', eventsError);
@@ -87,23 +108,30 @@ export function useGymCalendar() {
         return;
       }
 
-      // Transform events for gym view
-      const transformedEvents: GymCalendarEvent[] = (gymEvents || []).map(event => ({
-        id: event.id,
-        title: event.title,
-        start_datetime: event.start_datetime,
-        end_datetime: event.end_datetime,
-        event_category: event.event_category,
-        trainer_id: event.trainer_id,
-        client_id: event.client_id,
-        session_id: event.session_id,
-        package_assignment_id: event.package_assignment_id,
-        description: event.description,
-        location: event.location,
-        color: event.color || '#3B82F6',
-        trainer_name: `Trainer ${event.trainer_id.slice(-4)}`,
-        client_name: event.client_id ? `Client ${event.client_id.slice(-4)}` : undefined
-      }));
+      // Transform events for gym view or use demo data if no events
+      let transformedEvents: GymCalendarEvent[] = [];
+      
+      if (gymEvents && gymEvents.length > 0) {
+        transformedEvents = gymEvents.map(event => ({
+          id: event.id,
+          title: event.title,
+          start_datetime: event.start_datetime,
+          end_datetime: event.end_datetime,
+          event_category: event.event_category,
+          trainer_id: event.trainer_id,
+          client_id: event.client_id,
+          session_id: event.session_id,
+          package_assignment_id: event.package_assignment_id,
+          description: event.description,
+          location: event.location,
+          color: event.color || '#3B82F6',
+          trainer_name: `Trainer ${event.trainer_id.slice(-4)}`,
+          client_name: event.client_id ? `Client ${event.client_id.slice(-4)}` : undefined
+        }));
+      } else {
+        // Use demo events when no real events exist
+        transformedEvents = getDemoCalendarEvents();
+      }
 
       setEvents(transformedEvents);
       calculateStats(transformedEvents);

@@ -209,6 +209,7 @@ export const getDemoMembers = (): GymMember[] => [
     status: 'active',
     lastActivityDate: '2024-07-14T15:30:00Z',
     totalSessions: 24,
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b668aa02?w=400&h=400&auto=format&fit=crop&crop=face',
     currentPackages: [
       {
         id: 'demo-pkg-1',
@@ -234,6 +235,7 @@ export const getDemoMembers = (): GymMember[] => [
     status: 'active',
     lastActivityDate: '2024-07-12T18:45:00Z',
     totalSessions: 6,
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&auto=format&fit=crop&crop=face',
     currentPackages: [
       {
         id: 'demo-pkg-2',
@@ -258,6 +260,7 @@ export const getDemoMembers = (): GymMember[] => [
     joinDate: '2023-12-10T00:00:00Z',
     status: 'active',
     lastActivityDate: '2024-07-14T10:15:00Z',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&auto=format&fit=crop&crop=face',
     totalSessions: 145,
     currentPackages: [
       {
@@ -284,6 +287,7 @@ export const getDemoMembers = (): GymMember[] => [
     status: 'active',
     lastActivityDate: '2024-07-13T12:00:00Z',
     totalSessions: 8,
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&auto=format&fit=crop&crop=face',
     currentPackages: [
       {
         id: 'demo-pkg-4',
@@ -309,6 +313,7 @@ export const getDemoMembers = (): GymMember[] => [
     status: 'active',
     lastActivityDate: '2024-07-14T08:30:00Z',
     totalSessions: 4,
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&auto=format&fit=crop&crop=face',
     currentPackages: [
       {
         id: 'demo-pkg-5',
@@ -334,6 +339,7 @@ export const getDemoMembers = (): GymMember[] => [
     status: 'suspended',
     lastActivityDate: '2024-06-30T16:45:00Z',
     totalSessions: 8,
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&auto=format&fit=crop&crop=face',
     currentPackages: [
       {
         id: 'demo-pkg-6',
