@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle, Users, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { CancellationPolicyCard } from "./CancellationPolicyCard";
+
 
 interface CancelSessionDialogProps {
   open: boolean;
@@ -107,8 +107,6 @@ export function CancelSessionDialog({
             </p>
           </div>
 
-          {/* Cancellation Policy */}
-          <CancellationPolicyCard scheduledDate={scheduledDate} />
 
           {/* Impact Warning */}
           <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">

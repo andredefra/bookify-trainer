@@ -33,6 +33,10 @@ export interface GymSessionSchedule {
   cancelled_at?: string;
   cancellation_reason?: string;
   cancelled_by?: string;
+  free_cancellation_hours?: number;
+  reduced_fee_hours?: number;
+  reduced_fee_percentage?: number;
+  full_fee_percentage?: number;
   created_at: string;
   updated_at: string;
 }
@@ -192,7 +196,13 @@ export function useGymGroupSessions() {
     sessionId: string, 
     startDateTime: string, 
     endDateTime: string,
-    trainerId?: string
+    trainerId?: string,
+    cancellationPolicy?: {
+      free_cancellation_hours?: number;
+      reduced_fee_hours?: number;
+      reduced_fee_percentage?: number;
+      full_fee_percentage?: number;
+    }
   ) => {
     try {
       const { error } = await supabase
@@ -201,7 +211,11 @@ export function useGymGroupSessions() {
           gym_group_session_id: sessionId,
           start_datetime: startDateTime,
           end_datetime: endDateTime,
-          assigned_trainer_id: trainerId
+          assigned_trainer_id: trainerId,
+          free_cancellation_hours: cancellationPolicy?.free_cancellation_hours || 48,
+          reduced_fee_hours: cancellationPolicy?.reduced_fee_hours || 24,
+          reduced_fee_percentage: cancellationPolicy?.reduced_fee_percentage || 50,
+          full_fee_percentage: cancellationPolicy?.full_fee_percentage || 100
         });
 
       if (error) throw error;

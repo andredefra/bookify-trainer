@@ -11,12 +11,24 @@ import { SessionBookingDialog } from "./SessionBookingDialog";
 import { SessionParticipants } from "./SessionParticipants";
 import { AssignTrainerDialog } from "./AssignTrainerDialog";
 import { CancelSessionDialog } from "./CancelSessionDialog";
+import { ScheduleSessionDialog } from "./ScheduleSessionDialog";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface SessionsListProps {
   sessions: SessionWithSchedules[];
   onUpdateSession: (sessionId: string, updates: any) => void;
-  onScheduleSession: (sessionId: string, startDateTime: string, endDateTime: string, trainerId?: string) => void;
+  onScheduleSession: (
+    sessionId: string,
+    startDateTime: string,
+    endDateTime: string,
+    trainerId?: string,
+    cancellationPolicy?: {
+      free_cancellation_hours?: number;
+      reduced_fee_hours?: number;
+      reduced_fee_percentage?: number;
+      full_fee_percentage?: number;
+    }
+  ) => void;
   onAssignTrainer?: (sessionId: string, trainerId: string, compensationAmount?: number, compensationType?: string) => void;
   onCancelSession?: (sessionId: string, scheduleId: string, reason: string) => void;
 }
@@ -30,6 +42,8 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
   const [showAssignTrainerDialog, setShowAssignTrainerDialog] = useState(false);
   const [selectedSessionForCancel, setSelectedSessionForCancel] = useState<SessionWithSchedules | null>(null);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [selectedSessionForSchedule, setSelectedSessionForSchedule] = useState<SessionWithSchedules | null>(null);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
   
   const { isMobile, isTablet } = useResponsiveLayout();
   const getStatusColor = (status: string) => {
@@ -117,7 +131,12 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                         <Eye className="h-4 w-4 mr-2" />
                         {t('groupSessions.viewDetails')}
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedSessionForSchedule(session);
+                          setShowScheduleDialog(true);
+                        }}
+                      >
                         <CalendarPlus className="h-4 w-4 mr-2" />
                         {t('groupSessions.scheduleSession')}
                       </DropdownMenuItem>
@@ -152,7 +171,12 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       <Eye className="h-4 w-4 mr-2" />
                       {t('groupSessions.viewDetails')}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSelectedSessionForSchedule(session);
+                        setShowScheduleDialog(true);
+                      }}
+                    >
                       <CalendarPlus className="h-4 w-4 mr-2" />
                       {t('groupSessions.scheduleSession')}
                     </DropdownMenuItem>
@@ -342,6 +366,14 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
             await onCancelSession(selectedSessionForCancel.id, scheduleId, reason);
           }
         }}
+      />
+      
+      <ScheduleSessionDialog
+        open={showScheduleDialog}
+        onOpenChange={setShowScheduleDialog}
+        sessionTitle={selectedSessionForSchedule?.title || ""}
+        sessionId={selectedSessionForSchedule?.id || ""}
+        onScheduleSession={onScheduleSession}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { GymGroupSession } from "@/hooks/gym/useGymGroupSessions";
 import { SESSION_TYPES, DIFFICULTY_LEVELS, RECURRENCE_PATTERNS } from "@/constants/sessionTypes";
-import { CancellationPolicyCard } from "./CancellationPolicyCard";
+
 import { useLanguage } from "@/context/LanguageContext";
 
 interface CreateSessionDialogProps {
@@ -31,7 +31,12 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
     location: "",
     is_recurring: false,
     recurrence_pattern: "",
-    status: "active" as const
+    status: "active" as const,
+    // Default cancellation policy for sessions
+    free_cancellation_hours: 48,
+    reduced_fee_hours: 24,
+    reduced_fee_percentage: 50,
+    full_fee_percentage: 100
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,7 +56,11 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
       location: "",
       is_recurring: false,
       recurrence_pattern: "",
-      status: "active"
+      status: "active",
+      free_cancellation_hours: 48,
+      reduced_fee_hours: 24,
+      reduced_fee_percentage: 50,
+      full_fee_percentage: 100
     });
   };
 
@@ -135,6 +144,60 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </p>
           </div>
 
+          {/* Cancellation Policy Settings */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">{t('groupSessions.cancellationPolicy')}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="free_cancellation_hours">{t('groupSessions.freeCancellationHours')}</Label>
+                <Input
+                  id="free_cancellation_hours"
+                  type="number"
+                  value={formData.free_cancellation_hours}
+                  onChange={(e) => setFormData({ ...formData, free_cancellation_hours: parseInt(e.target.value) })}
+                  min="0"
+                  max="168"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="reduced_fee_hours">{t('groupSessions.reducedFeeHours')}</Label>
+                <Input
+                  id="reduced_fee_hours"
+                  type="number"
+                  value={formData.reduced_fee_hours}
+                  onChange={(e) => setFormData({ ...formData, reduced_fee_hours: parseInt(e.target.value) })}
+                  min="0"
+                  max="168"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="reduced_fee_percentage">{t('groupSessions.reducedFeePercentage')}</Label>
+                <Input
+                  id="reduced_fee_percentage"
+                  type="number"
+                  value={formData.reduced_fee_percentage}
+                  onChange={(e) => setFormData({ ...formData, reduced_fee_percentage: parseInt(e.target.value) })}
+                  min="0"
+                  max="100"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="full_fee_percentage">{t('groupSessions.fullFeePercentage')}</Label>
+                <Input
+                  id="full_fee_percentage"
+                  type="number"
+                  value={formData.full_fee_percentage}
+                  onChange={(e) => setFormData({ ...formData, full_fee_percentage: parseInt(e.target.value) })}
+                  min="0"
+                  max="100"
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="difficulty_level">{t('groupSessions.difficultyLevel')}</Label>
@@ -210,12 +273,6 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
           )}
 
-          {/* Cancellation Policy Card */}
-          <div className="mt-6">
-            <CancellationPolicyCard 
-              scheduledDate={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()}
-            />
-          </div>
 
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
