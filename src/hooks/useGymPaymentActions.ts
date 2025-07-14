@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 
 export const useConfirmCashPayment = () => {
   const queryClient = useQueryClient();
@@ -9,9 +10,34 @@ export const useConfirmCashPayment = () => {
     mutationFn: async (transactionId: string) => {
       console.log('Attempting to confirm cash payment for transaction:', transactionId);
       
-      // First, let's check the current user
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log('Current user:', user?.id);
+      // Check if we're using demo mode
+      const demoUser = localStorage.getItem('demo-user');
+      let isDemoMode = false;
+      let currentUserId = null;
+      
+      if (demoUser) {
+        try {
+          const userData = JSON.parse(demoUser);
+          if (userData.type === 'gym') {
+            isDemoMode = true;
+            currentUserId = getCurrentDemoUserId();
+            console.log('Demo mode detected for gym user:', currentUserId);
+          }
+        } catch (error) {
+          console.error('Error parsing demo user:', error);
+        }
+      }
+      
+      // If not demo mode, check Supabase auth
+      if (!isDemoMode) {
+        const { data: { user } } = await supabase.auth.getUser();
+        currentUserId = user?.id;
+        console.log('Supabase auth user:', currentUserId);
+      }
+      
+      if (!currentUserId) {
+        throw new Error('User not authenticated');
+      }
       
       // Check the transaction before updating
       const { data: existingTransaction, error: fetchError } = await supabase
@@ -27,6 +53,8 @@ export const useConfirmCashPayment = () => {
       
       console.log('Existing transaction:', existingTransaction);
       
+      // For demo mode, we need to bypass RLS by using a direct update
+      // In production, you'd have proper RLS policies
       const { data, error } = await supabase
         .from('gym_package_assignments')
         .update({ 
@@ -34,6 +62,7 @@ export const useConfirmCashPayment = () => {
           updated_at: new Date().toISOString()
         })
         .eq('id', transactionId)
+        .eq('gym_id', isDemoMode ? '11111111-1111-1111-1111-111111111111' : currentUserId)
         .select();
 
       if (error) {
@@ -42,6 +71,11 @@ export const useConfirmCashPayment = () => {
       }
       
       console.log('Update result:', data);
+      
+      if (!data || data.length === 0) {
+        throw new Error('No transaction updated - check permissions or transaction ID');
+      }
+      
       return data;
     },
     onSuccess: (data) => {

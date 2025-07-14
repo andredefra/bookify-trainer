@@ -31,8 +31,13 @@ export function TransactionsTab() {
   const handleConfirmCashPayment = async (transactionId: string) => {
     try {
       await confirmCashPayment.mutateAsync(transactionId);
-      // Force refetch to update the UI immediately
-      await refetch();
+      // Force multiple refetches to ensure UI updates
+      setTimeout(() => {
+        refetch();
+      }, 100);
+      setTimeout(() => {
+        refetch();
+      }, 500);
     } catch (error) {
       console.error('Error confirming payment:', error);
     }
@@ -193,66 +198,72 @@ export function TransactionsTab() {
           ) : transactions && transactions.length > 0 ? (
             <div className="space-y-4">
               {transactions.slice(0, 10).map((transaction) => (
-                <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <div key={transaction.id} className="flex flex-col lg:flex-row lg:items-center justify-between p-4 border rounded-lg gap-4">
+                  {/* Mobile Layout - Stacked */}
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
                       <CreditCard className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
-                      <div className="font-medium">{transaction.client_name}</div>
-                      <div className="text-sm text-muted-foreground">{transaction.package_title}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{transaction.client_name}</div>
+                      <div className="text-sm text-muted-foreground truncate">{transaction.package_title}</div>
                       <div className="text-xs text-muted-foreground">
                         {format(new Date(transaction.purchase_date), 'MMM dd, yyyy')}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Badge variant="secondary" className={getPackageTypeColor(transaction.package_type)}>
+                  
+                  {/* Mobile/Desktop - Badges and Amount */}
+                  <div className="flex flex-wrap items-center gap-2 lg:gap-3">
+                    <Badge variant="secondary" className={`${getPackageTypeColor(transaction.package_type)} text-xs`}>
                       {transaction.package_type}
                     </Badge>
-                    <Badge variant="secondary" className={getPaymentStatusColor(transaction.payment_status)}>
+                    <Badge variant="secondary" className={`${getPaymentStatusColor(transaction.payment_status)} text-xs`}>
                       {transaction.payment_status}
                     </Badge>
                     <div className="text-right">
                       <div className="font-semibold">€{transaction.total_paid.toLocaleString()}</div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {/* Cash payment confirmation button */}
-                      {transaction.payment_status === 'pending' && (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="h-7 text-xs"
-                          onClick={() => handleConfirmCashPayment(transaction.id)}
-                          disabled={confirmCashPayment.isPending}
-                        >
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Confirm Receipt
-                        </Button>
-                      )}
-                      
-                      {/* Invoice button - only for paid transactions */}
-                      {transaction.payment_status === 'paid' && (
-                        <Button 
-                          variant="outline"
-                          size="sm" 
-                          className="h-7 text-xs"
-                          onClick={() => handleSendInvoice(transaction)}
-                          disabled={markInvoiceSent.isPending}
-                        >
-                          <FileText className="w-3 h-3 mr-1" />
-                          Invoice
-                        </Button>
-                      )}
-                      
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* Cash payment confirmation button */}
+                    {transaction.payment_status === 'pending' && (
                       <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => handleViewDetails(transaction)}
+                        variant="outline" 
+                        size="sm" 
+                        className="h-8 text-xs flex-shrink-0"
+                        onClick={() => handleConfirmCashPayment(transaction.id)}
+                        disabled={confirmCashPayment.isPending}
                       >
-                        <Eye className="w-4 h-4" />
+                        <CheckCircle className="w-3 h-3 lg:mr-1" />
+                        <span className="hidden lg:inline">Confirm Receipt</span>
                       </Button>
-                    </div>
+                    )}
+                    
+                    {/* Invoice button - only for paid transactions */}
+                    {transaction.payment_status === 'paid' && (
+                      <Button 
+                        variant="outline"
+                        size="sm" 
+                        className="h-8 text-xs flex-shrink-0"
+                        onClick={() => handleSendInvoice(transaction)}
+                        disabled={markInvoiceSent.isPending}
+                      >
+                        <FileText className="w-3 h-3 lg:mr-1" />
+                        <span className="hidden lg:inline">Invoice</span>
+                      </Button>
+                    )}
+                    
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="h-8 flex-shrink-0"
+                      onClick={() => handleViewDetails(transaction)}
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               ))}
