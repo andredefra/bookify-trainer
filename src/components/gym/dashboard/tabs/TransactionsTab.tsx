@@ -208,7 +208,7 @@ export function TransactionsTab() {
                       <div className="font-medium truncate">{transaction.client_name}</div>
                       <div className="text-sm text-muted-foreground truncate">{transaction.package_title}</div>
                       <div className="text-xs text-muted-foreground">
-                        {format(new Date(transaction.purchase_date), 'MMM dd, yyyy')}
+                        {transaction.purchase_date ? format(new Date(transaction.purchase_date), 'MMM dd, yyyy') : 'Date not available'}
                       </div>
                     </div>
                   </div>

@@ -124,11 +124,11 @@ export function TransactionDetailsModal({ transaction, open, onOpenChange }: Tra
             <div className="pl-6 space-y-1 text-sm">
               <div className="flex justify-between">
                 <span>Purchase Date:</span>
-                <span>{format(new Date(transaction.purchase_date), 'MMM dd, yyyy')}</span>
+                <span>{transaction.purchase_date ? format(new Date(transaction.purchase_date), 'MMM dd, yyyy') : 'Not available'}</span>
               </div>
               <div className="flex justify-between">
                 <span>Start Date:</span>
-                <span>{format(new Date(transaction.start_date), 'MMM dd, yyyy')}</span>
+                <span>{transaction.start_date ? format(new Date(transaction.start_date), 'MMM dd, yyyy') : 'Not available'}</span>
               </div>
               {transaction.end_date && (
                 <div className="flex justify-between">
