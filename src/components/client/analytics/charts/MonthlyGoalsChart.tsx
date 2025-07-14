@@ -110,10 +110,7 @@ export function MonthlyGoalsChart({ monthlyData }: MonthlyGoalsChartProps) {
             <LabelList 
               dataKey="current" 
               position="right"
-              formatter={(value, entry) => {
-                if (entry && entry.payload && entry.payload.target !== undefined) {
-                  return `${value}/${entry.payload.target}`;
-                }
+              formatter={(value: any) => {
                 return `${value}`;
               }}
               style={{ 
