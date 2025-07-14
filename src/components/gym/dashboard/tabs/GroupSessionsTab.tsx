@@ -20,7 +20,8 @@ export function GroupSessionsTab() {
     loading, 
     createSession, 
     updateSession, 
-    scheduleSession 
+    scheduleSession,
+    assignTrainer 
   } = useGymGroupSessions();
 
   const filteredSessions = sessions.filter(session =>
@@ -131,6 +132,7 @@ export function GroupSessionsTab() {
                   sessions={filteredSessions}
                   onUpdateSession={updateSession}
                   onScheduleSession={scheduleSession}
+                  onAssignTrainer={assignTrainer}
                 />
               )}
             </TabsContent>

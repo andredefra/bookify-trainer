@@ -3,21 +3,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye, UserPlus } from "lucide-react";
+import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye, UserPlus, UserCog } from "lucide-react";
 import { SessionWithSchedules } from "@/hooks/gym/useGymGroupSessions";
 import { SessionBookingDialog } from "./SessionBookingDialog";
 import { SessionParticipants } from "./SessionParticipants";
+import { AssignTrainerDialog } from "./AssignTrainerDialog";
 
 interface SessionsListProps {
   sessions: SessionWithSchedules[];
   onUpdateSession: (sessionId: string, updates: any) => void;
   onScheduleSession: (sessionId: string, startDateTime: string, endDateTime: string, trainerId?: string) => void;
+  onAssignTrainer?: (sessionId: string, trainerId: string, compensationAmount?: number, compensationType?: string) => void;
 }
 
-export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: SessionsListProps) {
+export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onAssignTrainer }: SessionsListProps) {
   const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [showParticipants, setShowParticipants] = useState<string | null>(null);
+  const [selectedSessionForTrainer, setSelectedSessionForTrainer] = useState<SessionWithSchedules | null>(null);
+  const [showAssignTrainerDialog, setShowAssignTrainerDialog] = useState(false);
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
@@ -147,6 +151,17 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: S
                     variant="outline" 
                     size="sm"
                     onClick={() => {
+                      setSelectedSessionForTrainer(session);
+                      setShowAssignTrainerDialog(true);
+                    }}
+                  >
+                    <UserCog className="h-4 w-4 mr-1" />
+                    Assign Trainer
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
                       // For demo, create a mock schedule to book against
                       const mockSchedule = {
                         id: `${session.id}-schedule-1`,
@@ -160,7 +175,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: S
                     }}
                   >
                     <UserPlus className="h-4 w-4 mr-1" />
-                    Book Client
+                    Book Participant
                   </Button>
                   <Button 
                     variant="outline" 
@@ -204,6 +219,17 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: S
         open={showBookingDialog}
         onOpenChange={setShowBookingDialog}
         sessionSchedule={selectedSchedule}
+      />
+      
+      <AssignTrainerDialog
+        open={showAssignTrainerDialog}
+        onOpenChange={setShowAssignTrainerDialog}
+        sessionTitle={selectedSessionForTrainer?.title || ""}
+        onAssignTrainer={async (trainerId, compensationAmount, compensationType) => {
+          if (selectedSessionForTrainer && onAssignTrainer) {
+            await onAssignTrainer(selectedSessionForTrainer.id, trainerId, compensationAmount, compensationType);
+          }
+        }}
       />
     </div>
   );

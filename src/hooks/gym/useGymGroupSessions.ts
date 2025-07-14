@@ -211,6 +211,47 @@ export function useGymGroupSessions() {
     }
   }, [fetchSessions]);
 
+  const assignTrainer = useCallback(async (
+    sessionId: string,
+    trainerId: string,
+    compensationAmount?: number,
+    compensationType?: string
+  ) => {
+    try {
+      // First, check if there are scheduled sessions for this group session
+      const { data: schedules, error: schedulesError } = await supabase
+        .from('gym_session_schedules')
+        .select('id')
+        .eq('gym_group_session_id', sessionId);
+
+      if (schedulesError) throw schedulesError;
+
+      // For demo purposes, we'll create trainer assignments for each schedule
+      // In a real implementation, you might want to handle this differently
+      if (schedules && schedules.length > 0) {
+        for (const schedule of schedules) {
+          const { error } = await supabase
+            .from('gym_session_trainers')
+            .upsert({
+              session_schedule_id: schedule.id,
+              trainer_id: trainerId,
+              compensation_amount: compensationAmount,
+              compensation_type: compensationType,
+              role: 'primary'
+            });
+
+          if (error) throw error;
+        }
+      }
+      
+      await fetchSessions();
+      toast.success('Trainer assigned successfully!');
+    } catch (err) {
+      console.error('Error assigning trainer:', err);
+      toast.error('Failed to assign trainer');
+    }
+  }, [fetchSessions]);
+
   useEffect(() => {
     fetchSessions();
   }, [fetchSessions]);
@@ -222,6 +263,7 @@ export function useGymGroupSessions() {
     createSession,
     updateSession,
     scheduleSession,
+    assignTrainer,
     refetch: fetchSessions
   };
 }
