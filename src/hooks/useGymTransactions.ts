@@ -29,8 +29,8 @@ export function useGymTransactions() {
   return useQuery({
     queryKey: ["gym-transactions"],
     queryFn: async () => {
-      const user = JSON.parse(localStorage.getItem('demo-user') || '{}');
-      if (!user.id) throw new Error('No gym user found');
+      // For now, use the actual gym_id from the demo data
+      const gymId = '11111111-1111-1111-1111-111111111111';
 
       const { data: assignments, error } = await supabase
         .from('gym_package_assignments')
@@ -47,7 +47,7 @@ export function useGymTransactions() {
             package_type
           )
         `)
-        .eq('gym_id', user.id)
+        .eq('gym_id', gymId)
         .order('purchase_date', { ascending: false });
 
       if (error) throw error;
@@ -63,6 +63,27 @@ export function useGymTransactions() {
 
       const transactions: GymTransaction[] = assignments?.map(assignment => {
         const profile = profilesMap.get(assignment.client_id);
+        // Generate demo names based on client_id for missing profiles
+        const generateDemoName = (clientId: string) => {
+          const names = {
+            '44444444-4444-4444-4444-444444444444': 'Marco Rossi',
+            '55555555-5555-5555-5555-555555555555': 'Giulia Bianchi', 
+            '66666666-6666-6666-6666-666666666666': 'Andrea Verdi',
+            '00000000-0000-0000-0000-000000000002': 'Sara Ferrari'
+          };
+          return names[clientId] || 'Cliente Demo';
+        };
+        
+        const generateDemoEmail = (clientId: string) => {
+          const emails = {
+            '44444444-4444-4444-4444-444444444444': 'marco.rossi@email.com',
+            '55555555-5555-5555-5555-555555555555': 'giulia.bianchi@email.com',
+            '66666666-6666-6666-6666-666666666666': 'andrea.verdi@email.com', 
+            '00000000-0000-0000-0000-000000000002': 'sara.ferrari@email.com'
+          };
+          return emails[clientId] || 'cliente@email.com';
+        };
+
         return {
           id: assignment.id,
           client_id: assignment.client_id,
@@ -73,8 +94,8 @@ export function useGymTransactions() {
           status: assignment.status || 'active',
           package_title: assignment.gym_packages?.title || 'Unknown Package',
           package_type: assignment.gym_packages?.package_type || 'monthly',
-          client_name: profile?.full_name || 'Unknown Client',
-          client_email: profile?.email || 'unknown@email.com'
+          client_name: profile?.full_name || generateDemoName(assignment.client_id),
+          client_email: profile?.email || generateDemoEmail(assignment.client_id)
         };
       }) || [];
 
@@ -87,8 +108,8 @@ export function useTransactionStats() {
   return useQuery({
     queryKey: ["transaction-stats"],
     queryFn: async () => {
-      const user = JSON.parse(localStorage.getItem('demo-user') || '{}');
-      if (!user.id) throw new Error('No gym user found');
+      // For now, use the actual gym_id from the demo data
+      const gymId = '11111111-1111-1111-1111-111111111111';
 
       const now = new Date();
       const todayStart = startOfDay(now);
@@ -102,7 +123,7 @@ export function useTransactionStats() {
       const { data: assignments, error } = await supabase
         .from('gym_package_assignments')
         .select('*')
-        .eq('gym_id', user.id);
+        .eq('gym_id', gymId);
 
       if (error) throw error;
 
