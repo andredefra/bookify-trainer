@@ -6,6 +6,7 @@ import { NotificationsTab } from "./settings/NotificationsTab";
 import { IntegrationsTab } from "./settings/IntegrationsTab";
 import { InvoicingSection } from "./settings/InvoicingSection";
 import { BillingTab } from "./settings/BillingTab";
+import { CancellationPolicySettings } from "./settings/CancellationPolicySettings";
 
 interface SettingsTabProps {
   user: {
@@ -32,6 +33,7 @@ export function SettingsTab({ user }: SettingsTabProps) {
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
           <TabsTrigger value="invoicing">Invoicing</TabsTrigger>
+          <TabsTrigger value="cancellation">Cancellation Policy</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
         
@@ -49,6 +51,10 @@ export function SettingsTab({ user }: SettingsTabProps) {
         
         <TabsContent value="invoicing">
           <InvoicingSection />
+        </TabsContent>
+        
+        <TabsContent value="cancellation">
+          <CancellationPolicySettings />
         </TabsContent>
         
         <TabsContent value="billing">

@@ -18,7 +18,6 @@ interface CreateSessionDialogProps {
 }
 
 export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: CreateSessionDialogProps) {
-  console.log("CreateSessionDialog rendering, open:", open);
   const { t } = useLanguage();
   const [formData, setFormData] = useState({
     title: "",

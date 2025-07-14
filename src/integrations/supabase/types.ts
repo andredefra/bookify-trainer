@@ -929,6 +929,42 @@ export type Database = {
           },
         ]
       }
+      gym_settings: {
+        Row: {
+          created_at: string
+          free_cancellation_hours: number
+          full_fee_percentage: number
+          gym_id: string
+          id: string
+          reduced_fee_hours: number
+          reduced_fee_percentage: number
+          refund_processing_days: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          free_cancellation_hours?: number
+          full_fee_percentage?: number
+          gym_id: string
+          id?: string
+          reduced_fee_hours?: number
+          reduced_fee_percentage?: number
+          refund_processing_days?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          free_cancellation_hours?: number
+          full_fee_percentage?: number
+          gym_id?: string
+          id?: string
+          reduced_fee_hours?: number
+          reduced_fee_percentage?: number
+          refund_processing_days?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gym_trainer_assignments: {
         Row: {
           assigned_at: string

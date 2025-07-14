@@ -12,7 +12,6 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  console.log("LanguageProvider rendering");
   // Check if there's a language preference in localStorage
   const getSavedLanguage = (): Language => {
     if (typeof window !== 'undefined') {
@@ -62,11 +61,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useLanguage = (): LanguageContextType => {
-  console.log("useLanguage called");
   const context = useContext(LanguageContext);
-  console.log("useLanguage context:", context);
   if (context === undefined) {
-    console.error("useLanguage: context is undefined! This means the component is not wrapped in LanguageProvider");
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
