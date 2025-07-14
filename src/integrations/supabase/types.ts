@@ -1500,6 +1500,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      initialize_default_email_templates: {
+        Args: { gym_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       event_category:

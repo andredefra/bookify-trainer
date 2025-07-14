@@ -8,6 +8,7 @@ import { useGymPackages } from '@/hooks/gym/useGymPackages';
 import { CreatePackageDialog } from '@/components/gym/packages/CreatePackageDialog';
 import { AssignPackageDialog } from '@/components/gym/packages/AssignPackageDialog';
 import { PackageUsageStats } from './packages/PackageUsageStats';
+import { MarketingAutomationTab } from '../../marketing/MarketingAutomationTab';
 
 export function PackagesTab() {
   const {
@@ -161,6 +162,7 @@ export function PackagesTab() {
         <TabsList>
           <TabsTrigger value="packages">Package Templates</TabsTrigger>
           <TabsTrigger value="assignments">Active Subscriptions</TabsTrigger>
+          <TabsTrigger value="marketing">Marketing Automation</TabsTrigger>
         </TabsList>
 
         <TabsContent value="packages" className="space-y-4">
@@ -298,6 +300,10 @@ export function PackagesTab() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="marketing" className="space-y-4">
+          <MarketingAutomationTab />
         </TabsContent>
       </Tabs>
 
