@@ -1,14 +1,56 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard, Receipt, DollarSign, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { 
+  CreditCard, 
+  Receipt, 
+  DollarSign, 
+  TrendingUp, 
+  ArrowUpIcon, 
+  ArrowDownIcon,
+  Eye,
+  Download
+} from "lucide-react";
+import { useGymTransactions, useTransactionStats } from "@/hooks/useGymTransactions";
+import { format } from "date-fns";
 
 export function TransactionsTab() {
+  const { data: transactions, isLoading: transactionsLoading } = useGymTransactions();
+  const { data: stats, isLoading: statsLoading } = useTransactionStats();
+
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case 'paid': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'failed': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getPackageTypeColor = (type: string) => {
+    switch (type) {
+      case 'monthly': return 'bg-blue-100 text-blue-800';
+      case 'annual': return 'bg-purple-100 text-purple-800';
+      case 'weekly': return 'bg-green-100 text-green-800';
+      case 'sessions': return 'bg-orange-100 text-orange-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <CreditCard className="w-6 h-6 text-primary" />
-        <h1 className="text-2xl font-bold">Transactions</h1>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <CreditCard className="w-6 h-6 text-primary" />
+          <h1 className="text-2xl font-bold">Transactions</h1>
+        </div>
+        <Button variant="outline" size="sm">
+          <Download className="w-4 h-4 mr-2" />
+          Export Report
+        </Button>
       </div>
       
+      {/* Stats Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -18,9 +60,11 @@ export function TransactionsTab() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">€1,234</div>
+            <div className="text-2xl font-bold">
+              €{statsLoading ? '...' : stats?.todayRevenue.toLocaleString() || '0'}
+            </div>
             <p className="text-xs text-muted-foreground">
-              +8% from yesterday
+              Real-time revenue tracking
             </p>
           </CardContent>
         </Card>
@@ -33,7 +77,9 @@ export function TransactionsTab() {
             <Receipt className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
+            <div className="text-2xl font-bold">
+              {statsLoading ? '...' : stats?.pendingPayments || '0'}
+            </div>
             <p className="text-xs text-muted-foreground">
               require confirmation
             </p>
@@ -48,9 +94,21 @@ export function TransactionsTab() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">€18,567</div>
-            <p className="text-xs text-muted-foreground">
-              +12% vs last month
+            <div className="text-2xl font-bold">
+              €{statsLoading ? '...' : stats?.monthlyRevenue.toLocaleString() || '0'}
+            </div>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              {stats?.revenueGrowth && stats.revenueGrowth >= 0 ? (
+                <>
+                  <ArrowUpIcon className="w-3 h-3 text-green-500" />
+                  <span className="text-green-500">+{stats.revenueGrowth}%</span>
+                </>
+              ) : (
+                <>
+                  <ArrowDownIcon className="w-3 h-3 text-red-500" />
+                  <span className="text-red-500">{stats?.revenueGrowth}%</span>
+                </>
+              )} vs last month
             </p>
           </CardContent>
         </Card>
@@ -63,40 +121,138 @@ export function TransactionsTab() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
+            <div className="text-2xl font-bold">
+              {statsLoading ? '...' : Object.keys(stats?.paymentMethods || {}).length}
+            </div>
             <p className="text-xs text-muted-foreground">
-              Card, Cash, Transfer
+              {stats?.paymentMethods ? Object.keys(stats.paymentMethods).join(', ') : 'Card, Cash, Transfer'}
             </p>
           </CardContent>
         </Card>
       </div>
 
+      {/* Recent Transactions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Transactions</CardTitle>
+          <CardDescription>
+            Latest package purchases and payments
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {transactionsLoading ? (
+            <div className="space-y-3">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-gray-200 rounded animate-pulse" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
+                  </div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-20" />
+                </div>
+              ))}
+            </div>
+          ) : transactions && transactions.length > 0 ? (
+            <div className="space-y-4">
+              {transactions.slice(0, 10).map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                      <CreditCard className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="font-medium">{transaction.client_name}</div>
+                      <div className="text-sm text-muted-foreground">{transaction.package_title}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {format(new Date(transaction.purchase_date), 'MMM dd, yyyy')}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Badge variant="secondary" className={getPackageTypeColor(transaction.package_type)}>
+                      {transaction.package_type}
+                    </Badge>
+                    <Badge variant="secondary" className={getPaymentStatusColor(transaction.payment_status)}>
+                      {transaction.payment_status}
+                    </Badge>
+                    <div className="text-right">
+                      <div className="font-semibold">€{transaction.total_paid.toLocaleString()}</div>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              No transactions found
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Payment Methods Breakdown */}
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Payment Management</CardTitle>
+            <CardTitle>Payment Methods Breakdown</CardTitle>
             <CardDescription>
-              Process and manage gym payments and invoices
+              Distribution of payment methods used
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Payment processing system coming soon...
-            </p>
+            {statsLoading ? (
+              <div className="space-y-3">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20" />
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-10" />
+                  </div>
+                ))}
+              </div>
+            ) : stats?.paymentMethods ? (
+              <div className="space-y-3">
+                {Object.entries(stats.paymentMethods).map(([method, count]) => (
+                  <div key={method} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-primary rounded-full" />
+                      <span className="text-sm font-medium">{method}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">{count} transactions</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4 text-muted-foreground">
+                No payment data available
+              </div>
+            )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Financial Analytics</CardTitle>
+            <CardTitle>Quick Actions</CardTitle>
             <CardDescription>
-              Track revenue streams and payment trends
+              Manage payments and generate reports
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Financial reporting dashboard coming soon...
-            </p>
+          <CardContent className="space-y-3">
+            <Button variant="outline" className="w-full justify-start">
+              <Receipt className="w-4 h-4 mr-2" />
+              Process Pending Payments
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+              <Download className="w-4 h-4 mr-2" />
+              Generate Financial Report
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              View Revenue Analytics
+            </Button>
           </CardContent>
         </Card>
       </div>
