@@ -7,6 +7,26 @@ export const useConfirmCashPayment = () => {
 
   return useMutation({
     mutationFn: async (transactionId: string) => {
+      console.log('Attempting to confirm cash payment for transaction:', transactionId);
+      
+      // First, let's check the current user
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user?.id);
+      
+      // Check the transaction before updating
+      const { data: existingTransaction, error: fetchError } = await supabase
+        .from('gym_package_assignments')
+        .select('*')
+        .eq('id', transactionId)
+        .single();
+        
+      if (fetchError) {
+        console.error('Error fetching transaction:', fetchError);
+        throw fetchError;
+      }
+      
+      console.log('Existing transaction:', existingTransaction);
+      
       const { data, error } = await supabase
         .from('gym_package_assignments')
         .update({ 
@@ -16,17 +36,23 @@ export const useConfirmCashPayment = () => {
         .eq('id', transactionId)
         .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating payment status:', error);
+        throw error;
+      }
+      
+      console.log('Update result:', data);
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Payment confirmation successful:', data);
       queryClient.invalidateQueries({ queryKey: ['gym-transactions'] });
       queryClient.invalidateQueries({ queryKey: ['transaction-stats'] });
       toast.success("Cash payment confirmed successfully");
     },
     onError: (error) => {
       console.error('Error confirming cash payment:', error);
-      toast.error("Failed to confirm cash payment");
+      toast.error(`Failed to confirm cash payment: ${error.message}`);
     }
   });
 };
