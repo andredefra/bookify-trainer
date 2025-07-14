@@ -15,17 +15,32 @@ import {
 } from "lucide-react";
 import { useGymTransactions, useTransactionStats } from "@/hooks/useGymTransactions";
 import { useConfirmCashPayment, useMarkInvoiceSent } from "@/hooks/useGymPaymentActions";
+import { TransactionDetailsModal } from "../TransactionDetailsModal";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export function TransactionsTab() {
-  const { data: transactions, isLoading: transactionsLoading } = useGymTransactions();
+  const { data: transactions, isLoading: transactionsLoading, refetch } = useGymTransactions();
   const { data: stats, isLoading: statsLoading } = useTransactionStats();
   const confirmCashPayment = useConfirmCashPayment();
   const markInvoiceSent = useMarkInvoiceSent();
+  const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
-  const handleConfirmCashPayment = (transactionId: string) => {
-    confirmCashPayment.mutate(transactionId);
+  const handleConfirmCashPayment = async (transactionId: string) => {
+    try {
+      await confirmCashPayment.mutateAsync(transactionId);
+      // Force refetch to update the UI immediately
+      await refetch();
+    } catch (error) {
+      console.error('Error confirming payment:', error);
+    }
+  };
+
+  const handleViewDetails = (transaction: any) => {
+    setSelectedTransaction(transaction);
+    setDetailsModalOpen(true);
   };
 
   const handleSendInvoice = (transaction: any) => {
@@ -230,7 +245,11 @@ export function TransactionsTab() {
                         </Button>
                       )}
                       
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => handleViewDetails(transaction)}
+                      >
                         <Eye className="w-4 h-4" />
                       </Button>
                     </div>
@@ -308,6 +327,12 @@ export function TransactionsTab() {
           </CardContent>
         </Card>
       </div>
+
+      <TransactionDetailsModal
+        transaction={selectedTransaction}
+        open={detailsModalOpen}
+        onOpenChange={setDetailsModalOpen}
+      />
     </div>
   );
 }
