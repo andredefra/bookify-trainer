@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle, Users, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { CancellationPolicyCard } from "./CancellationPolicyCard";
 
 interface CancelSessionDialogProps {
   open: boolean;
@@ -106,16 +107,20 @@ export function CancelSessionDialog({
             </p>
           </div>
 
+          {/* Cancellation Policy */}
+          <CancellationPolicyCard scheduledDate={scheduledDate} />
+
           {/* Impact Warning */}
           <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
             <div className="flex gap-3">
               <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm">
-                <p className="font-medium text-amber-800">What happens next:</p>
+                <p className="font-medium text-amber-800">Cosa succederà:</p>
                 <ul className="mt-1 text-amber-700 space-y-1">
-                  <li>• All {participantCount} participants will receive an email notification</li>
-                  <li>• The session will be marked as cancelled in the system</li>
-                  <li>• Participants can request refunds if applicable</li>
+                  <li>• Tutti i {participantCount} partecipanti riceveranno una notifica email</li>
+                  <li>• La sessione verrà marcata come cancellata nel sistema</li>
+                  <li>• I partecipanti potranno richiedere rimborsi se applicabile</li>
+                  <li>• Le notifiche verranno inviate automaticamente</li>
                 </ul>
               </div>
             </div>

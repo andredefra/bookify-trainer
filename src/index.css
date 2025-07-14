@@ -77,6 +77,8 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
   /* Line clamp utilities for text truncation */
   .line-clamp-1 {
     overflow: hidden;
@@ -98,7 +100,6 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
-}
 
   .glass-navbar {
     @apply bg-background/90 backdrop-blur-md shadow-sm border-b border-border/10;
