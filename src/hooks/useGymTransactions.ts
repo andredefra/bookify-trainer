@@ -32,11 +32,7 @@ export function useGymTransactions() {
       // For now, use the actual gym_id from the demo data  
       const gymId = '11111111-1111-1111-1111-111111111111';
       
-      console.log('DEBUG: Fetching transactions for gym:', gymId);
-
-      // First, set a temporary session for the gym user to bypass RLS
-      const { error: sessionError } = await supabase.auth.signInAnonymously();
-      if (sessionError) console.warn('Session setup failed:', sessionError);
+      
 
       const { data: assignments, error } = await supabase
         .from('gym_package_assignments')
@@ -56,11 +52,7 @@ export function useGymTransactions() {
         .eq('gym_id', gymId)
         .order('purchase_date', { ascending: false });
 
-      console.log('DEBUG: Query result:', { assignments, error, count: assignments?.length });
-      if (error) {
-        console.error('DEBUG: Query error:', error);
-        throw error;
-      }
+      if (error) throw error;
 
       // Get client profiles separately
       const clientIds = assignments?.map(a => a.client_id) || [];
@@ -120,7 +112,7 @@ export function useTransactionStats() {
     queryFn: async () => {
       // For now, use the actual gym_id from the demo data
       const gymId = '11111111-1111-1111-1111-111111111111';
-
+      
       const now = new Date();
       const todayStart = startOfDay(now);
       const todayEnd = endOfDay(now);
@@ -129,7 +121,6 @@ export function useTransactionStats() {
       const lastMonthStart = startOfMonth(subMonths(now, 1));
       const lastMonthEnd = endOfMonth(subMonths(now, 1));
 
-      // Get all assignments for this gym
       const { data: assignments, error } = await supabase
         .from('gym_package_assignments')
         .select('*')
