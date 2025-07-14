@@ -12,7 +12,6 @@ import { SessionParticipants } from "./SessionParticipants";
 import { AssignTrainerDialog } from "./AssignTrainerDialog";
 import { CancelSessionDialog } from "./CancelSessionDialog";
 import { ScheduleSessionDialog } from "./ScheduleSessionDialog";
-import { useLanguage } from "@/context/LanguageContext";
 
 interface SessionsListProps {
   sessions: SessionWithSchedules[];
@@ -34,7 +33,6 @@ interface SessionsListProps {
 }
 
 export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onAssignTrainer, onCancelSession }: SessionsListProps) {
-  const { t } = useLanguage();
   const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [showParticipants, setShowParticipants] = useState<string | null>(null);
@@ -67,21 +65,20 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
   };
 
   const getStatusText = (status: string) => {
-    return t(`groupSessions.status.${status}`) || status;
+    return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
   const getDifficultyText = (level: string) => {
-    return t(`groupSessions.difficulty.${level}`) || level;
+    return level.charAt(0).toUpperCase() + level.slice(1);
   };
-
 
   if (sessions.length === 0) {
     return (
       <div className="text-center py-12">
-        <Users className="mx-auto h-12 w-12 text-muted-foreground" />
-        <h3 className="mt-2 text-sm font-semibold text-foreground">{t('groupSessions.noSessions')}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {t('groupSessions.noSessionsDesc')}
+        <Calendar className="mx-auto h-16 w-16 text-muted-foreground" />
+        <h3 className="mt-2 text-sm font-semibold text-foreground">No sessions available</h3>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Create your first group session to get started
         </p>
       </div>
     );
@@ -127,32 +124,30 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
-                      <DropdownMenuItem>
-                        <Eye className="h-4 w-4 mr-2" />
-                        {t('groupSessions.viewDetails')}
+                      <DropdownMenuItem onClick={() => setShowParticipants(showParticipants === session.id ? null : session.id)}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        View Details
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedSessionForSchedule(session);
-                          setShowScheduleDialog(true);
-                        }}
-                      >
-                        <CalendarPlus className="h-4 w-4 mr-2" />
-                        {t('groupSessions.scheduleSession')}
+                      <DropdownMenuItem onClick={() => {
+                        setSelectedSessionForSchedule(session);
+                        setShowScheduleDialog(true);
+                      }}>
+                        <CalendarPlus className="mr-2 h-4 w-4" />
+                        Schedule Session
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Edit className="h-4 w-4 mr-2" />
-                        {t('groupSessions.editSession')}
+                      <DropdownMenuItem onClick={() => onUpdateSession(session.id, { editing: true })}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit Session
                       </DropdownMenuItem>
                       <DropdownMenuItem 
-                        className="text-destructive"
                         onClick={() => {
                           setSelectedSessionForCancel(session);
                           setShowCancelDialog(true);
                         }}
+                        className="text-red-600"
                       >
-                        <X className="h-4 w-4 mr-2" />
-                        {t('groupSessions.cancelSession')}
+                        <Trash className="mr-2 h-4 w-4" />
+                        Cancel Session
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -160,42 +155,52 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
               )}
               
               {!isMobile && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm">
-                      <MoreHorizontal className="h-4 w-4" />
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowParticipants(showParticipants === session.id ? null : session.id)}
+                      className="mr-2"
+                    >
+                      <Eye className="h-4 w-4" />
+                      {isMobile ? "" : "View Details"}
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
-                    <DropdownMenuItem>
-                      <Eye className="h-4 w-4 mr-2" />
-                      {t('groupSessions.viewDetails')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => {
                         setSelectedSessionForSchedule(session);
                         setShowScheduleDialog(true);
                       }}
+                      className="mr-2"
                     >
-                      <CalendarPlus className="h-4 w-4 mr-2" />
-                      {t('groupSessions.scheduleSession')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Edit className="h-4 w-4 mr-2" />
-                      {t('groupSessions.editSession')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      className="text-destructive"
+                      <CalendarPlus className="h-4 w-4" />
+                      {isMobile ? "" : "Schedule Session"}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onUpdateSession(session.id, { editing: true })}
+                      className="mr-2"
+                    >
+                      <Edit className="h-4 w-4" />
+                      {isMobile ? "" : "Edit Session"}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => {
                         setSelectedSessionForCancel(session);
                         setShowCancelDialog(true);
                       }}
+                      className="text-red-600"
                     >
-                      <X className="h-4 w-4 mr-2" />
-                      {t('groupSessions.cancelSession')}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <Trash className="h-4 w-4" />
+                      {isMobile ? "" : "Cancel Session"}
+                    </Button>
+                  </div>
+                </div>
               )}
             </div>
           </CardHeader>
@@ -215,18 +220,16 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     ? "grid-cols-2" 
                     : "grid-cols-2 md:grid-cols-4"
               }`}>
-                <div className="flex items-center space-x-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <span>{session.max_participants} {t('groupSessions.max')}</span>
+                <div className="flex items-center text-muted-foreground">
+                  <Users className="h-4 w-4 mr-1" />
+                  <span>{session.max_participants} max</span>
                 </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span>{session.duration_minutes} {t('groupSessions.min')}</span>
+                <div className="flex items-center text-muted-foreground">
+                  <Clock className="h-4 w-4 mr-1" />
+                  <span>{session.duration_minutes} min</span>
                 </div>
-                
-                <div className="flex items-center space-x-2">
-                  <span className="text-green-600 text-xs font-medium">{t('groupSessions.includedInPackage')}</span>
+                <div className="flex items-center">
+                  <span className="text-green-600 text-xs font-medium">Included in Package</span>
                 </div>
                 
                 {session.location && (
@@ -239,14 +242,14 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
 
               <div className={`${isMobile ? "space-y-3" : "flex items-center justify-between"} pt-3 border-t`}>
                 <div className={`flex items-center ${isMobile ? "justify-between" : "space-x-4"} text-sm text-muted-foreground`}>
-                  <span className="flex items-center space-x-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>{session.upcoming_count} {t('groupSessions.upcoming')}</span>
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <Users className="h-4 w-4" />
-                    <span>{session.total_participants} {t('groupSessions.participants')}</span>
-                  </span>
+                  <div className="flex items-center text-muted-foreground">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    <span>{session.upcoming_count} upcoming</span>
+                  </div>
+                  <div className="flex items-center text-muted-foreground">
+                    <Users className="h-4 w-4 mr-1" />
+                    <span>{session.total_participants} participants</span>
+                  </div>
                   {!isMobile && (
                     <Badge variant="outline" className="text-xs">
                       {formatSessionType(session.session_type)}
@@ -255,70 +258,63 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 </div>
                 
                 <div className={`flex ${isMobile ? "flex-col space-y-2" : isTablet ? "flex-wrap gap-2" : "space-x-2"}`}>
-                  <Button 
-                    variant="outline" 
-                    size={isMobile ? "default" : "sm"}
-                    onClick={() => {
-                      setSelectedSessionForTrainer(session);
-                      setShowAssignTrainerDialog(true);
-                    }}
-                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[100px]" : ""}
-                  >
-                    <UserCog className="h-4 w-4 mr-1" />
-                    <span className={isTablet ? "text-xs truncate" : ""}>
-                      {t('groupSessions.assignTrainer')}
-                    </span>
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size={isMobile ? "default" : "sm"}
-                    onClick={() => {
-                      // For demo, create a mock schedule to book against
-                      const mockSchedule = {
-                        id: `${session.id}-schedule-1`,
-                        start_datetime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-                        end_datetime: new Date(Date.now() + 24 * 60 * 60 * 1000 + session.duration_minutes * 60 * 1000).toISOString(),
-                        gym_group_session_id: session.id,
-                        session: session
-                      };
-                      setSelectedSchedule(mockSchedule);
-                      setShowBookingDialog(true);
-                    }}
-                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[100px]" : ""}
-                  >
-                    <UserPlus className="h-4 w-4 mr-1" />
-                    <span className={isTablet ? "text-xs truncate" : ""}>
-                      {isMobile ? t('groupSessions.bookParticipant') : isTablet ? 'Book' : t('groupSessions.bookParticipant')}
-                    </span>
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size={isMobile ? "default" : "sm"}
+                  {onAssignTrainer && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedSessionForTrainer(session);
+                        setShowAssignTrainerDialog(true);
+                      }}
+                      className="mr-2"
+                    >
+                      <UserPlus className="h-4 w-4" />
+                      {isMobile ? "" : "Assign Trainer"}
+                    </Button>
+                  )}
+                  
+                  {session.upcoming_count > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedSchedule(session.schedules?.[0]);
+                        setShowBookingDialog(true);
+                      }}
+                      className="mr-2"
+                    >
+                      <UserCog className="h-4 w-4" />
+                      {isMobile ? "Book Participant" : isTablet ? 'Book' : "Book Participant"}
+                    </Button>
+                  )}
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => setShowParticipants(showParticipants === session.id ? null : session.id)}
-                    className={isMobile ? "w-full justify-start" : isTablet ? "flex-1 min-w-[100px]" : ""}
+                    className="mr-2"
                   >
-                    <Users className="h-4 w-4 mr-1" />
-                    <span className={isTablet ? "text-xs truncate" : ""}>
-                      {showParticipants === session.id ? 
-                        (isMobile ? t('groupSessions.hideParticipants') : isTablet ? 'Hide' : t('groupSessions.hideParticipants')) : 
-                        (isMobile ? t('groupSessions.showParticipants') : isTablet ? 'Show' : t('groupSessions.showParticipants'))
-                      }
-                    </span>
+                    <Eye className="h-4 w-4" />
+                    {showParticipants === session.id ? 
+                      (isMobile ? "Hide Participants" : isTablet ? 'Hide' : "Hide Participants") : 
+                      (isMobile ? "Show Participants" : isTablet ? 'Show' : "Show Participants")
+                    }
                   </Button>
                 </div>
               </div>
 
               {session.requirements && (
-                <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>{t('groupSessions.requirements')}:</strong> 
-                  <span className="line-clamp-2">{session.requirements}</span>
-                </div>
-              )}
-
-              {session.equipment_needed && (
-                <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>{t('groupSessions.equipment')}:</strong> 
-                  <span className="line-clamp-2">{session.equipment_needed}</span>
+                <div className="mt-4 space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Requirements:</strong> 
+                    {session.requirements || "None"}
+                  </p>
+                  {session.equipment_needed && (
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Equipment:</strong> 
+                      {session.equipment_needed}
+                    </p>
+                  )}
                 </div>
               )}
               
