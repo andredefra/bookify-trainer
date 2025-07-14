@@ -839,12 +839,9 @@ export type Database = {
           created_at: string
           end_datetime: string
           free_cancellation_hours: number | null
-          full_fee_percentage: number | null
           gym_group_session_id: string
           id: string
           notes: string | null
-          reduced_fee_hours: number | null
-          reduced_fee_percentage: number | null
           start_datetime: string
           status: string
           updated_at: string
@@ -858,12 +855,9 @@ export type Database = {
           created_at?: string
           end_datetime: string
           free_cancellation_hours?: number | null
-          full_fee_percentage?: number | null
           gym_group_session_id: string
           id?: string
           notes?: string | null
-          reduced_fee_hours?: number | null
-          reduced_fee_percentage?: number | null
           start_datetime: string
           status?: string
           updated_at?: string
@@ -877,12 +871,9 @@ export type Database = {
           created_at?: string
           end_datetime?: string
           free_cancellation_hours?: number | null
-          full_fee_percentage?: number | null
           gym_group_session_id?: string
           id?: string
           notes?: string | null
-          reduced_fee_hours?: number | null
-          reduced_fee_percentage?: number | null
           start_datetime?: string
           status?: string
           updated_at?: string

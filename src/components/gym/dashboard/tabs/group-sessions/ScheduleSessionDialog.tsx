@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar, Clock, Users, Settings2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLanguage } from "@/context/LanguageContext";
+
 
 interface ScheduleSessionDialogProps {
   open: boolean;
@@ -19,9 +19,6 @@ interface ScheduleSessionDialogProps {
     trainerId?: string,
     cancellationPolicy?: {
       free_cancellation_hours?: number;
-      reduced_fee_hours?: number;
-      reduced_fee_percentage?: number;
-      full_fee_percentage?: number;
     }
   ) => void;
 }
@@ -33,16 +30,12 @@ export function ScheduleSessionDialog({
   sessionId,
   onScheduleSession
 }: ScheduleSessionDialogProps) {
-  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     date: "",
     startTime: "",
     endTime: "",
     trainerId: "",
-    free_cancellation_hours: 48,
-    reduced_fee_hours: 24,
-    reduced_fee_percentage: 50,
-    full_fee_percentage: 100
+    free_cancellation_hours: 48
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -57,10 +50,7 @@ export function ScheduleSessionDialog({
       endDateTime,
       formData.trainerId || undefined,
       {
-        free_cancellation_hours: formData.free_cancellation_hours,
-        reduced_fee_hours: formData.reduced_fee_hours,
-        reduced_fee_percentage: formData.reduced_fee_percentage,
-        full_fee_percentage: formData.full_fee_percentage
+        free_cancellation_hours: formData.free_cancellation_hours
       }
     );
     
@@ -72,10 +62,7 @@ export function ScheduleSessionDialog({
       startTime: "",
       endTime: "",
       trainerId: "",
-      free_cancellation_hours: 48,
-      reduced_fee_hours: 24,
-      reduced_fee_percentage: 50,
-      full_fee_percentage: 100
+      free_cancellation_hours: 48
     });
   };
 
@@ -85,7 +72,7 @@ export function ScheduleSessionDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            {t('groupSessions.scheduleSession')}: {sessionTitle}
+            Schedule Session: {sessionTitle}
           </DialogTitle>
         </DialogHeader>
 
@@ -151,14 +138,14 @@ export function ScheduleSessionDialog({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Settings2 className="h-4 w-4" />
-                {t('groupSessions.cancellationPolicy')}
+                Cancellation Policy
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="free_cancellation_hours">
-                    {t('groupSessions.freeCancellationHours')} *
+                    Free Cancellation Hours *
                   </Label>
                   <Input
                     id="free_cancellation_hours"
@@ -170,68 +157,14 @@ export function ScheduleSessionDialog({
                     required
                   />
                   <p className="text-xs text-muted-foreground">
-                    Hours before session for free cancellation
-                  </p>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="reduced_fee_hours">
-                    {t('groupSessions.reducedFeeHours')} *
-                  </Label>
-                  <Input
-                    id="reduced_fee_hours"
-                    type="number"
-                    value={formData.reduced_fee_hours}
-                    onChange={(e) => setFormData({ ...formData, reduced_fee_hours: parseInt(e.target.value) })}
-                    min="0"
-                    max="168"
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Hours before session for reduced fee cancellation
-                  </p>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="reduced_fee_percentage">
-                    {t('groupSessions.reducedFeePercentage')} *
-                  </Label>
-                  <Input
-                    id="reduced_fee_percentage"
-                    type="number"
-                    value={formData.reduced_fee_percentage}
-                    onChange={(e) => setFormData({ ...formData, reduced_fee_percentage: parseInt(e.target.value) })}
-                    min="0"
-                    max="100"
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Percentage of session lost for reduced fee cancellation
-                  </p>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="full_fee_percentage">
-                    {t('groupSessions.fullFeePercentage')} *
-                  </Label>
-                  <Input
-                    id="full_fee_percentage"
-                    type="number"
-                    value={formData.full_fee_percentage}
-                    onChange={(e) => setFormData({ ...formData, full_fee_percentage: parseInt(e.target.value) })}
-                    min="0"
-                    max="100"
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Percentage of session lost for late cancellation
+                    Hours before session for free cancellation. Late cancellations will lose the session from member's package.
                   </p>
                 </div>
               </div>
 
               <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>Note:</strong> Members use sessions from their pre-paid packages. No refunds are given - only the session is lost from their package based on the cancellation timing.
+                  <strong>Note:</strong> Members use sessions from their pre-paid packages. Cancellations within the free hours keep the session in their package. Late cancellations lose the session from their package - no monetary refunds.
                 </p>
               </div>
             </CardContent>

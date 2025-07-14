@@ -30,10 +30,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
     recurrence_pattern: "",
     status: "active" as const,
     // Default cancellation policy for sessions
-    free_cancellation_hours: 48,
-    reduced_fee_hours: 24,
-    reduced_fee_percentage: 50,
-    full_fee_percentage: 100
+    free_cancellation_hours: 48
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,10 +51,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
       is_recurring: false,
       recurrence_pattern: "",
       status: "active",
-      free_cancellation_hours: 48,
-      reduced_fee_hours: 24,
-      reduced_fee_percentage: 50,
-      full_fee_percentage: 100
+      free_cancellation_hours: 48
     });
   };
 
@@ -155,42 +149,9 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
                   min="0"
                   max="168"
                 />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="reduced_fee_hours">Reduced Fee Hours</Label>
-                <Input
-                  id="reduced_fee_hours"
-                  type="number"
-                  value={formData.reduced_fee_hours}
-                  onChange={(e) => setFormData({ ...formData, reduced_fee_hours: parseInt(e.target.value) })}
-                  min="0"
-                  max="168"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="reduced_fee_percentage">Reduced Fee Percentage</Label>
-                <Input
-                  id="reduced_fee_percentage"
-                  type="number"
-                  value={formData.reduced_fee_percentage}
-                  onChange={(e) => setFormData({ ...formData, reduced_fee_percentage: parseInt(e.target.value) })}
-                  min="0"
-                  max="100"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="full_fee_percentage">Full Fee Percentage</Label>
-                <Input
-                  id="full_fee_percentage"
-                  type="number"
-                  value={formData.full_fee_percentage}
-                  onChange={(e) => setFormData({ ...formData, full_fee_percentage: parseInt(e.target.value) })}
-                  min="0"
-                  max="100"
-                />
+                <p className="text-xs text-muted-foreground">
+                  Hours before session for free cancellation. Late cancellations will lose the session from member's package.
+                </p>
               </div>
             </div>
           </div>
