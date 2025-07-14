@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      automation_rules: {
+        Row: {
+          created_at: string | null
+          days_before_expiry: number | null
+          discount_percentage: number | null
+          discount_valid_days: number | null
+          gym_id: string
+          id: string
+          is_active: boolean | null
+          template_id: string
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          days_before_expiry?: number | null
+          discount_percentage?: number | null
+          discount_valid_days?: number | null
+          gym_id: string
+          id?: string
+          is_active?: boolean | null
+          template_id: string
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          days_before_expiry?: number | null
+          discount_percentage?: number | null
+          discount_valid_days?: number | null
+          gym_id?: string
+          id?: string
+          is_active?: boolean | null
+          template_id?: string
+          trigger_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calendar_events: {
         Row: {
           client_id: string | null
@@ -258,6 +305,124 @@ export type Database = {
           trainer_id?: string
           updated_at?: string | null
           validity_days?: number | null
+        }
+        Relationships: []
+      }
+      email_campaigns: {
+        Row: {
+          assignment_id: string
+          bounce_reason: string | null
+          clicked_at: string | null
+          content: string
+          created_at: string | null
+          gym_id: string
+          id: string
+          opened_at: string | null
+          recipient_email: string
+          recipient_name: string | null
+          rule_id: string | null
+          sent_at: string | null
+          status: string | null
+          subject: string
+          template_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          assignment_id: string
+          bounce_reason?: string | null
+          clicked_at?: string | null
+          content: string
+          created_at?: string | null
+          gym_id: string
+          id?: string
+          opened_at?: string | null
+          recipient_email: string
+          recipient_name?: string | null
+          rule_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject: string
+          template_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          assignment_id?: string
+          bounce_reason?: string | null
+          clicked_at?: string | null
+          content?: string
+          created_at?: string | null
+          gym_id?: string
+          id?: string
+          opened_at?: string | null
+          recipient_email?: string
+          recipient_name?: string | null
+          rule_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string
+          template_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_campaigns_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "gym_package_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_campaigns_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "automation_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_campaigns_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_templates: {
+        Row: {
+          content: string
+          created_at: string | null
+          gym_id: string
+          id: string
+          is_active: boolean | null
+          name: string
+          subject: string
+          template_type: string
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          gym_id: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          subject: string
+          template_type: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          gym_id?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          subject?: string
+          template_type?: string
+          updated_at?: string | null
+          variables?: Json | null
         }
         Relationships: []
       }
