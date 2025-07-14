@@ -39,7 +39,7 @@ export function CancellationPolicyCard({
       return {
         type: "partial" as const,
         title: t('cancellationPolicy.reducedFeeCancellation'),
-        description: t('cancellationPolicy.reducedFeeCancellationDesc'),
+        description: t('cancellationPolicy.reducedFeeCancellationDesc').replace('{percentage}', reducedPercentage.toString()),
         icon: Euro,
         color: "text-amber-600",
         bgColor: "bg-amber-50 border-amber-200"
@@ -48,7 +48,7 @@ export function CancellationPolicyCard({
       return {
         type: "full" as const,
         title: t('cancellationPolicy.lateCancellation'),
-        description: t('cancellationPolicy.lateCancellationDesc'),
+        description: t('cancellationPolicy.lateCancellationDesc').replace('{percentage}', fullPercentage.toString()),
         icon: AlertCircle,
         color: "text-red-600",
         bgColor: "bg-red-50 border-red-200"
@@ -82,7 +82,7 @@ export function CancellationPolicyCard({
             <Clock className="h-3 w-3" />
             <span>
               {hoursUntilSession > 0 
-                ? `${t('cancellationPolicy.timeRemaining')} ${hoursUntilSession} ${hoursUntilSession === 1 ? 'ora' : 'ore'}`
+                ? `${t('cancellationPolicy.timeRemaining')} ${hoursUntilSession} ${hoursUntilSession === 1 ? t('cancellationPolicy.hour') : t('cancellationPolicy.hours')}`
                 : t('cancellationPolicy.timeRemainingLessThanHour')
               }
             </span>
@@ -91,10 +91,17 @@ export function CancellationPolicyCard({
           <div className="bg-white/50 rounded-md p-2 space-y-1">
             <p className="font-medium">{t('cancellationPolicy.terms')}</p>
             <ul className="space-y-0.5 text-muted-foreground">
-              <li>• +{freeHours}h prima: {t('cancellationPolicy.freeHours')}</li>
-              <li>• {reducedHours}-{freeHours}h prima: {reducedPercentage}% del costo</li>
-              <li>• &lt;{reducedHours}h prima: {fullPercentage}% del costo</li>
-              <li>• {t('cancellationPolicy.refundTime')}</li>
+              <li>• {t('cancellationPolicy.freeCancellationRule')
+                .replace('{hours}', freeHours.toString())
+                .replace('{description}', t('cancellationPolicy.freeHours'))}</li>
+              <li>• {t('cancellationPolicy.reducedFeeRule')
+                .replace('{startHours}', reducedHours.toString())
+                .replace('{endHours}', freeHours.toString())
+                .replace('{percentage}', reducedPercentage.toString())}</li>
+              <li>• {t('cancellationPolicy.lateCancellationRule')
+                .replace('{hours}', reducedHours.toString())
+                .replace('{percentage}', fullPercentage.toString())}</li>
+              <li>• {t('cancellationPolicy.refundTime').replace('{days}', refundDays.toString())}</li>
             </ul>
           </div>
         </div>
