@@ -9,8 +9,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { GymGroupSession } from "@/hooks/gym/useGymGroupSessions";
 import { SESSION_TYPES, DIFFICULTY_LEVELS, RECURRENCE_PATTERNS } from "@/constants/sessionTypes";
 
-import { useLanguage } from "@/context/LanguageContext";
-
 interface CreateSessionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -18,7 +16,6 @@ interface CreateSessionDialogProps {
 }
 
 export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: CreateSessionDialogProps) {
-  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -68,24 +65,24 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl max-w-[95vw] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle>{t('groupSessions.createNew')}</DialogTitle>
+          <DialogTitle>Create New Group Session</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title">{t('groupSessions.title')} *</Label>
+              <Label htmlFor="title">Title *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder={t('groupSessions.titlePlaceholder')}
+                placeholder="Enter session title"
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="session_type">{t('groupSessions.sessionType')}</Label>
+              <Label htmlFor="session_type">Session Type</Label>
               <Select value={formData.session_type} onValueChange={(value) => setFormData({ ...formData, session_type: value })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -102,19 +99,19 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">{t('groupSessions.description')}</Label>
+            <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder={t('groupSessions.descriptionPlaceholder')}
+              placeholder="Enter session description"
               rows={3}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="max_participants">{t('groupSessions.maxParticipants')}</Label>
+              <Label htmlFor="max_participants">Max Participants</Label>
               <Input
                 id="max_participants"
                 type="number"
@@ -126,7 +123,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="duration_minutes">{t('groupSessions.duration')}</Label>
+              <Label htmlFor="duration_minutes">Duration (minutes)</Label>
               <Input
                 id="duration_minutes"
                 type="number"
@@ -140,16 +137,16 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
 
           <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              <strong>Note:</strong> {t('groupSessions.packageNote')}
+              <strong>Note:</strong> Members will use their package sessions to book these group sessions.
             </p>
           </div>
 
           {/* Cancellation Policy Settings */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{t('groupSessions.cancellationPolicy')}</h3>
+            <h3 className="text-lg font-semibold">Cancellation Policy</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="free_cancellation_hours">{t('groupSessions.freeCancellationHours')}</Label>
+                <Label htmlFor="free_cancellation_hours">Free Cancellation Hours</Label>
                 <Input
                   id="free_cancellation_hours"
                   type="number"
@@ -161,7 +158,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="reduced_fee_hours">{t('groupSessions.reducedFeeHours')}</Label>
+                <Label htmlFor="reduced_fee_hours">Reduced Fee Hours</Label>
                 <Input
                   id="reduced_fee_hours"
                   type="number"
@@ -173,7 +170,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="reduced_fee_percentage">{t('groupSessions.reducedFeePercentage')}</Label>
+                <Label htmlFor="reduced_fee_percentage">Reduced Fee Percentage</Label>
                 <Input
                   id="reduced_fee_percentage"
                   type="number"
@@ -185,7 +182,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="full_fee_percentage">{t('groupSessions.fullFeePercentage')}</Label>
+                <Label htmlFor="full_fee_percentage">Full Fee Percentage</Label>
                 <Input
                   id="full_fee_percentage"
                   type="number"
@@ -200,7 +197,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="difficulty_level">{t('groupSessions.difficultyLevel')}</Label>
+              <Label htmlFor="difficulty_level">Difficulty Level</Label>
               <Select value={formData.difficulty_level} onValueChange={(value) => setFormData({ ...formData, difficulty_level: value })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -216,33 +213,33 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="location">{t('groupSessions.location')}</Label>
+              <Label htmlFor="location">Location</Label>
               <Input
                 id="location"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder={t('groupSessions.locationPlaceholder')}
+                placeholder="Enter session location"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="requirements">{t('groupSessions.requirements')}</Label>
+            <Label htmlFor="requirements">Requirements</Label>
             <Input
               id="requirements"
               value={formData.requirements}
               onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-              placeholder={t('groupSessions.requirementsPlaceholder')}
+              placeholder="Enter session requirements"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="equipment_needed">{t('groupSessions.equipment')}</Label>
+            <Label htmlFor="equipment_needed">Equipment Needed</Label>
             <Input
               id="equipment_needed"
               value={formData.equipment_needed}
               onChange={(e) => setFormData({ ...formData, equipment_needed: e.target.value })}
-              placeholder={t('groupSessions.equipmentPlaceholder')}
+              placeholder="Enter equipment needed"
             />
           </div>
 
@@ -252,15 +249,15 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
               checked={formData.is_recurring}
               onCheckedChange={(checked) => setFormData({ ...formData, is_recurring: !!checked })}
             />
-            <Label htmlFor="is_recurring">{t('groupSessions.recurringSession')}</Label>
+            <Label htmlFor="is_recurring">Recurring Session</Label>
           </div>
 
           {formData.is_recurring && (
             <div className="space-y-2">
-              <Label htmlFor="recurrence_pattern">{t('groupSessions.recurrencePattern')}</Label>
+              <Label htmlFor="recurrence_pattern">Recurrence Pattern</Label>
               <Select value={formData.recurrence_pattern} onValueChange={(value) => setFormData({ ...formData, recurrence_pattern: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder={t('groupSessions.recurrencePatternPlaceholder')} />
+                  <SelectValue placeholder="Select recurrence pattern" />
                 </SelectTrigger>
                 <SelectContent className="z-50 bg-background">
                   {RECURRENCE_PATTERNS.map((pattern) => (
@@ -276,10 +273,10 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
 
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              {t('groupSessions.cancel')}
+              Cancel
             </Button>
             <Button type="submit">
-              {t('groupSessions.createSession')}
+              Create Session
             </Button>
           </div>
         </form>
