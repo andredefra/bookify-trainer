@@ -55,9 +55,9 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
     return (
       <div className="text-center py-12">
         <Users className="mx-auto h-12 w-12 text-muted-foreground" />
-        <h3 className="mt-2 text-sm font-semibold text-gray-900">No sessions found</h3>
+        <h3 className="mt-2 text-sm font-semibold text-foreground">Nessuna sessione trovata</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Get started by creating your first group session.
+          Inizia creando la tua prima sessione di gruppo.
         </p>
       </div>
     );
@@ -105,15 +105,15 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
                       <DropdownMenuItem>
                         <Eye className="h-4 w-4 mr-2" />
-                        View Details
+                        Vedi Dettagli
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <CalendarPlus className="h-4 w-4 mr-2" />
-                        Schedule Session
+                        Programma Sessione
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Edit className="h-4 w-4 mr-2" />
-                        Edit Session
+                        Modifica Sessione
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         className="text-destructive"
@@ -123,7 +123,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                         }}
                       >
                         <X className="h-4 w-4 mr-2" />
-                        Cancel Session
+                        Cancella Sessione
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -140,15 +140,15 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                   <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
                     <DropdownMenuItem>
                       <Eye className="h-4 w-4 mr-2" />
-                      View Details
+                      Vedi Dettagli
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <CalendarPlus className="h-4 w-4 mr-2" />
-                      Schedule Session
+                      Programma Sessione
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Edit className="h-4 w-4 mr-2" />
-                      Edit Session
+                      Modifica Sessione
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       className="text-destructive"
@@ -158,7 +158,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       }}
                     >
                       <X className="h-4 w-4 mr-2" />
-                      Cancel Session
+                      Cancella Sessione
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -192,7 +192,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <span className="text-green-600 text-xs font-medium">Included in package</span>
+                  <span className="text-green-600 text-xs font-medium">Incluso nel pacchetto</span>
                 </div>
                 
                 {session.location && (
@@ -207,11 +207,11 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 <div className={`flex items-center ${isMobile ? "justify-between" : "space-x-4"} text-sm text-muted-foreground`}>
                   <span className="flex items-center space-x-1">
                     <Calendar className="h-4 w-4" />
-                    <span>{session.upcoming_count} upcoming</span>
+                    <span>{session.upcoming_count} prossime</span>
                   </span>
                   <span className="flex items-center space-x-1">
                     <Users className="h-4 w-4" />
-                    <span>{session.total_participants} participants</span>
+                    <span>{session.total_participants} partecipanti</span>
                   </span>
                   {!isMobile && (
                     <Badge variant="outline" className="text-xs">
@@ -232,7 +232,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                   >
                     <UserCog className="h-4 w-4 mr-1" />
                     <span className={isTablet ? "text-xs truncate" : ""}>
-                      {isMobile ? "Assegna Trainer" : isTablet ? "Trainer" : "Assign Trainer"}
+                      Assegna Trainer
                     </span>
                   </Button>
                   <Button 
@@ -254,7 +254,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                   >
                     <UserPlus className="h-4 w-4 mr-1" />
                     <span className={isTablet ? "text-xs truncate" : ""}>
-                      {isMobile ? "Prenota Partecipante" : isTablet ? "Prenota" : "Book Participant"}
+                      {isMobile ? "Prenota Partecipante" : isTablet ? "Prenota" : "Prenota Partecipante"}
                     </span>
                   </Button>
                   <Button 
@@ -266,8 +266,8 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     <Users className="h-4 w-4 mr-1" />
                     <span className={isTablet ? "text-xs truncate" : ""}>
                       {showParticipants === session.id ? 
-                        (isMobile ? 'Nascondi Partecipanti' : isTablet ? 'Nascondi' : 'Hide') : 
-                        (isMobile ? 'Mostra Partecipanti' : isTablet ? 'Mostra' : 'Show Participants')
+                        (isMobile ? 'Nascondi Partecipanti' : isTablet ? 'Nascondi' : 'Nascondi Partecipanti') : 
+                        (isMobile ? 'Mostra Partecipanti' : isTablet ? 'Mostra' : 'Mostra Partecipanti')
                       }
                     </span>
                   </Button>
@@ -276,14 +276,14 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
 
               {session.requirements && (
                 <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>Requirements:</strong> 
+                  <strong>Requisiti:</strong> 
                   <span className="line-clamp-2">{session.requirements}</span>
                 </div>
               )}
 
               {session.equipment_needed && (
                 <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>Equipment:</strong> 
+                  <strong>Attrezzatura:</strong> 
                   <span className="line-clamp-2">{session.equipment_needed}</span>
                 </div>
               )}

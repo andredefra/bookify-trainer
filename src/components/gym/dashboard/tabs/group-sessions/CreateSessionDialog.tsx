@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { GymGroupSession } from "@/hooks/gym/useGymGroupSessions";
 import { SESSION_TYPES, DIFFICULTY_LEVELS, RECURRENCE_PATTERNS } from "@/constants/sessionTypes";
+import { CancellationPolicyCard } from "./CancellationPolicyCard";
 
 interface CreateSessionDialogProps {
   open: boolean;
@@ -54,27 +55,26 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto">
-        <div className="p-1">
+      <DialogContent className="sm:max-w-2xl max-w-[95vw] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle>Create New Group Session</DialogTitle>
+          <DialogTitle>Crea Nuova Sessione di Gruppo</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Session Title *</Label>
+              <Label htmlFor="title">Titolo Sessione *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g., Morning HIIT Blast"
+                placeholder="es. HIIT Mattutino Intenso"
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="session_type">Session Type</Label>
+              <Label htmlFor="session_type">Tipo di Sessione</Label>
               <Select value={formData.session_type} onValueChange={(value) => setFormData({ ...formData, session_type: value })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -91,19 +91,19 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Descrizione</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Describe the session and its benefits"
+              placeholder="Descrivi la sessione e i suoi benefici"
               rows={3}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="max_participants">Max Participants</Label>
+              <Label htmlFor="max_participants">Max Partecipanti</Label>
               <Input
                 id="max_participants"
                 type="number"
@@ -115,7 +115,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="duration_minutes">Duration (minutes)</Label>
+              <Label htmlFor="duration_minutes">Durata (minuti)</Label>
               <Input
                 id="duration_minutes"
                 type="number"
@@ -136,7 +136,7 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="difficulty_level">Difficulty Level</Label>
+              <Label htmlFor="difficulty_level">Livello di Difficoltà</Label>
               <Select value={formData.difficulty_level} onValueChange={(value) => setFormData({ ...formData, difficulty_level: value })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -152,33 +152,33 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">Ubicazione</Label>
               <Input
                 id="location"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="e.g., Studio A, Pool Area"
+                placeholder="es. Studio A, Area Piscina"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="requirements">Requirements</Label>
+            <Label htmlFor="requirements">Requisiti</Label>
             <Input
               id="requirements"
               value={formData.requirements}
               onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-              placeholder="e.g., Basic fitness level required"
+              placeholder="es. Livello base di fitness richiesto"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="equipment_needed">Equipment Needed</Label>
+            <Label htmlFor="equipment_needed">Attrezzatura Necessaria</Label>
             <Input
               id="equipment_needed"
               value={formData.equipment_needed}
               onChange={(e) => setFormData({ ...formData, equipment_needed: e.target.value })}
-              placeholder="e.g., Yoga mats, dumbbells, resistance bands"
+              placeholder="es. Tappetini yoga, manubri, bande elastiche"
             />
           </div>
 
@@ -188,15 +188,15 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
               checked={formData.is_recurring}
               onCheckedChange={(checked) => setFormData({ ...formData, is_recurring: !!checked })}
             />
-            <Label htmlFor="is_recurring">Recurring Session</Label>
+            <Label htmlFor="is_recurring">Sessione Ricorrente</Label>
           </div>
 
           {formData.is_recurring && (
             <div className="space-y-2">
-              <Label htmlFor="recurrence_pattern">Recurrence Pattern</Label>
+              <Label htmlFor="recurrence_pattern">Schema di Ricorrenza</Label>
               <Select value={formData.recurrence_pattern} onValueChange={(value) => setFormData({ ...formData, recurrence_pattern: value })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select pattern" />
+                  <SelectValue placeholder="Seleziona schema" />
                 </SelectTrigger>
                 <SelectContent className="z-50 bg-background">
                   {RECURRENCE_PATTERNS.map((pattern) => (
@@ -209,16 +209,22 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
             </div>
           )}
 
+          {/* Cancellation Policy Card */}
+          <div className="mt-6">
+            <CancellationPolicyCard 
+              scheduledDate={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()}
+            />
+          </div>
+
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              Annulla
             </Button>
             <Button type="submit">
-              Create Session
+              Crea Sessione
             </Button>
           </div>
         </form>
-        </div>
       </DialogContent>
     </Dialog>
   );
