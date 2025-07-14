@@ -11,6 +11,7 @@ import { SessionBookingDialog } from "./SessionBookingDialog";
 import { SessionParticipants } from "./SessionParticipants";
 import { AssignTrainerDialog } from "./AssignTrainerDialog";
 import { CancelSessionDialog } from "./CancelSessionDialog";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface SessionsListProps {
   sessions: SessionWithSchedules[];
@@ -21,6 +22,7 @@ interface SessionsListProps {
 }
 
 export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onAssignTrainer, onCancelSession }: SessionsListProps) {
+  const { t } = useLanguage();
   const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [showParticipants, setShowParticipants] = useState<string | null>(null);
@@ -50,14 +52,22 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
     }
   };
 
+  const getStatusText = (status: string) => {
+    return t(`groupSessions.status.${status}`) || status;
+  };
+
+  const getDifficultyText = (level: string) => {
+    return t(`groupSessions.difficulty.${level}`) || level;
+  };
+
 
   if (sessions.length === 0) {
     return (
       <div className="text-center py-12">
         <Users className="mx-auto h-12 w-12 text-muted-foreground" />
-        <h3 className="mt-2 text-sm font-semibold text-foreground">Nessuna sessione trovata</h3>
+        <h3 className="mt-2 text-sm font-semibold text-foreground">{t('groupSessions.noSessions')}</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Inizia creando la tua prima sessione di gruppo.
+          {t('groupSessions.noSessionsDesc')}
         </p>
       </div>
     );
@@ -76,10 +86,10 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 {!isMobile && (
                   <div className="flex items-center space-x-2">
                     <Badge className={getStatusColor(session.status)}>
-                      {session.status}
+                      {getStatusText(session.status)}
                     </Badge>
                     <Badge className={getDifficultyColor(session.difficulty_level)}>
-                      {session.difficulty_level}
+                      {getDifficultyText(session.difficulty_level)}
                     </Badge>
                   </div>
                 )}
@@ -89,10 +99,10 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 <div className="flex items-center space-x-2 w-full justify-between">
                   <div className="flex items-center space-x-2">
                     <Badge className={getStatusColor(session.status)} variant="outline">
-                      {session.status}
+                      {getStatusText(session.status)}
                     </Badge>
                     <Badge className={getDifficultyColor(session.difficulty_level)} variant="outline">
-                      {session.difficulty_level}
+                      {getDifficultyText(session.difficulty_level)}
                     </Badge>
                   </div>
               
@@ -105,15 +115,15 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
                       <DropdownMenuItem>
                         <Eye className="h-4 w-4 mr-2" />
-                        Vedi Dettagli
+                        {t('groupSessions.viewDetails')}
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <CalendarPlus className="h-4 w-4 mr-2" />
-                        Programma Sessione
+                        {t('groupSessions.scheduleSession')}
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Edit className="h-4 w-4 mr-2" />
-                        Modifica Sessione
+                        {t('groupSessions.editSession')}
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         className="text-destructive"
@@ -123,7 +133,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                         }}
                       >
                         <X className="h-4 w-4 mr-2" />
-                        Cancella Sessione
+                        {t('groupSessions.cancelSession')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -140,15 +150,15 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                   <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
                     <DropdownMenuItem>
                       <Eye className="h-4 w-4 mr-2" />
-                      Vedi Dettagli
+                      {t('groupSessions.viewDetails')}
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <CalendarPlus className="h-4 w-4 mr-2" />
-                      Programma Sessione
+                      {t('groupSessions.scheduleSession')}
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Edit className="h-4 w-4 mr-2" />
-                      Modifica Sessione
+                      {t('groupSessions.editSession')}
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       className="text-destructive"
@@ -158,7 +168,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       }}
                     >
                       <X className="h-4 w-4 mr-2" />
-                      Cancella Sessione
+                      {t('groupSessions.cancelSession')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -183,16 +193,16 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
               }`}>
                 <div className="flex items-center space-x-2">
                   <Users className="h-4 w-4 text-muted-foreground" />
-                  <span>{session.max_participants} max</span>
+                  <span>{session.max_participants} {t('groupSessions.max')}</span>
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span>{session.duration_minutes} min</span>
+                  <span>{session.duration_minutes} {t('groupSessions.min')}</span>
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <span className="text-green-600 text-xs font-medium">Incluso nel pacchetto</span>
+                  <span className="text-green-600 text-xs font-medium">{t('groupSessions.includedInPackage')}</span>
                 </div>
                 
                 {session.location && (
@@ -207,11 +217,11 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 <div className={`flex items-center ${isMobile ? "justify-between" : "space-x-4"} text-sm text-muted-foreground`}>
                   <span className="flex items-center space-x-1">
                     <Calendar className="h-4 w-4" />
-                    <span>{session.upcoming_count} prossime</span>
+                    <span>{session.upcoming_count} {t('groupSessions.upcoming')}</span>
                   </span>
                   <span className="flex items-center space-x-1">
                     <Users className="h-4 w-4" />
-                    <span>{session.total_participants} partecipanti</span>
+                    <span>{session.total_participants} {t('groupSessions.participants')}</span>
                   </span>
                   {!isMobile && (
                     <Badge variant="outline" className="text-xs">
@@ -232,7 +242,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                   >
                     <UserCog className="h-4 w-4 mr-1" />
                     <span className={isTablet ? "text-xs truncate" : ""}>
-                      Assegna Trainer
+                      {t('groupSessions.assignTrainer')}
                     </span>
                   </Button>
                   <Button 
@@ -254,7 +264,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                   >
                     <UserPlus className="h-4 w-4 mr-1" />
                     <span className={isTablet ? "text-xs truncate" : ""}>
-                      {isMobile ? "Prenota Partecipante" : isTablet ? "Prenota" : "Prenota Partecipante"}
+                      {isMobile ? t('groupSessions.bookParticipant') : isTablet ? 'Book' : t('groupSessions.bookParticipant')}
                     </span>
                   </Button>
                   <Button 
@@ -266,8 +276,8 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     <Users className="h-4 w-4 mr-1" />
                     <span className={isTablet ? "text-xs truncate" : ""}>
                       {showParticipants === session.id ? 
-                        (isMobile ? 'Nascondi Partecipanti' : isTablet ? 'Nascondi' : 'Nascondi Partecipanti') : 
-                        (isMobile ? 'Mostra Partecipanti' : isTablet ? 'Mostra' : 'Mostra Partecipanti')
+                        (isMobile ? t('groupSessions.hideParticipants') : isTablet ? 'Hide' : t('groupSessions.hideParticipants')) : 
+                        (isMobile ? t('groupSessions.showParticipants') : isTablet ? 'Show' : t('groupSessions.showParticipants'))
                       }
                     </span>
                   </Button>
@@ -276,14 +286,14 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
 
               {session.requirements && (
                 <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>Requisiti:</strong> 
+                  <strong>{t('groupSessions.requirements')}:</strong> 
                   <span className="line-clamp-2">{session.requirements}</span>
                 </div>
               )}
 
               {session.equipment_needed && (
                 <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>Attrezzatura:</strong> 
+                  <strong>{t('groupSessions.equipment')}:</strong> 
                   <span className="line-clamp-2">{session.equipment_needed}</span>
                 </div>
               )}
