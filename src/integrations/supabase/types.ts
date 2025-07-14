@@ -1168,6 +1168,42 @@ export type Database = {
         }
         Relationships: []
       }
+      trainer_availability: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          end_time: string
+          gym_id: string
+          id: string
+          is_active: boolean
+          start_time: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          gym_id: string
+          id?: string
+          is_active?: boolean
+          start_time: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          gym_id?: string
+          id?: string
+          is_active?: boolean
+          start_time?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       trainer_client_relationships: {
         Row: {
           client_id: string
@@ -1246,6 +1282,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      trainer_shifts: {
+        Row: {
+          created_at: string
+          end_datetime: string
+          gym_id: string
+          id: string
+          notes: string | null
+          shift_type: string
+          start_datetime: string
+          status: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_datetime: string
+          gym_id: string
+          id?: string
+          notes?: string | null
+          shift_type?: string
+          start_datetime: string
+          status?: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_datetime?: string
+          gym_id?: string
+          id?: string
+          notes?: string | null
+          shift_type?: string
+          start_datetime?: string
+          status?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {
