@@ -65,15 +65,20 @@ export function useGymMembers() {
 
       // Fetch package assignments for these clients
       const clientIds = gymClients?.map(gc => gc.client_id) || [];
-      const { data: assignments, error: assignmentsError } = await supabase
-        .from('gym_package_assignments')
-        .select(`
-          *,
-          package:gym_packages(*)
-        `)
-        .in('client_id', clientIds.length > 0 ? clientIds : ['no-clients']);
+      let assignments = [];
+      if (clientIds.length > 0) {
+        const { data: assignmentsData, error: assignmentsError } = await supabase
+          .from('gym_package_assignments')
+          .select(`
+            *,
+            package:gym_packages(*)
+          `)
+          .in('client_id', clientIds);
+        
+        if (assignmentsError) throw assignmentsError;
+        assignments = assignmentsData || [];
+      }
 
-      if (assignmentsError) throw assignmentsError;
 
       // Map gym clients to member format
       const membersArray: GymMember[] = (gymClients || []).map(gymClient => {
