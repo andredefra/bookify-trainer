@@ -3,25 +3,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye, UserPlus, UserCog } from "lucide-react";
+import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye, UserPlus, UserCog, X } from "lucide-react";
 import { SessionWithSchedules } from "@/hooks/gym/useGymGroupSessions";
+import { useResponsiveLayout } from "@/hooks/useResponsiveLayout";
 import { SessionBookingDialog } from "./SessionBookingDialog";
 import { SessionParticipants } from "./SessionParticipants";
 import { AssignTrainerDialog } from "./AssignTrainerDialog";
+import { CancelSessionDialog } from "./CancelSessionDialog";
 
 interface SessionsListProps {
   sessions: SessionWithSchedules[];
   onUpdateSession: (sessionId: string, updates: any) => void;
   onScheduleSession: (sessionId: string, startDateTime: string, endDateTime: string, trainerId?: string) => void;
   onAssignTrainer?: (sessionId: string, trainerId: string, compensationAmount?: number, compensationType?: string) => void;
+  onCancelSession?: (sessionId: string, scheduleId: string, reason: string) => void;
 }
 
-export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onAssignTrainer }: SessionsListProps) {
+export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onAssignTrainer, onCancelSession }: SessionsListProps) {
   const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [showParticipants, setShowParticipants] = useState<string | null>(null);
   const [selectedSessionForTrainer, setSelectedSessionForTrainer] = useState<SessionWithSchedules | null>(null);
   const [showAssignTrainerDialog, setShowAssignTrainerDialog] = useState(false);
+  const [selectedSessionForCancel, setSelectedSessionForCancel] = useState<SessionWithSchedules | null>(null);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  
+  const { isMobile, isTablet } = useResponsiveLayout();
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
@@ -93,9 +100,15 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     <Edit className="h-4 w-4 mr-2" />
                     Edit Session
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-600">
-                    <Trash className="h-4 w-4 mr-2" />
-                    Delete Session
+                  <DropdownMenuItem 
+                    className="text-red-600"
+                    onClick={() => {
+                      setSelectedSessionForCancel(session);
+                      setShowCancelDialog(true);
+                    }}
+                  >
+                    <X className="h-4 w-4 mr-2" />
+                    Cancel Session
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -108,7 +121,13 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 <p className="text-sm text-muted-foreground">{session.description}</p>
               )}
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div className={`grid gap-4 text-sm ${
+                isMobile 
+                  ? "grid-cols-1" 
+                  : isTablet 
+                    ? "grid-cols-2" 
+                    : "grid-cols-2 md:grid-cols-4"
+              }`}>
                 <div className="flex items-center space-x-2">
                   <Users className="h-4 w-4 text-muted-foreground" />
                   <span>{session.max_participants} max</span>
@@ -131,8 +150,8 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 )}
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t">
-                <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+              <div className={`${isMobile ? "space-y-3" : "flex items-center justify-between"} pt-3 border-t`}>
+                <div className={`flex items-center ${isMobile ? "justify-between" : "space-x-4"} text-sm text-muted-foreground`}>
                   <span className="flex items-center space-x-1">
                     <Calendar className="h-4 w-4" />
                     <span>{session.upcoming_count} upcoming</span>
@@ -141,26 +160,29 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                     <Users className="h-4 w-4" />
                     <span>{session.total_participants} participants</span>
                   </span>
-                  <Badge variant="outline" className="text-xs">
-                    {formatSessionType(session.session_type)}
-                  </Badge>
+                  {!isMobile && (
+                    <Badge variant="outline" className="text-xs">
+                      {formatSessionType(session.session_type)}
+                    </Badge>
+                  )}
                 </div>
                 
-                <div className="flex space-x-2">
+                <div className={`flex ${isMobile ? "flex-col space-y-2" : "space-x-2"}`}>
                   <Button 
                     variant="outline" 
-                    size="sm"
+                    size={isMobile ? "default" : "sm"}
                     onClick={() => {
                       setSelectedSessionForTrainer(session);
                       setShowAssignTrainerDialog(true);
                     }}
+                    className={isMobile ? "w-full justify-start" : ""}
                   >
                     <UserCog className="h-4 w-4 mr-1" />
-                    Assign Trainer
+                    {isMobile ? "Assign Trainer" : "Assign Trainer"}
                   </Button>
                   <Button 
                     variant="outline" 
-                    size="sm"
+                    size={isMobile ? "default" : "sm"}
                     onClick={() => {
                       // For demo, create a mock schedule to book against
                       const mockSchedule = {
@@ -173,14 +195,16 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       setSelectedSchedule(mockSchedule);
                       setShowBookingDialog(true);
                     }}
+                    className={isMobile ? "w-full justify-start" : ""}
                   >
                     <UserPlus className="h-4 w-4 mr-1" />
-                    Book Participant
+                    {isMobile ? "Book Participant" : "Book Participant"}
                   </Button>
                   <Button 
                     variant="outline" 
-                    size="sm"
+                    size={isMobile ? "default" : "sm"}
                     onClick={() => setShowParticipants(showParticipants === session.id ? null : session.id)}
+                    className={isMobile ? "w-full justify-start" : ""}
                   >
                     <Users className="h-4 w-4 mr-1" />
                     {showParticipants === session.id ? 'Hide' : 'Show'} Participants
@@ -228,6 +252,20 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
         onAssignTrainer={async (trainerId, compensationAmount, compensationType) => {
           if (selectedSessionForTrainer && onAssignTrainer) {
             await onAssignTrainer(selectedSessionForTrainer.id, trainerId, compensationAmount, compensationType);
+          }
+        }}
+      />
+      
+      <CancelSessionDialog
+        open={showCancelDialog}
+        onOpenChange={setShowCancelDialog}
+        sessionTitle={selectedSessionForCancel?.title || ""}
+        scheduleId={`${selectedSessionForCancel?.id || ""}-schedule-1`}
+        scheduledDate={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()}
+        participantCount={selectedSessionForCancel?.total_participants || 0}
+        onCancelSession={async (scheduleId, reason) => {
+          if (selectedSessionForCancel && onCancelSession) {
+            await onCancelSession(selectedSessionForCancel.id, scheduleId, reason);
           }
         }}
       />

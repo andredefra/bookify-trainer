@@ -30,6 +30,9 @@ export interface GymSessionSchedule {
   actual_participants: number;
   status: 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
   notes?: string;
+  cancelled_at?: string;
+  cancellation_reason?: string;
+  cancelled_by?: string;
   created_at: string;
   updated_at: string;
 }
@@ -252,6 +255,63 @@ export function useGymGroupSessions() {
     }
   }, [fetchSessions]);
 
+  const cancelSession = useCallback(async (
+    sessionId: string,
+    scheduleId: string,
+    reason: string
+  ) => {
+    try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
+      // Cancel the specific schedule
+      const { error: cancelError } = await supabase
+        .from('gym_session_schedules')
+        .update({
+          status: 'cancelled',
+          cancelled_at: new Date().toISOString(),
+          cancellation_reason: reason,
+          cancelled_by: user.user.id
+        })
+        .eq('id', scheduleId);
+
+      if (cancelError) throw cancelError;
+
+      // Get participants to notify
+      const { data: participants, error: participantsError } = await supabase
+        .from('gym_session_participants')
+        .select('participant_id')
+        .eq('session_schedule_id', scheduleId);
+
+      if (participantsError) {
+        console.error('Error fetching participants:', participantsError);
+      }
+
+      // Create notification records for each participant
+      if (participants && participants.length > 0) {
+        const notifications = participants.map(p => ({
+          session_schedule_id: scheduleId,
+          participant_id: p.participant_id,
+          notification_type: 'cancellation'
+        }));
+
+        const { error: notificationError } = await supabase
+          .from('gym_session_cancellation_notifications')
+          .insert(notifications);
+
+        if (notificationError) {
+          console.error('Error creating notifications:', notificationError);
+        }
+      }
+
+      await fetchSessions();
+      toast.success('Session cancelled successfully. Participants will be notified.');
+    } catch (err) {
+      console.error('Error cancelling session:', err);
+      toast.error('Failed to cancel session');
+    }
+  }, [fetchSessions]);
+
   useEffect(() => {
     fetchSessions();
   }, [fetchSessions]);
@@ -264,6 +324,7 @@ export function useGymGroupSessions() {
     updateSession,
     scheduleSession,
     assignTrainer,
+    cancelSession,
     refetch: fetchSessions
   };
 }

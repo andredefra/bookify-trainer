@@ -693,6 +693,44 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_session_cancellation_notifications: {
+        Row: {
+          created_at: string | null
+          email_sent: boolean | null
+          id: string
+          notification_sent_at: string | null
+          notification_type: string
+          participant_id: string
+          session_schedule_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_sent?: boolean | null
+          id?: string
+          notification_sent_at?: string | null
+          notification_type?: string
+          participant_id: string
+          session_schedule_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email_sent?: boolean | null
+          id?: string
+          notification_sent_at?: string | null
+          notification_type?: string
+          participant_id?: string
+          session_schedule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_session_cancellation_notifications_session_schedule_id_fkey"
+            columns: ["session_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "gym_session_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gym_session_participants: {
         Row: {
           attendance_status: string
@@ -751,6 +789,9 @@ export type Database = {
         Row: {
           actual_participants: number
           assigned_trainer_id: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
           created_at: string
           end_datetime: string
           gym_group_session_id: string
@@ -763,6 +804,9 @@ export type Database = {
         Insert: {
           actual_participants?: number
           assigned_trainer_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
           created_at?: string
           end_datetime: string
           gym_group_session_id: string
@@ -775,6 +819,9 @@ export type Database = {
         Update: {
           actual_participants?: number
           assigned_trainer_id?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
           created_at?: string
           end_datetime?: string
           gym_group_session_id?: string
