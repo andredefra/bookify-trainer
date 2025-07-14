@@ -9,14 +9,36 @@ import {
   ArrowUpIcon, 
   ArrowDownIcon,
   Eye,
-  Download
+  Download,
+  CheckCircle,
+  FileText
 } from "lucide-react";
 import { useGymTransactions, useTransactionStats } from "@/hooks/useGymTransactions";
+import { useConfirmCashPayment, useMarkInvoiceSent } from "@/hooks/useGymPaymentActions";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 export function TransactionsTab() {
   const { data: transactions, isLoading: transactionsLoading } = useGymTransactions();
   const { data: stats, isLoading: statsLoading } = useTransactionStats();
+  const confirmCashPayment = useConfirmCashPayment();
+  const markInvoiceSent = useMarkInvoiceSent();
+
+  const handleConfirmCashPayment = (transactionId: string) => {
+    confirmCashPayment.mutate(transactionId);
+  };
+
+  const handleSendInvoice = (transaction: any) => {
+    const invoiceUrl = `https://invoice-partner.com/create?amount=${transaction.total_paid}&client=${encodeURIComponent(transaction.client_name)}&description=${encodeURIComponent(transaction.package_title)}`;
+    
+    window.open(invoiceUrl, 'invoice-popup', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    
+    markInvoiceSent.mutate(transaction.id);
+    
+    toast.success("Invoice integration opened. Complete the process in the new window.", {
+      duration: 4000
+    });
+  };
 
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
@@ -179,9 +201,39 @@ export function TransactionsTab() {
                     <div className="text-right">
                       <div className="font-semibold">€{transaction.total_paid.toLocaleString()}</div>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      <Eye className="w-4 h-4" />
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      {/* Cash payment confirmation button */}
+                      {transaction.payment_status === 'pending' && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => handleConfirmCashPayment(transaction.id)}
+                          disabled={confirmCashPayment.isPending}
+                        >
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Confirm Receipt
+                        </Button>
+                      )}
+                      
+                      {/* Invoice button - only for paid transactions */}
+                      {transaction.payment_status === 'paid' && (
+                        <Button 
+                          variant="outline"
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => handleSendInvoice(transaction)}
+                          disabled={markInvoiceSent.isPending}
+                        >
+                          <FileText className="w-3 h-3 mr-1" />
+                          Invoice
+                        </Button>
+                      )}
+                      
+                      <Button variant="ghost" size="sm">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
