@@ -383,7 +383,7 @@ export type Database = {
           start_date: string
           status: string | null
           total_paid: number
-          trainer_id: string
+          trainer_id: string | null
           updated_at: string
         }
         Insert: {
@@ -400,7 +400,7 @@ export type Database = {
           start_date?: string
           status?: string | null
           total_paid: number
-          trainer_id: string
+          trainer_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -417,7 +417,7 @@ export type Database = {
           start_date?: string
           status?: string | null
           total_paid?: number
-          trainer_id?: string
+          trainer_id?: string | null
           updated_at?: string
         }
         Relationships: [

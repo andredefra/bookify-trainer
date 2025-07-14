@@ -22,7 +22,7 @@ export interface GymPackageAssignment {
   gym_id: string;
   package_id: string;
   client_id: string;
-  trainer_id: string;
+  trainer_id: string | null; // Made optional for gym-only packages
   purchase_date: string;
   start_date: string;
   end_date?: string;
@@ -185,7 +185,7 @@ export function useGymPackages() {
   const assignPackageToClient = async (
     packageId: string, 
     clientId: string, 
-    trainerId: string
+    trainerId?: string
   ) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -204,7 +204,7 @@ export function useGymPackages() {
           gym_id: user.id,
           package_id: packageId,
           client_id: clientId,
-          trainer_id: trainerId,
+          trainer_id: trainerId || null,
           end_date: endDate,
           sessions_total: packageData.session_limit,
           total_paid: packageData.price,

@@ -272,7 +272,7 @@ export function PackagesTab() {
                               Package: {assignment.package?.title || 'Unknown Package'}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              Trainer: {assignment.trainer_id.slice(0, 8)}...
+                              Trainer: {assignment.trainer_id ? assignment.trainer_id.slice(0, 8) + '...' : 'Gym Access Only'}
                             </p>
                           </div>
                           <div className="text-right">

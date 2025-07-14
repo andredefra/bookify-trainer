@@ -12,7 +12,7 @@ interface AssignPackageDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   packages: GymPackage[];
-  onAssign: (packageId: string, clientId: string, trainerId: string) => Promise<any>;
+  onAssign: (packageId: string, clientId: string, trainerId?: string) => Promise<any>;
 }
 
 export function AssignPackageDialog({ 
@@ -45,24 +45,26 @@ export function AssignPackageDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedPackage || !selectedClient || !selectedTrainer) return;
+    if (!selectedPackage || !selectedClient) return;
 
     setLoading(true);
     try {
-      await onAssign(selectedPackage, selectedClient, selectedTrainer);
+      await onAssign(selectedPackage, selectedClient, selectedTrainer || undefined);
       
-      // Create notification for successful assignment
+      // Create notification for successful assignment (only if trainer is assigned)
       const selectedClientName = clients.find(c => c.id === selectedClient)?.name || 'Client';
-      const selectedTrainerName = trainers.find(t => t.id === selectedTrainer)?.name || 'Trainer';
       const packageName = selectedPackageData?.title || 'Package';
       
-      await createNotification(
-        selectedTrainer,
-        'trainer',
-        'package_assigned',
-        'New Package Assignment',
-        `${packageName} assigned to ${selectedClientName}`
-      );
+      if (selectedTrainer) {
+        const selectedTrainerName = trainers.find(t => t.id === selectedTrainer)?.name || 'Trainer';
+        await createNotification(
+          selectedTrainer,
+          'trainer',
+          'package_assigned',
+          'New Package Assignment',
+          `${packageName} assigned to ${selectedClientName}`
+        );
+      }
       
       toast.success('Package assigned successfully!');
       setSelectedPackage('');
@@ -135,12 +137,13 @@ export function AssignPackageDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="trainer">Trainer</Label>
+            <Label htmlFor="trainer">Trainer (Optional)</Label>
             <Select value={selectedTrainer} onValueChange={setSelectedTrainer}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a trainer" />
+                <SelectValue placeholder="Select a trainer (optional for gym-only access)" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="">No specific trainer (gym access only)</SelectItem>
                 {trainers.map(trainer => (
                   <SelectItem key={trainer.id} value={trainer.id}>
                     {trainer.name}
@@ -156,7 +159,7 @@ export function AssignPackageDialog({
             </Button>
             <Button 
               type="submit" 
-              disabled={loading || !selectedPackage || !selectedClient || !selectedTrainer}
+              disabled={loading || !selectedPackage || !selectedClient}
             >
               {loading ? 'Assigning...' : 'Assign Package'}
             </Button>
