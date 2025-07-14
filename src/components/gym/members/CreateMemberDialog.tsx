@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { GymMember } from "@/hooks/gym/useGymMembers";
+import type { CreateMemberData, GymMember } from "@/types/gym/members";
 
 interface CreateMemberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreateMember: (memberData: Omit<GymMember, 'id' | 'totalSessions' | 'currentPackages'>) => Promise<GymMember>;
+  onCreateMember: (memberData: CreateMemberData) => Promise<GymMember>;
 }
 
 export function CreateMemberDialog({ open, onOpenChange, onCreateMember }: CreateMemberDialogProps) {
