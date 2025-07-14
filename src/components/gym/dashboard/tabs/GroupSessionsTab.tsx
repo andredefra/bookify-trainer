@@ -10,6 +10,7 @@ import { useResponsiveLayout } from "@/hooks/useResponsiveLayout";
 import { CreateSessionDialog } from "./group-sessions/CreateSessionDialog";
 import { SessionsList } from "./group-sessions/SessionsList";
 import { SessionCalendar } from "./group-sessions/SessionCalendar";
+import { GroupSessionAnalytics } from "./group-sessions/GroupSessionAnalytics";
 
 export function GroupSessionsTab() {
   const [activeTab, setActiveTab] = useState("sessions");
@@ -162,9 +163,7 @@ export function GroupSessionsTab() {
             </TabsContent>
             
             <TabsContent value="analytics">
-              <div className="text-center py-8 text-muted-foreground">
-                Session analytics coming soon...
-              </div>
+              <GroupSessionAnalytics />
             </TabsContent>
           </Tabs>
         </CardContent>

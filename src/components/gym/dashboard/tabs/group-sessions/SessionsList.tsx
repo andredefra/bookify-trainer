@@ -70,55 +70,110 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
       {sessions.map((session) => (
         <Card key={session.id} className="hover:shadow-md transition-shadow">
           <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <CardTitle className="text-lg">{session.title}</CardTitle>
-                <Badge className={getStatusColor(session.status)}>
-                  {session.status}
-                </Badge>
-                <Badge className={getDifficultyColor(session.difficulty_level)}>
-                  {session.difficulty_level}
-                </Badge>
+            <div className={`flex items-center justify-between ${isMobile ? "flex-col space-y-2" : ""}`}>
+              <div className={`flex items-center ${isMobile ? "w-full justify-between" : "space-x-3"}`}>
+                <CardTitle className={`${isMobile ? "text-base" : "text-lg"} truncate flex-1`}>
+                  {session.title}
+                </CardTitle>
+                {!isMobile && (
+                  <div className="flex items-center space-x-2">
+                    <Badge className={getStatusColor(session.status)}>
+                      {session.status}
+                    </Badge>
+                    <Badge className={getDifficultyColor(session.difficulty_level)}>
+                      {session.difficulty_level}
+                    </Badge>
+                  </div>
+                )}
               </div>
               
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Eye className="h-4 w-4 mr-2" />
-                    View Details
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CalendarPlus className="h-4 w-4 mr-2" />
-                    Schedule Session
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit Session
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    className="text-red-600"
-                    onClick={() => {
-                      setSelectedSessionForCancel(session);
-                      setShowCancelDialog(true);
-                    }}
-                  >
-                    <X className="h-4 w-4 mr-2" />
-                    Cancel Session
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {isMobile && (
+                <div className="flex items-center space-x-2 w-full justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Badge className={getStatusColor(session.status)} variant="outline">
+                      {session.status}
+                    </Badge>
+                    <Badge className={getDifficultyColor(session.difficulty_level)} variant="outline">
+                      {session.difficulty_level}
+                    </Badge>
+                  </div>
+              
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-background border shadow-lg">
+                      <DropdownMenuItem>
+                        <Eye className="h-4 w-4 mr-2" />
+                        View Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <CalendarPlus className="h-4 w-4 mr-2" />
+                        Schedule Session
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit Session
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="text-destructive"
+                        onClick={() => {
+                          setSelectedSessionForCancel(session);
+                          setShowCancelDialog(true);
+                        }}
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Cancel Session
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              )}
+              
+              {!isMobile && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-background border shadow-lg">
+                    <DropdownMenuItem>
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Details
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <CalendarPlus className="h-4 w-4 mr-2" />
+                      Schedule Session
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Session
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      className="text-destructive"
+                      onClick={() => {
+                        setSelectedSessionForCancel(session);
+                        setShowCancelDialog(true);
+                      }}
+                    >
+                      <X className="h-4 w-4 mr-2" />
+                      Cancel Session
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           </CardHeader>
           
           <CardContent>
             <div className="space-y-4">
               {session.description && (
-                <p className="text-sm text-muted-foreground">{session.description}</p>
+                <p className={`text-sm text-muted-foreground ${isMobile ? "line-clamp-2" : "line-clamp-3"}`}>
+                  {session.description}
+                </p>
               )}
               
               <div className={`grid gap-4 text-sm ${
@@ -144,8 +199,8 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                 
                 {session.location && (
                   <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{session.location}</span>
+                    <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <span className="truncate">{session.location}</span>
                   </div>
                 )}
               </div>
@@ -214,13 +269,15 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
 
               {session.requirements && (
                 <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>Requirements:</strong> {session.requirements}
+                  <strong>Requirements:</strong> 
+                  <span className="line-clamp-2">{session.requirements}</span>
                 </div>
               )}
 
               {session.equipment_needed && (
                 <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded">
-                  <strong>Equipment:</strong> {session.equipment_needed}
+                  <strong>Equipment:</strong> 
+                  <span className="line-clamp-2">{session.equipment_needed}</span>
                 </div>
               )}
               

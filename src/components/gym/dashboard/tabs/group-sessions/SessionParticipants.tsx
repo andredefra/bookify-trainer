@@ -1,10 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Users, UserCheck, UserX, Package, Clock } from 'lucide-react';
-import { useSessionBooking } from '@/hooks/gym/useSessionBooking';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Users, Clock, X, ArrowUp, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+interface Booking {
+  id: string;
+  participant_id: string;
+  booking_status: 'confirmed' | 'waitlisted' | 'cancelled';
+  waitlist_position?: number;
+  booked_at: string;
+  notes?: string;
+}
 
 interface SessionParticipantsProps {
   sessionScheduleId: string;
@@ -12,170 +22,242 @@ interface SessionParticipantsProps {
   maxParticipants: number;
 }
 
-export function SessionParticipants({
-  sessionScheduleId,
-  sessionTitle,
-  maxParticipants
-}: SessionParticipantsProps) {
-  const [participants, setParticipants] = useState<any[]>([]);
+export function SessionParticipants({ sessionScheduleId, sessionTitle, maxParticipants }: SessionParticipantsProps) {
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  const { getSessionParticipants, checkIn, checkOut, cancelBooking } = useSessionBooking();
-
-  const loadParticipants = async () => {
-    setLoading(true);
-    const data = await getSessionParticipants(sessionScheduleId);
-    setParticipants(data || []);
-    setLoading(false);
-  };
+  const { toast } = useToast();
 
   useEffect(() => {
-    loadParticipants();
+    fetchBookings();
   }, [sessionScheduleId]);
 
-  const handleCheckIn = async (participantId: string) => {
-    const success = await checkIn(participantId, sessionScheduleId);
-    if (success) await loadParticipants();
+  const fetchBookings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gym_session_bookings')
+        .select('*')
+        .eq('session_schedule_id', sessionScheduleId)
+        .order('booked_at', { ascending: true });
+
+      if (error) throw error;
+      setBookings((data || []) as Booking[]);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCheckOut = async (participantId: string) => {
-    const success = await checkOut(participantId, sessionScheduleId);
-    if (success) await loadParticipants();
+  const handleCancelBooking = async (bookingId: string) => {
+    try {
+      const { error } = await supabase
+        .from('gym_session_bookings')
+        .update({ booking_status: 'cancelled' })
+        .eq('id', bookingId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Booking Cancelled",
+        description: "Participant booking has been cancelled",
+      });
+
+      fetchBookings(); // Refresh the list
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to cancel booking",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleCancelBooking = async (participantId: string) => {
-    const success = await cancelBooking(participantId, sessionScheduleId);
-    if (success) await loadParticipants();
-  };
+  const handlePromoteFromWaitlist = async (bookingId: string) => {
+    try {
+      const { error } = await supabase
+        .from('gym_session_bookings')
+        .update({ 
+          booking_status: 'confirmed',
+          waitlist_position: null 
+        })
+        .eq('id', bookingId);
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      registered: 'bg-blue-100 text-blue-800',
-      checked_in: 'bg-green-100 text-green-800',
-      checked_out: 'bg-gray-100 text-gray-800',
-      no_show: 'bg-red-100 text-red-800'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  };
+      if (error) throw error;
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'checked_in':
-        return <UserCheck className="w-4 h-4" />;
-      case 'checked_out':
-        return <UserX className="w-4 h-4" />;
-      default:
-        return <Users className="w-4 h-4" />;
+      toast({
+        title: "Promoted from Waitlist",
+        description: "Participant has been confirmed for the session",
+      });
+
+      fetchBookings(); // Refresh the list
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to promote participant",
+        variant: "destructive",
+      });
     }
   };
 
   if (loading) {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center">Loading participants...</div>
-        </CardContent>
-      </Card>
-    );
+    return <div className="text-center py-4">Loading participants...</div>;
   }
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span className="flex items-center gap-2">
-            <Users className="w-5 h-5" />
-            Session Participants
-          </span>
-          <Badge variant="outline">
-            {participants.length}/{maxParticipants} registered
-          </Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {participants.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No participants registered yet</p>
-          </div>
-        ) : (
-          <ScrollArea className="h-96">
-            <div className="space-y-3">
-              {participants.map((participant) => (
-                <div
-                  key={participant.id}
-                  className="flex items-center justify-between p-3 border rounded-lg"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">
-                        Client {participant.participant_id.slice(0, 8)}...
-                      </span>
-                      <Badge className={getStatusColor(participant.attendance_status)}>
-                        {getStatusIcon(participant.attendance_status)}
-                        {participant.attendance_status.replace('_', ' ')}
-                      </Badge>
-                    </div>
-                    
-                    {participant.package_assignment && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Package className="w-3 h-3" />
-                        <span>
-                          {participant.package_assignment.package?.title || 'Unknown Package'}
-                        </span>
-                        {participant.package_assignment.sessions_total && (
-                          <Badge variant="secondary" className="text-xs">
-                            {participant.package_assignment.sessions_used + 1}/
-                            {participant.package_assignment.sessions_total} sessions
-                          </Badge>
-                        )}
-                      </div>
-                    )}
-                    
-                    <div className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Registered: {new Date(participant.registered_at).toLocaleString()}
-                    </div>
-                  </div>
+  const confirmedBookings = bookings.filter(b => b.booking_status === 'confirmed');
+  const waitlistBookings = bookings.filter(b => b.booking_status === 'waitlisted')
+    .sort((a, b) => (a.waitlist_position || 0) - (b.waitlist_position || 0));
+  const availableSpots = maxParticipants - confirmedBookings.length;
 
-                  <div className="flex gap-2">
-                    {participant.attendance_status === 'registered' && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleCheckIn(participant.participant_id)}
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        Check In
-                      </Button>
-                    )}
-                    
-                    {participant.attendance_status === 'checked_in' && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleCheckOut(participant.participant_id)}
-                      >
-                        Check Out
-                      </Button>
-                    )}
-                    
-                    {participant.attendance_status === 'registered' && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleCancelBooking(participant.participant_id)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        Cancel
-                      </Button>
-                    )}
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h4 className="font-medium">Session Participants</h4>
+        <Badge variant="outline">
+          {confirmedBookings.length}/{maxParticipants} confirmed
+        </Badge>
+      </div>
+
+      {/* Session Status */}
+      <div className="grid grid-cols-3 gap-3 text-sm">
+        <div className="text-center p-2 bg-green-50 rounded">
+          <div className="font-medium text-green-900">Confirmed</div>
+          <div className="text-lg font-bold text-green-700">{confirmedBookings.length}</div>
+        </div>
+        <div className="text-center p-2 bg-orange-50 rounded">
+          <div className="font-medium text-orange-900">Waitlist</div>
+          <div className="text-lg font-bold text-orange-700">{waitlistBookings.length}</div>
+        </div>
+        <div className="text-center p-2 bg-blue-50 rounded">
+          <div className="font-medium text-blue-900">Available</div>
+          <div className="text-lg font-bold text-blue-700">{Math.max(0, availableSpots)}</div>
+        </div>
+      </div>
+
+      {/* Confirmed Participants */}
+      {confirmedBookings.length > 0 && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Confirmed Participants ({confirmedBookings.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {confirmedBookings.map((booking, index) => (
+              <div key={booking.id} className="flex items-center justify-between p-2 bg-green-50 rounded">
+                <div className="flex-1">
+                  <div className="font-medium text-sm">Participant {index + 1}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Booked: {new Date(booking.booked_at).toLocaleDateString()}
                   </div>
+                  {booking.notes && (
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Note: {booking.notes}
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </ScrollArea>
-        )}
-      </CardContent>
-    </Card>
+                <div className="flex gap-1">
+                  <Button 
+                    size="sm" 
+                    variant="ghost"
+                    className="h-6 w-6 p-0"
+                    title="Send notification"
+                  >
+                    <Mail className="h-3 w-3" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="ghost"
+                    onClick={() => handleCancelBooking(booking.id)}
+                    className="h-6 w-6 p-0 text-destructive hover:text-destructive/80"
+                    title="Cancel booking"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Waitlist */}
+      {waitlistBookings.length > 0 && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              Waitlist ({waitlistBookings.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {waitlistBookings.map((booking) => (
+              <div key={booking.id} className="flex items-center justify-between p-2 bg-orange-50 rounded">
+                <div className="flex-1">
+                  <div className="font-medium text-sm">
+                    Position {booking.waitlist_position}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Added: {new Date(booking.booked_at).toLocaleDateString()}
+                  </div>
+                  {booking.notes && (
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Note: {booking.notes}
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-1">
+                  {availableSpots > 0 && (
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => handlePromoteFromWaitlist(booking.id)}
+                      className="h-6 w-6 p-0 text-green-600 hover:text-green-700"
+                      title="Promote to confirmed"
+                    >
+                      <ArrowUp className="h-3 w-3" />
+                    </Button>
+                  )}
+                  <Button 
+                    size="sm" 
+                    variant="ghost"
+                    className="h-6 w-6 p-0"
+                    title="Send notification"
+                  >
+                    <Mail className="h-3 w-3" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="ghost"
+                    onClick={() => handleCancelBooking(booking.id)}
+                    className="h-6 w-6 p-0 text-destructive hover:text-destructive/80"
+                    title="Remove from waitlist"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Auto-promotion alert */}
+      {waitlistBookings.length > 0 && availableSpots > 0 && (
+        <Alert>
+          <ArrowUp className="h-4 w-4" />
+          <AlertDescription>
+            {availableSpots} spot(s) available. You can promote waitlisted participants to confirmed status.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {confirmedBookings.length === 0 && waitlistBookings.length === 0 && (
+        <div className="text-center py-6 text-muted-foreground">
+          <Users className="mx-auto h-8 w-8 mb-2" />
+          <p>No participants registered yet</p>
+        </div>
+      )}
+    </div>
   );
 }

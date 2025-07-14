@@ -693,6 +693,50 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_session_bookings: {
+        Row: {
+          booked_at: string
+          booking_status: string
+          created_at: string
+          id: string
+          notes: string | null
+          participant_id: string
+          session_schedule_id: string
+          updated_at: string
+          waitlist_position: number | null
+        }
+        Insert: {
+          booked_at?: string
+          booking_status?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          participant_id: string
+          session_schedule_id: string
+          updated_at?: string
+          waitlist_position?: number | null
+        }
+        Update: {
+          booked_at?: string
+          booking_status?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          participant_id?: string
+          session_schedule_id?: string
+          updated_at?: string
+          waitlist_position?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_session_schedule"
+            columns: ["session_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "gym_session_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gym_session_cancellation_notifications: {
         Row: {
           created_at: string | null
