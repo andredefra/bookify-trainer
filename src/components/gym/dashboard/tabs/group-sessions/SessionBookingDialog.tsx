@@ -37,13 +37,13 @@ export function SessionBookingDialog({
   const { validateBooking, bookSession, loading } = useSessionBooking();
   const { availableClients } = useGymTrainerAssignments();
 
-  // Demo clients if none available
-  const clients = availableClients.length > 0 ? availableClients : [
+  // Demo clients if none available - filter out any with empty IDs
+  const clients = (availableClients.length > 0 ? availableClients : [
     { id: '44444444-4444-4444-4444-444444444444', name: 'Maria Rodriguez', email: 'maria@example.com' },
     { id: '55555555-5555-5555-5555-555555555555', name: 'John Smith', email: 'john@example.com' },
     { id: '66666666-6666-6666-6666-666666666666', name: 'Lisa Brown', email: 'lisa@example.com' },
     { id: '77777777-8888-8888-8888-777777777777', name: 'David Wilson', email: 'david@example.com' }
-  ];
+  ]).filter(client => client.id && client.id.trim() !== '');
 
   // Validate booking when client changes
   useEffect(() => {
@@ -132,7 +132,7 @@ export function SessionBookingDialog({
                         <SelectValue placeholder="Select package (optional - will use first available)" />
                       </SelectTrigger>
                       <SelectContent>
-                        {validation.packagesAvailable.map((pkg: any) => (
+                        {validation.packagesAvailable.filter((pkg: any) => pkg.id && pkg.id.trim() !== '').map((pkg: any) => (
                           <SelectItem key={pkg.id} value={pkg.id}>
                             <div className="flex items-center justify-between w-full">
                               <span>{pkg.title}</span>
