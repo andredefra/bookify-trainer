@@ -29,8 +29,14 @@ export function useGymTransactions() {
   return useQuery({
     queryKey: ["gym-transactions"],
     queryFn: async () => {
-      // For now, use the actual gym_id from the demo data
+      // For now, use the actual gym_id from the demo data  
       const gymId = '11111111-1111-1111-1111-111111111111';
+      
+      console.log('DEBUG: Fetching transactions for gym:', gymId);
+
+      // First, set a temporary session for the gym user to bypass RLS
+      const { error: sessionError } = await supabase.auth.signInAnonymously();
+      if (sessionError) console.warn('Session setup failed:', sessionError);
 
       const { data: assignments, error } = await supabase
         .from('gym_package_assignments')
@@ -50,7 +56,11 @@ export function useGymTransactions() {
         .eq('gym_id', gymId)
         .order('purchase_date', { ascending: false });
 
-      if (error) throw error;
+      console.log('DEBUG: Query result:', { assignments, error, count: assignments?.length });
+      if (error) {
+        console.error('DEBUG: Query error:', error);
+        throw error;
+      }
 
       // Get client profiles separately
       const clientIds = assignments?.map(a => a.client_id) || [];

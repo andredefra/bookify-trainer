@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfileTab } from "./settings/ProfileTab";
 import { NotificationsTab } from "./settings/NotificationsTab";
 import { IntegrationsTab } from "./settings/IntegrationsTab";
+import { InvoicingSection } from "./settings/InvoicingSection";
 import { BillingTab } from "./settings/BillingTab";
 
 interface SettingsTabProps {
@@ -30,6 +31,7 @@ export function SettingsTab({ user }: SettingsTabProps) {
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          <TabsTrigger value="invoicing">Invoicing</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
         
@@ -43,6 +45,10 @@ export function SettingsTab({ user }: SettingsTabProps) {
         
         <TabsContent value="integrations">
           <IntegrationsTab />
+        </TabsContent>
+        
+        <TabsContent value="invoicing">
+          <InvoicingSection />
         </TabsContent>
         
         <TabsContent value="billing">
