@@ -42,7 +42,7 @@ export function useGymTransactions() {
           purchase_date,
           payment_status,
           status,
-          gym_packages!inner(
+          gym_packages(
             title,
             package_type
           )
