@@ -1,226 +1,390 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  BarChart, 
-  Bar, 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  PieChart, 
-  Pie, 
-  Cell
-} from "recharts";
+  TrendingUp, 
+  Users, 
+  Calendar, 
+  DollarSign, 
+  Activity, 
+  Target,
+  BarChart3,
+  Download,
+  RefreshCw
+} from "lucide-react";
+import { useGymAnalytics } from "@/hooks/gym/useGymAnalytics";
+import { Progress } from "@/components/ui/progress";
 
 export function AnalyticsTab() {
-  // Sample data for the charts
-  const membershipData = [
-    { name: "Jan", premium: 32, standard: 45 },
-    { name: "Feb", premium: 38, standard: 48 },
-    { name: "Mar", premium: 42, standard: 50 },
-    { name: "Apr", premium: 40, standard: 53 },
-    { name: "May", premium: 45, standard: 55 },
-    { name: "Jun", premium: 50, standard: 58 },
-    { name: "Jul", premium: 55, standard: 60 }
-  ];
-  
-  const revenueData = [
-    { name: "Jan", revenue: 15400 },
-    { name: "Feb", revenue: 16800 },
-    { name: "Mar", revenue: 18200 },
-    { name: "Apr", revenue: 17600 },
-    { name: "May", revenue: 19500 },
-    { name: "Jun", revenue: 21000 },
-    { name: "Jul", revenue: 22500 }
-  ];
-  
-  const pieData = [
-    { name: "Membership Fees", value: 60 },
-    { name: "Personal Training", value: 25 },
-    { name: "Group Classes", value: 10 },
-    { name: "Other", value: 5 }
-  ];
-  
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  
+  const {
+    sessionAnalytics,
+    memberAnalytics,
+    financialAnalytics,
+    loading,
+    error,
+    refetch
+  } = useGymAnalytics();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center space-y-4">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Loading analytics...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="space-y-4">
+          <Activity className="h-12 w-12 mx-auto text-muted-foreground" />
+          <div>
+            <h3 className="text-lg font-semibold">Error Loading Analytics</h3>
+            <p className="text-muted-foreground">{error}</p>
+          </div>
+          <Button onClick={refetch} variant="outline">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-        <p className="text-gray-700 mt-1">Analyze your gym's performance and trends</p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Analytics Dashboard</h2>
+          <p className="text-muted-foreground">
+            Comprehensive insights into your gym's performance
+          </p>
+        </div>
+        <div className="flex space-x-2">
+          <Button variant="outline" onClick={refetch}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+          <Button variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Export Report
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
-          <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Member Growth</CardTitle>
+      {/* KPI Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="p-6 bg-white">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={membershipData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="name" tick={{ fill: '#374151', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#374151', fontSize: 12 }} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#ffffff', 
-                      border: '1px solid #d1d5db',
-                      borderRadius: '6px',
-                      color: '#111827'
-                    }} 
-                  />
-                  <Bar dataKey="premium" name="Premium Members" stackId="a" fill="#3b82f6" />
-                  <Bar dataKey="standard" name="Standard Members" stackId="a" fill="#10b981" />
-                </BarChart>
-              </ResponsiveContainer>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              ${financialAnalytics?.totalRevenue.toLocaleString() || '0'}
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
-          <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Monthly Revenue</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 bg-white">
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={revenueData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="name" tick={{ fill: '#374151', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#374151', fontSize: 12 }} />
-                  <Tooltip 
-                    formatter={(value) => [`€${value}`, 'Revenue']} 
-                    contentStyle={{ 
-                      backgroundColor: '#ffffff', 
-                      border: '1px solid #d1d5db',
-                      borderRadius: '6px',
-                      color: '#111827'
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="#3b82f6"
-                    activeDot={{ r: 8, fill: '#3b82f6' }}
-                    strokeWidth={3}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <p className="text-xs text-muted-foreground">
+              +12.5% from last month
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
-          <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Revenue Breakdown</CardTitle>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Members</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="p-6 bg-white">
-            <div className="flex items-center justify-center min-h-[300px] gap-6">
-              {/* Legend on the left */}
-              <div className="space-y-3">
-                {pieData.map((entry, index) => (
-                  <div key={`legend-${index}`} className="flex items-center">
-                    <div 
-                      className="w-4 h-4 mr-3 rounded" 
-                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {memberAnalytics?.activeMembers || 0}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +{memberAnalytics?.newMembersThisMonth || 0} new this month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Sessions This Week</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {sessionAnalytics?.upcomingSessions || 0}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Avg {sessionAnalytics?.averageAttendance.toFixed(1) || 0} per session
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Member Retention</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {100 - (memberAnalytics?.churnRate || 0)}%
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {memberAnalytics?.churnRate || 0}% churn rate
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Tabs defaultValue="sessions" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="sessions">Session Analytics</TabsTrigger>
+          <TabsTrigger value="members">Member Analytics</TabsTrigger>
+          <TabsTrigger value="financial">Financial Analytics</TabsTrigger>
+        </TabsList>
+
+        {/* Session Analytics Tab */}
+        <TabsContent value="sessions" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Popular Session Types */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <BarChart3 className="h-5 w-5" />
+                  <span>Popular Session Types</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {sessionAnalytics?.popularSessionTypes.map((sessionType, index) => (
+                  <div key={sessionType.type} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline">#{index + 1}</Badge>
+                        <span className="font-medium capitalize">
+                          {sessionType.type.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {sessionType.attendance} participants
+                      </div>
+                    </div>
+                    <Progress 
+                      value={(sessionType.attendance / (sessionAnalytics?.totalParticipants || 1)) * 100} 
+                      className="h-2"
                     />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">{entry.name}</div>
-                      <div className="text-gray-600">{entry.value}%</div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Package Utilization */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Target className="h-5 w-5" />
+                  <span>Package Utilization</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {sessionAnalytics?.packageUtilization.map((pkg) => (
+                  <div key={pkg.packageType} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{pkg.packageType}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {pkg.utilizationRate}%
+                      </span>
+                    </div>
+                    <Progress value={pkg.utilizationRate} className="h-2" />
+                    <div className="text-xs text-muted-foreground">
+                      {pkg.usedSessions}/{pkg.totalSessions} sessions used
                     </div>
                   </div>
                 ))}
-              </div>
-              
-              {/* Pie chart on the right */}
-              <div className="h-64 w-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={false}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: '#ffffff', 
-                        border: '1px solid #d1d5db',
-                        borderRadius: '6px',
-                        color: '#111827'
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Weekly Attendance Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Weekly Attendance Trend</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px] flex items-end justify-between space-x-2">
+                {sessionAnalytics?.weeklyAttendance.map((day, index) => (
+                  <div key={day.date} className="flex flex-col items-center space-y-2">
+                    <div 
+                      className="bg-primary rounded-t w-8"
+                      style={{ 
+                        height: `${(day.attendance / Math.max(...sessionAnalytics.weeklyAttendance.map(d => d.attendance))) * 160}px`,
+                        minHeight: '20px'
                       }}
                     />
-                  </PieChart>
-                </ResponsiveContainer>
+                    <div className="text-xs text-muted-foreground">
+                      {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
+                    </div>
+                    <div className="text-xs font-medium">{day.attendance}</div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="col-span-1 bg-white shadow-md border border-gray-200">
-          <CardHeader className="bg-gray-50 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-900">Key Metrics</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 bg-white">
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Average Daily Check-ins</p>
-                  <h3 className="text-2xl font-bold mt-1 text-gray-900">78</h3>
-                  <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
-                    <span className="mr-1">📈</span>
-                    +12% from last month
-                  </p>
-                </div>
-                
-                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">New Member Conversion</p>
-                  <h3 className="text-2xl font-bold mt-1 text-gray-900">32%</h3>
-                  <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
-                    <span className="mr-1">📈</span>
-                    +5% from last month
-                  </p>
-                </div>
-                
-                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Class Participation</p>
-                  <h3 className="text-2xl font-bold mt-1 text-gray-900">68%</h3>
-                  <p className="text-xs text-amber-600 flex items-center mt-1 font-medium">
-                    <span className="mr-1">📉</span>
-                    -2% from last month
-                  </p>
-                </div>
-                
-                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">Member Retention</p>
-                  <h3 className="text-2xl font-bold mt-1 text-gray-900">92%</h3>
-                  <p className="text-xs text-green-600 flex items-center mt-1 font-medium">
-                    <span className="mr-1">📈</span>
-                    +3% from last month
-                  </p>
-                </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Member Analytics Tab */}
+        <TabsContent value="members" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Membership Types Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Membership Distribution</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {memberAnalytics?.membershipTypes.map((type) => (
+                  <div key={type.type} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{type.type}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {type.count} members
+                      </span>
+                    </div>
+                    <Progress 
+                      value={(type.count / (memberAnalytics?.totalMembers || 1)) * 100} 
+                      className="h-2"
+                    />
+                    <div className="text-xs text-muted-foreground">
+                      ${type.revenue.toLocaleString()} revenue
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Top Members */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Performing Members</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {memberAnalytics?.topMembers.map((member, index) => (
+                  <div key={member.id} className="flex items-center justify-between p-3 rounded-lg border">
+                    <div className="flex items-center space-x-3">
+                      <Badge variant="outline">#{index + 1}</Badge>
+                      <div>
+                        <div className="font-medium">{member.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {member.packageType} Member
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-medium">{member.sessionsAttended}</div>
+                      <div className="text-xs text-muted-foreground">sessions</div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Member Retention */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Member Retention Over Time</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-4 gap-4">
+                {memberAnalytics?.memberRetention.map((period) => (
+                  <div key={period.period} className="text-center p-4 rounded-lg border">
+                    <div className="text-2xl font-bold text-primary">
+                      {period.retentionRate}%
+                    </div>
+                    <div className="text-sm text-muted-foreground">{period.period}</div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Financial Analytics Tab */}
+        <TabsContent value="financial" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Package Sales */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Package Sales Performance</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {financialAnalytics?.packageSales.map((pkg) => (
+                  <div key={pkg.packageType} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{pkg.packageType}</span>
+                      <span className="text-sm text-muted-foreground">
+                        ${pkg.revenue.toLocaleString()}
+                      </span>
+                    </div>
+                    <Progress 
+                      value={(pkg.revenue / (financialAnalytics?.totalRevenue || 1)) * 100} 
+                      className="h-2"
+                    />
+                    <div className="text-xs text-muted-foreground">
+                      {pkg.count} packages sold
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Trainer Commissions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Trainer Commission Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {financialAnalytics?.trainerCommissions.map((trainer) => (
+                  <div key={trainer.trainerId} className="flex items-center justify-between p-3 rounded-lg border">
+                    <div className="font-medium">{trainer.trainerName}</div>
+                    <div className="text-right">
+                      <div className="font-medium">${trainer.commission.toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground">commission</div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Monthly Revenue Trend */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Monthly Revenue Trend</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px] flex items-end justify-between space-x-4">
+                {financialAnalytics?.monthlyTrends.map((month) => (
+                  <div key={month.month} className="flex flex-col items-center space-y-2">
+                    <div 
+                      className="bg-primary rounded-t w-12"
+                      style={{ 
+                        height: `${(month.revenue / Math.max(...financialAnalytics.monthlyTrends.map(m => m.revenue))) * 160}px`,
+                        minHeight: '20px'
+                      }}
+                    />
+                    <div className="text-xs text-muted-foreground">{month.month}</div>
+                    <div className="text-xs font-medium">${month.revenue.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground">{month.members} members</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
