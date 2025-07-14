@@ -49,13 +49,13 @@ export function AssignPackageDialog({
 
     setLoading(true);
     try {
-      await onAssign(selectedPackage, selectedClient, selectedTrainer || undefined);
+      await onAssign(selectedPackage, selectedClient, (selectedTrainer && selectedTrainer !== 'none') ? selectedTrainer : undefined);
       
       // Create notification for successful assignment (only if trainer is assigned)
       const selectedClientName = clients.find(c => c.id === selectedClient)?.name || 'Client';
       const packageName = selectedPackageData?.title || 'Package';
       
-      if (selectedTrainer) {
+      if (selectedTrainer && selectedTrainer !== 'none') {
         const selectedTrainerName = trainers.find(t => t.id === selectedTrainer)?.name || 'Trainer';
         await createNotification(
           selectedTrainer,
@@ -143,7 +143,7 @@ export function AssignPackageDialog({
                 <SelectValue placeholder="Select a trainer (optional for gym-only access)" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">No specific trainer (gym access only)</SelectItem>
+                <SelectItem value="none">No specific trainer (gym access only)</SelectItem>
                 {trainers.map(trainer => (
                   <SelectItem key={trainer.id} value={trainer.id}>
                     {trainer.name}
