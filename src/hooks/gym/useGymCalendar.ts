@@ -2,6 +2,13 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 
+export interface GymTrainer {
+  id: string;
+  name: string;
+  email?: string;
+  status: string;
+}
+
 export interface GymCalendarEvent {
   id: string;
   title: string;
@@ -28,6 +35,7 @@ export interface GymCalendarStats {
 
 export function useGymCalendar() {
   const [events, setEvents] = useState<GymCalendarEvent[]>([]);
+  const [trainers, setTrainers] = useState<GymTrainer[]>([]);
   const [stats, setStats] = useState<GymCalendarStats>({
     todayAppointments: 0,
     weeklyBookings: 0,
@@ -43,10 +51,32 @@ export function useGymCalendar() {
     try {
       setLoading(true);
       
-      // Fetch all calendar events for trainers associated with this gym
+      // Fetch trainers associated with this gym
+      const { data: gymTrainers, error: trainersError } = await supabase
+        .from('gym_trainer_contracts')
+        .select('trainer_id')
+        .eq('gym_id', gymId)
+        .eq('status', 'active');
+
+      if (trainersError) {
+        console.error('Error fetching gym trainers:', trainersError);
+      }
+
+      const trainerIds = gymTrainers?.map(t => t.trainer_id) || [];
+      
+      // Create trainer objects (in a real app, you'd fetch from a trainers table)
+      const trainersData: GymTrainer[] = trainerIds.map(id => ({
+        id,
+        name: `Trainer ${id.slice(-4)}`,
+        status: 'active'
+      }));
+      setTrainers(trainersData);
+
+      // Fetch calendar events for these trainers
       const { data: gymEvents, error: eventsError } = await supabase
         .from('calendar_events')
         .select('*')
+        .in('trainer_id', trainerIds.length > 0 ? trainerIds : ['no-trainers'])
         .gte('start_datetime', new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString())
         .lte('start_datetime', new Date(new Date().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString())
         .order('start_datetime', { ascending: true });
@@ -195,6 +225,7 @@ export function useGymCalendar() {
 
   return {
     events,
+    trainers,
     stats,
     loading,
     error,

@@ -14,7 +14,8 @@ export function CalendarTab() {
   
   const { 
     events, 
-    stats, 
+    trainers,
+    stats,
     loading, 
     error, 
     createEvent, 
@@ -165,6 +166,7 @@ export function CalendarTab() {
         <CardContent>
           <GymCalendarView
             events={events}
+            trainers={trainers}
             onEventClick={handleEventClick}
             onCreateEvent={() => setShowCreateEvent(true)}
           />
@@ -187,6 +189,7 @@ export function CalendarTab() {
         open={showCreateEvent}
         onClose={() => setShowCreateEvent(false)}
         onCreateEvent={handleCreateEvent}
+        trainers={trainers}
       />
     </div>
   );

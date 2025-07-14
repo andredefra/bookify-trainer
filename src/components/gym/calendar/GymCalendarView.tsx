@@ -7,12 +7,13 @@ import { GymCalendarEvent } from "@/hooks/gym/useGymCalendar";
 
 interface GymCalendarViewProps {
   events: GymCalendarEvent[];
+  trainers: { id: string; name: string }[];
   onEventClick: (event: GymCalendarEvent) => void;
   onCreateEvent: () => void;
   onDateChange?: (date: Date) => void;
 }
 
-export function GymCalendarView({ events, onEventClick, onCreateEvent, onDateChange }: GymCalendarViewProps) {
+export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent, onDateChange }: GymCalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
   const [selectedTrainer, setSelectedTrainer] = useState<string>('all');
@@ -112,7 +113,6 @@ export function GymCalendarView({ events, onEventClick, onCreateEvent, onDateCha
     });
   };
 
-  const uniqueTrainers = Array.from(new Set(events.map(e => e.trainer_id)));
 
   return (
     <div className="space-y-4">
@@ -160,9 +160,9 @@ export function GymCalendarView({ events, onEventClick, onCreateEvent, onDateCha
             className="px-3 py-1 border rounded text-sm"
           >
             <option value="all">All Trainers</option>
-            {uniqueTrainers.map(trainerId => (
-              <option key={trainerId} value={trainerId}>
-                Trainer {trainerId.slice(-4)}
+            {trainers.map(trainer => (
+              <option key={trainer.id} value={trainer.id}>
+                {trainer.name}
               </option>
             ))}
           </select>
