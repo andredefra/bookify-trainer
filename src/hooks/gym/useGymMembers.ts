@@ -52,49 +52,35 @@ export function useGymMembers() {
       setLoading(true);
       const gymId = getCurrentGymId();
 
-      // Fetch gym package assignments to get members
+      // Fetch gym clients with their profile information and package assignments
+      const { data: gymClients, error: clientsError } = await supabase
+        .from('gym_clients')
+        .select(`
+          *,
+          profile:profiles(*)
+        `)
+        .eq('gym_id', gymId);
+
+      if (clientsError) throw clientsError;
+
+      // Fetch package assignments for these clients
+      const clientIds = gymClients?.map(gc => gc.client_id) || [];
       const { data: assignments, error: assignmentsError } = await supabase
         .from('gym_package_assignments')
         .select(`
           *,
           package:gym_packages(*)
         `)
-        .eq('gym_id', gymId);
+        .in('client_id', clientIds.length > 0 ? clientIds : ['no-clients']);
 
       if (assignmentsError) throw assignmentsError;
 
-      // Fetch trainer assignments to get additional member data
-      const { data: trainerAssignments, error: trainerError } = await supabase
-        .from('gym_trainer_assignments')
-        .select('*')
-        .eq('gym_id', gymId);
-
-      if (trainerError) throw trainerError;
-
-      // Group assignments by client_id to create member profiles
-      const memberMap = new Map<string, GymMember>();
-
-      assignments?.forEach(assignment => {
-        const clientId = assignment.client_id;
+      // Map gym clients to member format
+      const membersArray: GymMember[] = (gymClients || []).map(gymClient => {
+        const profile = gymClient.profile;
+        const clientAssignments = assignments?.filter(a => a.client_id === gymClient.client_id) || [];
         
-        if (!memberMap.has(clientId)) {
-          // Create new member profile
-          memberMap.set(clientId, {
-            id: clientId,
-            name: `Member ${clientId.slice(0, 8)}`, // TODO: Get real name from profiles
-            email: `member${clientId.slice(0, 8)}@gym.com`, // TODO: Get real email
-            membershipType: assignment.package?.package_type || 'basic',
-            joinDate: assignment.created_at,
-            status: assignment.status === 'active' ? 'active' : 'inactive',
-            lastActivityDate: assignment.updated_at,
-            totalSessions: assignment.sessions_used || 0,
-            currentPackages: []
-          });
-        }
-
-        // Add package to member's current packages
-        const member = memberMap.get(clientId)!;
-        member.currentPackages.push({
+        const currentPackages: GymMemberPackage[] = clientAssignments.map(assignment => ({
           id: assignment.id,
           packageId: assignment.package_id,
           packageTitle: assignment.package?.title || 'Unknown Package',
@@ -105,20 +91,33 @@ export function useGymMembers() {
           endDate: assignment.end_date,
           status: assignment.status || 'active',
           paymentStatus: assignment.payment_status || 'pending'
-        });
+        }));
 
-        // Update total sessions
-        member.totalSessions += assignment.sessions_used || 0;
+        const totalSessions = currentPackages.reduce((sum, pkg) => sum + pkg.sessionsUsed, 0);
+
+        return {
+          id: gymClient.client_id,
+          name: profile?.full_name || `Member ${gymClient.client_id.slice(0, 8)}`,
+          email: profile?.email || `member${gymClient.client_id.slice(0, 8)}@gym.com`,
+          phone: profile?.phone || gymClient.emergency_phone,
+          membershipType: gymClient.membership_type,
+          joinDate: gymClient.join_date || gymClient.created_at,
+          status: gymClient.status as 'active' | 'inactive' | 'suspended',
+          lastActivityDate: gymClient.last_activity_date || gymClient.updated_at,
+          totalSessions,
+          currentPackages,
+          avatar: profile?.avatar_url
+        };
       });
 
-      const membersArray = Array.from(memberMap.values());
       setMembers(membersArray);
+      setError(null);
 
     } catch (err) {
       console.error('Error fetching members:', err);
       setError('Failed to fetch members');
       
-      // Demo data fallback
+      // Demo data fallback only if error
       const demoMembers: GymMember[] = [
         {
           id: '00000000-0000-0000-0000-000000000001',
@@ -254,10 +253,31 @@ export function useGymMembers() {
 
   const createMember = useCallback(async (memberData: Omit<GymMember, 'id' | 'totalSessions' | 'currentPackages'>) => {
     try {
-      // TODO: Implement real member creation
+      const gymId = getCurrentGymId();
+      
+      // Create a profile first (simulated - in real app this would be done through auth)
+      const clientId = crypto.randomUUID();
+      
+      // Create gym client record
+      const { data: gymClient, error: gymClientError } = await supabase
+        .from('gym_clients')
+        .insert({
+          gym_id: gymId,
+          client_id: clientId,
+          membership_type: memberData.membershipType,
+          status: memberData.status,
+          join_date: memberData.joinDate,
+          emergency_phone: memberData.phone
+        })
+        .select()
+        .single();
+
+      if (gymClientError) throw gymClientError;
+
+      // Create the member object for state update
       const newMember: GymMember = {
         ...memberData,
-        id: crypto.randomUUID(),
+        id: clientId,
         totalSessions: 0,
         currentPackages: []
       };
@@ -280,7 +300,7 @@ export function useGymMembers() {
     try {
       const gymId = getCurrentGymId();
       
-      // For now, just fetch the package data and create a demo assignment
+      // Fetch the package data
       const { data: packageData, error: packageError } = await supabase
         .from('gym_packages')
         .select('*')
@@ -289,17 +309,40 @@ export function useGymMembers() {
 
       if (packageError) throw packageError;
 
+      // Create the assignment in the database
+      const { data: assignment, error: assignmentError } = await supabase
+        .from('gym_package_assignments')
+        .insert({
+          gym_id: gymId,
+          package_id: packageId,
+          client_id: memberId,
+          trainer_id: trainerId,
+          purchase_date: new Date().toISOString().split('T')[0],
+          start_date: new Date().toISOString().split('T')[0],
+          end_date: packageData.duration_days ? 
+            new Date(Date.now() + packageData.duration_days * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : 
+            null,
+          sessions_total: packageData.session_limit,
+          sessions_used: 0,
+          total_paid: packageData.price,
+          payment_status: 'pending',
+          status: 'active'
+        })
+        .select()
+        .single();
+
+      if (assignmentError) throw assignmentError;
+
+      // Update local state
       const newAssignment: GymMemberPackage = {
-        id: crypto.randomUUID(),
+        id: assignment.id,
         packageId,
         packageTitle: packageData.title,
         packageType: packageData.package_type,
         sessionsTotal: packageData.session_limit || 0,
         sessionsUsed: 0,
-        startDate: new Date().toISOString(),
-        endDate: packageData.duration_days ? 
-          new Date(Date.now() + packageData.duration_days * 24 * 60 * 60 * 1000).toISOString() : 
-          undefined,
+        startDate: assignment.start_date,
+        endDate: assignment.end_date,
         status: 'active',
         paymentStatus: 'pending'
       };
@@ -311,11 +354,12 @@ export function useGymMembers() {
       ));
 
       toast.success('Package assigned to member successfully');
+      await fetchMembers(); // Refresh data
     } catch (err) {
       console.error('Error assigning package:', err);
       toast.error('Failed to assign package');
     }
-  }, []);
+  }, [fetchMembers]);
 
   useEffect(() => {
     fetchMembers();

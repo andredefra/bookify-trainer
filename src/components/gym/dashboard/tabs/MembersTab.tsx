@@ -21,9 +21,10 @@ import {
 import { useGymMembers } from "@/hooks/gym/useGymMembers";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CreateMemberDialog } from "@/components/gym/members/CreateMemberDialog";
 
 export function MembersTab() {
-  const { members, loading, error, updateMemberStatus, refetch } = useGymMembers();
+  const { members, loading, error, updateMemberStatus, refetch, createMember } = useGymMembers();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
@@ -377,6 +378,13 @@ export function MembersTab() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Create Member Dialog */}
+      <CreateMemberDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onCreateMember={createMember}
+      />
     </div>
   );
 }

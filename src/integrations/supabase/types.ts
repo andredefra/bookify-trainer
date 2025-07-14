@@ -426,6 +426,59 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_clients: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          emergency_contact: string | null
+          emergency_phone: string | null
+          gym_id: string
+          id: string
+          join_date: string
+          last_activity_date: string | null
+          membership_type: string
+          notes: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          emergency_contact?: string | null
+          emergency_phone?: string | null
+          gym_id: string
+          id?: string
+          join_date?: string
+          last_activity_date?: string | null
+          membership_type?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          emergency_contact?: string | null
+          emergency_phone?: string | null
+          gym_id?: string
+          id?: string
+          join_date?: string
+          last_activity_date?: string | null
+          membership_type?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_clients_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gym_group_sessions: {
         Row: {
           created_at: string
@@ -1088,6 +1141,48 @@ export type Database = {
           trainer_id?: string
           updated_at?: string
           validity_days?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          date_of_birth: string | null
+          email: string
+          emergency_contact: string | null
+          emergency_phone: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string | null
+          user_type: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          email: string
+          emergency_contact?: string | null
+          emergency_phone?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string | null
+          user_type?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          email?: string
+          emergency_contact?: string | null
+          emergency_phone?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string | null
+          user_type?: string
         }
         Relationships: []
       }
