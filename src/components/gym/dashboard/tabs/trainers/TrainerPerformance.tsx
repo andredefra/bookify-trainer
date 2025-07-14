@@ -18,7 +18,7 @@ import { useGymAnalytics } from "@/hooks/gym/useGymAnalytics";
 
 export function TrainerPerformance() {
   const { trainers, loading: trainersLoading } = useGymTrainersData();
-  const { analytics, loading: analyticsLoading } = useGymAnalytics();
+  const { sessionAnalytics, memberAnalytics, financialAnalytics, loading: analyticsLoading } = useGymAnalytics();
 
   if (trainersLoading || analyticsLoading) {
     return <div className="p-4">Loading performance data...</div>;
@@ -86,7 +86,7 @@ export function TrainerPerformance() {
             <CardTitle className="text-base">Plan Upgrades</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{analytics?.trainerConversions.freemiumToPaid || 0}</div>
+            <div className="text-3xl font-bold">{memberAnalytics?.newMembersThisMonth || 0}</div>
             <p className="text-xs text-muted-foreground mt-1">Freemium to paid this month</p>
           </CardContent>
         </Card>

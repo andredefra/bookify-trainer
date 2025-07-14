@@ -24,7 +24,7 @@ interface OverviewTabProps {
 
 export function OverviewTab({ user }: OverviewTabProps) {
   const gymName = user?.gymName || "Your Gym";
-  const { analytics, loading: analyticsLoading } = useGymAnalytics();
+  const { sessionAnalytics, memberAnalytics, financialAnalytics, loading: analyticsLoading } = useGymAnalytics();
   const { trainers, loading: trainersLoading } = useGymTrainersData();
 
   if (analyticsLoading || trainersLoading) {
@@ -49,8 +49,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics?.totalMembers || 0}</div>
-            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.membersChange}</p>
+            <div className="text-2xl font-bold">{memberAnalytics?.totalMembers || 0}</div>
+            <p className="text-xs text-muted-foreground">+{memberAnalytics?.newMembersThisMonth || 0} this month</p>
           </CardContent>
         </Card>
         
@@ -60,8 +60,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Dumbbell className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics?.activeTrainers || 0}</div>
-            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.trainersChange}</p>
+            <div className="text-2xl font-bold">{trainers.length || 0}</div>
+            <p className="text-xs text-muted-foreground">Active now</p>
           </CardContent>
         </Card>
         
@@ -71,8 +71,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics?.sessionsBooked || 0}</div>
-            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.sessionsChange}</p>
+            <div className="text-2xl font-bold">{sessionAnalytics?.upcomingSessions || 0}</div>
+            <p className="text-xs text-muted-foreground">Upcoming sessions</p>
           </CardContent>
         </Card>
         
@@ -82,8 +82,8 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">€{analytics?.monthlyRevenue?.toLocaleString() || 0}</div>
-            <p className="text-xs text-muted-foreground">{analytics?.growthMetrics.revenueChange}</p>
+            <div className="text-2xl font-bold">€{financialAnalytics?.monthlyRevenue?.toLocaleString() || 0}</div>
+            <p className="text-xs text-muted-foreground">This month</p>
           </CardContent>
         </Card>
         
@@ -93,7 +93,7 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics?.memberRetention || 0}%</div>
+            <div className="text-2xl font-bold">{memberAnalytics?.memberRetention?.[0]?.retentionRate || 0}%</div>
             <p className="text-xs text-muted-foreground">+3% from last quarter</p>
           </CardContent>
         </Card>
@@ -104,7 +104,7 @@ export function OverviewTab({ user }: OverviewTabProps) {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics?.memberActivity || 0}%</div>
+            <div className="text-2xl font-bold">{Math.round((memberAnalytics?.activeMembers || 0) / (memberAnalytics?.totalMembers || 1) * 100)}%</div>
             <p className="text-xs text-muted-foreground">of members active this week</p>
           </CardContent>
         </Card>
