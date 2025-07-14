@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GymGroupSession } from "@/hooks/gym/useGymGroupSessions";
+import { SESSION_TYPES, DIFFICULTY_LEVELS, RECURRENCE_PATTERNS } from "@/constants/sessionTypes";
 
 interface CreateSessionDialogProps {
   open: boolean;
@@ -77,15 +78,12 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="hiit">HIIT</SelectItem>
-                  <SelectItem value="yoga">Yoga</SelectItem>
-                  <SelectItem value="strength">Strength Training</SelectItem>
-                  <SelectItem value="cardio">Cardio</SelectItem>
-                  <SelectItem value="pilates">Pilates</SelectItem>
-                  <SelectItem value="zumba">Zumba</SelectItem>
-                  <SelectItem value="crossfit">CrossFit</SelectItem>
-                  <SelectItem value="group_class">Group Class</SelectItem>
+                <SelectContent className="z-50 bg-background max-h-60 overflow-auto">
+                  {SESSION_TYPES.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      {type.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -142,11 +140,12 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="beginner">Beginner</SelectItem>
-                  <SelectItem value="intermediate">Intermediate</SelectItem>
-                  <SelectItem value="advanced">Advanced</SelectItem>
-                  <SelectItem value="all_levels">All Levels</SelectItem>
+                <SelectContent className="z-50 bg-background">
+                  {DIFFICULTY_LEVELS.map((level) => (
+                    <SelectItem key={level.value} value={level.value}>
+                      {level.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -198,11 +197,12 @@ export function CreateSessionDialog({ open, onOpenChange, onCreateSession }: Cre
                 <SelectTrigger>
                   <SelectValue placeholder="Select pattern" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="biweekly">Bi-weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectContent className="z-50 bg-background">
+                  {RECURRENCE_PATTERNS.map((pattern) => (
+                    <SelectItem key={pattern.value} value={pattern.value}>
+                      {pattern.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

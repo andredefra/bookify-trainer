@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye, UserPlus, UserCog, X } from "lucide-react";
 import { SessionWithSchedules } from "@/hooks/gym/useGymGroupSessions";
 import { useResponsiveLayout } from "@/hooks/useResponsiveLayout";
+import { formatSessionType } from "@/constants/sessionTypes";
 import { SessionBookingDialog } from "./SessionBookingDialog";
 import { SessionParticipants } from "./SessionParticipants";
 import { AssignTrainerDialog } from "./AssignTrainerDialog";
@@ -49,9 +50,6 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
     }
   };
 
-  const formatSessionType = (type: string) => {
-    return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  };
 
   if (sessions.length === 0) {
     return (
@@ -104,7 +102,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="bg-background border shadow-lg">
+                    <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
                       <DropdownMenuItem>
                         <Eye className="h-4 w-4 mr-2" />
                         View Details
@@ -139,7 +137,7 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession, onA
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-background border shadow-lg">
+                  <DropdownMenuContent align="end" className="z-50 bg-background border shadow-lg backdrop-blur-sm">
                     <DropdownMenuItem>
                       <Eye className="h-4 w-4 mr-2" />
                       View Details
