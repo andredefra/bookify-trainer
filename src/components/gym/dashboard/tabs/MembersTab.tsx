@@ -48,9 +48,10 @@ export function MembersTab() {
 
   const getMembershipTypeColor = (type: string) => {
     switch (type) {
-      case 'premium': return 'bg-purple-100 text-purple-800';
-      case 'basic': return 'bg-blue-100 text-blue-800';
-      case 'unlimited': return 'bg-orange-100 text-orange-800';
+      case 'monthly': return 'bg-blue-100 text-blue-800';
+      case 'annual': return 'bg-purple-100 text-purple-800';
+      case 'weekly': return 'bg-green-100 text-green-800';
+      case 'sessions': return 'bg-orange-100 text-orange-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -340,13 +341,15 @@ export function MembersTab() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {["premium", "basic", "unlimited"].map(packageType => {
+                {["monthly", "annual", "weekly", "sessions"].map(packageType => {
                   const typeMembers = members.filter(m => m.membershipType === packageType);
                   const totalSessions = typeMembers.reduce((sum, m) => 
                     sum + m.currentPackages.reduce((pkgSum, pkg) => pkgSum + pkg.sessionsTotal, 0), 0);
                   const usedSessions = typeMembers.reduce((sum, m) => 
                     sum + m.currentPackages.reduce((pkgSum, pkg) => pkgSum + pkg.sessionsUsed, 0), 0);
-                  const utilization = totalSessions > 0 ? Math.round((usedSessions / totalSessions) * 100) : 0;
+                  // For unlimited packages (sessions = 0), show utilization based on usage
+                  const utilization = totalSessions > 0 ? Math.round((usedSessions / totalSessions) * 100) : 
+                    (usedSessions > 0 ? Math.min(Math.round((usedSessions / 30) * 100), 100) : 0);
 
                   return (
                     <div key={packageType} className="p-4 rounded-lg border">
@@ -368,7 +371,7 @@ export function MembersTab() {
                         />
                       </div>
                       <div className="text-sm text-muted-foreground mt-1">
-                        {usedSessions}/{totalSessions} total sessions used
+                        {totalSessions > 0 ? `${usedSessions}/${totalSessions} sessions used` : `${usedSessions} sessions completed`}
                       </div>
                     </div>
                   );
