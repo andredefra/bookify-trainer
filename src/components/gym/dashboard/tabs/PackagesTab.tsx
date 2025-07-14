@@ -7,6 +7,7 @@ import { Package, DollarSign, Users, TrendingUp, Plus, Edit, Trash2, UserPlus } 
 import { useGymPackages } from '@/hooks/gym/useGymPackages';
 import { CreatePackageDialog } from '@/components/gym/packages/CreatePackageDialog';
 import { AssignPackageDialog } from '@/components/gym/packages/AssignPackageDialog';
+import { PackageUsageStats } from './packages/PackageUsageStats';
 
 export function PackagesTab() {
   const {
@@ -151,6 +152,9 @@ export function PackagesTab() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Package Usage Statistics */}
+      <PackageUsageStats assignments={assignments} />
 
       {/* Tabs for Packages and Assignments */}
       <Tabs defaultValue="packages" className="space-y-4">

@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye } from "lucide-react";
+import { Calendar, Clock, Users, MapPin, MoreHorizontal, Edit, Trash, CalendarPlus, Eye, UserPlus } from "lucide-react";
 import { SessionWithSchedules } from "@/hooks/gym/useGymGroupSessions";
+import { SessionBookingDialog } from "./SessionBookingDialog";
+import { SessionParticipants } from "./SessionParticipants";
 
 interface SessionsListProps {
   sessions: SessionWithSchedules[];
@@ -12,6 +15,9 @@ interface SessionsListProps {
 }
 
 export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: SessionsListProps) {
+  const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
+  const [showBookingDialog, setShowBookingDialog] = useState(false);
+  const [showParticipants, setShowParticipants] = useState<string | null>(null);
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
@@ -137,13 +143,32 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: S
                 </div>
                 
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    Schedule
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      // For demo, create a mock schedule to book against
+                      const mockSchedule = {
+                        id: `${session.id}-schedule-1`,
+                        start_datetime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                        end_datetime: new Date(Date.now() + 24 * 60 * 60 * 1000 + session.duration_minutes * 60 * 1000).toISOString(),
+                        gym_group_session_id: session.id,
+                        session: session
+                      };
+                      setSelectedSchedule(mockSchedule);
+                      setShowBookingDialog(true);
+                    }}
+                  >
+                    <UserPlus className="h-4 w-4 mr-1" />
+                    Book Client
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Eye className="h-4 w-4 mr-1" />
-                    View
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setShowParticipants(showParticipants === session.id ? null : session.id)}
+                  >
+                    <Users className="h-4 w-4 mr-1" />
+                    {showParticipants === session.id ? 'Hide' : 'Show'} Participants
                   </Button>
                 </div>
               </div>
@@ -159,10 +184,27 @@ export function SessionsList({ sessions, onUpdateSession, onScheduleSession }: S
                   <strong>Equipment:</strong> {session.equipment_needed}
                 </div>
               )}
+              
+              {/* Show participants if expanded */}
+              {showParticipants === session.id && (
+                <div className="mt-4">
+                  <SessionParticipants
+                    sessionScheduleId={`${session.id}-schedule-1`}
+                    sessionTitle={session.title}
+                    maxParticipants={session.max_participants}
+                  />
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
       ))}
+      
+      <SessionBookingDialog
+        open={showBookingDialog}
+        onOpenChange={setShowBookingDialog}
+        sessionSchedule={selectedSchedule}
+      />
     </div>
   );
 }
