@@ -19,7 +19,7 @@ interface MyGymTabProps {
   };
 }
 
-function MyGymTab({ user }: MyGymTabProps) {
+export function MyGymTab({ user }: MyGymTabProps) {
   console.log('🔍 MyGymTab START - Component inizializzato');
   
   const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
@@ -250,4 +250,3 @@ function MyGymTab({ user }: MyGymTabProps) {
   );
 }
 
-export default MyGymTab;

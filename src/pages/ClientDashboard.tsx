@@ -13,7 +13,7 @@ import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
 import { TrainingProgramTab } from "@/components/client/tabs/TrainingProgramTab";
 import { TrainingLogTab } from "@/components/client/tabs/TrainingLogTab";
 import { MyPackagesTab } from "@/components/client/tabs/packages/MyPackagesTab";
-import MyGymTab from "@/components/client/tabs/MyGymTab";
+import { MyGymTab } from "@/components/client/tabs/MyGymTab";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 import { useIsMobile } from "@/hooks/use-mobile";
