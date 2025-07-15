@@ -426,6 +426,51 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_client_communications: {
+        Row: {
+          client_id: string
+          created_at: string
+          gym_id: string
+          id: string
+          is_read: boolean
+          message: string
+          message_type: string
+          read_at: string | null
+          sender_type: string
+          sent_at: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          gym_id: string
+          id?: string
+          is_read?: boolean
+          message: string
+          message_type?: string
+          read_at?: string | null
+          sender_type: string
+          sent_at?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          gym_id?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          message_type?: string
+          read_at?: string | null
+          sender_type?: string
+          sent_at?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gym_clients: {
         Row: {
           client_id: string
@@ -478,6 +523,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      gym_connection_requests: {
+        Row: {
+          client_id: string
+          client_message: string | null
+          created_at: string
+          gym_id: string
+          gym_response: string | null
+          id: string
+          requested_at: string
+          responded_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          client_message?: string | null
+          created_at?: string
+          gym_id: string
+          gym_response?: string | null
+          id?: string
+          requested_at?: string
+          responded_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          client_message?: string | null
+          created_at?: string
+          gym_id?: string
+          gym_response?: string | null
+          id?: string
+          requested_at?: string
+          responded_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       gym_group_sessions: {
         Row: {

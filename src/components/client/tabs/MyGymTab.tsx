@@ -1,9 +1,11 @@
-import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings } from "lucide-react";
+import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, Loader2, AlertCircle } from "lucide-react";
+import { useGymConnection } from "@/hooks/useGymConnection";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 interface MyGymTabProps {
   user?: {
@@ -15,50 +17,60 @@ interface MyGymTabProps {
 }
 
 export function MyGymTab({ user }: MyGymTabProps) {
-  const [isConnectedToGym] = useState(false); // This will come from gym connection hook later
-  
-  // Mock gym data - will be replaced with real data from hooks
-  const gymData = {
-    name: "FitLife Gym Center",
-    address: "Via Roma 123, Milano",
-    memberSince: "March 2024",
-    status: "active"
+  const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
+  const navigate = useNavigate();
+
+  const handleConnectToGym = () => {
+    navigate("/client-dashboard?tab=settings&section=gym");
   };
 
-  const activePackages = [
-    {
-      id: 1,
-      name: "Premium Monthly",
-      type: "gym_membership",
-      sessionsUsed: 12,
-      sessionsTotal: 20,
-      expiryDate: "2024-04-30",
-      daysLeft: 15
-    }
-  ];
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">My Gym</h1>
+            <p className="text-muted-foreground">Loading your gym connection...</p>
+          </div>
+        </div>
 
-  const upcomingSessions = [
-    {
-      id: 1,
-      name: "Morning Yoga",
-      time: "09:00 - 10:00",
-      date: "Tomorrow",
-      instructor: "Maria Rossi",
-      spots: 5,
-      maxSpots: 15
-    },
-    {
-      id: 2,
-      name: "HIIT Training",
-      time: "18:30 - 19:30",
-      date: "Thursday",
-      instructor: "Marco Bianchi",
-      spots: 12,
-      maxSpots: 12
-    }
-  ];
+        <Card className="text-center py-12">
+          <CardContent className="space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
+            <p className="text-muted-foreground">Loading gym data...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-  if (!isConnectedToGym) {
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">My Gym</h1>
+            <p className="text-muted-foreground">Error loading gym data</p>
+          </div>
+        </div>
+
+        <Card className="text-center py-12">
+          <CardContent className="space-y-4">
+            <AlertCircle className="h-8 w-8 mx-auto text-destructive" />
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold">Error Loading Data</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">{error}</p>
+            </div>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              Try Again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!isConnected) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
@@ -79,7 +91,7 @@ export function MyGymTab({ user }: MyGymTabProps) {
                 Connect to a gym to access group sessions, facilities, and exclusive services
               </p>
             </div>
-            <Button onClick={() => {}} className="mt-4">
+            <Button onClick={handleConnectToGym} className="mt-4">
               <Settings className="h-4 w-4 mr-2" />
               Connect to Gym
             </Button>
@@ -88,6 +100,9 @@ export function MyGymTab({ user }: MyGymTabProps) {
       </div>
     );
   }
+
+  const activePackagesCount = packages.filter(pkg => pkg.status === 'active').length;
+  const totalSessionsUsed = packages.reduce((sum, pkg) => sum + pkg.sessions_used, 0);
 
   return (
     <div className="space-y-6">
@@ -107,10 +122,10 @@ export function MyGymTab({ user }: MyGymTabProps) {
                 <Building2 className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-xl">{gymData.name}</CardTitle>
+                <CardTitle className="text-xl">{connection?.gym_name || 'Your Gym'}</CardTitle>
                 <CardDescription className="flex items-center gap-1">
                   <MapPin className="h-3 w-3" />
-                  {gymData.address}
+                  {connection?.gym_address || 'Gym Address'}
                 </CardDescription>
               </div>
             </div>
@@ -122,15 +137,17 @@ export function MyGymTab({ user }: MyGymTabProps) {
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-primary">3</div>
+              <div className="text-2xl font-bold text-primary">{activePackagesCount}</div>
               <div className="text-sm text-muted-foreground">Active Packages</div>
             </div>
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-primary">15</div>
-              <div className="text-sm text-muted-foreground">Sessions This Month</div>
+              <div className="text-2xl font-bold text-primary">{totalSessionsUsed}</div>
+              <div className="text-sm text-muted-foreground">Sessions Used</div>
             </div>
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-primary">{gymData.memberSince}</div>
+              <div className="text-2xl font-bold text-primary">
+                {connection?.requested_at ? format(new Date(connection.requested_at), 'MMM yyyy') : 'Recently'}
+              </div>
               <div className="text-sm text-muted-foreground">Member Since</div>
             </div>
           </div>
@@ -147,33 +164,46 @@ export function MyGymTab({ user }: MyGymTabProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {activePackages.map((pkg) => (
-              <div key={pkg.id} className="border rounded-lg p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">{pkg.name}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {pkg.sessionsUsed}/{pkg.sessionsTotal} sessions used
-                    </p>
-                  </div>
-                  <Badge variant={pkg.daysLeft < 7 ? "destructive" : "secondary"}>
-                    {pkg.daysLeft} days left
-                  </Badge>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div 
-                    className="bg-primary h-2 rounded-full transition-all" 
-                    style={{ width: `${(pkg.sessionsUsed / pkg.sessionsTotal) * 100}%` }}
-                  />
-                </div>
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Expires: {pkg.expiryDate}</span>
-                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
-                    View Details
-                  </Button>
-                </div>
+            {packages.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <Package className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p>No active packages</p>
               </div>
-            ))}
+            ) : (
+              packages.map((pkg) => {
+                const progressPercentage = pkg.sessions_total > 0 ? (pkg.sessions_used / pkg.sessions_total) * 100 : 0;
+                const endDate = pkg.end_date ? new Date(pkg.end_date) : null;
+                const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0;
+                
+                return (
+                  <div key={pkg.id} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">{pkg.title}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {pkg.sessions_used}/{pkg.sessions_total} sessions used
+                        </p>
+                      </div>
+                      <Badge variant={daysLeft < 7 ? "destructive" : "secondary"}>
+                        {daysLeft} days left
+                      </Badge>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-primary h-2 rounded-full transition-all" 
+                        style={{ width: `${progressPercentage}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Expires: {endDate ? format(endDate, 'dd/MM/yyyy') : 'No expiry'}</span>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </CardContent>
         </Card>
 
@@ -186,37 +216,12 @@ export function MyGymTab({ user }: MyGymTabProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {upcomingSessions.map((session) => (
-              <div key={session.id} className="border rounded-lg p-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium">{session.name}</h4>
-                  <Badge variant={session.spots === session.maxSpots ? "destructive" : "secondary"}>
-                    {session.spots}/{session.maxSpots} spots
-                  </Badge>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {session.time}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {session.date}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Users className="h-3 w-3" />
-                    {session.instructor}
-                  </div>
-                </div>
-                <Button 
-                  size="sm" 
-                  className="w-full"
-                  disabled={session.spots === session.maxSpots}
-                >
-                  {session.spots === session.maxSpots ? "Full - Join Waitlist" : "Book Session"}
-                </Button>
-              </div>
-            ))}
+            {/* This will be populated with real session data in future updates */}
+            <div className="text-center py-8 text-muted-foreground">
+              <Calendar className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <p>No upcoming sessions</p>
+              <p className="text-xs">Check with your gym for available group sessions</p>
+            </div>
             <Button variant="outline" className="w-full">
               View All Sessions
             </Button>
@@ -248,24 +253,37 @@ export function MyGymTab({ user }: MyGymTabProps) {
             </Button>
           </div>
           
-          <Separator />
-          
-          <div className="bg-muted/50 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                <Building2 className="h-4 w-4 text-primary" />
+          {communications.length > 0 && (
+            <>
+              <Separator />
+              
+              <div className="space-y-3">
+                {communications.slice(0, 3).map((comm) => (
+                  <div key={comm.id} className="bg-muted/50 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                        <Building2 className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium text-sm">{comm.subject}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {format(new Date(comm.sent_at), 'dd MMM')}
+                          </span>
+                          {!comm.is_read && (
+                            <div className="w-2 h-2 bg-primary rounded-full" />
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {comm.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-sm">{gymData.name}</span>
-                  <span className="text-xs text-muted-foreground">2h ago</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Don't forget about our new HIIT class starting this Thursday! Limited spots available.
-                </p>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
