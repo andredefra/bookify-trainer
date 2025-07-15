@@ -124,8 +124,11 @@ export function GymActivitiesCard({ gymId }: GymActivitiesCardProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Activity className="h-5 w-5" />
-          Gym Activities & Services
+          Gym Services & Classes
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Explore our group classes, facilities, and additional services
+        </p>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4">
@@ -183,10 +186,15 @@ export function GymActivitiesCard({ gymId }: GymActivitiesCardProps) {
         
         <div className="pt-4 border-t">
           <div className="text-center text-sm text-muted-foreground">
-            <p>Visit our reception for more information about activities and schedules</p>
-            <Button variant="outline" size="sm" className="mt-2">
-              Contact Reception
-            </Button>
+            <p>These are ongoing services and classes available at your gym</p>
+            <div className="flex gap-2 justify-center mt-3">
+              <Button variant="outline" size="sm">
+                View Schedule
+              </Button>
+              <Button variant="outline" size="sm">
+                Contact Reception
+              </Button>
+            </div>
           </div>
         </div>
       </CardContent>

@@ -1,11 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, Users, Loader2 } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Loader2, Info } from "lucide-react";
 import { format } from "date-fns";
 import { useGymSessions } from "@/hooks/useGymSessions";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { SessionDetailsDialog } from "./SessionDetailsDialog";
+import { useState } from "react";
 
 interface GymSessionsCardProps {
   gymId?: string;
@@ -16,6 +18,8 @@ export function GymSessionsCard({ gymId }: GymSessionsCardProps) {
   
   const { sessions, loading, bookSession, cancelBooking } = useGymSessions(gymId);
   const { toast } = useToast();
+  const [selectedSession, setSelectedSession] = useState<any>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   
   console.log('🔍 GymSessionsCard DATA:', {
     sessions: sessions?.length || 0,
@@ -151,6 +155,25 @@ export function GymSessionsCard({ gymId }: GymSessionsCardProps) {
                   </div>
                   
                   <div className="flex flex-col gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedSession({
+                          ...session,
+                          requirements: ['Suitable for all fitness levels', 'Bring water bottle'],
+                          equipment_needed: ['Yoga mat provided', 'Comfortable clothing'],
+                          benefits: ['Improved flexibility', 'Stress reduction', 'Better posture'],
+                          trainer_bio: session.assigned_trainer_name ? 'Certified trainer with 5+ years experience' : undefined,
+                          trainer_rating: 4.8,
+                          cancellation_policy: 'Free cancellation up to 2 hours before the session'
+                        });
+                        setDetailsOpen(true);
+                      }}
+                    >
+                      <Info className="h-4 w-4 mr-1" />
+                      Details
+                    </Button>
                     {session.is_booked ? (
                       <Button 
                         variant="outline" 
@@ -175,6 +198,20 @@ export function GymSessionsCard({ gymId }: GymSessionsCardProps) {
           </div>
         )}
       </CardContent>
+      
+      <SessionDetailsDialog
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+        session={selectedSession}
+        onBookSession={async (sessionId) => {
+          await handleBookSession(sessionId, selectedSession?.title || '');
+          setDetailsOpen(false);
+        }}
+        onCancelBooking={async (sessionId) => {
+          await handleCancelBooking(sessionId, selectedSession?.title || '');
+          setDetailsOpen(false);
+        }}
+      />
     </Card>
   );
 }

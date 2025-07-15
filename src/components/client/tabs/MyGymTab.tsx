@@ -2,13 +2,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, Loader2, AlertCircle, Activity } from "lucide-react";
+import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, Loader2, AlertCircle, Activity, ShoppingBag } from "lucide-react";
 import { useGymConnection } from "@/hooks/useGymConnection";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { GymSessionsCard } from "@/components/client/gym/GymSessionsCard";
 import { GymMessagingCard } from "@/components/client/gym/GymMessagingCard";
 import { GymActivitiesCard } from "@/components/client/gym/GymActivitiesCard";
+import { PackageMarketplaceDialog } from "@/components/client/gym/PackageMarketplaceDialog";
+import { useState } from "react";
 
 interface MyGymTabProps {
   user?: {
@@ -24,6 +26,7 @@ export function MyGymTab({ user }: MyGymTabProps) {
   
   const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
   const navigate = useNavigate();
+  const [marketplaceOpen, setMarketplaceOpen] = useState(false);
   
   console.log('🔍 MyGymTab HOOK DATA:', { 
     connection, 
@@ -225,6 +228,14 @@ export function MyGymTab({ user }: MyGymTabProps) {
                 );
               })
             )}
+            
+            <Button 
+              className="w-full mt-4" 
+              onClick={() => setMarketplaceOpen(true)}
+            >
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Browse New Packages
+            </Button>
           </CardContent>
         </Card>
 
@@ -246,6 +257,12 @@ export function MyGymTab({ user }: MyGymTabProps) {
         {/* Gym Activities */}
         <GymActivitiesCard gymId={connection?.gym_id} />
       </div>
+      
+      <PackageMarketplaceDialog
+        open={marketplaceOpen}
+        onOpenChange={setMarketplaceOpen}
+        gymId={connection?.gym_id}
+      />
     </div>
   );
 }
