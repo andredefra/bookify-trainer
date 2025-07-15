@@ -7,6 +7,7 @@ import { PaymentsSection } from "./PaymentsSection";
 import { PreferencesSection } from "./PreferencesSection";
 import { IntegrationsSection } from "./IntegrationsSection";
 import { NotificationsSection } from "./NotificationsSection";
+import { MyGymSection } from "./MyGymSection";
 
 interface SettingsTabContentProps {
   user: { 
@@ -73,6 +74,14 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
               <span className="flex-1">Integrations</span>
             </button>
             <button
+              onClick={() => setActiveTab("mygym")}
+              className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
+                activeTab === "mygym" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
+              } md:border-l-2 md:border-transparent whitespace-nowrap`}
+            >
+              <span className="flex-1">My Gym</span>
+            </button>
+            <button
               onClick={() => setActiveTab("notifications")}
               className={`flex-shrink-0 flex items-center p-3 md:p-4 hover:bg-muted/50 transition-colors ${
                 activeTab === "notifications" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
@@ -92,6 +101,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             {activeTab === "payments" && "Payment Settings"}
             {activeTab === "preferences" && "Preferences"}
             {activeTab === "integrations" && "App Integrations"}
+            {activeTab === "mygym" && "My Gym"}
             {activeTab === "notifications" && "Notification Settings"}
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -99,6 +109,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             {activeTab === "payments" && "Manage your payment methods"}
             {activeTab === "preferences" && "Customize your fitness goals and preferences"}
             {activeTab === "integrations" && "Connect with your favorite fitness apps"}
+            {activeTab === "mygym" && "Connect to your gym and manage your gym membership"}
             {activeTab === "notifications" && "Choose which notifications you want to receive"}
           </p>
         </div>
@@ -108,6 +119,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
           {activeTab === "payments" && <PaymentsSection />}
           {activeTab === "preferences" && <PreferencesSection goals={goals} />}
           {activeTab === "integrations" && <IntegrationsSection user={user} />}
+          {activeTab === "mygym" && <MyGymSection user={user} />}
           {activeTab === "notifications" && <NotificationsSection />}
         </div>
       </div>
