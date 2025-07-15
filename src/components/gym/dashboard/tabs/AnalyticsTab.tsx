@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   TrendingUp, 
   Users, 
@@ -11,10 +13,29 @@ import {
   Target,
   BarChart3,
   Download,
-  RefreshCw
+  RefreshCw,
+  CalendarRange,
+  Filter,
+  TrendingDown,
+  ArrowUpIcon,
+  ArrowDownIcon
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  Legend
+} from "recharts";
 import { useGymAnalytics } from "@/hooks/gym/useGymAnalytics";
-import { Progress } from "@/components/ui/progress";
 
 export function AnalyticsTab() {
   const {
@@ -28,10 +49,42 @@ export function AnalyticsTab() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-center space-y-4">
-          <RefreshCw className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="text-muted-foreground">Loading analytics...</p>
+      <div className="space-y-6">
+        {/* Header Skeleton */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+          <div className="flex space-x-2">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+        </div>
+
+        {/* KPI Cards Skeleton */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-20 mb-2" />
+                <Skeleton className="h-3 w-32" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Tabs Skeleton */}
+        <div className="space-y-4">
+          <Skeleton className="h-10 w-full" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Skeleton className="h-80" />
+            <Skeleton className="h-80" />
+          </div>
         </div>
       </div>
     );
@@ -58,28 +111,32 @@ export function AnalyticsTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Analytics Dashboard</h2>
           <p className="text-muted-foreground">
             Comprehensive insights into your gym's performance
           </p>
         </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={refetch}>
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+          <Button variant="outline" onClick={refetch} className="w-full sm:w-auto">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" className="w-full sm:w-auto">
+            <CalendarRange className="h-4 w-4 mr-2" />
+            Date Range
+          </Button>
+          <Button variant="outline" className="w-full sm:w-auto">
             <Download className="h-4 w-4 mr-2" />
-            Export Report
+            Export
           </Button>
         </div>
       </div>
 
       {/* KPI Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -88,13 +145,15 @@ export function AnalyticsTab() {
             <div className="text-2xl font-bold">
               ${financialAnalytics?.totalRevenue.toLocaleString() || '0'}
             </div>
-            <p className="text-xs text-muted-foreground">
-              +12.5% from last month
-            </p>
+            <div className="flex items-center space-x-1 text-xs">
+              <ArrowUpIcon className="h-3 w-3 text-green-500" />
+              <span className="text-green-500 font-medium">+12.5%</span>
+              <span className="text-muted-foreground">from last month</span>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Members</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -103,13 +162,15 @@ export function AnalyticsTab() {
             <div className="text-2xl font-bold">
               {memberAnalytics?.activeMembers || 0}
             </div>
-            <p className="text-xs text-muted-foreground">
-              +{memberAnalytics?.newMembersThisMonth || 0} new this month
-            </p>
+            <div className="flex items-center space-x-1 text-xs">
+              <ArrowUpIcon className="h-3 w-3 text-green-500" />
+              <span className="text-green-500 font-medium">+{memberAnalytics?.newMembersThisMonth || 0}</span>
+              <span className="text-muted-foreground">new this month</span>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Sessions This Week</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -124,7 +185,7 @@ export function AnalyticsTab() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Member Retention</CardTitle>
             <Target className="h-4 w-4 text-muted-foreground" />
@@ -133,23 +194,31 @@ export function AnalyticsTab() {
             <div className="text-2xl font-bold">
               {100 - (memberAnalytics?.churnRate || 0)}%
             </div>
-            <p className="text-xs text-muted-foreground">
-              {memberAnalytics?.churnRate || 0}% churn rate
-            </p>
+            <div className="flex items-center space-x-1 text-xs">
+              <ArrowDownIcon className="h-3 w-3 text-green-500" />
+              <span className="text-green-500 font-medium">{memberAnalytics?.churnRate || 0}%</span>
+              <span className="text-muted-foreground">churn rate</span>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="sessions" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="sessions">Session Analytics</TabsTrigger>
-          <TabsTrigger value="members">Member Analytics</TabsTrigger>
-          <TabsTrigger value="financial">Financial Analytics</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 gap-2 md:gap-0 h-auto md:h-10 p-1">
+          <TabsTrigger value="sessions" className="text-sm md:text-base py-3 md:py-1.5">
+            Session Analytics
+          </TabsTrigger>
+          <TabsTrigger value="members" className="text-sm md:text-base py-3 md:py-1.5">
+            Member Analytics
+          </TabsTrigger>
+          <TabsTrigger value="financial" className="text-sm md:text-base py-3 md:py-1.5">
+            Financial Analytics
+          </TabsTrigger>
         </TabsList>
 
         {/* Session Analytics Tab */}
         <TabsContent value="sessions" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Popular Session Types */}
             <Card>
               <CardHeader>
@@ -214,22 +283,28 @@ export function AnalyticsTab() {
               <CardTitle>Weekly Attendance Trend</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[200px] flex items-end justify-between space-x-2">
-                {sessionAnalytics?.weeklyAttendance.map((day, index) => (
-                  <div key={day.date} className="flex flex-col items-center space-y-2">
-                    <div 
-                      className="bg-primary rounded-t w-8"
-                      style={{ 
-                        height: `${(day.attendance / Math.max(...sessionAnalytics.weeklyAttendance.map(d => d.attendance))) * 160}px`,
-                        minHeight: '20px'
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={sessionAnalytics?.weeklyAttendance || []}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      dataKey="date" 
+                      tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' })}
+                      className="text-xs"
+                    />
+                    <YAxis className="text-xs" />
+                    <Tooltip 
+                      labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                      formatter={(value) => [value, 'Attendance']}
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '6px'
                       }}
                     />
-                    <div className="text-xs text-muted-foreground">
-                      {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
-                    </div>
-                    <div className="text-xs font-medium">{day.attendance}</div>
-                  </div>
-                ))}
+                    <Bar dataKey="attendance" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
@@ -237,7 +312,7 @@ export function AnalyticsTab() {
 
         {/* Member Analytics Tab */}
         <TabsContent value="members" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Membership Types Distribution */}
             <Card>
               <CardHeader>
@@ -297,9 +372,9 @@ export function AnalyticsTab() {
               <CardTitle>Member Retention Over Time</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {memberAnalytics?.memberRetention.map((period) => (
-                  <div key={period.period} className="text-center p-4 rounded-lg border">
+                  <div key={period.period} className="text-center p-4 rounded-lg border hover:shadow-md transition-shadow">
                     <div className="text-2xl font-bold text-primary">
                       {period.retentionRate}%
                     </div>
@@ -313,7 +388,7 @@ export function AnalyticsTab() {
 
         {/* Financial Analytics Tab */}
         <TabsContent value="financial" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Package Sales */}
             <Card>
               <CardHeader>
@@ -362,24 +437,50 @@ export function AnalyticsTab() {
           {/* Monthly Revenue Trend */}
           <Card>
             <CardHeader>
-              <CardTitle>Monthly Revenue Trend</CardTitle>
+              <CardTitle>Monthly Revenue & Member Trend</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[200px] flex items-end justify-between space-x-4">
-                {financialAnalytics?.monthlyTrends.map((month) => (
-                  <div key={month.month} className="flex flex-col items-center space-y-2">
-                    <div 
-                      className="bg-primary rounded-t w-12"
-                      style={{ 
-                        height: `${(month.revenue / Math.max(...financialAnalytics.monthlyTrends.map(m => m.revenue))) * 160}px`,
-                        minHeight: '20px'
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={financialAnalytics?.monthlyTrends || []}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      dataKey="month" 
+                      className="text-xs"
+                    />
+                    <YAxis yAxisId="revenue" orientation="left" className="text-xs" />
+                    <YAxis yAxisId="members" orientation="right" className="text-xs" />
+                    <Tooltip 
+                      formatter={(value, name) => [
+                        name === 'revenue' ? `$${value.toLocaleString()}` : value,
+                        name === 'revenue' ? 'Revenue' : 'Members'
+                      ]}
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '6px'
                       }}
                     />
-                    <div className="text-xs text-muted-foreground">{month.month}</div>
-                    <div className="text-xs font-medium">${month.revenue.toLocaleString()}</div>
-                    <div className="text-xs text-muted-foreground">{month.members} members</div>
-                  </div>
-                ))}
+                    <Line 
+                      yAxisId="revenue"
+                      type="monotone" 
+                      dataKey="revenue" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth={3}
+                      dot={{ fill: 'hsl(var(--primary))' }}
+                    />
+                    <Line 
+                      yAxisId="members"
+                      type="monotone" 
+                      dataKey="members" 
+                      stroke="hsl(var(--secondary))" 
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={{ fill: 'hsl(var(--secondary))' }}
+                    />
+                    <Legend />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
