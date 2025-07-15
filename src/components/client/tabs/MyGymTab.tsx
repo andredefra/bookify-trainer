@@ -19,6 +19,15 @@ interface MyGymTabProps {
 export function MyGymTab({ user }: MyGymTabProps) {
   const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
   const navigate = useNavigate();
+  
+  console.log('MyGymTab render:', { 
+    connection, 
+    packages: packages.length, 
+    communications: communications.length, 
+    loading, 
+    error, 
+    isConnected 
+  });
 
   const handleConnectToGym = () => {
     navigate("/client-dashboard?tab=settings&section=gym");
@@ -289,3 +298,5 @@ export function MyGymTab({ user }: MyGymTabProps) {
     </div>
   );
 }
+
+export default MyGymTab;

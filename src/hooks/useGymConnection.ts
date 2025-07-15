@@ -53,6 +53,7 @@ export function useGymConnection() {
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log('useGymConnection: Starting to fetch gym connection');
     fetchGymConnection();
   }, []);
 
