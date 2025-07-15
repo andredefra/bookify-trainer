@@ -47,6 +47,15 @@ export function AnalyticsTab() {
     refetch
   } = useGymAnalytics();
 
+  // Debug logging
+  console.log('Analytics Debug:', {
+    sessionAnalytics,
+    memberAnalytics,
+    financialAnalytics,
+    loading,
+    error
+  });
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -259,6 +268,9 @@ export function AnalyticsTab() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="text-center text-sm text-muted-foreground mb-4">
+                  Package usage analysis based on member activity
+                </div>
                 {sessionAnalytics?.packageUtilization?.length ? (
                   sessionAnalytics.packageUtilization.map((pkg) => (
                     <div key={pkg.packageType} className="space-y-2">

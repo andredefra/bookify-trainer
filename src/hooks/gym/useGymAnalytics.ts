@@ -152,7 +152,7 @@ export function useGymAnalytics() {
       };
     } catch (err) {
       console.error('Error fetching session analytics:', err);
-      // Return demo data
+      // Return demo data as fallback
       return {
         totalSessions: 25,
         activeSessions: 18,
