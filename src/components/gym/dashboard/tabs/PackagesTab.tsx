@@ -73,81 +73,91 @@ export function PackagesTab() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6 p-4 md:p-0">
+      {/* Header - Stack on mobile */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-2">
           <Package className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl font-bold">Gym Packages</h1>
+          <h1 className="text-xl md:text-2xl font-bold">Gym Packages</h1>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={() => setAssignDialogOpen(true)} variant="outline">
+        
+        {/* Action buttons - Stack on mobile with full width */}
+        <div className="flex flex-col gap-3 md:flex-row md:gap-2">
+          <Button 
+            onClick={() => setAssignDialogOpen(true)} 
+            variant="outline"
+            className="w-full md:w-auto min-h-[44px] text-base md:text-sm"
+          >
             <UserPlus className="w-4 h-4 mr-2" />
             Assign Package
           </Button>
-          <Button onClick={() => setCreateDialogOpen(true)}>
+          <Button 
+            onClick={() => setCreateDialogOpen(true)}
+            className="w-full md:w-auto min-h-[44px] text-base md:text-sm"
+          >
             <Plus className="w-4 h-4 mr-2" />
             Create Package
           </Button>
         </div>
       </div>
       
-      {/* Statistics Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {/* Statistics Cards - Single column on mobile */}
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 md:pb-2">
+            <CardTitle className="text-base md:text-sm font-medium">
               Active Packages
             </CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+            <Package className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.activePackages}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-1">
+            <div className="text-3xl md:text-2xl font-bold">{stats.activePackages}</div>
+            <p className="text-sm md:text-xs text-muted-foreground mt-1">
               currently available
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 md:pb-2">
+            <CardTitle className="text-base md:text-sm font-medium">
               Monthly Revenue
             </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <DollarSign className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">€{stats.monthlyRevenue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-1">
+            <div className="text-3xl md:text-2xl font-bold">€{stats.monthlyRevenue.toFixed(2)}</div>
+            <p className="text-sm md:text-xs text-muted-foreground mt-1">
               from packages
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 md:pb-2">
+            <CardTitle className="text-base md:text-sm font-medium">
               Active Subscriptions
             </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.activeSubscriptions}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-1">
+            <div className="text-3xl md:text-2xl font-bold">{stats.activeSubscriptions}</div>
+            <p className="text-sm md:text-xs text-muted-foreground mt-1">
               active memberships
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 md:pb-2">
+            <CardTitle className="text-base md:text-sm font-medium">
               Total Revenue
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">€{stats.totalRevenue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-1">
+            <div className="text-3xl md:text-2xl font-bold">€{stats.totalRevenue.toFixed(2)}</div>
+            <p className="text-sm md:text-xs text-muted-foreground mt-1">
               all time
             </p>
           </CardContent>
@@ -184,14 +194,14 @@ export function PackagesTab() {
                   </Button>
                 </div>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   {packages.map((pkg) => (
                     <Card key={pkg.id} className="relative">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <CardTitle className="text-lg">{pkg.title}</CardTitle>
-                            <div className="flex gap-2 mt-2">
+                      <CardHeader className="pb-4 md:pb-3">
+                        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-xl md:text-lg mb-3 md:mb-0">{pkg.title}</CardTitle>
+                            <div className="flex flex-wrap gap-2 mt-2">
                               <Badge className={getPackageTypeColor(pkg.package_type)}>
                                 {pkg.package_type}
                               </Badge>
@@ -200,36 +210,41 @@ export function PackagesTab() {
                               )}
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold">€{pkg.price}</div>
+                          <div className="text-left md:text-right">
+                            <div className="text-3xl md:text-2xl font-bold">€{pkg.price}</div>
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent className="pt-0">
+                      <CardContent className="pt-0 space-y-4">
                         {pkg.description && (
-                          <p className="text-sm text-muted-foreground mb-3">{pkg.description}</p>
+                          <p className="text-base md:text-sm text-muted-foreground">{pkg.description}</p>
                         )}
-                        <div className="space-y-1 text-sm">
+                        <div className="space-y-2 text-base md:text-sm">
                           {pkg.duration_days && (
-                            <p>Duration: {pkg.duration_days} days</p>
+                            <p><span className="font-medium">Duration:</span> {pkg.duration_days} days</p>
                           )}
                           {pkg.session_limit && (
-                            <p>Sessions: {pkg.session_limit}</p>
+                            <p><span className="font-medium">Sessions:</span> {pkg.session_limit}</p>
                           )}
-                          <p>Trainer Commission: {pkg.trainer_commission_percentage}%</p>
+                          <p><span className="font-medium">Trainer Commission:</span> {pkg.trainer_commission_percentage}%</p>
                         </div>
-                        <div className="flex gap-2 mt-4">
-                          <Button size="sm" variant="outline" className="flex-1">
-                            <Edit className="w-3 h-3 mr-1" />
+                        <div className="flex flex-col gap-3 md:flex-row md:gap-2 pt-2">
+                          <Button 
+                            size="default" 
+                            variant="outline" 
+                            className="w-full md:flex-1 min-h-[44px] md:min-h-[36px] text-base md:text-sm"
+                          >
+                            <Edit className="w-4 h-4 mr-2 md:w-3 md:h-3 md:mr-1" />
                             Edit
                           </Button>
                           <Button 
-                            size="sm" 
+                            size="default"
                             variant="outline" 
                             onClick={() => deletePackage(pkg.id)}
-                            className="text-red-600 hover:text-red-700"
+                            className="w-full md:w-auto text-red-600 hover:text-red-700 min-h-[44px] md:min-h-[36px] text-base md:text-sm"
                           >
-                            <Trash2 className="w-3 h-3" />
+                            <Trash2 className="w-4 h-4 md:w-3 md:h-3" />
+                            <span className="md:hidden ml-2">Delete</span>
                           </Button>
                         </div>
                       </CardContent>
@@ -263,32 +278,36 @@ export function PackagesTab() {
                 <div className="space-y-4">
                   {assignments.map((assignment) => (
                     <Card key={assignment.id}>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <h4 className="font-medium">
+                      <CardContent className="pt-4 md:pt-6">
+                        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                          <div className="space-y-3 md:space-y-1 flex-1">
+                            <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
+                              <h4 className="font-medium text-base md:text-sm">
                                 Client: {assignment.client_id.slice(0, 8)}...
                               </h4>
                               <Badge className={getStatusColor(assignment.status)}>
                                 {assignment.status}
                               </Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground">
-                              Package: {assignment.package?.title || 'Unknown Package'}
+                            <p className="text-base md:text-sm text-muted-foreground">
+                              <span className="font-medium">Package:</span> {assignment.package?.title || 'Unknown Package'}
                             </p>
-                            <p className="text-sm text-muted-foreground">
-                              Trainer: {assignment.trainer_id ? assignment.trainer_id.slice(0, 8) + '...' : 'Gym Access Only'}
+                            <p className="text-base md:text-sm text-muted-foreground">
+                              <span className="font-medium">Trainer:</span> {assignment.trainer_id ? assignment.trainer_id.slice(0, 8) + '...' : 'Gym Access Only'}
                             </p>
                           </div>
-                          <div className="text-right">
-                            <div className="font-medium">€{assignment.total_paid}</div>
-                            <p className="text-sm text-muted-foreground">
-                              {assignment.sessions_used}/{assignment.sessions_total || '∞'} sessions
+                          <div className="text-left md:text-right border-t pt-4 md:border-t-0 md:pt-0">
+                            <div className="font-medium text-lg md:text-base">€{assignment.total_paid}</div>
+                            <p className="text-base md:text-sm text-muted-foreground mt-1">
+                              <span className="md:hidden font-medium">Sessions: </span>
+                              {assignment.sessions_used}/{assignment.sessions_total || '∞'}
+                              <span className="hidden md:inline"> sessions</span>
                             </p>
                             {assignment.end_date && (
-                              <p className="text-xs text-muted-foreground">
-                                Expires: {new Date(assignment.end_date).toLocaleDateString()}
+                              <p className="text-sm md:text-xs text-muted-foreground mt-1">
+                                <span className="md:hidden font-medium">Expires: </span>
+                                <span className="hidden md:inline">Expires: </span>
+                                {new Date(assignment.end_date).toLocaleDateString()}
                               </p>
                             )}
                           </div>
