@@ -81,7 +81,7 @@ export function CreateGymEventDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md w-[95vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Plus className="h-5 w-5" />
@@ -99,6 +99,7 @@ export function CreateGymEventDialog({
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="Enter event title"
               required
+              className="min-h-[44px]"
             />
           </div>
 
@@ -116,7 +117,7 @@ export function CreateGymEventDialog({
                 }));
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="min-h-[44px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -142,7 +143,7 @@ export function CreateGymEventDialog({
               value={formData.trainer_id}
               onValueChange={(value) => setFormData(prev => ({ ...prev, trainer_id: value }))}
             >
-              <SelectTrigger>
+              <SelectTrigger className="min-h-[44px]">
                 <SelectValue placeholder="Select trainer" />
               </SelectTrigger>
               <SelectContent>
@@ -163,13 +164,13 @@ export function CreateGymEventDialog({
           {(formData.event_category as string) === 'session' && (
             <div className="space-y-2">
               <Label htmlFor="client">Client</Label>
-              <Select
-                value={formData.client_id}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, client_id: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select client (optional)" />
-                </SelectTrigger>
+                <Select
+                  value={formData.client_id}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, client_id: value }))}
+                >
+                  <SelectTrigger className="min-h-[44px]">
+                    <SelectValue placeholder="Select client (optional)" />
+                  </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">No client selected</SelectItem>
                   {clients.length > 0 ? (
@@ -187,7 +188,7 @@ export function CreateGymEventDialog({
           )}
 
           {/* Date & Time */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="space-y-2">
               <Label htmlFor="start">Start Date & Time *</Label>
               <Input
@@ -196,6 +197,7 @@ export function CreateGymEventDialog({
                 value={formData.start_datetime}
                 onChange={(e) => setFormData(prev => ({ ...prev, start_datetime: e.target.value }))}
                 required
+                className="min-h-[44px]"
               />
             </div>
             <div className="space-y-2">
@@ -206,6 +208,7 @@ export function CreateGymEventDialog({
                 value={formData.end_datetime}
                 onChange={(e) => setFormData(prev => ({ ...prev, end_datetime: e.target.value }))}
                 required
+                className="min-h-[44px]"
               />
             </div>
           </div>
@@ -218,6 +221,7 @@ export function CreateGymEventDialog({
               value={formData.location}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
               placeholder="Enter location"
+              className="min-h-[44px]"
             />
           </div>
 
@@ -234,19 +238,19 @@ export function CreateGymEventDialog({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading || !formData.title || !formData.start_datetime || !formData.end_datetime || !formData.trainer_id}
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
             >
               {loading ? 'Creating...' : 'Create Event'}
             </Button>

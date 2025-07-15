@@ -117,35 +117,38 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
   return (
     <div className="space-y-4">
       {/* Header Controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center justify-between gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => getNavigationFunction()('prev')}
+              className="min-h-[44px] px-3"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <h2 className="text-lg font-semibold min-w-[200px] text-center">
+            <h2 className="text-base sm:text-lg font-semibold flex-1 text-center px-2">
               {getHeaderTitle()}
             </h2>
             <Button
               variant="outline"
               size="sm"
               onClick={() => getNavigationFunction()('next')}
+              className="min-h-[44px] px-3"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
 
-          <div className="flex gap-1">
+          <div className="grid grid-cols-3 gap-1 sm:flex">
             {(['month', 'week', 'day'] as const).map((viewType) => (
               <Button
                 key={viewType}
                 variant={view === viewType ? "default" : "outline"}
                 size="sm"
                 onClick={() => setView(viewType)}
+                className="min-h-[44px] text-sm"
               >
                 {viewType.charAt(0).toUpperCase() + viewType.slice(1)}
               </Button>
@@ -153,11 +156,11 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <select
             value={selectedTrainer}
             onChange={(e) => setSelectedTrainer(e.target.value)}
-            className="px-3 py-1 border rounded text-sm"
+            className="px-3 py-2 border rounded text-sm min-h-[44px] w-full sm:w-auto"
           >
             <option value="all">All Trainers</option>
             {trainers.map(trainer => (
@@ -167,9 +170,10 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
             ))}
           </select>
 
-          <Button onClick={onCreateEvent} className="gap-2">
+          <Button onClick={onCreateEvent} className="gap-2 min-h-[44px] w-full sm:w-auto">
             <Plus className="h-4 w-4" />
-            New Event
+            <span className="sm:hidden">Add Event</span>
+            <span className="hidden sm:inline">New Event</span>
           </Button>
         </div>
       </div>
@@ -197,7 +201,7 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
                 <div
                   key={index}
                   className={cn(
-                    "min-h-[120px] p-2 border-r border-b",
+                    "min-h-[80px] sm:min-h-[120px] p-1 sm:p-2 border-r border-b",
                     !isCurrentMonth && "bg-muted/30 text-muted-foreground",
                     isToday && "bg-primary/5"
                   )}
@@ -210,22 +214,23 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
                   </div>
                   
                   <div className="space-y-1">
-                    {dayEvents.slice(0, 3).map(event => (
+                    {dayEvents.slice(0, 2).map(event => (
                       <div
                         key={event.id}
                         onClick={() => onEventClick(event)}
                         className={cn(
-                          "text-xs p-1 rounded cursor-pointer truncate",
+                          "text-xs p-1 rounded cursor-pointer truncate min-h-[24px] flex items-center",
                           getEventTypeColor(event.event_category)
                         )}
                         title={`${event.title} - ${formatTime(event.start_datetime)}`}
                       >
-                        {formatTime(event.start_datetime)} {event.title}
+                        <span className="hidden sm:inline">{formatTime(event.start_datetime)} </span>
+                        <span className="truncate">{event.title}</span>
                       </div>
                     ))}
-                    {dayEvents.length > 3 && (
+                    {dayEvents.length > 2 && (
                       <div className="text-xs text-muted-foreground">
-                        +{dayEvents.length - 3} more
+                        +{dayEvents.length - 2} more
                       </div>
                     )}
                   </div>
@@ -238,68 +243,116 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
 
       {/* Week View */}
       {view === 'week' && (
-        <div className="border rounded-lg">
-          <div className="grid grid-cols-8 border-b">
-            <div className="p-2 text-center text-sm font-medium bg-muted">Time</div>
-            {Array.from({ length: 7 }, (_, i) => {
-              const date = new Date(currentDate);
-              date.setDate(currentDate.getDate() - currentDate.getDay() + i);
+        <>
+          {/* Desktop Week View */}
+          <div className="hidden lg:block border rounded-lg">
+            <div className="grid grid-cols-8 border-b">
+              <div className="p-2 text-center text-sm font-medium bg-muted">Time</div>
+              {Array.from({ length: 7 }, (_, i) => {
+                const date = new Date(currentDate);
+                date.setDate(currentDate.getDate() - currentDate.getDay() + i);
+                return (
+                  <div key={i} className="p-2 text-center text-sm font-medium bg-muted">
+                    {date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' })}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Time slots */}
+            {Array.from({ length: 12 }, (_, hour) => {
+              const timeSlot = hour + 8; // 8 AM to 8 PM
               return (
-                <div key={i} className="p-2 text-center text-sm font-medium bg-muted">
-                  {date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' })}
+                <div key={hour} className="grid grid-cols-8 border-b min-h-[60px]">
+                  <div className="p-2 text-xs text-muted-foreground border-r">
+                    {timeSlot}:00
+                  </div>
+                  {Array.from({ length: 7 }, (_, day) => {
+                    const date = new Date(currentDate);
+                    date.setDate(currentDate.getDate() - currentDate.getDay() + day);
+                    date.setHours(timeSlot, 0, 0, 0);
+                    
+                    const dayEvents = events.filter(event => {
+                      const eventStart = new Date(event.start_datetime);
+                      return eventStart.toDateString() === date.toDateString() &&
+                             eventStart.getHours() === timeSlot &&
+                             (selectedTrainer === 'all' || event.trainer_id === selectedTrainer);
+                    });
+
+                    return (
+                      <div key={day} className="p-1 border-r">
+                        {dayEvents.map(event => (
+                          <div
+                            key={event.id}
+                            onClick={() => onEventClick(event)}
+                            className={cn(
+                              "text-xs p-1 rounded cursor-pointer mb-1",
+                              getEventTypeColor(event.event_category)
+                            )}
+                          >
+                            {event.title}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}
           </div>
 
-          {/* Time slots */}
-          {Array.from({ length: 12 }, (_, hour) => {
-            const timeSlot = hour + 8; // 8 AM to 8 PM
-            return (
-              <div key={hour} className="grid grid-cols-8 border-b min-h-[60px]">
-                <div className="p-2 text-xs text-muted-foreground border-r">
-                  {timeSlot}:00
-                </div>
-                {Array.from({ length: 7 }, (_, day) => {
-                  const date = new Date(currentDate);
-                  date.setDate(currentDate.getDate() - currentDate.getDay() + day);
-                  date.setHours(timeSlot, 0, 0, 0);
-                  
-                  const dayEvents = events.filter(event => {
-                    const eventStart = new Date(event.start_datetime);
-                    return eventStart.toDateString() === date.toDateString() &&
-                           eventStart.getHours() === timeSlot &&
-                           (selectedTrainer === 'all' || event.trainer_id === selectedTrainer);
-                  });
-
-                  return (
-                    <div key={day} className="p-1 border-r">
-                      {dayEvents.map(event => (
+          {/* Mobile Week View */}
+          <div className="lg:hidden space-y-4">
+            {Array.from({ length: 7 }, (_, i) => {
+              const date = new Date(currentDate);
+              date.setDate(currentDate.getDate() - currentDate.getDay() + i);
+              const dayEvents = getEventsForDate(date);
+              
+              return (
+                <div key={i} className="border rounded-lg">
+                  <div className="p-3 border-b bg-muted">
+                    <h3 className="font-medium">
+                      {date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' })}
+                    </h3>
+                  </div>
+                  <div className="p-3 space-y-2">
+                    {dayEvents.length > 0 ? (
+                      dayEvents.map(event => (
                         <div
                           key={event.id}
                           onClick={() => onEventClick(event)}
                           className={cn(
-                            "text-xs p-1 rounded cursor-pointer mb-1",
+                            "p-3 rounded cursor-pointer min-h-[60px]",
                             getEventTypeColor(event.event_category)
                           )}
                         >
-                          {event.title}
+                          <div className="font-medium">{event.title}</div>
+                          <div className="text-xs mt-1">
+                            {formatTime(event.start_datetime)} - {formatTime(event.end_datetime)}
+                          </div>
+                          {event.trainer_name && (
+                            <div className="text-xs">with {event.trainer_name}</div>
+                          )}
                         </div>
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+                      ))
+                    ) : (
+                      <div className="text-muted-foreground text-sm p-3 text-center">
+                        No events scheduled
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       {/* Day View */}
       {view === 'day' && (
         <div className="border rounded-lg">
-          <div className="p-4 border-b bg-muted">
-            <h3 className="font-medium">
+          <div className="p-3 sm:p-4 border-b bg-muted">
+            <h3 className="font-medium text-sm sm:text-base">
               {currentDate.toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 month: 'long', 
@@ -319,8 +372,8 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
               });
 
               return (
-                <div key={hour} className="flex border-b min-h-[80px]">
-                  <div className="w-20 p-2 text-sm text-muted-foreground border-r">
+                <div key={hour} className="flex border-b min-h-[60px] sm:min-h-[80px]">
+                  <div className="w-16 sm:w-20 p-2 text-xs sm:text-sm text-muted-foreground border-r flex items-start">
                     {timeSlot}:00
                   </div>
                   <div className="flex-1 p-2">
@@ -329,12 +382,12 @@ export function GymCalendarView({ events, trainers, onEventClick, onCreateEvent,
                         key={event.id}
                         onClick={() => onEventClick(event)}
                         className={cn(
-                          "p-2 rounded cursor-pointer mb-2",
+                          "p-2 sm:p-3 rounded cursor-pointer mb-2 min-h-[50px] flex flex-col justify-center",
                           getEventTypeColor(event.event_category)
                         )}
                       >
-                        <div className="font-medium">{event.title}</div>
-                        <div className="text-xs">
+                        <div className="font-medium text-sm">{event.title}</div>
+                        <div className="text-xs mt-1">
                           {formatTime(event.start_datetime)} - {formatTime(event.end_datetime)}
                         </div>
                         {event.trainer_name && (

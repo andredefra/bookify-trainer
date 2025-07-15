@@ -51,20 +51,20 @@ export function GymHeader({
             )}
             <span className="font-display text-xl font-bold text-primary -ml-4">MyPersonal.fit</span>
             
-            <div className="hidden md:flex ml-6 items-center space-x-2">
+            <div className="hidden lg:flex ml-6 items-center space-x-2">
               <Building className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Fitactive - Via Tolstoj 79, San Giuliano Milanese (MI) - 20098</span>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-2">
-              <span className="text-sm text-muted-foreground">Demo Mode</span>
-              <Badge variant="secondary" className="bg-primary/10 text-primary">
+            <div className="hidden sm:flex items-center space-x-2">
+              <span className="text-xs sm:text-sm text-muted-foreground">Demo Mode</span>
+              <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
                 Gym Admin
               </Badge>
               {user?.plan && (
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
                   {user.plan === 'pro' ? 'Gym Plan' : 'Basic Plan'}
                 </Badge>
               )}
@@ -78,13 +78,13 @@ export function GymHeader({
                   {displayName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden md:block">
+              <div className="hidden sm:block">
                 <p className="text-sm font-medium leading-none">{user?.name || "Admin"}</p>
                 <p className="text-xs text-muted-foreground">{user?.email}</p>
               </div>
             </div>
             
-            <Button variant="outline" size="sm" onClick={handleLogout}>
+            <Button variant="outline" size="sm" onClick={handleLogout} className="min-h-[44px]">
               {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
             </Button>
           </div>
