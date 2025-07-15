@@ -62,27 +62,32 @@ export function ShiftCalendar() {
   return (
     <div className="space-y-6">
       {/* Header with navigation */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center justify-center sm:justify-start space-x-2 sm:space-x-4">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setCurrentWeek(subWeeks(currentWeek, 1))}
+            className="min-h-[44px] px-3"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-base sm:text-lg font-semibold text-center">
             Week of {format(currentWeek, 'MMM d, yyyy')}
           </h3>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setCurrentWeek(addWeeks(currentWeek, 1))}
+            className="min-h-[44px] px-3"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
+        <Button 
+          onClick={() => setIsCreateDialogOpen(true)}
+          className="w-full sm:w-auto min-h-[44px]"
+        >
           <Plus className="h-4 w-4 mr-2" />
           Create Shift
         </Button>
@@ -91,45 +96,86 @@ export function ShiftCalendar() {
       {/* Calendar Grid */}
       <Card>
         <CardContent className="p-0">
-          <div className="grid grid-cols-8 border-b">
-            <div className="p-4 border-r bg-muted/50">
-              <span className="text-sm font-medium">Time</span>
-            </div>
+          {/* Mobile: Stack days vertically */}
+          <div className="block sm:hidden">
             {weekDays.map((day, dayIndex) => (
-              <div key={dayIndex} className="p-4 text-center border-r last:border-r-0">
-                <div className="font-medium">{format(day, 'EEE')}</div>
-                <div className="text-sm text-muted-foreground">{format(day, 'MMM d')}</div>
+              <div key={dayIndex} className="border-b last:border-b-0">
+                <div className="p-3 bg-muted/50 border-b">
+                  <div className="font-medium text-center">
+                    {format(day, 'EEEE, MMM d')}
+                  </div>
+                </div>
+                <div className="space-y-1 p-2">
+                  {timeSlots.map((hour) => {
+                    const dayShifts = getShiftsForDayAndHour(day, hour);
+                    if (dayShifts.length === 0) return null;
+                    return (
+                      <div key={hour} className="flex items-center gap-2 p-2 bg-muted/20 rounded">
+                        <div className="text-xs text-muted-foreground min-w-[50px]">
+                          {hour.toString().padStart(2, '0')}:00
+                        </div>
+                        <div className="flex flex-wrap gap-1 flex-1">
+                          {dayShifts.map((shift) => (
+                            <Badge
+                              key={shift.id}
+                              variant="secondary"
+                              className={`text-xs cursor-pointer ${getStatusColor(shift.status)}`}
+                              title={`${getTrainerName(shift.trainer_id)} - ${shift.shift_type}`}
+                            >
+                              {getTrainerName(shift.trainer_id).split(' ')[0]}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="max-h-96 overflow-y-auto">
-            {timeSlots.map((hour) => (
-              <div key={hour} className="grid grid-cols-8 border-b last:border-b-0">
-                <div className="p-2 border-r bg-muted/30 text-center">
-                  <span className="text-xs text-muted-foreground">
-                    {hour.toString().padStart(2, '0')}:00
-                  </span>
-                </div>
-                {weekDays.map((day, dayIndex) => {
-                  const dayShifts = getShiftsForDayAndHour(day, hour);
-                  return (
-                    <div key={dayIndex} className="p-1 border-r last:border-r-0 min-h-[60px]">
-                      {dayShifts.map((shift) => (
-                        <Badge
-                          key={shift.id}
-                          variant="secondary"
-                          className={`text-xs mb-1 block truncate cursor-pointer ${getStatusColor(shift.status)}`}
-                          title={`${getTrainerName(shift.trainer_id)} - ${shift.shift_type}`}
-                        >
-                          {getTrainerName(shift.trainer_id).split(' ')[0]}
-                        </Badge>
-                      ))}
-                    </div>
-                  );
-                })}
+          {/* Desktop: Grid layout */}
+          <div className="hidden sm:block">
+            <div className="grid grid-cols-8 border-b">
+              <div className="p-4 border-r bg-muted/50">
+                <span className="text-sm font-medium">Time</span>
               </div>
-            ))}
+              {weekDays.map((day, dayIndex) => (
+                <div key={dayIndex} className="p-4 text-center border-r last:border-r-0">
+                  <div className="font-medium">{format(day, 'EEE')}</div>
+                  <div className="text-sm text-muted-foreground">{format(day, 'MMM d')}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="max-h-96 overflow-y-auto">
+              {timeSlots.map((hour) => (
+                <div key={hour} className="grid grid-cols-8 border-b last:border-b-0">
+                  <div className="p-2 border-r bg-muted/30 text-center">
+                    <span className="text-xs text-muted-foreground">
+                      {hour.toString().padStart(2, '0')}:00
+                    </span>
+                  </div>
+                  {weekDays.map((day, dayIndex) => {
+                    const dayShifts = getShiftsForDayAndHour(day, hour);
+                    return (
+                      <div key={dayIndex} className="p-1 border-r last:border-r-0 min-h-[60px]">
+                        {dayShifts.map((shift) => (
+                          <Badge
+                            key={shift.id}
+                            variant="secondary"
+                            className={`text-xs mb-1 block truncate cursor-pointer ${getStatusColor(shift.status)}`}
+                            title={`${getTrainerName(shift.trainer_id)} - ${shift.shift_type}`}
+                          >
+                            {getTrainerName(shift.trainer_id).split(' ')[0]}
+                          </Badge>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

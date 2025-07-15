@@ -13,10 +13,16 @@ export function AvailabilityTab() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="calendar">Shift Calendar</TabsTrigger>
-          <TabsTrigger value="availability">Manage Availability</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto sm:h-10 gap-1 sm:gap-0 p-1">
+          <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 sm:py-1.5 min-h-[44px] sm:min-h-0">
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="calendar" className="text-xs sm:text-sm py-2 sm:py-1.5 min-h-[44px] sm:min-h-0">
+            Shift Calendar
+          </TabsTrigger>
+          <TabsTrigger value="availability" className="text-xs sm:text-sm py-2 sm:py-1.5 min-h-[44px] sm:min-h-0">
+            Manage Availability
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">

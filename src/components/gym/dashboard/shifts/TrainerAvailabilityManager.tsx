@@ -100,14 +100,14 @@ export function TrainerAvailabilityManager() {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="trainer">Select Trainer</Label>
+          <Label htmlFor="trainer" className="text-sm sm:text-base">Select Trainer</Label>
           <Select value={selectedTrainer} onValueChange={setSelectedTrainer}>
-            <SelectTrigger>
+            <SelectTrigger className="min-h-[44px]">
               <SelectValue placeholder="Choose a trainer to manage availability" />
             </SelectTrigger>
             <SelectContent>
               {trainers.map((trainer) => (
-                <SelectItem key={trainer.id} value={trainer.id}>
+                <SelectItem key={trainer.id} value={trainer.id} className="min-h-[44px]">
                   {trainer.name}
                 </SelectItem>
               ))}
@@ -123,9 +123,9 @@ export function TrainerAvailabilityManager() {
                 const dayAvailability = availabilityData.find(a => a.day_of_week === day.value);
                 
                 return (
-                  <div key={day.value} className="flex items-center gap-4 p-4 border rounded-lg">
-                    <div className="w-24">
-                      <span className="font-medium">{day.label}</span>
+                  <div key={day.value} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 border rounded-lg">
+                    <div className="sm:w-24">
+                      <span className="font-medium text-sm sm:text-base">{day.label}</span>
                     </div>
                     
                     <div className="flex items-center space-x-2">
@@ -139,31 +139,31 @@ export function TrainerAvailabilityManager() {
                     </div>
 
                     {dayAvailability?.is_active && (
-                      <>
+                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
                         <div className="flex items-center gap-2">
-                          <Label className="text-sm">From:</Label>
+                          <Label className="text-sm min-w-[45px]">From:</Label>
                           <Input
                             type="time"
                             value={dayAvailability.start_time?.slice(0, 5) || '09:00'}
                             onChange={(e) => 
                               updateAvailabilityForDay(day.value, 'start_time', e.target.value + ':00')
                             }
-                            className="w-32"
+                            className="w-full sm:w-32 min-h-[44px]"
                           />
                         </div>
                         
                         <div className="flex items-center gap-2">
-                          <Label className="text-sm">To:</Label>
+                          <Label className="text-sm min-w-[25px]">To:</Label>
                           <Input
                             type="time"
                             value={dayAvailability.end_time?.slice(0, 5) || '17:00'}
                             onChange={(e) => 
                               updateAvailabilityForDay(day.value, 'end_time', e.target.value + ':00')
                             }
-                            className="w-32"
+                            className="w-full sm:w-32 min-h-[44px]"
                           />
                         </div>
-                      </>
+                      </div>
                     )}
                   </div>
                 );
@@ -171,7 +171,11 @@ export function TrainerAvailabilityManager() {
             </div>
 
             <div className="flex justify-end">
-              <Button onClick={handleSave} disabled={isLoading}>
+              <Button 
+                onClick={handleSave} 
+                disabled={isLoading}
+                className="w-full sm:w-auto min-h-[44px]"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 {isLoading ? 'Saving...' : 'Save Availability'}
               </Button>

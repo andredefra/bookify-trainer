@@ -54,42 +54,79 @@ export function TimelineGrid({ weekDays, weekEvents, selectedTrainers }: Timelin
   };
 
   return (
-    <div className="overflow-auto max-h-[600px]">
-      {timeSlots.map((timeSlot, slotIndex) => (
-        <div
-          key={timeSlot}
-          className={`grid grid-cols-8 border-b last:border-b-0 min-h-[60px] ${
-            slotIndex % 2 === 0 ? 'bg-background' : 'bg-muted/20'
-          }`}
-        >
-          {/* Time column */}
-          <div className="p-3 border-r bg-muted/30 flex items-center">
-            <span className="text-sm font-medium text-muted-foreground">
-              {timeSlot}
-            </span>
-          </div>
-
-          {/* Day columns */}
-          {weekDays.map(day => {
-            const dayEvents = getEventsForDayAndTime(day, timeSlot);
-            
-            return (
-              <div
-                key={`${day.toISOString()}-${timeSlot}`}
-                className="border-r last:border-r-0 p-1 relative min-h-[60px]"
-              >
-                {dayEvents.map(event => (
-                  <SessionBlock
-                    key={`${event.id}-${timeSlot}`}
-                    event={event}
-                    isCompact={dayEvents.length > 1}
-                  />
-                ))}
+    <>
+      {/* Mobile: Stack days vertically */}
+      <div className="block sm:hidden">
+        {weekDays.map(day => {
+          const dayKey = format(day, 'yyyy-MM-dd');
+          const dayEvents = weekEvents[dayKey] || [];
+          
+          return (
+            <div key={day.toISOString()} className="border-b last:border-b-0">
+              <div className="p-3 bg-muted/50 border-b">
+                <div className="font-medium text-center">
+                  {format(day, 'EEEE, MMM d')}
+                </div>
               </div>
-            );
-          })}
-        </div>
-      ))}
-    </div>
+              <div className="space-y-1 p-2 min-h-[100px]">
+                {dayEvents.length === 0 ? (
+                  <div className="text-center text-sm text-muted-foreground py-4">
+                    No events scheduled
+                  </div>
+                ) : (
+                  dayEvents.map(event => (
+                    <div key={event.id} className="mb-2">
+                      <SessionBlock
+                        event={event}
+                        isCompact={false}
+                      />
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop: Grid layout */}
+      <div className="hidden sm:block overflow-auto max-h-[600px]">
+        {timeSlots.map((timeSlot, slotIndex) => (
+          <div
+            key={timeSlot}
+            className={`grid grid-cols-8 border-b last:border-b-0 min-h-[60px] ${
+              slotIndex % 2 === 0 ? 'bg-background' : 'bg-muted/20'
+            }`}
+          >
+            {/* Time column */}
+            <div className="p-3 border-r bg-muted/30 flex items-center">
+              <span className="text-sm font-medium text-muted-foreground">
+                {timeSlot}
+              </span>
+            </div>
+
+            {/* Day columns */}
+            {weekDays.map(day => {
+              const dayEvents = getEventsForDayAndTime(day, timeSlot);
+              
+              return (
+                <div
+                  key={`${day.toISOString()}-${timeSlot}`}
+                  className="border-r last:border-r-0 p-1 relative min-h-[60px]"
+                >
+                  {dayEvents.map(event => (
+                    <SessionBlock
+                      key={`${event.id}-${timeSlot}`}
+                      event={event}
+                      isCompact={dayEvents.length > 1}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

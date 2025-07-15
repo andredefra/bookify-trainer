@@ -56,7 +56,7 @@ export function ShiftStats() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Today's Shifts</CardTitle>
@@ -126,20 +126,20 @@ export function ShiftStats() {
               {todayShifts.map((shift) => {
                 const trainer = trainers.find(t => t.id === shift.trainer_id);
                 return (
-                  <div key={shift.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div key={shift.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3 sm:gap-0">
                     <div className="flex items-center gap-3">
                       <div>
-                        <div className="font-medium">{trainer?.name || `Trainer ${shift.trainer_id}`}</div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="font-medium text-sm sm:text-base">{trainer?.name || `Trainer ${shift.trainer_id}`}</div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">
                           {format(new Date(shift.start_datetime), 'h:mm a')} - {format(new Date(shift.end_datetime), 'h:mm a')}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className={getStatusColor(shift.status)}>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge className={`text-xs ${getStatusColor(shift.status)}`}>
                         {shift.status}
                       </Badge>
-                      <Badge variant="outline">{shift.shift_type}</Badge>
+                      <Badge variant="outline" className="text-xs">{shift.shift_type}</Badge>
                     </div>
                   </div>
                 );
