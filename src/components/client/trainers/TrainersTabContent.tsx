@@ -5,6 +5,7 @@ import { TrainersGrid } from "./TrainersGrid";
 import { PaymentsTable } from "./PaymentsTable";
 import { FollowedTrainersSection } from "./FollowedTrainersSection";
 import { MyTrainerExplanation } from "./MyTrainerExplanation";
+import { TrainersGymFilter } from "./TrainersGymFilter";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Trainer {
@@ -56,6 +57,9 @@ interface TrainersTabContentProps {
   onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
   onFollowToggle: (id: number, name: string) => void;
   onTabChange: (tab: "trainers" | "payments" | "marketplace" | "followed") => void;
+  isGymFilterActive?: boolean;
+  onToggleGymFilter?: () => void;
+  gymConnection?: any;
 }
 
 export function TrainersTabContent({
@@ -65,26 +69,64 @@ export function TrainersTabContent({
   followedTrainers,
   onPayClick,
   onFollowToggle,
-  onTabChange
+  onTabChange,
+  isGymFilterActive = false,
+  onToggleGymFilter,
+  gymConnection
 }: TrainersTabContentProps) {
   const isMobile = useIsMobile();
+
+  // Filter trainers based on gym connection
+  const getFilteredTrainers = () => {
+    if (!isGymFilterActive || !gymConnection) {
+      return myTrainers;
+    }
+    
+    // Filter trainers who work at the connected gym
+    // For demo purposes, we'll assume Sarah Johnson and Alex Thompson work at FitLife Gym
+    const gymTrainerIds = [1, 2]; // These would come from real data
+    return myTrainers.filter(trainer => gymTrainerIds.includes(trainer.id));
+  };
+
+  const filteredTrainers = getFilteredTrainers();
+  const gymTrainersCount = gymConnection ? 2 : 0;
 
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <TrainerMarketplace />;
+        return (
+          <div className="space-y-4">
+            {gymConnection && onToggleGymFilter && (
+              <TrainersGymFilter
+                isGymFilterActive={isGymFilterActive}
+                onToggleGymFilter={onToggleGymFilter}
+                gymName={gymConnection.gym_name}
+                gymTrainersCount={gymTrainersCount}
+              />
+            )}
+            <TrainerMarketplace />
+          </div>
+        );
       
       case "trainers":
         return (
-          <>
+          <div className="space-y-4">
+            {gymConnection && onToggleGymFilter && (
+              <TrainersGymFilter
+                isGymFilterActive={isGymFilterActive}
+                onToggleGymFilter={onToggleGymFilter}
+                gymName={gymConnection.gym_name}
+                gymTrainersCount={gymTrainersCount}
+              />
+            )}
             <MyTrainerExplanation />
             <TrainersGrid 
-              trainers={myTrainers} 
+              trainers={filteredTrainers} 
               onPayClick={onPayClick} 
               followedTrainers={followedTrainers}
               onFollowToggle={onFollowToggle}
             />
-          </>
+          </div>
         );
       
       case "followed":

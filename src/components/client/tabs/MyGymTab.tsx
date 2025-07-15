@@ -2,10 +2,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, Loader2, AlertCircle } from "lucide-react";
+import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, Loader2, AlertCircle, Activity } from "lucide-react";
 import { useGymConnection } from "@/hooks/useGymConnection";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { GymSessionsCard } from "@/components/client/gym/GymSessionsCard";
+import { GymMessagingCard } from "@/components/client/gym/GymMessagingCard";
+import { GymActivitiesCard } from "@/components/client/gym/GymActivitiesCard";
 
 interface MyGymTabProps {
   user?: {
@@ -217,84 +220,23 @@ function MyGymTab({ user }: MyGymTabProps) {
         </Card>
 
         {/* Available Sessions */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Available Sessions
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* This will be populated with real session data in future updates */}
-            <div className="text-center py-8 text-muted-foreground">
-              <Calendar className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p>No upcoming sessions</p>
-              <p className="text-xs">Check with your gym for available group sessions</p>
-            </div>
-            <Button variant="outline" className="w-full">
-              View All Sessions
-            </Button>
-          </CardContent>
-        </Card>
+        <GymSessionsCard gymId={connection?.gym_id} />
       </div>
 
-      {/* Quick Communication */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="h-5 w-5" />
-            Quick Communication
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid md:grid-cols-3 gap-4">
-            <Button variant="outline" className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4" />
-              Message Gym
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Schedule Tour
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              View Packages
-            </Button>
-          </div>
-          
-          {communications.length > 0 && (
-            <>
-              <Separator />
-              
-              <div className="space-y-3">
-                {communications.slice(0, 3).map((comm) => (
-                  <div key={comm.id} className="bg-muted/50 rounded-lg p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                        <Building2 className="h-4 w-4 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-sm">{comm.subject}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {format(new Date(comm.sent_at), 'dd MMM')}
-                          </span>
-                          {!comm.is_read && (
-                            <div className="w-2 h-2 bg-primary rounded-full" />
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {comm.message}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Communication */}
+        <GymMessagingCard 
+          gymId={connection?.gym_id} 
+          communications={communications}
+          onNewMessage={() => {
+            // Refresh communications when a new message is sent
+            // This could be enhanced with real-time updates
+          }}
+        />
+        
+        {/* Gym Activities */}
+        <GymActivitiesCard gymId={connection?.gym_id} />
+      </div>
     </div>
   );
 }

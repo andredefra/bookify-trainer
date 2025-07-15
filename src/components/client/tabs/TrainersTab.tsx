@@ -7,6 +7,7 @@ import { useFollowedTrainers } from "@/components/client/trainers/hooks/useFollo
 import { TrainersTabHeader } from "@/components/client/trainers/TrainersTabHeader";
 import { TrainersTabContent } from "@/components/client/trainers/TrainersTabContent";
 import { useLocation } from "react-router-dom";
+import { useGymConnection } from "@/hooks/useGymConnection";
 
 // Mock data for payment history
 const paymentHistory = [
@@ -103,8 +104,10 @@ export function TrainersTab() {
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number, plan?: string} | null>(null);
+  const [isGymFilterActive, setIsGymFilterActive] = useState(false);
   
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
+  const { connection: gymConnection } = useGymConnection();
   const userPlan = localStorage.getItem('user-plan') || "freemium";
   
   // Check if we should show the marketplace tab based on navigation state
@@ -152,6 +155,9 @@ export function TrainersTab() {
           onPayClick={handlePayTrainer}
           onFollowToggle={handleFollowToggle}
           onTabChange={setActiveTab}
+          isGymFilterActive={isGymFilterActive}
+          onToggleGymFilter={() => setIsGymFilterActive(!isGymFilterActive)}
+          gymConnection={gymConnection}
         />
         
         {/* Payment Dialog */}
