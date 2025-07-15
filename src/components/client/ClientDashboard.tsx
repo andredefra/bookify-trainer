@@ -10,6 +10,7 @@ import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { MessagesTab } from "./tabs/MessagesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { MyPackagesTab } from "./tabs/packages/MyPackagesTab";
+import { MyGymTab } from "./tabs/MyGymTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SessionItem } from "@/types/sessions";
 import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
@@ -144,6 +145,7 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
               />
             )}
             {activeTab === "sessions" && <SessionsTab upcomingSessions={upcomingSessions} />}
+            {activeTab === "mygym" && <MyGymTab user={sampleUser} />}
             {activeTab === "packages" && <MyPackagesTab />}
             {activeTab === "training-program" && <TrainingProgramTab />}
             {activeTab === "training-log" && <TrainingLogTab />}

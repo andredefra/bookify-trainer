@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap } from "lucide-react";
+import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useClientNotifications } from "@/hooks/useClientNotifications";
 
@@ -26,6 +26,7 @@ interface ClientSidebarProps {
 const sidebarItems = [
   { id: "overview", label: "Overview", icon: User },
   { id: "sessions", label: "Sessions", icon: Calendar },
+  { id: "mygym", label: "My Gym", icon: Building2 },
   { id: "packages", label: "My Packages", icon: Package },
   { id: "training-program", label: "Training Program", icon: Dumbbell },
   { id: "training-log", label: "Training Log", icon: BookOpen },
