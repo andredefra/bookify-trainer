@@ -27,23 +27,23 @@ export function TrainersManagementTab() {
         <p className="text-muted-foreground">Manage your personal trainers and their assignments</p>
       </div>
       
-      <div className="flex flex-col md:flex-row justify-between gap-4">
-        <div className="relative">
+      <div className="flex flex-col gap-4">
+        <div className="relative w-full">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search trainers..."
-            className="pl-9 w-full md:w-[300px]"
+            className="pl-9 w-full h-11"
           />
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col gap-3">
           <CreateAssignmentDialog
             availableTrainers={availableTrainers}
             availableClients={availableClients}
             onCreateAssignment={createAssignment}
           />
-          <Button variant="outline">
+          <Button variant="outline" className="w-full h-11">
             <UserPlus className="h-4 w-4 mr-2" />
             Invite Trainer
           </Button>
@@ -57,18 +57,21 @@ export function TrainersManagementTab() {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6">
-              <TabsTrigger value="trainers" className="flex items-center gap-2">
+            <TabsList className="mb-6 w-full grid grid-cols-3 h-12">
+              <TabsTrigger value="trainers" className="flex items-center gap-1 text-xs sm:text-sm">
                 <Users className="h-4 w-4" />
-                Trainers
+                <span className="hidden sm:inline">Trainers</span>
+                <span className="sm:hidden">Team</span>
               </TabsTrigger>
-              <TabsTrigger value="assignments" className="flex items-center gap-2">
+              <TabsTrigger value="assignments" className="flex items-center gap-1 text-xs sm:text-sm">
                 <UserPlus className="h-4 w-4" />
-                Assignments
+                <span className="hidden sm:inline">Assignments</span>
+                <span className="sm:hidden">Tasks</span>
               </TabsTrigger>
-              <TabsTrigger value="performance" className="flex items-center gap-2">
+              <TabsTrigger value="performance" className="flex items-center gap-1 text-xs sm:text-sm">
                 <BarChart3 className="h-4 w-4" />
-                Performance
+                <span className="hidden sm:inline">Performance</span>
+                <span className="sm:hidden">Stats</span>
               </TabsTrigger>
             </TabsList>
             

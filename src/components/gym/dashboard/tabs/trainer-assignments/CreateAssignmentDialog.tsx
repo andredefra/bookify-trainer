@@ -73,12 +73,12 @@ export function CreateAssignmentDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="w-full h-11">
           <UserPlus className="h-4 w-4 mr-2" />
           Assign Trainer
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto mx-4">
         <DialogHeader>
           <DialogTitle>Assign Personal Trainer</DialogTitle>
           <DialogDescription>
@@ -100,7 +100,7 @@ export function CreateAssignmentDialog({
                   </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                    <SelectTrigger className="h-11">
                         <SelectValue placeholder="Select a trainer" />
                       </SelectTrigger>
                     </FormControl>
@@ -172,7 +172,7 @@ export function CreateAssignmentDialog({
                   </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11">
                         <SelectValue placeholder="Select a client" />
                       </SelectTrigger>
                     </FormControl>
@@ -241,7 +241,7 @@ export function CreateAssignmentDialog({
                   <FormLabel>Assignment Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11">
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
@@ -280,15 +280,16 @@ export function CreateAssignmentDialog({
               )}
             />
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setOpen(false)}
+                className="h-11 order-2 sm:order-1"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading} className="h-11 order-1 sm:order-2">
                 {loading ? "Creating..." : "Create Assignment"}
               </Button>
             </div>

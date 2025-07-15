@@ -45,7 +45,7 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {/* Trainer Info */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -53,13 +53,13 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                   Personal Trainer
                 </div>
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback>
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="text-lg">
                       {assignment.trainer_name?.split(' ').map(n => n[0]).join('') || 'PT'}
                     </AvatarFallback>
                   </Avatar>
-                  <div>
-                    <p className="font-medium">{assignment.trainer_name}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-base">{assignment.trainer_name}</p>
                     <p className="text-sm text-muted-foreground">ID: {assignment.trainer_id.slice(-8)}</p>
                   </div>
                 </div>
@@ -72,13 +72,13 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                   Client
                 </div>
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback>
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="text-lg">
                       {assignment.client_name?.split(' ').map(n => n[0]).join('') || 'CL'}
                     </AvatarFallback>
                   </Avatar>
-                  <div>
-                    <p className="font-medium">{assignment.client_name}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-base">{assignment.client_name}</p>
                     <p className="text-sm text-muted-foreground">ID: {assignment.client_id.slice(-8)}</p>
                   </div>
                 </div>
@@ -87,13 +87,13 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
 
             {/* Assignment Details */}
             <div className="mt-4 pt-4 border-t">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     <CalendarDays className="h-4 w-4" />
                     Assignment Date
                   </div>
-                  <p className="text-sm">
+                  <p className="text-base">
                     {new Date(assignment.assigned_at).toLocaleDateString('en-US', {
                       day: '2-digit',
                       month: '2-digit',
@@ -105,7 +105,7 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                 </div>
 
                 <div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     Status
                   </div>
                   <Select
@@ -114,7 +114,7 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
                       onUpdateStatus(assignment.id, value)
                     }
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-11">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -141,8 +141,9 @@ export function TrainerAssignmentsList({ assignments, onUpdateStatus }: TrainerA
             <div className="flex justify-end mt-4 pt-4 border-t">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <MoreHorizontal className="h-4 w-4" />
+                  <Button variant="outline" size="sm" className="h-10 px-4">
+                    <MoreHorizontal className="h-4 w-4 mr-2" />
+                    Actions
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
