@@ -170,10 +170,10 @@ export function PackagesTab() {
 
         {/* Tabs for Packages and Assignments */}
         <Tabs defaultValue="packages" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="packages" className="text-xs sm:text-sm">Package Templates</TabsTrigger>
-            <TabsTrigger value="assignments" className="text-xs sm:text-sm">Active Subscriptions</TabsTrigger>
-            <TabsTrigger value="marketing" className="text-xs sm:text-sm">Marketing Automation</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 gap-2 md:gap-0 h-auto md:h-10 p-1">
+            <TabsTrigger value="packages" className="text-sm md:text-base py-3 md:py-1.5">Package Templates</TabsTrigger>
+            <TabsTrigger value="assignments" className="text-sm md:text-base py-3 md:py-1.5">Active Subscriptions</TabsTrigger>
+            <TabsTrigger value="marketing" className="text-sm md:text-base py-3 md:py-1.5">Marketing Automation</TabsTrigger>
           </TabsList>
 
         <TabsContent value="packages" className="space-y-4">
