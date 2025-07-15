@@ -52,14 +52,14 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
   const selectedDateSessions = getSessionsForDate(selectedDate);
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12">
-      <Card className="md:col-span-5 lg:col-span-5">
-        <CardContent className="p-0">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full">
+      <Card className="lg:col-span-5 h-fit">
+        <CardContent className="p-2">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
-            className="w-full mx-auto"
+            className="w-full mx-auto scale-90"
             modifiers={{
               booked: (date) => {
                 const dateString = date.toDateString();
@@ -93,28 +93,28 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
         </CardContent>
       </Card>
       
-      <Card className="md:col-span-7 lg:col-span-7">
-        <CardContent className="py-3 px-2 sm:py-4 sm:px-3">
-          <div className="flex items-center gap-2 mb-4">
-            <CalendarIcon className="h-5 w-5 text-muted-foreground" />
-            <h3 className="text-lg font-medium">
+      <Card className="lg:col-span-7 flex flex-col h-full min-h-[400px]">
+        <CardContent className="py-3 px-3 flex-1 flex flex-col">
+          <div className="flex items-center gap-2 mb-3">
+            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+            <h3 className="text-base font-medium">
               {selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Select a date"}
             </h3>
           </div>
           
-          <div className="h-[calc(100vh-26rem)] min-h-[280px] max-h-[400px]">
+          <div className="flex-1 min-h-0">
             {selectedDateSessions.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-6 text-muted-foreground">
                 No sessions scheduled for this date
               </div>
             ) : (
-              <div className="space-y-3 max-h-full overflow-y-auto pr-1">
+              <div className="space-y-2 h-full overflow-y-auto pr-1">
                 {selectedDateSessions.map((session) => (
-                  <div key={session.id} className="flex flex-col p-3 bg-muted/50 rounded-lg border">
+                  <div key={session.id} className="flex flex-col p-3 bg-muted/30 rounded-lg border hover:bg-muted/50 transition-colors">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-2">
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-medium truncate">{session.name}</h3>
-                        <div className="text-sm text-muted-foreground">
+                        <h3 className="font-medium text-sm truncate">{session.name}</h3>
+                        <div className="text-xs text-muted-foreground">
                           {session.trainer} • {session.time}
                         </div>
                       </div>
@@ -122,25 +122,25 @@ export function CalendarSessionView({ sessions, onViewDetails, onRegister }: Cal
                         {session.status === "available" && (
                           <Badge 
                             variant="outline" 
-                            className="bg-background hover:bg-muted cursor-pointer border-border"
+                            className="bg-background hover:bg-muted cursor-pointer border-border text-xs px-2 py-0.5"
                             onClick={() => onRegister && onRegister(session)}
                           >
                             Register
                           </Badge>
                         )}
                         {session.status === "confirmed" && (
-                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800">
+                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 text-xs">
                             Confirmed
                           </Badge>
                         )}
                         {session.status === "pending" && (
-                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800">
+                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800 text-xs">
                             Pending
                           </Badge>
                         )}
                         <Badge 
                           variant="outline" 
-                          className="bg-background hover:bg-muted cursor-pointer border-border"
+                          className="bg-background hover:bg-muted cursor-pointer border-border text-xs px-2 py-0.5"
                           onClick={() => onViewDetails && onViewDetails(session)}
                         >
                           Details

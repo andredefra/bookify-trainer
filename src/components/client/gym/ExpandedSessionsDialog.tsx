@@ -134,7 +134,7 @@ export function ExpandedSessionsDialog({ open, onOpenChange, gymId }: ExpandedSe
             </DialogTitle>
           </DialogHeader>
           
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden p-4">
             {loading ? (
               <div className="flex items-center justify-center h-full">
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -147,11 +147,13 @@ export function ExpandedSessionsDialog({ open, onOpenChange, gymId }: ExpandedSe
                   <p className="text-xs">Check back later for new sessions</p>
                 </div>
               ) : (
-                <CalendarSessionView 
-                  sessions={calendarSessions}
-                  onViewDetails={handleViewDetails}
-                  onRegister={handleRegister}
-                />
+                <div className="h-full">
+                  <CalendarSessionView 
+                    sessions={calendarSessions}
+                    onViewDetails={handleViewDetails}
+                    onRegister={handleRegister}
+                  />
+                </div>
               )
             ) : (
               sessions.length === 0 ? (
