@@ -16,7 +16,7 @@ interface MyGymTabProps {
   };
 }
 
-export function MyGymTab({ user }: MyGymTabProps) {
+function MyGymTab({ user }: MyGymTabProps) {
   const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
   const navigate = useNavigate();
   
