@@ -60,18 +60,18 @@ export function SessionSelector({
   return (
     <div className="border-b">
       {/* Progress Header */}
-      <div className={`${isMobile ? 'px-3 py-2' : 'px-4 py-3'} border-b bg-muted/20`}>
-        <div className="flex justify-between items-center">
+      <div className={`${isMobile ? 'px-3 py-3' : 'px-4 py-3'} border-b bg-muted/20`}>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-muted-foreground`}>
             Progress: {completedSessions}/{totalSessions} sessions
           </span>
           <span className={`${isMobile ? 'text-xs' : 'text-sm'} text-primary font-medium`}>
-            {Math.round((completedSessions / totalSessions) * 100)}%
+            {Math.round((completedSessions / totalSessions) * 100)}% complete
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
           <div 
-            className="bg-primary h-1.5 rounded-full transition-all duration-300" 
+            className="bg-primary h-2 rounded-full transition-all duration-300" 
             style={{ width: `${(completedSessions / totalSessions) * 100}%` }}
           />
         </div>
@@ -116,8 +116,8 @@ export function SessionSelector({
               return (
                 <button
                   key={session.id}
-                  className={`${isMobile ? 'min-w-[80px] p-2' : 'min-w-[100px] p-3'} text-center border-r last:border-r-0 transition-colors flex-shrink-0 ${
-                    activeSession === session.id ? "bg-primary/10 text-primary" : "hover:bg-gray-50"
+                  className={`${isMobile ? 'min-w-[100px] p-3' : 'min-w-[120px] p-4'} text-center border-r last:border-r-0 transition-colors flex-shrink-0 min-h-[80px] sm:min-h-[90px] ${
+                    activeSession === session.id ? "bg-primary/10 text-primary border-primary/20" : "hover:bg-gray-50"
                   } ${status === 'locked' ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={() => status !== 'locked' && onSessionSelect(session.id)}
                   disabled={status === 'locked'}
@@ -126,27 +126,27 @@ export function SessionSelector({
                   <div className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium mb-1`}>
                     Session {session.sessionNumber}
                   </div>
-                  <div className={`${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground mb-2 truncate`}>
+                  <div className={`${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground mb-2 truncate leading-tight`}>
                     {session.title}
                   </div>
                   
                   {/* Status Icon */}
-                  <div className="flex justify-center">
+                  <div className="flex justify-center mb-1">
                     {session.completed && (
-                      <CheckCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-emerald-600`} />
+                      <CheckCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-emerald-600`} />
                     )}
                     {!session.completed && status === 'available' && (
-                      <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-500`} />
+                      <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-blue-500`} />
                     )}
                     {status === 'locked' && (
-                      <AlertTriangle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-gray-400`} />
+                      <AlertTriangle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-gray-400`} />
                     )}
                   </div>
                   
                   {/* Completion Date */}
                   {session.completed && session.completedDate && (
-                    <div className={`${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground mt-1`}>
-                      {new Date(session.completedDate).toLocaleDateString()}
+                    <div className={`${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground leading-tight`}>
+                      {new Date(session.completedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </div>
                   )}
                 </button>

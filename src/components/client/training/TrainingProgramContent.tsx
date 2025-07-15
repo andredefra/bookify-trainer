@@ -43,15 +43,15 @@ export function TrainingProgramContent({ currentProgram, previousPrograms }: Tra
   const normalizedPreviousPrograms = previousPrograms.map(normalizeProgram);
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-5 md:space-y-6">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 px-1">Current Training Program</h2>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 px-1">Current Training Program</h2>
         <TrainingProgramCard program={normalizedCurrentProgram} />
       </div>
       
       {normalizedPreviousPrograms.length > 0 && (
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 px-1">Previous Programs</h2>
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 px-1">Previous Programs</h2>
           <PreviousProgramsList programs={normalizedPreviousPrograms} />
         </div>
       )}

@@ -25,7 +25,7 @@ export function PreviousProgramsList({ programs }: PreviousProgramsListProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {programs.map(program => {
         const isExpanded = expandedPrograms.has(program.id);
         const completedSessions = program.sessions.filter(session => session.completed).length;
@@ -35,52 +35,52 @@ export function PreviousProgramsList({ programs }: PreviousProgramsListProps) {
           <div key={program.id}>
             {!isExpanded ? (
               <Card className="border-gray-200">
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-medium text-lg mb-2">{program.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-3">
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-base sm:text-lg mb-2 truncate">{program.title}</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-3">
                         Created by {program.trainerName} • {program.week}
                       </p>
                       
-                      {/* Program Details Grid - Aligned with current program header */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-3">
+                      {/* Program Details Grid - Mobile First */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 text-xs sm:text-sm mb-3">
                         {program.duration && (
-                          <div className="flex items-center text-muted-foreground">
-                            <Calendar className="mr-1 h-3 w-3" />
-                            {program.duration} weeks
+                          <div className="flex items-center text-muted-foreground min-h-[24px]">
+                            <Calendar className="mr-2 h-3 w-3 flex-shrink-0" />
+                            <span>{program.duration} weeks</span>
                           </div>
                         )}
                         
                         {program.targetFrequency && (
-                          <div className="flex items-center text-muted-foreground">
-                            <Clock className="mr-1 h-3 w-3" />
-                            {program.targetFrequency}x/week
+                          <div className="flex items-center text-muted-foreground min-h-[24px]">
+                            <Clock className="mr-2 h-3 w-3 flex-shrink-0" />
+                            <span>{program.targetFrequency}x per week</span>
                           </div>
                         )}
                         
                         {program.totalSessions && (
-                          <div className="flex items-center text-muted-foreground">
-                            <Target className="mr-1 h-3 w-3" />
-                            {completedSessions}/{program.totalSessions} sessions
+                          <div className="flex items-center text-muted-foreground min-h-[24px]">
+                            <Target className="mr-2 h-3 w-3 flex-shrink-0" />
+                            <span>{completedSessions}/{program.totalSessions} sessions</span>
                           </div>
                         )}
                         
-                        <div className="flex items-center text-muted-foreground">
-                          <DollarSign className="mr-1 h-3 w-3" />
-                          {program.isPaid && program.price ? `€${program.price}` : 'Free'}
+                        <div className="flex items-center text-muted-foreground min-h-[24px]">
+                          <DollarSign className="mr-2 h-3 w-3 flex-shrink-0" />
+                          <span>{program.isPaid && program.price ? `€${program.price}` : 'Free'}</span>
                         </div>
                       </div>
                       
-                      {/* Objective Badge with correct completion logic */}
+                      {/* Objective Badge */}
                       {program.objective && (
                         <div className="mt-3">
                           {isFullyCompleted ? (
-                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
                               Completed: {program.objective}
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+                            <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 text-xs">
                               Incomplete: {program.objective}
                             </Badge>
                           )}
@@ -92,22 +92,23 @@ export function PreviousProgramsList({ programs }: PreviousProgramsListProps) {
                       variant="ghost"
                       size="sm"
                       onClick={() => toggleProgram(program.id)}
-                      className="ml-4"
+                      className="flex-shrink-0 w-full sm:w-auto min-h-[44px] sm:min-h-[36px]"
                     >
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className="h-4 w-4 mr-1" />
                       View Details
                     </Button>
                   </div>
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-medium text-lg">Program Details</h3>
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                  <h3 className="font-medium text-base sm:text-lg">Program Details</h3>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleProgram(program.id)}
+                    className="w-full sm:w-auto min-h-[44px] sm:min-h-[36px]"
                   >
                     <ChevronUp className="h-4 w-4 mr-1" />
                     Collapse
@@ -120,8 +121,8 @@ export function PreviousProgramsList({ programs }: PreviousProgramsListProps) {
         );
       })}
       
-      <div className="text-center mt-6">
-        <Button variant="outline">View All Previous Programs</Button>
+      <div className="text-center mt-4 sm:mt-6">
+        <Button variant="outline" className="min-h-[44px]">View All Previous Programs</Button>
       </div>
     </div>
   );

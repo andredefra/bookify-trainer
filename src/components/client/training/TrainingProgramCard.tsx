@@ -27,7 +27,7 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
   const completedSessions = program.sessions.filter(session => session.completed).length;
   
   return (
-    <Card className="border-primary/10">
+    <Card className="border-primary/10 overflow-hidden">
       <TrainingProgramHeader 
         title={program.title} 
         week={program.week} 
@@ -60,10 +60,12 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
         ))}
       </CardContent>
       
-      <CardFooter className="bg-muted/20 p-4 text-sm text-muted-foreground">
-        <div className="flex items-center">
-          <CheckCircle className="h-4 w-4 mr-2 text-emerald-600" />
-          Track your progress through {program.totalSessions} sessions. Complete {program.targetFrequency} sessions per week to stay on schedule.
+      <CardFooter className="bg-muted/20 p-3 sm:p-4 text-xs sm:text-sm text-muted-foreground">
+        <div className="flex items-start">
+          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-2 text-emerald-600 mt-0.5 flex-shrink-0" />
+          <span className="leading-relaxed">
+            Track your progress through {program.totalSessions} sessions. Complete {program.targetFrequency} sessions per week to stay on schedule.
+          </span>
         </div>
       </CardFooter>
     </Card>
