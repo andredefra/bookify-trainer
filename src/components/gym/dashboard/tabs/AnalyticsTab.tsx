@@ -272,17 +272,26 @@ export function AnalyticsTab() {
                   Package usage analysis based on member activity
                 </div>
                 {sessionAnalytics?.packageUtilization?.length ? (
-                  sessionAnalytics.packageUtilization.map((pkg) => (
-                    <div key={pkg.packageType} className="space-y-2">
+                  sessionAnalytics.packageUtilization.map((pkg, index) => (
+                    <div key={pkg.packageType} className="space-y-3 p-3 rounded-lg border hover:shadow-sm transition-shadow">
                       <div className="flex items-center justify-between">
-                        <span className="font-medium">{pkg.packageType}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {pkg.utilizationRate}%
-                        </span>
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="outline" className="text-xs">#{index + 1}</Badge>
+                          <span className="font-medium">{pkg.packageType}</span>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-semibold text-primary">
+                            {pkg.utilizationRate}%
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            utilization
+                          </div>
+                        </div>
                       </div>
-                      <Progress value={pkg.utilizationRate} className="h-2" />
-                      <div className="text-xs text-muted-foreground">
-                        {pkg.usedSessions}/{pkg.totalSessions} sessions used
+                      <Progress value={pkg.utilizationRate} className="h-3" />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>{pkg.usedSessions} sessions used</span>
+                        <span>{pkg.totalSessions} total sessions</span>
                       </div>
                     </div>
                   ))
@@ -290,6 +299,7 @@ export function AnalyticsTab() {
                   <div className="text-center py-8">
                     <Target className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
                     <p className="text-muted-foreground">No package utilization data available</p>
+                    <p className="text-sm text-muted-foreground">Data will appear when packages are purchased</p>
                   </div>
                 )}
               </CardContent>
@@ -303,35 +313,62 @@ export function AnalyticsTab() {
             </CardHeader>
             <CardContent>
               {sessionAnalytics?.weeklyAttendance?.length ? (
-                <div className="h-[300px] w-full">
+                <div className="h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={sessionAnalytics.weeklyAttendance}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <BarChart 
+                      data={sessionAnalytics.weeklyAttendance}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis 
                         dataKey="date" 
-                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' })}
-                        className="text-xs"
+                        tickFormatter={(value) => {
+                          const date = new Date(value);
+                          return date.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
+                        }}
+                        tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                        axisLine={{ stroke: 'hsl(var(--border))' }}
                       />
-                      <YAxis className="text-xs" />
+                      <YAxis 
+                        tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                        axisLine={{ stroke: 'hsl(var(--border))' }}
+                      />
                       <Tooltip 
-                        labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-                        formatter={(value) => [value, 'Attendance']}
+                        labelFormatter={(value) => {
+                          const date = new Date(value);
+                          return date.toLocaleDateString('en-US', { 
+                            weekday: 'long', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          });
+                        }}
+                        formatter={(value: any) => [`${value} people`, 'Attendance']}
                         contentStyle={{ 
                           backgroundColor: 'hsl(var(--card))', 
                           border: '1px solid hsl(var(--border))',
-                          borderRadius: '6px'
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }}
+                        labelStyle={{ color: 'hsl(var(--foreground))' }}
                       />
-                      <Bar dataKey="attendance" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                      <Bar 
+                        dataKey="attendance" 
+                        fill="hsl(var(--primary))" 
+                        radius={[6, 6, 0, 0]}
+                        stroke="hsl(var(--primary))"
+                        strokeWidth={0}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <div className="h-[300px] flex items-center justify-center">
-                  <div className="text-center">
-                    <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-                    <p className="text-muted-foreground">No attendance data available</p>
-                    <p className="text-sm text-muted-foreground">Check back after more sessions are completed</p>
+                <div className="h-[350px] flex items-center justify-center">
+                  <div className="text-center space-y-4">
+                    <BarChart3 className="h-16 w-16 mx-auto text-muted-foreground/40" />
+                    <div>
+                      <p className="text-lg font-medium text-muted-foreground">No attendance data available</p>
+                      <p className="text-sm text-muted-foreground">Check back after sessions are completed</p>
+                    </div>
                   </div>
                 </div>
               )}
