@@ -102,52 +102,62 @@ export function ExpandedSessionsDialog({ open, onOpenChange, gymId }: ExpandedSe
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-6xl h-[80vh] flex flex-col">
-          <DialogHeader className="flex-shrink-0">
+        <DialogContent className="max-w-7xl h-[85vh] flex flex-col p-0">
+          <DialogHeader className="flex-shrink-0 p-6 pb-3 border-b">
             <DialogTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                All Available Sessions
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <Calendar className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold">Session Explorer</h2>
+                  <p className="text-sm text-muted-foreground">Browse and book available sessions</p>
+                </div>
               </div>
               
               {/* View Toggle */}
-              <div className="flex items-center bg-muted rounded-lg p-1">
+              <div className="flex items-center bg-muted/50 rounded-full p-1 shadow-sm">
                 <Button 
                   variant={viewMode === 'list' ? 'default' : 'ghost'} 
                   size="sm" 
                   onClick={() => setViewMode('list')}
-                  className="h-8 px-3"
+                  className="h-9 px-4 rounded-full transition-all"
                 >
-                  <List className="h-4 w-4 mr-1" />
-                  List
+                  <List className="h-4 w-4 mr-2" />
+                  List View
                 </Button>
                 <Button 
                   variant={viewMode === 'calendar' ? 'default' : 'ghost'} 
                   size="sm" 
                   onClick={() => setViewMode('calendar')}
-                  className="h-8 px-3"
+                  className="h-9 px-4 rounded-full transition-all"
                 >
-                  <CalendarDays className="h-4 w-4 mr-1" />
+                  <CalendarDays className="h-4 w-4 mr-2" />
                   Calendar
                 </Button>
               </div>
             </DialogTitle>
           </DialogHeader>
           
-          <div className="flex-1 overflow-hidden p-4">
+          <div className="flex-1 overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center h-full">
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <div className="text-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">Loading sessions...</p>
+                </div>
               </div>
             ) : viewMode === 'calendar' ? (
               sessions.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Calendar className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>No upcoming sessions</p>
-                  <p className="text-xs">Check back later for new sessions</p>
+                <div className="text-center py-12 text-muted-foreground">
+                  <div className="p-4 bg-muted/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <Calendar className="h-8 w-8 opacity-50" />
+                  </div>
+                  <h3 className="font-medium mb-1">No sessions available</h3>
+                  <p className="text-sm">Check back later for new sessions</p>
                 </div>
               ) : (
-                <div className="h-full">
+                <div className="h-full p-6">
                   <CalendarSessionView 
                     sessions={calendarSessions}
                     onViewDetails={handleViewDetails}
@@ -157,107 +167,128 @@ export function ExpandedSessionsDialog({ open, onOpenChange, gymId }: ExpandedSe
               )
             ) : (
               sessions.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Calendar className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>No upcoming sessions</p>
-                  <p className="text-xs">Check back later for new sessions</p>
+                <div className="text-center py-12 text-muted-foreground">
+                  <div className="p-4 bg-muted/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <Calendar className="h-8 w-8 opacity-50" />
+                  </div>
+                  <h3 className="font-medium mb-1">No sessions available</h3>
+                  <p className="text-sm">Check back later for new sessions</p>
                 </div>
               ) : (
-                <div className="space-y-3 h-full overflow-y-auto pr-2">
-                  {sessions.map((session) => (
-                    <div 
-                      key={session.id} 
-                      className={cn(
-                        "border rounded-lg p-4 space-y-3 transition-all",
-                        session.is_booked && "bg-primary/5 border-primary/20"
-                      )}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-medium">{session.title}</h4>
-                            <Badge 
-                              variant="secondary" 
-                              className={getDifficultyColor(session.difficulty_level)}
-                            >
-                              {session.difficulty_level}
-                            </Badge>
-                            {session.is_booked && (
-                              <Badge variant="default" className="bg-green-100 text-green-800">
-                                Booked
+                <div className="p-6 h-full overflow-hidden">
+                  <div className="grid gap-3 h-full overflow-y-auto pr-2">
+                    {sessions.map((session) => (
+                      <div 
+                        key={session.id} 
+                        className={cn(
+                          "group border rounded-xl p-4 transition-all hover:shadow-md",
+                          session.is_booked 
+                            ? "bg-primary/5 border-primary/30 shadow-sm" 
+                            : "hover:border-primary/20"
+                        )}
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="font-semibold text-base truncate">{session.title}</h4>
+                              <Badge 
+                                variant="secondary" 
+                                className={cn(
+                                  "text-xs font-medium shrink-0",
+                                  getDifficultyColor(session.difficulty_level)
+                                )}
+                              >
+                                {session.difficulty_level}
                               </Badge>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {session.description}
-                          </p>
-                          
-                          <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {format(new Date(session.start_datetime), 'MMM dd, HH:mm')} 
-                              ({session.duration_minutes}min)
+                              {session.is_booked && (
+                                <Badge className="bg-green-500/10 text-green-700 border-green-200 shrink-0">
+                                  ✓ Booked
+                                </Badge>
+                              )}
                             </div>
-                            {session.location && (
-                              <div className="flex items-center gap-1">
-                                <MapPin className="h-3 w-3" />
-                                {session.location}
-                              </div>
-                            )}
-                            <div className="flex items-center gap-1">
-                              <Users className="h-3 w-3" />
-                              {session.available_spots} spots left
-                            </div>
-                          </div>
-                          
-                          {session.assigned_trainer_name && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Trainer: {session.assigned_trainer_name}
+                            
+                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                              {session.description}
                             </p>
-                          )}
-                        </div>
-                        
-                        <div className="flex flex-col gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedSession({
-                                ...session,
-                                requirements: ['Suitable for all fitness levels', 'Bring water bottle'],
-                                equipment_needed: ['Yoga mat provided', 'Comfortable clothing'],
-                                benefits: ['Improved flexibility', 'Stress reduction', 'Better posture'],
-                                trainer_bio: session.assigned_trainer_name ? 'Certified trainer with 5+ years experience' : undefined,
-                                trainer_rating: 4.8,
-                                cancellation_policy: 'Free cancellation up to 2 hours before the session'
-                              });
-                              setDetailsOpen(true);
-                            }}
-                          >
-                            <Info className="h-4 w-4 mr-1" />
-                            Details
-                          </Button>
-                          {session.is_booked ? (
-                            <Button 
-                              variant="outline" 
+                            
+                            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1.5">
+                                <Clock className="h-4 w-4 text-primary/70" />
+                                <span className="font-medium">
+                                  {format(new Date(session.start_datetime), 'MMM dd, HH:mm')}
+                                </span>
+                                <span className="text-xs">({session.duration_minutes}min)</span>
+                              </div>
+                              {session.location && (
+                                <div className="flex items-center gap-1.5">
+                                  <MapPin className="h-4 w-4 text-primary/70" />
+                                  <span>{session.location}</span>
+                                </div>
+                              )}
+                              <div className="flex items-center gap-1.5">
+                                <Users className="h-4 w-4 text-primary/70" />
+                                <span className={cn(
+                                  "font-medium",
+                                  session.available_spots <= 3 && session.available_spots > 0 && "text-orange-600",
+                                  session.available_spots === 0 && "text-red-600"
+                                )}>
+                                  {session.available_spots} spots left
+                                </span>
+                              </div>
+                            </div>
+                            
+                            {session.assigned_trainer_name && (
+                              <p className="text-sm text-muted-foreground mt-2 font-medium">
+                                👨‍🏫 {session.assigned_trainer_name}
+                              </p>
+                            )}
+                          </div>
+                          
+                          <div className="flex flex-col gap-2 shrink-0">
+                            <Button
+                              variant="outline"
                               size="sm"
-                              onClick={() => handleCancelBooking(session.id, session.title)}
+                              className="h-9 text-xs"
+                              onClick={() => {
+                                setSelectedSession({
+                                  ...session,
+                                  requirements: ['Suitable for all fitness levels', 'Bring water bottle'],
+                                  equipment_needed: ['Yoga mat provided', 'Comfortable clothing'],
+                                  benefits: ['Improved flexibility', 'Stress reduction', 'Better posture'],
+                                  trainer_bio: session.assigned_trainer_name ? 'Certified trainer with 5+ years experience' : undefined,
+                                  trainer_rating: 4.8,
+                                  cancellation_policy: 'Free cancellation up to 2 hours before the session'
+                                });
+                                setDetailsOpen(true);
+                              }}
                             >
-                              Cancel
+                              <Info className="h-3.5 w-3.5 mr-1" />
+                              Details
                             </Button>
-                          ) : (
-                            <Button 
-                              size="sm"
-                              disabled={session.available_spots === 0}
-                              onClick={() => handleBookSession(session.id, session.title)}
-                            >
-                              {session.available_spots === 0 ? 'Full' : 'Book'}
-                            </Button>
-                          )}
+                            {session.is_booked ? (
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="h-9 text-xs border-red-200 text-red-600 hover:bg-red-50"
+                                onClick={() => handleCancelBooking(session.id, session.title)}
+                              >
+                                Cancel
+                              </Button>
+                            ) : (
+                              <Button 
+                                size="sm"
+                                className="h-9 text-xs"
+                                disabled={session.available_spots === 0}
+                                onClick={() => handleBookSession(session.id, session.title)}
+                              >
+                                {session.available_spots === 0 ? 'Full' : 'Book Session'}
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )
             )}
