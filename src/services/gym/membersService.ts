@@ -154,21 +154,65 @@ export const createMember = async (memberData: CreateMemberData): Promise<GymMem
   return newMember;
 };
 
+interface PackageAssignmentData {
+  packageId: string;
+  clientId: string;
+  trainerId?: string;
+  startDate: Date;
+  endDate?: Date;
+  sessionsUsed: number;
+  totalPaid: number;
+  paymentStatus: string;
+  customPackage?: {
+    title: string;
+    description: string;
+    packageType: string;
+    sessionsTotal: number;
+    price: number;
+    durationDays?: number;
+  };
+}
+
 export const assignPackageToMember = async (
-  memberId: string, 
-  packageId: string, 
-  trainerId?: string
+  assignmentData: PackageAssignmentData
 ): Promise<void> => {
   const gymId = getCurrentGymId();
   
-  // Fetch the package data
-  const { data: packageData, error: packageError } = await supabase
-    .from('gym_packages')
-    .select('*')
-    .eq('id', packageId)
-    .single();
+  let packageId = assignmentData.packageId;
+  let sessionsTotal = 0;
+  
+  // If it's a custom package, create it first
+  if (assignmentData.customPackage) {
+    const { data: newPackage, error: packageError } = await supabase
+      .from('gym_packages')
+      .insert({
+        gym_id: gymId,
+        title: assignmentData.customPackage.title,
+        description: assignmentData.customPackage.description,
+        package_type: assignmentData.customPackage.packageType,
+        price: assignmentData.customPackage.price,
+        duration_days: assignmentData.customPackage.durationDays,
+        session_limit: assignmentData.customPackage.sessionsTotal,
+        trainer_commission_percentage: 20, // Default commission
+        is_active: true
+      })
+      .select()
+      .single();
 
-  if (packageError) throw packageError;
+    if (packageError) throw packageError;
+    packageId = newPackage.id;
+    sessionsTotal = assignmentData.customPackage.sessionsTotal;
+  } else {
+    // Fetch existing package data
+    const { data: packageData, error: packageError } = await supabase
+      .from('gym_packages')
+      .select('*')
+      .eq('id', packageId)
+      .single();
+
+    if (packageError) throw packageError;
+    sessionsTotal = packageData.session_limit || 0;
+  }
 
   // Create the assignment in the database
   const { data: assignment, error: assignmentError } = await supabase
@@ -176,17 +220,15 @@ export const assignPackageToMember = async (
     .insert({
       gym_id: gymId,
       package_id: packageId,
-      client_id: memberId,
-      trainer_id: trainerId,
-      purchase_date: new Date().toISOString().split('T')[0],
-      start_date: new Date().toISOString().split('T')[0],
-      end_date: packageData.duration_days ? 
-        new Date(Date.now() + packageData.duration_days * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : 
-        null,
-      sessions_total: packageData.session_limit,
-      sessions_used: 0,
-      total_paid: packageData.price,
-      payment_status: 'pending',
+      client_id: assignmentData.clientId,
+      trainer_id: assignmentData.trainerId,
+      purchase_date: assignmentData.startDate.toISOString().split('T')[0],
+      start_date: assignmentData.startDate.toISOString().split('T')[0],
+      end_date: assignmentData.endDate ? assignmentData.endDate.toISOString().split('T')[0] : null,
+      sessions_total: sessionsTotal,
+      sessions_used: assignmentData.sessionsUsed,
+      total_paid: assignmentData.totalPaid,
+      payment_status: assignmentData.paymentStatus,
       status: 'active'
     })
     .select()

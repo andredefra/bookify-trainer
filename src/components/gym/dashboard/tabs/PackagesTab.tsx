@@ -337,7 +337,18 @@ export function PackagesTab() {
         open={assignDialogOpen}
         onOpenChange={setAssignDialogOpen}
         packages={packages}
-        onAssign={assignPackageToClient}
+        onAssign={async (assignmentData) => {
+          if (assignmentData.customPackage) {
+            // Handle custom package assignment differently for PackagesTab
+            console.log('Custom package assignment:', assignmentData);
+            return;
+          }
+          return assignPackageToClient(
+            assignmentData.packageId,
+            assignmentData.clientId,
+            assignmentData.trainerId
+          );
+        }}
       />
     </div>
   );

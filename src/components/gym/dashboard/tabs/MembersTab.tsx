@@ -19,16 +19,22 @@ import {
   Filter
 } from "lucide-react";
 import { useGymMembers } from "@/hooks/gym/useGymMembers";
+import { useGymPackages } from "@/hooks/gym/useGymPackages";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CreateMemberDialog } from "@/components/gym/members/CreateMemberDialog";
+import { AssignPackageDialog } from "@/components/gym/packages/AssignPackageDialog";
+import type { GymMember } from "@/types/gym/members";
 
 export function MembersTab() {
   const { members, loading, error, updateMemberStatus, refetch, createMember } = useGymMembers();
+  const { packages, assignPackageToClient } = useGymPackages();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showAssignDialog, setShowAssignDialog] = useState(false);
+  const [memberForAssignment, setMemberForAssignment] = useState<GymMember | null>(null);
 
   const filteredMembers = members.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -94,6 +100,33 @@ export function MembersTab() {
   const totalRevenue = members.reduce((sum, member) => 
     sum + member.currentPackages.reduce((pkgSum, pkg) => 
       pkgSum + (pkg.paymentStatus === 'paid' ? 1000 : 0), 0), 0); // Placeholder calculation
+
+  const handleAssignPackage = (member: GymMember) => {
+    setMemberForAssignment(member);
+    setShowAssignDialog(true);
+  };
+
+  const handlePackageAssignment = async (assignmentData: any) => {
+    if (assignmentData.customPackage) {
+      // Handle custom package creation and assignment
+      // This would need to create a custom package first, then assign it
+      console.log('Custom package assignment:', assignmentData);
+      // For now, we'll use a simplified approach
+      await assignPackageToClient(
+        'custom', // This would need to be handled differently
+        assignmentData.clientId,
+        assignmentData.trainerId
+      );
+    } else {
+      // Handle regular package assignment
+      await assignPackageToClient(
+        assignmentData.packageId,
+        assignmentData.clientId,
+        assignmentData.trainerId
+      );
+    }
+    await refetch(); // Refresh members data
+  };
 
   return (
     <div className="space-y-6">
@@ -260,7 +293,7 @@ export function MembersTab() {
                             <DropdownMenuItem>
                               Edit Member
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleAssignPackage(member)}>
                               Assign Package
                             </DropdownMenuItem>
                             <DropdownMenuItem 
@@ -387,6 +420,15 @@ export function MembersTab() {
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
         onCreateMember={createMember}
+      />
+
+      {/* Assign Package Dialog */}
+      <AssignPackageDialog
+        open={showAssignDialog}
+        onOpenChange={setShowAssignDialog}
+        packages={packages}
+        selectedMember={memberForAssignment}
+        onAssign={handlePackageAssignment}
       />
     </div>
   );

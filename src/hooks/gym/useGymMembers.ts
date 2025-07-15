@@ -54,12 +54,10 @@ export function useGymMembers() {
   }, []);
 
   const assignPackageToMember = useCallback(async (
-    memberId: string, 
-    packageId: string, 
-    trainerId?: string
+    assignmentData: any
   ) => {
     try {
-      await assignPackageToMemberService(memberId, packageId, trainerId);
+      await assignPackageToMemberService(assignmentData);
       await refetchMembers(); // Refresh data
     } catch (err) {
       console.error('Error assigning package:', err);
