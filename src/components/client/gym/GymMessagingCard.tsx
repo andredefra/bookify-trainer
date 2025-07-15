@@ -17,6 +17,8 @@ interface GymMessagingCardProps {
 }
 
 export function GymMessagingCard({ gymId, communications, onNewMessage }: GymMessagingCardProps) {
+  console.log('🔍 GymMessagingCard START - gymId:', gymId, 'communications:', communications?.length || 0);
+  
   const [isComposing, setIsComposing] = useState(false);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");

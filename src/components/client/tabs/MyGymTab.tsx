@@ -20,16 +20,25 @@ interface MyGymTabProps {
 }
 
 function MyGymTab({ user }: MyGymTabProps) {
+  console.log('🔍 MyGymTab START - Component inizializzato');
+  
   const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
   const navigate = useNavigate();
   
-  console.log('MyGymTab render:', { 
+  console.log('🔍 MyGymTab HOOK DATA:', { 
     connection, 
-    packages: packages.length, 
-    communications: communications.length, 
+    packages: packages?.length || 0, 
+    communications: communications?.length || 0, 
     loading, 
     error, 
     isConnected 
+  });
+
+  console.log('🔍 MyGymTab RENDER STATE:', {
+    shouldShowLoading: loading,
+    shouldShowError: error,
+    shouldShowNotConnected: !isConnected,
+    shouldShowMain: isConnected && !loading && !error
   });
 
   const handleConnectToGym = () => {

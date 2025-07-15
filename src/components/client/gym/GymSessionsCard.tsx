@@ -12,8 +12,16 @@ interface GymSessionsCardProps {
 }
 
 export function GymSessionsCard({ gymId }: GymSessionsCardProps) {
+  console.log('🔍 GymSessionsCard START - gymId:', gymId);
+  
   const { sessions, loading, bookSession, cancelBooking } = useGymSessions(gymId);
   const { toast } = useToast();
+  
+  console.log('🔍 GymSessionsCard DATA:', {
+    sessions: sessions?.length || 0,
+    loading,
+    gymId
+  });
 
   const handleBookSession = async (sessionId: string, sessionTitle: string) => {
     try {

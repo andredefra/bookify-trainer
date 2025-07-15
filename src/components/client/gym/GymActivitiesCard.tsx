@@ -21,6 +21,8 @@ interface GymActivitiesCardProps {
 }
 
 export function GymActivitiesCard({ gymId }: GymActivitiesCardProps) {
+  console.log('🔍 GymActivitiesCard START - gymId:', gymId);
+  
   // Demo activities data
   const activities: GymActivity[] = [
     {
