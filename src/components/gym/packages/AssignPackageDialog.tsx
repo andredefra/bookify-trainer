@@ -335,17 +335,22 @@ export function AssignPackageDialog({
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="sessionsUsed">Sessions Already Used</Label>
-                  <Input
-                    id="sessionsUsed"
-                    type="number"
-                    min="0"
-                    value={sessionsUsed}
-                    onChange={(e) => setSessionsUsed(Number(e.target.value))}
-                    placeholder="0"
-                  />
-                </div>
+                {selectedPackageData?.session_limit && (
+                  <div className="space-y-2">
+                    <Label htmlFor="sessionsUsed">
+                      Sessions Already Used (out of {selectedPackageData.session_limit} total)
+                    </Label>
+                    <Input
+                      id="sessionsUsed"
+                      type="number"
+                      min="0"
+                      max={selectedPackageData.session_limit}
+                      value={sessionsUsed}
+                      onChange={(e) => setSessionsUsed(Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="totalPaid">Amount Paid (€)</Label>
@@ -550,18 +555,22 @@ export function AssignPackageDialog({
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="sessionsUsedCustom">Sessions Already Used</Label>
-                  <Input
-                    id="sessionsUsedCustom"
-                    type="number"
-                    min="0"
-                    max={customSessions}
-                    value={sessionsUsed}
-                    onChange={(e) => setSessionsUsed(Number(e.target.value))}
-                    placeholder="0"
-                  />
-                </div>
+                {customSessions > 0 && (
+                  <div className="space-y-2">
+                    <Label htmlFor="sessionsUsedCustom">
+                      Sessions Already Used (out of {customSessions} total)
+                    </Label>
+                    <Input
+                      id="sessionsUsedCustom"
+                      type="number"
+                      min="0"
+                      max={customSessions}
+                      value={sessionsUsed}
+                      onChange={(e) => setSessionsUsed(Number(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="totalPaidCustom">Amount Paid (€)</Label>
