@@ -13,6 +13,7 @@ import { AnalyticsTab } from "@/components/client/tabs/AnalyticsTab";
 import { TrainingProgramTab } from "@/components/client/tabs/TrainingProgramTab";
 import { TrainingLogTab } from "@/components/client/tabs/TrainingLogTab";
 import { MyPackagesTab } from "@/components/client/tabs/packages/MyPackagesTab";
+import MyGymTab from "@/components/client/tabs/MyGymTab";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { SessionItem, SessionStatus } from "@/types/sessions";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -182,6 +183,10 @@ const ClientDashboard = () => {
 
               <TabsContent value="trainers" className="mt-0">
                 <TrainersTab />
+              </TabsContent>
+
+              <TabsContent value="mygym" className="mt-0">
+                <MyGymTab user={user} />
               </TabsContent>
 
               <TabsContent value="messages" className="mt-0">
