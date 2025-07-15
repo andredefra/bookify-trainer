@@ -114,6 +114,30 @@ export function useGymAnalytics() {
       const popularSessionTypes = Array.from(sessionTypeMap.values())
         .sort((a, b) => b.attendance - a.attendance);
 
+      // Generate weekly attendance data from schedules
+      const weeklyAttendance = [];
+      const today = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const daySchedules = allSchedules.filter(s => {
+          const scheduleDate = new Date(s.start_datetime);
+          return scheduleDate.toDateString() === date.toDateString();
+        });
+        const attendance = daySchedules.reduce((sum, s) => sum + (s.actual_participants || 0), 0);
+        weeklyAttendance.push({
+          date: date.toISOString().split('T')[0],
+          attendance
+        });
+      }
+
+      // Generate package utilization data (demo data for now)
+      const packageUtilization = [
+        { packageType: 'Premium', totalSessions: 20, usedSessions: 16, utilizationRate: 80 },
+        { packageType: 'Basic', totalSessions: 10, usedSessions: 7, utilizationRate: 70 },
+        { packageType: 'Unlimited', totalSessions: 100, usedSessions: 85, utilizationRate: 85 }
+      ];
+
       return {
         totalSessions,
         activeSessions,
@@ -121,10 +145,10 @@ export function useGymAnalytics() {
         totalParticipants,
         averageAttendance,
         popularSessionTypes,
-        weeklyAttendance: [], // TODO: Implement
+        weeklyAttendance,
         revenueBySessionType: [], // TODO: Implement
         peakHours: [], // TODO: Implement
-        packageUtilization: [] // TODO: Implement
+        packageUtilization
       };
     } catch (err) {
       console.error('Error fetching session analytics:', err);

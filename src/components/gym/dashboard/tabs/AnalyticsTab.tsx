@@ -259,20 +259,27 @@ export function AnalyticsTab() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {sessionAnalytics?.packageUtilization.map((pkg) => (
-                  <div key={pkg.packageType} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{pkg.packageType}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {pkg.utilizationRate}%
-                      </span>
+                {sessionAnalytics?.packageUtilization?.length ? (
+                  sessionAnalytics.packageUtilization.map((pkg) => (
+                    <div key={pkg.packageType} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{pkg.packageType}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {pkg.utilizationRate}%
+                        </span>
+                      </div>
+                      <Progress value={pkg.utilizationRate} className="h-2" />
+                      <div className="text-xs text-muted-foreground">
+                        {pkg.usedSessions}/{pkg.totalSessions} sessions used
+                      </div>
                     </div>
-                    <Progress value={pkg.utilizationRate} className="h-2" />
-                    <div className="text-xs text-muted-foreground">
-                      {pkg.usedSessions}/{pkg.totalSessions} sessions used
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <Target className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+                    <p className="text-muted-foreground">No package utilization data available</p>
                   </div>
-                ))}
+                )}
               </CardContent>
             </Card>
           </div>
@@ -283,29 +290,39 @@ export function AnalyticsTab() {
               <CardTitle>Weekly Attendance Trend</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={sessionAnalytics?.weeklyAttendance || []}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' })}
-                      className="text-xs"
-                    />
-                    <YAxis className="text-xs" />
-                    <Tooltip 
-                      labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-                      formatter={(value) => [value, 'Attendance']}
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '6px'
-                      }}
-                    />
-                    <Bar dataKey="attendance" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+              {sessionAnalytics?.weeklyAttendance?.length ? (
+                <div className="h-[300px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={sessionAnalytics.weeklyAttendance}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis 
+                        dataKey="date" 
+                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' })}
+                        className="text-xs"
+                      />
+                      <YAxis className="text-xs" />
+                      <Tooltip 
+                        labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                        formatter={(value) => [value, 'Attendance']}
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '6px'
+                        }}
+                      />
+                      <Bar dataKey="attendance" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <div className="h-[300px] flex items-center justify-center">
+                  <div className="text-center">
+                    <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+                    <p className="text-muted-foreground">No attendance data available</p>
+                    <p className="text-sm text-muted-foreground">Check back after more sessions are completed</p>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
