@@ -44,7 +44,7 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
         specialties: [],
         certifications: [],
         education: [],
-        experience: [],
+        experience: { years: 0 },
         languages: ["English"],
         is_public: true
       });
@@ -126,31 +126,23 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">My Public Profile</h2>
-          <p className="text-muted-foreground">
-            Manage your public trainer profile that clients will see
-          </p>
-        </div>
-        <div className="flex gap-2">
-          {profileUrl && (
-            <Button variant="outline" size="sm" asChild>
-              <a href={profileUrl} target="_blank" rel="noopener noreferrer">
-                <Eye className="h-4 w-4 mr-2" />
-                Preview
-              </a>
-            </Button>
-          )}
-          <Button onClick={handleSave} disabled={saving}>
-            {saving ? (
-              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4 mr-2" />
-            )}
-            Save Changes
+      <div className="flex items-center justify-end gap-2">
+        {profileUrl && (
+          <Button variant="outline" size="sm" asChild>
+            <a href={profileUrl} target="_blank" rel="noopener noreferrer">
+              <Eye className="h-4 w-4 mr-2" />
+              Preview
+            </a>
           </Button>
-        </div>
+        )}
+        <Button onClick={handleSave} disabled={saving}>
+          {saving ? (
+            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="h-4 w-4 mr-2" />
+          )}
+          Save Changes
+        </Button>
       </div>
 
       <Tabs defaultValue="basic" className="w-full">
@@ -217,6 +209,29 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
         </TabsContent>
 
         <TabsContent value="professional" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Experience</CardTitle>
+              <CardDescription>
+                Your professional experience and expertise level
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="years_experience">Years of Experience</Label>
+                  <Input
+                    id="years_experience"
+                    type="number"
+                    value={(formData.experience as any)?.years || ""}
+                    onChange={(e) => handleInputChange('experience', { 
+                      years: parseInt(e.target.value) || 0 
+                    })}
+                    placeholder="5"
+                  />
+                </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle>Specialties</CardTitle>
@@ -297,14 +312,67 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
         <TabsContent value="background" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Professional Background</CardTitle>
+              <CardTitle>Certifications</CardTitle>
               <CardDescription>
-                Add your certifications, education, and experience
+                Add your professional certifications to build client trust
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="cert-title">Certification Title</Label>
+                  <Input 
+                    id="cert-title" 
+                    placeholder="e.g. NASM Certified Personal Trainer" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="issuing-org">Issuing Organization</Label>
+                  <Input 
+                    id="issuing-org" 
+                    placeholder="e.g. National Academy of Sports Medicine" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="issue-date">Issue Date</Label>
+                  <Input id="issue-date" type="date" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="expiry-date">Expiry Date (Optional)</Label>
+                  <Input id="expiry-date" type="date" />
+                </div>
+              </div>
+              <Button variant="secondary" size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Certification
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Education</CardTitle>
+              <CardDescription>
+                Your educational background and qualifications
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Professional background management coming soon. You'll be able to add detailed certifications, education history, and work experience.
+                Education management coming soon. You'll be able to add degrees, diplomas, and other educational qualifications.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Work Experience</CardTitle>
+              <CardDescription>
+                Your professional work history and achievements
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Work experience management coming soon. You'll be able to add previous positions, responsibilities, and achievements.
               </p>
             </CardContent>
           </Card>

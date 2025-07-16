@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { ProfileImageUpload } from "./profile/ProfileImageUpload";
 import { PersonalInfoForm } from "./profile/PersonalInfoForm";
-import { CertificationsForm } from "./profile/CertificationsForm";
+
 import { AIAssistantSettings } from "./profile/AIAssistantSettings";
 import { getDefaultProfileImage } from "@/utils/demoUserUtils";
 
@@ -35,8 +35,8 @@ export function ProfileSection({ user }: ProfileSectionProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-medium">Trainer Profile</h3>
-        <p className="text-sm text-muted-foreground">This information will be displayed on your public profile page.</p>
+        <h3 className="text-lg font-medium">Private Profile Settings</h3>
+        <p className="text-sm text-muted-foreground">Internal settings for your trainer account.</p>
         
         <ProfileImageUpload 
           name={name}
@@ -49,11 +49,6 @@ export function ProfileSection({ user }: ProfileSectionProps) {
         <PersonalInfoForm initialName={name} userEmail={user.email} />
       </div>
       
-      <div className="space-y-2">
-        <h3 className="text-lg font-medium">Certifications</h3>
-        <p className="text-sm text-muted-foreground">Add your professional certifications to build client trust.</p>
-        <CertificationsForm />
-      </div>
       
       <div className="space-y-2">
         <h3 className="text-lg font-medium">AI Assistant Settings</h3>
