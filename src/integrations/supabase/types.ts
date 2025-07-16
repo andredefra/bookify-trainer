@@ -1721,6 +1721,99 @@ export type Database = {
           },
         ]
       }
+      trainer_profiles: {
+        Row: {
+          bio: string | null
+          certifications: Json | null
+          created_at: string
+          education: Json | null
+          experience: Json | null
+          hourly_rate: number | null
+          id: string
+          is_public: boolean | null
+          languages: string[] | null
+          location: string | null
+          profile_image_url: string | null
+          slug: string | null
+          specialties: string[] | null
+          title: string | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          certifications?: Json | null
+          created_at?: string
+          education?: Json | null
+          experience?: Json | null
+          hourly_rate?: number | null
+          id?: string
+          is_public?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          profile_image_url?: string | null
+          slug?: string | null
+          specialties?: string[] | null
+          title?: string | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          certifications?: Json | null
+          created_at?: string
+          education?: Json | null
+          experience?: Json | null
+          hourly_rate?: number | null
+          id?: string
+          is_public?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          profile_image_url?: string | null
+          slug?: string | null
+          specialties?: string[] | null
+          title?: string | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      trainer_reviews: {
+        Row: {
+          client_id: string
+          comment: string | null
+          created_at: string
+          id: string
+          is_verified: boolean | null
+          rating: number
+          session_date: string | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          is_verified?: boolean | null
+          rating: number
+          session_date?: string | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          is_verified?: boolean | null
+          rating?: number
+          session_date?: string | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       trainer_shifts: {
         Row: {
           created_at: string
@@ -1772,6 +1865,10 @@ export type Database = {
       generate_expiring_program_notifications: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      generate_trainer_slug: {
+        Args: { trainer_name: string }
+        Returns: string
       }
       initialize_default_email_templates: {
         Args: { gym_user_id: string }

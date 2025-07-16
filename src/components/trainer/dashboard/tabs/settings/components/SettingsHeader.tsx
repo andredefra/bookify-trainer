@@ -11,6 +11,11 @@ export function SettingsHeader({ selectedSection }: SettingsHeaderProps) {
           title: "Profile Settings",
           description: "Manage your personal information and professional details"
         };
+      case "public-profile":
+        return {
+          title: "My Public Profile",
+          description: "Manage your public trainer profile that clients will see"
+        };
       case "availability":
         return {
           title: "Availability Settings",
