@@ -13,6 +13,7 @@ export function SettingsSidebar({ selectedSection, setSelectedSection }: Setting
     { id: "profile", label: "Profile", icon: "👤" },
     { id: "public-profile", label: "My Public Profile", icon: "🌟" },
     { id: "availability", label: "Availability", icon: "📅" },
+    { id: "my-gyms", label: "My Gyms", icon: "🏢" },
     { id: "invoicing", label: "Invoicing", icon: "🧾" },
     { id: "membership", label: "Membership", icon: "⭐" },
     { id: "billing", label: "Billing", icon: "💳" }

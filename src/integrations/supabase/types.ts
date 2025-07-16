@@ -1680,6 +1680,54 @@ export type Database = {
           },
         ]
       }
+      trainer_gym_affiliations: {
+        Row: {
+          commission_rate: number | null
+          contract_details: Json | null
+          created_at: string
+          gym_id: string
+          id: string
+          is_primary: boolean | null
+          request_message: string | null
+          requested_at: string
+          responded_at: string | null
+          response_message: string | null
+          status: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          commission_rate?: number | null
+          contract_details?: Json | null
+          created_at?: string
+          gym_id: string
+          id?: string
+          is_primary?: boolean | null
+          request_message?: string | null
+          requested_at?: string
+          responded_at?: string | null
+          response_message?: string | null
+          status?: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          commission_rate?: number | null
+          contract_details?: Json | null
+          created_at?: string
+          gym_id?: string
+          id?: string
+          is_primary?: boolean | null
+          request_message?: string | null
+          requested_at?: string
+          responded_at?: string | null
+          response_message?: string | null
+          status?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       trainer_notifications: {
         Row: {
           created_at: string
@@ -1733,6 +1781,7 @@ export type Database = {
           is_public: boolean | null
           languages: string[] | null
           location: string | null
+          primary_gym_id: string | null
           profile_image_url: string | null
           slug: string | null
           specialties: string[] | null
@@ -1751,6 +1800,7 @@ export type Database = {
           is_public?: boolean | null
           languages?: string[] | null
           location?: string | null
+          primary_gym_id?: string | null
           profile_image_url?: string | null
           slug?: string | null
           specialties?: string[] | null
@@ -1769,6 +1819,7 @@ export type Database = {
           is_public?: boolean | null
           languages?: string[] | null
           location?: string | null
+          primary_gym_id?: string | null
           profile_image_url?: string | null
           slug?: string | null
           specialties?: string[] | null

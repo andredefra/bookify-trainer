@@ -10,6 +10,7 @@ import { AvailabilitySection } from "./AvailabilitySection";
 import { InvoicingSection } from "./InvoicingSection";
 import { MembershipSection } from "./MembershipSection";
 import { BillingSection } from "./BillingSection";
+import { MyGymsSection } from "./sections/MyGymsSection";
 
 interface SettingsTabContentProps {
   user: {
@@ -71,14 +72,15 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
             {selectedSection === "profile" && <ProfileSection user={updatedUser} />}
             {selectedSection === "public-profile" && <PublicProfileSection user={updatedUser} />}
             {selectedSection === "availability" && <AvailabilitySection />}
+            {selectedSection === "my-gyms" && <MyGymsSection trainerId={user?.email} />}
             {selectedSection === "invoicing" && <InvoicingSection />}
             {selectedSection === "membership" && <MembershipSection user={updatedUser} />}
             {selectedSection === "billing" && <BillingSection user={updatedUser} />}
           </div>
           
-          {selectedSection !== "invoicing" && (
-            <SettingsFooter onSave={handleSaveChanges} />
-          )}
+        {selectedSection !== "invoicing" && selectedSection !== "my-gyms" && (
+          <SettingsFooter onSave={handleSaveChanges} />
+        )}
         </div>
       </div>
     </div>
