@@ -20,6 +20,7 @@ import { TabsSection } from "@/components/trainer/TabsSection";
 // Import hooks and types
 import { useTrainerProfile, type TrainerProfile } from "@/hooks/useTrainerProfile";
 import { useTrainerReviews } from "@/hooks/useTrainerReviews";
+import { useTrainerGymAffiliations } from "@/hooks/useTrainerGymAffiliations";
 
 // Import mock data as fallback
 import { 
@@ -45,6 +46,8 @@ const TrainerProfile = () => {
   const [openMessageDialog, setOpenMessageDialog] = useState(false);
 
   const { reviews, averageRating, totalReviews } = useTrainerReviews(trainerId || undefined);
+  const { affiliations, searchGyms } = useTrainerGymAffiliations(trainerId || undefined);
+  const [primaryGymInfo, setPrimaryGymInfo] = useState<any>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -113,6 +116,15 @@ const TrainerProfile = () => {
         };
         
         setTrainer(convertedTrainer);
+        
+        // Fetch primary gym info if available
+        if (profileData.primary_gym_id) {
+          const allGyms = await searchGyms("");
+          const primaryGym = allGyms.find(gym => gym.id === profileData.primary_gym_id);
+          if (primaryGym) {
+            setPrimaryGymInfo(primaryGym);
+          }
+        }
       } else {
         // Fallback to mock data for demo
         const mockTrainer = getTrainerById(idOrSlug);
@@ -206,6 +218,7 @@ const TrainerProfile = () => {
               trainer={trainer} 
               onBookSession={handleBookSession}
               onMessageClick={() => setOpenMessageDialog(true)}
+              primaryGym={primaryGymInfo}
             />
           </div>
           

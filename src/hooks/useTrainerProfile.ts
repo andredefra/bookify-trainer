@@ -18,6 +18,7 @@ export interface TrainerProfile {
   experience?: Json;
   languages?: string[];
   is_public?: boolean;
+  primary_gym_id?: string;
 }
 
 export const useTrainerProfile = (trainerId?: string) => {

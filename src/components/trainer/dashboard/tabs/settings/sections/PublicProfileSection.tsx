@@ -7,8 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Plus, X, Eye, ExternalLink, Save, RefreshCw } from "lucide-react";
+import { Plus, X, Eye, ExternalLink, Save, RefreshCw, Building2 } from "lucide-react";
 import { useTrainerProfile, type TrainerProfile } from "@/hooks/useTrainerProfile";
+import { useTrainerGymAffiliations } from "@/hooks/useTrainerGymAffiliations";
+import { GymInfoCard } from "./GymInfoCard";
 import { useToast } from "@/hooks/use-toast";
 
 interface PublicProfileSectionProps {
@@ -22,7 +24,9 @@ interface PublicProfileSectionProps {
 }
 
 export function PublicProfileSection({ user }: PublicProfileSectionProps) {
-  const { profile, loading, saving, saveProfile, generateSlug } = useTrainerProfile(user?.email === "demo@trainer.com" ? "demo-trainer-id" : undefined);
+  const trainerId = user?.email === "demo@trainer.com" ? "demo-trainer-id" : undefined;
+  const { profile, loading, saving, saveProfile, generateSlug } = useTrainerProfile(trainerId);
+  const { affiliations, setPrimaryGym, searchGyms } = useTrainerGymAffiliations(trainerId);
   const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<TrainerProfile>>({});
   const [newSpecialty, setNewSpecialty] = useState("");
@@ -119,6 +123,21 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
   };
 
   const profileUrl = customSlug ? `${window.location.origin}/trainer/${customSlug}` : "";
+  
+  // Get primary gym info for display
+  const primaryAffiliation = affiliations.find(aff => aff.is_primary && aff.status === 'approved');
+  const [primaryGymInfo, setPrimaryGymInfo] = useState<any>(null);
+  
+  useEffect(() => {
+    if (primaryAffiliation) {
+      // In a real app, you would fetch gym details by ID
+      // For now, we'll use mock data
+      searchGyms("").then(gyms => {
+        const gym = gyms.find(g => g.id === primaryAffiliation.gym_id);
+        setPrimaryGymInfo(gym);
+      });
+    }
+  }, [primaryAffiliation]);
 
   if (loading) {
     return <div className="flex items-center justify-center p-8">Loading profile...</div>;
@@ -146,9 +165,10 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
       </div>
 
       <Tabs defaultValue="basic" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
           <TabsTrigger value="professional">Professional</TabsTrigger>
+          <TabsTrigger value="gym">Gym Info</TabsTrigger>
           <TabsTrigger value="background">Background</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
@@ -305,6 +325,51 @@ export function PublicProfileSection({ user }: PublicProfileSectionProps) {
                   </Badge>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="gym" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Primary Gym</CardTitle>
+              <CardDescription>
+                Your primary gym appears on your public profile and helps build credibility with potential clients
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {primaryGymInfo ? (
+                <div className="space-y-4">
+                  <GymInfoCard 
+                    gym={primaryGymInfo} 
+                    isPrimary={true}
+                    showActions={false}
+                  />
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-md border border-green-200">
+                    <div className="flex items-center gap-2 text-green-800">
+                      <Building2 className="w-4 h-4" />
+                      <span className="text-sm font-medium">Primary gym is set and will appear on your public profile</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Building2 className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="font-medium mb-2">No Primary Gym Set</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Set a primary gym to display on your public profile. This helps build trust with potential clients.
+                  </p>
+                  <div className="bg-muted/50 rounded-md p-3 mb-4 text-sm text-muted-foreground">
+                    <div className="font-medium mb-1">To set a primary gym:</div>
+                    <ol className="text-xs space-y-1 text-left">
+                      <li>1. Go to the "My Gyms" section in settings</li>
+                      <li>2. Request affiliation with a gym</li>
+                      <li>3. Wait for gym approval</li>
+                      <li>4. Set approved gym as primary</li>
+                    </ol>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
