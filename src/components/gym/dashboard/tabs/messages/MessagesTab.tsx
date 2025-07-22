@@ -1,211 +1,212 @@
-import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TabContent } from "./TabContent";
-import { TrainerMessage, Conversation } from "./types";
-import { toast } from "sonner";
+
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
-import { NewMessageDialog } from "./NewMessageDialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MessageSquare, Send, Reply, Settings, Users, TrendingUp, Clock } from "lucide-react";
+import { MessageAutomationTab } from "@/components/common/MessageAutomationTab";
 
 interface MessagesTabProps {
   onMessagesRead?: () => void;
 }
 
 export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
-  const [activeConversation, setActiveConversation] = useState<number | null>(null);
-  const [showNewMessageDialog, setShowNewMessageDialog] = useState(false);
-  
-  // Mock data for trainers
-  const trainers: TrainerMessage[] = [
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+
+  // Mock data for gym messages
+  const conversations = [
     {
-      id: 1,
-      name: "Sarah Johnson",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-      status: "online",
-      unread: 2,
-      lastMessage: "I'll check with the other trainers about the schedule.",
-      timestamp: "10:30 AM"
+      id: "1",
+      clientName: "Marco Rossi",
+      lastMessage: "Vorrei prenotare una sessione per domani",
+      timestamp: "2h fa",
+      unread: true,
+      type: "booking"
     },
     {
-      id: 2,
-      name: "Alex Thompson",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-      status: "offline",
-      unread: 0,
-      lastMessage: "The new fitness program is ready for review.",
-      timestamp: "Yesterday"
+      id: "2", 
+      clientName: "Anna Bianchi",
+      lastMessage: "Il mio pacchetto scade tra 3 giorni",
+      timestamp: "1d fa",
+      unread: false,
+      type: "package"
     },
     {
-      id: 3,
-      name: "Emma Davis",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=160&h=160&q=80",
-      status: "away",
-      unread: 1,
-      lastMessage: "We need to discuss the new equipment delivery.",
-      timestamp: "2 days ago"
+      id: "3",
+      clientName: "Luca Verdi", 
+      lastMessage: "Posso cambiare trainer?",
+      timestamp: "2d fa",
+      unread: true,
+      type: "support"
     }
   ];
-  
-  // Mock messages for conversations
-  const [conversations, setConversations] = useState<Conversation>({
-    1: [
-      { id: 1, sender: "trainer", text: "Good morning! I wanted to update you on our class attendance this week.", time: "10:15 AM" },
-      { id: 2, sender: "you", text: "Great, how are the numbers looking?", time: "10:20 AM" },
-      { id: 3, sender: "trainer", text: "We've seen a 15% increase in the HIIT classes and yoga sessions are fully booked.", time: "10:25 AM" },
-      { id: 4, sender: "trainer", text: "I'll check with the other trainers about the schedule.", time: "10:30 AM" },
-    ],
-    2: [
-      { id: 1, sender: "trainer", text: "I've completed the new fitness program outline as requested.", time: "3:45 PM" },
-      { id: 2, sender: "you", text: "Thank you, I'll take a look at it.", time: "4:15 PM" },
-      { id: 3, sender: "trainer", text: "The new fitness program is ready for review.", time: "5:30 PM" },
-    ],
-    3: [
-      { id: 1, sender: "you", text: "Have we confirmed the delivery date for the new equipment?", time: "Monday" },
-      { id: 2, sender: "trainer", text: "Yes, it's scheduled for next Thursday.", time: "Monday" },
-      { id: 3, sender: "trainer", text: "We need to discuss the new equipment delivery.", time: "Tuesday" },
-    ]
-  });
-  
-  // Effect to mark messages as read when component mounts
-  useEffect(() => {
-    if (onMessagesRead) {
-      onMessagesRead();
-    }
-  }, [onMessagesRead]);
-  
-  const getStatusColor = (status: string) => {
-    switch(status) {
-      case "online": return "bg-green-500";
-      case "away": return "bg-amber-500";
-      default: return "bg-slate-400";
-    }
-  };
 
-  const handleSendMessage = (message: string) => {
-    if (!message.trim() || activeConversation === null) return;
-    
-    // Here you would typically send a message to your backend
-    console.log(`Sending message to trainer ${activeConversation}: ${message}`);
-    
-    // Update the conversation with the new message
-    setConversations(prev => {
-      const conversation = [...(prev[activeConversation] || [])];
-      const newId = conversation.length > 0 
-        ? Math.max(...conversation.map(m => m.id)) + 1 
-        : 1;
-        
-      return {
-        ...prev,
-        [activeConversation]: [
-          ...conversation,
-          { 
-            id: newId, 
-            sender: "you", 
-            text: message, 
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-          }
-        ]
-      };
-    });
-    
-    toast.success("Message sent successfully");
+  const stats = {
+    totalMessages: 24,
+    unreadMessages: 5,
+    responseRate: 98,
+    avgResponseTime: "2h"
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Trainer Messages</h1>
-          <p className="text-muted-foreground">Communicate with your gym's trainers</p>
-        </div>
-        <Button 
-          onClick={() => setShowNewMessageDialog(true)} 
-          className="flex items-center gap-2"
-        >
-          <Send className="h-4 w-4" />
-          <span>New Message</span>
-        </Button>
+    <div className="space-y-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <MessageSquare className="h-8 w-8 text-blue-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Messaggi Totali</p>
+                <p className="text-2xl font-bold">{stats.totalMessages}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Users className="h-8 w-8 text-green-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Non Letti</p>
+                <p className="text-2xl font-bold">{stats.unreadMessages}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <TrendingUp className="h-8 w-8 text-purple-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Tasso Risposta</p>
+                <p className="text-2xl font-bold">{stats.responseRate}%</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Clock className="h-8 w-8 text-orange-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Tempo Medio</p>
+                <p className="text-2xl font-bold">{stats.avgResponseTime}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-      
-      <Card className="border-none shadow-none">
-        <Tabs defaultValue="all" className="w-full">
-          <div className="border-b pb-2 mb-4">
-            <TabsList className="h-9">
-              <TabsTrigger value="all" className="text-sm">All Messages</TabsTrigger>
-              <TabsTrigger value="unread" className="text-sm">Unread</TabsTrigger>
-              <TabsTrigger value="archived" className="text-sm">Archived</TabsTrigger>
-            </TabsList>
-          </div>
 
-          <TabsContent value="all" className="mt-0">
-            <TabContent 
-              activeTab="all"
-              activeConversation={activeConversation}
-              setActiveConversation={setActiveConversation}
-              trainers={trainers}
-              conversations={conversations}
-              getStatusColor={getStatusColor}
-              handleSendMessage={handleSendMessage}
-            />
-          </TabsContent>
-          
-          <TabsContent value="unread" className="mt-0">
-            <TabContent 
-              activeTab="unread"
-              activeConversation={activeConversation}
-              setActiveConversation={setActiveConversation}
-              trainers={trainers.filter(t => t.unread > 0)}
-              conversations={conversations}
-              getStatusColor={getStatusColor}
-              handleSendMessage={handleSendMessage}
-            />
-          </TabsContent>
-          
-          <TabsContent value="archived" className="mt-0">
-            <TabContent 
-              activeTab="archived"
-              activeConversation={activeConversation}
-              setActiveConversation={setActiveConversation}
-              trainers={[]}
-              conversations={conversations}
-              getStatusColor={getStatusColor}
-              handleSendMessage={handleSendMessage}
-            />
-          </TabsContent>
-        </Tabs>
-      </Card>
+      <Tabs defaultValue="messages" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="messages">Messaggi</TabsTrigger>
+          <TabsTrigger value="unread">Non Letti</TabsTrigger>
+          <TabsTrigger value="automation">Automazione</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        </TabsList>
 
-      <NewMessageDialog 
-        open={showNewMessageDialog} 
-        onOpenChange={setShowNewMessageDialog} 
-        trainers={trainers}
-        onSend={(trainerId, message) => {
-          setConversations(prev => {
-            const conversation = [...(prev[trainerId] || [])];
-            const newId = conversation.length > 0 
-              ? Math.max(...conversation.map(m => m.id)) + 1 
-              : 1;
-              
-            return {
-              ...prev,
-              [trainerId]: [
-                ...conversation,
-                { 
-                  id: newId, 
-                  sender: "you", 
-                  text: message, 
-                  time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-                }
-              ]
-            };
-          });
-          
-          setActiveConversation(trainerId);
-          
-          toast.success("Message sent successfully");
-        }}
-      />
+        <TabsContent value="messages" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Tutte le Conversazioni</CardTitle>
+                  <CardDescription>Gestisci le comunicazioni con membri e trainer</CardDescription>
+                </div>
+                <Button>
+                  <Send className="h-4 w-4 mr-2" />
+                  Nuovo Messaggio
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {conversations.map((conversation) => (
+                  <div 
+                    key={conversation.id} 
+                    className={`border rounded-lg p-4 cursor-pointer hover:bg-accent/50 transition-colors ${
+                      conversation.unread ? 'border-l-4 border-l-blue-500' : ''
+                    }`}
+                    onClick={() => setSelectedConversation(conversation.id)}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium">{conversation.clientName}</h3>
+                        {conversation.unread && (
+                          <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">{conversation.timestamp}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{conversation.lastMessage}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs bg-secondary px-2 py-1 rounded capitalize">
+                        {conversation.type}
+                      </span>
+                      <Button size="sm" variant="outline">
+                        <Reply className="h-4 w-4 mr-1" />
+                        Rispondi
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="unread" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Messaggi Non Letti</CardTitle>
+              <CardDescription>Messaggi che richiedono attenzione</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {conversations.filter(c => c.unread).map((conversation) => (
+                  <div key={conversation.id} className="border-l-4 border-l-blue-500 border rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-medium">{conversation.clientName}</h3>
+                      <span className="text-xs text-muted-foreground">{conversation.timestamp}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{conversation.lastMessage}</p>
+                    <Button size="sm" onClick={onMessagesRead}>
+                      <Reply className="h-4 w-4 mr-1" />
+                      Rispondi
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="automation" className="space-y-4">
+          <MessageAutomationTab />
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Analytics Messaggi</CardTitle>
+              <CardDescription>Statistiche e metriche delle comunicazioni</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <TrendingUp className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">Analytics Dettagliate</h3>
+                <p className="text-muted-foreground">
+                  Visualizzazioni dettagliate delle metriche di comunicazione saranno disponibili presto
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

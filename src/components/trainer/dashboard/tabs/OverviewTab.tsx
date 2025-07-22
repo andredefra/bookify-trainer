@@ -1,106 +1,157 @@
 
-import { useState } from "react";
-import { UpcomingSessionsCard } from "./overview/UpcomingSessionsCard";
-import { RecentClientsCard } from "./overview/RecentClientsCard";
-import { MessageRequestsCard } from "./overview/MessageRequestsCard";
-import { CreateSessionDialog } from "../dialogs/CreateSessionDialog";
-import { EditSessionDialog } from "../tabs/sessions/EditSessionDialog";
-import { VideoSessionDialog } from "../tabs/sessions/components/VideoSessionDialog";
-import { toast } from "sonner";
-import { TrainerSessionItem } from "@/types/sessions";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, Users, DollarSign, TrendingUp, Clock, MessageSquare, Package, Target } from "lucide-react";
+import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
 
-interface ClientItem {
-  id: number;
-  name: string;
-  sessions: number;
-  lastSession: string;
-}
-
-interface MessageItem {
-  id: number;
-  from: string;
-  preview: string;
-  time: string;
-}
-
-interface OverviewTabProps {
-  upcomingSessions: TrainerSessionItem[];
-  clients: ClientItem[];
-  messageRequests: MessageItem[];
-}
-
-export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
-  const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
-  const [showEditSessionDialog, setShowEditSessionDialog] = useState(false);
-  const [showVideoSessionDialog, setShowVideoSessionDialog] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<TrainerSessionItem | null>(null);
-  
-  // Enhanced mock data with a clearly visible video session
-  const sessionsWithPaymentInfo = upcomingSessions.map(session => ({
-    ...session,
-    waitingList: session.waitingList || 0,
-    paymentStatus: session.paymentStatus || {
-      paid: Math.floor(Math.random() * session.participants),
-      pending: Math.floor(Math.random() * session.participants),
-      get total() { return this.paid + this.pending; }
-    },
-    // Ensure we have a video session that's highly visible (putting it first in the list)
-    mode: session.id === 1 ? 'video' : (session.mode || 'in-person'),
-    status: session.id === 1 ? 'scheduled' : (session.status || 'scheduled')
-  }));
-  
-  const handleViewSessionDetails = (session: TrainerSessionItem) => {
-    setSelectedSession(session);
-    setShowEditSessionDialog(true);
-  };
-  
-  const handleUpdateSession = (data: any, sessionId: number) => {
-    toast.success("Session updated successfully!");
-    setShowEditSessionDialog(false);
+export function OverviewTab() {
+  const stats = {
+    totalClients: 24,
+    activePrograms: 18,
+    monthlyRevenue: 3200,
+    completedSessions: 156,
+    upcomingToday: 3,
+    messagesUnread: 2
   };
 
-  const handleStartVideoSession = (session: TrainerSessionItem) => {
-    setSelectedSession(session);
-    setShowVideoSessionDialog(true);
-  };
-  
+  const recentActivities = [
+    { id: 1, type: "session", client: "Marco Rossi", action: "Sessione completata", time: "1h fa" },
+    { id: 2, type: "program", client: "Anna Bianchi", action: "Nuovo programma assegnato", time: "2h fa" },
+    { id: 3, type: "message", client: "Luca Verdi", action: "Messaggio ricevuto", time: "3h fa" },
+    { id: 4, type: "payment", client: "Sofia Nero", action: "Pagamento ricevuto", time: "1d fa" }
+  ];
+
+  const upcomingSessions = [
+    { id: 1, client: "Marco Rossi", time: "14:00", type: "Personal Training" },
+    { id: 2, client: "Anna Bianchi", time: "15:30", type: "Weight Loss Session" },
+    { id: 3, client: "Luca Verdi", time: "17:00", type: "Strength Training" }
+  ];
+
   return (
     <div className="space-y-6">
-      <UpcomingSessionsCard 
-        sessions={sessionsWithPaymentInfo} 
-        onNewSession={() => setShowCreateSessionDialog(true)}
-        onViewDetails={handleViewSessionDetails}
-        onStartVideoSession={handleStartVideoSession}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <RecentClientsCard clients={clients} />
-        <MessageRequestsCard messages={messageRequests} />
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Users className="h-8 w-8 text-blue-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Clienti Attivi</p>
+                <p className="text-2xl font-bold">{stats.totalClients}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Target className="h-8 w-8 text-green-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Programmi Attivi</p>
+                <p className="text-2xl font-bold">{stats.activePrograms}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <DollarSign className="h-8 w-8 text-purple-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Ricavi Mensili</p>
+                <p className="text-2xl font-bold">€{stats.monthlyRevenue}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Calendar className="h-8 w-8 text-orange-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-muted-foreground">Sessioni Oggi</p>
+                <p className="text-2xl font-bold">{stats.upcomingToday}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-      
-      <CreateSessionDialog 
-        open={showCreateSessionDialog} 
-        onOpenChange={setShowCreateSessionDialog}
-        onSubmit={(data) => {
-          // Here you would typically save the session to your database
-          console.log("New session data:", data);
-          toast.success("Session created successfully!");
-          setShowCreateSessionDialog(false);
-        }}
-      />
-      
-      <EditSessionDialog
-        open={showEditSessionDialog}
-        onOpenChange={setShowEditSessionDialog}
-        session={selectedSession}
-        onSubmit={handleUpdateSession}
-      />
 
-      <VideoSessionDialog
-        open={showVideoSessionDialog}
-        onOpenChange={setShowVideoSessionDialog}
-        session={selectedSession}
-      />
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Expiration Alerts - New Component */}
+        <ExpirationAlertsCard />
+
+        {/* Upcoming Sessions */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Sessioni di Oggi
+            </CardTitle>
+            <CardDescription>Le tue prossime sessioni programmate</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {upcomingSessions.length === 0 ? (
+              <div className="text-center py-6">
+                <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Nessuna sessione programmata per oggi</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {upcomingSessions.map((session) => (
+                  <div key={session.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div>
+                      <p className="font-medium">{session.client}</p>
+                      <p className="text-sm text-muted-foreground">{session.type}</p>
+                    </div>
+                    <div className="text-right">
+                      <Badge variant="outline">{session.time}</Badge>
+                    </div>
+                  </div>
+                ))}
+                <Button variant="outline" className="w-full">
+                  Vedi Tutte le Sessioni
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recent Activities */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Attività Recenti
+          </CardTitle>
+          <CardDescription>Panoramica delle attività più recenti</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {recentActivities.map((activity) => (
+              <div key={activity.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                  <div>
+                    <p className="font-medium">{activity.client}</p>
+                    <p className="text-sm text-muted-foreground">{activity.action}</p>
+                  </div>
+                </div>
+                <span className="text-xs text-muted-foreground">{activity.time}</span>
+              </div>
+            ))}
+            <Button variant="outline" className="w-full">
+              Vedi Tutte le Attività
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

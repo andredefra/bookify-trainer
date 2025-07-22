@@ -3,9 +3,9 @@ import { FitnessProgressCard } from "@/components/client/overview/FitnessProgres
 import { UpcomingSessionsCard } from "@/components/client/overview/UpcomingSessionsCard";
 import { TrainerCard } from "@/components/client/overview/TrainerCard";
 import { MessagesCard } from "@/components/client/overview/MessagesCard";
+import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
 import { useEffect, useState } from "react";
-import { Info } from "lucide-react";
-import { SessionItem, SessionStatus } from "@/types/sessions";
+import { SessionItem } from "@/types/sessions";
 import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
 
 interface MessageItem {
@@ -48,9 +48,10 @@ export function Overview({ progressData, upcomingSessions, trainerMessages }: Ov
       />
       <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ExpirationAlertsCard />
         <TrainerCard />
-        <MessagesCard messages={trainerMessages} />
       </div>
+      <MessagesCard messages={trainerMessages} />
     </div>
   );
 }
