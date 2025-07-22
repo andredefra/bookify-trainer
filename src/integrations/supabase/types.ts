@@ -733,6 +733,9 @@ export type Database = {
           package_id: string
           payment_status: string | null
           purchase_date: string
+          receipt_number: string | null
+          receipt_sent_at: string | null
+          receipt_url: string | null
           sessions_total: number | null
           sessions_used: number | null
           start_date: string
@@ -750,6 +753,9 @@ export type Database = {
           package_id: string
           payment_status?: string | null
           purchase_date?: string
+          receipt_number?: string | null
+          receipt_sent_at?: string | null
+          receipt_url?: string | null
           sessions_total?: number | null
           sessions_used?: number | null
           start_date?: string
@@ -767,6 +773,9 @@ export type Database = {
           package_id?: string
           payment_status?: string | null
           purchase_date?: string
+          receipt_number?: string | null
+          receipt_sent_at?: string | null
+          receipt_url?: string | null
           sessions_total?: number | null
           sessions_used?: number | null
           start_date?: string

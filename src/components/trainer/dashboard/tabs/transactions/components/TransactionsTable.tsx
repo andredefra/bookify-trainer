@@ -8,19 +8,31 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { Transaction } from "../types/TransactionHistoryTypes";
 import { PaymentMethodBadge } from "./PaymentMethodBadge";
 import { TransactionStatusBadge } from "./TransactionStatusBadge";
-import { FileText, CheckCircle } from "lucide-react";
+import { FileText, CheckCircle, Receipt } from "lucide-react";
 import { toast } from "sonner";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
   onConfirmCashPayment?: (transactionId: number) => void;
   onToggleInvoice?: (transactionId: number) => void;
+  onSendReceipt?: (transactionId: number) => void;
+  selectedTransactions?: Set<number>;
+  onToggleSelection?: (transactionId: number) => void;
 }
 
-export function TransactionsTable({ transactions, onConfirmCashPayment, onToggleInvoice }: TransactionsTableProps) {
+export function TransactionsTable({ 
+  transactions, 
+  onConfirmCashPayment, 
+  onToggleInvoice,
+  onSendReceipt,
+  selectedTransactions = new Set(),
+  onToggleSelection
+}: TransactionsTableProps) {
   const handleSendInvoice = (transaction: Transaction) => {
     // Open popup/modal that redirects to the integrated invoice partner
     const invoiceUrl = `https://invoice-partner.com/create?amount=${transaction.amount}&client=${encodeURIComponent(transaction.client)}&description=${encodeURIComponent(transaction.name)}`;
@@ -43,6 +55,26 @@ export function TransactionsTable({ transactions, onConfirmCashPayment, onToggle
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[50px]">
+              <Checkbox 
+                checked={transactions.length > 0 && transactions
+                  .filter(t => t.status === 'paid' && !t.receiptSent)
+                  .every(t => selectedTransactions.has(t.id))}
+                onCheckedChange={(checked) => {
+                  if (onToggleSelection) {
+                    transactions.forEach(t => {
+                      if (t.status === 'paid' && !t.receiptSent) {
+                        if (checked && !selectedTransactions.has(t.id)) {
+                          onToggleSelection(t.id);
+                        } else if (!checked && selectedTransactions.has(t.id)) {
+                          onToggleSelection(t.id);
+                        }
+                      }
+                    });
+                  }
+                }}
+              />
+            </TableHead>
             <TableHead className="w-[100px]">Date</TableHead>
             <TableHead>Client</TableHead>
             <TableHead>Type</TableHead>
@@ -55,63 +87,97 @@ export function TransactionsTable({ transactions, onConfirmCashPayment, onToggle
         </TableHeader>
         <TableBody>
           {transactions.length > 0 ? (
-            transactions.map((transaction) => (
-              <TableRow key={transaction.id}>
-                <TableCell className="text-xs">{transaction.date}</TableCell>
-                <TableCell>{transaction.client}</TableCell>
-                <TableCell className="text-xs">{transaction.type}</TableCell>
-                <TableCell className="text-xs">{transaction.name}</TableCell>
-                <TableCell className="font-medium">€{transaction.amount.toFixed(2)}</TableCell>
-                <TableCell>
-                  {transaction.paymentMethod && (
-                    <PaymentMethodBadge method={transaction.paymentMethod} />
-                  )}
-                </TableCell>
-                <TableCell>
-                  <TransactionStatusBadge status={transaction.status} />
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex gap-2 justify-end">
-                    {/* Cash payment confirmation button */}
-                    {transaction.paymentMethod === 'cash' && transaction.status === 'pending' && (
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="h-7 text-xs" 
-                        onClick={() => onConfirmCashPayment && onConfirmCashPayment(transaction.id)}
-                      >
-                        Confirm Receipt
-                      </Button>
+            transactions.map((transaction) => {
+              const isSelected = selectedTransactions.has(transaction.id);
+              const canSelect = transaction.status === 'paid' && !transaction.receiptSent;
+              
+              return (
+                <TableRow key={transaction.id} className={isSelected ? 'bg-primary/5' : ''}>
+                  <TableCell>
+                    {canSelect && (
+                      <Checkbox
+                        checked={isSelected}
+                        onCheckedChange={() => onToggleSelection?.(transaction.id)}
+                      />
                     )}
-                    
-                    {/* Invoice button - only for paid transactions */}
-                    {transaction.status === 'paid' && (
-                      <Button 
-                        variant={transaction.invoiceSent ? "secondary" : "outline"}
-                        size="sm" 
-                        className="h-7 text-xs" 
-                        onClick={() => handleSendInvoice(transaction)}
-                      >
-                        {transaction.invoiceSent ? (
-                          <>
-                            <CheckCircle className="h-3 w-3 mr-1" />
-                            Sent
-                          </>
-                        ) : (
-                          <>
-                            <FileText className="h-3 w-3 mr-1" />
-                            Invoice
-                          </>
-                        )}
-                      </Button>
+                  </TableCell>
+                  <TableCell className="text-xs">{transaction.date}</TableCell>
+                  <TableCell>{transaction.client}</TableCell>
+                  <TableCell className="text-xs">{transaction.type}</TableCell>
+                  <TableCell className="text-xs">{transaction.name}</TableCell>
+                  <TableCell className="font-medium">€{transaction.amount.toFixed(2)}</TableCell>
+                  <TableCell>
+                    {transaction.paymentMethod && (
+                      <PaymentMethodBadge method={transaction.paymentMethod} />
                     )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <TransactionStatusBadge status={transaction.status} />
+                      {transaction.receiptSent && (
+                        <Badge variant="outline" className="text-xs flex items-center gap-1">
+                          <CheckCircle className="h-3 w-3" />
+                          Scontrino
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex gap-2 justify-end">
+                      {/* Cash payment confirmation button */}
+                      {transaction.paymentMethod === 'cash' && transaction.status === 'pending' && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-7 text-xs" 
+                          onClick={() => onConfirmCashPayment && onConfirmCashPayment(transaction.id)}
+                        >
+                          Confirm Receipt
+                        </Button>
+                      )}
+                      
+                      {/* Receipt button - only for paid transactions without receipt */}
+                      {transaction.status === 'paid' && !transaction.receiptSent && (
+                        <Button 
+                          variant="outline"
+                          size="sm" 
+                          className="h-7 text-xs" 
+                          onClick={() => onSendReceipt?.(transaction.id)}
+                        >
+                          <Receipt className="h-3 w-3 mr-1" />
+                          Scontrino
+                        </Button>
+                      )}
+                      
+                      {/* Invoice button - only for paid transactions */}
+                      {transaction.status === 'paid' && (
+                        <Button 
+                          variant={transaction.invoiceSent ? "secondary" : "outline"}
+                          size="sm" 
+                          className="h-7 text-xs" 
+                          onClick={() => handleSendInvoice(transaction)}
+                        >
+                          {transaction.invoiceSent ? (
+                            <>
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              Sent
+                            </>
+                          ) : (
+                            <>
+                              <FileText className="h-3 w-3 mr-1" />
+                              Invoice
+                            </>
+                          )}
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
-              <TableCell colSpan={8} className="text-center py-6 text-muted-foreground">
+              <TableCell colSpan={9} className="text-center py-6 text-muted-foreground">
                 No transactions found
               </TableCell>
             </TableRow>

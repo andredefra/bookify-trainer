@@ -11,6 +11,10 @@ export interface TransactionType {
   status: 'paid' | 'pending' | 'failed';
   paymentMethod?: 'card' | 'cash';
   invoiceSent?: boolean;
+  receiptSent?: boolean;
+  receiptSentAt?: string;
+  receiptNumber?: string;
+  receiptUrl?: string;
   packageId?: string;
   packageAssignmentId?: string;
   isPackagePayment?: boolean;
@@ -41,4 +45,20 @@ export interface AddTransactionDialogProps {
   onOpenChange: (open: boolean) => void;
   onAdd: (transaction: Omit<TransactionType, 'id'>) => void;
   clients: { id: number; name: string }[];
+}
+
+// Bulk operations interface
+export interface BulkReceiptOperation {
+  transactionIds: number[];
+  templateId?: string;
+  customMessage?: string;
+}
+
+// Receipt template interface
+export interface ReceiptTemplate {
+  id: string;
+  name: string;
+  subject: string;
+  content: string;
+  variables: string[];
 }
