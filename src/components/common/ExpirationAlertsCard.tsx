@@ -83,7 +83,7 @@ export function ExpirationAlertsCard() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
@@ -93,12 +93,12 @@ export function ExpirationAlertsCard() {
               {counts.total} elementi in scadenza - {counts.critical} critici
             </CardDescription>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {counts.critical > 0 && (
-              <Badge variant="destructive">{counts.critical} critici</Badge>
+              <Badge variant="destructive" className="text-xs">{counts.critical} critici</Badge>
             )}
             {counts.warning > 0 && (
-              <Badge variant="secondary">{counts.warning} attenzione</Badge>
+              <Badge variant="secondary" className="text-xs">{counts.warning} attenzione</Badge>
             )}
           </div>
         </div>
@@ -106,23 +106,26 @@ export function ExpirationAlertsCard() {
       <CardContent>
         <div className="space-y-4">
           {expiringItems.slice(0, 5).map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg">
-              <div className="flex items-center gap-3">
+            <div key={item.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className={`w-2 h-2 rounded-full ${getStatusColor(item.status)}`} />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
                   {getTypeIcon(item.type)}
-                  <div>
-                    <p className="font-medium">{item.title}</p>
-                    <p className="text-sm text-muted-foreground">{item.clientName}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium truncate">{item.title}</p>
+                    <p className="text-sm text-muted-foreground truncate">{item.clientName}</p>
                   </div>
                 </div>
               </div>
-              <div className="text-right">
-                <Badge variant={getStatusBadgeVariant(item.status)}>
+              <div className="flex flex-col sm:text-right gap-1">
+                <Badge variant={getStatusBadgeVariant(item.status)} className="text-xs w-fit">
                   {item.daysLeft} giorni
                 </Badge>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground hidden sm:block">
                   Scade il {new Date(item.expiryDate).toLocaleDateString('it-IT')}
+                </p>
+                <p className="text-xs text-muted-foreground sm:hidden">
+                  {new Date(item.expiryDate).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
                 </p>
               </div>
             </div>
