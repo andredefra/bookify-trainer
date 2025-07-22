@@ -14,6 +14,9 @@ export interface GymTransaction {
   package_type: string;
   client_name: string;
   client_email: string;
+  receipt_sent_at?: string | null;
+  receipt_number?: string | null;
+  receipt_url?: string | null;
 }
 
 export interface TransactionStats {
@@ -44,6 +47,9 @@ export function useGymTransactions() {
           purchase_date,
           payment_status,
           status,
+          receipt_sent_at,
+          receipt_number,
+          receipt_url,
           gym_packages(
             title,
             package_type
@@ -106,7 +112,10 @@ export function useGymTransactions() {
           package_title: assignment.gym_packages?.title || 'Unknown Package',
           package_type: assignment.gym_packages?.package_type || 'monthly',
           client_name: (profile as any)?.full_name || generateDemoName(assignment.client_id),
-          client_email: (profile as any)?.email || generateDemoEmail(assignment.client_id)
+          client_email: (profile as any)?.email || generateDemoEmail(assignment.client_id),
+          receipt_sent_at: assignment.receipt_sent_at,
+          receipt_number: assignment.receipt_number,
+          receipt_url: assignment.receipt_url
         };
       }) || [];
 
