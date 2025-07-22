@@ -41,23 +41,46 @@ export const useGymReviews = () => {
       // Get current gym ID
       const gymId = '11111111-1111-1111-1111-111111111111'; // Demo gym ID
 
-      // Fetch reviews for trainers affiliated with this gym
+      // First, get trainers associated with this gym through gym_trainer_assignments
+      const { data: gymTrainersData, error: gymTrainersError } = await supabase
+        .from('gym_trainer_assignments')
+        .select('trainer_id')
+        .eq('gym_id', gymId)
+        .eq('status', 'active');
+
+      if (gymTrainersError) throw gymTrainersError;
+
+      const trainerIds = gymTrainersData?.map(t => t.trainer_id) || [];
+
+      // If no trainers, return empty data
+      if (trainerIds.length === 0) {
+        setReviews([]);
+        setTrainerPerformance([]);
+        setStats({
+          averageRating: 0,
+          totalReviews: 0,
+          activeReviews: 0,
+          clientSatisfaction: 0,
+          topTrainer: { name: "No trainers", rating: 0 }
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Fetch reviews for these trainers
       const { data: reviewsData, error: reviewsError } = await supabase
         .from('trainer_reviews')
-        .select(`
-          *,
-          trainer_profiles!inner(trainer_id, primary_gym_id)
-        `)
-        .eq('trainer_profiles.primary_gym_id', gymId)
+        .select('*')
+        .in('trainer_id', trainerIds)
         .order('created_at', { ascending: false });
 
       if (reviewsError) throw reviewsError;
 
-      // Fetch trainer names and performance metrics
+      // Fetch trainer profiles for these trainers
       const { data: trainersData, error: trainersError } = await supabase
         .from('trainer_profiles')
         .select('trainer_id, bio')
-        .eq('primary_gym_id', gymId);
+        .in('trainer_id', trainerIds);
 
       if (trainersError) throw trainersError;
 
