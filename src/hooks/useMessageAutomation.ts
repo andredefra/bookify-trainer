@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export interface MessageTemplate {
@@ -169,23 +168,11 @@ export function useMessageAutomation() {
 
   const initializeDefaultTemplates = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      // Check if templates already exist
-      const { data: existingTemplates } = await supabase
-        .from('message_templates')
-        .select('id')
-        .limit(1);
-
-      if (existingTemplates && existingTemplates.length > 0) {
-        return; // Templates already exist
-      }
-
-      // Create default templates
-      const templatesWithVariables = DEFAULT_MESSAGE_TEMPLATES.map(template => ({
+      // Create default templates with mock data for demo
+      const templatesWithVariables = DEFAULT_MESSAGE_TEMPLATES.map((template, index) => ({
         ...template,
-        user_id: user.id,
+        id: `template-${index}`,
+        user_id: 'mock-user',
         variables: {
           clientName: 'Client Name',
           trainerName: 'Trainer Name',
@@ -206,16 +193,13 @@ export function useMessageAutomation() {
           startDate: 'Start Date',
           packageDuration: 'Package Duration',
           programDuration: 'Program Duration'
-        }
+        },
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       }));
 
-      const { error } = await supabase
-        .from('message_templates')
-        .insert(templatesWithVariables);
-
-      if (error) throw error;
-
-      await fetchTemplates();
+      setTemplates(templatesWithVariables as MessageTemplate[]);
       
       toast({
         title: "Templates Initialized",
@@ -233,13 +217,10 @@ export function useMessageAutomation() {
 
   const fetchTemplates = async () => {
     try {
-      const { data, error } = await supabase
-        .from('message_templates')
-        .select('*')
-        .order('template_type', { ascending: true });
-
-      if (error) throw error;
-      setTemplates((data || []) as MessageTemplate[]);
+      // Mock fetch - in real implementation would fetch from database
+      if (templates.length === 0) {
+        await initializeDefaultTemplates();
+      }
     } catch (err) {
       console.error('Error fetching message templates:', err);
       setError('Failed to fetch message templates');
@@ -248,16 +229,8 @@ export function useMessageAutomation() {
 
   const fetchRules = async () => {
     try {
-      const { data, error } = await supabase
-        .from('message_automation_rules')
-        .select(`
-          *,
-          template:message_templates(*)
-        `)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setRules((data || []) as MessageAutomationRule[]);
+      // Mock fetch - in real implementation would fetch from database
+      setRules([]);
     } catch (err) {
       console.error('Error fetching automation rules:', err);
       setError('Failed to fetch automation rules');
@@ -266,14 +239,8 @@ export function useMessageAutomation() {
 
   const fetchMessages = async () => {
     try {
-      const { data, error } = await supabase
-        .from('automated_messages')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100);
-
-      if (error) throw error;
-      setMessages((data || []) as AutomatedMessage[]);
+      // Mock fetch - in real implementation would fetch from database
+      setMessages([]);
     } catch (err) {
       console.error('Error fetching automated messages:', err);
       setError('Failed to fetch automated messages');
@@ -282,28 +249,24 @@ export function useMessageAutomation() {
 
   const createTemplate = async (templateData: CreateMessageTemplateData) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const newTemplate: MessageTemplate = {
+        ...templateData,
+        id: `template-${Date.now()}`,
+        user_id: 'mock-user',
+        variables: templateData.variables || {},
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
 
-      const { data, error } = await supabase
-        .from('message_templates')
-        .insert({
-          ...templateData,
-          user_id: user.id,
-          variables: templateData.variables || {}
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
+      setTemplates(prev => [newTemplate, ...prev]);
 
       toast({
         title: "Template Created",
         description: "Message template has been created successfully",
       });
 
-      await fetchTemplates();
-      return data;
+      return newTemplate;
     } catch (err) {
       console.error('Error creating template:', err);
       toast({
@@ -317,22 +280,23 @@ export function useMessageAutomation() {
 
   const updateTemplate = async (id: string, templateData: Partial<CreateMessageTemplateData>) => {
     try {
-      const { data, error } = await supabase
-        .from('message_templates')
-        .update(templateData)
-        .eq('id', id)
-        .select()
-        .single();
+      const updatedTemplate = templates.find(t => t.id === id);
+      if (!updatedTemplate) throw new Error('Template not found');
 
-      if (error) throw error;
+      const updated = {
+        ...updatedTemplate,
+        ...templateData,
+        updated_at: new Date().toISOString()
+      };
+
+      setTemplates(prev => prev.map(t => t.id === id ? updated : t));
 
       toast({
         title: "Template Updated",
         description: "Message template has been updated successfully",
       });
 
-      await fetchTemplates();
-      return data;
+      return updated;
     } catch (err) {
       console.error('Error updating template:', err);
       toast({
@@ -346,27 +310,24 @@ export function useMessageAutomation() {
 
   const createRule = async (ruleData: CreateMessageRuleData) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const newRule: MessageAutomationRule = {
+        ...ruleData,
+        id: `rule-${Date.now()}`,
+        user_id: 'mock-user',
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        template: templates.find(t => t.id === ruleData.template_id)
+      };
 
-      const { data, error } = await supabase
-        .from('message_automation_rules')
-        .insert({
-          ...ruleData,
-          user_id: user.id
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
+      setRules(prev => [newRule, ...prev]);
 
       toast({
         title: "Rule Created",
         description: "Automation rule has been created successfully",
       });
 
-      await fetchRules();
-      return data;
+      return newRule;
     } catch (err) {
       console.error('Error creating rule:', err);
       toast({
@@ -380,19 +341,16 @@ export function useMessageAutomation() {
 
   const toggleRuleStatus = async (id: string, isActive: boolean) => {
     try {
-      const { error } = await supabase
-        .from('message_automation_rules')
-        .update({ is_active: isActive })
-        .eq('id', id);
-
-      if (error) throw error;
+      setRules(prev => prev.map(r => 
+        r.id === id 
+          ? { ...r, is_active: isActive, updated_at: new Date().toISOString() }
+          : r
+      ));
 
       toast({
         title: "Rule Updated",
         description: `Automation rule has been ${isActive ? 'activated' : 'deactivated'}`,
       });
-
-      await fetchRules();
     } catch (err) {
       console.error('Error updating rule status:', err);
       toast({

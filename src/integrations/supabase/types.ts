@@ -14,6 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      automated_messages: {
+        Row: {
+          content: string
+          created_at: string
+          error_message: string | null
+          id: string
+          recipient_email: string
+          recipient_id: string
+          recipient_name: string
+          rule_id: string
+          sent_at: string | null
+          status: string | null
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          recipient_email: string
+          recipient_id: string
+          recipient_name: string
+          rule_id: string
+          sent_at?: string | null
+          status?: string | null
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          recipient_email?: string
+          recipient_id?: string
+          recipient_name?: string
+          rule_id?: string
+          sent_at?: string | null
+          status?: string | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automated_messages_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "message_automation_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       automation_rules: {
         Row: {
           created_at: string | null
@@ -1164,6 +1217,92 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      message_automation_rules: {
+        Row: {
+          created_at: string
+          days_before: number | null
+          id: string
+          is_active: boolean | null
+          specific_conditions: Json | null
+          target_audience: string | null
+          template_id: string
+          trigger_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          days_before?: number | null
+          id?: string
+          is_active?: boolean | null
+          specific_conditions?: Json | null
+          target_audience?: string | null
+          template_id: string
+          trigger_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          days_before?: number | null
+          id?: string
+          is_active?: boolean | null
+          specific_conditions?: Json | null
+          target_audience?: string | null
+          template_id?: string
+          trigger_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_automation_rules_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "message_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_templates: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          name: string
+          subject: string
+          template_type: string
+          updated_at: string
+          user_id: string
+          variables: Json | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          subject: string
+          template_type: string
+          updated_at?: string
+          user_id: string
+          variables?: Json | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          subject?: string
+          template_type?: string
+          updated_at?: string
+          user_id?: string
+          variables?: Json | null
+        }
+        Relationships: []
       }
       package_assignments: {
         Row: {
