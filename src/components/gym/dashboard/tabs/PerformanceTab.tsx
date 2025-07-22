@@ -1,7 +1,26 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, TrendingUp, Users, Award } from "lucide-react";
+import { useGymReviews } from "@/hooks/useGymReviews";
+import { TrainerPerformanceCard } from "./performance/TrainerPerformanceCard";
+import { RecentReviewsCard } from "./performance/RecentReviewsCard";
 
 export function PerformanceTab() {
+  const { stats, trainerPerformance, reviews, loading } = useGymReviews();
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-2">
+          <Star className="w-6 h-6 text-primary" />
+          <h1 className="text-2xl font-bold">Performance & Reviews</h1>
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="text-muted-foreground">Loading performance data...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
@@ -18,9 +37,9 @@ export function PerformanceTab() {
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4.8</div>
+            <div className="text-2xl font-bold">{stats.averageRating}</div>
             <p className="text-xs text-muted-foreground">
-              from 127 reviews
+              from {stats.totalReviews} reviews
             </p>
           </CardContent>
         </Card>
@@ -33,9 +52,9 @@ export function PerformanceTab() {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5.0</div>
+            <div className="text-2xl font-bold">{stats.topTrainer.rating}</div>
             <p className="text-xs text-muted-foreground">
-              Marco Rossi
+              {stats.topTrainer.name}
             </p>
           </CardContent>
         </Card>
@@ -48,9 +67,9 @@ export function PerformanceTab() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">96%</div>
+            <div className="text-2xl font-bold">{stats.clientSatisfaction}%</div>
             <p className="text-xs text-muted-foreground">
-              +2% from last month
+              4+ star ratings
             </p>
           </CardContent>
         </Card>
@@ -63,7 +82,7 @@ export function PerformanceTab() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23</div>
+            <div className="text-2xl font-bold">{stats.activeReviews}</div>
             <p className="text-xs text-muted-foreground">
               this week
             </p>
@@ -72,33 +91,8 @@ export function PerformanceTab() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Trainer Performance</CardTitle>
-            <CardDescription>
-              Individual trainer metrics and ratings
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Detailed performance analytics coming soon...
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Reviews</CardTitle>
-            <CardDescription>
-              Latest member feedback and ratings
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Review management system coming soon...
-            </p>
-          </CardContent>
-        </Card>
+        <TrainerPerformanceCard performance={trainerPerformance} />
+        <RecentReviewsCard reviews={reviews} />
       </div>
     </div>
   );
