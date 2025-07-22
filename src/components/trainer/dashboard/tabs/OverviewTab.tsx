@@ -4,15 +4,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Users, DollarSign, TrendingUp, Clock, MessageSquare, Package, Target } from "lucide-react";
 import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
+import { TrainerSessionItem } from "@/types/sessions";
 
-export function OverviewTab() {
+interface OverviewTabProps {
+  upcomingSessions: TrainerSessionItem[];
+  clients: Array<{ id: number; name: string; sessions: number; lastSession: string }>;
+  messageRequests: Array<{ id: number; from: string; preview: string; time: string }>;
+}
+
+export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
   const stats = {
-    totalClients: 24,
+    totalClients: clients.length,
     activePrograms: 18,
     monthlyRevenue: 3200,
     completedSessions: 156,
-    upcomingToday: 3,
-    messagesUnread: 2
+    upcomingToday: upcomingSessions.length,
+    messagesUnread: messageRequests.length
   };
 
   const recentActivities = [
@@ -20,12 +27,6 @@ export function OverviewTab() {
     { id: 2, type: "program", client: "Anna Bianchi", action: "Nuovo programma assegnato", time: "2h fa" },
     { id: 3, type: "message", client: "Luca Verdi", action: "Messaggio ricevuto", time: "3h fa" },
     { id: 4, type: "payment", client: "Sofia Nero", action: "Pagamento ricevuto", time: "1d fa" }
-  ];
-
-  const upcomingSessions = [
-    { id: 1, client: "Marco Rossi", time: "14:00", type: "Personal Training" },
-    { id: 2, client: "Anna Bianchi", time: "15:30", type: "Weight Loss Session" },
-    { id: 3, client: "Luca Verdi", time: "17:00", type: "Strength Training" }
   ];
 
   return (
@@ -106,8 +107,8 @@ export function OverviewTab() {
                 {upcomingSessions.map((session) => (
                   <div key={session.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
-                      <p className="font-medium">{session.client}</p>
-                      <p className="text-sm text-muted-foreground">{session.type}</p>
+                      <p className="font-medium">{session.name}</p>
+                      <p className="text-sm text-muted-foreground">{session.participants}/{session.maxParticipants} partecipanti</p>
                     </div>
                     <div className="text-right">
                       <Badge variant="outline">{session.time}</Badge>
