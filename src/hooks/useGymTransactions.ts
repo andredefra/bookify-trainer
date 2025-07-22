@@ -54,14 +54,23 @@ export function useGymTransactions() {
 
       if (error) throw error;
 
-      // Get client profiles separately
+      // Get client profiles separately - handle empty response gracefully
       const clientIds = assignments?.map(a => a.client_id) || [];
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, full_name, email')
-        .in('id', clientIds);
+      let profiles = null;
+      if (clientIds.length > 0) {
+        try {
+          const { data } = await supabase
+            .from('profiles')
+            .select('id, full_name, email')
+            .in('id', clientIds);
+          profiles = data;
+        } catch (error) {
+          console.warn('Profiles not found, using demo data:', error);
+          profiles = null;
+        }
+      }
 
-      const profilesMap = new Map(profiles?.map(p => [p.id, p]) || []);
+      const profilesMap = new Map(profiles?.map((p: any) => [p.id, p]) || []);
 
       const transactions: GymTransaction[] = assignments?.map(assignment => {
         const profile = profilesMap.get(assignment.client_id);
@@ -96,8 +105,8 @@ export function useGymTransactions() {
           status: assignment.status || 'active',
           package_title: assignment.gym_packages?.title || 'Unknown Package',
           package_type: assignment.gym_packages?.package_type || 'monthly',
-          client_name: profile?.full_name || generateDemoName(assignment.client_id),
-          client_email: profile?.email || generateDemoEmail(assignment.client_id)
+          client_name: (profile as any)?.full_name || generateDemoName(assignment.client_id),
+          client_email: (profile as any)?.email || generateDemoEmail(assignment.client_id)
         };
       }) || [];
 
