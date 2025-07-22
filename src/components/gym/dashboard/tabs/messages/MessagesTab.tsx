@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageSquare, Send, Reply, Settings, Users, TrendingUp, Clock } from "lucide-react";
+import { MessageSquare, Send, Reply, Users, TrendingUp, Clock } from "lucide-react";
 import { MessageAutomationTab } from "@/components/common/MessageAutomationTab";
 
 interface MessagesTabProps {
@@ -50,7 +50,7 @@ export function MessagesTab({ onMessagesRead }: MessagesTabProps) {
 
   return (
     <div className="space-y-6">
-      {/* Stats Overview */}
+      {/* KPI Generali Messaggi */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6">
