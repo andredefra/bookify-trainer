@@ -19,12 +19,12 @@ const LanguageToggle = ({ className }: LanguageToggleProps) => {
 
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
+    const currentPath = window.location.pathname;
     
-    // Navigate to the appropriate route
-    if (lang === 'en') {
-      navigate('/');
+    if (currentPath === '/user' || currentPath === '/user-en') {
+      navigate(lang === 'en' ? '/user-en' : '/user');
     } else {
-      navigate('/it');
+      navigate(lang === 'en' ? '/' : '/it');
     }
   };
 

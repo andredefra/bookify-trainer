@@ -317,5 +317,10 @@ export const it = {
   // Registration CTA
   'cta.title': 'Sii il Primo a Sapere Quando Lanciamo',
   'cta.description': 'Registrati per la demo oggi e ottieni un prezzo scontato speciale quando lanciamo ufficialmente.',
-  'cta.button': 'Compila il Modulo per Accesso Anticipato'
+  'cta.button': 'Compila il Modulo per Accesso Anticipato',
+
+  // User Landing
+  'user.hero.title': 'Allena corpo e mente. Con Trainer.ai, non sei mai da solo.',
+  'user.hero.subtitle': 'Scopri il primo personal trainer virtuale che ti ascolta davvero. Crea il tuo piano, registra i progressi, ricevi consigli su misura.',
+  'user.hero.cta': 'Inizia ora – Gratis per 1 anno per i primi 100 utenti!'
 };

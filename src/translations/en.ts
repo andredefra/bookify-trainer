@@ -317,5 +317,10 @@ export const en = {
   'pricing.detailedFeatures.everythingInBasic.name': 'Everything in Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'All features from the Basic plan are included',
   'pricing.detailedFeatures.everythingInEssential.name': 'Everything in Essential',
-  'pricing.detailedFeatures.everythingInEssential.description': 'All features from the Essential plan are included'
+  'pricing.detailedFeatures.everythingInEssential.description': 'All features from the Essential plan are included',
+
+  // User Landing
+  'user.hero.title': 'Train body and mind. With Trainer.ai, you\'re never alone.',
+  'user.hero.subtitle': 'Discover the first virtual personal trainer that truly listens to you. Create your plan, track progress, receive personalized advice.',
+  'user.hero.cta': 'Start now – Free for 1 year for the first 100 users!'
 };
