@@ -9,149 +9,122 @@ export function useWorkoutLogs() {
   }, []);
 
   const loadWorkoutLogs = () => {
-    // Force clear old data and load new demo data
-    localStorage.removeItem("workoutLogs");
+    // Clear all existing data completely
+    localStorage.clear();
     
     const logs: WorkoutLog[] = [
       {
-        id: "demo-1",
+        id: "new-log-1",
         date: new Date().toISOString(),
-        name: "Upper Body Strength",
-        duration: "45 min",
+        name: "Morning Push Session",
+        duration: "35 min",
         exercises: [
           {
-            id: "ex-1",
-            name: "Bench Press",
-            exerciseDbId: "dumbbell-flat-press",
+            id: "exercise-1",
+            name: "Dumbbell Chest Press",
+            exerciseDbId: "dumbbell-chest-press",
             difficulty: "intermediate" as const,
             muscleGroups: ["Pectorals", "Triceps", "Anterior Deltoids"],
             equipment: ["Dumbbells", "Bench"],
             setsData: [
-              { setNumber: 1, targetReps: "8-10", actualReps: 8, weight: 60, completed: true },
-              { setNumber: 2, targetReps: "8-10", actualReps: 9, weight: 60, completed: true },
-              { setNumber: 3, targetReps: "8-10", actualReps: 8, weight: 65, completed: true },
-              { setNumber: 4, targetReps: "8-10", actualReps: 7, weight: 65, completed: true }
+              { setNumber: 1, targetReps: "8-10", actualReps: 10, weight: 22.5, completed: true },
+              { setNumber: 2, targetReps: "8-10", actualReps: 9, weight: 25, completed: true },
+              { setNumber: 3, targetReps: "8-10", actualReps: 8, weight: 25, completed: true }
             ]
           },
           {
-            id: "ex-2", 
-            name: "Lat Pulldown",
-            exerciseDbId: "lat-pulldown",
-            difficulty: "beginner" as const,
-            muscleGroups: ["Latissimus Dorsi", "Rhomboids", "Middle Trapezius"],
-            equipment: ["Cable Machine", "Lat Pulldown"],
-            setsData: [
-              { setNumber: 1, targetReps: "10-12", actualReps: 12, weight: 50, completed: true },
-              { setNumber: 2, targetReps: "10-12", actualReps: 11, weight: 55, completed: true },
-              { setNumber: 3, targetReps: "10-12", actualReps: 10, weight: 55, completed: true }
-            ]
-          },
-          {
-            id: "ex-3",
-            name: "Shoulder Press",
-            exerciseDbId: "dumbbell-shoulder-press", 
+            id: "exercise-2",
+            name: "Overhead Press",
+            exerciseDbId: "dumbbell-overhead-press",
             difficulty: "intermediate" as const,
             muscleGroups: ["Anterior Deltoids", "Medial Deltoids", "Triceps"],
             equipment: ["Dumbbells"],
             setsData: [
-              { setNumber: 1, targetReps: "8-12", actualReps: 10, weight: 15, completed: true },
-              { setNumber: 2, targetReps: "8-12", actualReps: 9, weight: 15, completed: true },
-              { setNumber: 3, targetReps: "8-12", actualReps: 8, weight: 17.5, completed: true }
+              { setNumber: 1, targetReps: "10-12", actualReps: 12, weight: 15, completed: true },
+              { setNumber: 2, targetReps: "10-12", actualReps: 10, weight: 17.5, completed: true },
+              { setNumber: 3, targetReps: "10-12", actualReps: 9, weight: 17.5, completed: true }
             ]
           }
         ]
       },
       {
-        id: "demo-2", 
-        date: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-        name: "Leg Day",
-        duration: "50 min",
+        id: "new-log-2",
+        date: new Date(Date.now() - 86400000).toISOString(),
+        name: "Lower Body Power",
+        duration: "40 min",
         exercises: [
           {
-            id: "ex-4",
-            name: "Squats",
-            exerciseDbId: "barbell-squat",
-            difficulty: "intermediate" as const, 
-            muscleGroups: ["Quadriceps", "Glutes", "Hamstrings"],
-            equipment: ["Barbell"],
+            id: "exercise-3",
+            name: "Goblet Squats",
+            exerciseDbId: "goblet-squat",
+            difficulty: "beginner" as const,
+            muscleGroups: ["Quadriceps", "Glutes", "Core"],
+            equipment: ["Dumbbell"],
             setsData: [
-              { setNumber: 1, targetReps: "8-10", actualReps: 10, weight: 70, completed: true },
-              { setNumber: 2, targetReps: "8-10", actualReps: 9, weight: 75, completed: true },
-              { setNumber: 3, targetReps: "8-10", actualReps: 8, weight: 80, completed: true },
-              { setNumber: 4, targetReps: "8-10", actualReps: 8, weight: 80, completed: true }
+              { setNumber: 1, targetReps: "12-15", actualReps: 15, weight: 20, completed: true },
+              { setNumber: 2, targetReps: "12-15", actualReps: 14, weight: 22.5, completed: true },
+              { setNumber: 3, targetReps: "12-15", actualReps: 13, weight: 22.5, completed: true },
+              { setNumber: 4, targetReps: "12-15", actualReps: 12, weight: 25, completed: true }
             ]
           },
           {
-            id: "ex-5",
-            name: "Romanian Deadlift",
-            exerciseDbId: "romanian-deadlift-dumbbell",
-            difficulty: "advanced" as const,
-            muscleGroups: ["Hamstrings", "Glutes"],
-            equipment: ["Dumbbells"],
-            setsData: [
-              { setNumber: 1, targetReps: "6-8", actualReps: 8, weight: 25, completed: true },
-              { setNumber: 2, targetReps: "6-8", actualReps: 7, weight: 27.5, completed: true },
-              { setNumber: 3, targetReps: "6-8", actualReps: 6, weight: 30, completed: true }
-            ]
-          },
-          {
-            id: "ex-6",
-            name: "Leg Press",
-            exerciseDbId: "45-degree-leg-press",
+            id: "exercise-4",
+            name: "Walking Lunges",
+            exerciseDbId: "walking-lunges",
             difficulty: "beginner" as const,
             muscleGroups: ["Quadriceps", "Glutes", "Hamstrings"],
-            equipment: ["45 Degree Leg Press Machine"],
-            setsData: [
-              { setNumber: 1, targetReps: "12-15", actualReps: 15, weight: 100, completed: true },
-              { setNumber: 2, targetReps: "12-15", actualReps: 14, weight: 110, completed: true },
-              { setNumber: 3, targetReps: "12-15", actualReps: 12, weight: 120, completed: true }
-            ]
-          }
-        ]
-      },
-      {
-        id: "demo-3",
-        date: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-        name: "Full Body Circuit",
-        duration: "60 min", 
-        exercises: [
-          {
-            id: "ex-7",
-            name: "Push-ups",
-            exerciseDbId: "push-up",
-            difficulty: "beginner" as const,
-            muscleGroups: ["Pectorals", "Triceps", "Core"],
             equipment: ["Bodyweight"],
             setsData: [
-              { setNumber: 1, targetReps: "12-15", actualReps: 15, weight: 0, completed: true },
-              { setNumber: 2, targetReps: "12-15", actualReps: 12, weight: 0, completed: true },
-              { setNumber: 3, targetReps: "12-15", actualReps: 10, weight: 0, completed: true }
+              { setNumber: 1, targetReps: "20", actualReps: 20, weight: 0, completed: true },
+              { setNumber: 2, targetReps: "20", actualReps: 18, weight: 0, completed: true },
+              { setNumber: 3, targetReps: "20", actualReps: 16, weight: 0, completed: true }
             ]
-          },
+          }
+        ]
+      },
+      {
+        id: "new-log-3",
+        date: new Date(Date.now() - 172800000).toISOString(),
+        name: "Back & Arms",
+        duration: "45 min",
+        exercises: [
           {
-            id: "ex-8",
-            name: "Cable Row",
-            exerciseDbId: "seated-cable-row",
+            id: "exercise-5",
+            name: "Bent Over Rows",
+            exerciseDbId: "bent-over-row",
             difficulty: "intermediate" as const,
-            muscleGroups: ["Rhomboids", "Middle Trapezius", "Latissimus Dorsi"],
-            equipment: ["Cable Machine", "Row Handle"],
-            setsData: [
-              { setNumber: 1, targetReps: "8-12", actualReps: 12, weight: 40, completed: true },
-              { setNumber: 2, targetReps: "8-12", actualReps: 10, weight: 45, completed: true },
-              { setNumber: 3, targetReps: "8-12", actualReps: 9, weight: 45, completed: true }
-            ]
-          },
-          {
-            id: "ex-9",
-            name: "Lateral Raises",
-            exerciseDbId: "lateral-raises",
-            difficulty: "beginner" as const,
-            muscleGroups: ["Medial Deltoids"],
+            muscleGroups: ["Latissimus Dorsi", "Rhomboids", "Biceps"],
             equipment: ["Dumbbells"],
             setsData: [
-              { setNumber: 1, targetReps: "12-15", actualReps: 15, weight: 5, completed: true },
-              { setNumber: 2, targetReps: "12-15", actualReps: 13, weight: 7.5, completed: true },
-              { setNumber: 3, targetReps: "12-15", actualReps: 12, weight: 7.5, completed: true }
+              { setNumber: 1, targetReps: "8-10", actualReps: 10, weight: 20, completed: true },
+              { setNumber: 2, targetReps: "8-10", actualReps: 9, weight: 22.5, completed: true },
+              { setNumber: 3, targetReps: "8-10", actualReps: 8, weight: 22.5, completed: true }
+            ]
+          },
+          {
+            id: "exercise-6",
+            name: "Bicep Curls",
+            exerciseDbId: "bicep-curls",
+            difficulty: "beginner" as const,
+            muscleGroups: ["Biceps"],
+            equipment: ["Dumbbells"],
+            setsData: [
+              { setNumber: 1, targetReps: "12-15", actualReps: 15, weight: 10, completed: true },
+              { setNumber: 2, targetReps: "12-15", actualReps: 14, weight: 12.5, completed: true },
+              { setNumber: 3, targetReps: "12-15", actualReps: 12, weight: 12.5, completed: true }
+            ]
+          },
+          {
+            id: "exercise-7",
+            name: "Tricep Dips",
+            exerciseDbId: "tricep-dips",
+            difficulty: "intermediate" as const,
+            muscleGroups: ["Triceps", "Anterior Deltoids"],
+            equipment: ["Bodyweight", "Chair"],
+            setsData: [
+              { setNumber: 1, targetReps: "10-12", actualReps: 12, weight: 0, completed: true },
+              { setNumber: 2, targetReps: "10-12", actualReps: 10, weight: 0, completed: true },
+              { setNumber: 3, targetReps: "10-12", actualReps: 8, weight: 0, completed: true }
             ]
           }
         ]
