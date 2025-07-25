@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash2, Plus, Minus } from "lucide-react";
+import { Trash2, Plus, Minus, CheckCircle2 } from "lucide-react";
 import { ExerciseLog, SetLogData } from "./types";
 import { ExerciseSelector } from "./ExerciseSelector";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
@@ -12,6 +12,7 @@ import { SetTracker } from "../SetTracker";
 import { AlternativeExercises } from "../AlternativeExercises";
 import { ExerciseVideoPlayer } from "../ExerciseVideoPlayer";
 import { SetData } from "@/data/training/types";
+import { exerciseVideoUrls } from "@/data/exercises/videoUrls";
 
 interface ExerciseLogItemProps {
   exercise: ExerciseLog;
@@ -24,14 +25,16 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
   const [notes, setNotes] = useState(exercise.notes || "");
 
   const handleExerciseSelect = (selectedExercise: ExerciseData) => {
-    // Aggiorna i dati dell'esercizio
+    console.log("Exercise selected:", selectedExercise);
+    
+    // Update exercise data
     onChange(exercise.id, "name", selectedExercise.name);
     onChange(exercise.id, "exerciseDbId", selectedExercise.id);
     onChange(exercise.id, "difficulty", selectedExercise.difficulty);
     onChange(exercise.id, "muscleGroups", selectedExercise.muscleGroup);
     onChange(exercise.id, "equipment", selectedExercise.equipment);
     
-    // Inizializza i set di default come SetLogData
+    // Initialize default sets as SetLogData
     const defaultSets: SetLogData[] = Array.from({ length: 3 }, (_, index) => ({
       setNumber: index + 1,
       targetReps: selectedExercise.difficulty === 'beginner' ? '12-15' : 
@@ -45,7 +48,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     onChange(exercise.id, "setsData", defaultSets);
   };
 
-  // Conversione da SetLogData a SetData per il SetTracker
+  // Convert SetLogData to SetData for SetTracker compatibility
   const convertToSetData = (setLogData: SetLogData): SetData => ({
     setNumber: setLogData.setNumber,
     targetReps: setLogData.targetReps,
@@ -53,16 +56,6 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     weight: setLogData.weight,
     completed: setLogData.completed,
     notes: setLogData.notes,
-  });
-
-  // Conversione da SetData a SetLogData
-  const convertFromSetData = (setData: SetData, setNumber: number): SetLogData => ({
-    setNumber: setNumber,
-    targetReps: setData.targetReps,
-    actualReps: setData.actualReps,
-    weight: setData.weight,
-    completed: setData.completed,
-    notes: setData.notes,
   });
 
   const handleSetUpdate = (setNumber: number, updates: Partial<SetData>) => {
@@ -105,8 +98,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
   };
 
   const getVideoUrl = () => {
-    const exerciseData = getExerciseData();
-    return exerciseData?.videoUrl;
+    return exercise.exerciseDbId ? exerciseVideoUrls[exercise.exerciseDbId] : undefined;
   };
 
   const isExerciseCompleted = () => {
@@ -123,6 +115,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
 
   const exerciseData = getExerciseData();
   const setsData = exercise.setsData || [];
+  const videoUrl = getVideoUrl();
 
   return (
     <Card className="border-primary/10">
@@ -130,7 +123,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h4 className="font-medium">
-              {exercise.name || "Seleziona Esercizio"}
+              {exercise.name || "Select Exercise"}
             </h4>
             {exercise.difficulty && (
               <Badge variant="outline" className="text-xs">
@@ -139,7 +132,8 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
             )}
             {isExerciseCompleted() && (
               <Badge className="bg-green-100 text-green-800 text-xs">
-                Completato
+                <CheckCircle2 className="h-3 w-3 mr-1" />
+                Completed
               </Badge>
             )}
           </div>
@@ -159,19 +153,19 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
       </CardHeader>
       
       <CardContent className="space-y-4">
-        {/* Selezione Esercizio */}
+        {/* Exercise Selection */}
         <div className="space-y-2">
           <ExerciseSelector
             value={exercise.name}
             onSelect={handleExerciseSelect}
-            placeholder="Clicca per selezionare un esercizio"
+            placeholder="Click to select an exercise"
           />
         </div>
         
-        {/* Dettagli Esercizio - mostrati solo se è selezionato */}
+        {/* Exercise Details - shown only when exercise is selected */}
         {exercise.name && exerciseData && (
           <div className="space-y-4">
-            {/* Info esercizio */}
+            {/* Exercise Info */}
             <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
               <Badge variant="outline" className="text-xs">
                 {exerciseData.difficulty}
@@ -184,20 +178,20 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
             </div>
             
             <div className="text-sm text-muted-foreground">
-              <strong>Attrezzatura:</strong> {exerciseData.equipment.join(', ')}
+              <strong>Equipment:</strong> {exerciseData.equipment.join(', ')}
             </div>
             
-            {/* Note dell'esercizio dal database */}
+            {/* Exercise notes from database */}
             {exerciseData.notes && (
               <div className="p-3 bg-muted/50 rounded-lg">
                 <p className="text-sm text-muted-foreground">{exerciseData.notes}</p>
               </div>
             )}
 
-            {/* Bottoni azione */}
+            {/* Action Buttons */}
             <div className="flex gap-2 flex-wrap">
               <ExerciseVideoPlayer
-                videoUrl={getVideoUrl()}
+                videoUrl={videoUrl}
                 exerciseName={exercise.name}
               />
               
@@ -208,10 +202,10 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
               />
             </div>
 
-            {/* Tracking Set */}
+            {/* Set Tracking */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h5 className="font-medium">Set</h5>
+                <h5 className="font-medium">Sets</h5>
                 <div className="flex items-center space-x-2">
                   <Button
                     type="button"
@@ -244,11 +238,11 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
               ))}
             </div>
 
-            {/* Note */}
+            {/* Notes */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Note Esercizio</label>
+              <label className="text-sm font-medium">Exercise Notes</label>
               <Textarea
-                placeholder="Aggiungi note per questo esercizio..."
+                placeholder="Add notes for this exercise..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 onBlur={() => onChange(exercise.id, "notes", notes)}
