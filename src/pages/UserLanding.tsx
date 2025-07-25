@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar';
+import UserNavbar from '@/components/UserNavbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const UserLanding = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <UserNavbar />
       
       <main className="flex-grow">
         {/* Hero Section */}

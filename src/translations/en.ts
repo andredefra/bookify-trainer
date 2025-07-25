@@ -302,6 +302,14 @@ export const en = {
   'footer.product': 'Product',
   'footer.legal': 'Legal',
   'footer.userPlatformLink': 'If you train without a PT you can try MyPersonal for users',
+  
+  // User Navigation (for /user page)
+  'userNav.forUsers': 'for users',
+  'userNav.features': 'Features',
+  'userNav.pricing': 'Pricing',
+  'userNav.about': 'About',
+  'userNav.login': 'Login',
+  'userNav.startTrial': 'Start Free',
   'pricing.detailedFeatures.everythingInBasic.name': 'Everything in Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'All features from the Basic plan are included',
   'pricing.detailedFeatures.everythingInEssential.name': 'Everything in Essential',

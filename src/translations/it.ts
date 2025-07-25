@@ -295,6 +295,14 @@ export const it = {
   'footer.product': 'Prodotto',
   'footer.legal': 'Legale',
   'footer.userPlatformLink': 'Se ti alleni senza PT puoi provare MyPersonal per utenti',
+  
+  // User Navigation (for /user page)
+  'userNav.forUsers': 'per utenti',
+  'userNav.features': 'Funzionalità',
+  'userNav.pricing': 'Prezzi',
+  'userNav.about': 'Chi siamo',
+  'userNav.login': 'Accedi',
+  'userNav.startTrial': 'Inizia Gratis',
   'pricing.detailedFeatures.everythingInBasic.name': 'Tutto del Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'Tutte le funzionalità del piano Basic sono incluse',
   'pricing.detailedFeatures.everythingInEssential.name': 'Tutto dell\'Essential',
