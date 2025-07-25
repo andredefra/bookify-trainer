@@ -1,16 +1,18 @@
-
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ExerciseLogItem } from "./ExerciseLogItem";
-import { useWorkoutLogForm } from "./WorkoutLogFormContext";
+import { ExerciseItem } from "./ExerciseItem";
+import { useWorkoutForm } from "./NewWorkoutFormContext";
 
 export function ExercisesList() {
   const { 
     exercises, 
-    handleAddExercise, 
-    handleRemoveExercise, 
-    handleExerciseChange 
-  } = useWorkoutLogForm();
+    addExercise, 
+    removeExercise, 
+    updateExercise,
+    updateExerciseSet,
+    addSet,
+    removeSet
+  } = useWorkoutForm();
 
   return (
     <div className="space-y-4">
@@ -20,18 +22,21 @@ export function ExercisesList() {
           type="button" 
           variant="outline" 
           size="sm" 
-          onClick={handleAddExercise}
+          onClick={addExercise}
         >
           <Plus className="h-4 w-4 mr-1" /> Add Exercise
         </Button>
       </div>
       
       {exercises.map((exercise) => (
-        <ExerciseLogItem
+        <ExerciseItem
           key={exercise.id}
           exercise={exercise}
-          onRemove={handleRemoveExercise}
-          onChange={handleExerciseChange}
+          onRemove={() => removeExercise(exercise.id)}
+          onUpdate={(updates) => updateExercise(exercise.id, updates)}
+          onUpdateSet={(setNumber, updates) => updateExerciseSet(exercise.id, setNumber, updates)}
+          onAddSet={() => addSet(exercise.id)}
+          onRemoveSet={() => removeSet(exercise.id)}
           isRemoveDisabled={exercises.length === 1}
         />
       ))}

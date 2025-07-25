@@ -60,15 +60,25 @@ export function WorkoutDetails({ workout, onBack }: WorkoutDetailsProps) {
               <div className="grid grid-cols-3 gap-2 mt-2 text-sm">
                 <div className="bg-muted/30 rounded px-2 py-1 text-center">
                   <span className="block text-xs text-muted-foreground">Sets</span>
-                  <span className="font-medium">{exercise.sets}</span>
+                  <span className="font-medium">{exercise.setsData?.length || 0}</span>
                 </div>
                 <div className="bg-muted/30 rounded px-2 py-1 text-center">
-                  <span className="block text-xs text-muted-foreground">Reps</span>
-                  <span className="font-medium">{exercise.reps}</span>
+                  <span className="block text-xs text-muted-foreground">Avg Reps</span>
+                  <span className="font-medium">
+                    {exercise.setsData?.length > 0 
+                      ? Math.round(exercise.setsData.reduce((sum, set) => sum + (set.actualReps || 0), 0) / exercise.setsData.length)
+                      : 0
+                    }
+                  </span>
                 </div>
                 <div className="bg-muted/30 rounded px-2 py-1 text-center">
-                  <span className="block text-xs text-muted-foreground">Weight</span>
-                  <span className="font-medium">{exercise.weight} kg</span>
+                  <span className="block text-xs text-muted-foreground">Max Weight</span>
+                  <span className="font-medium">
+                    {exercise.setsData?.length > 0 
+                      ? Math.max(...exercise.setsData.map(set => set.weight || 0))
+                      : 0
+                    } kg
+                  </span>
                 </div>
               </div>
             </div>
@@ -80,17 +90,27 @@ export function WorkoutDetails({ workout, onBack }: WorkoutDetailsProps) {
             <TableRow>
               <TableHead>Exercise</TableHead>
               <TableHead className="text-right">Sets</TableHead>
-              <TableHead className="text-right">Reps</TableHead>
-              <TableHead className="text-right">Weight (kg)</TableHead>
+              <TableHead className="text-right">Avg Reps</TableHead>
+              <TableHead className="text-right">Max Weight (kg)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {workout.exercises.map((exercise) => (
               <TableRow key={exercise.id}>
                 <TableCell>{exercise.name}</TableCell>
-                <TableCell className="text-right">{exercise.sets}</TableCell>
-                <TableCell className="text-right">{exercise.reps}</TableCell>
-                <TableCell className="text-right">{exercise.weight}</TableCell>
+                <TableCell className="text-right">{exercise.setsData?.length || 0}</TableCell>
+                <TableCell className="text-right">
+                  {exercise.setsData?.length > 0 
+                    ? Math.round(exercise.setsData.reduce((sum, set) => sum + (set.actualReps || 0), 0) / exercise.setsData.length)
+                    : 0
+                  }
+                </TableCell>
+                <TableCell className="text-right">
+                  {exercise.setsData?.length > 0 
+                    ? Math.max(...exercise.setsData.map(set => set.weight || 0))
+                    : 0
+                  }
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

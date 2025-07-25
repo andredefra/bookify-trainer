@@ -1,10 +1,3 @@
 
-import { ExerciseLog } from "../workout-form/types";
-
-export interface WorkoutLog {
-  id: string;
-  date: string;
-  name: string;
-  exercises: ExerciseLog[];
-  duration?: string;
-}
+// Re-export unified types for backward compatibility
+export type { WorkoutLog, WorkoutExercise as ExerciseLog } from "@/data/training/workoutTypes";
