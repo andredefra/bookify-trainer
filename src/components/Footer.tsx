@@ -65,6 +65,16 @@ const Footer = () => {
           ))}
         </div>
         
+        {/* User Platform Link */}
+        <div className="mt-8 text-center">
+          <Link 
+            to="/user" 
+            className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+          >
+            Se ti alleni senza PT puoi provare MyPersonal per utenti
+          </Link>
+        </div>
+        
         {/* Copyright section - moved to bottom */}
         <div className="mt-12 pt-6 border-t border-border">
           <p className="text-sm text-muted-foreground text-center">MyPersonal ltd.</p>
