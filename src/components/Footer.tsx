@@ -40,14 +40,6 @@ const Footer = () => {
               <span className="font-display text-xl font-bold tracking-tight text-primary">MyPersonal.fit</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">{t('footer.description')}</p>
-            <div className="mt-4">
-              <Link 
-                to="/user" 
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
-                {t('footer.userPlatformLink')}
-              </Link>
-            </div>
           </div>
           
           {/* Spacer for alignment */}
@@ -68,6 +60,17 @@ const Footer = () => {
                     </Link>
                   </li>
                 ))}
+                {/* Add user platform link under "Come funziona" (Product section) */}
+                {idx === 0 && (
+                  <li>
+                    <Link 
+                      to="/user" 
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {t('footer.userPlatformLink')}
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           ))}
