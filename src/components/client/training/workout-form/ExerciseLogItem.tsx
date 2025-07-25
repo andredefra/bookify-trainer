@@ -1,5 +1,5 @@
 
-import { Trash2, Timer } from "lucide-react";
+import { Trash2, Timer, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { ExerciseLog, SetLogData } from "./types";
 import { ExerciseSelector } from "./ExerciseSelector";
+import { ExerciseDetailCard } from "./ExerciseDetailCard";
+import { SetTrackingInterface } from "./SetTrackingInterface";
 import { ExerciseData } from "@/data/exercises/types";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
@@ -21,6 +23,8 @@ interface ExerciseLogItemProps {
 export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled }: ExerciseLogItemProps) {
   const isMobile = useIsMobile();
   const [showDetails, setShowDetails] = useState(false);
+  const [selectedExerciseData, setSelectedExerciseData] = useState<ExerciseData | null>(null);
+  const [trainerNotes, setTrainerNotes] = useState("");
   
   const handleExerciseSelect = (selectedExercise: ExerciseData) => {
     onChange(exercise.id, "name", selectedExercise.name);
@@ -28,6 +32,12 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     onChange(exercise.id, "difficulty", selectedExercise.difficulty);
     onChange(exercise.id, "muscleGroups", selectedExercise.muscleGroup);
     onChange(exercise.id, "equipment", selectedExercise.equipment);
+    setSelectedExerciseData(selectedExercise);
+    
+    // Initialize sets if not already present
+    if (!exercise.setsData) {
+      initializeSets();
+    }
   };
 
   const initializeSets = () => {
@@ -38,6 +48,17 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
       completed: false
     }));
     onChange(exercise.id, "setsData", setsData);
+  };
+
+  const handleSetsChange = (newSets: SetLogData[]) => {
+    onChange(exercise.id, "setsData", newSets);
+    // Update sets count to match
+    onChange(exercise.id, "sets", newSets.length);
+  };
+
+  const isExerciseCompleted = () => {
+    if (!exercise.setsData || exercise.setsData.length === 0) return false;
+    return exercise.setsData.every(set => set.completed);
   };
 
   const updateSetData = (setIndex: number, field: keyof SetLogData, value: any) => {
@@ -59,16 +80,34 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
               {exercise.difficulty}
             </Badge>
           )}
+          {isExerciseCompleted() && (
+            <Badge variant="default" className="text-xs bg-green-600">
+              <CheckCircle2 className="h-3 w-3 mr-1" />
+              Completed
+            </Badge>
+          )}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onRemove(exercise.id)}
-          disabled={isRemoveDisabled}
-          className="text-destructive hover:text-destructive"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          {exercise.name && exercise.setsData && (
+            <Button
+              type="button"
+              variant={isExerciseCompleted() ? "default" : "outline"}
+              size="sm"
+              className={isExerciseCompleted() ? "bg-green-600 hover:bg-green-700" : ""}
+            >
+              Complete Exercise
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onRemove(exercise.id)}
+            disabled={isRemoveDisabled}
+            className="text-destructive hover:text-destructive"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       
       <div className="grid grid-cols-1 gap-3">
@@ -99,9 +138,10 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
               min="1"
               value={exercise.sets}
               onChange={(e) => {
-                onChange(exercise.id, "sets", parseInt(e.target.value) || 0);
+                const newSets = parseInt(e.target.value) || 0;
+                onChange(exercise.id, "sets", newSets);
                 // Re-initialize sets when count changes
-                if (exercise.setsData) {
+                if (exercise.setsData || newSets > 0) {
                   initializeSets();
                 }
               }}
@@ -132,82 +172,37 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
           </div>
         </div>
 
-        {/* Advanced tracking toggle */}
-        <div className="flex items-center justify-between">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              if (!exercise.setsData) {
-                initializeSets();
-              }
-              setShowDetails(!showDetails);
-            }}
-            className="text-xs"
-          >
-            {showDetails ? "Hide Details" : "Track Sets"}
-          </Button>
-          {exercise.restTime && (
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Timer className="h-3 w-3" />
-              {exercise.restTime}s rest
-            </div>
-          )}
-        </div>
-
-        {/* Advanced set tracking */}
-        {showDetails && (
-          <div className="space-y-3 border-t pt-3">
-            {exercise.setsData?.map((set, index) => (
-              <div key={set.setNumber} className="grid grid-cols-5 gap-2 items-center text-sm">
-                <div className="font-medium">Set {set.setNumber}</div>
-                <Input
-                  type="number"
-                  placeholder="Reps"
-                  value={set.actualReps || ''}
-                  onChange={(e) => updateSetData(index, "actualReps", parseInt(e.target.value) || 0)}
-                  className="h-8"
-                />
-                <Input
-                  type="number"
-                  placeholder="Weight"
-                  value={set.weight || ''}
-                  onChange={(e) => updateSetData(index, "weight", parseFloat(e.target.value) || 0)}
-                  step="0.5"
-                  className="h-8"
-                />
-                <Button
-                  type="button"
-                  variant={set.completed ? "default" : "outline"}
-                  size="sm"
-                  className="h-8 text-xs"
-                  onClick={() => updateSetData(index, "completed", !set.completed)}
-                >
-                  {set.completed ? "✓" : "○"}
-                </Button>
-                <Input
-                  type="number"
-                  placeholder="Rest (s)"
-                  value={set.restTime || ''}
-                  onChange={(e) => updateSetData(index, "restTime", parseInt(e.target.value) || 0)}
-                  className="h-8"
-                />
-              </div>
-            ))}
-            
-            <div>
-              <Label htmlFor={`notes-${exercise.id}`}>Notes</Label>
-              <Textarea
-                id={`notes-${exercise.id}`}
-                value={exercise.notes || ''}
-                onChange={(e) => onChange(exercise.id, "notes", e.target.value)}
-                placeholder="Exercise notes..."
-                className="h-16"
-              />
-            </div>
-          </div>
+        {/* Exercise Details Card */}
+        {selectedExerciseData && (
+          <ExerciseDetailCard 
+            exercise={selectedExerciseData}
+            trainerNotes={trainerNotes}
+            onTrainerNotesChange={setTrainerNotes}
+          />
         )}
+
+        {/* Set Tracking Interface */}
+        {exercise.name && exercise.setsData && (
+          <SetTrackingInterface
+            sets={exercise.setsData}
+            onSetsChange={handleSetsChange}
+            targetSets={exercise.sets}
+            targetReps={exercise.reps}
+            targetWeight={exercise.weight}
+          />
+        )}
+
+        {/* General Exercise Notes */}
+        <div>
+          <Label htmlFor={`notes-${exercise.id}`}>General Notes</Label>
+          <Textarea
+            id={`notes-${exercise.id}`}
+            value={exercise.notes || ''}
+            onChange={(e) => onChange(exercise.id, "notes", e.target.value)}
+            placeholder="Add general notes for this exercise..."
+            className="h-16"
+          />
+        </div>
       </div>
     </div>
   );
