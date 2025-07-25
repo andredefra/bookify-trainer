@@ -13,7 +13,7 @@ interface WorkoutLogFormContextType {
   setExercises: (exercises: ExerciseLog[]) => void;
   handleAddExercise: () => void;
   handleRemoveExercise: (id: string) => void;
-  handleExerciseChange: (id: string, field: keyof ExerciseLog, value: string | number) => void;
+  handleExerciseChange: (id: string, field: keyof ExerciseLog, value: string | number | any) => void;
 }
 
 const WorkoutLogFormContext = createContext<WorkoutLogFormContextType | undefined>(undefined);
@@ -45,7 +45,7 @@ export function WorkoutLogFormProvider({ children }: { children: React.ReactNode
     }
   };
   
-  const handleExerciseChange = (id: string, field: keyof ExerciseLog, value: string | number) => {
+  const handleExerciseChange = (id: string, field: keyof ExerciseLog, value: any) => {
     setExercises(exercises.map(ex => 
       ex.id === id ? { ...ex, [field]: value } : ex
     ));
