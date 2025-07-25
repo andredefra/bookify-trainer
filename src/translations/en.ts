@@ -310,6 +310,10 @@ export const en = {
   'userNav.about': 'About',
   'userNav.login': 'Login',
   'userNav.startTrial': 'Start Free',
+  
+  // User Footer (for /user page)
+  'userFooter.description': 'The platform for the user who wants to train with a personal trainer AI',
+  'userFooter.trainerPlatformLink': 'If you are a personal trainer you can try our version for Personal Trainers',
   'pricing.detailedFeatures.everythingInBasic.name': 'Everything in Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'All features from the Basic plan are included',
   'pricing.detailedFeatures.everythingInEssential.name': 'Everything in Essential',

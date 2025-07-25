@@ -1,5 +1,5 @@
 import UserNavbar from '@/components/UserNavbar';
-import Footer from '@/components/Footer';
+import UserFooter from '@/components/UserFooter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Check, Bot, Target, BarChart3, Heart, Zap } from 'lucide-react';
@@ -160,7 +160,7 @@ const UserLanding = () => {
         </section>
       </main>
       
-      <Footer />
+      <UserFooter />
     </div>
   );
 };
