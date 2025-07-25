@@ -40,7 +40,7 @@ const Footer = () => {
               <span className="font-display text-xl font-bold tracking-tight text-primary">MyPersonal.fit</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">{t('footer.description')}</p>
-            <div className="mt-4">
+            <div className="mt-8">{/* Increased margin to align with other links */}
               <Link 
                 to="/user" 
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
