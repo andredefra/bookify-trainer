@@ -301,6 +301,7 @@ export const en = {
   'footer.copyright': '© {year} mypersonalai ltd. All rights reserved.',
   'footer.product': 'Product',
   'footer.legal': 'Legal',
+  'footer.userPlatformLink': 'If you train without a PT you can try MyPersonal for users',
   'pricing.detailedFeatures.everythingInBasic.name': 'Everything in Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'All features from the Basic plan are included',
   'pricing.detailedFeatures.everythingInEssential.name': 'Everything in Essential',

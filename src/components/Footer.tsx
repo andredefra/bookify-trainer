@@ -40,6 +40,14 @@ const Footer = () => {
               <span className="font-display text-xl font-bold tracking-tight text-primary">MyPersonal.fit</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">{t('footer.description')}</p>
+            <div className="mt-4">
+              <Link 
+                to="/user" 
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                {t('footer.userPlatformLink')}
+              </Link>
+            </div>
           </div>
           
           {/* Spacer for alignment */}
@@ -65,15 +73,6 @@ const Footer = () => {
           ))}
         </div>
         
-        {/* User Platform Link */}
-        <div className="mt-8 text-center">
-          <Link 
-            to="/user" 
-            className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
-          >
-            Se ti alleni senza PT puoi provare MyPersonal per utenti
-          </Link>
-        </div>
         
         {/* Copyright section - moved to bottom */}
         <div className="mt-12 pt-6 border-t border-border">

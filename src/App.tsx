@@ -19,6 +19,8 @@ import GymDashboard from "./pages/GymDashboard";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
+import UserLanding from "./pages/UserLanding";
+import UserLandingEn from "./pages/UserLandingEn";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -76,6 +78,8 @@ const AppContent = () => {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/cookies" element={<Cookies />} />
+        <Route path="/user" element={<UserLanding />} />
+        <Route path="/user-en" element={<UserLandingEn />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

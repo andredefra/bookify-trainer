@@ -288,21 +288,22 @@ export const it = {
   'cancellationPolicy.lateCancellationRule': '<{hours}h prima: {percentage}% del costo',
   'pricing.detailedFeatures.pro.prioritySupport.name': 'Supporto Prioritario',
   'pricing.detailedFeatures.pro.prioritySupport.description': 'Risposta garantita 24 ore, canale supporto dedicato, assistenza tecnica specializzata, accesso webinar formativi esclusivi, consulenza strategica business mensile.',
-  'pricing.disclaimer1': 'Piano gratuito include funzionalità essenziali per sempre. I piani a pagamento includono elaborazione sicura dei pagamenti. Puoi fare upgrade, downgrade o cancellare in qualsiasi momento.',
-  'pricing.disclaimer2': 'I tuoi clienti non pagano mai per l\'app — ottengono accesso alle funzionalità premium tramite il tuo abbonamento',
-  
-  // Registration CTA
-  'cta.title': 'Sii il Primo a Sapere Quando Lanciamo',
-  'cta.description': 'Registrati per la demo oggi e ottieni un prezzo scontato speciale quando lanciamo ufficialmente.',
-  'cta.button': 'Compila il Modulo per Accesso Anticipato',
   
   // Footer
   'footer.description': 'La piattaforma all-in-one per personal trainer.',
   'footer.copyright': '© {year} mypersonalai ltd. Tutti i diritti riservati.',
   'footer.product': 'Prodotto',
   'footer.legal': 'Legale',
-  'pricing.detailedFeatures.everythingInBasic.name': 'Tutto quello del Basic',
+  'footer.userPlatformLink': 'Se ti alleni senza PT puoi provare MyPersonal per utenti',
+  'pricing.detailedFeatures.everythingInBasic.name': 'Tutto del Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'Tutte le funzionalità del piano Basic sono incluse',
-  'pricing.detailedFeatures.everythingInEssential.name': 'Tutto quello dell\'Essential',
-  'pricing.detailedFeatures.everythingInEssential.description': 'Tutte le funzionalità del piano Essential sono incluse'
+  'pricing.detailedFeatures.everythingInEssential.name': 'Tutto dell\'Essential',
+  'pricing.detailedFeatures.everythingInEssential.description': 'Tutte le funzionalità del piano Essential sono incluse',
+  'pricing.disclaimer1': 'Piano gratuito include funzionalità essenziali per sempre. I piani a pagamento includono elaborazione sicura dei pagamenti. Puoi fare upgrade, downgrade o cancellare in qualsiasi momento.',
+  'pricing.disclaimer2': 'I tuoi clienti non pagano mai per l\'app — ottengono accesso alle funzionalità premium tramite il tuo abbonamento',
+  
+  // Registration CTA
+  'cta.title': 'Sii il Primo a Sapere Quando Lanciamo',
+  'cta.description': 'Registrati per la demo oggi e ottieni un prezzo scontato speciale quando lanciamo ufficialmente.',
+  'cta.button': 'Compila il Modulo per Accesso Anticipato'
 };
