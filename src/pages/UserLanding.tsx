@@ -309,101 +309,43 @@ const UserLanding = () => {
             <div className="text-center mb-12 animate-fade-in">
               <Badge variant="secondary" className="mb-4">💶 Prezzi</Badge>
               <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                Scegli il tuo piano
+                Un solo piano. Tutte le funzionalità.
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Inizia gratis per 1 anno. Nessun vincolo, nessuna carta di credito richiesta.
+                Solo i primi 100 utenti ottengono l'accesso gratuito per 1 anno. Dopo, piano normale a €4.99/mese.
               </p>
             </div>
             
             <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* Free Plan */}
-              <Card className="relative p-8 border-2 border-primary/20 hover:border-primary/40 transition-colors">
+              {/* Free Plan for first 100 users */}
+              <Card className="relative p-8 border-2 border-green-500/50 bg-green-50/50 hover:bg-green-50/70 transition-colors">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-green-500 hover:bg-green-500">🎉 LANCIO SPECIALE</Badge>
+                  <Badge className="bg-green-500 hover:bg-green-500 text-white">🎉 PRIMI 100 UTENTI</Badge>
                 </div>
                 
                 <CardHeader className="p-0 mb-6">
                   <div className="flex items-center justify-between mb-4">
-                    <CardTitle className="text-2xl">Piano Gratuito</CardTitle>
+                    <CardTitle className="text-2xl">Accesso Gratuito</CardTitle>
                     <div className="text-right">
-                      <div className="text-3xl font-bold">€0</div>
-                      <div className="text-sm text-muted-foreground">per 1 anno</div>
+                      <div className="text-3xl font-bold text-green-600">€0</div>
+                      <div className="text-sm text-muted-foreground">per 1 anno completo</div>
                     </div>
                   </div>
                   <CardDescription className="text-base">
-                    Perfetto per iniziare il tuo percorso fitness
+                    Tutte le funzionalità premium, completamente gratis per un anno
                   </CardDescription>
                   
                   {/* Counter */}
-                  <div className="bg-primary/10 rounded-lg p-4 mt-4">
+                  <div className="bg-green-100 border border-green-200 rounded-lg p-4 mt-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Posti rimanenti</span>
-                      <span className="text-lg font-bold text-primary">95/100</span>
+                      <span className="text-sm font-medium text-green-800">Posti rimanenti</span>
+                      <span className="text-lg font-bold text-green-600">95/100</span>
                     </div>
-                    <div className="w-full bg-background rounded-full h-2">
-                      <div className="bg-primary h-2 rounded-full" style={{width: '5%'}}></div>
+                    <div className="w-full bg-green-200 rounded-full h-2">
+                      <div className="bg-green-500 h-2 rounded-full" style={{width: '5%'}}></div>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">Solo 5 utenti si sono già registrati!</p>
+                    <p className="text-xs text-green-700 mt-2">⚡ Solo 5 utenti si sono già registrati!</p>
                   </div>
-                </CardHeader>
-                
-                <CardContent className="p-0">
-                  <div className="space-y-4 mb-8">
-                    {[
-                      { text: "Chat con Trainer.ai", icon: Bot, included: true },
-                      { text: "Programmi base personalizzati", icon: Target, included: true },
-                      { text: "Tracking allenamenti", icon: BarChart3, included: true },
-                      { text: "Supporto community", icon: Heart, included: true },
-                      { text: "1 integrazione dispositivo", icon: Smartphone, included: true },
-                      { text: "Funzionalità avanzate", icon: Zap, included: false },
-                      { text: "Supporto prioritario", icon: Shield, included: false }
-                    ].map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                          feature.included ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'
-                        }`}>
-                          {feature.included ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
-                        </div>
-                        <feature.icon className="h-4 w-4 text-muted-foreground" />
-                        <span className={feature.included ? 'text-foreground' : 'text-muted-foreground line-through'}>
-                          {feature.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button asChild size="lg" className="w-full">
-                    <Link to="/user-register">
-                      🚀 Inizia Gratis Ora
-                    </Link>
-                  </Button>
-                  
-                  <div className="text-center mt-4 space-y-1">
-                    <p className="text-sm text-muted-foreground">✅ Nessun vincolo</p>
-                    <p className="text-sm text-muted-foreground">✅ Nessuna carta di credito</p>
-                    <p className="text-sm text-muted-foreground">✅ Cancellazione in qualsiasi momento</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Premium Plan */}
-              <Card className="relative p-8 border-2 border-primary bg-primary/5 hover:bg-primary/10 transition-colors">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge variant="secondary">⭐ PREMIUM</Badge>
-                </div>
-                
-                <CardHeader className="p-0 mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <CardTitle className="text-2xl">Piano Premium</CardTitle>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold">€9.99</div>
-                      <div className="text-sm text-muted-foreground">al mese</div>
-                    </div>
-                  </div>
-                  <CardDescription className="text-base">
-                    Tutte le funzionalità avanzate per massimizzare i tuoi risultati
-                  </CardDescription>
                 </CardHeader>
                 
                 <CardContent className="p-0">
@@ -422,19 +364,83 @@ const UserLanding = () => {
                         <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
                           <Check className="h-3 w-3" />
                         </div>
+                        <feature.icon className="h-4 w-4 text-green-600" />
+                        <span className="text-foreground font-medium">{feature.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <Button asChild size="lg" className="w-full bg-green-600 hover:bg-green-700">
+                    <Link to="/user-register">
+                      🚀 Prendi il Tuo Posto Gratis
+                    </Link>
+                  </Button>
+                  
+                  <div className="text-center mt-4 space-y-1">
+                    <p className="text-sm text-green-700 font-medium">✅ Accesso completo per 1 anno</p>
+                    <p className="text-sm text-green-700">✅ Nessuna carta di credito richiesta</p>
+                    <p className="text-sm text-green-700">✅ Tutte le funzionalità incluse</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Normal Plan (after 100 users) */}
+              <Card className="relative p-8 border-2 border-primary/30 hover:border-primary/50 transition-colors">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <Badge variant="outline">💼 PIANO NORMALE</Badge>
+                </div>
+                
+                <CardHeader className="p-0 mb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <CardTitle className="text-2xl">Accesso Normale</CardTitle>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold">€4.99</div>
+                      <div className="text-sm text-muted-foreground">al mese</div>
+                    </div>
+                  </div>
+                  <CardDescription className="text-base">
+                    Le stesse identiche funzionalità, disponibili dopo i primi 100 utenti
+                  </CardDescription>
+                  
+                  <div className="bg-primary/10 rounded-lg p-4 mt-4">
+                    <p className="text-sm text-primary font-medium">
+                      💡 Stesso servizio premium, solo che non hai fatto in tempo per il periodo gratuito!
+                    </p>
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="p-0">
+                  <div className="space-y-4 mb-8">
+                    {[
+                      { text: "Chat illimitata con Trainer.ai", icon: Bot },
+                      { text: "Programmi avanzati personalizzati", icon: Target },
+                      { text: "Analytics completi e insights", icon: BarChart3 },
+                      { text: "Consigli nutrizionali dettagliati", icon: Heart },
+                      { text: "Tutte le integrazioni dispositivi", icon: Smartphone },
+                      { text: "Funzionalità AI avanzate", icon: Zap },
+                      { text: "Supporto prioritario 24/7", icon: Shield },
+                      { text: "Aggiornamenti early access", icon: Infinity }
+                    ].map((feature, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                          <Check className="h-3 w-3" />
+                        </div>
                         <feature.icon className="h-4 w-4 text-primary" />
                         <span>{feature.text}</span>
                       </div>
                     ))}
                   </div>
                   
-                  <Button variant="secondary" size="lg" className="w-full">
-                    Upgrade a Premium
+                  <Button variant="outline" size="lg" className="w-full">
+                    Inizia con Piano Normale
                   </Button>
                   
                   <div className="text-center mt-4">
                     <p className="text-sm text-primary font-medium">
-                      💎 Passa a Premium in qualsiasi momento
+                      💎 Stesse funzionalità, solo €4.99/mese
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Puoi cancellare in qualsiasi momento
                     </p>
                   </div>
                 </CardContent>
@@ -442,12 +448,15 @@ const UserLanding = () => {
             </div>
             
             <div className="text-center mt-12">
-              <p className="text-2xl font-semibold text-primary mb-4">
-                🎯 Il miglior investimento che puoi fare… è su te stesso.
-              </p>
-              <p className="text-muted-foreground">
-                Unisciti ai primi 100 utenti e ottieni 1 anno gratuito di accesso completo
-              </p>
+              <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-6 border shadow-lg max-w-3xl mx-auto">
+                <p className="text-2xl font-semibold text-primary mb-2">
+                  🎯 Un unico livello di servizio premium
+                </p>
+                <p className="text-muted-foreground">
+                  Non ci sono funzionalità nascoste o limitate. Tutti i nostri utenti ottengono la migliore esperienza possibile.
+                  I primi 100 la ottengono gratis per 1 anno, gli altri pagano €4.99/mese.
+                </p>
+              </div>
             </div>
           </div>
         </section>
