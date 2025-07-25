@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash2, Plus, Minus } from "lucide-react";
-import { ExerciseLog } from "./types";
+import { ExerciseLog, SetLogData } from "./types";
 import { ExerciseSelector } from "./ExerciseSelector";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
 import { ExerciseData } from "@/data/exercises/types";
@@ -31,8 +31,8 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     onChange(exercise.id, "muscleGroups", selectedExercise.muscleGroup);
     onChange(exercise.id, "equipment", selectedExercise.equipment);
     
-    // Inizializza i set di default
-    const defaultSets: SetData[] = Array.from({ length: 3 }, (_, index) => ({
+    // Inizializza i set di default come SetLogData
+    const defaultSets: SetLogData[] = Array.from({ length: 3 }, (_, index) => ({
       setNumber: index + 1,
       targetReps: selectedExercise.difficulty === 'beginner' ? '12-15' : 
                   selectedExercise.difficulty === 'intermediate' ? '8-12' : '6-10',
@@ -45,8 +45,28 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     onChange(exercise.id, "setsData", defaultSets);
   };
 
+  // Conversione da SetLogData a SetData per il SetTracker
+  const convertToSetData = (setLogData: SetLogData): SetData => ({
+    setNumber: setLogData.setNumber,
+    targetReps: setLogData.targetReps,
+    actualReps: setLogData.actualReps,
+    weight: setLogData.weight,
+    completed: setLogData.completed,
+    notes: setLogData.notes,
+  });
+
+  // Conversione da SetData a SetLogData
+  const convertFromSetData = (setData: SetData, setNumber: number): SetLogData => ({
+    setNumber: setNumber,
+    targetReps: setData.targetReps,
+    actualReps: setData.actualReps,
+    weight: setData.weight,
+    completed: setData.completed,
+    notes: setData.notes,
+  });
+
   const handleSetUpdate = (setNumber: number, updates: Partial<SetData>) => {
-    const currentSetsData = exercise.setsData as SetData[] || [];
+    const currentSetsData = exercise.setsData || [];
     const newSetsData = currentSetsData.map(set => 
       set.setNumber === setNumber ? { ...set, ...updates } : set
     );
@@ -54,8 +74,8 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
   };
 
   const addSet = () => {
-    const currentSetsData = exercise.setsData as SetData[] || [];
-    const newSet: SetData = {
+    const currentSetsData = exercise.setsData || [];
+    const newSet: SetLogData = {
       setNumber: currentSetsData.length + 1,
       targetReps: '8-12',
       actualReps: undefined,
@@ -67,7 +87,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
   };
 
   const removeSet = () => {
-    const currentSetsData = exercise.setsData as SetData[] || [];
+    const currentSetsData = exercise.setsData || [];
     if (currentSetsData.length > 1) {
       const updatedSets = currentSetsData.slice(0, -1).map((set, index) => ({
         ...set,
@@ -90,7 +110,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
   };
 
   const isExerciseCompleted = () => {
-    const sets = exercise.setsData as SetData[] || [];
+    const sets = exercise.setsData || [];
     return sets.length > 0 && sets.every(set => set.completed);
   };
 
@@ -102,7 +122,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
   };
 
   const exerciseData = getExerciseData();
-  const setsData = exercise.setsData as SetData[] || [];
+  const setsData = exercise.setsData || [];
 
   return (
     <Card className="border-primary/10">
@@ -213,12 +233,12 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
                 </div>
               </div>
               
-              {setsData.map((setData) => (
+              {setsData.map((setLogData) => (
                 <SetTracker
-                  key={setData.setNumber}
-                  setData={setData}
+                  key={setLogData.setNumber}
+                  setData={convertToSetData(setLogData)}
                   suggestedWeight={0}
-                  onUpdate={(updates) => handleSetUpdate(setData.setNumber, updates)}
+                  onUpdate={(updates) => handleSetUpdate(setLogData.setNumber, updates)}
                   showProgress={false}
                 />
               ))}
