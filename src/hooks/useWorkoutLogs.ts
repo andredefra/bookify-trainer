@@ -5,6 +5,8 @@ export function useWorkoutLogs() {
   const [workoutLogs, setWorkoutLogs] = useState<WorkoutLog[]>([]);
 
   useEffect(() => {
+    // Force clear everything and reload with fresh data
+    localStorage.clear();
     loadWorkoutLogs();
   }, []);
 
