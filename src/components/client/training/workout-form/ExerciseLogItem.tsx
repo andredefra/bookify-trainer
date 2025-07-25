@@ -1,19 +1,16 @@
-
-import { Trash2, Play, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { ExerciseLog, SetLogData } from "./types";
+import { Textarea } from "@/components/ui/textarea";
+import { Trash2, Plus, Minus } from "lucide-react";
+import { ExerciseLog } from "./types";
 import { ExerciseSelector } from "./ExerciseSelector";
+import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
+import { ExerciseData } from "@/data/exercises/types";
 import { SetTracker } from "../SetTracker";
 import { AlternativeExercises } from "../AlternativeExercises";
 import { ExerciseVideoPlayer } from "../ExerciseVideoPlayer";
-import { ExerciseData } from "@/data/exercises/types";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
-import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
-import { exerciseVideoUrls } from "@/data/exercises/videoUrls";
 import { SetData } from "@/data/training/types";
 
 interface ExerciseLogItemProps {
@@ -24,46 +21,72 @@ interface ExerciseLogItemProps {
 }
 
 export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled }: ExerciseLogItemProps) {
-  const isMobile = useIsMobile();
-  const [selectedExerciseData, setSelectedExerciseData] = useState<ExerciseData | null>(null);
-  
+  const [notes, setNotes] = useState(exercise.notes || "");
+
   const handleExerciseSelect = (selectedExercise: ExerciseData) => {
+    // Aggiorna i dati dell'esercizio
     onChange(exercise.id, "name", selectedExercise.name);
     onChange(exercise.id, "exerciseDbId", selectedExercise.id);
     onChange(exercise.id, "difficulty", selectedExercise.difficulty);
     onChange(exercise.id, "muscleGroups", selectedExercise.muscleGroup);
     onChange(exercise.id, "equipment", selectedExercise.equipment);
-    setSelectedExerciseData(selectedExercise);
     
-    // Initialize sets for this exercise (3 sets by default)
+    // Inizializza i set di default
     const defaultSets: SetData[] = Array.from({ length: 3 }, (_, index) => ({
       setNumber: index + 1,
-      targetReps: (selectedExercise.difficulty === 'beginner' ? '12' : 
-                  selectedExercise.difficulty === 'intermediate' ? '10' : '8'),
-      weight: 0,
-      actualReps: 0,
-      completed: false
+      targetReps: selectedExercise.difficulty === 'beginner' ? '12-15' : 
+                  selectedExercise.difficulty === 'intermediate' ? '8-12' : '6-10',
+      actualReps: undefined,
+      weight: undefined,
+      completed: false,
+      notes: "",
     }));
+    
     onChange(exercise.id, "setsData", defaultSets);
   };
 
-  const handleSetUpdate = (setNumber: number, data: Partial<SetData>) => {
-    const currentSets = exercise.setsData as SetData[] || [];
-    const updatedSets = currentSets.map(set => 
-      set.setNumber === setNumber ? { ...set, ...data } : set
+  const handleSetUpdate = (setNumber: number, updates: Partial<SetData>) => {
+    const currentSetsData = exercise.setsData as SetData[] || [];
+    const newSetsData = currentSetsData.map(set => 
+      set.setNumber === setNumber ? { ...set, ...updates } : set
     );
-    onChange(exercise.id, "setsData", updatedSets);
+    onChange(exercise.id, "setsData", newSetsData);
+  };
+
+  const addSet = () => {
+    const currentSetsData = exercise.setsData as SetData[] || [];
+    const newSet: SetData = {
+      setNumber: currentSetsData.length + 1,
+      targetReps: '8-12',
+      actualReps: undefined,
+      weight: undefined,
+      completed: false,
+      notes: "",
+    };
+    onChange(exercise.id, "setsData", [...currentSetsData, newSet]);
+  };
+
+  const removeSet = () => {
+    const currentSetsData = exercise.setsData as SetData[] || [];
+    if (currentSetsData.length > 1) {
+      const updatedSets = currentSetsData.slice(0, -1).map((set, index) => ({
+        ...set,
+        setNumber: index + 1
+      }));
+      onChange(exercise.id, "setsData", updatedSets);
+    }
   };
 
   const getExerciseData = () => {
     if (exercise.exerciseDbId) {
       return completeExerciseDatabase.find(ex => ex.id === exercise.exerciseDbId);
     }
-    return selectedExerciseData;
+    return null;
   };
 
   const getVideoUrl = () => {
-    return exercise.exerciseDbId ? exerciseVideoUrls[exercise.exerciseDbId] : null;
+    const exerciseData = getExerciseData();
+    return exerciseData?.videoUrl;
   };
 
   const isExerciseCompleted = () => {
@@ -71,154 +94,150 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     return sets.length > 0 && sets.every(set => set.completed);
   };
 
-  const exerciseData = getExerciseData();
-  const videoUrl = getVideoUrl();
+  const handleExerciseChange = (newExerciseId: string, newExerciseName: string) => {
+    const selectedExercise = completeExerciseDatabase.find(ex => ex.id === newExerciseId);
+    if (selectedExercise) {
+      handleExerciseSelect(selectedExercise);
+    }
+  };
 
-  
+  const exerciseData = getExerciseData();
+  const setsData = exercise.setsData as SetData[] || [];
+
   return (
-    <div className="border rounded-lg p-4 space-y-4 bg-card">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h4 className="font-medium">{exercise.name || "Select Exercise"}</h4>
-          {exercise.difficulty && (
-            <Badge variant="outline" className="text-xs">
-              {exercise.difficulty}
-            </Badge>
-          )}
-          {isExerciseCompleted() && (
-            <Badge variant="default" className="text-xs bg-green-600">
-              <CheckCircle2 className="h-3 w-3 mr-1" />
-              Completed
-            </Badge>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {exercise.name && exercise.setsData && (
+    <Card className="border-primary/10">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <h4 className="font-medium">
+              {exercise.name || "Seleziona Esercizio"}
+            </h4>
+            {exercise.difficulty && (
+              <Badge variant="outline" className="text-xs">
+                {exercise.difficulty}
+              </Badge>
+            )}
+            {isExerciseCompleted() && (
+              <Badge className="bg-green-100 text-green-800 text-xs">
+                Completato
+              </Badge>
+            )}
+          </div>
+          <div className="flex items-center space-x-2">
             <Button
               type="button"
-              variant={isExerciseCompleted() ? "default" : "outline"}
+              variant="ghost"
               size="sm"
-              className={isExerciseCompleted() ? "bg-green-600 hover:bg-green-700" : ""}
+              onClick={() => onRemove(exercise.id)}
+              disabled={isRemoveDisabled}
+              className="text-destructive hover:text-destructive"
             >
-              Complete Exercise
+              <Trash2 className="h-4 w-4" />
             </Button>
-          )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onRemove(exercise.id)}
-            disabled={isRemoveDisabled}
-            className="text-destructive hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          </div>
         </div>
-      </div>
+      </CardHeader>
       
-      <div className="grid grid-cols-1 gap-3">
-        <div>
-          <Label htmlFor={`exercise-name-${exercise.id}`}>Exercise Name</Label>
+      <CardContent className="space-y-4">
+        {/* Selezione Esercizio */}
+        <div className="space-y-2">
           <ExerciseSelector
             value={exercise.name}
             onSelect={handleExerciseSelect}
-            placeholder="Click to select an exercise"
+            placeholder="Clicca per selezionare un esercizio"
           />
-          
-          {/* Exercise Info */}
-          {exerciseData && (
-            <div className="mt-2 space-y-2">
-              <div className="flex flex-wrap gap-1">
-                <Badge variant="secondary" className="text-xs">
-                  {exerciseData.difficulty}
-                </Badge>
-                {exerciseData.muscleGroup.map((muscle, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {muscle}
-                  </Badge>
-                ))}
-              </div>
-              
-              <div className="text-sm text-muted-foreground">
-                <strong>Equipment:</strong> {exerciseData.equipment.join(', ')}
-              </div>
-              
-              <p className="text-sm text-muted-foreground">
-                {exerciseData.notes}
-              </p>
-              
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                {videoUrl && (
-                  <ExerciseVideoPlayer
-                    videoUrl={videoUrl}
-                    exerciseName={exerciseData.name}
-                    triggerButton={
-                      <Button variant="outline" size="sm">
-                        <Play className="h-3 w-3 mr-1" />
-                        Video
-                      </Button>
-                    }
-                  />
-                )}
-                
-                {exerciseData.alternativeExercises && exerciseData.alternativeExercises.length > 0 && (
-                  <AlternativeExercises
-                    currentExercise={exerciseData.name}
-                    alternativeIds={exerciseData.alternativeExercises}
-                    onExerciseChange={(newId, newName) => {
-                      const newExercise = completeExerciseDatabase.find(ex => ex.id === newId);
-                      if (newExercise) {
-                        handleExerciseSelect(newExercise);
-                      }
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-          )}
         </div>
         
-        {/* Set Tracking */}
-        {exercise.name && exercise.setsData && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="font-medium">Set Tracking</h4>
-              {isExerciseCompleted() && (
-                <Badge className="bg-green-600">
-                  <CheckCircle2 className="h-3 w-3 mr-1" />
-                  Completed
+        {/* Dettagli Esercizio - mostrati solo se è selezionato */}
+        {exercise.name && exerciseData && (
+          <div className="space-y-4">
+            {/* Info esercizio */}
+            <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+              <Badge variant="outline" className="text-xs">
+                {exerciseData.difficulty}
+              </Badge>
+              {exerciseData.muscleGroup.map((muscle, idx) => (
+                <Badge key={idx} variant="outline" className="text-xs">
+                  {muscle}
                 </Badge>
-              )}
+              ))}
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {(exercise.setsData as SetData[])?.map((setData, index) => (
+            <div className="text-sm text-muted-foreground">
+              <strong>Attrezzatura:</strong> {exerciseData.equipment.join(', ')}
+            </div>
+            
+            {/* Note dell'esercizio dal database */}
+            {exerciseData.notes && (
+              <div className="p-3 bg-muted/50 rounded-lg">
+                <p className="text-sm text-muted-foreground">{exerciseData.notes}</p>
+              </div>
+            )}
+
+            {/* Bottoni azione */}
+            <div className="flex gap-2 flex-wrap">
+              <ExerciseVideoPlayer
+                videoUrl={getVideoUrl()}
+                exerciseName={exercise.name}
+              />
+              
+              <AlternativeExercises
+                currentExercise={exercise.exerciseDbId || ""}
+                alternativeIds={exerciseData.alternativeExercises}
+                onExerciseChange={handleExerciseChange}
+              />
+            </div>
+
+            {/* Tracking Set */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h5 className="font-medium">Set</h5>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={removeSet}
+                    disabled={setsData.length <= 1}
+                  >
+                    <Minus className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addSet}
+                  >
+                    <Plus className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+              
+              {setsData.map((setData) => (
                 <SetTracker
-                  key={index}
+                  key={setData.setNumber}
                   setData={setData}
-                  suggestedWeight={0} // No suggestions in workout log
-                  onUpdate={(data) => handleSetUpdate(setData.setNumber, data)}
+                  suggestedWeight={0}
+                  onUpdate={(updates) => handleSetUpdate(setData.setNumber, updates)}
                   showProgress={false}
                 />
               ))}
             </div>
-          </div>
-        )}
 
-        {/* General Exercise Notes */}
-        {exercise.name && (
-          <div>
-            <Label htmlFor={`notes-${exercise.id}`}>Exercise Notes</Label>
-            <Textarea
-              id={`notes-${exercise.id}`}
-              value={exercise.notes || ''}
-              onChange={(e) => onChange(exercise.id, "notes", e.target.value)}
-              placeholder="Add general notes for this exercise..."
-              className="h-16"
-            />
+            {/* Note */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Note Esercizio</label>
+              <Textarea
+                placeholder="Aggiungi note per questo esercizio..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                onBlur={() => onChange(exercise.id, "notes", notes)}
+                className="min-h-[60px]"
+              />
+            </div>
           </div>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
