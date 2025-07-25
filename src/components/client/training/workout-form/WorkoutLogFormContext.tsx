@@ -23,7 +23,14 @@ export function WorkoutLogFormProvider({ children }: { children: React.ReactNode
   const [workoutName, setWorkoutName] = useState("");
   const [duration, setDuration] = useState("");
   const [exercises, setExercises] = useState<ExerciseLog[]>([
-    { id: "1", name: "", sets: 0, reps: 0, weight: 0 }
+    { 
+      id: "1", 
+      name: "", 
+      sets: 0, 
+      reps: 0, 
+      weight: 0,
+      setsData: []
+    }
   ]);
 
   const handleAddExercise = () => {
@@ -34,7 +41,8 @@ export function WorkoutLogFormProvider({ children }: { children: React.ReactNode
         name: "", 
         sets: 0, 
         reps: 0, 
-        weight: 0 
+        weight: 0,
+        setsData: []
       }
     ]);
   };

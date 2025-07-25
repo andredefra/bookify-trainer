@@ -79,7 +79,7 @@ export function ExerciseLogItem({ exercise, onRemove, onChange, isRemoveDisabled
     <div className="border rounded-lg p-4 space-y-4 bg-card">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h4 className="font-medium">Exercise {exercise.id}</h4>
+          <h4 className="font-medium">{exercise.name || "Select Exercise"}</h4>
           {exercise.difficulty && (
             <Badge variant="outline" className="text-xs">
               {exercise.difficulty}
