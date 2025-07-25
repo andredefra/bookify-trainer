@@ -22,6 +22,14 @@ const UserNavbar = () => {
     { key: 'userNav.about', href: '#about' },
   ];
 
+  const handleMenuClick = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -42,13 +50,13 @@ const UserNavbar = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {menuItems.map((item) => (
-                <a
+                <button
                   key={item.key}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
+                  onClick={() => handleMenuClick(item.href)}
+                  className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors cursor-pointer"
                 >
                   {t(item.key)}
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -101,14 +109,13 @@ const UserNavbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-border">
               {menuItems.map((item) => (
-                <a
+                <button
                   key={item.key}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-primary block px-3 py-2 text-base font-medium transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => handleMenuClick(item.href)}
+                  className="text-muted-foreground hover:text-primary block px-3 py-2 text-base font-medium transition-colors w-full text-left"
                 >
                   {t(item.key)}
-                </a>
+                </button>
               ))}
               
               {/* Mobile Language Selector */}

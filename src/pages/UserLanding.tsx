@@ -58,7 +58,7 @@ const UserLanding = () => {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24">
+        <section id="features" className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-primary text-center mb-12">
               Cosa puoi fare:
@@ -124,7 +124,7 @@ const UserLanding = () => {
         </section>
 
         {/* Why Section */}
-        <section className="py-16 md:py-24 bg-muted/20">
+        <section id="about" className="py-16 md:py-24 bg-muted/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-display font-bold text-primary mb-6">
@@ -140,7 +140,7 @@ const UserLanding = () => {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-16 md:py-24">
+        <section id="pricing" className="py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-display font-bold text-primary mb-6">
