@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, ClipboardList } from "lucide-react";
-import { NewWorkoutLogForm } from "@/components/client/training/workout-form/NewWorkoutLogForm";
+import { SimpleWorkoutForm } from "@/components/client/training/simple-workout/SimpleWorkoutForm";
 import { PastWorkoutsLog } from "@/components/client/training/PastWorkoutsLog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -37,7 +36,7 @@ export function TrainingLogTab() {
         </CardHeader>
         <CardContent className={isMobile ? "p-3 pt-1" : ""}>
           {isLoggingWorkout ? (
-            <NewWorkoutLogForm onComplete={() => setIsLoggingWorkout(false)} />
+            <SimpleWorkoutForm onComplete={() => setIsLoggingWorkout(false)} />
           ) : (
             <PastWorkoutsLog />
           )}
