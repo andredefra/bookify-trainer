@@ -7,7 +7,7 @@ export interface ExerciseLog {
   weight: number;
   // Enhanced tracking fields
   exerciseDbId?: string; // Link to exercise database
-  setsData?: SetLogData[]; // Individual set tracking
+  setsData?: any[]; // Individual set tracking (can be SetData or SetLogData)
   notes?: string;
   restTime?: number; // Rest time in seconds
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
