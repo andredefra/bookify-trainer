@@ -117,56 +117,68 @@ export function AnalyticsTab() {
   };
 
   return (
-    <div className="space-y-6 w-full max-w-7xl mx-auto">
-      {/* Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Analytics Dashboard</h1>
-          <p className="text-muted-foreground mt-1">
-            Track your progress and visualize your fitness journey
+    <div className="space-y-6 animate-fade-in">
+      {/* Header Section with Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-border">
+        <div className="space-y-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Analytics</h1>
+          <p className="text-sm text-muted-foreground">
+            Track your fitness journey and performance insights
           </p>
         </div>
-        <Button 
-          variant="outline" 
-          onClick={handleGoToIntegrations}
-          className="self-start lg:self-center"
-        >
-          <Settings className="h-4 w-4 mr-2" />
-          Connect Apps
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleGoToIntegrations}
+            className="hover-scale"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Connect Apps
+          </Button>
+        </div>
       </div>
 
-      {/* Integration Alert */}
-      <Alert className="border-info/20 bg-info/5">
+      {/* Integration Notice */}
+      <Alert className="border-info/20 bg-info/5 animate-scale-in">
         <InfoIcon className="h-4 w-4 text-info" />
         <AlertDescription className="text-sm">
-          Connect your fitness apps to automatically sync data and get richer insights.
+          <strong>Pro tip:</strong> Connect your fitness apps for automatic data sync and richer insights.
         </AlertDescription>
       </Alert>
 
-      {/* Progress Overview - Full Width Card */}
-      <Card className="shadow-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-xl">Progress Overview</CardTitle>
-          <CardDescription>
-            Current status of your fitness goals and measurements
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <GoalsProgress progressData={progressData} bodyMeasurements={bodyMeasurements} />
-        </CardContent>
-      </Card>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        {/* Left Column - Main Analytics */}
+        <div className="xl:col-span-8 space-y-6">
+          {/* Progress Overview */}
+          <Card className="shadow-sm animate-fade-in">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg">Goals Progress</CardTitle>
+                  <CardDescription className="text-sm">
+                    Your current progress toward fitness goals
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <GoalsProgress progressData={progressData} bodyMeasurements={bodyMeasurements} />
+            </CardContent>
+          </Card>
 
-      {/* Main Analytics Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Workout Analytics - Takes 2 columns on large screens */}
-        <div className="xl:col-span-2">
-          <WorkoutAnalytics progressData={progressData} />
+          {/* Workout Analytics */}
+          <div className="animate-fade-in [animation-delay:100ms]">
+            <WorkoutAnalytics progressData={progressData} />
+          </div>
         </div>
-        
-        {/* Statistics Section - Takes 1 column */}
-        <div className="xl:col-span-1">
-          <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
+
+        {/* Right Column - Statistics Sidebar */}
+        <div className="xl:col-span-4">
+          <div className="sticky top-6 animate-fade-in [animation-delay:200ms]">
+            <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
+          </div>
         </div>
       </div>
     </div>
