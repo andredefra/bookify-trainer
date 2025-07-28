@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Target, Trophy, Calendar, TrendingUp, MessageCircle, Zap } from "lucide-react";
+import { UserFitnessProgress } from "../overview/UserFitnessProgress";
 
 export function UserOverview() {
   return (
@@ -129,6 +130,9 @@ export function UserOverview() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Fitness Progress Section */}
+      <UserFitnessProgress />
     </div>
   );
 }
