@@ -470,7 +470,12 @@ export function UserTrainingProgram() {
                     <Button 
                       className="w-full mt-3" 
                       size="sm"
-                      onClick={() => startWorkout(day, index)}
+                      onClick={(e) => {
+                        console.log('Button clicked!', { day, index, selectedProgram });
+                        e.preventDefault();
+                        e.stopPropagation();
+                        startWorkout(day, index);
+                      }}
                     >
                       <Play className="h-4 w-4 mr-2" />
                       Start Workout
