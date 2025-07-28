@@ -9,19 +9,26 @@ import { RegisterHeader } from "@/components/register/RegisterHeader";
 interface RegisterContainerProps {
   onRegister: (data: z.infer<typeof registerSchema>) => void;
   onCancel: () => void;
+  hideUserTypeSelection?: boolean;
+  title?: string;
+  subtitle?: string;
 }
 
-const RegisterContainer = ({ onRegister, onCancel }: RegisterContainerProps) => {
+const RegisterContainer = ({ onRegister, onCancel, hideUserTypeSelection = false, title, subtitle }: RegisterContainerProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow flex items-center justify-center py-20 px-6">
         <div className="w-full max-w-lg">
-          <RegisterHeader />
+          <RegisterHeader title={title} subtitle={subtitle} />
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
-            <RegisterForm onSubmit={onRegister} onCancel={onCancel} />
+            <RegisterForm 
+              onSubmit={onRegister} 
+              onCancel={onCancel} 
+              hideUserTypeSelection={hideUserTypeSelection}
+            />
             
             <div className="mt-6 pt-6 border-t border-border text-center">
               <p className="text-sm text-muted-foreground">

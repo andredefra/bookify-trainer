@@ -21,6 +21,9 @@ import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 import UserLanding from "./pages/UserLanding";
 import UserLandingEn from "./pages/UserLandingEn";
+import UserLogin from "./pages/UserLogin";
+import UserRegister from "./pages/UserRegister";
+import UserDashboard from "./pages/UserDashboard";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -80,6 +83,9 @@ const AppContent = () => {
         <Route path="/cookies" element={<Cookies />} />
         <Route path="/user" element={<UserLanding />} />
         <Route path="/user-en" element={<UserLandingEn />} />
+        <Route path="/user-login" element={<UserLogin />} />
+        <Route path="/user-register" element={<UserRegister />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

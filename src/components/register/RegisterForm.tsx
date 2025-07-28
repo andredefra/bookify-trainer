@@ -18,10 +18,11 @@ export const registerSchema = z.object({
 
 interface RegisterFormProps {
   onSubmit: (data: z.infer<typeof registerSchema>) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
+  hideUserTypeSelection?: boolean;
 }
 
-export const RegisterForm = ({ onSubmit, onCancel }: RegisterFormProps) => {
+export const RegisterForm = ({ onSubmit, onCancel, hideUserTypeSelection = false }: RegisterFormProps) => {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -80,51 +81,55 @@ export const RegisterForm = ({ onSubmit, onCancel }: RegisterFormProps) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="userType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>I am a:</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="grid grid-cols-3 gap-4 mt-2"
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="client" />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">Client</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="trainer" />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">Trainer</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="gym" />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">Gym</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!hideUserTypeSelection && (
+          <FormField
+            control={form.control}
+            name="userType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>I am a:</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="grid grid-cols-3 gap-4 mt-2"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="client" />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">Client</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="trainer" />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">Trainer</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="gym" />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">Gym</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         
         {userType !== "client" && (
           <UserTypePlans userType={userType} control={form.control} />
         )}
         
         <div className="flex justify-end gap-3 pt-3">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
+          {onCancel && (
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
           <Button type="submit">Create Account</Button>
         </div>
       </form>
