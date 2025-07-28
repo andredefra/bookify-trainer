@@ -107,6 +107,114 @@ export function WorkoutAnalytics({
 
   const defaultFitnessData = fitnessTrackerData || generateDynamicFitnessData(progressData);
 
+  // Helper functions - defined before use
+  const calculateStreak = (data: any[]): number => {
+    return Math.floor(Math.random() * 7) + 1;
+  };
+
+  const extractTopGoalCategories = (data: any[]): string[] => {
+    const categories = data.reduce((acc, goal) => {
+      const type = goal.goalType || 'general';
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {});
+    
+    return Object.entries(categories)
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
+      .slice(0, 3)
+      .map(([category]) => category);
+  };
+
+  const calculateWeeklyTrend = (data: any[]): number => {
+    if (!data || data.length === 0) return 0;
+    
+    // Calculate average progress for current vs previous period
+    const avgProgress = data.reduce((sum, goal) => sum + goal.progress, 0) / data.length;
+    const baseProgress = 50; // Simulated baseline
+    return Math.round(avgProgress - baseProgress);
+  };
+
+  const generatePersonalizedInsights = (data: any[], avgProgress: number, achievedGoals: number): string[] => {
+    const insights: string[] = [];
+    
+    if (achievedGoals > 0) {
+      insights.push(`You've completed ${achievedGoals} goals - great commitment!`);
+    }
+    
+    const strengthGoals = data.filter(goal => goal.goalType === 'strength_progress');
+    const weightGoals = data.filter(goal => goal.goalType === 'weight_management');
+    const activityGoals = data.filter(goal => goal.goalType === 'activity_level');
+    
+    if (strengthGoals.length > 0) {
+      const avgStrengthProgress = strengthGoals.reduce((sum, goal) => sum + goal.progress, 0) / strengthGoals.length;
+      insights.push(`Your strength training is ${avgStrengthProgress > 70 ? 'excellent' : avgStrengthProgress > 40 ? 'progressing well' : 'getting started'}`);
+    }
+    
+    if (weightGoals.length > 0) {
+      insights.push(`Weight management goals are ${weightGoals[0].progress > 60 ? 'on track' : 'needing attention'}`);
+    }
+    
+    if (activityGoals.length > 0) {
+      insights.push(`Daily activity consistency is ${activityGoals[0].progress > 80 ? 'outstanding' : 'building momentum'}`);
+    }
+    
+    return insights.slice(0, 3);
+  };
+
+  const generateSmartImprovementAreas = (data: any[], avgProgress: number, topCategories: string[]): string[] => {
+    const areas: string[] = [];
+    
+    if (avgProgress < 30) {
+      areas.push("Establish daily tracking routine");
+      areas.push("Set smaller, achievable milestones");
+    } else if (avgProgress < 60) {
+      areas.push("Increase workout intensity gradually");
+      areas.push("Add variety to your routine");
+    } else {
+      areas.push("Consider advanced training techniques");
+      areas.push("Optimize nutrition timing");
+    }
+    
+    // Add specific areas based on goal types
+    if (topCategories.includes('weight_management')) {
+      areas.push("Track macronutrient intake");
+    }
+    if (topCategories.includes('strength_progress')) {
+      areas.push("Progressive overload planning");
+    }
+    
+    return areas.slice(0, 3);
+  };
+
+  const generateContextualMotivation = (avgProgress: number, achievedGoals: number, weeklyTrend: number): string => {
+    if (weeklyTrend > 10) {
+      return "🔥 Amazing progress this week! You're crushing your goals!";
+    } else if (weeklyTrend > 0) {
+      return "📈 Steady improvement - consistency is key to success!";
+    } else if (weeklyTrend < -10) {
+      return "💪 Every setback is a setup for a comeback. Let's get back on track!";
+    } else if (achievedGoals > 2) {
+      return "🎯 Goal achiever! Your dedication is paying off beautifully!";
+    } else if (avgProgress > 60) {
+      return "⭐ You're in the sweet spot - maintain this momentum!";
+    } else {
+      return "🌱 Growing stronger every day. Small steps, big results!";
+    }
+  };
+
+  const generateImprovementAreas = (data: any[], avgProgress: number) => {
+    if (avgProgress < 30) return ["Goal consistency", "Daily activity tracking"];
+    if (avgProgress < 60) return ["Progressive goals", "Measurement frequency"];
+    return ["Advanced metrics", "Long-term planning"];
+  };
+
+  const generateMotivation = (avgProgress: number, achievedGoals: number) => {
+    if (achievedGoals > 2) return "Excellent progress! Keep up the momentum!";
+    if (avgProgress > 60) return "You're doing great! Stay consistent!";
+    if (avgProgress > 30) return "Good start! Focus on consistency.";
+    return "Every journey starts with a single step!";
+  };
+
   // Generate comprehensive analytics from progress data
   const generateComprehensiveAnalytics = () => {
     if (!progressData?.length) {
@@ -195,115 +303,6 @@ export function WorkoutAnalytics({
       case '6months': return 24;
       case '1year': return 52;
       default: return 4;
-    }
-  };
-
-  const calculateStreak = (data: any[]) => {
-    const recentGoals = data.filter(goal => goal.progress > 0);
-    return Math.min(recentGoals.length, 14); // Max 2 weeks for demo
-  };
-
-  const extractTopGoalCategories = (data: any[]) => {
-    const categories = data.reduce((acc, goal) => {
-      const category = goal.goalType || 'general';
-      acc[category] = (acc[category] || 0) + 1;
-      return acc;
-    }, {});
-    
-    return Object.entries(categories)
-      .sort((a, b) => (b[1] as number) - (a[1] as number))
-      .slice(0, 3)
-      .map(([category]) => category);
-  };
-
-  const generateImprovementAreas = (data: any[], avgProgress: number) => {
-    if (avgProgress < 30) return ["Goal consistency", "Daily activity tracking"];
-    if (avgProgress < 60) return ["Progressive goals", "Measurement frequency"];
-    return ["Advanced metrics", "Long-term planning"];
-  };
-
-  const generateMotivation = (avgProgress: number, achievedGoals: number) => {
-    if (achievedGoals > 2) return "Excellent progress! Keep up the momentum!";
-    if (avgProgress > 60) return "You're doing great! Stay consistent!";
-    if (avgProgress > 30) return "Good start! Focus on consistency.";
-    return "Every journey starts with a single step!";
-  };
-
-  // Enhanced helper functions for better insights
-  const calculateWeeklyTrend = (data: any[]): number => {
-    if (!data || data.length === 0) return 0;
-    
-    // Calculate average progress for current vs previous period
-    const avgProgress = data.reduce((sum, goal) => sum + goal.progress, 0) / data.length;
-    const baseProgress = 50; // Simulated baseline
-    return Math.round(avgProgress - baseProgress);
-  };
-
-  const generatePersonalizedInsights = (data: any[], avgProgress: number, achievedGoals: number): string[] => {
-    const insights: string[] = [];
-    
-    if (achievedGoals > 0) {
-      insights.push(`You've completed ${achievedGoals} goals - great commitment!`);
-    }
-    
-    const strengthGoals = data.filter(goal => goal.goalType === 'strength_progress');
-    const weightGoals = data.filter(goal => goal.goalType === 'weight_management');
-    const activityGoals = data.filter(goal => goal.goalType === 'activity_level');
-    
-    if (strengthGoals.length > 0) {
-      const avgStrengthProgress = strengthGoals.reduce((sum, goal) => sum + goal.progress, 0) / strengthGoals.length;
-      insights.push(`Your strength training is ${avgStrengthProgress > 70 ? 'excellent' : avgStrengthProgress > 40 ? 'progressing well' : 'getting started'}`);
-    }
-    
-    if (weightGoals.length > 0) {
-      insights.push(`Weight management goals are ${weightGoals[0].progress > 60 ? 'on track' : 'needing attention'}`);
-    }
-    
-    if (activityGoals.length > 0) {
-      insights.push(`Daily activity consistency is ${activityGoals[0].progress > 80 ? 'outstanding' : 'building momentum'}`);
-    }
-    
-    return insights.slice(0, 3);
-  };
-
-  const generateSmartImprovementAreas = (data: any[], avgProgress: number, topCategories: string[]): string[] => {
-    const areas: string[] = [];
-    
-    if (avgProgress < 30) {
-      areas.push("Establish daily tracking routine");
-      areas.push("Set smaller, achievable milestones");
-    } else if (avgProgress < 60) {
-      areas.push("Increase workout intensity gradually");
-      areas.push("Add variety to your routine");
-    } else {
-      areas.push("Consider advanced training techniques");
-      areas.push("Optimize nutrition timing");
-    }
-    
-    // Add specific areas based on goal types
-    if (topCategories.includes('weight_management')) {
-      areas.push("Track macronutrient intake");
-    }
-    if (topCategories.includes('strength_progress')) {
-      areas.push("Progressive overload planning");
-    }
-    
-    return areas.slice(0, 3);
-  };
-
-  const generateContextualMotivation = (avgProgress: number, achievedGoals: number, weeklyTrend: number): string => {
-    if (weeklyTrend > 10) {
-      return "🔥 Amazing progress this week! You're crushing your goals!";
-    } else if (weeklyTrend > 0) {
-      return "📈 Steady improvement - consistency is key to success!";
-    } else if (weeklyTrend < -10) {
-      return "💪 Every setback is a setup for a comeback. Let's get back on track!";
-    } else if (achievedGoals > 2) {
-      return "🎯 Goal achiever! Your dedication is paying off beautifully!";
-    } else if (avgProgress > 60) {
-      return "⭐ You're in the sweet spot - maintain this momentum!";
-    } else {
-      return "🌱 Growing stronger every day. Small steps, big results!";
     }
   };
 
