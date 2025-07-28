@@ -325,19 +325,21 @@ export function WorkoutAnalytics({
 
   return (
     <Card className="col-span-12 border shadow-sm">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
+      <CardHeader className="pb-4">
+        <div className="flex flex-col gap-3">
           <div>
-            <CardTitle>Enhanced Fitness Analytics</CardTitle>
-            <CardDescription>Comprehensive insights from your fitness data and goals</CardDescription>
+            <CardTitle className="text-lg">Fitness Analytics</CardTitle>
+            <CardDescription className="text-sm mt-1">
+              Insights from your fitness data
+            </CardDescription>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={runAIAnalysis} disabled={isLoadingAI} variant="outline" size="sm">
-              {isLoadingAI ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
-              AI Analysis
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button onClick={runAIAnalysis} disabled={isLoadingAI} variant="outline" size="sm" className="flex-1 sm:flex-none">
+              {isLoadingAI ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Brain className="h-4 w-4 mr-2" />}
+              <span className="hidden xs:inline">AI </span>Analysis
             </Button>
             <Select value={timeframe} onValueChange={setTimeframe}>
-              <SelectTrigger className="w-32">
+              <SelectTrigger className="w-full sm:w-32">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
