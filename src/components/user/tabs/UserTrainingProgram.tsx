@@ -188,7 +188,7 @@ export function UserTrainingProgram() {
   // Exercise name mapping from workout program to Exercise Library
   const exerciseNameMapping: { [key: string]: string } = {
     'Push-ups': 'Standard Push-ups',
-    'Bent-over Rows': 'Bent-Over Barbell Rows',
+    'Bent-over Rows': 'Bent Over Row',
     'Pull-ups': 'Pull-ups',
     'Bench Press': 'Barbell Bench Press',
     'Squats': 'Barbell Squats',
