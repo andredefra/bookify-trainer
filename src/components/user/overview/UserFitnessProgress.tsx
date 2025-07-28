@@ -66,6 +66,8 @@ export function UserFitnessProgress() {
   const [activeTab, setActiveTab] = useState("overview");
   const [editingProfile, setEditingProfile] = useState(false);
   const [showActivityForm, setShowActivityForm] = useState(false);
+  const [showWeightForm, setShowWeightForm] = useState(false);
+  const [showGoalForm, setShowGoalForm] = useState(false);
   const [newMeasurement, setNewMeasurement] = useState<BodyMeasurements>({
     date: new Date().toISOString().split('T')[0]
   });
@@ -76,6 +78,19 @@ export function UserFitnessProgress() {
     name: '',
     duration: 30,
     intensity: 'moderate'
+  });
+  const [newWeight, setNewWeight] = useState({
+    date: new Date().toISOString().split('T')[0],
+    weight: ''
+  });
+  const [newGoal, setNewGoal] = useState<FitnessGoal>({
+    id: '',
+    type: 'weight_loss',
+    current: 0,
+    target: 0,
+    unit: 'kg',
+    targetDate: '',
+    description: ''
   });
 
   useEffect(() => {
@@ -159,6 +174,55 @@ export function UserFitnessProgress() {
     toast.success("Activity logged successfully!");
   };
 
+  const addWeightEntry = () => {
+    if (!newWeight.weight) {
+      toast.error("Please enter your weight");
+      return;
+    }
+
+    const weightMeasurement: BodyMeasurements = {
+      date: newWeight.date,
+      weight: parseFloat(newWeight.weight)
+    };
+
+    const updatedMeasurements = [weightMeasurement, ...measurements];
+    setMeasurements(updatedMeasurements);
+    localStorage.setItem('user-measurements', JSON.stringify(updatedMeasurements));
+    setNewWeight({
+      date: new Date().toISOString().split('T')[0],
+      weight: ''
+    });
+    setShowWeightForm(false);
+    toast.success("Weight logged successfully!");
+  };
+
+  const addGoal = () => {
+    if (!newGoal.description.trim() || !newGoal.target || !newGoal.targetDate) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const goalWithId = {
+      ...newGoal,
+      id: Date.now().toString()
+    };
+
+    const updatedGoals = [goalWithId, ...goals];
+    setGoals(updatedGoals);
+    localStorage.setItem('user-fitness-goals', JSON.stringify(updatedGoals));
+    setNewGoal({
+      id: '',
+      type: 'weight_loss',
+      current: 0,
+      target: 0,
+      unit: 'kg',
+      targetDate: '',
+      description: ''
+    });
+    setShowGoalForm(false);
+    toast.success("Goal created successfully!");
+  };
+
   const getProfileCompleteness = () => {
     const fields = ['age', 'gender', 'height', 'weight', 'experienceLevel', 'fitnessGoals', 'weeklyFrequency'];
     const completedFields = fields.filter(field => profile[field] !== undefined && profile[field] !== null);
@@ -191,6 +255,145 @@ export function UserFitnessProgress() {
         </Card>
       )}
 
+      {/* Quick Forms */}
+      {showWeightForm && (
+        <Card className="border-2 border-primary">
+          <CardHeader>
+            <CardTitle>Log Weight</CardTitle>
+            <CardDescription>Quick weight entry</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="weight-date">Date</Label>
+                <Input
+                  id="weight-date"
+                  type="date"
+                  value={newWeight.date}
+                  onChange={(e) => setNewWeight({...newWeight, date: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="weight-value">Weight (kg)</Label>
+                <Input
+                  id="weight-value"
+                  type="number"
+                  step="0.1"
+                  placeholder="Enter your weight"
+                  value={newWeight.weight}
+                  onChange={(e) => setNewWeight({...newWeight, weight: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={addWeightEntry}>
+                <Save className="h-4 w-4 mr-2" />
+                Save Weight
+              </Button>
+              <Button variant="outline" onClick={() => setShowWeightForm(false)}>
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {showGoalForm && (
+        <Card className="border-2 border-primary">
+          <CardHeader>
+            <CardTitle>Create New Goal</CardTitle>
+            <CardDescription>Set a fitness target to work towards</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="goal-type">Goal Type</Label>
+                <Select 
+                  value={newGoal.type} 
+                  onValueChange={(value) => setNewGoal({...newGoal, type: value as FitnessGoal['type']})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="weight_loss">Weight Loss</SelectItem>
+                    <SelectItem value="weight_gain">Weight Gain</SelectItem>
+                    <SelectItem value="muscle_gain">Muscle Gain</SelectItem>
+                    <SelectItem value="endurance">Endurance</SelectItem>
+                    <SelectItem value="strength">Strength</SelectItem>
+                    <SelectItem value="flexibility">Flexibility</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="goal-target-date">Target Date</Label>
+                <Input
+                  id="goal-target-date"
+                  type="date"
+                  value={newGoal.targetDate}
+                  onChange={(e) => setNewGoal({...newGoal, targetDate: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="goal-description">Description</Label>
+                <Input
+                  id="goal-description"
+                  placeholder="e.g., Lose 5kg for summer"
+                  value={newGoal.description}
+                  onChange={(e) => setNewGoal({...newGoal, description: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="goal-unit">Unit</Label>
+                <Select 
+                  value={newGoal.unit} 
+                  onValueChange={(value) => setNewGoal({...newGoal, unit: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="kg">kg</SelectItem>
+                    <SelectItem value="lbs">lbs</SelectItem>
+                    <SelectItem value="minutes">minutes</SelectItem>
+                    <SelectItem value="reps">reps</SelectItem>
+                    <SelectItem value="sets">sets</SelectItem>
+                    <SelectItem value="cm">cm</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="goal-current">Current Value</Label>
+                <Input
+                  id="goal-current"
+                  type="number"
+                  value={newGoal.current}
+                  onChange={(e) => setNewGoal({...newGoal, current: parseFloat(e.target.value)})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="goal-target">Target Value</Label>
+                <Input
+                  id="goal-target"
+                  type="number"
+                  value={newGoal.target}
+                  onChange={(e) => setNewGoal({...newGoal, target: parseFloat(e.target.value)})}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={addGoal}>
+                <Save className="h-4 w-4 mr-2" />
+                Create Goal
+              </Button>
+              <Button variant="outline" onClick={() => setShowGoalForm(false)}>
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Quick Action Buttons - Track your journey */}
       <Card className="mb-6">
         <CardHeader>
@@ -201,7 +404,7 @@ export function UserFitnessProgress() {
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
-              onClick={() => setActiveTab("goals")}
+              onClick={() => setShowGoalForm(true)}
             >
               <Plus className="h-4 w-4" />
               Add Goal
@@ -217,7 +420,7 @@ export function UserFitnessProgress() {
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
-              onClick={() => setActiveTab("measurements")}
+              onClick={() => setShowWeightForm(true)}
             >
               <Weight className="h-4 w-4" />
               Log Weight
@@ -285,9 +488,19 @@ export function UserFitnessProgress() {
                     {latestMeasurement.weight && <div className="flex justify-between"><span>Weight:</span><span>{latestMeasurement.weight} kg</span></div>}
                     {latestMeasurement.waist && <div className="flex justify-between"><span>Waist:</span><span>{latestMeasurement.waist} cm</span></div>}
                     {latestMeasurement.hips && <div className="flex justify-between"><span>Hips:</span><span>{latestMeasurement.hips} cm</span></div>}
+                    <Button variant="outline" size="sm" onClick={() => setShowWeightForm(true)} className="w-full mt-2">
+                      <Plus className="h-3 w-3 mr-1" />
+                      Log Weight
+                    </Button>
                   </>
                 ) : (
-                  <p className="text-sm text-muted-foreground">No measurements recorded</p>
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-2">No measurements recorded</p>
+                    <Button size="sm" onClick={() => setShowWeightForm(true)}>
+                      <Plus className="h-3 w-3 mr-1" />
+                      Log First Weight
+                    </Button>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -302,17 +515,29 @@ export function UserFitnessProgress() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {goals.length > 0 ? (
-                  goals.slice(0, 3).map((goal) => (
-                    <div key={goal.id} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>{goal.description}</span>
-                        <span>{goal.current}/{goal.target} {goal.unit}</span>
+                  <>
+                    {goals.slice(0, 2).map((goal) => (
+                      <div key={goal.id} className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>{goal.description}</span>
+                          <span>{goal.current}/{goal.target} {goal.unit}</span>
+                        </div>
+                        <Progress value={(goal.current / goal.target) * 100} className="h-2" />
                       </div>
-                      <Progress value={(goal.current / goal.target) * 100} className="h-2" />
-                    </div>
-                  ))
+                    ))}
+                    <Button variant="outline" size="sm" onClick={() => setShowGoalForm(true)} className="w-full mt-2">
+                      <Plus className="h-3 w-3 mr-1" />
+                      Add Goal
+                    </Button>
+                  </>
                 ) : (
-                  <p className="text-sm text-muted-foreground">No goals set</p>
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-2">No goals set</p>
+                    <Button size="sm" onClick={() => setShowGoalForm(true)}>
+                      <Plus className="h-3 w-3 mr-1" />
+                      Create First Goal
+                    </Button>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -625,10 +850,20 @@ export function UserFitnessProgress() {
         <TabsContent value="goals">
           <Card>
             <CardHeader>
-              <CardTitle>Your Fitness Goals</CardTitle>
-              <CardDescription>
-                Set and monitor your training objectives
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Your Fitness Goals</CardTitle>
+                  <CardDescription>
+                    Set and monitor your training objectives
+                  </CardDescription>
+                </div>
+                {!showGoalForm && (
+                  <Button onClick={() => setShowGoalForm(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Goal
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {goals.length > 0 ? (
@@ -645,6 +880,19 @@ export function UserFitnessProgress() {
                           <span>Due date: {new Date(goal.targetDate).toLocaleDateString()}</span>
                         </div>
                         <Progress value={(goal.current / goal.target) * 100} />
+                        <div className="flex gap-2 mt-2">
+                          <Button size="sm" variant="outline" onClick={() => {
+                            const updatedGoals = goals.map(g => 
+                              g.id === goal.id 
+                                ? {...g, current: Math.min(g.current + 1, g.target)} 
+                                : g
+                            );
+                            setGoals(updatedGoals);
+                            localStorage.setItem('user-fitness-goals', JSON.stringify(updatedGoals));
+                          }}>
+                            +1 Progress
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -655,9 +903,10 @@ export function UserFitnessProgress() {
                   <p className="text-muted-foreground mb-4">
                     You haven't set any specific goals yet.
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    Your goals will be automatically created by the AI trainer when you request a personalized plan.
-                  </p>
+                  <Button onClick={() => setShowGoalForm(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Your First Goal
+                  </Button>
                 </div>
               )}
             </CardContent>
