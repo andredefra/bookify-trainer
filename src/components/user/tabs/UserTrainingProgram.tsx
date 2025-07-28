@@ -169,6 +169,8 @@ export function UserTrainingProgram() {
   const [showProgramDetail, setShowProgramDetail] = useState(false);
   const [activeWorkout, setActiveWorkout] = useState<any>(null);
   const [workoutLogs, setWorkoutLogs] = useState<any>({});
+  const [sessionStarted, setSessionStarted] = useState(false);
+  const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
@@ -552,8 +554,6 @@ export function UserTrainingProgram() {
 
   // Active Workout View
   if (activeWorkout) {
-    const [sessionStarted, setSessionStarted] = useState(false);
-    const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
 
     if (!sessionStarted) {
       // Pre-session view
