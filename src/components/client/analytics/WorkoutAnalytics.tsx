@@ -409,12 +409,12 @@ export function WorkoutAnalytics({
 
         {/* Enhanced Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid grid-cols-5 w-full">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-            <TabsTrigger value="goals">Goals</TabsTrigger>
-            <TabsTrigger value="body">Body Data</TabsTrigger>
+          <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full h-auto gap-1 p-1">
+            <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-2">Overview</TabsTrigger>
+            <TabsTrigger value="ai-insights" className="text-xs sm:text-sm px-2 py-2">AI Insights</TabsTrigger>
+            <TabsTrigger value="activity" className="text-xs sm:text-sm px-2 py-2">Activity</TabsTrigger>
+            <TabsTrigger value="goals" className="text-xs sm:text-sm px-2 py-2">Goals</TabsTrigger>
+            <TabsTrigger value="body" className="text-xs sm:text-sm px-2 py-2 col-span-2 md:col-span-1">Body Data</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
