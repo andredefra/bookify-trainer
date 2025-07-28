@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 import { Menu, X, Globe } from 'lucide-react';
@@ -13,6 +13,18 @@ import {
 const UserNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleLanguageChange = (lang: 'en' | 'it') => {
+    setLanguage(lang);
+    const currentPath = window.location.pathname;
+    
+    if (currentPath === '/user' || currentPath === '/user-en') {
+      navigate(lang === 'en' ? '/user-en' : '/user');
+    } else {
+      navigate(lang === 'en' ? '/' : '/it');
+    }
+  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -72,10 +84,10 @@ const UserNavbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setLanguage('it')}>
+                <DropdownMenuItem onClick={() => handleLanguageChange('it')}>
                   🇮🇹 Italiano
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage('en')}>
+                <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
                   🇬🇧 English
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -126,7 +138,7 @@ const UserNavbar = () => {
                 </div>
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => setLanguage('it')}
+                    onClick={() => handleLanguageChange('it')}
                     className={`px-3 py-1 text-sm rounded ${
                       language === 'it' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
                     }`}
@@ -134,7 +146,7 @@ const UserNavbar = () => {
                     🇮🇹 IT
                   </button>
                   <button
-                    onClick={() => setLanguage('en')}
+                    onClick={() => handleLanguageChange('en')}
                     className={`px-3 py-1 text-sm rounded ${
                       language === 'en' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
                     }`}
