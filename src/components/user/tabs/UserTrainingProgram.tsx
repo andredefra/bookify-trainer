@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { 
   Target, 
   Clock, 
@@ -17,10 +18,19 @@ import {
   Dumbbell,
   MessageCircle,
   User,
-  Star
+  Star,
+  ChevronDown,
+  ChevronUp,
+  Video,
+  Info,
+  RefreshCw
 } from "lucide-react";
 import { currentProgram } from '@/data/training/mockPrograms/currentProgram';
 import { toast } from "sonner";
+import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
+import { ExerciseData } from '@/data/exercises/types';
+import { ExerciseVideoPlayer } from '@/components/client/training/ExerciseVideoPlayer';
+import { AlternativeExercisesList } from '@/components/trainer/dashboard/tabs/programs/AlternativeExercisesList';
 
 interface TrainingPlan {
   id: string;
@@ -171,12 +181,33 @@ export function UserTrainingProgram() {
   const [workoutLogs, setWorkoutLogs] = useState<any>({});
   const [sessionStarted, setSessionStarted] = useState(false);
   const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
+  const [showExerciseInfo, setShowExerciseInfo] = useState<number | null>(null);
+  
+  const { allExercises, getExerciseByName } = useExerciseLibrary();
+
+  // Get exercise data from library
+  const getExerciseData = (exerciseName: string): ExerciseData | null => {
+    return getExerciseByName(exerciseName) || null;
+  };
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
       case 'beginner': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
       case 'intermediate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
       case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'chest': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      case 'back': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'legs': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'shoulders': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+      case 'arms': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+      case 'core': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+      case 'cardio': return 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     }
   };
@@ -654,110 +685,201 @@ export function UserTrainingProgram() {
         </div>
 
         <div className="space-y-4">
-          {activeWorkout.exercises.map((exercise: any, exerciseIndex: number) => (
-            <Card key={exerciseIndex} className={exercise.completed ? 'border-green-200 bg-green-50' : ''}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Dumbbell className="h-5 w-5" />
-                      {exercise.name}
-                    </CardTitle>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                      <span>{exercise.sets} sets × {exercise.reps}</span>
-                      <Badge variant="outline" className="text-xs">
-                        {exercise.exerciseType || 'beginner'}
-                      </Badge>
+          {activeWorkout.exercises.map((exercise: any, exerciseIndex: number) => {
+            const exerciseData = getExerciseData(exercise.name);
+            
+            return (
+              <Card key={exerciseIndex} className={exercise.completed ? 'border-green-200 bg-green-50' : ''}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <CardTitle className="flex items-center gap-2">
+                        <Dumbbell className="h-5 w-5" />
+                        {exercise.name}
+                      </CardTitle>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                        <span>{exercise.sets} sets × {exercise.reps}</span>
+                        {exerciseData && (
+                          <>
+                            <Badge variant="outline" className={`text-xs ${getDifficultyColor(exerciseData.difficulty)}`}>
+                              {exerciseData.difficulty}
+                            </Badge>
+                            <Badge variant="outline" className={`text-xs ${getCategoryColor(exerciseData.category)}`}>
+                              {exerciseData.category}
+                            </Badge>
+                          </>
+                        )}
+                      </div>
+                      
+                      {/* Exercise details */}
+                      {exerciseData && (
+                        <div className="mt-2 text-xs text-muted-foreground">
+                          <div className="flex flex-wrap gap-1">
+                            <span>Muscles: {exerciseData.muscleGroup.join(', ')}</span>
+                            {exerciseData.equipment.length > 0 && (
+                              <span>• Equipment: {exerciseData.equipment.join(', ')}</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {exercise.completed && (
+                        <Badge className="bg-green-600">Completed</Badge>
+                      )}
+                      
+                      {/* Exercise Info Button */}
+                      {exerciseData && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setShowExerciseInfo(
+                            showExerciseInfo === exerciseIndex ? null : exerciseIndex
+                          )}
+                        >
+                          <Info className="h-4 w-4" />
+                        </Button>
+                      )}
+                      
+                      <Button
+                        variant="outline"
+                        onClick={() => setExpandedExercise(
+                          expandedExercise === exerciseIndex ? null : exerciseIndex
+                        )}
+                        className="min-w-[120px]"
+                      >
+                        {expandedExercise === exerciseIndex ? 'Hide Sets' : 'Track Sets'}
+                        <span className="ml-2">
+                          {expandedExercise === exerciseIndex ? '▲' : '▼'}
+                        </span>
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {exercise.completed && (
-                      <Badge className="bg-green-600">Completed</Badge>
-                    )}
-                    <Button
-                      variant="outline"
-                      onClick={() => setExpandedExercise(
-                        expandedExercise === exerciseIndex ? null : exerciseIndex
-                      )}
-                      className="min-w-[120px]"
-                    >
-                      {expandedExercise === exerciseIndex ? 'Hide Sets' : 'Track Sets'}
-                      <span className="ml-2">
-                        {expandedExercise === exerciseIndex ? '▲' : '▼'}
-                      </span>
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
+                </CardHeader>
 
-              {expandedExercise === exerciseIndex && (
-                <CardContent>
-                  <div className="space-y-3">
-                    {Array.from({ length: exercise.sets }, (_, setIndex) => (
-                      <div key={setIndex} className="border rounded-lg p-3 bg-muted/20">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium">Set {setIndex + 1}</span>
-                          {exercise.sets_logged?.[setIndex]?.completed && (
-                            <Badge variant="outline" className="text-green-600">
-                              ✓ Done
-                            </Badge>
-                          )}
+                {/* Exercise Information Panel */}
+                {showExerciseInfo === exerciseIndex && exerciseData && (
+                  <CardContent className="border-t">
+                    <div className="space-y-4">
+                      {/* Exercise Notes */}
+                      {exerciseData.notes && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-1">Notes:</h4>
+                          <p className="text-sm text-muted-foreground">{exerciseData.notes}</p>
                         </div>
-                        
-                        <div className="grid grid-cols-3 gap-2">
-                          <div>
-                            <label className="text-xs text-muted-foreground">Weight (kg)</label>
-                            <Input
-                              type="number"
-                              placeholder="0"
-                              className="h-8"
-                              value={exercise.sets_logged?.[setIndex]?.weight || ''}
-                              onChange={(e) => {
-                                const weight = parseFloat(e.target.value) || 0;
-                                const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
-                                if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
-                              }}
-                            />
+                      )}
+                      
+                      {/* Video Player */}
+                      {exerciseData.videoUrl && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                            <Video className="h-4 w-4" />
+                            Exercise Video
+                          </h4>
+                          <ExerciseVideoPlayer 
+                            videoUrl={exerciseData.videoUrl}
+                            exerciseName={exerciseData.name}
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Alternative Exercises */}
+                      {exerciseData.alternativeExercises && exerciseData.alternativeExercises.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                            <RefreshCw className="h-4 w-4" />
+                            Alternative Exercises
+                          </h4>
+                          <AlternativeExercisesList 
+                            alternativeExerciseIds={exerciseData.alternativeExercises}
+                            onSelectAlternative={(altExercise) => {
+                              // Update the exercise in the workout
+                              const updatedWorkout = { ...activeWorkout };
+                              updatedWorkout.exercises[exerciseIndex] = {
+                                ...exercise,
+                                name: altExercise.name
+                              };
+                              setActiveWorkout(updatedWorkout);
+                              setShowExerciseInfo(null);
+                              toast.success(`Switched to ${altExercise.name}`);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                )}
+
+                {/* Sets Tracking Panel */}
+                {expandedExercise === exerciseIndex && (
+                  <CardContent className={showExerciseInfo === exerciseIndex ? 'border-t' : ''}>
+                    <div className="space-y-3">
+                      {Array.from({ length: exercise.sets }, (_, setIndex) => (
+                        <div key={setIndex} className="border rounded-lg p-3 bg-muted/20">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-medium">Set {setIndex + 1}</span>
+                            {exercise.sets_logged?.[setIndex]?.completed && (
+                              <Badge variant="outline" className="text-green-600">
+                                ✓ Done
+                              </Badge>
+                            )}
                           </div>
-                          <div>
-                            <label className="text-xs text-muted-foreground">Reps</label>
-                            <Input
-                              type="number"
-                              placeholder="0"
-                              className="h-8"
-                              value={exercise.sets_logged?.[setIndex]?.reps || ''}
-                              onChange={(e) => {
-                                const reps = parseInt(e.target.value) || 0;
-                                const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
-                                if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
-                              }}
-                            />
-                          </div>
-                          <div className="flex items-end">
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              className="w-full h-8"
-                              onClick={() => {
-                                const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
-                                const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
-                                if (weight > 0 && reps > 0) {
-                                  logSet(exerciseIndex, setIndex, weight, reps);
-                                }
-                              }}
-                              disabled={exercise.sets_logged?.[setIndex]?.completed}
-                            >
-                              {exercise.sets_logged?.[setIndex]?.completed ? '✓' : 'Log'}
-                            </Button>
+                          
+                          <div className="grid grid-cols-3 gap-2">
+                            <div>
+                              <label className="text-xs text-muted-foreground">Weight (kg)</label>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                className="h-8"
+                                value={exercise.sets_logged?.[setIndex]?.weight || ''}
+                                onChange={(e) => {
+                                  const weight = parseFloat(e.target.value) || 0;
+                                  const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
+                                  if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-muted-foreground">Reps</label>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                className="h-8"
+                                value={exercise.sets_logged?.[setIndex]?.reps || ''}
+                                onChange={(e) => {
+                                  const reps = parseInt(e.target.value) || 0;
+                                  const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
+                                  if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
+                                }}
+                              />
+                            </div>
+                            <div className="flex items-end">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="w-full h-8"
+                                onClick={() => {
+                                  const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
+                                  const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
+                                  if (weight > 0 && reps > 0) {
+                                    logSet(exerciseIndex, setIndex, weight, reps);
+                                  }
+                                }}
+                                disabled={exercise.sets_logged?.[setIndex]?.completed}
+                              >
+                                {exercise.sets_logged?.[setIndex]?.completed ? '✓' : 'Log'}
+                              </Button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-          ))}
+                      ))}
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+            );
+          })}
         </div>
 
         {/* Workout Progress */}
