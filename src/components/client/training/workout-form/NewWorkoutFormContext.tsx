@@ -51,9 +51,14 @@ export function WorkoutFormProvider({ children }: { children: React.ReactNode })
   };
 
   const updateExercise = (id: string, updates: Partial<WorkoutExercise>) => {
-    setExercises(exercises.map(ex => 
-      ex.id === id ? { ...ex, ...updates } : ex
-    ));
+    console.log("updateExercise called with:", { id, updates, currentExercises: exercises });
+    setExercises(exercises.map(ex => {
+      if (ex.id === id) {
+        console.log("Updating exercise:", ex, "with updates:", updates);
+        return { ...ex, ...updates };
+      }
+      return ex;
+    }));
   };
 
   const updateExerciseSet = (exerciseId: string, setNumber: number, updates: Partial<WorkoutSet>) => {

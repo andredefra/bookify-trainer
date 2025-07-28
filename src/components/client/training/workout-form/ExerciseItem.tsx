@@ -37,6 +37,7 @@ export function ExerciseItem({
 
   const handleExerciseSelect = (selectedExercise: ExerciseData) => {
     console.log("Exercise selected:", selectedExercise);
+    console.log("Current exercise ID:", exercise.id);
     
     // Update exercise data
     onUpdate({
