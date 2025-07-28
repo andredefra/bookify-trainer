@@ -579,14 +579,14 @@ export function UserAnalytics() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Streak attuale</p>
+                <p className="text-sm font-medium text-muted-foreground">Current streak</p>
                 <p className="text-2xl font-bold">{analyticsData.workoutStats.currentStreak}</p>
               </div>
               <Flame className="h-8 w-8 text-orange-600" />
             </div>
             <div className="flex items-center mt-2 text-sm">
               <Award className="h-4 w-4 text-yellow-600 mr-1" />
-              <span className="text-yellow-600">Record: {analyticsData.workoutStats.longestStreak} giorni</span>
+              <span className="text-yellow-600">Record: {analyticsData.workoutStats.longestStreak} days</span>
             </div>
           </CardContent>
         </Card>
@@ -595,14 +595,14 @@ export function UserAnalytics() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Tempo totale</p>
+                <p className="text-sm font-medium text-muted-foreground">Total time</p>
                 <p className="text-2xl font-bold">{Math.round(analyticsData.workoutStats.totalMinutes / 60)}h</p>
               </div>
               <Clock className="h-8 w-8 text-purple-600" />
             </div>
             <div className="flex items-center mt-2 text-sm">
               <Zap className="h-4 w-4 text-blue-600 mr-1" />
-              <span className="text-blue-600">Media: {analyticsData.workoutStats.weeklyAverage} alla settimana</span>
+              <span className="text-blue-600">Average: {analyticsData.workoutStats.weeklyAverage} per week</span>
             </div>
           </CardContent>
         </Card>
@@ -611,7 +611,7 @@ export function UserAnalytics() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Calorie totali (AI)</p>
+                <p className="text-sm font-medium text-muted-foreground">Total calories (AI)</p>
                 <p className="text-2xl font-bold">{analyticsData.workoutStats.totalCaloriesBurned}</p>
               </div>
               <Flame className="h-8 w-8 text-orange-600" />
@@ -619,7 +619,7 @@ export function UserAnalytics() {
             <div className="flex items-center mt-2 text-sm">
               <Brain className="h-4 w-4 text-purple-600 mr-1" />
               <span className="text-purple-600">
-                Media: {analyticsData.aiInsights.averageCaloriesPerWorkout} per workout
+                Average: {analyticsData.aiInsights.averageCaloriesPerWorkout} per workout
               </span>
             </div>
           </CardContent>
@@ -629,7 +629,7 @@ export function UserAnalytics() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Peso attuale</p>
+                <p className="text-sm font-medium text-muted-foreground">Current weight</p>
                 <p className="text-2xl font-bold">
                   {analyticsData.weightProgress[analyticsData.weightProgress.length - 1]?.weight} kg
                 </p>
@@ -638,7 +638,7 @@ export function UserAnalytics() {
             </div>
             <div className="flex items-center mt-2 text-sm">
               <TrendingDown className="h-4 w-4 text-green-600 mr-1" />
-              <span className="text-green-600">-2.7 kg dal primo giorno</span>
+              <span className="text-green-600">-2.7 kg since start</span>
             </div>
           </CardContent>
         </Card>
@@ -646,11 +646,11 @@ export function UserAnalytics() {
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="overview">Panoramica</TabsTrigger>
-          <TabsTrigger value="ai-insights">Insights AI</TabsTrigger>
-          <TabsTrigger value="goals">Obiettivi</TabsTrigger>
-          <TabsTrigger value="body">Composizione corporea</TabsTrigger>
-          <TabsTrigger value="activity">Attività</TabsTrigger>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
+          <TabsTrigger value="goals">Goals</TabsTrigger>
+          <TabsTrigger value="body">Body Composition</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
         </TabsList>
 
         {/* AI Insights Tab */}
@@ -661,32 +661,32 @@ export function UserAnalytics() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5" />
-                  Insights AI
+                  AI Insights
                 </CardTitle>
-                <CardDescription>Analisi intelligente dei tuoi workout</CardDescription>
+                <CardDescription>Intelligent analysis of your workouts</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-muted/50 rounded-lg">
                     <div className="text-lg font-bold text-primary">{analyticsData.aiInsights.totalAnalyses}</div>
-                    <p className="text-xs text-muted-foreground">Workout analizzati</p>
+                    <p className="text-xs text-muted-foreground">Workouts analyzed</p>
                   </div>
                   <div className="text-center p-3 bg-muted/50 rounded-lg">
                     <div className="text-lg font-bold text-orange-600">{analyticsData.aiInsights.averageCaloriesPerWorkout}</div>
-                    <p className="text-xs text-muted-foreground">Calorie medie</p>
+                    <p className="text-xs text-muted-foreground">Average calories</p>
                   </div>
                 </div>
                 
                 <div className="space-y-3">
                   <div>
-                    <h5 className="font-medium text-sm mb-2">🎯 Intensità Dominante</h5>
+                    <h5 className="font-medium text-sm mb-2">🎯 Dominant Intensity</h5>
                     <Badge variant="outline" className="capitalize">
                       {analyticsData.aiInsights.dominantIntensity}
                     </Badge>
                   </div>
                   
                   <div>
-                    <h5 className="font-medium text-sm mb-2">💪 Gruppi Muscolari Principali</h5>
+                    <h5 className="font-medium text-sm mb-2">💪 Top Muscle Groups</h5>
                     <div className="flex flex-wrap gap-1">
                       {analyticsData.aiInsights.topMuscleGroups.slice(0, 3).map((muscle, idx) => (
                         <Badge key={idx} variant="secondary" className="text-xs">
@@ -697,7 +697,7 @@ export function UserAnalytics() {
                   </div>
                   
                   <div>
-                    <h5 className="font-medium text-sm mb-2">📈 Motivazione AI</h5>
+                    <h5 className="font-medium text-sm mb-2">📈 AI Motivation</h5>
                     <p className="text-sm text-muted-foreground">
                       {analyticsData.aiInsights.currentMotivation}
                     </p>
@@ -709,33 +709,33 @@ export function UserAnalytics() {
             {/* Fitness Integration */}
             <Card>
               <CardHeader>
-                <CardTitle>Integrazione Fitness Tracker</CardTitle>
-                <CardDescription>Dati combinati da piattaforma e dispositivi</CardDescription>
+                <CardTitle>Fitness Tracker Integration</CardTitle>
+                <CardDescription>Combined data from platform and devices</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Passi giornalieri</span>
+                    <span className="text-sm">Daily steps</span>
                     <Badge variant="outline">{mockFitnessData.steps.toLocaleString()}</Badge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Freq. cardiaca media</span>
+                    <span className="text-sm">Average heart rate</span>
                     <Badge variant="outline">{mockFitnessData.heartRate} bpm</Badge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Tempo attivo</span>
+                    <span className="text-sm">Active time</span>
                     <Badge variant="outline">{mockFitnessData.activeTime} min</Badge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Calorie extra</span>
+                    <span className="text-sm">Extra calories</span>
                     <Badge variant="outline">{mockFitnessData.calories} kcal</Badge>
                   </div>
                 </div>
                 
                 <div className="p-3 bg-green-50 rounded-lg">
                   <p className="text-sm text-green-800">
-                    ✅ <strong>Sincronizzazione attiva</strong><br/>
-                    I dati dei tuoi dispositivi vengono integrati automaticamente nelle analisi AI
+                    ✅ <strong>Active synchronization</strong><br/>
+                    Your device data is automatically integrated into AI analysis
                   </p>
                 </div>
               </CardContent>
@@ -749,8 +749,8 @@ export function UserAnalytics() {
             {/* Weight Progress Chart */}
             <Card>
               <CardHeader>
-                <CardTitle>Progresso Peso</CardTitle>
-                <CardDescription>Andamento del peso nel tempo</CardDescription>
+                <CardTitle>Weight Progress</CardTitle>
+                <CardDescription>Weight trends over time</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -768,8 +768,8 @@ export function UserAnalytics() {
             {/* Weekly Activity */}
             <Card>
               <CardHeader>
-                <CardTitle>Attività Settimanale</CardTitle>
-                <CardDescription>Allenamenti per settimana</CardDescription>
+                <CardTitle>Weekly Activity</CardTitle>
+                <CardDescription>Workouts per week</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -792,8 +792,8 @@ export function UserAnalytics() {
             {/* Goals Progress */}
             <Card>
               <CardHeader>
-                <CardTitle>Progresso Obiettivi</CardTitle>
-                <CardDescription>I tuoi obiettivi principali</CardDescription>
+                <CardTitle>Goals Progress</CardTitle>
+                <CardDescription>Your main objectives</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {analyticsData.goalProgress.map((goal, index) => (
@@ -807,8 +807,8 @@ export function UserAnalytics() {
                     </div>
                     <Progress value={goal.percentage} className="h-2" />
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Attuale: {goal.current}</span>
-                      <span>Obiettivo: {goal.target}</span>
+                      <span>Current: {goal.current}</span>
+                      <span>Target: {goal.target}</span>
                     </div>
                   </div>
                 ))}
@@ -818,8 +818,8 @@ export function UserAnalytics() {
             {/* Goals Distribution */}
             <Card>
               <CardHeader>
-                <CardTitle>Distribuzione Obiettivi</CardTitle>
-                <CardDescription>Categorie di obiettivi per progresso</CardDescription>
+                <CardTitle>Goals Distribution</CardTitle>
+                <CardDescription>Goal categories by progress</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -851,8 +851,8 @@ export function UserAnalytics() {
             {/* Body Composition Chart */}
             <Card>
               <CardHeader>
-                <CardTitle>Composizione Corporea</CardTitle>
-                <CardDescription>Grasso corporeo vs massa muscolare</CardDescription>
+                <CardTitle>Body Composition</CardTitle>
+                <CardDescription>Body fat vs muscle mass</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -871,8 +871,8 @@ export function UserAnalytics() {
             {/* BMI Trend */}
             <Card>
               <CardHeader>
-                <CardTitle>Andamento BMI</CardTitle>
-                <CardDescription>Indice di massa corporea nel tempo</CardDescription>
+                <CardTitle>BMI Trend</CardTitle>
+                <CardDescription>Body mass index over time</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -895,8 +895,8 @@ export function UserAnalytics() {
             {/* Calories Burned */}
             <Card>
               <CardHeader>
-                <CardTitle>Calorie Bruciate</CardTitle>
-                <CardDescription>Calorie per settimana</CardDescription>
+                <CardTitle>Calories Burned</CardTitle>
+                <CardDescription>Calories per week</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -914,8 +914,8 @@ export function UserAnalytics() {
             {/* Training Minutes */}
             <Card>
               <CardHeader>
-                <CardTitle>Minuti di Allenamento</CardTitle>
-                <CardDescription>Tempo dedicato agli allenamenti</CardDescription>
+                <CardTitle>Training Minutes</CardTitle>
+                <CardDescription>Time dedicated to workouts</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
