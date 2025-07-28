@@ -11,6 +11,17 @@ import { Progress } from "@/components/ui/progress";
 import { Plus, Target, TrendingUp, Scale, Calendar, Edit, Save, X, Activity, Weight, Ruler } from "lucide-react";
 import { toast } from "sonner";
 
+interface Activity {
+  id: string;
+  date: string;
+  type: 'cardio' | 'strength' | 'flexibility' | 'sports' | 'other';
+  name: string;
+  duration: number; // in minutes
+  intensity: 'low' | 'moderate' | 'high';
+  calories?: number;
+  notes?: string;
+}
+
 interface BodyMeasurements {
   id?: string;
   date: string;
@@ -51,10 +62,20 @@ export function UserFitnessProgress() {
   const [profile, setProfile] = useState<UserProfile>({});
   const [measurements, setMeasurements] = useState<BodyMeasurements[]>([]);
   const [goals, setGoals] = useState<FitnessGoal[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
   const [editingProfile, setEditingProfile] = useState(false);
+  const [showActivityForm, setShowActivityForm] = useState(false);
   const [newMeasurement, setNewMeasurement] = useState<BodyMeasurements>({
     date: new Date().toISOString().split('T')[0]
+  });
+  const [newActivity, setNewActivity] = useState<Activity>({
+    id: '',
+    date: new Date().toISOString().split('T')[0],
+    type: 'cardio',
+    name: '',
+    duration: 30,
+    intensity: 'moderate'
   });
 
   useEffect(() => {
@@ -62,6 +83,7 @@ export function UserFitnessProgress() {
     const storedProfile = localStorage.getItem('user-fitness-profile');
     const storedMeasurements = localStorage.getItem('user-measurements');
     const storedGoals = localStorage.getItem('user-fitness-goals');
+    const storedActivities = localStorage.getItem('user-activities');
 
     if (storedProfile) {
       setProfile(JSON.parse(storedProfile));
@@ -71,6 +93,9 @@ export function UserFitnessProgress() {
     }
     if (storedGoals) {
       setGoals(JSON.parse(storedGoals));
+    }
+    if (storedActivities) {
+      setActivities(JSON.parse(storedActivities));
     }
   }, []);
 
@@ -106,6 +131,32 @@ export function UserFitnessProgress() {
     if (bmi < 25) return { status: "Normal", color: "text-green-600" };
     if (bmi < 30) return { status: "Overweight", color: "text-yellow-600" };
     return { status: "Obese", color: "text-red-600" };
+  };
+
+  const addActivity = () => {
+    if (!newActivity.name.trim()) {
+      toast.error("Please enter activity name");
+      return;
+    }
+
+    const activityWithId = {
+      ...newActivity,
+      id: Date.now().toString()
+    };
+
+    const updatedActivities = [activityWithId, ...activities];
+    setActivities(updatedActivities);
+    localStorage.setItem('user-activities', JSON.stringify(updatedActivities));
+    setNewActivity({
+      id: '',
+      date: new Date().toISOString().split('T')[0],
+      type: 'cardio',
+      name: '',
+      duration: 30,
+      intensity: 'moderate'
+    });
+    setShowActivityForm(false);
+    toast.success("Activity logged successfully!");
   };
 
   const getProfileCompleteness = () => {
@@ -158,7 +209,7 @@ export function UserFitnessProgress() {
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
-              onClick={() => toast.info("Log Activity feature coming soon!")}
+              onClick={() => setShowActivityForm(true)}
             >
               <Activity className="h-4 w-4" />
               Log Activity
@@ -184,10 +235,11 @@ export function UserFitnessProgress() {
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="measurements">Measurements</TabsTrigger>
+          <TabsTrigger value="activities">Activities</TabsTrigger>
           <TabsTrigger value="goals">Goals</TabsTrigger>
         </TabsList>
 
@@ -606,6 +658,167 @@ export function UserFitnessProgress() {
                   <p className="text-sm text-muted-foreground">
                     Your goals will be automatically created by the AI trainer when you request a personalized plan.
                   </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Activities Tab */}
+        <TabsContent value="activities" className="space-y-6">
+          {/* Activity Logging Form */}
+          {showActivityForm && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Log Activity</CardTitle>
+                <CardDescription>
+                  Record your workout or physical activity
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="activity-date">Date</Label>
+                    <Input
+                      id="activity-date"
+                      type="date"
+                      value={newActivity.date}
+                      onChange={(e) => setNewActivity({...newActivity, date: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="activity-type">Activity Type</Label>
+                    <Select 
+                      value={newActivity.type} 
+                      onValueChange={(value) => setNewActivity({...newActivity, type: value as Activity['type']})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cardio">Cardio</SelectItem>
+                        <SelectItem value="strength">Strength Training</SelectItem>
+                        <SelectItem value="flexibility">Flexibility/Yoga</SelectItem>
+                        <SelectItem value="sports">Sports</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="activity-name">Activity Name</Label>
+                    <Input
+                      id="activity-name"
+                      placeholder="e.g., Morning Run, Push-up workout"
+                      value={newActivity.name}
+                      onChange={(e) => setNewActivity({...newActivity, name: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="activity-duration">Duration (minutes)</Label>
+                    <Input
+                      id="activity-duration"
+                      type="number"
+                      value={newActivity.duration}
+                      onChange={(e) => setNewActivity({...newActivity, duration: parseInt(e.target.value)})}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="activity-intensity">Intensity</Label>
+                    <Select 
+                      value={newActivity.intensity} 
+                      onValueChange={(value) => setNewActivity({...newActivity, intensity: value as Activity['intensity']})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="moderate">Moderate</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="activity-calories">Calories (optional)</Label>
+                    <Input
+                      id="activity-calories"
+                      type="number"
+                      placeholder="Estimated calories burned"
+                      value={newActivity.calories || ''}
+                      onChange={(e) => setNewActivity({...newActivity, calories: e.target.value ? parseInt(e.target.value) : undefined})}
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="activity-notes">Notes (optional)</Label>
+                  <Input
+                    id="activity-notes"
+                    placeholder="How did you feel? Any observations?"
+                    value={newActivity.notes || ''}
+                    onChange={(e) => setNewActivity({...newActivity, notes: e.target.value})}
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <Button onClick={addActivity}>
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Activity
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowActivityForm(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Activities History */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Activity History</CardTitle>
+                {!showActivityForm && (
+                  <Button onClick={() => setShowActivityForm(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Log New Activity
+                  </Button>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {activities.length > 0 ? (
+                <div className="space-y-4">
+                  {activities.slice(0, 10).map((activity) => (
+                    <div key={activity.id} className="p-4 border rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium">{activity.name}</h3>
+                        <Badge variant="outline">{new Date(activity.date).toLocaleDateString()}</Badge>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div><span className="text-muted-foreground">Type:</span> {activity.type}</div>
+                        <div><span className="text-muted-foreground">Duration:</span> {activity.duration} min</div>
+                        <div><span className="text-muted-foreground">Intensity:</span> {activity.intensity}</div>
+                        {activity.calories && <div><span className="text-muted-foreground">Calories:</span> {activity.calories}</div>}
+                      </div>
+                      {activity.notes && (
+                        <div className="mt-2 text-sm text-muted-foreground">
+                          <span className="font-medium">Notes:</span> {activity.notes}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground mb-4">
+                    No activities logged yet.
+                  </p>
+                  <Button onClick={() => setShowActivityForm(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Log Your First Activity
+                  </Button>
                 </div>
               )}
             </CardContent>
