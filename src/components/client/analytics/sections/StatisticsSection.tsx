@@ -10,11 +10,9 @@ interface StatisticsSectionProps {
 
 export function StatisticsSection({ progressData, bodyMeasurements }: StatisticsSectionProps) {
   return (
-    <div className="w-full">
-      <h2 className="text-xl font-semibold mb-5 text-slate-800">Performance Statistics</h2>
-      <div className="space-y-5">
-        <StatisticsSummary />
-      </div>
+    <div className="w-full space-y-6">
+      <h2 className="text-xl font-semibold text-foreground">Performance Statistics</h2>
+      <StatisticsSummary />
     </div>
   );
 }
