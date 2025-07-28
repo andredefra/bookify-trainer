@@ -88,13 +88,19 @@ export function ProgramAnalysisCard({
 
       if (error) throw error;
 
-      if (data.success) {
-        setAnalysis(data.analysis);
-        onAnalysisComplete?.(data.analysis);
-        toast({
-          title: "Program Analysis completed",
-          description: "AI has successfully analyzed your training program"
-        });
+      if (data.success && data.analysis) {
+        // Validate the analysis structure
+        const analysis = data.analysis;
+        if (analysis.overallProgress && analysis.performanceMetrics && analysis.recommendations && analysis.insights) {
+          setAnalysis(analysis);
+          onAnalysisComplete?.(analysis);
+          toast({
+            title: "Program Analysis completed",
+            description: "AI has successfully analyzed your training program"
+          });
+        } else {
+          throw new Error('Invalid analysis structure returned from AI');
+        }
       } else {
         throw new Error(data.error || 'Error during analysis');
       }
@@ -200,24 +206,24 @@ export function ProgramAnalysisCard({
           {/* Key Metrics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{Math.round(analysis.overallProgress.completionRate)}%</div>
+              <div className="text-2xl font-bold text-primary">{Math.round(analysis.overallProgress?.completionRate || 0)}%</div>
               <p className="text-sm text-muted-foreground">Completion Rate</p>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary flex items-center justify-center gap-1">
-                {getProgressTrendIcon(analysis.overallProgress.progressTrend)}
-                <span className={getProgressTrendColor(analysis.overallProgress.progressTrend)}>
-                  {analysis.overallProgress.progressTrend.toUpperCase()}
+                {getProgressTrendIcon(analysis.overallProgress?.progressTrend || 'stable')}
+                <span className={getProgressTrendColor(analysis.overallProgress?.progressTrend || 'stable')}>
+                  {(analysis.overallProgress?.progressTrend || 'stable').toUpperCase()}
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">Progress Trend</p>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{Math.round(analysis.overallProgress.adherenceScore)}/10</div>
+              <div className="text-2xl font-bold text-primary">{Math.round(analysis.overallProgress?.adherenceScore || 0)}/10</div>
               <p className="text-sm text-muted-foreground">Adherence Score</p>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{Math.round(analysis.overallProgress.weeklyConsistency)}%</div>
+              <div className="text-2xl font-bold text-primary">{Math.round(analysis.overallProgress?.weeklyConsistency || 0)}%</div>
               <p className="text-sm text-muted-foreground">Weekly Consistency</p>
             </div>
           </div>
@@ -237,19 +243,19 @@ export function ProgramAnalysisCard({
           <CardContent className="space-y-3">
             <div>
               <h5 className="font-medium text-blue-600 mb-1">💪 Strength Progression</h5>
-              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics.strengthProgression}</p>
+              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics?.strengthProgression || 'No data available'}</p>
             </div>
             <div>
               <h5 className="font-medium text-green-600 mb-1">📊 Volume Progression</h5>
-              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics.volumeProgression}</p>
+              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics?.volumeProgression || 'No data available'}</p>
             </div>
             <div>
               <h5 className="font-medium text-orange-600 mb-1">🔥 Intensity Trend</h5>
-              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics.intensityTrend}</p>
+              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics?.intensityTrend || 'No data available'}</p>
             </div>
             <div>
               <h5 className="font-medium text-purple-600 mb-1">🛌 Recovery Indicators</h5>
-              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics.recoveryIndicators}</p>
+              <p className="text-sm text-muted-foreground">{analysis.performanceMetrics?.recoveryIndicators || 'No data available'}</p>
             </div>
           </CardContent>
         </Card>
@@ -266,7 +272,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-green-600 mb-1">✅ Goals On Track</h5>
               <ul className="text-sm space-y-1">
-                {analysis.goalAlignment.goalsOnTrack.map((goal, index) => (
+                {(analysis.goalAlignment?.goalsOnTrack || []).map((goal, index) => (
                   <li key={index} className="text-muted-foreground">• {goal}</li>
                 ))}
               </ul>
@@ -274,7 +280,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-orange-600 mb-1">🎯 Areas Needing Focus</h5>
               <ul className="text-sm space-y-1">
-                {analysis.goalAlignment.areasNeedingFocus.map((area, index) => (
+                {(analysis.goalAlignment?.areasNeedingFocus || []).map((area, index) => (
                   <li key={index} className="text-muted-foreground">• {area}</li>
                 ))}
               </ul>
@@ -282,7 +288,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-blue-600 mb-1">💡 Adjustment Suggestions</h5>
               <ul className="text-sm space-y-1">
-                {analysis.goalAlignment.adjustmentSuggestions.map((suggestion, index) => (
+                {(analysis.goalAlignment?.adjustmentSuggestions || []).map((suggestion, index) => (
                   <li key={index} className="text-muted-foreground">• {suggestion}</li>
                 ))}
               </ul>
@@ -302,25 +308,25 @@ export function ProgramAnalysisCard({
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
-              {analysis.healthIntegration.heartRateZoneAnalysis && (
+              {analysis.healthIntegration?.heartRateZoneAnalysis && (
                 <div>
                   <span className="font-medium">Heart Rate Analysis:</span>
                   <p className="text-muted-foreground">{analysis.healthIntegration.heartRateZoneAnalysis}</p>
                 </div>
               )}
-              {analysis.healthIntegration.recoveryAssessment && (
+              {analysis.healthIntegration?.recoveryAssessment && (
                 <div>
                   <span className="font-medium">Recovery Assessment:</span>
                   <p className="text-muted-foreground">{analysis.healthIntegration.recoveryAssessment}</p>
                 </div>
               )}
-              {analysis.healthIntegration.sleepImpact && (
+              {analysis.healthIntegration?.sleepImpact && (
                 <div>
                   <span className="font-medium">Sleep Impact:</span>
                   <p className="text-muted-foreground">{analysis.healthIntegration.sleepImpact}</p>
                 </div>
               )}
-              {analysis.healthIntegration.calorieBalance && (
+              {analysis.healthIntegration?.calorieBalance && (
                 <div>
                   <span className="font-medium">Calorie Balance:</span>
                   <p className="text-muted-foreground">{analysis.healthIntegration.calorieBalance}</p>
@@ -344,7 +350,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-blue-600 mb-2">📅 Weekly Adjustments</h5>
               <ul className="text-sm space-y-1">
-                {analysis.recommendations.weeklyAdjustments.map((adjustment, index) => (
+                {(analysis.recommendations?.weeklyAdjustments || []).map((adjustment, index) => (
                   <li key={index} className="text-muted-foreground">• {adjustment}</li>
                 ))}
               </ul>
@@ -352,7 +358,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-green-600 mb-2">🏋️ Exercise Modifications</h5>
               <ul className="text-sm space-y-1">
-                {analysis.recommendations.exerciseModifications.map((modification, index) => (
+                {(analysis.recommendations?.exerciseModifications || []).map((modification, index) => (
                   <li key={index} className="text-muted-foreground">• {modification}</li>
                 ))}
               </ul>
@@ -360,7 +366,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-purple-600 mb-2">😴 Recovery Optimization</h5>
               <ul className="text-sm space-y-1">
-                {analysis.recommendations.recoveryOptimization.map((tip, index) => (
+                {(analysis.recommendations?.recoveryOptimization || []).map((tip, index) => (
                   <li key={index} className="text-muted-foreground">• {tip}</li>
                 ))}
               </ul>
@@ -368,7 +374,7 @@ export function ProgramAnalysisCard({
             <div>
               <h5 className="font-medium text-orange-600 mb-2">🍎 Nutrition Tips</h5>
               <ul className="text-sm space-y-1">
-                {analysis.recommendations.nutritionTips.map((tip, index) => (
+                {(analysis.recommendations?.nutritionTips || []).map((tip, index) => (
                   <li key={index} className="text-muted-foreground">• {tip}</li>
                 ))}
               </ul>
@@ -381,7 +387,7 @@ export function ProgramAnalysisCard({
               <div>
                 <h5 className="font-medium text-green-600 mb-2">💪 Strength Areas</h5>
                 <ul className="text-sm space-y-1">
-                  {analysis.insights.strengthAreas.map((strength, index) => (
+                  {(analysis.insights?.strengthAreas || []).map((strength, index) => (
                     <li key={index} className="text-muted-foreground">• {strength}</li>
                   ))}
                 </ul>
@@ -389,7 +395,7 @@ export function ProgramAnalysisCard({
               <div>
                 <h5 className="font-medium text-blue-600 mb-2">🚀 Improvement Opportunities</h5>
                 <ul className="text-sm space-y-1">
-                  {analysis.insights.improvementOpportunities.map((opportunity, index) => (
+                  {(analysis.insights?.improvementOpportunities || []).map((opportunity, index) => (
                     <li key={index} className="text-muted-foreground">• {opportunity}</li>
                   ))}
                 </ul>
@@ -398,12 +404,12 @@ export function ProgramAnalysisCard({
             
             <div className="mt-4 p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg">
               <h5 className="font-medium text-primary mb-2">🎉 Motivational Note</h5>
-              <p className="text-sm text-muted-foreground">{analysis.insights.motivationalNotes}</p>
+              <p className="text-sm text-muted-foreground">{analysis.insights?.motivationalNotes || 'Keep up the great work!'}</p>
             </div>
             
             <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
               <h5 className="font-medium text-blue-600 mb-1">🎯 Next Milestone</h5>
-              <p className="text-sm text-muted-foreground">{analysis.insights.nextMilestone}</p>
+              <p className="text-sm text-muted-foreground">{analysis.insights?.nextMilestone || 'Continue your current progress!'}</p>
             </div>
           </div>
         </CardContent>

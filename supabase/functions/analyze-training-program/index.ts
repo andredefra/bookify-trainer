@@ -141,7 +141,46 @@ serve(async (req) => {
     - Motivating and encouraging
     - Professional but accessible
 
-    Always provide insights in English and structure your response as a valid JSON object matching the ProgramAnalysis interface.`;
+    CRITICAL: Your response MUST be a valid JSON object that exactly matches this structure:
+    {
+      "overallProgress": {
+        "completionRate": number,
+        "adherenceScore": number,
+        "progressTrend": "improving" | "stable" | "declining",
+        "weeklyConsistency": number
+      },
+      "performanceMetrics": {
+        "strengthProgression": "string description",
+        "volumeProgression": "string description", 
+        "intensityTrend": "string description",
+        "recoveryIndicators": "string description"
+      },
+      "goalAlignment": {
+        "goalsOnTrack": ["string array"],
+        "areasNeedingFocus": ["string array"],
+        "adjustmentSuggestions": ["string array"]
+      },
+      "healthIntegration": {
+        "heartRateZoneAnalysis": "string description",
+        "recoveryAssessment": "string description",
+        "sleepImpact": "string description",
+        "calorieBalance": "string description"
+      },
+      "recommendations": {
+        "weeklyAdjustments": ["string array"],
+        "exerciseModifications": ["string array"],
+        "recoveryOptimization": ["string array"],
+        "nutritionTips": ["string array"]
+      },
+      "insights": {
+        "strengthAreas": ["string array"],
+        "improvementOpportunities": ["string array"],
+        "motivationalNotes": "string",
+        "nextMilestone": "string"
+      }
+    }
+
+    Do NOT include any text before or after the JSON. Return ONLY the JSON object.`;
 
     const userPrompt = `
     Analyze this training program data:
