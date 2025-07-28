@@ -434,8 +434,51 @@ const UserLandingEn = () => {
             </div>
           </div>
         </section>
-      </main>
 
+        {/* Final CTA Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <Badge variant="outline" className="mb-4">🚀 Final Step</Badge>
+                <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
+                  Stop postponing.<br />
+                  <span className="text-2xl md:text-3xl text-muted-foreground">Trainer.ai is ready. Are you?</span>
+                </h2>
+              </div>
+              
+              <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg mb-8">
+                <p className="text-xl text-muted-foreground mb-6">
+                  🏃‍♂️ <strong>95 spots remaining</strong> for 1-year free access<br />
+                  ⏰ <strong>Limited time offer</strong> - don't wait too long!
+                </p>
+                
+                <Button asChild size="lg" className="text-lg px-12 py-6 hover-scale">
+                  <Link to="/user-register">
+                    👉 Get Free Access Now - Hurry Up!
+                  </Link>
+                </Button>
+                
+                <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <Check className="h-4 w-4 text-green-600" />
+                    <span>2-minute setup</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Check className="h-4 w-4 text-green-600" />
+                    <span>No card required</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Check className="h-4 w-4 text-green-600" />
+                    <span>Easy cancellation</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      
       <UserFooter />
     </div>
   );
