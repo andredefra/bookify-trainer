@@ -39,15 +39,6 @@ export function ExerciseItem({
     console.log("Exercise selected:", selectedExercise);
     console.log("Current exercise ID:", exercise.id);
     
-    // Update exercise data
-    onUpdate({
-      name: selectedExercise.name,
-      exerciseDbId: selectedExercise.id,
-      difficulty: selectedExercise.difficulty,
-      muscleGroups: selectedExercise.muscleGroup,
-      equipment: selectedExercise.equipment
-    });
-    
     // Initialize default sets
     const defaultSets: WorkoutSet[] = Array.from({ length: 3 }, (_, index) => ({
       setNumber: index + 1,
@@ -56,7 +47,15 @@ export function ExerciseItem({
       completed: false
     }));
     
-    onUpdate({ setsData: defaultSets });
+    // Update exercise data AND sets in a single call to avoid state batching issues
+    onUpdate({
+      name: selectedExercise.name,
+      exerciseDbId: selectedExercise.id,
+      difficulty: selectedExercise.difficulty,
+      muscleGroups: selectedExercise.muscleGroup,
+      equipment: selectedExercise.equipment,
+      setsData: defaultSets
+    });
   };
 
   const handleSetUpdate = (setNumber: number, updates: Partial<SetData>) => {
