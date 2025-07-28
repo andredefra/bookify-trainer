@@ -85,7 +85,7 @@ export function UserSidebar({
         fixed lg:relative lg:translate-x-0 z-50 lg:z-auto
         w-72 h-full bg-white border-r border-border
         transition-transform duration-300 ease-in-out
-        ${showSidebar ? 'translate-x-0' : '-translate-x-full'}
+        ${isMobile ? (showSidebar ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
         ${isMobile ? 'top-16' : 'top-0'}
       `}>
         <div className="flex flex-col h-full">
