@@ -470,15 +470,19 @@ export function UserTrainingProgram() {
                     <Button 
                       className="w-full mt-3" 
                       size="sm"
-                      onClick={(e) => {
-                        console.log('Button clicked!', { day, index, selectedProgram });
-                        e.preventDefault();
-                        e.stopPropagation();
-                        startWorkout(day, index);
+                      onClick={() => {
+                        alert('Button works! Starting workout...');
+                        console.log('TEST: Button clicked for day', day.day);
+                        setActiveWorkout({
+                          day: day.day,
+                          dayIndex: index,
+                          exercises: day.exercises || [],
+                          startTime: new Date().toISOString()
+                        });
                       }}
                     >
                       <Play className="h-4 w-4 mr-2" />
-                      Start Workout
+                      Start Workout (Day {day.day})
                     </Button>
                   )}
                 </div>
