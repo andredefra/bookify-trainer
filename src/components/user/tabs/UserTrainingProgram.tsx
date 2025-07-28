@@ -31,6 +31,7 @@ import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
 import { ExerciseData } from '@/data/exercises/types';
 import { ExerciseVideoPlayer } from '@/components/client/training/ExerciseVideoPlayer';
 import { AlternativeExercisesList } from '@/components/trainer/dashboard/tabs/programs/AlternativeExercisesList';
+import { ProgramAnalysisCard } from '../training/ProgramAnalysisCard';
 
 interface TrainingPlan {
   id: string;
@@ -613,6 +614,30 @@ export function UserTrainingProgram() {
             </div>
           </CardContent>
         </Card>
+
+        {/* AI Program Analysis */}
+        <ProgramAnalysisCard
+          programData={selectedProgram}
+          workoutLogs={JSON.parse(localStorage.getItem('workout-logs') || '[]').filter((log: any) => log.programId === selectedProgram.id)}
+          fitnessData={{
+            heartRateAverage: 142,
+            caloriesBurned: 380,
+            steps: 8500,
+            sleepQuality: 7.5,
+            restingHeartRate: 68,
+            activeMinutes: 45
+          }}
+          userProfile={{
+            age: 30,
+            weight: 75,
+            height: 180,
+            fitnessLevel: selectedProgram.difficulty_level,
+            primaryGoals: selectedProgram.goals
+          }}
+          onAnalysisComplete={(analysis) => {
+            console.log('Program analysis completed:', analysis);
+          }}
+        />
       </div>
     );
   }
