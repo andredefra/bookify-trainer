@@ -490,6 +490,7 @@ export function UserTrainingProgram() {
                           };
                           console.log('Setting activeWorkout to:', workoutData);
                           setActiveWorkout(workoutData);
+                          setShowProgramDetail(false); // Hide program detail to show workout
                           console.log('activeWorkout state should be updated now');
                         } else {
                           console.error('Error: day or exercises not found', { day, exercises: day?.exercises });
