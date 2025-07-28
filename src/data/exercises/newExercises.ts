@@ -2155,15 +2155,6 @@ export const newExercises: ExerciseData[] = [
     notes: 'Indoor running with adjustable speed/incline'
   },
   {
-    id: 'elliptical',
-    name: 'Elliptical',
-    category: 'cardio',
-    difficulty: 'beginner',
-    muscleGroup: ['Full Body'],
-    equipment: ['Elliptical Machine'],
-    notes: 'Low impact full body cardio machine'
-  },
-  {
     id: 'stair-climber',
     name: 'Stair Climber',
     category: 'cardio',
