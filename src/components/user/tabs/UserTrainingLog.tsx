@@ -1,13 +1,32 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Calendar, Plus, Edit3, Clock } from "lucide-react";
-import { useState } from "react";
+import { Calendar, Plus, Edit3, Clock, Brain } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useWorkoutLogs } from "@/hooks/useWorkoutLogs";
+import { NewWorkoutLogForm } from "@/components/client/training/workout-form/NewWorkoutLogForm";
+import { WorkoutAnalysisCard } from "../training/WorkoutAnalysisCard";
 
 export function UserTrainingLog() {
   const [showAddWorkout, setShowAddWorkout] = useState(false);
+  const [selectedWorkoutForAnalysis, setSelectedWorkoutForAnalysis] = useState<any>(null);
+  const { workoutLogs } = useWorkoutLogs();
+
+  // Mock user profile and fitness data
+  const userProfile = {
+    weight: 75,
+    height: 180,
+    age: 30,
+    fitnessLevel: 'intermediate',
+    goals: 'Strength building and muscle gain'
+  };
+
+  const mockFitnessData = {
+    steps: 8500,
+    calories: 320,
+    heartRate: 145,
+    activeTime: 45
+  };
 
   return (
     <div className="space-y-6">
@@ -29,161 +48,127 @@ export function UserTrainingLog() {
           <CardHeader>
             <CardTitle>Log New Workout</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="workout-name">Workout Name</Label>
-                <Input id="workout-name" placeholder="e.g., Upper Body Strength" />
-              </div>
-              <div>
-                <Label htmlFor="duration">Duration (minutes)</Label>
-                <Input id="duration" type="number" placeholder="45" />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="notes">Notes</Label>
-              <Input id="notes" placeholder="How did you feel? Any observations?" />
-            </div>
-            <div className="flex space-x-2">
-              <Button>Save Workout</Button>
-              <Button variant="outline" onClick={() => setShowAddWorkout(false)}>
-                Cancel
-              </Button>
-            </div>
+          <CardContent>
+            <NewWorkoutLogForm onComplete={() => setShowAddWorkout(false)} />
           </CardContent>
         </Card>
+      )}
+
+      {/* AI Analysis Card */}
+      {selectedWorkoutForAnalysis && (
+        <WorkoutAnalysisCard
+          workoutLog={selectedWorkoutForAnalysis}
+          fitnessData={mockFitnessData}
+          userProfile={userProfile}
+          onAnalysisComplete={(analysis) => {
+            console.log('Analysis completed:', analysis);
+          }}
+        />
       )}
 
       {/* Recent Workouts */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Recent Workouts</h2>
         
-        {/* Workout Entry 1 */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="text-center">
-                  <div className="text-sm font-medium">MON</div>
-                  <div className="text-lg font-bold text-primary">18</div>
-                </div>
-                <div>
-                  <h3 className="font-medium">Upper Body Strength</h3>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>45 minutes</span>
-                    <span>•</span>
-                    <span>6 exercises</span>
+        {workoutLogs.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <p className="text-muted-foreground">Nessun workout registrato ancora.</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Inizia a registrare i tuoi allenamenti per vedere l'analisi AI!
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          workoutLogs.slice(0, 5).map((workout) => (
+            <Card key={workout.id}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="text-center">
+                      <div className="text-sm font-medium">
+                        {new Date(workout.date).toLocaleDateString('it-IT', { weekday: 'short' }).toUpperCase()}
+                      </div>
+                      <div className="text-lg font-bold text-primary">
+                        {new Date(workout.date).getDate()}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-medium">{workout.name}</h3>
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                        <Clock className="h-4 w-4" />
+                        <span>{workout.duration || 'Non specificata'}</span>
+                        <span>•</span>
+                        <span>{workout.exercises.length} esercizi</span>
+                      </div>
+                      {workout.notes && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {workout.notes}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Felt strong today, increased weights on most exercises
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Badge variant="secondary">Completed</Badge>
-                <Button variant="ghost" size="sm">
-                  <Edit3 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Workout Entry 2 */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="text-center">
-                  <div className="text-sm font-medium">TUE</div>
-                  <div className="text-lg font-bold text-primary">19</div>
-                </div>
-                <div>
-                  <h3 className="font-medium">Cardio & Core</h3>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>30 minutes</span>
-                    <span>•</span>
-                    <span>HIIT + Core</span>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="secondary">Completato</Badge>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setSelectedWorkoutForAnalysis(
+                        selectedWorkoutForAnalysis?.id === workout.id ? null : workout
+                      )}
+                      className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
+                    >
+                      <Brain className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <Edit3 className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Great HIIT session, really pushed myself
-                  </p>
                 </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Badge variant="secondary">Completed</Badge>
-                <Button variant="ghost" size="sm">
-                  <Edit3 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Workout Entry 3 */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="text-center">
-                  <div className="text-sm font-medium">SUN</div>
-                  <div className="text-lg font-bold text-primary">17</div>
-                </div>
-                <div>
-                  <h3 className="font-medium">Full Body Circuit</h3>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>40 minutes</span>
-                    <span>•</span>
-                    <span>8 exercises</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Tough workout but felt accomplished
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Badge variant="secondary">Completed</Badge>
-                <Button variant="ghost" size="sm">
-                  <Edit3 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       {/* Weekly Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Calendar className="h-5 w-5" />
-            <span>This Week's Summary</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary">3</div>
-              <p className="text-sm text-muted-foreground">Workouts completed</p>
+      {workoutLogs.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="h-5 w-5" />
+              <span>Riepilogo Settimanale</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-primary">{workoutLogs.length}</div>
+                <p className="text-sm text-muted-foreground">Workout completati</p>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">
+                  {workoutLogs.reduce((total, workout) => {
+                    const duration = parseInt(workout.duration) || 0;
+                    return total + duration;
+                  }, 0)}
+                </div>
+                <p className="text-sm text-muted-foreground">Minuti di allenamento</p>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">-</div>
+                <p className="text-sm text-muted-foreground">Calorie stimate</p>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">
+                  {workoutLogs.reduce((total, workout) => total + workout.exercises.length, 0)}
+                </div>
+                <p className="text-sm text-muted-foreground">Esercizi totali</p>
+              </div>
             </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">115</div>
-              <p className="text-sm text-muted-foreground">Minutes exercised</p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">450</div>
-              <p className="text-sm text-muted-foreground">Calories burned</p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">7</div>
-              <p className="text-sm text-muted-foreground">Day streak</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
