@@ -43,26 +43,26 @@ export function UserSettings({ user }: UserSettingsProps) {
       <h1 className="text-2xl font-bold">Settings</h1>
 
       <Tabs defaultValue="account" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="account" className="gap-2">
-            <User className="h-4 w-4" />
-            Account
+        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 gap-1">
+          <TabsTrigger value="account" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
+            <User className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden sm:inline">Account</span>
           </TabsTrigger>
-          <TabsTrigger value="payments" className="gap-2">
-            <CreditCard className="h-4 w-4" />
-            Payments
+          <TabsTrigger value="payments" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
+            <CreditCard className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden sm:inline">Payments</span>
           </TabsTrigger>
-          <TabsTrigger value="preferences" className="gap-2">
-            <SettingsIcon className="h-4 w-4" />
-            Preferences
+          <TabsTrigger value="preferences" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
+            <SettingsIcon className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden sm:inline">Preferences</span>
           </TabsTrigger>
-          <TabsTrigger value="integrations" className="gap-2">
-            <Zap className="h-4 w-4" />
-            Integrations
+          <TabsTrigger value="integrations" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
+            <Zap className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden sm:inline">Apps</span>
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="gap-2">
-            <Bell className="h-4 w-4" />
-            Notifications
+          <TabsTrigger value="notifications" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3 col-span-2 lg:col-span-1">
+            <Bell className="h-3 w-3 lg:h-4 lg:w-4" />
+            <span className="hidden sm:inline">Notifications</span>
           </TabsTrigger>
         </TabsList>
 
@@ -73,7 +73,7 @@ export function UserSettings({ user }: UserSettingsProps) {
               <CardTitle>Personal Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="firstName">First Name</Label>
                   <Input id="firstName" defaultValue={user.name?.split(' ')[0] || ''} />
@@ -141,21 +141,21 @@ export function UserSettings({ user }: UserSettingsProps) {
                 <div className="bg-white/20 p-2 rounded-full text-lg">
                   🎉
                 </div>
-                <h3 className="text-lg font-bold">Accesso Anticipato - Primi 100 Utenti!</h3>
+                <h3 className="text-lg font-bold">Early Access - First 100 Users!</h3>
               </div>
               <p className="text-white/90 mb-4">
-                Congratulazioni! Hai accesso gratuito a tutte le funzionalità AI fino al 2026. 
-                Potrai decidere quando annullare l'abbonamento AI e aggiungere un trainer personale.
+                Congratulations! You have free access to all AI features until 2026. 
+                You can decide when to cancel the AI subscription and add a personal trainer.
               </p>
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-white/20 text-white hover:bg-white/30">
-                  ✨ Accesso completo AI
+                  ✨ Full AI Access
                 </Badge>
                 <Badge className="bg-white/20 text-white hover:bg-white/30">
-                  🆓 Gratuito fino al 2026
+                  🆓 Free until 2026
                 </Badge>
                 <Badge className="bg-white/20 text-white hover:bg-white/30">
-                  👨‍💼 Trainer personale disponibile
+                  👨‍💼 Personal trainer available
                 </Badge>
               </div>
             </CardContent>
@@ -164,33 +164,33 @@ export function UserSettings({ user }: UserSettingsProps) {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Piano Attuale
+                Current Plan
                 <Badge variant="default" className="bg-green-600">
-                  Early Access - Gratuito
+                  Early Access - Free
                 </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-sm text-muted-foreground">
-                Sei tra i primi 100 utenti! Hai accesso completo a tutte le funzionalità AI senza costi fino al 2026. 
-                Dal 2026 potrai scegliere se continuare con l'abbonamento AI o passare a un trainer personale.
+                You're among the first 100 users! You have complete access to all AI features at no cost until 2026. 
+                From 2026 you can choose whether to continue with the AI subscription or switch to a personal trainer.
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-green-600">✓</span>
-                  Accesso illimitato alle funzionalità AI
+                  Unlimited access to AI features
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-green-600">✓</span>
-                  Programmi di allenamento personalizzati
+                  Personalized workout programs
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-green-600">✓</span>
-                  Analytics avanzate
+                  Advanced analytics
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-green-600">✓</span>
-                  Opzione trainer personale disponibile
+                  Personal trainer option available
                 </div>
               </div>
             </CardContent>
@@ -198,16 +198,16 @@ export function UserSettings({ user }: UserSettingsProps) {
 
           <Card>
             <CardHeader>
-              <CardTitle>Metodi di Pagamento</CardTitle>
+              <CardTitle>Payment Methods</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center p-6 border-2 border-dashed border-muted-foreground/20 rounded-lg">
                 <CreditCard className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground mb-3">
-                  Nessun metodo di pagamento richiesto fino al 2026
+                  No payment method required until 2026
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Potrai aggiungere un metodo di pagamento quando deciderai di continuare con l'abbonamento AI o aggiungere un trainer personale.
+                  You can add a payment method when you decide to continue with the AI subscription or add a personal trainer.
                 </p>
               </div>
             </CardContent>
@@ -215,7 +215,7 @@ export function UserSettings({ user }: UserSettingsProps) {
 
           <Card>
             <CardHeader>
-              <CardTitle>Cronologia Fatturazione</CardTitle>
+              <CardTitle>Billing History</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-center p-6">
@@ -223,10 +223,10 @@ export function UserSettings({ user }: UserSettingsProps) {
                   <CreditCard className="h-8 w-8 mx-auto mb-2" />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Nessuna fatturazione fino al 2026
+                  No billing until 2026
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
-                  La cronologia delle fatture apparirà qui quando inizierai a pagare per i servizi.
+                  Billing history will appear here when you start paying for services.
                 </p>
               </div>
             </CardContent>
@@ -452,7 +452,7 @@ export function UserSettings({ user }: UserSettingsProps) {
 
               <div className="space-y-3">
                 <Label>Notification Schedule</Label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="morningTime" className="text-sm">Morning Reminders</Label>
                     <Input type="time" defaultValue="08:00" />
