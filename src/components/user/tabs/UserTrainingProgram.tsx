@@ -347,6 +347,7 @@ export function UserTrainingProgram() {
   };
 
   const startWorkout = (day: any, dayIndex: number) => {
+    console.log('Starting workout for day:', day, 'index:', dayIndex);
     const workoutData = {
       ...day,
       dayIndex,
@@ -359,7 +360,9 @@ export function UserTrainingProgram() {
         sets_logged: []
       }))
     };
+    console.log('Setting active workout:', workoutData);
     setActiveWorkout(workoutData);
+    toast.success(`Starting ${day.exercises?.length || 0} exercises for Day ${day.day}!`);
   };
 
   const logSet = (exerciseIndex: number, setIndex: number, weight: number, reps: number) => {
