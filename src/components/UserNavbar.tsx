@@ -35,9 +35,18 @@ const UserNavbar = () => {
   ];
 
   const handleMenuClick = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    const currentPath = window.location.pathname;
+    
+    // Se siamo su /user o /user-en, fai scroll nella pagina corrente
+    if (currentPath === '/user' || currentPath === '/user-en') {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Se siamo su altre pagine (login/register), naviga alla landing con l'anchor
+      const targetPage = language === 'en' ? '/user-en' : '/user';
+      navigate(targetPage + href);
     }
     setIsMenuOpen(false);
   };
