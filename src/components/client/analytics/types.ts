@@ -62,6 +62,10 @@ export interface AIInsights {
   currentMotivation: string;
   fitnessScore: number;
   progressTrend: 'improving' | 'stable' | 'declining';
+  personalizedInsights?: string[];
+  weeklyProgressChange?: number;
+  specificRecommendations?: string[];
+  goalAchievementRate?: number;
 }
 
 export interface TrendData {
