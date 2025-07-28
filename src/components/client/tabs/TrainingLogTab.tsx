@@ -1,47 +1,232 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, ClipboardList } from "lucide-react";
-import { SimpleWorkoutForm } from "@/components/client/training/simple-workout/SimpleWorkoutForm";
-import { PastWorkoutsLog } from "@/components/client/training/PastWorkoutsLog";
+import { Calendar, Plus, Edit3, Clock, Brain, TrendingUp, Target } from "lucide-react";
+import { useWorkoutLogs } from "@/hooks/useWorkoutLogs";
+import { NewWorkoutLogForm } from "@/components/client/training/workout-form/NewWorkoutLogForm";
+import { WorkoutAnalysisCard } from "@/components/user/training/WorkoutAnalysisCard";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function TrainingLogTab() {
-  const [isLoggingWorkout, setIsLoggingWorkout] = useState(false);
+  const [showAddWorkout, setShowAddWorkout] = useState(false);
+  const [selectedWorkoutForAnalysis, setSelectedWorkoutForAnalysis] = useState<any>(null);
+  const { workoutLogs } = useWorkoutLogs();
   const isMobile = useIsMobile();
   
+  // Mock user profile and fitness data for AI analysis
+  const userProfile = {
+    weight: 75,
+    height: 180,
+    age: 30,
+    fitnessLevel: 'intermediate',
+    goals: 'Strength building and muscle gain'
+  };
+
+  const mockFitnessData = {
+    steps: 8500,
+    calories: 320,
+    heartRate: 145,
+    activeTime: 45
+  };
+
+  // Calculate weekly stats
+  const weeklyStats = {
+    totalWorkouts: workoutLogs.length,
+    totalMinutes: workoutLogs.reduce((total, workout) => {
+      const duration = parseInt(workout.duration) || 0;
+      return total + duration;
+    }, 0),
+    totalExercises: workoutLogs.reduce((total, workout) => total + workout.exercises.length, 0),
+    estimatedCalories: workoutLogs.reduce((total, workout) => {
+      const duration = parseInt(workout.duration) || 0;
+      return total + (duration * 8); // ~8 calories per minute
+    }, 0)
+  };
+
   return (
     <div className="space-y-6">
-      <Card className="border-primary/10">
-        <CardHeader className={isMobile ? "pb-2 pt-4 px-4" : "pb-2 pt-4"}>
-          <div>
-            <div className="flex items-center">
-              <ClipboardList className="h-5 w-5 text-primary mr-2" />
-              <CardTitle className={isMobile ? "text-xl" : ""}>Training Log</CardTitle>
-            </div>
-            <CardDescription className="mt-1 mb-3">
-              Record and track your workouts
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className={`font-bold ${isMobile ? 'text-xl' : 'text-2xl'}`}>Training Log</h1>
+          <p className="text-muted-foreground text-sm">Track your workouts and monitor progress</p>
+        </div>
+        <Button 
+          onClick={() => setShowAddWorkout(!showAddWorkout)} 
+          className="flex items-center space-x-2"
+          size={isMobile ? "sm" : "default"}
+        >
+          <Plus className="h-4 w-4" />
+          <span>Log Workout</span>
+        </Button>
+      </div>
+
+      {/* Quick Stats Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-primary">{weeklyStats.totalWorkouts}</div>
+            <p className="text-xs text-muted-foreground">Workouts This Week</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-primary">{weeklyStats.totalMinutes}</div>
+            <p className="text-xs text-muted-foreground">Minutes Trained</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-primary">{weeklyStats.estimatedCalories}</div>
+            <p className="text-xs text-muted-foreground">Calories Burned</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-primary">{weeklyStats.totalExercises}</div>
+            <p className="text-xs text-muted-foreground">Total Exercises</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Add Workout Form */}
+      {showAddWorkout && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus className="h-5 w-5" />
+              Log New Workout
+            </CardTitle>
+            <CardDescription>
+              Add your workout details to track progress and get AI insights
             </CardDescription>
-            {!isLoggingWorkout && (
-              <Button 
-                className="flex items-center mt-2 w-full sm:w-auto"
-                onClick={() => setIsLoggingWorkout(true)}
-                size={isMobile ? "sm" : "default"}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Log Workout
-              </Button>
-            )}
-          </div>
+          </CardHeader>
+          <CardContent>
+            <NewWorkoutLogForm onComplete={() => setShowAddWorkout(false)} />
+          </CardContent>
+        </Card>
+      )}
+
+      {/* AI Analysis Card */}
+      {selectedWorkoutForAnalysis && (
+        <WorkoutAnalysisCard
+          workoutLog={selectedWorkoutForAnalysis}
+          fitnessData={mockFitnessData}
+          userProfile={userProfile}
+          onAnalysisComplete={(analysis) => {
+            console.log('Analysis completed:', analysis);
+          }}
+        />
+      )}
+
+      {/* Recent Workouts */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Recent Workouts
+          </CardTitle>
+          <CardDescription>
+            Your training history with AI-powered insights
+          </CardDescription>
         </CardHeader>
-        <CardContent className={isMobile ? "p-3 pt-1" : ""}>
-          {isLoggingWorkout ? (
-            <SimpleWorkoutForm onComplete={() => setIsLoggingWorkout(false)} />
+        <CardContent>
+          {workoutLogs.length === 0 ? (
+            <div className="text-center py-8">
+              <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground mb-2">No workouts logged yet</p>
+              <p className="text-sm text-muted-foreground">
+                Start logging your workouts to see AI-powered insights and track your progress!
+              </p>
+            </div>
           ) : (
-            <PastWorkoutsLog />
+            <div className="space-y-4">
+              {workoutLogs.slice(0, 5).map((workout) => (
+                <div key={workout.id} className="border rounded-lg p-4 hover:bg-muted/30 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="text-center">
+                        <div className="text-sm font-medium">
+                          {new Date(workout.date).toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}
+                        </div>
+                        <div className="text-lg font-bold text-primary">
+                          {new Date(workout.date).getDate()}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium">{workout.name}</h3>
+                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4" />
+                          <span>{workout.duration || 'Duration not specified'}</span>
+                          <span>•</span>
+                          <span>{workout.exercises.length} exercises</span>
+                        </div>
+                        {workout.notes && (
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                            {workout.notes}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">Completed</Badge>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => setSelectedWorkoutForAnalysis(
+                          selectedWorkoutForAnalysis?.id === workout.id ? null : workout
+                        )}
+                        className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
+                      >
+                        <Brain className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Edit3 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Weekly Summary */}
+      {workoutLogs.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="h-5 w-5" />
+              <span>Weekly Summary</span>
+            </CardTitle>
+            <CardDescription>
+              Your training performance overview - data feeds into Analytics AI insights
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <div className="text-2xl font-bold text-primary">{weeklyStats.totalWorkouts}</div>
+                <p className="text-sm text-muted-foreground">Workouts Completed</p>
+              </div>
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <div className="text-2xl font-bold text-primary">{weeklyStats.totalMinutes}</div>
+                <p className="text-sm text-muted-foreground">Training Minutes</p>
+              </div>
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <div className="text-2xl font-bold text-primary">{weeklyStats.estimatedCalories}</div>
+                <p className="text-sm text-muted-foreground">Estimated Calories</p>
+              </div>
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <div className="text-2xl font-bold text-primary">{weeklyStats.totalExercises}</div>
+                <p className="text-sm text-muted-foreground">Total Exercises</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
