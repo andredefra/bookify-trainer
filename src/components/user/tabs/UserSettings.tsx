@@ -134,66 +134,100 @@ export function UserSettings({ user }: UserSettingsProps) {
 
         {/* Payments Settings */}
         <TabsContent value="payments" className="space-y-4">
+          {/* Early Access Status Banner */}
+          <Card className="bg-gradient-to-r from-primary to-primary/80 text-white border-0">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-white/20 p-2 rounded-full text-lg">
+                  🎉
+                </div>
+                <h3 className="text-lg font-bold">Accesso Anticipato - Primi 100 Utenti!</h3>
+              </div>
+              <p className="text-white/90 mb-4">
+                Congratulazioni! Hai accesso gratuito a tutte le funzionalità AI fino al 2026. 
+                Potrai decidere quando annullare l'abbonamento AI e aggiungere un trainer personale.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-white/20 text-white hover:bg-white/30">
+                  ✨ Accesso completo AI
+                </Badge>
+                <Badge className="bg-white/20 text-white hover:bg-white/30">
+                  🆓 Gratuito fino al 2026
+                </Badge>
+                <Badge className="bg-white/20 text-white hover:bg-white/30">
+                  👨‍💼 Trainer personale disponibile
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Current Plan
-                <Badge variant={user.plan === 'pro' ? 'default' : 'secondary'}>
-                  {user.plan === 'pro' ? 'Pro Plan' : 'Free Plan'}
+                Piano Attuale
+                <Badge variant="default" className="bg-green-600">
+                  Early Access - Gratuito
                 </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-sm text-muted-foreground">
-                {user.plan === 'pro' 
-                  ? 'You have access to all premium features including unlimited training programs and AI coaching.'
-                  : 'Upgrade to Pro for unlimited access to all features, personalized training programs, and advanced analytics.'
-                }
+                Sei tra i primi 100 utenti! Hai accesso completo a tutte le funzionalità AI senza costi fino al 2026. 
+                Dal 2026 potrai scegliere se continuare con l'abbonamento AI o passare a un trainer personale.
               </div>
-              {user.plan !== 'pro' && (
-                <Button className="w-full">Upgrade to Pro</Button>
-              )}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Accesso illimitato alle funzionalità AI
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Programmi di allenamento personalizzati
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Analytics avanzate
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Opzione trainer personale disponibile
+                </div>
+              </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Payment Methods</CardTitle>
+              <CardTitle>Metodi di Pagamento</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-12 bg-gradient-to-r from-blue-600 to-blue-800 rounded flex items-center justify-center text-white text-xs font-bold">
-                    VISA
-                  </div>
-                  <div>
-                    <p className="font-medium">•••• •••• •••• 4242</p>
-                    <p className="text-sm text-muted-foreground">Expires 12/25</p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm">Edit</Button>
+              <div className="text-center p-6 border-2 border-dashed border-muted-foreground/20 rounded-lg">
+                <CreditCard className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-3">
+                  Nessun metodo di pagamento richiesto fino al 2026
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Potrai aggiungere un metodo di pagamento quando deciderai di continuare con l'abbonamento AI o aggiungere un trainer personale.
+                </p>
               </div>
-              <Button variant="outline" className="w-full">Add New Payment Method</Button>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Billing History</CardTitle>
+              <CardTitle>Cronologia Fatturazione</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 border rounded">
-                  <div>
-                    <p className="font-medium">Pro Plan - Monthly</p>
-                    <p className="text-sm text-muted-foreground">Jan 15, 2024</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">$29.99</p>
-                    <Badge variant="secondary" className="text-xs">Paid</Badge>
-                  </div>
+              <div className="text-center p-6">
+                <div className="text-muted-foreground mb-2">
+                  <CreditCard className="h-8 w-8 mx-auto mb-2" />
                 </div>
-                <Button variant="outline" className="w-full">View All Invoices</Button>
+                <p className="text-sm text-muted-foreground">
+                  Nessuna fatturazione fino al 2026
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  La cronologia delle fatture apparirà qui quando inizierai a pagare per i servizi.
+                </p>
               </div>
             </CardContent>
           </Card>
