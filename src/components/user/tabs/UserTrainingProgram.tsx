@@ -185,9 +185,43 @@ export function UserTrainingProgram() {
   
   const { allExercises, getExerciseByName } = useExerciseLibrary();
 
+  // Exercise name mapping from workout program to Exercise Library
+  const exerciseNameMapping: { [key: string]: string } = {
+    'Push-ups': 'Standard Push-ups',
+    'Bent-over Rows': 'Bent-Over Barbell Rows',
+    'Pull-ups': 'Pull-ups',
+    'Bench Press': 'Barbell Bench Press',
+    'Squats': 'Barbell Squats',
+    'Romanian Deadlifts': 'Romanian Deadlifts',
+    'Bulgarian Split Squats': 'Bulgarian Split Squats',
+    'Overhead Press': 'Overhead Press',
+    'Dips': 'Dips',
+    'Burpees': 'Burpees',
+    'Mountain Climbers': 'Mountain Climbers',
+    'Plank': 'Plank',
+    'Jump Squats': 'Jump Squats'
+  };
+
   // Get exercise data from library
   const getExerciseData = (exerciseName: string): ExerciseData | null => {
-    return getExerciseByName(exerciseName) || null;
+    // First try exact match
+    let exerciseData = getExerciseByName(exerciseName);
+    
+    // If no exact match, try mapped name
+    if (!exerciseData && exerciseNameMapping[exerciseName]) {
+      exerciseData = getExerciseByName(exerciseNameMapping[exerciseName]);
+    }
+    
+    // If still no match, try searching for similar names
+    if (!exerciseData) {
+      const searchTerm = exerciseName.toLowerCase();
+      exerciseData = allExercises.find(ex => 
+        ex.name.toLowerCase().includes(searchTerm) ||
+        searchTerm.includes(ex.name.toLowerCase())
+      ) || null;
+    }
+    
+    return exerciseData;
   };
 
   const getDifficultyColor = (level: string) => {
