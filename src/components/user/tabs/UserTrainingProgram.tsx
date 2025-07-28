@@ -471,15 +471,12 @@ export function UserTrainingProgram() {
                       className="w-full mt-3" 
                       size="sm"
                       onClick={() => {
-                        console.log('=== COMPLETE DEBUG INFO ===');
+                        console.log('=== STARTING WORKOUT ===');
                         console.log('day object:', day);
                         console.log('index:', index);
-                        console.log('day.day:', day?.day);
-                        console.log('day.exercises:', day?.exercises);
-                        alert(`Debug: day=${day?.day}, exercises=${day?.exercises?.length || 0}`);
                         
                         if (day && day.exercises) {
-                          setActiveWorkout({
+                          const workoutData = {
                             day: day.day || (index + 1),
                             dayIndex: index,
                             programId: selectedProgram?.id,
@@ -490,9 +487,12 @@ export function UserTrainingProgram() {
                               completed: false,
                               sets_logged: []
                             }))
-                          });
+                          };
+                          console.log('Setting activeWorkout to:', workoutData);
+                          setActiveWorkout(workoutData);
+                          console.log('activeWorkout state should be updated now');
                         } else {
-                          alert('Error: day or exercises not found');
+                          console.error('Error: day or exercises not found', { day, exercises: day?.exercises });
                         }
                       }}
                     >
