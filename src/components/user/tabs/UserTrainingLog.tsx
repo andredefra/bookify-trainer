@@ -73,9 +73,9 @@ export function UserTrainingLog() {
         {workoutLogs.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
-              <p className="text-muted-foreground">Nessun workout registrato ancora.</p>
+              <p className="text-muted-foreground">No workouts logged yet.</p>
               <p className="text-sm text-muted-foreground mt-2">
-                Inizia a registrare i tuoi allenamenti per vedere l'analisi AI!
+                Start logging your workouts to see AI analysis!
               </p>
             </CardContent>
           </Card>
@@ -97,9 +97,9 @@ export function UserTrainingLog() {
                       <h3 className="font-medium">{workout.name}</h3>
                       <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                         <Clock className="h-4 w-4" />
-                        <span>{workout.duration || 'Non specificata'}</span>
+                        <span>{workout.duration || 'Not specified'}</span>
                         <span>•</span>
-                        <span>{workout.exercises.length} esercizi</span>
+                        <span>{workout.exercises.length} exercises</span>
                       </div>
                       {workout.notes && (
                         <p className="text-sm text-muted-foreground mt-1">
@@ -109,7 +109,7 @@ export function UserTrainingLog() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Badge variant="secondary">Completato</Badge>
+                    <Badge variant="secondary">Completed</Badge>
                     <Button 
                       variant="ghost" 
                       size="sm"
@@ -137,14 +137,14 @@ export function UserTrainingLog() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Calendar className="h-5 w-5" />
-              <span>Riepilogo Settimanale</span>
+              <span>Weekly Summary</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-primary">{workoutLogs.length}</div>
-                <p className="text-sm text-muted-foreground">Workout completati</p>
+                <p className="text-sm text-muted-foreground">Completed workouts</p>
               </div>
               <div>
                 <div className="text-2xl font-bold text-primary">
@@ -153,17 +153,17 @@ export function UserTrainingLog() {
                     return total + duration;
                   }, 0)}
                 </div>
-                <p className="text-sm text-muted-foreground">Minuti di allenamento</p>
+                <p className="text-sm text-muted-foreground">Training minutes</p>
               </div>
               <div>
                 <div className="text-2xl font-bold text-primary">-</div>
-                <p className="text-sm text-muted-foreground">Calorie stimate</p>
+                <p className="text-sm text-muted-foreground">Estimated calories</p>
               </div>
               <div>
                 <div className="text-2xl font-bold text-primary">
                   {workoutLogs.reduce((total, workout) => total + workout.exercises.length, 0)}
                 </div>
-                <p className="text-sm text-muted-foreground">Esercizi totali</p>
+                <p className="text-sm text-muted-foreground">Total exercises</p>
               </div>
             </div>
           </CardContent>
