@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { Link } from "react-router-dom";
 import UserNavbar from '@/components/UserNavbar';
-import Footer from '@/components/Footer';
+import UserFooter from '@/components/UserFooter';
 import { RegisterForm, registerSchema } from "@/components/register/RegisterForm";
 import { RegisterHeader } from "@/components/register/RegisterHeader";
 
@@ -42,7 +42,7 @@ const RegisterContainer = ({ onRegister, onCancel, hideUserTypeSelection = false
         </div>
       </main>
       
-      <Footer />
+      <UserFooter />
     </div>
   );
 };

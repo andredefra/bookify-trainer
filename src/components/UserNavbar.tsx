@@ -93,12 +93,16 @@ const UserNavbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/user-login'}>
-              {t('userNav.login')}
-            </Button>
-            <Button size="sm" onClick={() => window.location.href = '/user-register'}>
-              {t('userNav.startTrial')}
-            </Button>
+            <Link to="/user-login">
+              <Button variant="outline" size="sm">
+                {t('userNav.login')}
+              </Button>
+            </Link>
+            <Link to="/user-register">
+              <Button size="sm">
+                {t('userNav.startTrial')}
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -158,12 +162,16 @@ const UserNavbar = () => {
 
               {/* Mobile Actions */}
               <div className="px-3 py-2 space-y-2">
-                <Button variant="outline" className="w-full" onClick={() => window.location.href = '/user-login'}>
-                  {t('userNav.login')}
-                </Button>
-                <Button className="w-full" onClick={() => window.location.href = '/user-register'}>
-                  {t('userNav.startTrial')}
-                </Button>
+                <Link to="/user-login" className="block">
+                  <Button variant="outline" className="w-full">
+                    {t('userNav.login')}
+                  </Button>
+                </Link>
+                <Link to="/user-register" className="block">
+                  <Button className="w-full">
+                    {t('userNav.startTrial')}
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Link } from "react-router-dom";
 import UserNavbar from '@/components/UserNavbar';
-import Footer from '@/components/Footer';
+import UserFooter from '@/components/UserFooter';
 import { LoginForm } from "./LoginForm";
 
 const loginSchema = z.object({
@@ -43,7 +43,7 @@ const LoginContainer = ({ onLogin, onCancel, title = "Welcome back", subtitle = 
         </div>
       </main>
       
-      <Footer />
+      <UserFooter />
     </div>
   );
 };
