@@ -144,10 +144,10 @@ export function UserAnalytics() {
         },
         weightProgress: generateWeightProgressForTimeframe(timeframe),
         goalProgress: [
-          { name: "Perdita peso", target: 5, current: 0, percentage: 0, category: "weight" },
-          { name: "Forza braccia", target: 100, current: 0, percentage: 0, category: "strength" },
-          { name: "Resistenza cardio", target: 30, current: 0, percentage: 0, category: "cardio" },
-          { name: "Flessibilità", target: 100, current: 0, percentage: 0, category: "flexibility" },
+          { name: "Weight Loss", target: 5, current: 0, percentage: 0, category: "weight" },
+          { name: "Arm Strength", target: 100, current: 0, percentage: 0, category: "strength" },
+          { name: "Cardio Endurance", target: 30, current: 0, percentage: 0, category: "cardio" },
+          { name: "Flexibility", target: 100, current: 0, percentage: 0, category: "flexibility" },
         ],
         weeklyActivity: [],
         bodyComposition: generateBodyCompositionForTimeframe(timeframe),
@@ -156,8 +156,8 @@ export function UserAnalytics() {
           averageCaloriesPerWorkout: 0,
           dominantIntensity: "none",
           topMuscleGroups: [],
-          improvementAreas: ["Inizia ad allenarti regolarmente"],
-          currentMotivation: "Inizia il tuo percorso fitness!"
+          improvementAreas: ["Start working out regularly"],
+          currentMotivation: "Start your fitness journey!"
         }
       };
     }
@@ -194,23 +194,36 @@ export function UserAnalytics() {
           Math.round(weeklyActivity.reduce((sum, week) => sum + week.calories, 0) / Math.max(totalWorkouts, 1)) : 0,
         dominantIntensity: totalWorkouts > 5 ? "moderate" : "beginner",
         topMuscleGroups: extractTopMuscleGroups(filteredWorkouts),
-        improvementAreas: totalWorkouts < 2 ? ["Costanza negli allenamenti"] : ["Progressione carichi"],
+        improvementAreas: totalWorkouts < 2 ? ["Workout consistency"] : ["Progressive overload"],
         currentMotivation: generateMotivationalMessage(totalWorkouts, weeklyAverage)
       }
     };
   };
 
-  // Helper functions for timeframe-based data generation
   const generateWeeklyActivityData = (workouts, timeframe) => {
-    if (!workouts.length) return [];
+    console.log("Generating weekly activity for:", workouts.length, "workouts, timeframe:", timeframe);
+    
+    if (!workouts.length) {
+      // Return empty data structure for charts
+      const weekLabels = getWeekLabelsForTimeframe(timeframe);
+      return weekLabels.map(week => ({
+        week,
+        workouts: 0,
+        minutes: 0,
+        calories: 0,
+        volume: 0
+      }));
+    }
     
     const workoutsByWeek = new Map();
     const weekLabels = getWeekLabelsForTimeframe(timeframe);
     
     workouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
-      const weekIndex = Math.floor((Date.now() - workoutDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
-      const weekKey = weekLabels[Math.min(weekIndex, weekLabels.length - 1)] || `Sett ${weekIndex + 1}`;
+      const now = new Date();
+      const daysAgo = Math.floor((now.getTime() - workoutDate.getTime()) / (24 * 60 * 60 * 1000));
+      const weeksAgo = Math.floor(daysAgo / 7);
+      const weekKey = weekLabels[Math.min(weeksAgo, weekLabels.length - 1)] || `Week ${weeksAgo + 1}`;
       
       if (!workoutsByWeek.has(weekKey)) {
         workoutsByWeek.set(weekKey, { workouts: 0, minutes: 0, calories: 0, volume: 0 });
@@ -230,7 +243,7 @@ export function UserAnalytics() {
       week.volume += volume;
     });
 
-    // Fill in missing weeks with zero data
+    // Fill in missing weeks with zero data and ensure proper order
     const result = weekLabels.map(week => ({
       week,
       workouts: workoutsByWeek.get(week)?.workouts || 0,
@@ -239,21 +252,22 @@ export function UserAnalytics() {
       volume: workoutsByWeek.get(week)?.volume || 0
     }));
 
+    console.log("Generated weekly activity data:", result);
     return result;
   };
 
   const getWeekLabelsForTimeframe = (timeframe) => {
     switch (timeframe) {
       case '1month':
-        return ['Sett 1', 'Sett 2', 'Sett 3', 'Sett 4'];
+        return ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
       case '3months':
-        return ['Sett 1', 'Sett 2', 'Sett 3', 'Sett 4', 'Sett 5', 'Sett 6', 'Sett 7', 'Sett 8', 'Sett 9', 'Sett 10', 'Sett 11', 'Sett 12'];
+        return ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12'];
       case '6months':
-        return Array.from({ length: 24 }, (_, i) => `Sett ${i + 1}`);
+        return Array.from({ length: 24 }, (_, i) => `Week ${i + 1}`);
       case '1year':
-        return Array.from({ length: 52 }, (_, i) => `Sett ${i + 1}`);
+        return Array.from({ length: 52 }, (_, i) => `Week ${i + 1}`);
       default:
-        return ['Sett 1', 'Sett 2', 'Sett 3', 'Sett 4', 'Sett 5', 'Sett 6'];
+        return ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'];
     }
   };
 
@@ -284,10 +298,10 @@ export function UserAnalytics() {
 
   const generateBodyCompositionForTimeframe = (timeframe) => {
     const months = {
-      '1month': ['Questo mese'],
-      '3months': ['Gen', 'Feb', 'Mar'],
-      '6months': ['Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-      '1year': ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic']
+      '1month': ['This month'],
+      '3months': ['Jan', 'Feb', 'Mar'],
+      '6months': ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      '1year': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     };
     
     const monthLabels = months[timeframe] || months['3months'];
@@ -317,28 +331,28 @@ export function UserAnalytics() {
     
     return [
       { 
-        name: "Perdita peso", 
+        name: "Weight Loss", 
         target: 5, 
         current: Math.round((2.7 * factor) * 10) / 10, 
         percentage: Math.round(Math.min((2.7 * factor / 5) * 100, 100)), 
         category: "weight" 
       },
       { 
-        name: "Forza braccia", 
+        name: "Arm Strength", 
         target: 100, 
         current: Math.round(baseProgress * 0.8), 
         percentage: Math.round(baseProgress * 0.8), 
         category: "strength" 
       },
       { 
-        name: "Resistenza cardio", 
+        name: "Cardio Endurance", 
         target: 30, 
         current: Math.round(baseProgress * 0.25), 
         percentage: Math.round(baseProgress * 0.9), 
         category: "cardio" 
       },
       { 
-        name: "Flessibilità", 
+        name: "Flexibility", 
         target: 100, 
         current: Math.round(baseProgress * 0.4), 
         percentage: Math.round(baseProgress * 0.4), 
@@ -393,18 +407,18 @@ export function UserAnalytics() {
   };
 
   const generateMotivationalMessage = (totalWorkouts, weeklyAverage) => {
-    if (totalWorkouts === 0) return "Inizia il tuo percorso fitness!";
-    if (totalWorkouts < 3) return "Ottimo inizio! Continua così!";
-    if (weeklyAverage >= 3) return "Fantastico! Stai mantenendo una routine eccellente!";
-    if (weeklyAverage >= 2) return "Buon lavoro! Stai progredendo bene!";
-    return "Mantieni la costanza per vedere risultati migliori!";
+    if (totalWorkouts === 0) return "Start your fitness journey!";
+    if (totalWorkouts < 3) return "Great start! Keep it up!";
+    if (weeklyAverage >= 3) return "Fantastic! You're maintaining an excellent routine!";
+    if (weeklyAverage >= 2) return "Good work! You're progressing well!";
+    return "Stay consistent to see better results!";
   };
 
   const runAIAnalysisOnAllWorkouts = async () => {
     if (!workoutLogs.length) {
       toast({
-        title: "Nessun workout",
-        description: "Registra alcuni workout per ottenere analisi AI",
+        title: "No workouts",
+        description: "Log some workouts to get AI analysis",
         variant: "destructive"
       });
       return;
@@ -445,15 +459,15 @@ export function UserAnalytics() {
         } : prev);
 
         toast({
-          title: "Analisi AI completata",
-          description: `Analizzati ${analyses.length} workout con insights personalizzati`
+          title: "AI Analysis completed",
+          description: `Analyzed ${analyses.length} workouts with personalized insights`
         });
       }
     } catch (error) {
       console.error('Error in AI analysis:', error);
       toast({
-        title: "Errore analisi AI",
-        description: "Riprova più tardi",
+        title: "AI Analysis error",
+        description: "Please try again later",
         variant: "destructive"
       });
     } finally {
@@ -488,12 +502,12 @@ export function UserAnalytics() {
       <div className="space-y-6">
         <Card>
           <CardContent className="p-8 text-center">
-            <h2 className="text-xl font-semibold mb-2">Nessun dato disponibile</h2>
+            <h2 className="text-xl font-semibold mb-2">No data available</h2>
             <p className="text-muted-foreground mb-4">
-              Registra alcuni workout per vedere le tue analytics personalizzate
+              Log some workouts to see your personalized analytics
             </p>
             <Button onClick={() => window.location.hash = '#training-log'}>
-              Registra il tuo primo workout
+              Log your first workout
             </Button>
           </CardContent>
         </Card>
@@ -506,9 +520,9 @@ export function UserAnalytics() {
       {/* Header with timeframe selector and AI Analysis */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Analytics e Progressi</h1>
+          <h1 className="text-2xl font-bold">Analytics & Progress</h1>
           <p className="text-muted-foreground">
-            Monitora i tuoi progressi con dati reali e analisi AI
+            Monitor your progress with real data and AI analysis
           </p>
         </div>
         <div className="flex gap-2">
@@ -520,12 +534,12 @@ export function UserAnalytics() {
             {isLoadingAI ? (
               <>
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Analisi AI...
+                AI Analysis...
               </>
             ) : (
               <>
                 <Brain className="h-4 w-4 mr-2" />
-                Analisi AI Completa
+                Complete AI Analysis
               </>
             )}
           </Button>
@@ -534,10 +548,10 @@ export function UserAnalytics() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1month">Ultimo mese</SelectItem>
-              <SelectItem value="3months">Ultimi 3 mesi</SelectItem>
-              <SelectItem value="6months">Ultimi 6 mesi</SelectItem>
-              <SelectItem value="1year">Ultimo anno</SelectItem>
+              <SelectItem value="1month">Last month</SelectItem>
+              <SelectItem value="3months">Last 3 months</SelectItem>
+              <SelectItem value="6months">Last 6 months</SelectItem>
+              <SelectItem value="1year">Last year</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -549,14 +563,14 @@ export function UserAnalytics() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Allenamenti totali</p>
+                <p className="text-sm font-medium text-muted-foreground">Total workouts</p>
                 <p className="text-2xl font-bold">{analyticsData.workoutStats.totalWorkouts}</p>
               </div>
               <Activity className="h-8 w-8 text-blue-600" />
             </div>
             <div className="flex items-center mt-2 text-sm">
               <TrendingUp className="h-4 w-4 text-green-600 mr-1" />
-              <span className="text-green-600">+12% vs mese scorso</span>
+              <span className="text-green-600">+12% vs last month</span>
             </div>
           </CardContent>
         </Card>
