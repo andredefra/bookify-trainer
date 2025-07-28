@@ -471,14 +471,21 @@ export function UserTrainingProgram() {
                       className="w-full mt-3" 
                       size="sm"
                       onClick={() => {
-                        alert('Button works! Starting workout...');
-                        console.log('TEST: Button clicked for day', day.day);
-                        setActiveWorkout({
+                        console.log('Starting workout for day:', day);
+                        const workoutData = {
                           day: day.day,
                           dayIndex: index,
-                          exercises: day.exercises || [],
-                          startTime: new Date().toISOString()
-                        });
+                          programId: selectedProgram?.id,
+                          startTime: new Date().toISOString(),
+                          exercises: day.exercises.map((ex: any, exIndex: number) => ({
+                            ...ex,
+                            id: `ex-${index}-${exIndex}`,
+                            completed: false,
+                            sets_logged: []
+                          }))
+                        };
+                        console.log('Setting activeWorkout to:', workoutData);
+                        setActiveWorkout(workoutData);
                       }}
                     >
                       <Play className="h-4 w-4 mr-2" />
