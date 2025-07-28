@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -148,6 +148,8 @@ export function UserTrainingProgram() {
   const [activeTab, setActiveTab] = useState("current");
   const [trainingPlans, setTrainingPlans] = useState<TrainingPlan[]>(mockTrainingPlans);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<TrainingPlan | null>(null);
+  const [showProgramDetail, setShowProgramDetail] = useState(false);
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
@@ -301,7 +303,14 @@ export function UserTrainingProgram() {
               </Button>
             )}
             {plan.status === 'active' && (
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => {
+                  setSelectedProgram(plan);
+                  setShowProgramDetail(true);
+                }}
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Continue Training
               </Button>
@@ -317,6 +326,109 @@ export function UserTrainingProgram() {
       </Card>
     );
   };
+
+  // Program Detail View
+  if (showProgramDetail && selectedProgram) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowProgramDetail(false)}
+          >
+            ← Back to Programs
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">{selectedProgram.title}</h1>
+            <p className="text-muted-foreground">Week {selectedProgram.progress.currentWeek} of {selectedProgram.duration_weeks}</p>
+          </div>
+        </div>
+
+        {/* Current Week Overview */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              This Week's Training
+            </CardTitle>
+            <CardDescription>
+              Complete your scheduled workouts to track progress
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {selectedProgram.plan_data.weeks[0]?.days.map((day, index) => (
+                <div key={index} className="border rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-medium">Day {day.day} - {index < 2 ? 'Completed' : 'Upcoming'}</h3>
+                    <Badge variant={index < 2 ? "default" : "outline"}>
+                      {index < 2 ? 'Done' : 'Pending'}
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    {day.exercises.map((exercise, exIndex) => (
+                      <div key={exIndex} className="flex items-center justify-between text-sm bg-muted/30 p-2 rounded">
+                        <span className="font-medium">{exercise.name}</span>
+                        <span className="text-muted-foreground">
+                          {exercise.sets} sets × {exercise.reps} reps
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {index >= 2 && (
+                    <Button className="w-full mt-3" size="sm">
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Workout
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Progress Overview */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Progress Overview
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span>Overall Progress</span>
+                  <span>{selectedProgram.progress.completed}/{selectedProgram.progress.total} sessions</span>
+                </div>
+                <Progress value={(selectedProgram.progress.completed / selectedProgram.progress.total) * 100} />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Current Week:</span>
+                  <p className="font-medium">{selectedProgram.progress.currentWeek} of {selectedProgram.duration_weeks}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Trainer:</span>
+                  <p className="font-medium">{selectedProgram.trainer.name}</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-1">
+                {selectedProgram.goals.map((goal, index) => (
+                  <Badge key={index} variant="outline" className="text-xs">
+                    {goal}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
