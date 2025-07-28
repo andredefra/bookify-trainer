@@ -46,7 +46,7 @@ const UserNavbar = () => {
     } else {
       // Se siamo su altre pagine (login/register), naviga alla landing con l'anchor
       const targetPage = language === 'en' ? '/user-en' : '/user';
-      navigate(targetPage + href);
+      window.location.href = targetPage + href;
     }
     setIsMenuOpen(false);
   };
