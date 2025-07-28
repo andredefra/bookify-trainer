@@ -20,9 +20,12 @@ const MobileLanguageSelector = ({ onLanguageChange }: MobileLanguageSelectorProp
 
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
+    const currentPath = window.location.pathname;
     
     setTimeout(() => {
-      if (lang === 'en') {
+      if (currentPath === '/user' || currentPath === '/user-en') {
+        navigate(lang === 'en' ? '/user-en' : '/user');
+      } else if (lang === 'en') {
         navigate('/');
       } else {
         navigate('/it');
