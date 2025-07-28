@@ -26,7 +26,7 @@ export function HeaderActions({ user, onLogout }: HeaderActionsProps) {
       <div className="hidden md:flex items-center space-x-2">
         <span className="text-sm text-muted-foreground">Demo Mode</span>
         <Badge variant="secondary" className="bg-primary/10 text-primary">
-          Client
+          User
         </Badge>
         {user?.plan && (
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
