@@ -117,49 +117,58 @@ export function AnalyticsTab() {
   };
 
   return (
-    <div className="space-y-6 w-full">
-      <Card className="w-full shadow-sm bg-white/80 backdrop-blur-sm border-slate-200">
-        <CardHeader className="py-4 px-5">
-          <CardTitle className="text-xl font-bold text-slate-800">Fitness Analytics Dashboard</CardTitle>
-          <CardDescription className="text-slate-600">
-            Track your progress and visualize your fitness journey with real-time data
+    <div className="space-y-6 w-full max-w-7xl mx-auto">
+      {/* Header Section */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Analytics Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
+            Track your progress and visualize your fitness journey
+          </p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={handleGoToIntegrations}
+          className="self-start lg:self-center"
+        >
+          <Settings className="h-4 w-4 mr-2" />
+          Connect Apps
+        </Button>
+      </div>
+
+      {/* Integration Alert */}
+      <Alert className="border-info/20 bg-info/5">
+        <InfoIcon className="h-4 w-4 text-info" />
+        <AlertDescription className="text-sm">
+          Connect your fitness apps to automatically sync data and get richer insights.
+        </AlertDescription>
+      </Alert>
+
+      {/* Progress Overview - Full Width Card */}
+      <Card className="shadow-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl">Progress Overview</CardTitle>
+          <CardDescription>
+            Current status of your fitness goals and measurements
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-5 pt-0">
-          <Alert className="bg-blue-50 border-blue-100 shadow-sm mb-6">
-            <InfoIcon className="h-4 w-4 text-blue-500" />
-            <AlertDescription className="text-sm text-blue-700">
-              <div className="space-y-2">
-                <p>Your analytics are based on your manually logged workouts, fitness goals and body measurements.</p>
-                <p>
-                  <span className="font-medium">Want to automate data collection?</span> Connect your fitness and health apps to automatically sync your data without manual entry.
-                </p>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleGoToIntegrations}
-                  className="mt-2 bg-white hover:bg-blue-50 border-blue-200 text-blue-700"
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  Go to Integrations
-                </Button>
-              </div>
-            </AlertDescription>
-          </Alert>
-          
-          {/* Goals Progress Summary - Inside the Card */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4 text-slate-800">Progress Overview</h3>
-            <GoalsProgress progressData={progressData} bodyMeasurements={bodyMeasurements} />
-          </div>
-          
-          <div className="space-y-8">
-            <WorkoutAnalytics progressData={progressData} />
-            
-            <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
-          </div>
+        <CardContent>
+          <GoalsProgress progressData={progressData} bodyMeasurements={bodyMeasurements} />
         </CardContent>
       </Card>
+
+      {/* Main Analytics Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Workout Analytics - Takes 2 columns on large screens */}
+        <div className="xl:col-span-2">
+          <WorkoutAnalytics progressData={progressData} />
+        </div>
+        
+        {/* Statistics Section - Takes 1 column */}
+        <div className="xl:col-span-1">
+          <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
+        </div>
+      </div>
     </div>
   );
 }
