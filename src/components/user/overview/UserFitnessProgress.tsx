@@ -77,12 +77,12 @@ export function UserFitnessProgress() {
   const saveProfile = () => {
     localStorage.setItem('user-fitness-profile', JSON.stringify(profile));
     setEditingProfile(false);
-    toast.success("Profilo aggiornato con successo!");
+    toast.success("Profile updated successfully!");
   };
 
   const addMeasurement = () => {
     if (!newMeasurement.weight && !newMeasurement.waist) {
-      toast.error("Inserisci almeno peso o circonferenza vita");
+      toast.error("Please enter at least weight or waist measurement");
       return;
     }
 
@@ -90,7 +90,7 @@ export function UserFitnessProgress() {
     setMeasurements(updatedMeasurements);
     localStorage.setItem('user-measurements', JSON.stringify(updatedMeasurements));
     setNewMeasurement({ date: new Date().toISOString().split('T')[0] });
-    toast.success("Misurazione aggiunta!");
+    toast.success("Measurement added!");
   };
 
   const calculateBMI = () => {
@@ -102,10 +102,10 @@ export function UserFitnessProgress() {
   };
 
   const getBMIStatus = (bmi: number) => {
-    if (bmi < 18.5) return { status: "Sottopeso", color: "text-blue-600" };
-    if (bmi < 25) return { status: "Normale", color: "text-green-600" };
-    if (bmi < 30) return { status: "Sovrappeso", color: "text-yellow-600" };
-    return { status: "Obeso", color: "text-red-600" };
+    if (bmi < 18.5) return { status: "Underweight", color: "text-blue-600" };
+    if (bmi < 25) return { status: "Normal", color: "text-green-600" };
+    if (bmi < 30) return { status: "Overweight", color: "text-yellow-600" };
+    return { status: "Obese", color: "text-red-600" };
   };
 
   const getProfileCompleteness = () => {
@@ -126,9 +126,9 @@ export function UserFitnessProgress() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-medium text-orange-900">Completa il tuo profilo</h3>
+                <h3 className="font-medium text-orange-900">Complete your profile</h3>
                 <p className="text-sm text-orange-700">
-                  Completa le informazioni per ricevere piani personalizzati dall'AI trainer
+                  Complete your information to receive personalized plans from the AI trainer
                 </p>
               </div>
               <div className="text-right">
@@ -141,7 +141,7 @@ export function UserFitnessProgress() {
       )}
 
       {/* Quick Action Buttons - Track your journey */}
-      <Card>
+      <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-lg">Track your journey toward your goals with detailed logging</CardTitle>
         </CardHeader>
@@ -199,14 +199,14 @@ export function UserFitnessProgress() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Target className="h-5 w-5" />
-                  Profilo
+                  Profile
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {profile.age && <div className="flex justify-between"><span>Età:</span><span>{profile.age} anni</span></div>}
-                {profile.gender && <div className="flex justify-between"><span>Sesso:</span><span className="capitalize">{profile.gender}</span></div>}
-                {profile.height && <div className="flex justify-between"><span>Altezza:</span><span>{profile.height} cm</span></div>}
-                {profile.weight && <div className="flex justify-between"><span>Peso:</span><span>{profile.weight} kg</span></div>}
+                {profile.age && <div className="flex justify-between"><span>Age:</span><span>{profile.age} years</span></div>}
+                {profile.gender && <div className="flex justify-between"><span>Gender:</span><span className="capitalize">{profile.gender}</span></div>}
+                {profile.height && <div className="flex justify-between"><span>Height:</span><span>{profile.height} cm</span></div>}
+                {profile.weight && <div className="flex justify-between"><span>Weight:</span><span>{profile.weight} kg</span></div>}
                 {bmi && (
                   <div className="flex justify-between">
                     <span>BMI:</span>
@@ -221,21 +221,21 @@ export function UserFitnessProgress() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Scale className="h-5 w-5" />
-                  Ultime Misurazioni
+                  Latest Measurements
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {latestMeasurement ? (
                   <>
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Data:</span><span>{new Date(latestMeasurement.date).toLocaleDateString()}</span>
+                      <span>Date:</span><span>{new Date(latestMeasurement.date).toLocaleDateString()}</span>
                     </div>
-                    {latestMeasurement.weight && <div className="flex justify-between"><span>Peso:</span><span>{latestMeasurement.weight} kg</span></div>}
-                    {latestMeasurement.waist && <div className="flex justify-between"><span>Vita:</span><span>{latestMeasurement.waist} cm</span></div>}
-                    {latestMeasurement.hips && <div className="flex justify-between"><span>Fianchi:</span><span>{latestMeasurement.hips} cm</span></div>}
+                    {latestMeasurement.weight && <div className="flex justify-between"><span>Weight:</span><span>{latestMeasurement.weight} kg</span></div>}
+                    {latestMeasurement.waist && <div className="flex justify-between"><span>Waist:</span><span>{latestMeasurement.waist} cm</span></div>}
+                    {latestMeasurement.hips && <div className="flex justify-between"><span>Hips:</span><span>{latestMeasurement.hips} cm</span></div>}
                   </>
                 ) : (
-                  <p className="text-sm text-muted-foreground">Nessuna misurazione registrata</p>
+                  <p className="text-sm text-muted-foreground">No measurements recorded</p>
                 )}
               </CardContent>
             </Card>
@@ -245,7 +245,7 @@ export function UserFitnessProgress() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
-                  Obiettivi
+                  Goals
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -260,7 +260,7 @@ export function UserFitnessProgress() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-muted-foreground">Nessun obiettivo impostato</p>
+                  <p className="text-sm text-muted-foreground">No goals set</p>
                 )}
               </CardContent>
             </Card>
@@ -273,9 +273,9 @@ export function UserFitnessProgress() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Informazioni Personali</CardTitle>
+                  <CardTitle>Personal Information</CardTitle>
                   <CardDescription>
-                    Queste informazioni aiutano l'AI a creare piani personalizzati
+                    This information helps the AI create personalized plans
                   </CardDescription>
                 </div>
                 <Button
@@ -283,14 +283,14 @@ export function UserFitnessProgress() {
                   onClick={() => editingProfile ? setEditingProfile(false) : setEditingProfile(true)}
                 >
                   {editingProfile ? <X className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
-                  {editingProfile ? "Annulla" : "Modifica"}
+                  {editingProfile ? "Cancel" : "Edit"}
                 </Button>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="age">Età</Label>
+                  <Label htmlFor="age">Age</Label>
                   <Input
                     id="age"
                     type="number"
@@ -300,23 +300,23 @@ export function UserFitnessProgress() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="gender">Sesso</Label>
+                  <Label htmlFor="gender">Gender</Label>
                   <Select 
                     value={profile.gender || ''} 
                     onValueChange={(value) => setProfile({...profile, gender: value as 'male' | 'female'})}
                     disabled={!editingProfile}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Seleziona sesso" />
+                      <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="male">Maschio</SelectItem>
-                      <SelectItem value="female">Femmina</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="height">Altezza (cm)</Label>
+                  <Label htmlFor="height">Height (cm)</Label>
                   <Input
                     id="height"
                     type="number"
@@ -326,7 +326,7 @@ export function UserFitnessProgress() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="weight">Peso (kg)</Label>
+                  <Label htmlFor="weight">Weight (kg)</Label>
                   <Input
                     id="weight"
                     type="number"
@@ -336,38 +336,38 @@ export function UserFitnessProgress() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="experience">Livello di esperienza</Label>
+                  <Label htmlFor="experience">Experience Level</Label>
                   <Select 
                     value={profile.experienceLevel || ''} 
                     onValueChange={(value) => setProfile({...profile, experienceLevel: value as any})}
                     disabled={!editingProfile}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Seleziona livello" />
+                      <SelectValue placeholder="Select level" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="principiante">Principiante</SelectItem>
-                      <SelectItem value="intermedio">Intermedio</SelectItem>
-                      <SelectItem value="avanzato">Avanzato</SelectItem>
+                      <SelectItem value="principiante">Beginner</SelectItem>
+                      <SelectItem value="intermedio">Intermediate</SelectItem>
+                      <SelectItem value="avanzato">Advanced</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="frequency">Frequenza settimanale</Label>
+                  <Label htmlFor="frequency">Weekly Frequency</Label>
                   <Select 
                     value={profile.weeklyFrequency?.toString() || ''} 
                     onValueChange={(value) => setProfile({...profile, weeklyFrequency: parseInt(value)})}
                     disabled={!editingProfile}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Volte a settimana" />
+                      <SelectValue placeholder="Times per week" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 volta a settimana</SelectItem>
-                      <SelectItem value="2">2 volte a settimana</SelectItem>
-                      <SelectItem value="3">3 volte a settimana</SelectItem>
-                      <SelectItem value="4">4 volte a settimana</SelectItem>
-                      <SelectItem value="5">5+ volte a settimana</SelectItem>
+                      <SelectItem value="1">1 time per week</SelectItem>
+                      <SelectItem value="2">2 times per week</SelectItem>
+                      <SelectItem value="3">3 times per week</SelectItem>
+                      <SelectItem value="4">4 times per week</SelectItem>
+                      <SelectItem value="5">5+ times per week</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -376,9 +376,9 @@ export function UserFitnessProgress() {
               <Separator />
 
               <div>
-                <Label>Obiettivi principali</Label>
+                <Label>Main Goals</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {['Perdere peso', 'Aumentare massa muscolare', 'Migliorare resistenza', 'Aumentare forza', 'Migliorare flessibilità', 'Tonificare'].map((goal) => (
+                  {['Weight Loss', 'Muscle Gain', 'Improve Endurance', 'Increase Strength', 'Improve Flexibility', 'Tone Up'].map((goal) => (
                     <Badge
                       key={goal}
                       variant={profile.fitnessGoals?.includes(goal) ? "default" : "outline"}
@@ -403,7 +403,7 @@ export function UserFitnessProgress() {
                 <div className="flex gap-2 pt-4">
                   <Button onClick={saveProfile}>
                     <Save className="h-4 w-4 mr-2" />
-                    Salva Modifiche
+                    Save Changes
                   </Button>
                 </div>
               )}
@@ -415,9 +415,9 @@ export function UserFitnessProgress() {
         <TabsContent value="measurements" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Aggiungi Nuova Misurazione</CardTitle>
+              <CardTitle>Add New Measurement</CardTitle>
               <CardDescription>
-                Tieni traccia dei tuoi progressi fisici
+                Track your physical progress
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -524,11 +524,12 @@ export function UserFitnessProgress() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button onClick={addMeasurement} className="bg-black text-white hover:bg-gray-800">
+                <Button onClick={addMeasurement}>
+                  <Save className="h-4 w-4 mr-2" />
                   Save Measurements
                 </Button>
                 <Button variant="outline" onClick={() => setNewMeasurement({ date: new Date().toISOString().split('T')[0] })}>
-                  Cancel
+                  Clear
                 </Button>
               </div>
             </CardContent>
@@ -537,7 +538,7 @@ export function UserFitnessProgress() {
           {/* Measurements History */}
           <Card>
             <CardHeader>
-              <CardTitle>Storico Misurazioni</CardTitle>
+              <CardTitle>Measurements History</CardTitle>
             </CardHeader>
             <CardContent>
               {measurements.length > 0 ? (
@@ -561,7 +562,7 @@ export function UserFitnessProgress() {
                 </div>
               ) : (
                 <p className="text-center text-muted-foreground py-8">
-                  Nessuna misurazione registrata. Aggiungi la tua prima misurazione!
+                  No measurements recorded. Add your first measurement!
                 </p>
               )}
             </CardContent>
@@ -572,9 +573,9 @@ export function UserFitnessProgress() {
         <TabsContent value="goals">
           <Card>
             <CardHeader>
-              <CardTitle>I Tuoi Obiettivi Fitness</CardTitle>
+              <CardTitle>Your Fitness Goals</CardTitle>
               <CardDescription>
-                Imposta e monitora i tuoi obiettivi di allenamento
+                Set and monitor your training objectives
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -588,8 +589,8 @@ export function UserFitnessProgress() {
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span>Progresso: {goal.current} / {goal.target} {goal.unit}</span>
-                          <span>Scadenza: {new Date(goal.targetDate).toLocaleDateString()}</span>
+                          <span>Progress: {goal.current} / {goal.target} {goal.unit}</span>
+                          <span>Due date: {new Date(goal.targetDate).toLocaleDateString()}</span>
                         </div>
                         <Progress value={(goal.current / goal.target) * 100} />
                       </div>
@@ -600,10 +601,10 @@ export function UserFitnessProgress() {
                 <div className="text-center py-8">
                   <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground mb-4">
-                    Non hai ancora impostato obiettivi specifici.
+                    You haven't set any specific goals yet.
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    I tuoi obiettivi verranno creati automaticamente dall'AI trainer quando chiederai un piano personalizzato.
+                    Your goals will be automatically created by the AI trainer when you request a personalized plan.
                   </p>
                 </div>
               )}
