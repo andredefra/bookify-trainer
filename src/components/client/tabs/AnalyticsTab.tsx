@@ -117,68 +117,56 @@ export function AnalyticsTab() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header Section with Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-border">
-        <div className="space-y-1">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Analytics</h1>
-          <p className="text-sm text-muted-foreground">
-            Track your fitness journey and performance insights
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2">
+    <div className="min-h-screen bg-background">
+      {/* Mobile-optimized Header */}
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="text-xl font-bold text-foreground">Analytics</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">Track your fitness progress</p>
+          </div>
           <Button 
             variant="outline" 
             size="sm"
             onClick={handleGoToIntegrations}
-            className="hover-scale"
+            className="shrink-0"
           >
-            <Settings className="h-4 w-4 mr-2" />
-            Connect Apps
+            <Settings className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Apps</span>
           </Button>
         </div>
       </div>
 
-      {/* Integration Notice */}
-      <Alert className="border-info/20 bg-info/5 animate-scale-in">
-        <InfoIcon className="h-4 w-4 text-info" />
-        <AlertDescription className="text-sm">
-          <strong>Pro tip:</strong> Connect your fitness apps for automatic data sync and richer insights.
-        </AlertDescription>
-      </Alert>
+      {/* Mobile-optimized Content */}
+      <div className="p-4 space-y-6">
+        {/* Connection Alert - Mobile friendly */}
+        <Alert className="border-info/20 bg-info/5">
+          <InfoIcon className="h-4 w-4 text-info shrink-0" />
+          <AlertDescription className="text-sm">
+            Connect fitness apps for automatic sync
+          </AlertDescription>
+        </Alert>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        {/* Left Column - Main Analytics */}
-        <div className="xl:col-span-8 space-y-6">
-          {/* Progress Overview */}
-          <Card className="shadow-sm animate-fade-in">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg">Goals Progress</CardTitle>
-                  <CardDescription className="text-sm">
-                    Your current progress toward fitness goals
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
+        {/* Statistics Cards - Mobile Stack */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-foreground">Quick Stats</h2>
+          <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
+        </div>
+
+        {/* Goals Progress - Mobile optimized */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-foreground">Goals Progress</h2>
+          <Card className="shadow-sm">
+            <CardContent className="p-4">
               <GoalsProgress progressData={progressData} bodyMeasurements={bodyMeasurements} />
             </CardContent>
           </Card>
-
-          {/* Workout Analytics */}
-          <div className="animate-fade-in [animation-delay:100ms]">
-            <WorkoutAnalytics progressData={progressData} />
-          </div>
         </div>
 
-        {/* Right Column - Statistics Sidebar */}
-        <div className="xl:col-span-4">
-          <div className="sticky top-6 animate-fade-in [animation-delay:200ms]">
-            <StatisticsSection progressData={progressData} bodyMeasurements={bodyMeasurements} />
-          </div>
+        {/* Workout Analytics - Mobile optimized */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-foreground">Workout Insights</h2>
+          <WorkoutAnalytics progressData={progressData} />
         </div>
       </div>
     </div>
