@@ -729,7 +729,7 @@ export function UserTrainingProgram() {
                     <div className="flex-1">
                       <CardTitle className="flex items-center gap-2">
                         <Dumbbell className="h-5 w-5" />
-                        {exercise.name}
+                        {exerciseData ? exerciseData.name : exercise.name}
                       </CardTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                         <span>{exercise.sets} sets × {exercise.reps}</span>
