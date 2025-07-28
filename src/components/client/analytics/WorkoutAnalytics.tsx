@@ -148,7 +148,7 @@ export function WorkoutAnalytics({
       totalAnalyses: totalGoals,
       averageCaloriesPerWorkout: Math.round((totalMinutes * 8) / Math.max(simulatedWorkouts, 1)),
       dominantIntensity: avgProgress > 70 ? "high" : avgProgress > 40 ? "moderate" : "low",
-      topGoalCategories,
+      topGoalCategories: topCategories,
       improvementAreas: generateImprovementAreas(progressData, avgProgress),
       currentMotivation: generateMotivation(avgProgress, achievedGoals),
       fitnessScore: Math.round(avgProgress),
