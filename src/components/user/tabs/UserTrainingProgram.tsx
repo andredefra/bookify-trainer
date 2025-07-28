@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -150,6 +151,8 @@ export function UserTrainingProgram() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<TrainingPlan | null>(null);
   const [showProgramDetail, setShowProgramDetail] = useState(false);
+  const [activeWorkout, setActiveWorkout] = useState<any>(null);
+  const [workoutLogs, setWorkoutLogs] = useState<any>({});
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
@@ -327,6 +330,75 @@ export function UserTrainingProgram() {
     );
   };
 
+  const startWorkout = (day: any, dayIndex: number) => {
+    const workoutData = {
+      ...day,
+      dayIndex,
+      programId: selectedProgram?.id,
+      startTime: new Date().toISOString(),
+      exercises: day.exercises.map((ex: any, index: number) => ({
+        ...ex,
+        id: `ex-${dayIndex}-${index}`,
+        completed: false,
+        sets_logged: []
+      }))
+    };
+    setActiveWorkout(workoutData);
+  };
+
+  const logSet = (exerciseIndex: number, setIndex: number, weight: number, reps: number) => {
+    if (!activeWorkout) return;
+    
+    const updatedWorkout = { ...activeWorkout };
+    const exercise = updatedWorkout.exercises[exerciseIndex];
+    
+    if (!exercise.sets_logged) {
+      exercise.sets_logged = [];
+    }
+    
+    exercise.sets_logged[setIndex] = { weight, reps, completed: true };
+    
+    // Check if all sets are completed
+    if (exercise.sets_logged.length === exercise.sets && exercise.sets_logged.every(set => set.completed)) {
+      exercise.completed = true;
+    }
+    
+    setActiveWorkout(updatedWorkout);
+  };
+
+  const completeWorkout = () => {
+    if (!activeWorkout || !selectedProgram) return;
+    
+    // Save workout log
+    const workoutLog = {
+      ...activeWorkout,
+      completedAt: new Date().toISOString(),
+      duration: Math.round((new Date().getTime() - new Date(activeWorkout.startTime).getTime()) / 60000) // minutes
+    };
+    
+    // Update workout logs
+    const logs = JSON.parse(localStorage.getItem('workout-logs') || '[]');
+    logs.push(workoutLog);
+    localStorage.setItem('workout-logs', JSON.stringify(logs));
+    
+    // Update program progress
+    const updatedPlans = trainingPlans.map(plan => 
+      plan.id === selectedProgram.id 
+        ? {
+            ...plan, 
+            progress: {
+              ...plan.progress,
+              completed: plan.progress.completed + 1
+            }
+          }
+        : plan
+    );
+    setTrainingPlans(updatedPlans);
+    
+    setActiveWorkout(null);
+    toast.success(`Workout completed! Great job!`);
+  };
+
   // Program Detail View
   if (showProgramDetail && selectedProgram) {
     return (
@@ -376,7 +448,11 @@ export function UserTrainingProgram() {
                     ))}
                   </div>
                   {index >= 2 && (
-                    <Button className="w-full mt-3" size="sm">
+                    <Button 
+                      className="w-full mt-3" 
+                      size="sm"
+                      onClick={() => startWorkout(day, index)}
+                    >
                       <Play className="h-4 w-4 mr-2" />
                       Start Workout
                     </Button>
@@ -423,6 +499,141 @@ export function UserTrainingProgram() {
                   </Badge>
                 ))}
               </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Active Workout View
+  if (activeWorkout) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setActiveWorkout(null)}
+            >
+              ← Exit Workout
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold">Day {activeWorkout.day} Workout</h1>
+              <p className="text-muted-foreground">
+                Started at {new Date(activeWorkout.startTime).toLocaleTimeString()}
+              </p>
+            </div>
+          </div>
+          <Button 
+            onClick={completeWorkout}
+            disabled={!activeWorkout.exercises.every((ex: any) => ex.completed)}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            <CheckCircle className="h-4 w-4 mr-2" />
+            Complete Workout
+          </Button>
+        </div>
+
+        <div className="space-y-4">
+          {activeWorkout.exercises.map((exercise: any, exerciseIndex: number) => (
+            <Card key={exerciseIndex} className={exercise.completed ? 'border-green-200 bg-green-50' : ''}>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <Dumbbell className="h-5 w-5" />
+                    {exercise.name}
+                  </span>
+                  {exercise.completed && (
+                    <Badge className="bg-green-600">Completed</Badge>
+                  )}
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Target: {exercise.sets} sets × {exercise.reps} reps
+                  {exercise.rest && ` • Rest: ${exercise.rest}`}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {Array.from({ length: exercise.sets }, (_, setIndex) => (
+                    <div key={setIndex} className="border rounded-lg p-3 bg-muted/20">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium">Set {setIndex + 1}</span>
+                        {exercise.sets_logged?.[setIndex]?.completed && (
+                          <Badge variant="outline" className="text-green-600">
+                            ✓ Done
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <label className="text-xs text-muted-foreground">Weight (kg)</label>
+                          <input
+                            type="number"
+                            placeholder="0"
+                            className="w-full px-2 py-1 text-sm border rounded"
+                            value={exercise.sets_logged?.[setIndex]?.weight || ''}
+                            onChange={(e) => {
+                              const weight = parseFloat(e.target.value) || 0;
+                              const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
+                              if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground">Reps</label>
+                          <input
+                            type="number"
+                            placeholder="0"
+                            className="w-full px-2 py-1 text-sm border rounded"
+                            value={exercise.sets_logged?.[setIndex]?.reps || ''}
+                            onChange={(e) => {
+                              const reps = parseInt(e.target.value) || 0;
+                              const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
+                              if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
+                            }}
+                          />
+                        </div>
+                        <div className="flex items-end">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => {
+                              const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
+                              const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
+                              if (weight > 0 && reps > 0) {
+                                logSet(exerciseIndex, setIndex, weight, reps);
+                              }
+                            }}
+                            disabled={exercise.sets_logged?.[setIndex]?.completed}
+                          >
+                            {exercise.sets_logged?.[setIndex]?.completed ? '✓' : 'Log'}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Workout Progress */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Workout Progress</span>
+                <span>
+                  {activeWorkout.exercises.filter((ex: any) => ex.completed).length} / {activeWorkout.exercises.length} exercises
+                </span>
+              </div>
+              <Progress 
+                value={(activeWorkout.exercises.filter((ex: any) => ex.completed).length / activeWorkout.exercises.length) * 100} 
+              />
             </div>
           </CardContent>
         </Card>
