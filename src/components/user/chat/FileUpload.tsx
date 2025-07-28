@@ -128,17 +128,23 @@ export function FileUpload({ onFileSelect, disabled }: FileUploadProps) {
         </div>
       )}
 
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={() => fileInputRef.current?.click()}
-        disabled={disabled || isUploading || !!selectedFile}
-        className="w-fit"
-      >
-        <Upload className="h-4 w-4 mr-2" />
-        Allega file
-      </Button>
+      <div className="space-y-1">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={disabled || isUploading || !!selectedFile}
+          className="w-fit"
+        >
+          <Upload className="h-4 w-4 mr-2" />
+          Allega file
+        </Button>
+        
+        <p className="text-xs text-muted-foreground">
+          Supportati: Immagini (JPG, PNG, GIF), Video (MP4, MOV), Audio (MP3, WAV), PDF, documenti di testo (max 10MB)
+        </p>
+      </div>
 
       <input
         ref={fileInputRef}
