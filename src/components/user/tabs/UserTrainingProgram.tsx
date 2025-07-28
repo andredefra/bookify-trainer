@@ -471,25 +471,33 @@ export function UserTrainingProgram() {
                       className="w-full mt-3" 
                       size="sm"
                       onClick={() => {
-                        console.log('Starting workout for day:', day);
-                        const workoutData = {
-                          day: day.day,
-                          dayIndex: index,
-                          programId: selectedProgram?.id,
-                          startTime: new Date().toISOString(),
-                          exercises: day.exercises.map((ex: any, exIndex: number) => ({
-                            ...ex,
-                            id: `ex-${index}-${exIndex}`,
-                            completed: false,
-                            sets_logged: []
-                          }))
-                        };
-                        console.log('Setting activeWorkout to:', workoutData);
-                        setActiveWorkout(workoutData);
+                        console.log('=== COMPLETE DEBUG INFO ===');
+                        console.log('day object:', day);
+                        console.log('index:', index);
+                        console.log('day.day:', day?.day);
+                        console.log('day.exercises:', day?.exercises);
+                        alert(`Debug: day=${day?.day}, exercises=${day?.exercises?.length || 0}`);
+                        
+                        if (day && day.exercises) {
+                          setActiveWorkout({
+                            day: day.day || (index + 1),
+                            dayIndex: index,
+                            programId: selectedProgram?.id,
+                            startTime: new Date().toISOString(),
+                            exercises: day.exercises.map((ex: any, exIndex: number) => ({
+                              ...ex,
+                              id: `ex-${index}-${exIndex}`,
+                              completed: false,
+                              sets_logged: []
+                            }))
+                          });
+                        } else {
+                          alert('Error: day or exercises not found');
+                        }
                       }}
                     >
                       <Play className="h-4 w-4 mr-2" />
-                      Start Workout (Day {day.day})
+                      Start Workout (Day {day?.day || index + 1})
                     </Button>
                   )}
                 </div>
