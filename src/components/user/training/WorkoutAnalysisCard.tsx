@@ -65,8 +65,8 @@ export function WorkoutAnalysisCard({
         setAnalysis(data.analysis);
         onAnalysisComplete?.(data.analysis);
         toast({
-          title: "Analisi completata",
-          description: "L'AI ha analizzato il tuo workout con successo"
+          title: "Analysis completed",
+          description: "AI has successfully analyzed your workout"
         });
       } else {
         throw new Error(data.error || 'Errore durante l\'analisi');
@@ -74,8 +74,8 @@ export function WorkoutAnalysisCard({
     } catch (error) {
       console.error('Error analyzing workout:', error);
       toast({
-        title: "Errore nell'analisi",
-        description: "Non è stato possibile analizzare il workout",
+        title: "Analysis error",
+        description: "Unable to analyze the workout",
         variant: "destructive"
       });
     } finally {
@@ -107,10 +107,10 @@ export function WorkoutAnalysisCard({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            Analisi AI Workout
+            AI Workout Analysis
           </CardTitle>
           <CardDescription>
-            Ottieni insights personalizzati sul tuo allenamento con analisi AI
+            Get personalized insights on your training with AI analysis
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -122,12 +122,12 @@ export function WorkoutAnalysisCard({
             {isLoading ? (
               <>
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Analizzando...
+                Analyzing...
               </>
             ) : (
               <>
                 <Brain className="h-4 w-4 mr-2" />
-                Analizza Workout
+                Analyze Workout
               </>
             )}
           </Button>
@@ -143,7 +143,7 @@ export function WorkoutAnalysisCard({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            Analisi AI Workout
+            AI Workout Analysis
           </CardTitle>
           <div className="flex items-center gap-2">
             <Button 
@@ -153,7 +153,7 @@ export function WorkoutAnalysisCard({
               disabled={isLoading}
             >
               <RefreshCw className={`h-3 w-3 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
-              Rigenera
+              Regenerate
             </Button>
           </div>
         </CardHeader>
@@ -162,7 +162,7 @@ export function WorkoutAnalysisCard({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{analysis.caloriesBurned}</div>
-              <p className="text-sm text-muted-foreground">Calorie Bruciate</p>
+              <p className="text-sm text-muted-foreground">Calories Burned</p>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary flex items-center justify-center gap-1">
@@ -171,21 +171,21 @@ export function WorkoutAnalysisCard({
                   {analysis.workoutIntensity.toUpperCase()}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">Intensità</p>
+              <p className="text-sm text-muted-foreground">Intensity</p>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{analysis.volumeAnalysis.totalVolume}</div>
-              <p className="text-sm text-muted-foreground">Volume Totale (kg)</p>
+              <p className="text-sm text-muted-foreground">Total Volume (kg)</p>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{analysis.fitnessIntegration.estimatedMET}</div>
-              <p className="text-sm text-muted-foreground">MET Stimati</p>
+              <p className="text-sm text-muted-foreground">Estimated MET</p>
             </div>
           </div>
 
           {/* Muscle Groups */}
           <div>
-            <h4 className="font-medium mb-2">Gruppi Muscolari Allenati</h4>
+            <h4 className="font-medium mb-2">Muscle Groups Trained</h4>
             <div className="flex flex-wrap gap-2">
               {analysis.muscleGroupsWorked.map((muscle, index) => (
                 <Badge key={index} variant="outline">
@@ -209,7 +209,7 @@ export function WorkoutAnalysisCard({
           </CardHeader>
           <CardContent className="space-y-3">
             <div>
-              <h5 className="font-medium text-green-600 mb-1">💪 Punti di Forza</h5>
+              <h5 className="font-medium text-green-600 mb-1">💪 Strengths</h5>
               <ul className="text-sm space-y-1">
                 {analysis.insights.strengths.map((strength, index) => (
                   <li key={index} className="text-muted-foreground">• {strength}</li>
@@ -217,7 +217,7 @@ export function WorkoutAnalysisCard({
               </ul>
             </div>
             <div>
-              <h5 className="font-medium text-orange-600 mb-1">🎯 Aree di Miglioramento</h5>
+              <h5 className="font-medium text-orange-600 mb-1">🎯 Areas for Improvement</h5>
               <ul className="text-sm space-y-1">
                 {analysis.insights.improvements.map((improvement, index) => (
                   <li key={index} className="text-muted-foreground">• {improvement}</li>
@@ -226,7 +226,7 @@ export function WorkoutAnalysisCard({
             </div>
             {analysis.insights.progressNotes && (
               <div>
-                <h5 className="font-medium text-blue-600 mb-1">📈 Note sui Progressi</h5>
+                <h5 className="font-medium text-blue-600 mb-1">📈 Progress Notes</h5>
                 <p className="text-sm text-muted-foreground">{analysis.insights.progressNotes}</p>
               </div>
             )}
@@ -238,28 +238,28 @@ export function WorkoutAnalysisCard({
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm">
               <Target className="h-4 w-4" />
-              Raccomandazioni
+              Recommendations
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div>
               <h5 className="font-medium flex items-center gap-1 mb-1">
                 <Zap className="h-3 w-3" />
-                Prossimo Workout
+                Next Workout
               </h5>
               <p className="text-sm text-muted-foreground">{analysis.recommendations.nextWorkout}</p>
             </div>
             <div>
               <h5 className="font-medium flex items-center gap-1 mb-1">
                 <Heart className="h-3 w-3" />
-                Recupero
+                Recovery
               </h5>
               <p className="text-sm text-muted-foreground">{analysis.recommendations.recovery}</p>
             </div>
             <div>
               <h5 className="font-medium flex items-center gap-1 mb-1">
                 <Utensils className="h-3 w-3" />
-                Nutrizione
+                Nutrition
               </h5>
               <p className="text-sm text-muted-foreground">{analysis.recommendations.nutrition}</p>
             </div>
@@ -272,21 +272,21 @@ export function WorkoutAnalysisCard({
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm">
             <Heart className="h-4 w-4" />
-            Integrazione Fitness Tracker
+            Fitness Tracker Integration
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4 text-sm">
             <div>
-              <span className="font-medium">Zona Frequenza Cardiaca:</span>
+              <span className="font-medium">Heart Rate Zone:</span>
               <p className="text-muted-foreground">{analysis.fitnessIntegration.heartRateZone}</p>
             </div>
             <div>
-              <span className="font-medium">Tipo Attività:</span>
+              <span className="font-medium">Activity Type:</span>
               <p className="text-muted-foreground">{analysis.fitnessIntegration.activityType}</p>
             </div>
             <div>
-              <span className="font-medium">MET Equivalenti:</span>
+              <span className="font-medium">MET Equivalent:</span>
               <p className="text-muted-foreground">{analysis.fitnessIntegration.estimatedMET} MET</p>
             </div>
           </div>
