@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { MessageBubble } from '../chat/MessageBubble';
 import { VoiceInterface } from '../chat/VoiceInterface';
 import { FileUpload } from '../chat/FileUpload';
+import { PlanProposal } from '../chat/PlanProposal';
 
 interface Message {
   id: string;
@@ -28,6 +29,7 @@ export function UserMessages() {
   const [isTyping, setIsTyping] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState('');
+  const [pendingPlan, setPendingPlan] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
@@ -95,6 +97,20 @@ export function UserMessages() {
 
       if (response.error) throw response.error;
 
+      // Check if AI created a plan
+      if (response.data?.plan_id) {
+        // Load the plan details
+        const { data: plan } = await supabase
+          .from('training_plans' as any)
+          .select('*')
+          .eq('id', response.data.plan_id)
+          .single();
+        
+        if (plan) {
+          setPendingPlan(plan);
+        }
+      }
+
       setInput('');
       
     } catch (error) {
@@ -143,6 +159,36 @@ export function UserMessages() {
       setCurrentTranscript('');
     } else {
       setCurrentTranscript(text);
+    }
+  };
+
+  const handleAcceptPlan = async (planId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await supabase.functions.invoke('openai-chat', {
+        body: {
+          action_type: 'accept_plan',
+          plan_id: planId,
+          conversation_id: conversationId
+        }
+      });
+
+      if (response.error) throw response.error;
+
+      setPendingPlan(null);
+      toast({
+        title: 'Piano Accettato!',
+        description: 'Il piano è stato aggiunto alla tua sezione Training Program'
+      });
+    } catch (error) {
+      console.error('Error accepting plan:', error);
+      toast({
+        title: 'Errore',
+        description: 'Impossibile accettare il piano',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -216,6 +262,18 @@ export function UserMessages() {
                     </div>
                     <span className="text-xs text-muted-foreground mt-1 px-2">Trascrizione in corso...</span>
                   </div>
+                </div>
+              )}
+              
+              {/* Pending Plan Proposal */}
+              {pendingPlan && (
+                <div className="mt-4">
+                  <PlanProposal 
+                    plan={pendingPlan}
+                    onAccept={handleAcceptPlan}
+                    onReject={() => setPendingPlan(null)}
+                    isLoading={isLoading}
+                  />
                 </div>
               )}
               

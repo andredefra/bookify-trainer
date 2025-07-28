@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message, conversation_id } = await req.json();
+    const { message, conversation_id, action_type, plan_id } = await req.json();
     
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
@@ -23,6 +23,38 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Handle plan acceptance
+    if (action_type === 'accept_plan' && plan_id) {
+      const { error } = await supabase
+        .from('training_plans')
+        .update({ 
+          status: 'accepted',
+          started_at: new Date().toISOString()
+        })
+        .eq('id', plan_id);
+
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ 
+        success: true,
+        message: 'Piano accettato con successo! Lo troverai nella sezione Training Program.' 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Get user profile for personalized responses
+    const authHeader = req.headers.get('authorization')?.replace('Bearer ', '');
+    let userProfile = null;
+    
+    if (authHeader) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .single();
+      userProfile = profile;
+    }
 
     // Get conversation history
     const { data: messages } = await supabase
@@ -43,6 +75,58 @@ serve(async (req) => {
       content: message
     });
 
+    // Create personalized system prompt
+    const systemPrompt = `Sei un AI Personal Trainer e nutrizionista esperto specializzato in fitness e benessere. 
+
+INFORMAZIONI UTENTE:
+${userProfile ? `
+- Nome: ${userProfile.first_name || 'Non specificato'}
+- Età: ${userProfile.age || 'Non specificata'}
+- Peso: ${userProfile.weight || 'Non specificato'}kg
+- Altezza: ${userProfile.height || 'Non specificata'}cm
+- Livello fitness: ${userProfile.fitness_level || 'Non specificato'}
+- Obiettivi: ${userProfile.fitness_goals ? JSON.stringify(userProfile.fitness_goals) : 'Non specificati'}
+- Condizioni mediche: ${userProfile.medical_conditions || 'Nessuna'}
+` : 'Profilo utente non disponibile - chiedi informazioni per personalizzare i consigli.'}
+
+CAPACITÀ:
+- Consigli su allenamento personalizzati
+- Piani nutrizionali bilanciati
+- Motivazione e supporto
+- Creazione di programmi di allenamento completi
+- Suggerimenti su esercizi e tecnica
+
+QUANDO CREARE UN PIANO:
+Se l'utente chiede un piano di allenamento personalizzato, rispondi con:
+1. Una descrizione del piano
+2. Alla fine aggiungi ESATTAMENTE questo formato:
+[CREA_PIANO]
+{
+  "title": "Titolo del piano",
+  "description": "Descrizione dettagliata",
+  "duration_weeks": 8,
+  "difficulty_level": "beginner/intermediate/advanced",
+  "goals": ["obiettivo1", "obiettivo2"],
+  "plan_data": {
+    "weeks": [
+      {
+        "week": 1,
+        "days": [
+          {
+            "day": 1,
+            "exercises": [
+              {"name": "Squat", "sets": 3, "reps": "10-12", "rest": "60s"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+[/CREA_PIANO]
+
+Rispondi sempre in italiano, sii professionale ma amichevole.`;
+
     // Call OpenAI
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -53,14 +137,11 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages: [
-          {
-            role: 'system',
-            content: 'Sei un assistente AI per fitness e allenamento. Rispondi sempre in italiano in modo amichevole e professionale.'
-          },
+          { role: 'system', content: systemPrompt },
           ...conversationMessages
         ],
         temperature: 0.7,
-        max_tokens: 1000
+        max_tokens: 2000
       }),
     });
 
@@ -69,9 +150,47 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
+    let aiResponse = data.choices[0].message.content;
 
-    // Save user message
+    // Check if AI wants to create a training plan
+    const planMatch = aiResponse.match(/\[CREA_PIANO\](.*?)\[\/CREA_PIANO\]/s);
+    let planId = null;
+    
+    if (planMatch) {
+      try {
+        const planData = JSON.parse(planMatch[1].trim());
+        
+        // Get user ID from auth header
+        const { data: { user } } = await supabase.auth.getUser(authHeader);
+        
+        if (user) {
+          const { data: plan, error: planError } = await supabase
+            .from('training_plans')
+            .insert({
+              user_id: user.id,
+              title: planData.title,
+              description: planData.description,
+              duration_weeks: planData.duration_weeks,
+              difficulty_level: planData.difficulty_level,
+              goals: planData.goals,
+              plan_data: planData.plan_data,
+              status: 'pending'
+            })
+            .select()
+            .single();
+
+          if (!planError && plan) {
+            planId = plan.id;
+            // Remove the plan creation syntax from the response
+            aiResponse = aiResponse.replace(/\[CREA_PIANO\].*?\[\/CREA_PIANO\]/s, '').trim();
+          }
+        }
+      } catch (error) {
+        console.error('Error creating plan:', error);
+      }
+    }
+
+    // Save messages
     await supabase.from('user_messages').insert({
       conversation_id,
       sender: 'user',
@@ -79,7 +198,6 @@ serve(async (req) => {
       message_type: 'text'
     });
 
-    // Save AI response
     await supabase.from('user_messages').insert({
       conversation_id,
       sender: 'ai',
@@ -89,7 +207,8 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({ 
       response: aiResponse,
-      conversation_id 
+      conversation_id,
+      plan_id: planId
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

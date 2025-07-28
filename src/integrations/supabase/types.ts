@@ -1313,6 +1313,57 @@ export type Database = {
         }
         Relationships: []
       }
+      nutrition_plans: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          created_by_ai: boolean | null
+          daily_calories: number | null
+          description: string | null
+          id: string
+          macros: Json | null
+          meal_plan: Json
+          message_id: string | null
+          started_at: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          daily_calories?: number | null
+          description?: string | null
+          id?: string
+          macros?: Json | null
+          meal_plan?: Json
+          message_id?: string | null
+          started_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          daily_calories?: number | null
+          description?: string | null
+          id?: string
+          macros?: Json | null
+          meal_plan?: Json
+          message_id?: string | null
+          started_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       package_assignments: {
         Row: {
           client_id: string
@@ -1472,43 +1523,67 @@ export type Database = {
       }
       profiles: {
         Row: {
+          age: number | null
           avatar_url: string | null
           created_at: string | null
           date_of_birth: string | null
           email: string
           emergency_contact: string | null
           emergency_phone: string | null
+          fitness_goals: Json | null
+          fitness_level: string | null
           full_name: string | null
+          gender: string | null
+          height: number | null
           id: string
+          medical_conditions: string | null
           phone: string | null
+          preferences: Json | null
           updated_at: string | null
           user_type: string
+          weight: number | null
         }
         Insert: {
+          age?: number | null
           avatar_url?: string | null
           created_at?: string | null
           date_of_birth?: string | null
           email: string
           emergency_contact?: string | null
           emergency_phone?: string | null
+          fitness_goals?: Json | null
+          fitness_level?: string | null
           full_name?: string | null
+          gender?: string | null
+          height?: number | null
           id: string
+          medical_conditions?: string | null
           phone?: string | null
+          preferences?: Json | null
           updated_at?: string | null
           user_type?: string
+          weight?: number | null
         }
         Update: {
+          age?: number | null
           avatar_url?: string | null
           created_at?: string | null
           date_of_birth?: string | null
           email?: string
           emergency_contact?: string | null
           emergency_phone?: string | null
+          fitness_goals?: Json | null
+          fitness_level?: string | null
           full_name?: string | null
+          gender?: string | null
+          height?: number | null
           id?: string
+          medical_conditions?: string | null
           phone?: string | null
+          preferences?: Json | null
           updated_at?: string | null
           user_type?: string
+          weight?: number | null
         }
         Relationships: []
       }
@@ -2049,6 +2124,60 @@ export type Database = {
           status?: string
           trainer_id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      training_plans: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          created_by_ai: boolean | null
+          description: string | null
+          difficulty_level: string | null
+          duration_weeks: number | null
+          goals: Json | null
+          id: string
+          message_id: string | null
+          plan_data: Json
+          started_at: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          description?: string | null
+          difficulty_level?: string | null
+          duration_weeks?: number | null
+          goals?: Json | null
+          id?: string
+          message_id?: string | null
+          plan_data?: Json
+          started_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          description?: string | null
+          difficulty_level?: string | null
+          duration_weeks?: number | null
+          goals?: Json | null
+          id?: string
+          message_id?: string | null
+          plan_data?: Json
+          started_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
