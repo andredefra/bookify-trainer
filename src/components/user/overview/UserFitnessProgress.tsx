@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Plus, Target, TrendingUp, Scale, Calendar, Edit, Save, X } from "lucide-react";
+import { Plus, Target, TrendingUp, Scale, Calendar, Edit, Save, X, Activity, Weight, Ruler } from "lucide-react";
 import { toast } from "sonner";
 
 interface BodyMeasurements {
@@ -140,12 +140,55 @@ export function UserFitnessProgress() {
         </Card>
       )}
 
+      {/* Quick Action Buttons - Track your journey */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Track your journey toward your goals with detailed logging</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setActiveTab("goals")}
+            >
+              <Plus className="h-4 w-4" />
+              Add Goal
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => toast.info("Log Activity feature coming soon!")}
+            >
+              <Activity className="h-4 w-4" />
+              Log Activity
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setActiveTab("measurements")}
+            >
+              <Weight className="h-4 w-4" />
+              Log Weight
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setActiveTab("measurements")}
+            >
+              <Ruler className="h-4 w-4" />
+              Body Measurements
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Panoramica</TabsTrigger>
-          <TabsTrigger value="profile">Profilo</TabsTrigger>
-          <TabsTrigger value="measurements">Misurazioni</TabsTrigger>
-          <TabsTrigger value="goals">Obiettivi</TabsTrigger>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="measurements">Measurements</TabsTrigger>
+          <TabsTrigger value="goals">Goals</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -378,9 +421,9 @@ export function UserFitnessProgress() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="date">Data</Label>
+                  <Label htmlFor="date">Date</Label>
                   <Input
                     id="date"
                     type="date"
@@ -389,7 +432,34 @@ export function UserFitnessProgress() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="weight">Peso (kg)</Label>
+                  <Label htmlFor="height">Height (cm)</Label>
+                  <Input
+                    id="height"
+                    type="number"
+                    value={newMeasurement.height || ''}
+                    onChange={(e) => setNewMeasurement({...newMeasurement, height: parseInt(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="gender">Gender</Label>
+                  <Select 
+                    value={newMeasurement.gender || ''} 
+                    onValueChange={(value) => setNewMeasurement({...newMeasurement, gender: value as 'male' | 'female'})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="weight">Weight (kg)</Label>
                   <Input
                     id="weight"
                     type="number"
@@ -399,7 +469,7 @@ export function UserFitnessProgress() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="waist">Vita (cm)</Label>
+                  <Label htmlFor="waist">Waist (cm)</Label>
                   <Input
                     id="waist"
                     type="number"
@@ -408,7 +478,7 @@ export function UserFitnessProgress() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="hips">Fianchi (cm)</Label>
+                  <Label htmlFor="hips">Hips (cm)</Label>
                   <Input
                     id="hips"
                     type="number"
@@ -416,11 +486,51 @@ export function UserFitnessProgress() {
                     onChange={(e) => setNewMeasurement({...newMeasurement, hips: parseInt(e.target.value)})}
                   />
                 </div>
+                <div>
+                  <Label htmlFor="thighs">Thighs (cm)</Label>
+                  <Input
+                    id="thighs"
+                    type="number"
+                    value={newMeasurement.thighs || ''}
+                    onChange={(e) => setNewMeasurement({...newMeasurement, thighs: parseInt(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="shoulders">Shoulders (cm)</Label>
+                  <Input
+                    id="shoulders"
+                    type="number"
+                    value={newMeasurement.shoulders || ''}
+                    onChange={(e) => setNewMeasurement({...newMeasurement, shoulders: parseInt(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="arms">Arms (cm)</Label>
+                  <Input
+                    id="arms"
+                    type="number"
+                    value={newMeasurement.arms || ''}
+                    onChange={(e) => setNewMeasurement({...newMeasurement, arms: parseInt(e.target.value)})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="neck">Neck (cm)</Label>
+                  <Input
+                    id="neck"
+                    type="number"
+                    value={newMeasurement.neck || ''}
+                    onChange={(e) => setNewMeasurement({...newMeasurement, neck: parseInt(e.target.value)})}
+                  />
+                </div>
               </div>
-              <Button onClick={addMeasurement}>
-                <Plus className="h-4 w-4 mr-2" />
-                Aggiungi Misurazione
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={addMeasurement} className="bg-black text-white hover:bg-gray-800">
+                  Save Measurements
+                </Button>
+                <Button variant="outline" onClick={() => setNewMeasurement({ date: new Date().toISOString().split('T')[0] })}>
+                  Cancel
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
@@ -437,12 +547,15 @@ export function UserFitnessProgress() {
                       <div className="flex justify-between items-center mb-2">
                         <Badge variant="outline">{new Date(measurement.date).toLocaleDateString()}</Badge>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        {measurement.weight && <div><span className="text-muted-foreground">Peso:</span> {measurement.weight} kg</div>}
-                        {measurement.waist && <div><span className="text-muted-foreground">Vita:</span> {measurement.waist} cm</div>}
-                        {measurement.hips && <div><span className="text-muted-foreground">Fianchi:</span> {measurement.hips} cm</div>}
-                        {measurement.arms && <div><span className="text-muted-foreground">Braccia:</span> {measurement.arms} cm</div>}
-                      </div>
+                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                         {measurement.weight && <div><span className="text-muted-foreground">Weight:</span> {measurement.weight} kg</div>}
+                         {measurement.waist && <div><span className="text-muted-foreground">Waist:</span> {measurement.waist} cm</div>}
+                         {measurement.hips && <div><span className="text-muted-foreground">Hips:</span> {measurement.hips} cm</div>}
+                         {measurement.thighs && <div><span className="text-muted-foreground">Thighs:</span> {measurement.thighs} cm</div>}
+                         {measurement.shoulders && <div><span className="text-muted-foreground">Shoulders:</span> {measurement.shoulders} cm</div>}
+                         {measurement.arms && <div><span className="text-muted-foreground">Arms:</span> {measurement.arms} cm</div>}
+                         {measurement.neck && <div><span className="text-muted-foreground">Neck:</span> {measurement.neck} cm</div>}
+                       </div>
                     </div>
                   ))}
                 </div>
