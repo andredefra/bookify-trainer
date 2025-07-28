@@ -46,7 +46,15 @@ const UserNavbar = () => {
     } else {
       // Se siamo su altre pagine (login/register), naviga alla landing con l'anchor
       const targetPage = language === 'en' ? '/user-en' : '/user';
-      window.location.href = targetPage + href;
+      navigate(targetPage + href);
+      
+      // Dopo la navigazione, aspetta che la pagina sia caricata e poi fai scroll
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
     setIsMenuOpen(false);
   };
