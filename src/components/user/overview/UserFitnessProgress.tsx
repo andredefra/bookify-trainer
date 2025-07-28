@@ -412,7 +412,10 @@ export function UserFitnessProgress() {
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
-              onClick={() => setShowActivityForm(true)}
+              onClick={() => {
+                setShowActivityForm(true);
+                setActiveTab("activities");
+              }}
             >
               <Activity className="h-4 w-4" />
               Log Activity
