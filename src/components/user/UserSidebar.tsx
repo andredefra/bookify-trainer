@@ -8,6 +8,7 @@ import {
   Calendar,
   BookOpen,
   BarChart3,
+  Users,
   MessageCircle,
   Settings,
   X,
@@ -37,6 +38,7 @@ const sidebarItems = [
   { id: "training-program", label: "Training Program", icon: Calendar },
   { id: "training-log", label: "Training Log", icon: BookOpen },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "my-trainers", label: "My Trainers", icon: Users },
   { id: "messages", label: "Messages", icon: MessageCircle, badge: true },
   { id: "settings", label: "Settings", icon: Settings },
 ];

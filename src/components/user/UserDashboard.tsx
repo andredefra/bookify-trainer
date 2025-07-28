@@ -5,6 +5,7 @@ import { UserOverview } from "./tabs/UserOverview";
 import { UserTrainingProgram } from "./tabs/UserTrainingProgram";
 import { UserTrainingLog } from "./tabs/UserTrainingLog";
 import { UserAnalytics } from "./tabs/UserAnalytics";
+import { UserTrainers } from "./tabs/UserTrainers";
 import { UserMessages } from "./tabs/UserMessages";
 import { UserSettings } from "./tabs/UserSettings";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -50,6 +51,7 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
             {activeTab === "training-program" && <UserTrainingProgram />}
             {activeTab === "training-log" && <UserTrainingLog />}
             {activeTab === "analytics" && <UserAnalytics />}
+            {activeTab === "my-trainers" && <UserTrainers />}
             {activeTab === "messages" && <UserMessages />}
             {activeTab === "settings" && <UserSettings user={user} />}
           </div>
