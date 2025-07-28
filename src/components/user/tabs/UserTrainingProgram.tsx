@@ -96,6 +96,22 @@ const mockTrainingPlans: TrainingPlan[] = [
                 { name: "Romanian Deadlifts", sets: 3, reps: "8-10", rest: "90s" },
                 { name: "Bulgarian Split Squats", sets: 3, reps: "10 each", rest: "60s" }
               ]
+            },
+            {
+              day: 3,
+              exercises: [
+                { name: "Push-ups", sets: 3, reps: "12-15", rest: "60s" },
+                { name: "Bent-over Rows", sets: 3, reps: "10-12", rest: "90s" },
+                { name: "Dips", sets: 3, reps: "8-10", rest: "90s" }
+              ]
+            },
+            {
+              day: 4,
+              exercises: [
+                { name: "Burpees", sets: 3, reps: "10", rest: "60s" },
+                { name: "Mountain Climbers", sets: 3, reps: "20 each", rest: "45s" },
+                { name: "Plank", sets: 3, reps: "45 seconds", rest: "60s" }
+              ]
             }
           ]
         }
