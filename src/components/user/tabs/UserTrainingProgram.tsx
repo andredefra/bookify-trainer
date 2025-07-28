@@ -14,10 +14,12 @@ import {
   CheckCircle,
   Trophy,
   Dumbbell,
-  MessageCircle
+  MessageCircle,
+  User,
+  Star
 } from "lucide-react";
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { currentProgram } from '@/data/training/mockPrograms/currentProgram';
+import { toast } from "sonner";
 
 interface TrainingPlan {
   id: string;
@@ -26,6 +28,15 @@ interface TrainingPlan {
   duration_weeks: number;
   difficulty_level: 'beginner' | 'intermediate' | 'advanced';
   goals: string[];
+  trainer: {
+    name: string;
+    rating: number;
+  };
+  progress: {
+    completed: number;
+    total: number;
+    currentWeek: number;
+  };
   plan_data: {
     weeks: Array<{
       week: number;
@@ -46,59 +57,97 @@ interface TrainingPlan {
   created_at: string;
 }
 
+// Mock training plans based on the currentProgram structure
+const mockTrainingPlans: TrainingPlan[] = [
+  {
+    id: "user-plan-1",
+    title: "Strength & Conditioning Program",
+    description: "A comprehensive 8-week program focusing on compound movements and metabolic conditioning",
+    duration_weeks: 8,
+    difficulty_level: 'intermediate',
+    goals: ["Build Strength", "Improve Conditioning", "Muscle Building"],
+    trainer: {
+      name: "Sarah Johnson",
+      rating: 4.9
+    },
+    progress: {
+      completed: 8,
+      total: 32,
+      currentWeek: 2
+    },
+    plan_data: {
+      weeks: [
+        {
+          week: 1,
+          days: [
+            {
+              day: 1,
+              exercises: [
+                { name: "Bench Press", sets: 3, reps: "8-10", rest: "90s" },
+                { name: "Pull-ups", sets: 3, reps: "6-8", rest: "90s" },
+                { name: "Overhead Press", sets: 3, reps: "8-10", rest: "90s" }
+              ]
+            },
+            {
+              day: 2,
+              exercises: [
+                { name: "Squats", sets: 4, reps: "6-8", rest: "2min" },
+                { name: "Romanian Deadlifts", sets: 3, reps: "8-10", rest: "90s" },
+                { name: "Bulgarian Split Squats", sets: 3, reps: "10 each", rest: "60s" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    status: 'active',
+    started_at: '2024-03-01T00:00:00Z',
+    created_at: '2024-02-28T00:00:00Z'
+  },
+  {
+    id: "user-plan-2",
+    title: "Weight Loss Bootcamp",
+    description: "High-intensity workouts designed to maximize calorie burn and fat loss",
+    duration_weeks: 6,
+    difficulty_level: 'beginner',
+    goals: ["Weight Loss", "Cardio Improvement", "Fat Burning"],
+    trainer: {
+      name: "Mike Anderson",
+      rating: 4.7
+    },
+    progress: {
+      completed: 24,
+      total: 24,
+      currentWeek: 6
+    },
+    plan_data: {
+      weeks: [
+        {
+          week: 1,
+          days: [
+            {
+              day: 1,
+              exercises: [
+                { name: "Burpees", sets: 3, reps: "10", rest: "60s" },
+                { name: "Mountain Climbers", sets: 3, reps: "20 each", rest: "45s" },
+                { name: "Jump Squats", sets: 3, reps: "15", rest: "60s" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    status: 'completed',
+    started_at: '2024-01-15T00:00:00Z',
+    completed_at: '2024-02-26T00:00:00Z',
+    created_at: '2024-01-10T00:00:00Z'
+  }
+];
+
 export function UserTrainingProgram() {
   const [activeTab, setActiveTab] = useState("current");
-  const [trainingPlans, setTrainingPlans] = useState<TrainingPlan[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    loadTrainingPlans();
-  }, []);
-
-  const loadTrainingPlans = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('training_plans' as any)
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setTrainingPlans((data as unknown as TrainingPlan[]) || []);
-    } catch (error) {
-      console.error('Error loading training plans:', error);
-      setTrainingPlans([]); // Use empty array as fallback
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const activatePlan = async (planId: string) => {
-    try {
-      const { error } = await supabase
-        .from('training_plans' as any)
-        .update({ 
-          status: 'active',
-          started_at: new Date().toISOString()
-        })
-        .eq('id', planId);
-
-      if (error) throw error;
-      
-      await loadTrainingPlans();
-      toast({
-        title: 'Piano Attivato!',
-        description: 'Il piano di allenamento è ora attivo'
-      });
-    } catch (error) {
-      console.error('Error activating plan:', error);
-      toast({
-        title: 'Errore',
-        description: 'Impossibile attivare il piano',
-        variant: 'destructive'
-      });
-    }
-  };
+  const [trainingPlans, setTrainingPlans] = useState<TrainingPlan[]>(mockTrainingPlans);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
@@ -126,7 +175,7 @@ export function UserTrainingProgram() {
     }, 0);
 
     const progress = plan.status === 'completed' ? 100 : 
-                    plan.status === 'active' ? 25 : 0; // Mock progress
+                    Math.round((plan.progress.completed / plan.progress.total) * 100);
 
     return (
       <Card key={plan.id} className="mb-4">
@@ -138,6 +187,16 @@ export function UserTrainingProgram() {
                 {plan.title}
               </CardTitle>
               <p className="text-sm text-muted-foreground">{plan.description}</p>
+              <div className="flex items-center gap-3 text-sm">
+                <div className="flex items-center gap-1">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span>{plan.trainer.name}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                  <span>{plan.trainer.rating}</span>
+                </div>
+              </div>
             </div>
             <div className="flex gap-2">
               <Badge className={getDifficultyColor(plan.difficulty_level)}>
@@ -152,13 +211,16 @@ export function UserTrainingProgram() {
 
         <CardContent className="space-y-4">
           {/* Progress Bar for Active Plans */}
-          {plan.status === 'active' && (
+          {(plan.status === 'active' || plan.status === 'completed') && (
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Progresso</span>
-                <span>{progress}%</span>
+                <span>Progress</span>
+                <span>{plan.progress.completed}/{plan.progress.total} sessions ({progress}%)</span>
               </div>
               <Progress value={progress} className="h-2" />
+              {plan.status === 'active' && (
+                <p className="text-xs text-muted-foreground">Week {plan.progress.currentWeek} of {plan.duration_weeks}</p>
+              )}
             </div>
           )}
 
@@ -166,26 +228,26 @@ export function UserTrainingProgram() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span>{plan.duration_weeks} settimane</span>
+              <span>{plan.duration_weeks} weeks</span>
             </div>
             <div className="flex items-center gap-2">
               <Dumbbell className="h-4 w-4 text-muted-foreground" />
-              <span>{totalExercises} esercizi</span>
+              <span>{plan.progress.total} sessions</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <span>{plan.plan_data.weeks.length} settimane</span>
+              <span>{Math.round(plan.progress.total / plan.duration_weeks)} per week</span>
             </div>
             <div className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              <span>{plan.goals.length} obiettivi</span>
+              <span>{plan.goals.length} goals</span>
             </div>
           </div>
 
           {/* Goals */}
           {plan.goals && plan.goals.length > 0 && (
             <div>
-              <h4 className="text-sm font-medium mb-2">Obiettivi:</h4>
+              <h4 className="text-sm font-medium mb-2">Goals:</h4>
               <div className="flex flex-wrap gap-1">
                 {plan.goals.map((goal, index) => (
                   <Badge key={index} variant="outline" className="text-xs">
@@ -199,11 +261,11 @@ export function UserTrainingProgram() {
           {/* Preview of plan structure */}
           {plan.plan_data.weeks[0] && (
             <div className="border rounded-lg p-3 bg-muted/30">
-              <h4 className="text-sm font-medium mb-2">Anteprima Piano:</h4>
+              <h4 className="text-sm font-medium mb-2">Program Preview:</h4>
               <div className="space-y-1 text-xs">
                 {plan.plan_data.weeks[0].days.slice(0, 2).map((day, dayIndex) => (
                   <div key={dayIndex}>
-                    <span className="font-medium">Giorno {day.day}:</span>
+                    <span className="font-medium">Day {day.day}:</span>
                     <span className="ml-2 text-muted-foreground">
                       {day.exercises.slice(0, 3).map(ex => ex.name).join(', ')}
                       {day.exercises.length > 3 && '...'}
@@ -212,7 +274,7 @@ export function UserTrainingProgram() {
                 ))}
                 {plan.plan_data.weeks[0].days.length > 2 && (
                   <div className="text-muted-foreground">
-                    ... e altri {plan.plan_data.weeks[0].days.length - 2} giorni
+                    ... and {plan.plan_data.weeks[0].days.length - 2} more days
                   </div>
                 )}
               </div>
@@ -223,23 +285,31 @@ export function UserTrainingProgram() {
           <div className="pt-2">
             {plan.status === 'accepted' && (
               <Button 
-                onClick={() => activatePlan(plan.id)}
+                onClick={() => {
+                  const updatedPlans = trainingPlans.map(p => 
+                    p.id === plan.id 
+                      ? {...p, status: 'active' as const, started_at: new Date().toISOString()}
+                      : p
+                  );
+                  setTrainingPlans(updatedPlans);
+                  toast.success("Training plan activated!");
+                }}
                 className="w-full"
               >
                 <Play className="h-4 w-4 mr-2" />
-                Inizia Piano
+                Start Program
               </Button>
             )}
             {plan.status === 'active' && (
               <Button variant="outline" className="w-full">
-                <Pause className="h-4 w-4 mr-2" />
-                Visualizza Dettagli
+                <Play className="h-4 w-4 mr-2" />
+                Continue Training
               </Button>
             )}
             {plan.status === 'completed' && (
               <Button variant="outline" className="w-full" disabled>
                 <CheckCircle className="h-4 w-4 mr-2" />
-                Completato
+                Completed
               </Button>
             )}
           </div>
@@ -253,13 +323,13 @@ export function UserTrainingProgram() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Training Program</h1>
-            <p className="text-muted-foreground">I tuoi piani di allenamento personalizzati</p>
+            <h1 className="text-2xl font-bold">Training Programs</h1>
+            <p className="text-muted-foreground">Your personalized workout plans</p>
           </div>
         </div>
         <div className="text-center py-8">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-muted-foreground mt-2">Caricamento piani...</p>
+          <p className="text-muted-foreground mt-2">Loading programs...</p>
         </div>
       </div>
     );
@@ -273,12 +343,12 @@ export function UserTrainingProgram() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Training Program</h1>
-          <p className="text-muted-foreground">I tuoi piani di allenamento personalizzati</p>
+          <h1 className="text-2xl font-bold">Training Programs</h1>
+          <p className="text-muted-foreground">Your personalized workout plans</p>
         </div>
         <Button variant="outline" className="flex items-center space-x-2">
           <MessageCircle className="h-4 w-4" />
-          <span>Chiedi nuovo piano</span>
+          <span>Request New Program</span>
         </Button>
       </div>
 
@@ -286,16 +356,16 @@ export function UserTrainingProgram() {
         <Card>
           <CardContent className="text-center py-12">
             <Trophy className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-            <h3 className="text-lg font-medium mb-2">Nessun piano di allenamento</h3>
+            <h3 className="text-lg font-medium mb-2">No Training Programs</h3>
             <p className="text-muted-foreground mb-4">
-              Vai nella sezione Messaggi e chiedi al tuo AI trainer di creare un piano personalizzato per te!
+              Go to Messages and ask your AI trainer to create a personalized program for you!
             </p>
             <p className="text-sm text-muted-foreground mb-4">
-              Esempio: "Crea un piano di allenamento per principianti di 8 settimane per perdere peso"
+              Example: "Create an 8-week beginner training program for weight loss"
             </p>
             <Button variant="outline">
               <MessageCircle className="h-4 w-4 mr-2" />
-              Vai ai Messaggi
+              Go to Messages
             </Button>
           </CardContent>
         </Card>
@@ -303,13 +373,13 @@ export function UserTrainingProgram() {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="current">
-              Attuali ({activePlans.length + acceptedPlans.length})
+              Current ({activePlans.length + acceptedPlans.length})
             </TabsTrigger>
             <TabsTrigger value="completed">
-              Completati ({completedPlans.length})
+              Completed ({completedPlans.length})
             </TabsTrigger>
             <TabsTrigger value="all">
-              Tutti ({trainingPlans.length})
+              All ({trainingPlans.length})
             </TabsTrigger>
           </TabsList>
 
@@ -317,7 +387,7 @@ export function UserTrainingProgram() {
             {[...activePlans, ...acceptedPlans].length === 0 ? (
               <Card>
                 <CardContent className="text-center py-8">
-                  <p className="text-muted-foreground">Nessun piano attuale</p>
+                  <p className="text-muted-foreground">No current programs</p>
                 </CardContent>
               </Card>
             ) : (
@@ -329,7 +399,7 @@ export function UserTrainingProgram() {
             {completedPlans.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-8">
-                  <p className="text-muted-foreground">Nessun piano completato</p>
+                  <p className="text-muted-foreground">No completed programs yet</p>
                 </CardContent>
               </Card>
             ) : (
