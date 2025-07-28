@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Link } from "react-router-dom";
-import Navbar from '@/components/Navbar';
+import UserNavbar from '@/components/UserNavbar';
 import Footer from '@/components/Footer';
 import { LoginForm } from "./LoginForm";
 
@@ -19,7 +19,7 @@ interface LoginContainerProps {
 const LoginContainer = ({ onLogin, onCancel, title = "Welcome back", subtitle = "Continue your journey" }: LoginContainerProps) => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <UserNavbar />
       
       <main className="flex-grow flex items-center justify-center py-20 px-6">
         <div className="w-full max-w-md">

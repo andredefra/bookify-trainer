@@ -1,7 +1,7 @@
 
 import { z } from "zod";
 import { Link } from "react-router-dom";
-import Navbar from '@/components/Navbar';
+import UserNavbar from '@/components/UserNavbar';
 import Footer from '@/components/Footer';
 import { RegisterForm, registerSchema } from "@/components/register/RegisterForm";
 import { RegisterHeader } from "@/components/register/RegisterHeader";
@@ -17,7 +17,7 @@ interface RegisterContainerProps {
 const RegisterContainer = ({ onRegister, onCancel, hideUserTypeSelection = false, title, subtitle }: RegisterContainerProps) => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <UserNavbar />
       
       <main className="flex-grow flex items-center justify-center py-20 px-6">
         <div className="w-full max-w-lg">
