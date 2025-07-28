@@ -552,6 +552,80 @@ export function UserTrainingProgram() {
 
   // Active Workout View
   if (activeWorkout) {
+    const [sessionStarted, setSessionStarted] = useState(false);
+    const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
+
+    if (!sessionStarted) {
+      // Pre-session view
+      return (
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setActiveWorkout(null)}
+            >
+              ← Exit Workout
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold">Session {activeWorkout.day}: Push/Pull Circuit</h1>
+              <p className="text-muted-foreground">Get ready for your workout</p>
+            </div>
+          </div>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <Play className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Ready to start your session?</h3>
+                  <p className="text-muted-foreground">
+                    This session includes {activeWorkout.exercises.length} exercises. Make sure you have all equipment ready.
+                  </p>
+                </div>
+                <Button 
+                  size="lg" 
+                  className="bg-black text-white hover:bg-gray-800"
+                  onClick={() => setSessionStarted(true)}
+                >
+                  <Play className="h-5 w-5 mr-2" />
+                  Start Session
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Exercise Preview */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Session Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {activeWorkout.exercises.map((exercise: any, index: number) => (
+                  <div key={index} className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold">{exercise.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {exercise.sets} sets × {exercise.reps} reps
+                        </p>
+                      </div>
+                      <Badge variant="outline">
+                        {exercise.exerciseType || 'strength'}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
+
+    // Active session view
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
@@ -563,7 +637,7 @@ export function UserTrainingProgram() {
               ← Exit Workout
             </Button>
             <div>
-              <h1 className="text-2xl font-bold">Day {activeWorkout.day} Workout</h1>
+              <h1 className="text-2xl font-bold">Session {activeWorkout.day}: Push/Pull Circuit</h1>
               <p className="text-muted-foreground">
                 Started at {new Date(activeWorkout.startTime).toLocaleTimeString()}
               </p>
@@ -575,7 +649,7 @@ export function UserTrainingProgram() {
             className="bg-green-600 hover:bg-green-700"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
-            Complete Workout
+            Complete Session
           </Button>
         </div>
 
@@ -583,84 +657,105 @@ export function UserTrainingProgram() {
           {activeWorkout.exercises.map((exercise: any, exerciseIndex: number) => (
             <Card key={exerciseIndex} className={exercise.completed ? 'border-green-200 bg-green-50' : ''}>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span className="flex items-center gap-2">
-                    <Dumbbell className="h-5 w-5" />
-                    {exercise.name}
-                  </span>
-                  {exercise.completed && (
-                    <Badge className="bg-green-600">Completed</Badge>
-                  )}
-                </CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Target: {exercise.sets} sets × {exercise.reps} reps
-                  {exercise.rest && ` • Rest: ${exercise.rest}`}
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {Array.from({ length: exercise.sets }, (_, setIndex) => (
-                    <div key={setIndex} className="border rounded-lg p-3 bg-muted/20">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium">Set {setIndex + 1}</span>
-                        {exercise.sets_logged?.[setIndex]?.completed && (
-                          <Badge variant="outline" className="text-green-600">
-                            ✓ Done
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="grid grid-cols-3 gap-2">
-                        <div>
-                          <label className="text-xs text-muted-foreground">Weight (kg)</label>
-                          <input
-                            type="number"
-                            placeholder="0"
-                            className="w-full px-2 py-1 text-sm border rounded"
-                            value={exercise.sets_logged?.[setIndex]?.weight || ''}
-                            onChange={(e) => {
-                              const weight = parseFloat(e.target.value) || 0;
-                              const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
-                              if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <label className="text-xs text-muted-foreground">Reps</label>
-                          <input
-                            type="number"
-                            placeholder="0"
-                            className="w-full px-2 py-1 text-sm border rounded"
-                            value={exercise.sets_logged?.[setIndex]?.reps || ''}
-                            onChange={(e) => {
-                              const reps = parseInt(e.target.value) || 0;
-                              const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
-                              if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
-                            }}
-                          />
-                        </div>
-                        <div className="flex items-end">
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className="w-full"
-                            onClick={() => {
-                              const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
-                              const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
-                              if (weight > 0 && reps > 0) {
-                                logSet(exerciseIndex, setIndex, weight, reps);
-                              }
-                            }}
-                            disabled={exercise.sets_logged?.[setIndex]?.completed}
-                          >
-                            {exercise.sets_logged?.[setIndex]?.completed ? '✓' : 'Log'}
-                          </Button>
-                        </div>
-                      </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Dumbbell className="h-5 w-5" />
+                      {exercise.name}
+                    </CardTitle>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                      <span>{exercise.sets} sets × {exercise.reps}</span>
+                      <Badge variant="outline" className="text-xs">
+                        {exercise.exerciseType || 'beginner'}
+                      </Badge>
                     </div>
-                  ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {exercise.completed && (
+                      <Badge className="bg-green-600">Completed</Badge>
+                    )}
+                    <Button
+                      variant="outline"
+                      onClick={() => setExpandedExercise(
+                        expandedExercise === exerciseIndex ? null : exerciseIndex
+                      )}
+                      className="min-w-[120px]"
+                    >
+                      {expandedExercise === exerciseIndex ? 'Hide Sets' : 'Track Sets'}
+                      <span className="ml-2">
+                        {expandedExercise === exerciseIndex ? '▲' : '▼'}
+                      </span>
+                    </Button>
+                  </div>
                 </div>
-              </CardContent>
+              </CardHeader>
+
+              {expandedExercise === exerciseIndex && (
+                <CardContent>
+                  <div className="space-y-3">
+                    {Array.from({ length: exercise.sets }, (_, setIndex) => (
+                      <div key={setIndex} className="border rounded-lg p-3 bg-muted/20">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium">Set {setIndex + 1}</span>
+                          {exercise.sets_logged?.[setIndex]?.completed && (
+                            <Badge variant="outline" className="text-green-600">
+                              ✓ Done
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-2">
+                          <div>
+                            <label className="text-xs text-muted-foreground">Weight (kg)</label>
+                            <Input
+                              type="number"
+                              placeholder="0"
+                              className="h-8"
+                              value={exercise.sets_logged?.[setIndex]?.weight || ''}
+                              onChange={(e) => {
+                                const weight = parseFloat(e.target.value) || 0;
+                                const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
+                                if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-muted-foreground">Reps</label>
+                            <Input
+                              type="number"
+                              placeholder="0"
+                              className="h-8"
+                              value={exercise.sets_logged?.[setIndex]?.reps || ''}
+                              onChange={(e) => {
+                                const reps = parseInt(e.target.value) || 0;
+                                const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
+                                if (reps > 0) logSet(exerciseIndex, setIndex, weight, reps);
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-end">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="w-full h-8"
+                              onClick={() => {
+                                const weight = exercise.sets_logged?.[setIndex]?.weight || 0;
+                                const reps = exercise.sets_logged?.[setIndex]?.reps || 0;
+                                if (weight > 0 && reps > 0) {
+                                  logSet(exerciseIndex, setIndex, weight, reps);
+                                }
+                              }}
+                              disabled={exercise.sets_logged?.[setIndex]?.completed}
+                            >
+                              {exercise.sets_logged?.[setIndex]?.completed ? '✓' : 'Log'}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
             </Card>
           ))}
         </div>
@@ -670,7 +765,7 @@ export function UserTrainingProgram() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Workout Progress</span>
+                <span>Session Progress</span>
                 <span>
                   {activeWorkout.exercises.filter((ex: any) => ex.completed).length} / {activeWorkout.exercises.length} exercises
                 </span>
