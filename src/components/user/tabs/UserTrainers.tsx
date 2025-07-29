@@ -17,11 +17,31 @@ export function UserTrainers() {
       </div>
 
       <Tabs defaultValue="my-trainers" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="my-trainers">My Trainers</TabsTrigger>
-          <TabsTrigger value="find-trainers">Find Trainers</TabsTrigger>
-          <TabsTrigger value="followed">Followed</TabsTrigger>
-          <TabsTrigger value="payments">Payments</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 bg-muted/30 backdrop-blur-sm border border-border/50 p-1 rounded-xl h-12">
+          <TabsTrigger 
+            value="my-trainers" 
+            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-muted/50 font-medium"
+          >
+            My Trainers
+          </TabsTrigger>
+          <TabsTrigger 
+            value="find-trainers"
+            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-muted/50 font-medium"
+          >
+            Find Trainers
+          </TabsTrigger>
+          <TabsTrigger 
+            value="followed"
+            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-muted/50 font-medium"
+          >
+            Followed
+          </TabsTrigger>
+          <TabsTrigger 
+            value="payments"
+            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-muted/50 font-medium"
+          >
+            Payments
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="my-trainers" className="space-y-4">
