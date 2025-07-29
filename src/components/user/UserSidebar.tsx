@@ -82,11 +82,12 @@ export function UserSidebar({
 
       {/* Sidebar */}
       <aside className={`
-        fixed lg:relative lg:translate-x-0 z-50 lg:z-auto
-        w-72 h-full bg-white border-r border-border
+        ${isMobile ? 'fixed' : 'relative'} lg:relative lg:translate-x-0 z-50 lg:z-auto
+        w-72 ${isMobile ? 'h-[calc(100vh-4rem)]' : 'h-full'} bg-white border-r border-border
         transition-transform duration-300 ease-in-out
         ${isMobile ? (showSidebar ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
         ${isMobile ? 'top-16' : 'top-0'}
+        ${isMobile ? 'shadow-lg' : ''}
       `}>
         <div className="flex flex-col h-full">
           {/* Close button for mobile */}

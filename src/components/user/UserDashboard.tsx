@@ -35,7 +35,7 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
         onMobileMenuClick={() => setShowSidebar(!showSidebar)}
         showMobileMenuButton={isMobile}
       />
-      <div className="flex flex-1 overflow-hidden">
+      <div className={`flex flex-1 ${isMobile ? 'overflow-hidden' : 'overflow-hidden'}`}>
         <UserSidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -47,13 +47,13 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
         
         <main className={`flex-1 overflow-y-auto bg-muted/20 ${
           isMobile 
-            ? 'w-full p-3' 
+            ? 'w-full p-2 pb-6' 
             : 'p-4 md:p-6 lg:p-8'
         }`}>
-          <div className={`mx-auto space-y-3 sm:space-y-4 md:space-y-6 ${
+          <div className={`mx-auto ${
             isMobile 
-              ? 'max-w-full px-0' 
-              : 'max-w-6xl'
+              ? 'max-w-full px-1 space-y-3' 
+              : 'max-w-6xl space-y-6'
           }`}>
             {activeTab === "overview" && <UserOverview />}
             {activeTab === "training-program" && <UserTrainingProgram />}
