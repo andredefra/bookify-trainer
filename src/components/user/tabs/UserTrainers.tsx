@@ -40,7 +40,10 @@ export function UserTrainers() {
             value="payments"
             className="flex-1 lg:flex-none rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-600 data-[state=active]:to-gray-900 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300 px-2 py-2 text-xs lg:text-sm min-w-0"
           >
-            <span className="truncate">Payments</span>
+            <span className="truncate">
+              <span className="lg:hidden">Pay</span>
+              <span className="hidden lg:inline">Payments</span>
+            </span>
           </TabsTrigger>
         </TabsList>
 
