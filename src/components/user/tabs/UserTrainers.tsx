@@ -17,30 +17,30 @@ export function UserTrainers() {
       </div>
 
       <Tabs defaultValue="my-trainers" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 p-1 rounded-xl h-12">
+        <TabsList className="flex flex-wrap lg:grid lg:grid-cols-4 w-full bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 p-1 rounded-xl gap-1 min-h-12 lg:h-12">
           <TabsTrigger 
             value="my-trainers" 
-            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-700 data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300"
+            className="flex-1 lg:flex-none rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-700 data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300 px-2 py-2 text-xs lg:text-sm min-w-0"
           >
-            My Trainers
+            <span className="truncate">My Trainers</span>
           </TabsTrigger>
           <TabsTrigger 
             value="find-trainers"
-            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-600 data-[state=active]:to-gray-900 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300"
+            className="flex-1 lg:flex-none rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-600 data-[state=active]:to-gray-900 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300 px-2 py-2 text-xs lg:text-sm min-w-0"
           >
-            Find Trainers
+            <span className="truncate">Find</span>
           </TabsTrigger>
           <TabsTrigger 
             value="followed"
-            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-700 data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300"
+            className="flex-1 lg:flex-none rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-700 data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300 px-2 py-2 text-xs lg:text-sm min-w-0"
           >
-            Followed
+            <span className="truncate">Followed</span>
           </TabsTrigger>
           <TabsTrigger 
             value="payments"
-            className="rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-600 data-[state=active]:to-gray-900 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300"
+            className="flex-1 lg:flex-none rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-600 data-[state=active]:to-gray-900 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all hover:bg-gray-800/50 font-medium text-gray-300 px-2 py-2 text-xs lg:text-sm min-w-0"
           >
-            Payments
+            <span className="truncate">Payments</span>
           </TabsTrigger>
         </TabsList>
 
