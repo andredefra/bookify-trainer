@@ -43,26 +43,26 @@ export function UserSettings({ user }: UserSettingsProps) {
       <h1 className="text-2xl font-bold">Settings</h1>
 
       <Tabs defaultValue="account" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 gap-1">
-          <TabsTrigger value="account" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
-            <User className="h-3 w-3 lg:h-4 lg:w-4" />
-            <span className="hidden sm:inline">Account</span>
+        <TabsList className="flex flex-wrap lg:grid lg:grid-cols-5 gap-1 p-1 h-auto">
+          <TabsTrigger value="account" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
+            <User className="h-4 w-4 shrink-0" />
+            <span className="truncate">Account</span>
           </TabsTrigger>
-          <TabsTrigger value="payments" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
-            <CreditCard className="h-3 w-3 lg:h-4 lg:w-4" />
-            <span className="hidden sm:inline">Payments</span>
+          <TabsTrigger value="payments" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
+            <CreditCard className="h-4 w-4 shrink-0" />
+            <span className="truncate">Payments</span>
           </TabsTrigger>
-          <TabsTrigger value="preferences" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
-            <SettingsIcon className="h-3 w-3 lg:h-4 lg:w-4" />
-            <span className="hidden sm:inline">Preferences</span>
+          <TabsTrigger value="preferences" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
+            <SettingsIcon className="h-4 w-4 shrink-0" />
+            <span className="truncate">Preferences</span>
           </TabsTrigger>
-          <TabsTrigger value="integrations" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3">
-            <Zap className="h-3 w-3 lg:h-4 lg:w-4" />
-            <span className="hidden sm:inline">Apps</span>
+          <TabsTrigger value="integrations" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
+            <Zap className="h-4 w-4 shrink-0" />
+            <span className="truncate">Apps</span>
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center justify-center gap-1 text-xs lg:text-sm p-2 lg:p-3 col-span-2 lg:col-span-1">
-            <Bell className="h-3 w-3 lg:h-4 lg:w-4" />
-            <span className="hidden sm:inline">Notifications</span>
+          <TabsTrigger value="notifications" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
+            <Bell className="h-4 w-4 shrink-0" />
+            <span className="truncate">Notifications</span>
           </TabsTrigger>
         </TabsList>
 
