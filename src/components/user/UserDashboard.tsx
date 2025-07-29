@@ -47,12 +47,12 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
         
         <main className={`flex-1 overflow-y-auto bg-muted/20 ${
           isMobile 
-            ? 'p-2 sm:p-4' 
+            ? 'w-full p-3' 
             : 'p-4 md:p-6 lg:p-8'
         }`}>
-          <div className={`mx-auto space-y-4 sm:space-y-6 ${
+          <div className={`mx-auto space-y-3 sm:space-y-4 md:space-y-6 ${
             isMobile 
-              ? 'max-w-full' 
+              ? 'max-w-full px-0' 
               : 'max-w-6xl'
           }`}>
             {activeTab === "overview" && <UserOverview />}
