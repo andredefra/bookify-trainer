@@ -28,7 +28,7 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
   const isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <UserHeader
         user={user}
         onLogout={onLogout}
@@ -45,8 +45,16 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
           onLogout={onLogout}
         />
         
-        <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
-          <div className="mx-auto max-w-6xl space-y-6">
+        <main className={`flex-1 overflow-y-auto bg-muted/20 ${
+          isMobile 
+            ? 'p-2 sm:p-4' 
+            : 'p-4 md:p-6 lg:p-8'
+        }`}>
+          <div className={`mx-auto space-y-4 sm:space-y-6 ${
+            isMobile 
+              ? 'max-w-full' 
+              : 'max-w-6xl'
+          }`}>
             {activeTab === "overview" && <UserOverview />}
             {activeTab === "training-program" && <UserTrainingProgram />}
             {activeTab === "training-log" && <UserTrainingLog />}
