@@ -25,6 +25,22 @@ import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import UserDashboard from "./pages/UserDashboard";
 
+const DomainRedirect = () => {
+  useEffect(() => {
+    const currentDomain = window.location.hostname;
+    
+    // Check if user is on mypersonalai.it (with or without www)
+    if (currentDomain === 'mypersonalai.it' || currentDomain === 'www.mypersonalai.it') {
+      // Preserve any URL parameters during redirect
+      const currentParams = window.location.search;
+      const newUrl = `https://my-personal-fit.it/user${currentParams}`;
+      window.location.replace(newUrl);
+    }
+  }, []);
+
+  return null;
+};
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -66,6 +82,7 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   return (
     <>
+      <DomainRedirect />
       <ScrollToTop />
       <RevealObserver />
       <Routes>
