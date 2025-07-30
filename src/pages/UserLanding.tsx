@@ -480,9 +480,10 @@ const UserLanding = () => {
                   ⏰ <strong>Offerta a tempo limitato</strong> - non aspettare troppo!
                 </p>
                 
-                <Button asChild size="lg" className="text-lg px-12 py-6 hover-scale">
-                  <Link to="/user-register">
-                    👉 Accedi Gratis Ora - Affrettati!
+                <Button asChild size="lg" className="text-lg px-6 py-6 sm:px-12 hover-scale">
+                  <Link to="/user-register" className="text-center">
+                    <span className="hidden sm:inline">👉 Accedi Gratis Ora - Affrettati!</span>
+                    <span className="sm:hidden">👉 Accedi Gratis!</span>
                   </Link>
                 </Button>
                 
