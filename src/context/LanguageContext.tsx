@@ -15,6 +15,20 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Check if there's a language preference in localStorage
   const getSavedLanguage = (): Language => {
     if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      
+      // Se siamo su /user, forza italiano come default
+      if (currentPath === '/user') {
+        const saved = localStorage.getItem('language');
+        // Solo se l'utente ha esplicitamente scelto inglese, mantieni inglese
+        return saved === 'en' ? 'en' : 'it';
+      }
+      
+      // Se siamo su /user-en, forza inglese
+      if (currentPath === '/user-en') {
+        return 'en';
+      }
+      
       const saved = localStorage.getItem('language');
       return (saved === 'en' || saved === 'it') ? saved as Language : 'it';
     }
