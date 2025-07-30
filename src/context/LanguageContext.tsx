@@ -19,9 +19,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       
       // Se siamo su /user, forza italiano come default
       if (currentPath === '/user') {
-        const saved = localStorage.getItem('language');
-        // Solo se l'utente ha esplicitamente scelto inglese, mantieni inglese
-        return saved === 'en' ? 'en' : 'it';
+        return 'it';
       }
       
       // Se siamo su /user-en, forza inglese
@@ -36,6 +34,16 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const [language, setLanguageState] = useState<Language>(getSavedLanguage);
+
+  // Forza italiano quando siamo su /user
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    if (currentPath === '/user' && language !== 'it') {
+      setLanguageState('it');
+    } else if (currentPath === '/user-en' && language !== 'en') {
+      setLanguageState('en');
+    }
+  }, [language]);
 
   // Save language preference to localStorage when it changes
   useEffect(() => {
