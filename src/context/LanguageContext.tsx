@@ -33,15 +33,29 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return 'it';
   };
 
-  const [language, setLanguageState] = useState<Language>(getSavedLanguage);
+  const [language, setLanguageState] = useState<Language>(() => {
+    // Forza la lingua in base alla route alla prima inizializzazione
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      if (currentPath === '/user') {
+        return 'it';
+      }
+      if (currentPath === '/user-en') {
+        return 'en';
+      }
+    }
+    return getSavedLanguage();
+  });
 
   // Forza italiano quando siamo su /user
   useEffect(() => {
-    const currentPath = window.location.pathname;
-    if (currentPath === '/user' && language !== 'it') {
-      setLanguageState('it');
-    } else if (currentPath === '/user-en' && language !== 'en') {
-      setLanguageState('en');
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      if (currentPath === '/user' && language !== 'it') {
+        setLanguageState('it');
+      } else if (currentPath === '/user-en' && language !== 'en') {
+        setLanguageState('en');
+      }
     }
   }, [language]);
 
