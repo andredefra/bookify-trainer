@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Language, translations } from '@/translations';
 
 interface LanguageContextType {
@@ -47,17 +48,17 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return getSavedLanguage();
   });
 
-  // Forza italiano quando siamo su /user
+  const location = useLocation();
+
+  // Forza la lingua in base alla route quando cambia
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const currentPath = window.location.pathname;
-      if (currentPath === '/user' && language !== 'it') {
-        setLanguageState('it');
-      } else if (currentPath === '/user-en' && language !== 'en') {
-        setLanguageState('en');
-      }
+    const currentPath = location.pathname;
+    if (currentPath === '/user' && language !== 'it') {
+      setLanguageState('it');
+    } else if (currentPath === '/user-en' && language !== 'en') {
+      setLanguageState('en');
     }
-  }, [language]);
+  }, [location.pathname, language]);
 
   // Save language preference to localStorage when it changes
   useEffect(() => {
