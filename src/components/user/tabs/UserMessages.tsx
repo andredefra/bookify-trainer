@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Send, User, MessageSquare, Mic, Plus, MoreVertical, Image, Video, Paperclip, X, Clock } from "lucide-react";
+import { Bot, Send, User, MessageSquare, Mic, Plus, Settings, Image, Video, Paperclip, X, Clock } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -504,7 +504,7 @@ export function UserMessages() {
                   <span className="hidden sm:inline">{voiceMode ? 'Voice ON' : 'Voice'}</span>
                 </Button>
                 <Button variant="ghost" size="sm">
-                  <MoreVertical className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <Settings className="h-3 w-3 lg:h-4 lg:w-4" />
                 </Button>
               </div>
             </div>
