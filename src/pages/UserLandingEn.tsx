@@ -463,16 +463,6 @@ const UserLandingEn = () => {
                     The first 100 get it free for 1 year, the others pay €4.99/month.
                   </p>
                 </div>
-                
-                <Button asChild size="lg" className="px-12 py-4 text-lg mt-6">
-                  <Link to="/user-register">
-                    <span className="hidden sm:inline">🚀 Join the First 100 - Free for 1 Year</span>
-                    <span className="sm:hidden">🚀 Join First 100</span>
-                  </Link>
-                </Button>
-                <p className="text-sm text-muted-foreground mt-2">
-                  No credit card required
-                </p>
               </div>
             </div>
           </div>
