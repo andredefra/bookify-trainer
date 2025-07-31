@@ -197,210 +197,158 @@ export function UserSettings({ user }: UserSettingsProps) {
 
         {/* Subscription Settings */}
         <TabsContent value="subscription" className="space-y-4">
-          {loading ? (
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-center space-x-2">
-                  <RefreshCw className="h-4 w-4 animate-spin" />
-                  <span>Loading subscription details...</span>
+          {/* Early Adopter Status Banner - Dark Theme */}
+          <Card className="bg-gradient-to-r from-gray-900 to-black text-white border-0">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Crown className="h-6 w-6 text-yellow-400" />
+                <h3 className="text-lg font-bold">Early Adopter #47 - Personal AI Access</h3>
+              </div>
+              <p className="text-white/90 mb-4">
+                Congratulations! You're among the first 100 users and have free access to Personal AI Trainer until one year from your registration date. 
+                After that, you can continue for $4.99/month or choose other options.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-green-600/20 text-green-400 border border-green-600/30">
+                  ✨ Personal AI Active
+                </Badge>
+                <Badge className="bg-yellow-600/20 text-yellow-400 border border-yellow-600/30">
+                  👑 Early Adopter #47
+                </Badge>
+                <Badge className="bg-blue-600/20 text-blue-400 border border-blue-600/30">
+                  🆓 Free until 1 year from registration
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                Current Plan
+                <Badge variant="default" className="bg-green-600">
+                  Personal AI - Active
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-sm text-muted-foreground">
+                You're among the first 100 users! You have complete access to Personal AI Trainer at no cost until 1 year from your registration date. 
+                From that date you can choose whether to continue with the Personal AI subscription ($4.99/month) or switch to a human trainer.
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Personal AI Trainer (Unlimited access)
                 </div>
-              </CardContent>
-            </Card>
-          ) : error ? (
-            <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
-              <CardContent className="pt-6">
-                <div className="text-center">
-                  <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
-                  <Button onClick={checkSubscription} variant="outline">
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Retry
-                  </Button>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Personalized workout programs
                 </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              {/* Early Adopter Status Banner */}
-              {isEarlyAdopter && (
-                <Card className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white border-0">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Crown className="h-6 w-6" />
-                      <h3 className="text-lg font-bold">Early Adopter #{early_adopter_number}</h3>
-                    </div>
-                    <p className="text-white/90 mb-4">
-                      Congratulations! You're among the first 100 users and have free access to Personal AI Trainer until{' '}
-                      <strong>{getSubscriptionEndDate()}</strong> (1 year from registration).
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge className="bg-white/20 text-white hover:bg-white/30">
-                        ✨ Full AI Access
-                      </Badge>
-                      <Badge className="bg-white/20 text-white hover:bg-white/30">
-                        🆓 Free for 1 Year
-                      </Badge>
-                      <Badge className="bg-white/20 text-white hover:bg-white/30">
-                        👑 Early Adopter
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Real-time form corrections & guidance
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Advanced progress analytics
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Nutrition planning assistance
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-green-600">✓</span>
+                  Human trainer option available
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Current Subscription Status */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle>Current Subscription</CardTitle>
-                  <div className="flex items-center gap-2">
-                    <Badge 
-                      variant={subscribed ? "default" : "secondary"}
-                      className={subscribed ? "bg-green-600" : ""}
-                    >
-                      {isEarlyAdopter 
-                        ? `Early Adopter #${early_adopter_number}` 
-                        : subscription_tier || (subscribed ? "Active" : "Inactive")
-                      }
-                    </Badge>
-                    <Button onClick={checkSubscription} size="sm" variant="ghost">
-                      <RefreshCw className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Status</Label>
-                      <p className="text-sm text-muted-foreground">
-                        {subscribed ? "Active subscription" : "No active subscription"}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Plan</Label>
-                      <p className="text-sm text-muted-foreground">
-                        {isEarlyAdopter 
-                          ? "Early Adopter (Free)" 
-                          : subscription_tier || "None"
-                        }
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Started</Label>
-                      <p className="text-sm text-muted-foreground">
-                        {formatDate(subscription_start_date)}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">
-                        {isEarlyAdopter ? "Billing starts" : "Next billing"}
-                      </Label>
-                      <p className="text-sm text-muted-foreground">
-                        {getSubscriptionEndDate()}
-                      </p>
-                    </div>
-                  </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Subscription Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Status</Label>
+                  <p className="text-sm text-green-600 font-medium">
+                    Active - Early Adopter
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Early Adopter Number</Label>
+                  <p className="text-sm text-muted-foreground">
+                    #47 of first 100 users
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Free Period Ends</Label>
+                  <p className="text-sm text-muted-foreground">
+                    1 year from registration date
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Then</Label>
+                  <p className="text-sm text-muted-foreground">
+                    $4.99/month or choose other options
+                  </p>
+                </div>
+              </div>
 
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Included Features</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-green-600">✓</span>
-                        Personal AI Trainer
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-green-600">✓</span>
-                        Unlimited workout programs
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-green-600">✓</span>
-                        Progress tracking & analytics
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-green-600">✓</span>
-                        Nutrition planning
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <h4 className="font-medium mb-2">Future Options</h4>
+                <p className="text-sm text-muted-foreground mb-3">
+                  When your free early adopter period ends, you can choose:
+                </p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                  <li>• Continue with Personal AI Trainer for $4.99/month</li>
+                  <li>• Switch to a human trainer</li>
+                  <li>• Use basic features for free</li>
+                </ul>
+                <p className="text-xs text-muted-foreground mt-3">
+                  We'll notify you well before your free period ends.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Subscription Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Subscription Management</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {isEarlyAdopter ? (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-                        <h4 className="font-medium mb-2">Future Billing Information</h4>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Your early adopter period will end on <strong>{getSubscriptionEndDate()}</strong>. 
-                          After this date, you can choose to:
-                        </p>
-                        <ul className="text-sm text-muted-foreground space-y-1 ml-4">
-                          <li>• Continue with Personal AI Trainer for $4.99/month</li>
-                          <li>• Switch to a human trainer</li>
-                          <li>• Use the free basic features</li>
-                        </ul>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        No action needed now. We'll notify you before your early adopter period ends.
-                      </p>
-                    </div>
-                  ) : subscribed ? (
-                    <div className="space-y-3">
-                      <Button onClick={handleManageSubscription} className="w-full">
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Manage Subscription
-                      </Button>
-                      <p className="text-xs text-muted-foreground text-center">
-                        Cancel, update payment method, or change plans
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg">
-                        <h4 className="font-medium mb-2">Upgrade to Personal AI Trainer</h4>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Get unlimited access to our Personal AI Trainer for just $4.99/month.
-                        </p>
-                        <ul className="text-sm text-muted-foreground space-y-1 ml-4 mb-3">
-                          <li>• Personalized workout programs</li>
-                          <li>• Real-time form corrections</li>
-                          <li>• Advanced progress analytics</li>
-                          <li>• Nutrition guidance</li>
-                        </ul>
-                      </div>
-                      <Button onClick={handleUpgradeToPersonalAI} className="w-full">
-                        <Crown className="h-4 w-4 mr-2" />
-                        Upgrade to Personal AI - $4.99/month
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-center p-6 border-2 border-dashed border-muted-foreground/20 rounded-lg">
+                <CreditCard className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-3">
+                  No payment required during early adopter period
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  You can add a payment method when you decide to continue with Personal AI after your free period ends.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Billing History */}
-              {subscribed && !isEarlyAdopter && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Billing History</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center p-6">
-                      <Calendar className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground">
-                        No billing history available yet
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Your billing history will appear here after your first payment
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </>
-          )}
+          <Card>
+            <CardHeader>
+              <CardTitle>Billing History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center p-6">
+                <div className="text-muted-foreground mb-2">
+                  <Calendar className="h-8 w-8 mx-auto mb-2" />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  No billing during early adopter period
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Billing history will appear here when payments begin.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Preferences Settings */}
