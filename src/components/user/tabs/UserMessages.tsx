@@ -546,10 +546,6 @@ export function UserMessages() {
             </ScrollArea>
             
             <div className="border-t p-3 lg:p-4">
-              {/* DEBUG: Always show current state */}
-              <div className="text-xs text-gray-500 mb-2 text-center">
-                Debug: isLoading={isLoading.toString()}, uploadingMedia={uploadingMedia.toString()}
-              </div>
 
               {/* Media options */}
               {showMediaOptions && (
@@ -608,15 +604,15 @@ export function UserMessages() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="flex space-x-2">
-                <div className="flex items-center space-x-2 flex-1">
+              <form onSubmit={handleSubmit} className="flex gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowMediaOptions(!showMediaOptions)}
                     disabled={uploadingMedia || isLoading}
-                    className="px-2"
+                    className="px-2 shrink-0"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -625,25 +621,27 @@ export function UserMessages() {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Write a message..."
                     disabled={isLoading || uploadingMedia}
-                    className="flex-1 text-sm lg:text-base"
+                    className="flex-1 min-w-0 text-sm lg:text-base"
                   />
                 </div>
                 
-                {/* Loading State - Non cliccabile */}
+                {/* Loading State - Mobile friendly */}
                 {(isLoading || uploadingMedia) ? (
-                  <div className="px-6 py-3 bg-red-500 border-4 border-red-700 rounded-lg text-white text-base flex items-center gap-3 font-bold animate-pulse">
-                    <Loader2 className="h-6 w-6 animate-spin text-white" />
-                    {uploadingMedia ? '⚠️ UPLOADING FILE - PLEASE WAIT!' : '⚠️ AI IS PROCESSING - PLEASE WAIT!'}
+                  <div className="px-2 py-2 lg:px-4 lg:py-3 bg-amber-100 border border-amber-300 rounded-lg text-amber-800 text-xs lg:text-sm flex items-center gap-2 shrink-0 min-w-fit">
+                    <Loader2 className="h-4 w-4 animate-spin text-amber-600" />
+                    <span className="font-medium whitespace-nowrap">
+                      {uploadingMedia ? 'Uploading...' : 'AI typing...'}
+                    </span>
                   </div>
                 ) : (
                   <Button 
                     type="submit" 
                     disabled={!input.trim()} 
                     size="sm" 
-                    className="px-3 bg-green-500 hover:bg-green-600"
+                    className="px-3 shrink-0"
                   >
                     <Send className="h-3 w-3 lg:h-4 lg:w-4" />
-                    SEND MESSAGE
+                    <span className="hidden sm:inline ml-1">Send</span>
                   </Button>
                 )}
               </form>
