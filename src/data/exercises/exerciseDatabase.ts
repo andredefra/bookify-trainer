@@ -1575,6 +1575,40 @@ export const completeExerciseDatabase: ExerciseData[] = [
     isDeletable: true
   },
    ...newExercises,
+  // Essential bodyweight exercises with comprehensive alternatives
+  {
+    id: "push-ups",
+    name: "Push-ups",
+    category: "chest",
+    difficulty: "intermediate",
+    muscleGroup: ["Pectorals", "Triceps", "Anterior Deltoids"],
+    equipment: ["Bodyweight"],
+    notes: "Classic bodyweight pushing exercise for upper body strength",
+    alternativeExercises: ["incline-push-ups", "knee-push-ups", "wall-push-ups", "diamond-push-ups", "decline-push-ups", "dumbbell-flat-press", "chest-press-machine"],
+    isDeletable: true
+  },
+  {
+    id: "bent-over-row",
+    name: "Bent Over Row",
+    category: "back",
+    difficulty: "intermediate",
+    muscleGroup: ["Latissimus Dorsi", "Rhomboids", "Middle Trapezius"],
+    equipment: ["Barbell", "Dumbbells"],
+    notes: "Hip hinge rowing movement for back thickness",
+    alternativeExercises: ["seated-cable-row", "single-arm-row", "t-bar-row", "chest-supported-row", "lat-pulldown"],
+    isDeletable: true
+  },
+  {
+    id: "barbell-squat",
+    name: "Barbell Squat",
+    category: "legs",
+    difficulty: "intermediate",
+    muscleGroup: ["Quadriceps", "Glutes", "Hamstrings"],
+    equipment: ["Barbell"],
+    notes: "King of exercises - compound leg movement",
+    alternativeExercises: ["front-squat", "goblet-squat", "leg-press", "hack-squat", "bodyweight-squats"],
+    isDeletable: true
+  },
   // Additional bodyweight exercises with proper alternatives
   {
     id: "bodyweight-squats",

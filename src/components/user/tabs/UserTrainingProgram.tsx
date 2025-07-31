@@ -188,19 +188,20 @@ export function UserTrainingProgram() {
 
   // Exercise name mapping from workout program to Exercise Library
   const exerciseNameMapping: { [key: string]: string } = {
-    'Push-ups': 'Standard Push-ups',
-    'Bent-over Rows': 'Bent Over Row',
-    'Pull-ups': 'Pull-ups',
-    'Bench Press': 'Barbell Bench Press',
-    'Squats': 'Barbell Squats',
-    'Romanian Deadlifts': 'Romanian Deadlifts',
-    'Bulgarian Split Squats': 'Bulgarian Split Squats',
-    'Overhead Press': 'Overhead Press',
-    'Dips': 'Dips',
-    'Burpees': 'Burpees',
-    'Mountain Climbers': 'Mountain Climbers',
-    'Plank': 'Plank',
-    'Jump Squats': 'Jump Squats'
+    'Push-ups': 'push-ups',
+    'Standard Push-ups': 'push-ups',
+    'Bent-over Rows': 'bent-over-row',
+    'Pull-ups': 'pull-ups',
+    'Bench Press': 'barbell-flat-press',
+    'Squats': 'barbell-squat',
+    'Romanian Deadlifts': 'romanian-deadlift-barbell',
+    'Bulgarian Split Squats': 'bulgarian-squat',
+    'Overhead Press': 'barbell-shoulder-press',
+    'Dips': 'tricep-dips',
+    'Burpees': 'burpees',
+    'Mountain Climbers': 'mountain-climbers',
+    'Plank': 'plank',
+    'Jump Squats': 'jump-squat'
   };
 
   // Get exercise data from library
