@@ -734,42 +734,81 @@ export function UserSettings({ user }: UserSettingsProps) {
 
           <Card>
             <CardHeader>
-              <CardTitle>Workout Preferences</CardTitle>
+              <CardTitle>Appearance</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="difficulty">Default Workout Difficulty</Label>
-                  <p className="text-sm text-muted-foreground">Your preferred workout intensity</p>
+                  <Label htmlFor="theme">Theme</Label>
+                  <p className="text-sm text-muted-foreground">Choose your preferred theme</p>
                 </div>
-                <Select defaultValue="intermediate">
+                <Select defaultValue="system">
                   <SelectTrigger className="w-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
+                    <SelectItem value="light">Light</SelectItem>
+                    <SelectItem value="dark">Dark</SelectItem>
+                    <SelectItem value="system">System</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="workoutDuration">Preferred Workout Duration</Label>
-                  <p className="text-sm text-muted-foreground">Default session length</p>
+                  <Label htmlFor="colorScheme">Accent Color</Label>
+                  <p className="text-sm text-muted-foreground">Customize your accent color</p>
                 </div>
-                <Select defaultValue="45">
+                <Select defaultValue="blue">
                   <SelectTrigger className="w-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="30">30 min</SelectItem>
-                    <SelectItem value="45">45 min</SelectItem>
-                    <SelectItem value="60">60 min</SelectItem>
-                    <SelectItem value="90">90 min</SelectItem>
+                    <SelectItem value="blue">Blue</SelectItem>
+                    <SelectItem value="green">Green</SelectItem>
+                    <SelectItem value="purple">Purple</SelectItem>
+                    <SelectItem value="orange">Orange</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="animations">Animations</Label>
+                  <p className="text-sm text-muted-foreground">Enable interface animations</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Privacy & Security</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="analytics">Analytics</Label>
+                  <p className="text-sm text-muted-foreground">Help improve the app with usage data</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="crashReports">Crash Reports</Label>
+                  <p className="text-sm text-muted-foreground">Automatically send crash reports</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="dataSharing">Data Sharing</Label>
+                  <p className="text-sm text-muted-foreground">Share anonymized data for research</p>
+                </div>
+                <Switch />
               </div>
             </CardContent>
           </Card>
