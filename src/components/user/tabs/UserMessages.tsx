@@ -425,7 +425,7 @@ export function UserMessages() {
           </CardHeader>
           <CardContent className="p-0 flex-1">
             <ScrollArea className="h-full">
-              <div className="space-y-1 p-4">
+              <div className="space-y-1 p-2 pr-3">{/* Ridotto padding e aggiunto padding-right */}
                 {conversations.map((conversation) => (
                   <Button
                     key={conversation.id}
