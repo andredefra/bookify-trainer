@@ -37,7 +37,7 @@ const UserLandingEn = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                 <Button asChild size="lg" className="text-lg px-8 py-4">
                   <Link to="/user-register">
-                    👉 Inizia ora – Gratis per 1 anno per i primi 100 utenti!
+                    👉 Start now – Free for 1 year for the first 100 users!
                   </Link>
                 </Button>
               </div>
