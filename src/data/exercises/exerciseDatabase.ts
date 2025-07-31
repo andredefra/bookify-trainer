@@ -1574,7 +1574,118 @@ export const completeExerciseDatabase: ExerciseData[] = [
     alternativeExercises: ["lateral-lunges", "side-shuffles", "skater-hops", "lateral-jumps"],
     isDeletable: true
   },
-  ...newExercises
+   ...newExercises,
+  // Additional bodyweight exercises with proper alternatives
+  {
+    id: "bodyweight-squats",
+    name: "Bodyweight Squats",
+    category: "legs",
+    difficulty: "beginner",
+    muscleGroup: ["Quadriceps", "Glutes", "Hamstrings"],
+    equipment: ["Bodyweight"],
+    notes: "Basic squat movement with no added weight",
+    alternativeExercises: ["goblet-squat", "wall-sits", "chair-squats", "sumo-squat"],
+    isDeletable: true
+  },
+  {
+    id: "chair-squats",
+    name: "Chair Squats",
+    category: "legs",
+    difficulty: "beginner",
+    muscleGroup: ["Quadriceps", "Glutes", "Hamstrings"],
+    equipment: ["Chair"],
+    notes: "Sit-to-stand exercise using chair for assistance",
+    alternativeExercises: ["bodyweight-squats", "wall-sits", "goblet-squat", "box-squats"],
+    isDeletable: true
+  },
+  {
+    id: "air-squats",
+    name: "Air Squats",
+    category: "legs",
+    difficulty: "beginner",
+    muscleGroup: ["Quadriceps", "Glutes", "Hamstrings"],
+    equipment: ["Bodyweight"],
+    notes: "Another name for bodyweight squats",
+    alternativeExercises: ["bodyweight-squats", "goblet-squat", "wall-sits", "chair-squats"],
+    isDeletable: true
+  },
+  {
+    id: "close-grip-push-ups",
+    name: "Close Grip Push-ups",
+    category: "chest",
+    difficulty: "intermediate",
+    muscleGroup: ["Triceps", "Pectorals", "Anterior Deltoids"],
+    equipment: ["Bodyweight"],
+    notes: "Push-ups with hands closer together for more tricep focus",
+    alternativeExercises: ["diamond-push-ups", "tricep-push-ups", "push-ups", "tricep-dips"],
+    isDeletable: true
+  },
+  {
+    id: "tricep-push-ups",
+    name: "Tricep Push-ups",
+    category: "arms",
+    difficulty: "intermediate",
+    muscleGroup: ["Triceps", "Pectorals", "Anterior Deltoids"],
+    equipment: ["Bodyweight"],
+    notes: "Push-ups with arms close to body for tricep emphasis",
+    alternativeExercises: ["close-grip-push-ups", "diamond-push-ups", "tricep-dips", "bench-dips"],
+    isDeletable: true
+  },
+  {
+    id: "decline-push-ups",
+    name: "Decline Push-ups",
+    category: "chest",
+    difficulty: "advanced",
+    muscleGroup: ["Upper Pectorals", "Triceps", "Anterior Deltoids"],
+    equipment: ["Bench", "Platform"],
+    notes: "Push-ups with feet elevated on platform",
+    alternativeExercises: ["incline-push-ups", "push-ups", "handstand-push-ups", "pike-push-ups"],
+    isDeletable: true
+  },
+  {
+    id: "pike-push-ups",
+    name: "Pike Push-ups",
+    category: "shoulders",
+    difficulty: "advanced",
+    muscleGroup: ["Anterior Deltoids", "Triceps"],
+    equipment: ["Bodyweight"],
+    notes: "Push-ups in pike position targeting shoulders",
+    alternativeExercises: ["handstand-push-ups", "decline-push-ups", "shoulder-press-machine", "dumbbell-shoulder-press"],
+    isDeletable: true
+  },
+  {
+    id: "handstand-push-ups",
+    name: "Handstand Push-ups",
+    category: "shoulders",
+    difficulty: "advanced",
+    muscleGroup: ["Anterior Deltoids", "Triceps", "Core"],
+    equipment: ["Wall"],
+    notes: "Inverted push-ups against wall in handstand position",
+    alternativeExercises: ["pike-push-ups", "shoulder-press-machine", "military-press", "wall-handstand-hold"],
+    isDeletable: true
+  },
+  {
+    id: "squat-pulses",
+    name: "Squat Pulses",
+    category: "legs",
+    difficulty: "intermediate",
+    muscleGroup: ["Quadriceps", "Glutes"],
+    equipment: ["Bodyweight"],
+    notes: "Small pulsing movements at bottom of squat",
+    alternativeExercises: ["jump-squats", "bodyweight-squats", "wall-sits", "squat-holds"],
+    isDeletable: true
+  },
+  {
+    id: "squat-holds",
+    name: "Squat Holds",
+    category: "legs",
+    difficulty: "beginner",
+    muscleGroup: ["Quadriceps", "Glutes"],
+    equipment: ["Bodyweight"],
+    notes: "Isometric hold in squat position",
+    alternativeExercises: ["wall-sits", "squat-pulses", "bodyweight-squats", "chair-squats"],
+    isDeletable: true
+  }
 ];
 
 export function getExerciseById(id: string): ExerciseData | undefined {

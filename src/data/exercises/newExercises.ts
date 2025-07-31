@@ -11,7 +11,7 @@ export const newExercises: ExerciseData[] = [
     muscleGroup: ['Quadriceps', 'Glutes', 'Hamstrings'],
     equipment: ['Bodyweight'],
     notes: 'Step forward into lunge, alternate legs walking forward',
-    alternativeExercises: ['Static Lunges', 'Reverse Lunges', 'Lateral Lunges']
+    alternativeExercises: ["stationary-lunges", "reverse-lunges", "lateral-lunges"],
   },
   {
     id: 'stationary-lunges',
