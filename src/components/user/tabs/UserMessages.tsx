@@ -406,7 +406,7 @@ export function UserMessages() {
 
       <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)] min-h-[600px]">
         {/* Conversations Sidebar - Hidden on mobile when chat is active */}
-        <Card className={`lg:w-80 flex-shrink-0 ${activeConversation && 'hidden lg:flex'} flex flex-col`}>
+        <Card className={`lg:w-64 flex-shrink-0 ${activeConversation && 'hidden lg:flex'} flex flex-col`}>
           <CardHeader className="flex-shrink-0">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Conversations</CardTitle>
@@ -530,11 +530,9 @@ export function UserMessages() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                      <div className="bg-muted rounded-2xl px-3 py-2 lg:px-4 lg:py-3 max-w-xs">
-                        <div className="flex space-x-1">
-                          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="bg-yellow-200 border-2 border-yellow-400 rounded-2xl px-4 py-3 max-w-xs">
+                        <div className="text-yellow-800 font-medium text-sm">
+                          🤖 AI is typing...
                         </div>
                       </div>
                     </div>
