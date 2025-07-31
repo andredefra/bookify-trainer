@@ -74,13 +74,13 @@ const mockTrainingPlans: TrainingPlan[] = [
   {
     id: "user-plan-1",
     title: "Strength & Conditioning Program",
-    description: "A comprehensive 8-week program focusing on compound movements and metabolic conditioning",
+    description: "AI-generated 8-week program tailored to your fitness goals, focusing on compound movements and metabolic conditioning",
     duration_weeks: 8,
     difficulty_level: 'intermediate',
     goals: ["Build Strength", "Improve Conditioning", "Muscle Building"],
     trainer: {
-      name: "Sarah Johnson",
-      rating: 4.9
+      name: "Personal AI Trainer",
+      rating: 5.0
     },
     progress: {
       completed: 8,
@@ -135,13 +135,13 @@ const mockTrainingPlans: TrainingPlan[] = [
   {
     id: "user-plan-2",
     title: "Weight Loss Bootcamp",
-    description: "High-intensity workouts designed to maximize calorie burn and fat loss",
+    description: "AI-designed high-intensity workouts optimized for maximum calorie burn and fat loss",
     duration_weeks: 6,
     difficulty_level: 'beginner',
     goals: ["Weight Loss", "Cardio Improvement", "Fat Burning"],
     trainer: {
-      name: "Mike Anderson",
-      rating: 4.7
+      name: "Personal AI Trainer",
+      rating: 5.0
     },
     progress: {
       completed: 24,

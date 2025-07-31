@@ -5,12 +5,12 @@ export const currentProgram: TrainingProgram = {
   id: "prog-1",
   title: "Strength & Conditioning Program",
   week: "Week 1 of 8",
-  trainerName: "Sarah Johnson",
+  trainerName: "Personal AI Trainer",
   targetFrequency: 4, // 4 sessions per week
   totalSessions: 32, // 8 weeks × 4 sessions per week
   duration: 8,
   objective: "Build strength and improve conditioning",
-  description: "A comprehensive 8-week program focusing on compound movements and metabolic conditioning",
+  description: "AI-generated 8-week program tailored to your fitness goals, focusing on compound movements and metabolic conditioning",
   isPaid: true,
   price: 89.99,
   sessions: [
