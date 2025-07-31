@@ -42,7 +42,7 @@ export function UserMessages() {
       type: 'ai',
       name: 'AI Trainer',
       status: 'online',
-      last_message: 'Ciao! Come posso aiutarti oggi?',
+      last_message: 'Hi! How can I help you today?',
       last_message_time: new Date().toISOString(),
       unread_count: 0
     }
@@ -146,20 +146,20 @@ export function UserMessages() {
           };
           setMessages(prev => [...prev.slice(0, -1), userMessage, aiMessage]); // Replace temp message with real ones
 
-          // Show success toast for function calls
-          if (response.data.function_call) {
-            toast({
-              title: '✅ Azione completata',
-              description: response.data.function_call.result || 'Operazione eseguita con successo'
-            });
-          }
+           // Show success toast for function calls
+           if (response.data.function_call) {
+             toast({
+               title: '✅ Action completed',
+               description: response.data.function_call.result || 'Operation completed successfully'
+             });
+           }
         }
 
       } else {
         // Send to human trainer (future implementation)
         toast({
-          title: 'Funzionalità in arrivo',
-          description: 'La chat con trainer umani sarà disponibile presto!'
+          title: 'Coming Soon',
+          description: 'Human trainer chat will be available soon!'
         });
       }
 
@@ -168,8 +168,8 @@ export function UserMessages() {
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
-        title: 'Errore',
-        description: 'Impossibile inviare il messaggio',
+        title: 'Error',
+        description: 'Unable to send message',
         variant: 'destructive'
       });
     } finally {
@@ -204,7 +204,7 @@ export function UserMessages() {
         id: `media-${Date.now()}`,
         conversation_id: activeConversation,
         sender: 'user',
-        content: messageType === 'file' ? `Documento: ${file.name}` : '',
+        content: messageType === 'file' ? `Document: ${file.name}` : '',
         message_type: messageType,
         media_url: urlData.publicUrl,
         file_name: file.name,
@@ -224,15 +224,15 @@ export function UserMessages() {
       });
 
       toast({
-        title: 'Media caricato',
-        description: 'File inviato con successo!'
+        title: 'Media uploaded',
+        description: 'File sent successfully!'
       });
 
     } catch (error) {
       console.error('Error uploading media:', error);
       toast({
-        title: 'Errore',
-        description: 'Impossibile caricare il file',
+        title: 'Error',
+        description: 'Unable to upload file',
         variant: 'destructive'
       });
     } finally {
@@ -248,8 +248,8 @@ export function UserMessages() {
       // Check file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
         toast({
-          title: 'File troppo grande',
-          description: 'Dimensione massima consentita: 10MB',
+          title: 'File too large',
+          description: 'Maximum allowed size: 10MB',
           variant: 'destructive'
         });
         return;
@@ -322,7 +322,7 @@ export function UserMessages() {
                 {message.message_type === 'image' && (
                   <img 
                     src={message.media_url} 
-                    alt="Immagine condivisa" 
+                    alt="Shared image" 
                     className="max-w-xs rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                     onClick={() => window.open(message.media_url, '_blank')}
                   />
@@ -354,7 +354,7 @@ export function UserMessages() {
             {message.function_call && (
               <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
                 <p className="text-xs font-medium text-blue-800 dark:text-blue-200">
-                  🔧 Azione: {message.function_call.name}
+                  🔧 Action: {message.function_call.name}
                 </p>
                 {message.function_call.result && (
                   <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
@@ -380,12 +380,12 @@ export function UserMessages() {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold">Messaggi</h1>
-          <p className="text-muted-foreground">Chatta con i tuoi trainer</p>
+          <h1 className="text-2xl font-bold">Messages</h1>
+          <p className="text-muted-foreground">Chat with your trainers</p>
         </div>
         <Button variant="outline" className="gap-2">
           <Plus className="h-4 w-4" />
-          Nuovo Trainer
+          New Trainer
         </Button>
       </div>
 
@@ -394,7 +394,7 @@ export function UserMessages() {
         <Card className={`lg:w-80 flex-shrink-0 ${activeConversation && 'hidden lg:flex'} flex flex-col`}>
           <CardHeader className="flex-shrink-0">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Conversazioni</CardTitle>
+              <CardTitle className="text-lg">Conversations</CardTitle>
               {activeConversation && (
                 <Button 
                   variant="ghost" 
@@ -402,7 +402,7 @@ export function UserMessages() {
                   className="lg:hidden"
                   onClick={() => setActiveConversation('')}
                 >
-                  Indietro
+                  Back
                 </Button>
               )}
             </div>
@@ -500,8 +500,8 @@ export function UserMessages() {
                 {messages.length === 0 && (
                   <div className="text-center text-muted-foreground py-8">
                     <MessageSquare className="h-10 w-10 lg:h-12 lg:w-12 mx-auto mb-4 opacity-50" />
-                    <p className="text-sm lg:text-base">Inizia una conversazione!</p>
-                    <p className="text-xs lg:text-sm mt-2">Chiedi consigli su allenamento, nutrizione o i tuoi obiettivi.</p>
+                    <p className="text-sm lg:text-base">Start a conversation!</p>
+                    <p className="text-xs lg:text-sm mt-2">Ask for advice on training, nutrition or your goals.</p>
                   </div>
                 )}
                 
@@ -543,41 +543,41 @@ export function UserMessages() {
                     }}
                     className="gap-1"
                   >
-                    <Image className="h-4 w-4" />
-                    Foto
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      const input = document.createElement('input');
-                      input.type = 'file';
-                      input.accept = 'video/*';
-                      input.onchange = (e) => handleFileSelect(e as any);
-                      input.click();
-                      setShowMediaOptions(false);
-                    }}
-                    className="gap-1"
-                  >
-                    <Video className="h-4 w-4" />
-                    Video
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      const input = document.createElement('input');
-                      input.type = 'file';
-                      input.accept = '.pdf,.doc,.docx,.txt,.png,.jpg,.jpeg';
-                      input.onchange = (e) => handleFileSelect(e as any);
-                      input.click();
-                      setShowMediaOptions(false);
-                    }}
-                    className="gap-1"
-                  >
-                    <Paperclip className="h-4 w-4" />
-                    File
-                  </Button>
+                     <Image className="h-4 w-4" />
+                     Photo
+                   </Button>
+                   <Button
+                     variant="outline"
+                     size="sm"
+                     onClick={() => {
+                       const input = document.createElement('input');
+                       input.type = 'file';
+                       input.accept = 'video/*';
+                       input.onchange = (e) => handleFileSelect(e as any);
+                       input.click();
+                       setShowMediaOptions(false);
+                     }}
+                     className="gap-1"
+                   >
+                     <Video className="h-4 w-4" />
+                     Video
+                   </Button>
+                   <Button
+                     variant="outline"
+                     size="sm"
+                     onClick={() => {
+                       const input = document.createElement('input');
+                       input.type = 'file';
+                       input.accept = '.pdf,.doc,.docx,.txt,.png,.jpg,.jpeg';
+                       input.onchange = (e) => handleFileSelect(e as any);
+                       input.click();
+                       setShowMediaOptions(false);
+                     }}
+                     className="gap-1"
+                   >
+                     <Paperclip className="h-4 w-4" />
+                     File
+                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -603,7 +603,7 @@ export function UserMessages() {
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Scrivi un messaggio..."
+                    placeholder="Write a message..."
                     disabled={isLoading || uploadingMedia}
                     className="flex-1 text-sm lg:text-base"
                   />
@@ -612,7 +612,7 @@ export function UserMessages() {
                 {(isLoading || uploadingMedia) ? (
                   <div className="px-4 py-2 bg-muted rounded-md border text-muted-foreground text-sm flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    {uploadingMedia ? 'Caricamento file...' : 'AI sta scrivendo...'}
+                    {uploadingMedia ? 'Uploading file...' : 'AI is writing...'}
                   </div>
                 ) : (
                   <Button 
