@@ -455,7 +455,8 @@ const UserLandingEn = () => {
               <div className="max-w-2xl mx-auto">
                 <Button asChild size="lg" className="px-12 py-4 text-lg">
                   <Link to="/user-register">
-                    🚀 Join the First 100 - Free for 1 Year
+                    <span className="hidden sm:inline">🚀 Join the First 100 - Free for 1 Year</span>
+                    <span className="sm:hidden">🚀 Join First 100</span>
                   </Link>
                 </Button>
                 <p className="text-sm text-muted-foreground mt-2">
