@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   User, 
   CreditCard, 
@@ -20,9 +22,15 @@ import {
   Activity,
   Crown,
   Calendar,
-  RefreshCw
+  RefreshCw,
+  Upload,
+  Camera,
+  MapPin,
+  Heart,
+  AlertTriangle
 } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useUserProfile, UserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
 
 interface User {
@@ -42,6 +50,8 @@ export function UserSettings({ user }: UserSettingsProps) {
   const [pushNotifications, setPushNotifications] = useState(true);
   const [workoutReminders, setWorkoutReminders] = useState(true);
   const [progressUpdates, setProgressUpdates] = useState(true);
+  const [formData, setFormData] = useState<Partial<UserProfile>>({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const {
     subscribed,
@@ -56,6 +66,22 @@ export function UserSettings({ user }: UserSettingsProps) {
     createCheckout,
     openCustomerPortal,
   } = useSubscription();
+
+  const {
+    profile,
+    loading: profileLoading,
+    saving: profileSaving,
+    saveProfile,
+    uploadProfileImage,
+    calculateAge,
+  } = useUserProfile();
+
+  // Update form data when profile loads
+  useEffect(() => {
+    if (profile) {
+      setFormData(profile);
+    }
+  }, [profile]);
 
   const handleUpgradeToPersonalAI = async () => {
     try {
@@ -76,6 +102,28 @@ export function UserSettings({ user }: UserSettingsProps) {
       console.error('Portal error:', error);
       toast.error("Failed to open subscription management");
     }
+  };
+
+  const handleSaveProfile = async () => {
+    const success = await saveProfile(formData);
+    if (success) {
+      // Profile saved successfully
+    }
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = await uploadProfileImage(file);
+    if (imageUrl) {
+      setFormData(prev => ({ ...prev, profile_image_url: imageUrl }));
+      await saveProfile({ ...formData, profile_image_url: imageUrl });
+    }
+  };
+
+  const handleInputChange = (field: keyof UserProfile, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const formatDate = (dateString?: string) => {
@@ -131,68 +179,343 @@ export function UserSettings({ user }: UserSettingsProps) {
 
         {/* Account Settings */}
         <TabsContent value="account" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue={user.name?.split(' ')[0] || ''} />
+          {profileLoading ? (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-center space-x-2">
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  <span>Loading profile...</span>
                 </div>
-                <div>
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue={user.name?.split(' ')[1] || ''} />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" defaultValue={user.email} />
-              </div>
-              <div>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" type="tel" placeholder="+1 (555) 000-0000" />
-              </div>
-              <Button>Save Changes</Button>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {/* Profile Picture & Basic Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Camera className="h-5 w-5" />
+                    Profile Picture & Basic Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Profile Picture Section */}
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="relative">
+                      <Avatar className="h-24 w-24">
+                        <AvatarImage src={formData.profile_image_url} alt="Profile" />
+                        <AvatarFallback className="text-lg">
+                          {formData.first_name?.[0]}{formData.last_name?.[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Upload className="h-4 w-4" />
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </div>
+                    <div className="flex-1 space-y-3 text-center sm:text-left">
+                      <h3 className="text-lg font-medium">
+                        {formData.first_name} {formData.last_name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {formData.date_of_birth && `${calculateAge(formData.date_of_birth)} years old`}
+                        {formData.city && ` • ${formData.city}`}
+                      </p>
+                      <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Change Picture
+                      </Button>
+                    </div>
+                  </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Security</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="currentPassword">Current Password</Label>
-                <div className="relative">
-                  <Input 
-                    id="currentPassword" 
-                    type={showPassword ? "text" : "password"} 
-                    placeholder="Enter current password"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </Button>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input id="newPassword" type="password" placeholder="Enter new password" />
-              </div>
-              <div>
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input id="confirmPassword" type="password" placeholder="Confirm new password" />
-              </div>
-              <Button>Update Password</Button>
-            </CardContent>
-          </Card>
+                  {/* Basic Information Form */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input 
+                        id="firstName" 
+                        value={formData.first_name || ''} 
+                        onChange={(e) => handleInputChange('first_name', e.target.value)}
+                        placeholder="Enter your first name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input 
+                        id="lastName" 
+                        value={formData.last_name || ''} 
+                        onChange={(e) => handleInputChange('last_name', e.target.value)}
+                        placeholder="Enter your last name"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                      <Input 
+                        id="dateOfBirth" 
+                        type="date" 
+                        value={formData.date_of_birth || ''} 
+                        onChange={(e) => handleInputChange('date_of_birth', e.target.value)}
+                      />
+                      {formData.date_of_birth && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Age: {calculateAge(formData.date_of_birth)} years
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <Label htmlFor="city" className="flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        City
+                      </Label>
+                      <Input 
+                        id="city" 
+                        value={formData.city || ''} 
+                        onChange={(e) => handleInputChange('city', e.target.value)}
+                        placeholder="Enter your city"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Button onClick={handleSaveProfile} disabled={profileSaving}>
+                      {profileSaving ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        'Save Changes'
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Health & Medical Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Heart className="h-5 w-5 text-red-500" />
+                    Health & Medical Information
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    This information helps our Personal AI Trainer create safer, more effective workouts and nutrition plans for you.
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="allergies">Food Allergies & Intolerances</Label>
+                    <Textarea 
+                      id="allergies" 
+                      value={formData.allergies || ''} 
+                      onChange={(e) => handleInputChange('allergies', e.target.value)}
+                      placeholder="List any food allergies, intolerances, or dietary restrictions (e.g., nuts, dairy, gluten)"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="healthConditions">Health Conditions</Label>
+                    <Textarea 
+                      id="healthConditions" 
+                      value={formData.health_conditions || ''} 
+                      onChange={(e) => handleInputChange('health_conditions', e.target.value)}
+                      placeholder="List any medical conditions, medications, or health concerns (e.g., diabetes, high blood pressure)"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="physicalLimitations" className="flex items-center gap-1">
+                      <AlertTriangle className="h-4 w-4 text-orange-500" />
+                      Physical Limitations & Injuries
+                    </Label>
+                    <Textarea 
+                      id="physicalLimitations" 
+                      value={formData.physical_limitations || ''} 
+                      onChange={(e) => handleInputChange('physical_limitations', e.target.value)}
+                      placeholder="Describe any injuries, physical limitations, or areas to avoid (e.g., bad knee, recent surgery, back problems)"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Button onClick={handleSaveProfile} disabled={profileSaving}>
+                      {profileSaving ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        'Save Health Information'
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Emergency Contact */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Emergency Contact</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Someone we can contact in case of emergency during training sessions.
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="emergencyContactName">Contact Name</Label>
+                      <Input 
+                        id="emergencyContactName" 
+                        value={formData.emergency_contact_name || ''} 
+                        onChange={(e) => handleInputChange('emergency_contact_name', e.target.value)}
+                        placeholder="Full name of emergency contact"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="emergencyContactPhone">Contact Phone</Label>
+                      <Input 
+                        id="emergencyContactPhone" 
+                        type="tel" 
+                        value={formData.emergency_contact_phone || ''} 
+                        onChange={(e) => handleInputChange('emergency_contact_phone', e.target.value)}
+                        placeholder="+1 (555) 000-0000"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Button onClick={handleSaveProfile} disabled={profileSaving}>
+                      {profileSaving ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        'Save Emergency Contact'
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Fitness Preferences */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Fitness Preferences</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Help us personalize your training experience.
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="experienceLevel">Experience Level</Label>
+                      <Select 
+                        value={formData.experience_level || 'beginner'} 
+                        onValueChange={(value) => handleInputChange('experience_level', value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="beginner">Beginner</SelectItem>
+                          <SelectItem value="intermediate">Intermediate</SelectItem>
+                          <SelectItem value="advanced">Advanced</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="preferredWorkoutTime">Preferred Workout Time</Label>
+                      <Select 
+                        value={formData.preferred_workout_time || ''} 
+                        onValueChange={(value) => handleInputChange('preferred_workout_time', value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select preferred time" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="early_morning">Early Morning (5-7 AM)</SelectItem>
+                          <SelectItem value="morning">Morning (7-10 AM)</SelectItem>
+                          <SelectItem value="midday">Midday (10 AM-2 PM)</SelectItem>
+                          <SelectItem value="afternoon">Afternoon (2-6 PM)</SelectItem>
+                          <SelectItem value="evening">Evening (6-9 PM)</SelectItem>
+                          <SelectItem value="night">Night (9 PM+)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Button onClick={handleSaveProfile} disabled={profileSaving}>
+                      {profileSaving ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        'Save Preferences'
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Account Security */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Account Security</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input id="email" type="email" value={user.email} disabled />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Contact support to change your email address
+                    </p>
+                  </div>
+                  <div>
+                    <Label htmlFor="currentPassword">Current Password</Label>
+                    <div className="relative">
+                      <Input 
+                        id="currentPassword" 
+                        type={showPassword ? "text" : "password"} 
+                        placeholder="Enter current password"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <Input id="newPassword" type="password" placeholder="Enter new password" />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                    <Input id="confirmPassword" type="password" placeholder="Confirm new password" />
+                  </div>
+                  <Button>Update Password</Button>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </TabsContent>
 
         {/* Subscription Settings */}

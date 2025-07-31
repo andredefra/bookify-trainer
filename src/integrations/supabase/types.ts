@@ -2259,6 +2259,66 @@ export type Database = {
         }
         Relationships: []
       }
+      user_profiles: {
+        Row: {
+          allergies: string | null
+          city: string | null
+          created_at: string
+          date_of_birth: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          experience_level: string | null
+          first_name: string | null
+          fitness_goals: string[] | null
+          health_conditions: string | null
+          id: string
+          last_name: string | null
+          physical_limitations: string | null
+          preferred_workout_time: string | null
+          profile_image_url: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          allergies?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          experience_level?: string | null
+          first_name?: string | null
+          fitness_goals?: string[] | null
+          health_conditions?: string | null
+          id?: string
+          last_name?: string | null
+          physical_limitations?: string | null
+          preferred_workout_time?: string | null
+          profile_image_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          allergies?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          experience_level?: string | null
+          first_name?: string | null
+          fitness_goals?: string[] | null
+          health_conditions?: string | null
+          id?: string
+          last_name?: string | null
+          physical_limitations?: string | null
+          preferred_workout_time?: string | null
+          profile_image_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_subscriptions: {
         Row: {
           created_at: string
@@ -2347,6 +2407,10 @@ export type Database = {
       generate_trainer_slug: {
         Args: { trainer_name: string }
         Returns: string
+      }
+      get_user_age: {
+        Args: { birth_date: string }
+        Returns: number
       }
       initialize_default_email_templates: {
         Args: { gym_user_id: string }
