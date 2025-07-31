@@ -33,7 +33,7 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
       // For now, we'll just show a success message
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       
-      toast.success("Invito inviato con successo! Contatteremo il personal trainer per te.");
+      toast.success("Invitation sent successfully! We'll contact the personal trainer for you.");
       onOpenChange(false);
       setFormData({
         firstName: '',
@@ -45,7 +45,7 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
         message: ''
       });
     } catch (error) {
-      toast.error("Errore nell'invio dell'invito. Riprova.");
+      toast.error("Error sending invitation. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -57,10 +57,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <UserPlus className="h-5 w-5" />
-            Invita un Personal Trainer
+            Invite a Personal Trainer
           </DialogTitle>
           <DialogDescription>
-            Compila i dati del tuo personal trainer e lo contatteremo noi per invitarlo sulla piattaforma.
+            Fill in your personal trainer's details and we'll contact them to invite them to the platform.
           </DialogDescription>
         </DialogHeader>
 
@@ -70,9 +70,9 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
             <div className="flex items-start gap-2">
               <Gift className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium text-green-900 dark:text-green-100 mb-1">🎁 Bonus Esclusivo!</p>
+                <p className="font-medium text-green-900 dark:text-green-100 mb-1">🎁 Exclusive Bonus!</p>
                 <p className="text-green-800 dark:text-green-200">
-                  <strong>Ricevi 1 mese GRATIS di abbonamento Personal AI</strong> per ogni trainer che inviti sulla piattaforma (massimo 12 inviti).
+                  <strong>Get 1 FREE month of Personal AI subscription</strong> for each trainer you invite to the platform (maximum 12 invitations).
                 </p>
               </div>
             </div>
@@ -80,10 +80,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">Nome *</Label>
+              <Label htmlFor="firstName">First Name *</Label>
               <Input
                 id="firstName"
-                placeholder="Nome del trainer"
+                placeholder="Trainer's first name"
                 value={formData.firstName}
                 onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                 required
@@ -91,10 +91,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="lastName">Cognome *</Label>
+              <Label htmlFor="lastName">Last Name *</Label>
               <Input
                 id="lastName"
-                placeholder="Cognome del trainer"
+                placeholder="Trainer's last name"
                 value={formData.lastName}
                 onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
                 required
@@ -116,11 +116,11 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Telefono *</Label>
+              <Label htmlFor="phone">Phone *</Label>
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+39 333 123 4567"
+                placeholder="+1 555 123 4567"
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 required
@@ -130,10 +130,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="city">Città *</Label>
+              <Label htmlFor="city">City *</Label>
               <Input
                 id="city"
-                placeholder="Roma, Milano, ecc."
+                placeholder="New York, Los Angeles, etc."
                 value={formData.city}
                 onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
                 required
@@ -141,10 +141,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="gym">Palestra/Studio</Label>
+              <Label htmlFor="gym">Gym/Studio</Label>
               <Input
                 id="gym"
-                placeholder="Nome della palestra"
+                placeholder="Gym name"
                 value={formData.gym}
                 onChange={(e) => setFormData(prev => ({ ...prev, gym: e.target.value }))}
               />
@@ -152,10 +152,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message">Messaggio con informazioni sul Personal Trainer</Label>
+            <Label htmlFor="message">Message with Personal Trainer Information</Label>
             <Textarea
               id="message"
-              placeholder="Racconta qualcosa sul trainer: specializzazioni, esperienza, perché lo consigli..."
+              placeholder="Tell us about the trainer: specializations, experience, why you recommend them..."
               value={formData.message}
               onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
               rows={4}
@@ -166,11 +166,11 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
             <div className="flex items-start gap-2">
               <Star className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium text-blue-900 dark:text-blue-100">Come funziona:</p>
+                <p className="font-medium text-blue-900 dark:text-blue-100">How it works:</p>
                 <ul className="mt-1 text-blue-800 dark:text-blue-200 space-y-1">
-                  <li>• Contatteremo direttamente il trainer per invitarlo</li>
-                  <li>• Riceverai 1 mese gratis di Personal AI se si iscrive</li>
-                  <li>• Ti notificheremo quando il trainer si unisce alla piattaforma</li>
+                  <li>• We'll contact the trainer directly to invite them</li>
+                  <li>• You'll get 1 free month of Personal AI if they sign up</li>
+                  <li>• We'll notify you when the trainer joins the platform</li>
                 </ul>
               </div>
             </div>
@@ -178,10 +178,10 @@ export function InviteTrainerDialog({ open, onOpenChange }: InviteTrainerDialogP
 
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Annulla
+              Cancel
             </Button>
             <Button type="submit" disabled={isLoading || !formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.city}>
-              {isLoading ? "Invio in corso..." : "Invia Invito"}
+              {isLoading ? "Sending..." : "Send Invitation"}
             </Button>
           </div>
         </form>

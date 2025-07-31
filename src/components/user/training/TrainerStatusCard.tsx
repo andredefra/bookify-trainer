@@ -94,7 +94,7 @@ export function TrainerStatusCard({
           </Button>
           <Button onClick={onInviteTrainer} variant="outline" className="w-full">
             <UserPlus className="h-4 w-4 mr-2" />
-            Invita un altro Trainer
+            Invite Another Trainer
           </Button>
         </div>
       );
