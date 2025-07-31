@@ -32,5 +32,8 @@ s3_max_part_size = "5MiB"
 [functions.openai-chat]
 verify_jwt = false
 
+[functions.openai-trainer-chat]
+verify_jwt = true
+
 [functions.openai-realtime]
 verify_jwt = false
