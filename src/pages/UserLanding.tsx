@@ -387,8 +387,8 @@ const UserLanding = () => {
 
               {/* Normal Plan (after 100 users) */}
               <Card className="relative p-8 border-2 border-primary/30 hover:border-primary/50 transition-colors">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge variant="outline">💼 PIANO NORMALE</Badge>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">💼 PIANO NORMALE</Badge>
                 </div>
                 
                 <CardHeader className="p-0 mb-6">
