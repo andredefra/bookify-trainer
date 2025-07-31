@@ -8,12 +8,21 @@ import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Star, UserPlus } from "lucide-react";
 import { InviteTrainerDialog } from "../training/InviteTrainerDialog";
 
-export function UserTrainers() {
+interface UserTrainersProps {
+  onNavigateToMessages?: () => void;
+}
+
+export function UserTrainers({ onNavigateToMessages }: UserTrainersProps) {
   const [showInviteTrainer, setShowInviteTrainer] = useState(false);
   const navigate = useNavigate();
 
   const handleStartChat = () => {
-    navigate('/chat');
+    if (onNavigateToMessages) {
+      onNavigateToMessages();
+    } else {
+      // Fallback for direct navigation
+      navigate('/user-dashboard');
+    }
   };
 
   return (

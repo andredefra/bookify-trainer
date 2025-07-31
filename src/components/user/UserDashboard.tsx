@@ -59,7 +59,7 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
             {activeTab === "training-program" && <UserTrainingProgram />}
             {activeTab === "training-log" && <UserTrainingLog />}
             {activeTab === "analytics" && <UserAnalytics />}
-            {activeTab === "my-trainers" && <UserTrainers />}
+            {activeTab === "my-trainers" && <UserTrainers onNavigateToMessages={() => setActiveTab("messages")} />}
             {activeTab === "messages" && <UserMessages />}
             {activeTab === "settings" && <UserSettings user={user} />}
           </div>
