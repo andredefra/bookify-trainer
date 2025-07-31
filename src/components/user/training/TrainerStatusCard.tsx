@@ -87,10 +87,16 @@ export function TrainerStatusCard({
   const renderActionButton = () => {
     if (hasHumanTrainer || hasPersonalAIAccess) {
       return (
-        <Button onClick={onRequestNewProgram} className="w-full">
-          <MessageCircle className="h-4 w-4 mr-2" />
-          Request New Program
-        </Button>
+        <div className="space-y-2">
+          <Button onClick={onRequestNewProgram} className="w-full">
+            <MessageCircle className="h-4 w-4 mr-2" />
+            Request New Program
+          </Button>
+          <Button onClick={onInviteTrainer} variant="outline" className="w-full">
+            <UserPlus className="h-4 w-4 mr-2" />
+            Invita un altro Trainer
+          </Button>
+        </div>
       );
     }
 
