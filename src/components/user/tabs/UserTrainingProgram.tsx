@@ -222,6 +222,31 @@ export function UserTrainingProgram() {
       ) || null;
     }
     
+    // If still no match, create a basic exercise with some default alternatives
+    if (!exerciseData) {
+      const category = exerciseName.toLowerCase().includes('squat') ? 'legs' : 
+                     exerciseName.toLowerCase().includes('push') ? 'chest' :
+                     exerciseName.toLowerCase().includes('pull') ? 'back' : 'functional';
+      
+      // Get some alternatives based on category
+      const defaultAlternatives = allExercises
+        .filter(ex => ex.category === category)
+        .slice(0, 4)
+        .map(ex => ex.id);
+        
+      exerciseData = {
+        id: exerciseName.toLowerCase().replace(/\s+/g, '-'),
+        name: exerciseName,
+        category: category as any,
+        difficulty: 'intermediate' as any,
+        muscleGroup: ['Full Body'],
+        equipment: ['Bodyweight'],
+        notes: 'Exercise from training program',
+        alternativeExercises: defaultAlternatives,
+        isDeletable: false
+      };
+    }
+    
     return exerciseData;
   };
 
