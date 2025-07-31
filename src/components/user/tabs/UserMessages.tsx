@@ -612,10 +612,18 @@ export function UserMessages() {
                   type="submit" 
                   disabled={isLoading || uploadingMedia || (!input.trim())} 
                   size="sm" 
-                  className="px-3"
+                  className="px-3 min-w-20"
                 >
-                  {isLoading || uploadingMedia ? (
-                    <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin" />
+                  {uploadingMedia ? (
+                    <>
+                      <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin mr-1" />
+                      <span className="hidden sm:inline text-xs">Carico...</span>
+                    </>
+                  ) : isLoading ? (
+                    <>
+                      <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin mr-1" />
+                      <span className="hidden sm:inline text-xs">AI...</span>
+                    </>
                   ) : (
                     <Send className="h-3 w-3 lg:h-4 lg:w-4" />
                   )}
