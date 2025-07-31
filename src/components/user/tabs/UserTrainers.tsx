@@ -147,11 +147,7 @@ export function UserTrainers({ onNavigateToMessages }: UserTrainersProps) {
                       size="sm" 
                       className="border-gray-400 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"
                       onClick={() => {
-                        // TODO: Navigate to analytics page
-                        toast({
-                          title: "Analytics",
-                          description: "Trainer analytics feature coming soon!"
-                        });
+                        navigate('/user-dashboard?tab=analytics');
                       }}
                     >
                       View Analytics
