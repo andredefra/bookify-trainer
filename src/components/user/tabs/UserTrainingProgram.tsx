@@ -1059,30 +1059,30 @@ export function UserTrainingProgram() {
   const completedPlans = trainingPlans.filter(plan => plan.status === 'completed');
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Training Programs</h1>
-          <p className="text-muted-foreground">Your personalized workout plans</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-xl sm:text-2xl font-bold">Training Programs</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Your personalized workout plans</p>
         </div>
-        <Button variant="outline" className="flex items-center space-x-2">
+        <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto">
           <MessageCircle className="h-4 w-4" />
-          <span>Request New Program</span>
+          <span className="text-sm sm:text-base">Request New Program</span>
         </Button>
       </div>
 
       {trainingPlans.length === 0 ? (
         <Card>
-          <CardContent className="text-center py-12">
-            <Trophy className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-            <h3 className="text-lg font-medium mb-2">No Training Programs</h3>
-            <p className="text-muted-foreground mb-4">
+          <CardContent className="text-center py-8 sm:py-12 px-4">
+            <Trophy className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+            <h3 className="text-base sm:text-lg font-medium mb-2">No Training Programs</h3>
+            <p className="text-sm text-muted-foreground mb-4">
               Go to Messages and ask your AI trainer to create a personalized program for you!
             </p>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-xs sm:text-sm text-muted-foreground mb-4">
               Example: "Create an 8-week beginner training program for weight loss"
             </p>
-            <Button variant="outline">
+            <Button variant="outline" className="w-full sm:w-auto">
               <MessageCircle className="h-4 w-4 mr-2" />
               Go to Messages
             </Button>
@@ -1090,14 +1090,16 @@ export function UserTrainingProgram() {
         </Card>
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="current">
-              Current ({activePlans.length + acceptedPlans.length})
+          <TabsList className="grid w-full grid-cols-3 h-auto p-1 gap-1">
+            <TabsTrigger value="current" className="text-xs sm:text-sm py-2 px-2">
+              <span className="hidden sm:inline">Current ({activePlans.length + acceptedPlans.length})</span>
+              <span className="sm:hidden">Current ({activePlans.length + acceptedPlans.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="completed">
-              Completed ({completedPlans.length})
+            <TabsTrigger value="completed" className="text-xs sm:text-sm py-2 px-2">
+              <span className="hidden sm:inline">Completed ({completedPlans.length})</span>
+              <span className="sm:hidden">Done ({completedPlans.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="all">
+            <TabsTrigger value="all" className="text-xs sm:text-sm py-2 px-2">
               All ({trainingPlans.length})
             </TabsTrigger>
           </TabsList>
