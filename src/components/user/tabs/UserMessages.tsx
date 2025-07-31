@@ -503,9 +503,6 @@ export function UserMessages() {
                   <Mic className="h-3 w-3 lg:h-4 lg:w-4" />
                   <span className="hidden sm:inline">{voiceMode ? 'Voice ON' : 'Voice'}</span>
                 </Button>
-                <Button variant="ghost" size="sm">
-                  <Settings className="h-3 w-3 lg:h-4 lg:w-4" />
-                </Button>
               </div>
             </div>
           </CardHeader>
