@@ -448,12 +448,23 @@ const UserLandingEn = () => {
             </div>
             
             <div className="text-center mt-12">
-              <p className="text-lg text-muted-foreground mb-6">
-                💡 <strong>One service, one quality level.</strong> Whether you get the free year or pay monthly, you get exactly the same experience.
-              </p>
-              
               <div className="max-w-2xl mx-auto">
-                <Button asChild size="lg" className="px-12 py-4 text-lg">
+                <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10">
+                      <Target className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-primary">
+                      One premium service level
+                    </h3>
+                  </div>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    No hidden or limited features. All our users get the best possible experience. 
+                    The first 100 get it free for 1 year, the others pay €4.99/month.
+                  </p>
+                </div>
+                
+                <Button asChild size="lg" className="px-12 py-4 text-lg mt-6">
                   <Link to="/user-register">
                     <span className="hidden sm:inline">🚀 Join the First 100 - Free for 1 Year</span>
                     <span className="sm:hidden">🚀 Join First 100</span>
