@@ -198,12 +198,12 @@ export function UserMessages() {
     const isUser = message.sender === 'user';
     
     return (
-      <div key={message.id} className={`flex gap-3 ${isUser ? 'flex-row-reverse' : ''}`}>
-        <Avatar className="h-8 w-8">
+      <div key={message.id} className={`flex gap-2 lg:gap-3 ${isUser ? 'flex-row-reverse' : ''}`}>
+        <Avatar className="h-6 w-6 lg:h-8 lg:w-8 flex-shrink-0">
           {!isUser ? (
             message.sender === 'ai' ? (
               <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                <Bot className="h-4 w-4" />
+                <Bot className="h-3 w-3 lg:h-4 lg:w-4" />
               </AvatarFallback>
             ) : (
               <AvatarFallback>
@@ -217,13 +217,13 @@ export function UserMessages() {
           )}
         </Avatar>
         
-        <div className={`flex flex-col max-w-[70%] ${isUser ? 'items-end' : 'items-start'}`}>
-          <div className={`rounded-2xl px-4 py-3 ${
+        <div className={`flex flex-col max-w-[85%] lg:max-w-[70%] ${isUser ? 'items-end' : 'items-start'}`}>
+          <div className={`rounded-2xl px-3 py-2 lg:px-4 lg:py-3 ${
             isUser 
               ? 'bg-primary text-primary-foreground' 
               : 'bg-muted'
           }`}>
-            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+            <p className="text-sm lg:text-base whitespace-pre-wrap break-words">{message.content}</p>
             
             {/* Function call results */}
             {message.function_call && (
@@ -264,14 +264,26 @@ export function UserMessages() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[700px]">
-        {/* Conversations Sidebar */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-lg">Conversazioni</CardTitle>
+      <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)] min-h-[600px]">
+        {/* Conversations Sidebar - Hidden on mobile when chat is active */}
+        <Card className={`lg:w-80 flex-shrink-0 ${activeConversation && 'hidden lg:flex'} flex flex-col`}>
+          <CardHeader className="flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Conversazioni</CardTitle>
+              {activeConversation && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="lg:hidden"
+                  onClick={() => setActiveConversation('')}
+                >
+                  Indietro
+                </Button>
+              )}
+            </div>
           </CardHeader>
-          <CardContent className="p-0">
-            <ScrollArea className="h-[600px]">
+          <CardContent className="p-0 flex-1">
+            <ScrollArea className="h-full">
               <div className="space-y-1 p-4">
                 {conversations.map((conversation) => (
                   <Button
@@ -312,69 +324,77 @@ export function UserMessages() {
           </CardContent>
         </Card>
 
-        {/* Chat Area */}
-        <Card className="lg:col-span-3 flex flex-col">
+        {/* Chat Area - Full width on mobile when active */}
+        <Card className={`flex-1 flex flex-col ${!activeConversation && 'hidden lg:flex'}`}>
           <CardHeader className="flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="lg:hidden -ml-2"
+                  onClick={() => setActiveConversation('')}
+                >
+                  ←
+                </Button>
+                <Avatar className="h-8 w-8 lg:h-10 lg:w-10">
                   <AvatarFallback>
                     {getConversationIcon(conversations.find(c => c.id === activeConversation)!)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <CardTitle className="text-lg">
+                  <CardTitle className="text-base lg:text-lg">
                     {conversations.find(c => c.id === activeConversation)?.name}
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs lg:text-sm text-muted-foreground">
                     {conversations.find(c => c.id === activeConversation)?.status === 'online' ? 'Online' : 'Offline'}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 lg:gap-2">
                 <Button
                   variant={voiceMode ? "default" : "outline"}
                   size="sm"
                   onClick={() => setVoiceMode(!voiceMode)}
-                  className="gap-2"
+                  className="gap-1 lg:gap-2 text-xs lg:text-sm"
                 >
-                  <Mic className="h-4 w-4" />
-                  {voiceMode ? 'Voice ON' : 'Voice'}
+                  <Mic className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <span className="hidden sm:inline">{voiceMode ? 'Voice ON' : 'Voice'}</span>
                 </Button>
                 <Button variant="ghost" size="sm">
-                  <Settings className="h-4 w-4" />
+                  <Settings className="h-3 w-3 lg:h-4 lg:w-4" />
                 </Button>
               </div>
             </div>
           </CardHeader>
           
           <CardContent className="flex-1 flex flex-col p-0">
-            <ScrollArea className="flex-1 p-6">
-              <div className="space-y-4">
+            <ScrollArea className="flex-1 p-3 lg:p-6">
+              <div className="space-y-3 lg:space-y-4">
                 {messages.length === 0 && (
                   <div className="text-center text-muted-foreground py-8">
-                    <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Inizia una conversazione!</p>
-                    <p className="text-sm mt-2">Chiedi consigli su allenamento, nutrizione o i tuoi obiettivi.</p>
+                    <MessageSquare className="h-10 w-10 lg:h-12 lg:w-12 mx-auto mb-4 opacity-50" />
+                    <p className="text-sm lg:text-base">Inizia una conversazione!</p>
+                    <p className="text-xs lg:text-sm mt-2">Chiedi consigli su allenamento, nutrizione o i tuoi obiettivi.</p>
                   </div>
                 )}
                 
                 {messages.map(renderMessage)}
                 
                 {isTyping && (
-                  <div className="flex gap-3">
-                    <Avatar className="h-8 w-8">
+                  <div className="flex gap-2 lg:gap-3">
+                    <Avatar className="h-6 w-6 lg:h-8 lg:w-8 flex-shrink-0">
                       <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                        <Bot className="h-4 w-4" />
+                        <Bot className="h-3 w-3 lg:h-4 lg:w-4" />
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                      <div className="bg-muted rounded-2xl px-4 py-3 max-w-xs">
+                      <div className="bg-muted rounded-2xl px-3 py-2 lg:px-4 lg:py-3 max-w-xs">
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                         </div>
                       </div>
                     </div>
@@ -385,20 +405,20 @@ export function UserMessages() {
               </div>
             </ScrollArea>
             
-            <div className="border-t p-4">
+            <div className="border-t p-3 lg:p-4">
               <form onSubmit={handleSubmit} className="flex space-x-2">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Scrivi un messaggio..."
                   disabled={isLoading}
-                  className="flex-1"
+                  className="flex-1 text-sm lg:text-base"
                 />
-                <Button type="submit" disabled={isLoading || (!input.trim())}>
+                <Button type="submit" disabled={isLoading || (!input.trim())} size="sm" className="px-3">
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin" />
                   ) : (
-                    <Send className="h-4 w-4" />
+                    <Send className="h-3 w-3 lg:h-4 lg:w-4" />
                   )}
                 </Button>
               </form>
