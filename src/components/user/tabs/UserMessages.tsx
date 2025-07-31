@@ -407,7 +407,7 @@ export function UserMessages() {
 
       <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)] min-h-[600px]">
         {/* Conversations Sidebar - Hidden on mobile when chat is active */}
-        <Card className={`lg:w-64 flex-shrink-0 ${activeConversation && 'hidden lg:flex'} flex flex-col`}>
+        <Card className={`lg:w-80 xl:w-96 flex-shrink-0 ${activeConversation && 'hidden lg:flex'} flex flex-col`}>
           <CardHeader className="flex-shrink-0">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Conversations</CardTitle>
@@ -423,9 +423,9 @@ export function UserMessages() {
               )}
             </div>
           </CardHeader>
-          <CardContent className="p-0 flex-1">
+          <CardContent className="p-0 flex-1 overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="space-y-1 p-2 pr-3">{/* Ridotto padding e aggiunto padding-right */}
+              <div className="space-y-2 p-3">{/* Migliore spaziatura */}
                 {conversations.map((conversation) => (
                   <Button
                     key={conversation.id}
@@ -444,16 +444,16 @@ export function UserMessages() {
                         <div className={`absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-background ${getStatusColor(conversation.status)} shadow-sm`} />
                       </div>
                       
-                      <div className="flex-1 text-left min-w-0">
+                      <div className="flex-1 text-left min-w-0 pr-2">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="font-semibold text-sm truncate text-foreground">{conversation.name}</p>
+                          <p className="font-semibold text-sm truncate text-foreground max-w-[140px] xl:max-w-[180px]">{conversation.name}</p>
                           {conversation.unread_count > 0 && (
-                            <Badge variant="destructive" className="text-xs h-5 min-w-5 px-2 rounded-full">
+                            <Badge variant="destructive" className="text-xs h-5 min-w-5 px-2 rounded-full flex-shrink-0">
                               {conversation.unread_count}
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground truncate leading-relaxed">
+                        <p className="text-xs text-muted-foreground truncate leading-relaxed max-w-[160px] xl:max-w-[200px]">
                           {conversation.last_message}
                         </p>
                       </div>
