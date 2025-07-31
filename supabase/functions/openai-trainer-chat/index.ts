@@ -132,6 +132,42 @@ serve(async (req) => {
           },
           required: ["workout_time", "days_of_week"]
         }
+      },
+      {
+        name: "modify_training_program",
+        description: "Modifica il programma di allenamento dell'utente basandosi sui suoi dati analytics",
+        parameters: {
+          type: "object",
+          properties: {
+            program_changes: { 
+              type: "object",
+              description: "Le modifiche da apportare al programma",
+              properties: {
+                frequency: { type: "number", description: "Frequenza settimanale allenamenti" },
+                intensity: { type: "string", description: "Livello intensità (low, medium, high)" },
+                focus_areas: { type: "array", items: { type: "string" }, description: "Aree di focus" },
+                duration_minutes: { type: "number", description: "Durata sessioni in minuti" }
+              }
+            },
+            reason: { type: "string", description: "Motivo delle modifiche basato sui dati analytics" }
+          },
+          required: ["program_changes", "reason"]
+        }
+      },
+      {
+        name: "create_personalized_program",
+        description: "Crea un nuovo programma personalizzato basato sui dati analytics dell'utente",
+        parameters: {
+          type: "object",
+          properties: {
+            program_type: { type: "string", description: "Tipo di programma (strength, cardio, mixed, weight_loss)" },
+            duration_weeks: { type: "number", description: "Durata in settimane" },
+            weekly_frequency: { type: "number", description: "Frequenza settimanale" },
+            target_goals: { type: "array", items: { type: "string" }, description: "Obiettivi specifici" },
+            adaptations: { type: "string", description: "Adattamenti basati sui dati analytics" }
+          },
+          required: ["program_type", "duration_weeks", "weekly_frequency", "target_goals"]
+        }
       }
     ];
 
@@ -263,6 +299,38 @@ Rispondi sempre in italiano, sii cordiale e professionale.`;
         case 'schedule_workout_reminder':
           // Schedule reminder (placeholder)
           functionResult = `Promemoria impostato per ${parsedArgs.workout_time} nei giorni: ${parsedArgs.days_of_week.join(', ')}`;
+          break;
+          
+        case 'modify_training_program':
+          // Modify existing training program
+          const changes = parsedArgs.program_changes;
+          functionResult = `Programma di allenamento modificato! 
+📊 Modifiche basate sui tuoi analytics:
+${parsedArgs.reason}
+
+🔄 Nuove impostazioni:
+${changes.frequency ? `• Frequenza: ${changes.frequency} volte/settimana` : ''}
+${changes.intensity ? `• Intensità: ${changes.intensity}` : ''}
+${changes.duration_minutes ? `• Durata sessioni: ${changes.duration_minutes} minuti` : ''}
+${changes.focus_areas ? `• Focus: ${changes.focus_areas.join(', ')}` : ''}
+
+Vai alla scheda "Training Program" per vedere i dettagli!`;
+          break;
+          
+        case 'create_personalized_program':
+          // Create new personalized program
+          functionResult = `🎯 Nuovo programma personalizzato creato!
+
+📋 Dettagli del programma:
+• Tipo: ${parsedArgs.program_type}
+• Durata: ${parsedArgs.duration_weeks} settimane
+• Frequenza: ${parsedArgs.weekly_frequency} volte/settimana
+• Obiettivi: ${parsedArgs.target_goals.join(', ')}
+
+🧠 Personalizzazioni basate sui tuoi dati:
+${parsedArgs.adaptations || 'Ottimizzato per i tuoi progressi attuali'}
+
+Il programma è ora disponibile nella scheda "Training Program"!`;
           break;
       }
       

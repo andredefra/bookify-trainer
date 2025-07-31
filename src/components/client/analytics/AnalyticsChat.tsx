@@ -22,18 +22,13 @@ interface AnalyticsChatProps {
 }
 
 export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatProps) {
-  const [messages, setMessages] = useState<AnalyticsChatMessage[]>([
-    {
-      id: '1',
-      sender: 'ai',
-      content: "Hi! I'm your Analytics AI assistant. I can help you understand your fitness data, identify trends, and provide personalized insights based on your workout performance. Ask me anything about your progress!",
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<AnalyticsChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const conversationId = 'main-chat'; // Shared conversation ID
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,6 +37,44 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Load conversation history on mount
+  useEffect(() => {
+    loadConversationHistory();
+  }, []);
+
+  const loadConversationHistory = async () => {
+    try {
+      const { data } = await supabase
+        .from('user_messages')
+        .select('*')
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: true });
+      
+      if (data && data.length > 0) {
+        const loadedMessages = data.map(msg => ({
+          id: msg.id,
+          sender: msg.sender as 'user' | 'ai',
+          content: msg.content || '',
+          timestamp: new Date(msg.created_at)
+        }));
+        setMessages(loadedMessages);
+      } else {
+        // Show welcome message if no history
+        const welcomeMessage = {
+          id: '1',
+          sender: 'ai' as const,
+          content: "Hi! I'm your AI assistant. I can help you understand your fitness data, create training programs, and provide personalized insights. I remember our previous conversations, so feel free to ask anything!",
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+      }
+    } catch (error) {
+      console.error('Error loading conversation history:', error);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
 
   const sendMessage = async (content: string) => {
     if (!content.trim() || !analyticsStats) return;
@@ -76,11 +109,12 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
       const response = await supabase.functions.invoke('openai-trainer-chat', {
         body: {
           message: content,
-          conversation_id: 'analytics-chat',
+          conversation_id: conversationId,
           user_context: {
             analytics_data: analyticsContext,
             conversation_type: 'analytics_consultation',
-            request_type: 'analytics_insight'
+            request_type: 'analytics_insight',
+            progress_data: progressData
           }
         }
       });
@@ -120,8 +154,8 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
     "Analyze my recent workout performance",
     "What trends do you see in my progress?",
     "How can I improve my consistency?",
-    "Compare this month vs last month",
-    "What are my strongest areas?"
+    "Create a training program based on my analytics",
+    "Modify my current training program"
   ];
 
   return (
@@ -138,46 +172,52 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
         {/* Messages Area */}
         <ScrollArea className="flex-1 px-4">
           <div className="space-y-4 pb-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                {message.sender === 'ai' && (
-                  <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                      <Bot className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-                
-                <div className={`max-w-[80%] ${message.sender === 'user' ? 'flex flex-col items-end' : ''}`}>
-                  <div
-                    className={`rounded-2xl px-4 py-3 text-sm ${
-                      message.sender === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}
-                  >
-                    {message.content}
-                  </div>
-                  <span className="text-xs text-muted-foreground mt-1 px-2">
-                    {message.timestamp.toLocaleTimeString('en-US', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </div>
-                
-                {message.sender === 'user' && (
-                  <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarFallback>
-                      <User className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                )}
+            {isLoadingHistory ? (
+              <div className="flex justify-center py-8">
+                <div className="text-muted-foreground">Loading conversation...</div>
               </div>
-            ))}
+            ) : (
+              messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  {message.sender === 'ai' && (
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                        <Bot className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  
+                  <div className={`max-w-[80%] ${message.sender === 'user' ? 'flex flex-col items-end' : ''}`}>
+                    <div
+                      className={`rounded-2xl px-4 py-3 text-sm ${
+                        message.sender === 'user'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted'
+                      }`}
+                    >
+                      {message.content}
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1 px-2">
+                      {message.timestamp.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  
+                  {message.sender === 'user' && (
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarFallback>
+                        <User className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                </div>
+              ))
+            )}
             
             {isLoading && (
               <div className="flex gap-3">
