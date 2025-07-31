@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Send, Loader2, User, MessageSquare, Mic, Plus, Settings, Image, Video, Paperclip, X } from "lucide-react";
+import { Bot, Send, User, MessageSquare, Mic, Plus, Settings, Image, Video, Paperclip, X, Clock } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -626,7 +626,7 @@ export function UserMessages() {
                 {/* Loading State - Mobile friendly */}
                 {(isLoading || uploadingMedia) ? (
                   <div className="px-2 py-2 lg:px-4 lg:py-3 bg-amber-100 border border-amber-300 rounded-lg text-amber-800 text-xs lg:text-sm flex items-center gap-2 shrink-0 min-w-fit">
-                    <Loader2 className="h-4 w-4 animate-spin text-amber-600" />
+                    <Clock className="h-4 w-4 text-amber-600" />
                     <span className="font-medium whitespace-nowrap">
                       {uploadingMedia ? 'Uploading...' : 'AI typing...'}
                     </span>
