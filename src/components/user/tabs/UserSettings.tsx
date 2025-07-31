@@ -42,9 +42,10 @@ interface User {
 
 interface UserSettingsProps {
   user: User;
+  activeSection?: string;
 }
 
-export function UserSettings({ user }: UserSettingsProps) {
+export function UserSettings({ user, activeSection }: UserSettingsProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
@@ -153,7 +154,7 @@ export function UserSettings({ user }: UserSettingsProps) {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Settings</h1>
 
-      <Tabs defaultValue="account" className="space-y-6">
+      <Tabs defaultValue={activeSection || "account"} className="space-y-6">
         <TabsList className="flex flex-wrap lg:grid lg:grid-cols-5 gap-1 p-1 h-auto">
           <TabsTrigger value="account" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
             <User className="h-4 w-4 shrink-0" />

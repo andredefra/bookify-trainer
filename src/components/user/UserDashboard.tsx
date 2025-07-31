@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { UserHeader } from "./UserHeader";
 import { UserSidebar } from "./UserSidebar";
 import { UserOverview } from "./tabs/UserOverview";
@@ -25,7 +26,35 @@ interface UserDashboardProps {
 export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
+  const [settingsSection, setSettingsSection] = useState<string | undefined>();
   const isMobile = useIsMobile();
+  const location = useLocation();
+
+  // Handle navigation from other components
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const tab = urlParams.get('tab');
+    const section = urlParams.get('section');
+
+    if (tab) {
+      setActiveTab(tab);
+    }
+    
+    if (section && tab === 'settings') {
+      setSettingsSection(section);
+    }
+
+    // Handle state-based navigation
+    if (location.state) {
+      const { activeTab: stateTab, settingsSection: stateSection } = location.state as any;
+      if (stateTab) {
+        setActiveTab(stateTab);
+      }
+      if (stateSection) {
+        setSettingsSection(stateSection);
+      }
+    }
+  }, [location]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -61,7 +90,7 @@ export function UserDashboardComponent({ user, onLogout }: UserDashboardProps) {
             {activeTab === "analytics" && <UserAnalytics />}
             {activeTab === "my-trainers" && <UserTrainers onNavigateToMessages={() => setActiveTab("messages")} />}
             {activeTab === "messages" && <UserMessages />}
-            {activeTab === "settings" && <UserSettings user={user} />}
+            {activeTab === "settings" && <UserSettings user={user} activeSection={settingsSection} />}
           </div>
         </main>
       </div>
