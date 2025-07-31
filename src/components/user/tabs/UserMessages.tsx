@@ -430,30 +430,30 @@ export function UserMessages() {
                   <Button
                     key={conversation.id}
                     variant={activeConversation === conversation.id ? "secondary" : "ghost"}
-                    className="w-full justify-start p-3 h-auto"
+                    className="w-full justify-start p-4 h-auto rounded-xl hover:bg-muted/50 transition-all duration-200"
                     onClick={() => setActiveConversation(conversation.id)}
                   >
-                    <div className="flex items-center gap-3 w-full">
-                      <div className="relative">
-                        <Avatar className="h-10 w-10">
+                    <div className="flex items-center gap-4 w-full">
+                      <div className="relative flex-shrink-0">
+                        <Avatar className="h-12 w-12 border-2 border-background shadow-sm">
                           <AvatarImage src={conversation.avatar} />
-                          <AvatarFallback>
+                          <AvatarFallback className="text-lg font-semibold">
                             {getConversationIcon(conversation)}
                           </AvatarFallback>
                         </Avatar>
-                        <div className={`absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-background ${getStatusColor(conversation.status)}`} />
+                        <div className={`absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-background ${getStatusColor(conversation.status)} shadow-sm`} />
                       </div>
                       
                       <div className="flex-1 text-left min-w-0">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium text-sm truncate">{conversation.name}</p>
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="font-semibold text-sm truncate text-foreground">{conversation.name}</p>
                           {conversation.unread_count > 0 && (
-                            <Badge variant="destructive" className="text-xs">
+                            <Badge variant="destructive" className="text-xs h-5 min-w-5 px-2 rounded-full">
                               {conversation.unread_count}
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-xs text-muted-foreground truncate leading-relaxed">
                           {conversation.last_message}
                         </p>
                       </div>
