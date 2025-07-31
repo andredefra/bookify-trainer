@@ -441,12 +441,12 @@ export function UserFitnessProgress() {
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="measurements">Measurements</TabsTrigger>
-          <TabsTrigger value="activities">Activities</TabsTrigger>
-          <TabsTrigger value="goals">Goals</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1">
+          <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+          <TabsTrigger value="profile" className="text-xs sm:text-sm">Profile</TabsTrigger>
+          <TabsTrigger value="measurements" className="text-xs sm:text-sm">Measures</TabsTrigger>
+          <TabsTrigger value="activities" className="text-xs sm:text-sm">Activities</TabsTrigger>
+          <TabsTrigger value="goals" className="text-xs sm:text-sm">Goals</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
