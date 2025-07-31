@@ -71,6 +71,17 @@ export function UserMessages() {
 
   useEffect(() => {
     loadMessages(activeConversation);
+    // Add welcome message if no messages exist
+    if (activeConversation === 'ai-trainer') {
+      setMessages([{
+        id: 'welcome-1',
+        conversation_id: 'ai-trainer',
+        sender: 'ai',
+        content: 'Hi! How can I help you today? I can assist you with training programs, nutrition plans, and tracking your fitness goals.',
+        message_type: 'text',
+        created_at: new Date().toISOString()
+      }]);
+    }
   }, [activeConversation]);
 
   const loadMessages = async (conversationId: string) => {
@@ -531,6 +542,11 @@ export function UserMessages() {
             </ScrollArea>
             
             <div className="border-t p-3 lg:p-4">
+              {/* DEBUG: Always show current state */}
+              <div className="text-xs text-gray-500 mb-2 text-center">
+                Debug: isLoading={isLoading.toString()}, uploadingMedia={uploadingMedia.toString()}
+              </div>
+
               {/* Media options */}
               {showMediaOptions && (
                 <div className="mb-3 flex gap-2">
@@ -607,10 +623,6 @@ export function UserMessages() {
                     disabled={isLoading || uploadingMedia}
                     className="flex-1 text-sm lg:text-base"
                   />
-                </div>
-                {/* DEBUG: Always show current state */}
-                <div className="text-xs text-gray-500 mb-1">
-                  Debug: isLoading={isLoading.toString()}, uploadingMedia={uploadingMedia.toString()}
                 </div>
                 
                 {/* Loading State - Non cliccabile */}
