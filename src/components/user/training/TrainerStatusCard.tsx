@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bot, User, Crown, MessageCircle, UserPlus, CreditCard } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface TrainerStatusCardProps {
   hasHumanTrainer: boolean;
@@ -22,6 +23,7 @@ export function TrainerStatusCard({
   onInviteTrainer,
   onUpgradeSubscription
 }: TrainerStatusCardProps) {
+  const { t } = useLanguage();
   const renderTrainerInfo = () => {
     if (hasHumanTrainer) {
       return (
@@ -96,16 +98,16 @@ export function TrainerStatusCard({
       <div className="space-y-3">
         <div className="p-4 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg">
           <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
-            Attualmente non hai un personal trainer assegnato e non stai pagando l'abbonamento per il tuo Personal AI.
+            Currently you don't have a personal trainer assigned and you're not paying for your Personal AI subscription.
           </p>
           <div className="space-y-2">
             <Button onClick={onInviteTrainer} variant="outline" className="w-full">
               <UserPlus className="h-4 w-4 mr-2" />
-              Invita un Trainer Umano
+              Invite a Human Trainer
             </Button>
             <Button onClick={onUpgradeSubscription} className="w-full">
               <CreditCard className="h-4 w-4 mr-2" />
-              Upgrade per Personal AI
+              Upgrade to Personal AI
             </Button>
           </div>
         </div>
