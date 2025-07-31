@@ -1,18 +1,22 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Star, UserPlus } from "lucide-react";
+import { InviteTrainerDialog } from "../training/InviteTrainerDialog";
 
 export function UserTrainers() {
+  const [showInviteTrainer, setShowInviteTrainer] = useState(false);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">My Trainers</h1>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2" onClick={() => setShowInviteTrainer(true)}>
           <UserPlus className="h-4 w-4" />
-          Invite your personal trainer
+          Invita il tuo personal trainer
         </Button>
       </div>
 
@@ -170,6 +174,12 @@ export function UserTrainers() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Invite Trainer Dialog */}
+      <InviteTrainerDialog
+        open={showInviteTrainer}
+        onOpenChange={setShowInviteTrainer}
+      />
     </div>
   );
 }
