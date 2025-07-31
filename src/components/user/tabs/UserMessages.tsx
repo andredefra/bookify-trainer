@@ -608,27 +608,22 @@ export function UserMessages() {
                     className="flex-1 text-sm lg:text-base"
                   />
                 </div>
-                <Button 
-                  type="submit" 
-                  disabled={isLoading || uploadingMedia || (!input.trim())} 
-                  size="sm" 
-                  variant={isLoading || uploadingMedia ? "secondary" : "default"}
-                  className="px-3 min-w-24 transition-all"
-                >
-                  {uploadingMedia ? (
-                    <>
-                      <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin mr-1" />
-                      <span className="text-xs">Upload</span>
-                    </>
-                  ) : isLoading ? (
-                    <>
-                      <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin mr-1" />
-                      <span className="text-xs">AI</span>
-                    </>
-                  ) : (
+                {/* Loading State - Non cliccabile */}
+                {(isLoading || uploadingMedia) ? (
+                  <div className="px-4 py-2 bg-muted rounded-md border text-muted-foreground text-sm flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {uploadingMedia ? 'Caricamento file...' : 'AI sta scrivendo...'}
+                  </div>
+                ) : (
+                  <Button 
+                    type="submit" 
+                    disabled={!input.trim()} 
+                    size="sm" 
+                    className="px-3"
+                  >
                     <Send className="h-3 w-3 lg:h-4 lg:w-4" />
-                  )}
-                </Button>
+                  </Button>
+                )}
               </form>
 
               {/* Hidden file input */}
