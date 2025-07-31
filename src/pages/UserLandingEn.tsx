@@ -26,7 +26,7 @@ const UserLandingEn = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-6 md:space-y-10">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-primary mx-auto max-w-5xl md:leading-tight text-balance">
-                Train body and mind. With Trainer.ai, you're never alone.
+                Train body and mind. With MyPersonal's AI Trainer, you're never alone.
               </h1>
               
               <p className="mx-auto max-w-3xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
@@ -66,7 +66,7 @@ const UserLandingEn = () => {
                   </p>
                   
                   <p>
-                    With <strong className="text-primary">Trainer.ai</strong>, you can finally build a personalized routine 
+                    With <strong className="text-primary">MyPersonal's AI Trainer</strong>, you can finally build a personalized routine 
                     without having to depend on a human coach.
                   </p>
                 </div>
@@ -108,7 +108,7 @@ const UserLandingEn = () => {
                           <Bot className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">Trainer.ai</div>
+                          <div className="text-sm font-semibold">MyPersonal's AI Trainer</div>
                           <div className="text-xs text-muted-foreground">Online now</div>
                         </div>
                       </div>
@@ -157,7 +157,7 @@ const UserLandingEn = () => {
             <div className="text-center mb-12 animate-fade-in">
               <Badge variant="outline" className="mb-4">🤖 Artificial Intelligence</Badge>
               <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                Trainer.ai: your new<br />
+                MyPersonal's AI Trainer: your new<br />
                 <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">virtual ally</span>
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -201,7 +201,7 @@ const UserLandingEn = () => {
             <div className="max-w-4xl mx-auto">
               <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg">
                 <h3 className="text-2xl font-semibold text-primary mb-6 text-center">
-                  💬 Questions you can ask Trainer.ai:
+                  💬 Questions you can ask MyPersonal's AI Trainer:
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   {[
@@ -217,7 +217,7 @@ const UserLandingEn = () => {
                 </div>
                 <div className="text-center mt-8">
                   <p className="text-lg">
-                    <strong className="text-primary">Trainer.ai always responds.</strong> Concrete, simple, effective.<br />
+                    <strong className="text-primary">MyPersonal's AI Trainer always responds.</strong> Concrete, simple, effective.<br />
                     <span className="text-muted-foreground">Like having a coach in your pocket, but cheaper and always available.</span>
                   </p>
                 </div>
@@ -322,7 +322,7 @@ const UserLandingEn = () => {
             <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {/* Free Plan for first 100 users */}
               <Card className="relative p-8 border-2 border-green-500/50 bg-green-50/50 hover:bg-green-50/70 transition-colors">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                   <Badge className="bg-green-500 hover:bg-green-500 text-white">🎉 FIRST 100 USERS</Badge>
                 </div>
                 
@@ -345,73 +345,103 @@ const UserLandingEn = () => {
                       <span className="text-lg font-bold text-green-600">95/100</span>
                     </div>
                     <div className="w-full bg-green-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full transition-all duration-500" style={{ width: '95%' }}></div>
+                      <div className="bg-green-500 h-2 rounded-full" style={{width: '5%'}}></div>
                     </div>
+                    <p className="text-xs text-green-700 mt-2">⚡ Only 5 users have already signed up!</p>
                   </div>
                 </CardHeader>
                 
                 <CardContent className="p-0">
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-4 mb-8">
                     {[
-                      "Chat with Trainer.ai",
-                      "Personalized workout plans",
-                      "Progress tracking",
-                      "Health app integrations",
-                      "Nutrition advice",
-                      "24/7 support"
+                      { text: "Unlimited chat with MyPersonal's AI Trainer", icon: Bot },
+                      { text: "Advanced personalized programs", icon: Target },
+                      { text: "Complete analytics and insights", icon: BarChart3 },
+                      { text: "Detailed nutritional advice", icon: Heart },
+                      { text: "All device integrations", icon: Smartphone },
+                      { text: "Advanced AI features", icon: Zap },
+                      { text: "Priority 24/7 support", icon: Shield },
+                      { text: "Early access updates", icon: Infinity }
                     ].map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
+                        <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                          <Check className="h-3 w-3" />
                         </div>
-                        <span className="text-sm">{feature}</span>
+                        <feature.icon className="h-4 w-4 text-green-600" />
+                        <span className="text-foreground font-medium">{feature.text}</span>
                       </div>
                     ))}
                   </div>
                   
-                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white" size="lg">
-                    Get Free Year Access
+                  <Button asChild size="lg" className="w-full bg-green-600 hover:bg-green-700">
+                    <Link to="/user-register">
+                      🚀 Get Your Free Spot
+                    </Link>
                   </Button>
+                  
+                  <div className="text-center mt-4 space-y-1">
+                    <p className="text-sm text-green-700 font-medium">✅ Full access for 1 year</p>
+                    <p className="text-sm text-green-700">✅ No credit card required</p>
+                    <p className="text-sm text-green-700">✅ All features included</p>
+                  </div>
                 </CardContent>
               </Card>
 
-              {/* Normal Plan */}
-              <Card className="relative p-8 border border-border bg-background hover:bg-accent/5 transition-colors">
+              {/* Normal Plan (after 100 users) */}
+              <Card className="relative p-8 border-2 border-primary/30 hover:border-primary/50 transition-colors">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">💼 NORMAL PLAN</Badge>
+                </div>
+                
                 <CardHeader className="p-0 mb-6">
                   <div className="flex items-center justify-between mb-4">
-                    <CardTitle className="text-2xl">Normal Plan</CardTitle>
+                    <CardTitle className="text-2xl">Normal Access</CardTitle>
                     <div className="text-right">
                       <div className="text-3xl font-bold">€4.99</div>
                       <div className="text-sm text-muted-foreground">per month</div>
                     </div>
                   </div>
                   <CardDescription className="text-base">
-                    Same features as free plan, active after the free year or if you're not among the first 100
+                    Same exact features, available after the first 100 users
                   </CardDescription>
+                  
+                  <div className="bg-primary/10 rounded-lg p-4 mt-4">
+                    <p className="text-sm text-primary font-medium">
+                      💡 Same premium service, you just didn't make it in time for the free period!
+                    </p>
+                  </div>
                 </CardHeader>
                 
                 <CardContent className="p-0">
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-4 mb-8">
                     {[
-                      "Chat with Trainer.ai",
-                      "Personalized workout plans", 
-                      "Progress tracking",
-                      "Health app integrations",
-                      "Nutrition advice",
-                      "24/7 support"
+                      { text: "Unlimited chat with MyPersonal's AI Trainer", icon: Bot },
+                      { text: "Advanced personalized programs", icon: Target },
+                      { text: "Complete analytics and insights", icon: BarChart3 },
+                      { text: "Detailed nutritional advice", icon: Heart },
+                      { text: "All device integrations", icon: Smartphone },
+                      { text: "Advanced AI features", icon: Zap },
+                      { text: "Priority 24/7 support", icon: Shield },
+                      { text: "Early access updates", icon: Infinity }
                     ].map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
+                        <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                          <Check className="h-3 w-3" />
                         </div>
-                        <span className="text-sm">{feature}</span>
+                        <feature.icon className="h-4 w-4 text-primary" />
+                        <span className="text-foreground font-medium">{feature.text}</span>
                       </div>
                     ))}
                   </div>
                   
                   <Button variant="outline" className="w-full" size="lg">
-                    Start After Free Year
+                    Subscribe at €4.99/month
                   </Button>
+                  
+                  <div className="text-center mt-4 space-y-1">
+                    <p className="text-sm text-primary">🔄 Monthly subscription</p>
+                    <p className="text-sm text-muted-foreground">Cancel anytime</p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -443,7 +473,7 @@ const UserLandingEn = () => {
                 <Badge variant="outline" className="mb-4">🚀 Final Step</Badge>
                 <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
                   Stop postponing.<br />
-                  <span className="text-2xl md:text-3xl text-muted-foreground">Trainer.ai is ready. Are you?</span>
+                  <span className="text-2xl md:text-3xl text-muted-foreground">MyPersonal's AI Trainer is ready. Are you?</span>
                 </h2>
               </div>
               
