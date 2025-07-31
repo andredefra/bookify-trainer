@@ -71,8 +71,21 @@ serve(async (req) => {
       .limit(1)
       .single();
 
-    // Define functions that AI can call
-    const functions = [
+    // Check if current program is AI-created (can be modified) or human trainer-created (read-only)
+    const currentProgram = user_context?.currentProgram;
+    const isAIProgram = currentProgram?.trainerName?.toLowerCase().includes('ai') || 
+                       currentProgram?.trainerName?.toLowerCase().includes('personal ai trainer') ||
+                       !currentProgram?.trainerName || 
+                       currentProgram?.trainerName === 'AI Trainer';
+    
+    console.log('Program modification check:', {
+      hasProgram: !!currentProgram,
+      trainerName: currentProgram?.trainerName,
+      isAIProgram: isAIProgram
+    });
+
+    // Define base functions that are always available
+    const baseFunctions = [
       {
         name: "create_training_program",
         description: "Crea un nuovo programma di allenamento personalizzato per l'utente",
@@ -171,6 +184,20 @@ serve(async (req) => {
       }
     ];
 
+    // Filter functions based on program type (AI vs Human Trainer)
+    let functions = [...baseFunctions];
+    
+    if (!isAIProgram && currentProgram) {
+      // Remove modification functions for human trainer programs
+      functions = baseFunctions.filter(fn => 
+        fn.name !== 'modify_training_program' && 
+        fn.name !== 'create_personalized_program'
+      );
+      console.log('Removed modification functions - program is from human trainer');
+    } else {
+      console.log('All functions available - AI program or no current program');
+    }
+
     // Build system message with user context
     const isAnalyticsConversation = user_context?.conversation_type === 'analytics_consultation';
     
@@ -193,7 +220,13 @@ STILE DI COMUNICAZIONE:
 
 DATI UTENTE DISPONIBILI: ${JSON.stringify(user_context?.analytics_data || {})}
 
-Rispondi sempre in italiano e concentrati su insights specifici basati sui dati forniti.` 
+${!isAIProgram && currentProgram ? `
+⚠️ LIMITAZIONI PROGRAMMA ATTUALE:
+Il programma di allenamento attuale "${currentProgram.title}" è stato creato dal trainer ${currentProgram.trainerName}.
+NON puoi modificare programmi creati da trainer umani - puoi solo fornire analytics e consigli.
+Per modifiche al programma, l'utente deve contattare il suo trainer.` : ''}
+
+Rispondi sempre in italiano e concentrati su insights specifici basati sui dati forniti.`
       : 
       `Sei un Personal AI Trainer esperto e motivante. Il tuo ruolo è aiutare l'utente a raggiungere i suoi obiettivi di fitness attraverso consigli personalizzati, programmi di allenamento e piani nutrizionali.
 

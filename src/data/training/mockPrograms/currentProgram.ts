@@ -5,7 +5,7 @@ export const currentProgram: TrainingProgram = {
   id: "prog-1",
   title: "Strength & Conditioning Program",
   week: "Week 1 of 8",
-  trainerName: "Personal AI Trainer",
+  trainerName: "Marco Rossi - Personal Trainer",
   targetFrequency: 4, // 4 sessions per week
   totalSessions: 32, // 8 weeks × 4 sessions per week
   duration: 8,
