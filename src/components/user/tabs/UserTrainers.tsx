@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +10,11 @@ import { InviteTrainerDialog } from "../training/InviteTrainerDialog";
 
 export function UserTrainers() {
   const [showInviteTrainer, setShowInviteTrainer] = useState(false);
+  const navigate = useNavigate();
+
+  const handleStartChat = () => {
+    navigate('/chat');
+  };
 
   return (
     <div className="space-y-6">
@@ -121,7 +127,7 @@ export function UserTrainers() {
 
                   {/* Enhanced Action Buttons */}
                   <div className="flex flex-col gap-3">
-                    <Button className="gap-2 bg-gradient-to-r from-gray-700 to-black hover:from-gray-600 hover:to-gray-900 text-white border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                    <Button onClick={handleStartChat} className="gap-2 bg-gradient-to-r from-gray-700 to-black hover:from-gray-600 hover:to-gray-900 text-white border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105">
                       <MessageSquare className="h-4 w-4" />
                       Start Chat
                     </Button>
