@@ -71,18 +71,22 @@ export function UserMessages() {
 
   useEffect(() => {
     loadMessages(activeConversation);
-    // Add welcome message if no messages exist
-    if (activeConversation === 'ai-trainer') {
-      setMessages([{
+  }, [activeConversation]);
+
+  // Add welcome message if no messages exist for AI trainer
+  useEffect(() => {
+    if (activeConversation === 'ai-trainer' && messages.length === 0) {
+      const welcomeMessage = {
         id: 'welcome-1',
         conversation_id: 'ai-trainer',
-        sender: 'ai',
+        sender: 'ai' as const,
         content: 'Hi! How can I help you today? I can assist you with training programs, nutrition plans, and tracking your fitness goals.',
-        message_type: 'text',
+        message_type: 'text' as const,
         created_at: new Date().toISOString()
-      }]);
+      };
+      setMessages([welcomeMessage]);
     }
-  }, [activeConversation]);
+  }, [activeConversation, messages.length]);
 
   const loadMessages = async (conversationId: string) => {
     try {
