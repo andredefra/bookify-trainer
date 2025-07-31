@@ -16,7 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Clock } from "lucide-react";
+
 import { ContactFormData } from "@/types/contact";
 
 interface ContactFormFieldsProps {
@@ -161,7 +162,7 @@ export function ContactFormFields({ form, isSubmitting, onSubmit }: ContactFormF
         className="w-full" 
         disabled={isSubmitting}
       >
-        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isSubmitting && <Clock className="mr-2 h-4 w-4" />}
         {isSubmitting ? "Invio in corso..." : "Invia Messaggio"}
       </Button>
     </form>

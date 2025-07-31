@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, Users, Info, CalendarDays, List, Loader2 } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Info, CalendarDays, List } from "lucide-react";
 import { format } from "date-fns";
 import { useGymSessions } from "@/hooks/useGymSessions";
 import { useToast } from "@/hooks/use-toast";
@@ -143,7 +143,7 @@ export function ExpandedSessionsDialog({ open, onOpenChange, gymId }: ExpandedSe
             {loading ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+                  <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
                   <p className="text-sm text-muted-foreground">Loading sessions...</p>
                 </div>
               </div>

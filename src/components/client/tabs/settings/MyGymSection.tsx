@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Building2, Search, CheckCircle, Clock, X, Loader2 } from "lucide-react";
+import { Building2, Search, CheckCircle, Clock, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,7 +105,7 @@ export function MyGymSection({ user }: MyGymSectionProps) {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin" />
+            <Clock className="h-6 w-6" />
           </div>
         </CardContent>
       </Card>
@@ -277,7 +277,7 @@ export function MyGymSection({ user }: MyGymSectionProps) {
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Clock className="h-4 w-4 mr-2" />
                   Sending Request...
                 </>
               ) : (

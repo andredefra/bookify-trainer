@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, Loader2, AlertCircle, Activity, ShoppingBag } from "lucide-react";
+import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, AlertCircle, Activity, ShoppingBag } from "lucide-react";
 import { useGymConnection } from "@/hooks/useGymConnection";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -60,7 +60,7 @@ export function MyGymTab({ user }: MyGymTabProps) {
 
         <Card className="text-center py-12">
           <CardContent className="space-y-4">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
+            <Clock className="h-8 w-8 mx-auto text-muted-foreground" />
             <p className="text-muted-foreground">Loading gym data...</p>
           </CardContent>
         </Card>

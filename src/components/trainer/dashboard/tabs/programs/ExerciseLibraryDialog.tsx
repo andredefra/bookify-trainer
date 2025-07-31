@@ -6,7 +6,7 @@ import { ExerciseData } from '@/data/exercises/types';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, RefreshCw, Clock } from 'lucide-react';
 
 interface ExerciseLibraryDialogProps {
   open: boolean;
@@ -96,7 +96,7 @@ export function ExerciseLibraryDialog({
             <CardContent className="pt-6">
               <div className="flex items-center justify-center py-8">
                 <div className="flex flex-col items-center gap-2">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <Clock className="h-8 w-8 text-primary" />
                   <p className="text-sm text-muted-foreground">Loading exercises...</p>
                 </div>
               </div>

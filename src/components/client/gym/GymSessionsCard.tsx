@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, Users, Loader2, ArrowRight } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, ArrowRight } from "lucide-react";
 import { format, isToday, isTomorrow, addDays } from "date-fns";
 import { useGymSessions } from "@/hooks/useGymSessions";
 import { cn } from "@/lib/utils";
@@ -51,7 +51,7 @@ export function GymSessionsCard({ gymId }: GymSessionsCardProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          <Clock className="h-6 w-6 text-muted-foreground" />
         </CardContent>
       </Card>
     );
