@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Star, UserPlus } from "lucide-react";
 import { InviteTrainerDialog } from "../training/InviteTrainerDialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserTrainersProps {
   onNavigateToMessages?: () => void;
@@ -15,6 +16,7 @@ interface UserTrainersProps {
 export function UserTrainers({ onNavigateToMessages }: UserTrainersProps) {
   const [showInviteTrainer, setShowInviteTrainer] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleStartChat = () => {
     if (onNavigateToMessages) {
@@ -140,7 +142,18 @@ export function UserTrainers({ onNavigateToMessages }: UserTrainersProps) {
                       <MessageSquare className="h-4 w-4" />
                       Start Chat
                     </Button>
-                    <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-800/50 transition-colors">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-gray-400 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"
+                      onClick={() => {
+                        // TODO: Navigate to analytics page
+                        toast({
+                          title: "Analytics",
+                          description: "Trainer analytics feature coming soon!"
+                        });
+                      }}
+                    >
                       View Analytics
                     </Button>
                   </div>
