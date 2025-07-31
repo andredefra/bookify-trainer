@@ -1087,7 +1087,13 @@ export function UserTrainingProgram() {
   };
 
   const hasHumanTrainer = trainerAssignment?.assignment_type === 'human';
-  const hasPersonalAIAccess = subscription?.hasPersonalAIAccess || false;
+  
+  // Check if user has AI programs (created by Personal AI Trainer) or has paid subscription
+  const hasAIPrograms = trainingPlans.some(plan => 
+    plan.trainer.name === "Personal AI Trainer" && 
+    (plan.status === 'active' || plan.status === 'accepted')
+  );
+  const hasPersonalAIAccess = subscription?.hasPersonalAIAccess || hasAIPrograms;
   const isEarlyAdopter = subscription?.subscription_status === 'early_adopter';
 
   return (
