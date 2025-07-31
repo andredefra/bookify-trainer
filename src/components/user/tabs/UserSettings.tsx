@@ -17,8 +17,13 @@ import {
   EyeOff,
   Apple,
   Smartphone,
-  Activity
+  Activity,
+  Crown,
+  Calendar,
+  RefreshCw
 } from "lucide-react";
+import { useSubscription } from "@/hooks/useSubscription";
+import { toast } from "sonner";
 
 interface User {
   name?: string;
@@ -37,6 +42,64 @@ export function UserSettings({ user }: UserSettingsProps) {
   const [pushNotifications, setPushNotifications] = useState(true);
   const [workoutReminders, setWorkoutReminders] = useState(true);
   const [progressUpdates, setProgressUpdates] = useState(true);
+  
+  const {
+    subscribed,
+    subscription_tier,
+    subscription_start_date,
+    subscription_end_date,
+    early_adopter_number,
+    isEarlyAdopter,
+    loading,
+    error,
+    checkSubscription,
+    createCheckout,
+    openCustomerPortal,
+  } = useSubscription();
+
+  const handleUpgradeToPersonalAI = async () => {
+    try {
+      // This would be the Stripe price ID for the $4.99/month Personal AI subscription
+      await createCheckout('price_1234567890abcdef'); // Replace with actual price ID
+      toast.success("Redirecting to checkout...");
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error("Failed to start checkout process");
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    try {
+      await openCustomerPortal();
+      toast.success("Opening subscription management...");
+    } catch (error) {
+      console.error('Portal error:', error);
+      toast.error("Failed to open subscription management");
+    }
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const getSubscriptionEndDate = () => {
+    if (isEarlyAdopter && subscription_start_date) {
+      const startDate = new Date(subscription_start_date);
+      const endDate = new Date(startDate);
+      endDate.setFullYear(endDate.getFullYear() + 1);
+      return endDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    return formatDate(subscription_end_date);
+  };
 
   return (
     <div className="space-y-6">
@@ -48,9 +111,9 @@ export function UserSettings({ user }: UserSettingsProps) {
             <User className="h-4 w-4 shrink-0" />
             <span className="truncate">Account</span>
           </TabsTrigger>
-          <TabsTrigger value="payments" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
-            <CreditCard className="h-4 w-4 shrink-0" />
-            <span className="truncate">Payments</span>
+          <TabsTrigger value="subscription" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
+            <Crown className="h-4 w-4 shrink-0" />
+            <span className="truncate">Subscription</span>
           </TabsTrigger>
           <TabsTrigger value="preferences" className="flex items-center justify-center gap-1.5 text-xs lg:text-sm px-3 py-2 min-w-0 flex-1 lg:flex-none">
             <SettingsIcon className="h-4 w-4 shrink-0" />
@@ -132,105 +195,212 @@ export function UserSettings({ user }: UserSettingsProps) {
           </Card>
         </TabsContent>
 
-        {/* Payments Settings */}
-        <TabsContent value="payments" className="space-y-4">
-          {/* Early Access Status Banner */}
-          <Card className="bg-gradient-to-r from-primary to-primary/80 text-white border-0">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="bg-white/20 p-2 rounded-full text-lg">
-                  🎉
+        {/* Subscription Settings */}
+        <TabsContent value="subscription" className="space-y-4">
+          {loading ? (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-center space-x-2">
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  <span>Loading subscription details...</span>
                 </div>
-                <h3 className="text-lg font-bold">Early Access - First 100 Users!</h3>
-              </div>
-              <p className="text-white/90 mb-4">
-                Congratulations! You have free access to all AI features until 2026. 
-                You can decide when to cancel the AI subscription and add a personal trainer.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-white/20 text-white hover:bg-white/30">
-                  ✨ Full AI Access
-                </Badge>
-                <Badge className="bg-white/20 text-white hover:bg-white/30">
-                  🆓 Free until 2026
-                </Badge>
-                <Badge className="bg-white/20 text-white hover:bg-white/30">
-                  👨‍💼 Personal trainer available
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ) : error ? (
+            <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+                  <Button onClick={checkSubscription} variant="outline">
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Retry
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {/* Early Adopter Status Banner */}
+              {isEarlyAdopter && (
+                <Card className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white border-0">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Crown className="h-6 w-6" />
+                      <h3 className="text-lg font-bold">Early Adopter #{early_adopter_number}</h3>
+                    </div>
+                    <p className="text-white/90 mb-4">
+                      Congratulations! You're among the first 100 users and have free access to Personal AI Trainer until{' '}
+                      <strong>{getSubscriptionEndDate()}</strong> (1 year from registration).
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge className="bg-white/20 text-white hover:bg-white/30">
+                        ✨ Full AI Access
+                      </Badge>
+                      <Badge className="bg-white/20 text-white hover:bg-white/30">
+                        🆓 Free for 1 Year
+                      </Badge>
+                      <Badge className="bg-white/20 text-white hover:bg-white/30">
+                        👑 Early Adopter
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                Current Plan
-                <Badge variant="default" className="bg-green-600">
-                  Early Access - Free
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-sm text-muted-foreground">
-                You're among the first 100 users! You have complete access to all AI features at no cost until 2026. 
-                From 2026 you can choose whether to continue with the AI subscription or switch to a personal trainer.
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-green-600">✓</span>
-                  Unlimited access to AI features
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-green-600">✓</span>
-                  Personalized workout programs
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-green-600">✓</span>
-                  Advanced analytics
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-green-600">✓</span>
-                  Personal trainer option available
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              {/* Current Subscription Status */}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Current Subscription</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Badge 
+                      variant={subscribed ? "default" : "secondary"}
+                      className={subscribed ? "bg-green-600" : ""}
+                    >
+                      {isEarlyAdopter 
+                        ? `Early Adopter #${early_adopter_number}` 
+                        : subscription_tier || (subscribed ? "Active" : "Inactive")
+                      }
+                    </Badge>
+                    <Button onClick={checkSubscription} size="sm" variant="ghost">
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Status</Label>
+                      <p className="text-sm text-muted-foreground">
+                        {subscribed ? "Active subscription" : "No active subscription"}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Plan</Label>
+                      <p className="text-sm text-muted-foreground">
+                        {isEarlyAdopter 
+                          ? "Early Adopter (Free)" 
+                          : subscription_tier || "None"
+                        }
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Started</Label>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(subscription_start_date)}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">
+                        {isEarlyAdopter ? "Billing starts" : "Next billing"}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {getSubscriptionEndDate()}
+                      </p>
+                    </div>
+                  </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Payment Methods</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center p-6 border-2 border-dashed border-muted-foreground/20 rounded-lg">
-                <CreditCard className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-3">
-                  No payment method required until 2026
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  You can add a payment method when you decide to continue with the AI subscription or add a personal trainer.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Included Features</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-green-600">✓</span>
+                        Personal AI Trainer
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-green-600">✓</span>
+                        Unlimited workout programs
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-green-600">✓</span>
+                        Progress tracking & analytics
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-green-600">✓</span>
+                        Nutrition planning
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Billing History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center p-6">
-                <div className="text-muted-foreground mb-2">
-                  <CreditCard className="h-8 w-8 mx-auto mb-2" />
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  No billing until 2026
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Billing history will appear here when you start paying for services.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              {/* Subscription Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Subscription Management</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {isEarlyAdopter ? (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <h4 className="font-medium mb-2">Future Billing Information</h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Your early adopter period will end on <strong>{getSubscriptionEndDate()}</strong>. 
+                          After this date, you can choose to:
+                        </p>
+                        <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                          <li>• Continue with Personal AI Trainer for $4.99/month</li>
+                          <li>• Switch to a human trainer</li>
+                          <li>• Use the free basic features</li>
+                        </ul>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        No action needed now. We'll notify you before your early adopter period ends.
+                      </p>
+                    </div>
+                  ) : subscribed ? (
+                    <div className="space-y-3">
+                      <Button onClick={handleManageSubscription} className="w-full">
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Manage Subscription
+                      </Button>
+                      <p className="text-xs text-muted-foreground text-center">
+                        Cancel, update payment method, or change plans
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg">
+                        <h4 className="font-medium mb-2">Upgrade to Personal AI Trainer</h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Get unlimited access to our Personal AI Trainer for just $4.99/month.
+                        </p>
+                        <ul className="text-sm text-muted-foreground space-y-1 ml-4 mb-3">
+                          <li>• Personalized workout programs</li>
+                          <li>• Real-time form corrections</li>
+                          <li>• Advanced progress analytics</li>
+                          <li>• Nutrition guidance</li>
+                        </ul>
+                      </div>
+                      <Button onClick={handleUpgradeToPersonalAI} className="w-full">
+                        <Crown className="h-4 w-4 mr-2" />
+                        Upgrade to Personal AI - $4.99/month
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Billing History */}
+              {subscribed && !isEarlyAdopter && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Billing History</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center p-6">
+                      <Calendar className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">
+                        No billing history available yet
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Your billing history will appear here after your first payment
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </>
+          )}
         </TabsContent>
 
         {/* Preferences Settings */}
