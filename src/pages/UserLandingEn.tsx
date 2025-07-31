@@ -487,7 +487,8 @@ const UserLandingEn = () => {
                 
                 <Button asChild size="lg" className="text-lg px-12 py-6 hover-scale">
                   <Link to="/user-register">
-                    👉 Get Free Access Now - Hurry Up!
+                    <span className="hidden sm:inline">👉 Get Free Access Now - Hurry Up!</span>
+                    <span className="sm:hidden">👉 Get Free Access!</span>
                   </Link>
                 </Button>
                 
