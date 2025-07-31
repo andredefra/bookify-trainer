@@ -788,39 +788,42 @@ export function UserTrainingProgram() {
             
             return (
               <Card key={exerciseIndex} className={exercise.completed ? 'border-green-200 bg-green-50' : ''}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="flex items-center gap-2">
-                        <Dumbbell className="h-5 w-5" />
-                        {exerciseData ? exerciseData.name : exercise.name}
-                      </CardTitle>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                        <span>{exercise.sets} sets × {exercise.reps}</span>
-                        {exerciseData && (
-                          <>
-                            <Badge variant="outline" className={`text-xs ${getDifficultyColor(exerciseData.difficulty)}`}>
-                              {exerciseData.difficulty}
-                            </Badge>
-                            <Badge variant="outline" className={`text-xs ${getCategoryColor(exerciseData.category)}`}>
-                              {exerciseData.category}
-                            </Badge>
-                          </>
-                        )}
-                      </div>
-                      
-                      {/* Exercise details */}
-                      {exerciseData && (
-                        <div className="mt-2 text-xs text-muted-foreground">
-                          <div className="flex flex-wrap gap-1">
-                            <span>Muscles: {exerciseData.muscleGroup.join(', ')}</span>
-                            {exerciseData.equipment.length > 0 && (
-                              <span>• Equipment: {exerciseData.equipment.join(', ')}</span>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                 <CardHeader className="pb-3">
+                   <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:justify-between">
+                     <div className="flex-1 space-y-2">
+                       <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                         <Dumbbell className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
+                         <span className="line-clamp-2">
+                           {exerciseData ? exerciseData.name : exercise.name}
+                         </span>
+                       </CardTitle>
+                       
+                       <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                         <span className="font-medium">{exercise.sets} sets × {exercise.reps}</span>
+                         {exerciseData && (
+                           <>
+                             <Badge variant="outline" className={`text-xs px-2 py-0.5 ${getDifficultyColor(exerciseData.difficulty)}`}>
+                               {exerciseData.difficulty}
+                             </Badge>
+                             <Badge variant="outline" className={`text-xs px-2 py-0.5 ${getCategoryColor(exerciseData.category)}`}>
+                               {exerciseData.category}
+                             </Badge>
+                           </>
+                         )}
+                       </div>
+                       
+                       {/* Exercise details */}
+                       {exerciseData && (
+                         <div className="text-xs text-muted-foreground">
+                           <div className="flex flex-wrap gap-1">
+                             <span>Muscles: {exerciseData.muscleGroup.join(', ')}</span>
+                             {exerciseData.equipment.length > 0 && (
+                               <span>• Equipment: {exerciseData.equipment.join(', ')}</span>
+                             )}
+                           </div>
+                         </div>
+                       )}
+                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2">
                       {exercise.completed && (
                         <Badge className="bg-green-600 w-fit">Completed</Badge>
