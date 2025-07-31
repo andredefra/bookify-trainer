@@ -755,18 +755,19 @@ export function UserTrainingProgram() {
 
     // Active session view
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
             <Button 
               variant="outline" 
               onClick={() => setActiveWorkout(null)}
+              className="w-fit"
             >
               ← Exit Workout
             </Button>
-            <div>
-              <h1 className="text-2xl font-bold">Session {activeWorkout.day}: Push/Pull Circuit</h1>
-              <p className="text-muted-foreground">
+            <div className="space-y-1">
+              <h1 className="text-lg sm:text-2xl font-bold">Session {activeWorkout.day}: Push/Pull Circuit</h1>
+              <p className="text-sm text-muted-foreground">
                 Started at {new Date(activeWorkout.startTime).toLocaleTimeString()}
               </p>
             </div>
@@ -774,7 +775,7 @@ export function UserTrainingProgram() {
           <Button 
             onClick={completeWorkout}
             disabled={!activeWorkout.exercises.every((ex: any) => ex.completed)}
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
             Complete Session
