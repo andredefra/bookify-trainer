@@ -821,36 +821,44 @@ export function UserTrainingProgram() {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2">
                       {exercise.completed && (
-                        <Badge className="bg-green-600">Completed</Badge>
+                        <Badge className="bg-green-600 w-fit">Completed</Badge>
                       )}
                       
-                      {/* Exercise Info Button */}
-                      {exerciseData && (
+                      <div className="flex items-center gap-2 w-full sm:w-auto">
+                        {/* Exercise Info Button */}
+                        {exerciseData && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowExerciseInfo(
+                              showExerciseInfo === exerciseIndex ? null : exerciseIndex
+                            )}
+                            className="shrink-0"
+                          >
+                            <Info className="h-4 w-4" />
+                          </Button>
+                        )}
+                        
                         <Button
                           variant="outline"
-                          size="sm"
-                          onClick={() => setShowExerciseInfo(
-                            showExerciseInfo === exerciseIndex ? null : exerciseIndex
+                          onClick={() => setExpandedExercise(
+                            expandedExercise === exerciseIndex ? null : exerciseIndex
                           )}
+                          className="flex-1 sm:min-w-[100px] sm:flex-none text-xs sm:text-sm"
                         >
-                          <Info className="h-4 w-4" />
+                          <span className="hidden sm:inline">
+                            {expandedExercise === exerciseIndex ? 'Hide Sets' : 'Track Sets'}
+                          </span>
+                          <span className="sm:hidden">
+                            {expandedExercise === exerciseIndex ? 'Hide' : 'Track'}
+                          </span>
+                          <span className="ml-1 sm:ml-2">
+                            {expandedExercise === exerciseIndex ? '▲' : '▼'}
+                          </span>
                         </Button>
-                      )}
-                      
-                      <Button
-                        variant="outline"
-                        onClick={() => setExpandedExercise(
-                          expandedExercise === exerciseIndex ? null : exerciseIndex
-                        )}
-                        className="min-w-[120px]"
-                      >
-                        {expandedExercise === exerciseIndex ? 'Hide Sets' : 'Track Sets'}
-                        <span className="ml-2">
-                          {expandedExercise === exerciseIndex ? '▲' : '▼'}
-                        </span>
-                      </Button>
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
