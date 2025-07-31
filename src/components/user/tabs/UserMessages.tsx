@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Bot, Send, User, MessageSquare, Mic, Plus, Settings, Image, Video, Paperclip, X, Clock } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useRealtimeVoice } from '@/hooks/useRealtimeVoice';
 
 interface Message {
   id: string;
@@ -60,6 +61,18 @@ export function UserMessages() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  
+  // Voice functionality
+  const { 
+    isConnected: voiceConnected, 
+    isListening, 
+    isSpeaking, 
+    connect: connectVoice, 
+    disconnect: disconnectVoice,
+    startListening,
+    stopListening,
+    sendTextMessage
+  } = useRealtimeVoice();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -133,7 +146,17 @@ export function UserMessages() {
       setMessages(prev => [...prev, userMessage]);
 
       if (activeConv.type === 'ai') {
-        // Send to AI trainer
+        // Check if we're in voice mode and connected
+        if (voiceMode && voiceConnected) {
+          // Send through voice interface for audio response
+          sendTextMessage(content);
+          setInput('');
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        }
+
+        // Send to AI trainer for text response
         const response = await supabase.functions.invoke('openai-trainer-chat', {
           body: {
             message: content,
@@ -494,15 +517,29 @@ export function UserMessages() {
               </div>
               
               <div className="flex items-center gap-1 lg:gap-2">
-                <Button
-                  variant={voiceMode ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setVoiceMode(!voiceMode)}
-                  className="gap-1 lg:gap-2 text-xs lg:text-sm"
-                >
-                  <Mic className="h-3 w-3 lg:h-4 lg:w-4" />
-                  <span className="hidden sm:inline">{voiceMode ? 'Voice ON' : 'Voice'}</span>
-                </Button>
+                 <Button
+                   variant={voiceMode ? "default" : "outline"}
+                   size="sm"
+                   onClick={async () => {
+                     if (!voiceMode) {
+                       await connectVoice();
+                       setVoiceMode(true);
+                     } else {
+                       disconnectVoice();
+                       setVoiceMode(false);
+                     }
+                   }}
+                   className="gap-1 lg:gap-2 text-xs lg:text-sm"
+                   disabled={isLoading}
+                 >
+                   <Mic className={`h-3 w-3 lg:h-4 lg:w-4 ${isListening ? 'text-red-500' : ''} ${isSpeaking ? 'text-blue-500' : ''}`} />
+                   <span className="hidden sm:inline">
+                     {!voiceMode ? 'Voice' : 
+                      isListening ? 'Listening...' : 
+                      isSpeaking ? 'AI Speaking...' :
+                      voiceConnected ? 'Voice ON' : 'Connecting...'}
+                   </span>
+                 </Button>
               </div>
             </div>
           </CardHeader>
@@ -542,6 +579,42 @@ export function UserMessages() {
             </ScrollArea>
             
             <div className="border-t p-3 lg:p-4">
+
+              {/* Voice Mode Interface */}
+              {voiceMode && voiceConnected && (
+                <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg border">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-3 w-3 rounded-full ${voiceConnected ? 'bg-green-500' : 'bg-red-500'}`} />
+                      <span className="text-sm font-medium">
+                        {isListening ? '🎤 Listening...' : 
+                         isSpeaking ? '🤖 AI Speaking...' : 
+                         '✅ Voice Ready'}
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      {!isListening && !isSpeaking && (
+                        <Button 
+                          size="sm" 
+                          onClick={startListening}
+                          className="bg-blue-500 hover:bg-blue-600"
+                        >
+                          Start Speaking
+                        </Button>
+                      )}
+                      {isListening && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={stopListening}
+                        >
+                          Stop
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Media options */}
               {showMediaOptions && (
