@@ -31,7 +31,7 @@ export function UserTrainers({ onNavigateToMessages }: UserTrainersProps) {
         <h1 className="text-2xl font-bold">My Trainers</h1>
         <Button variant="outline" className="gap-2" onClick={() => setShowInviteTrainer(true)}>
           <UserPlus className="h-4 w-4" />
-          Invita il tuo personal trainer
+          Invite Your Personal Trainer
         </Button>
       </div>
 
