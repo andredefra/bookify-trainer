@@ -56,6 +56,7 @@ import {
 import { WeeklyActivityChart } from "./charts/WeeklyActivityChart";
 import { WorkoutTypesChart } from "./charts/WorkoutTypesChart";
 import { GoalsProgressChart } from "./charts/GoalsProgressChart";
+import { AnalyticsChat } from "./AnalyticsChat";
 
 // Import activity type utilities
 import { generateWorkoutTypesFromData, getDefaultWorkoutTypes } from "./utils/workoutTypeUtils";
@@ -638,6 +639,14 @@ export function WorkoutAnalytics({
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* AI Analytics Chat Section */}
+        <div className="mt-6">
+          <AnalyticsChat 
+            analyticsStats={analyticsStats} 
+            progressData={progressData} 
+          />
+        </div>
       </CardContent>
     </Card>
   );
