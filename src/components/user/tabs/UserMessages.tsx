@@ -610,9 +610,9 @@ export function UserMessages() {
                 </div>
                 {/* Loading State - Non cliccabile */}
                 {(isLoading || uploadingMedia) ? (
-                  <div className="px-4 py-2 bg-muted rounded-md border text-muted-foreground text-sm flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {uploadingMedia ? 'Uploading file...' : 'AI is writing...'}
+                  <div className="px-4 py-2 bg-yellow-100 border-2 border-yellow-400 rounded-md text-yellow-800 text-sm flex items-center gap-2 font-medium">
+                    <Loader2 className="h-4 w-4 animate-spin text-yellow-600" />
+                    {uploadingMedia ? '📁 UPLOADING FILE...' : '🤖 AI IS WRITING...'}
                   </div>
                 ) : (
                   <Button 
