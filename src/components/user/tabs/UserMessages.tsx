@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Send, Loader2, User, MessageSquare, Mic, Plus, Settings } from "lucide-react";
+import { Bot, Send, Loader2, User, MessageSquare, Mic, Plus, Settings, Image, Video, Paperclip, X } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -54,7 +54,11 @@ export function UserMessages() {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [voiceMode, setVoiceMode] = useState(false);
+  const [showMediaOptions, setShowMediaOptions] = useState(false);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -174,9 +178,94 @@ export function UserMessages() {
     }
   };
 
+  const handleFileUpload = async (file: File) => {
+    setUploadingMedia(true);
+    try {
+      // Upload file to Supabase Storage
+      const fileName = `${Date.now()}_${file.name}`;
+      const { data, error } = await supabase.storage
+        .from('user-media')
+        .upload(fileName, file);
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('user-media')
+        .getPublicUrl(fileName);
+
+      // Determine message type based on file type
+      let messageType: 'image' | 'video' | 'file' = 'file';
+      if (file.type.startsWith('image/')) messageType = 'image';
+      else if (file.type.startsWith('video/')) messageType = 'video';
+
+      // Create message with media
+      const mediaMessage: Message = {
+        id: `media-${Date.now()}`,
+        conversation_id: activeConversation,
+        sender: 'user',
+        content: messageType === 'file' ? `Documento: ${file.name}` : '',
+        message_type: messageType,
+        media_url: urlData.publicUrl,
+        file_name: file.name,
+        created_at: new Date().toISOString()
+      };
+
+      setMessages(prev => [...prev, mediaMessage]);
+      
+      // Save to database
+      await supabase.from('user_messages').insert({
+        conversation_id: activeConversation,
+        sender: 'user',
+        content: mediaMessage.content,
+        message_type: messageType,
+        media_url: urlData.publicUrl,
+        file_name: file.name
+      });
+
+      toast({
+        title: 'Media caricato',
+        description: 'File inviato con successo!'
+      });
+
+    } catch (error) {
+      console.error('Error uploading media:', error);
+      toast({
+        title: 'Errore',
+        description: 'Impossibile caricare il file',
+        variant: 'destructive'
+      });
+    } finally {
+      setUploadingMedia(false);
+      setSelectedFile(null);
+      setShowMediaOptions(false);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast({
+          title: 'File troppo grande',
+          description: 'Dimensione massima consentita: 10MB',
+          variant: 'destructive'
+        });
+        return;
+      }
+      setSelectedFile(file);
+      handleFileUpload(file);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    sendMessage(input);
+    if (selectedFile) {
+      handleFileUpload(selectedFile);
+    } else {
+      sendMessage(input);
+    }
   };
 
   const getConversationIcon = (conversation: Conversation) => {
@@ -223,7 +312,43 @@ export function UserMessages() {
               ? 'bg-primary text-primary-foreground' 
               : 'bg-muted'
           }`}>
-            <p className="text-sm lg:text-base whitespace-pre-wrap break-words">{message.content}</p>
+            {message.content && (
+              <p className="text-sm lg:text-base whitespace-pre-wrap break-words">{message.content}</p>
+            )}
+            
+            {/* Media content */}
+            {message.media_url && (
+              <div className="mt-2">
+                {message.message_type === 'image' && (
+                  <img 
+                    src={message.media_url} 
+                    alt="Immagine condivisa" 
+                    className="max-w-xs rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => window.open(message.media_url, '_blank')}
+                  />
+                )}
+                {message.message_type === 'video' && (
+                  <video 
+                    src={message.media_url} 
+                    controls 
+                    className="max-w-xs rounded-lg"
+                  />
+                )}
+                {message.message_type === 'file' && (
+                  <div className="flex items-center gap-2 p-2 bg-background/50 rounded-lg">
+                    <Paperclip className="h-4 w-4" />
+                    <a 
+                      href={message.media_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm hover:underline"
+                    >
+                      {message.file_name}
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
             
             {/* Function call results */}
             {message.function_call && (
@@ -406,22 +531,105 @@ export function UserMessages() {
             </ScrollArea>
             
             <div className="border-t p-3 lg:p-4">
+              {/* Media options */}
+              {showMediaOptions && (
+                <div className="mb-3 flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      fileInputRef.current?.click();
+                      setShowMediaOptions(false);
+                    }}
+                    className="gap-1"
+                  >
+                    <Image className="h-4 w-4" />
+                    Foto
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = 'video/*';
+                      input.onchange = (e) => handleFileSelect(e as any);
+                      input.click();
+                      setShowMediaOptions(false);
+                    }}
+                    className="gap-1"
+                  >
+                    <Video className="h-4 w-4" />
+                    Video
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = '.pdf,.doc,.docx,.txt,.png,.jpg,.jpeg';
+                      input.onchange = (e) => handleFileSelect(e as any);
+                      input.click();
+                      setShowMediaOptions(false);
+                    }}
+                    className="gap-1"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                    File
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowMediaOptions(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="flex space-x-2">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Scrivi un messaggio..."
-                  disabled={isLoading}
-                  className="flex-1 text-sm lg:text-base"
-                />
-                <Button type="submit" disabled={isLoading || (!input.trim())} size="sm" className="px-3">
-                  {isLoading ? (
+                <div className="flex items-center space-x-2 flex-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowMediaOptions(!showMediaOptions)}
+                    disabled={uploadingMedia || isLoading}
+                    className="px-2"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                  <Input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Scrivi un messaggio..."
+                    disabled={isLoading || uploadingMedia}
+                    className="flex-1 text-sm lg:text-base"
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  disabled={isLoading || uploadingMedia || (!input.trim())} 
+                  size="sm" 
+                  className="px-3"
+                >
+                  {isLoading || uploadingMedia ? (
                     <Loader2 className="h-3 w-3 lg:h-4 lg:w-4 animate-spin" />
                   ) : (
                     <Send className="h-3 w-3 lg:h-4 lg:w-4" />
                   )}
                 </Button>
               </form>
+
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
             </div>
           </CardContent>
         </Card>
