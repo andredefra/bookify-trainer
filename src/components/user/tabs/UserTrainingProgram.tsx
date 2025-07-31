@@ -32,6 +32,10 @@ import { ExerciseData } from '@/data/exercises/types';
 import { ExerciseVideoPlayer } from '@/components/client/training/ExerciseVideoPlayer';
 import { AlternativeExercisesList } from '@/components/trainer/dashboard/tabs/programs/AlternativeExercisesList';
 import { ProgramAnalysisCard } from '../training/ProgramAnalysisCard';
+import { TrainerStatusCard } from '../training/TrainerStatusCard';
+import { InviteTrainerDialog } from '../training/InviteTrainerDialog';
+import { UpgradeSubscriptionDialog } from '../training/UpgradeSubscriptionDialog';
+import { useUserSubscription } from '@/hooks/useUserSubscription';
 
 interface TrainingPlan {
   id: string;
@@ -183,8 +187,11 @@ export function UserTrainingProgram() {
   const [sessionStarted, setSessionStarted] = useState(false);
   const [expandedExercise, setExpandedExercise] = useState<number | null>(null);
   const [showExerciseInfo, setShowExerciseInfo] = useState<number | null>(null);
+  const [showInviteTrainer, setShowInviteTrainer] = useState(false);
+  const [showUpgradeSubscription, setShowUpgradeSubscription] = useState(false);
   
   const { allExercises, getExerciseByName } = useExerciseLibrary();
+  const { subscription, trainerAssignment, loading: subscriptionLoading, updateSubscription } = useUserSubscription();
 
   // Exercise name mapping from workout program to Exercise Library
   const exerciseNameMapping: { [key: string]: string } = {
@@ -1058,6 +1065,31 @@ export function UserTrainingProgram() {
   const acceptedPlans = trainingPlans.filter(plan => plan.status === 'accepted');
   const completedPlans = trainingPlans.filter(plan => plan.status === 'completed');
 
+  // Handlers for the new workflow
+  const handleRequestNewProgram = () => {
+    if (trainerAssignment?.assignment_type === 'human') {
+      // TODO: Navigate to messages with human trainer
+      toast.success("Opening chat with your trainer...");
+    } else if (subscription?.hasPersonalAIAccess) {
+      // TODO: Navigate to AI chat for program creation
+      toast.success("Opening AI chat for program creation...");
+    }
+  };
+
+  const handleInviteTrainer = () => {
+    setShowInviteTrainer(true);
+  };
+
+  const handleUpgradeSubscription = (tier: string) => {
+    updateSubscription('paid', tier);
+    setShowUpgradeSubscription(false);
+    toast.success(`Upgraded to ${tier} plan! You now have access to Personal AI Trainer.`);
+  };
+
+  const hasHumanTrainer = trainerAssignment?.assignment_type === 'human';
+  const hasPersonalAIAccess = subscription?.hasPersonalAIAccess || false;
+  const isEarlyAdopter = subscription?.subscription_status === 'early_adopter';
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -1065,11 +1097,20 @@ export function UserTrainingProgram() {
           <h1 className="text-xl sm:text-2xl font-bold">Training Programs</h1>
           <p className="text-sm sm:text-base text-muted-foreground">Your personalized workout plans</p>
         </div>
-        <Button variant="outline" className="flex items-center justify-center space-x-2 w-full sm:w-auto">
-          <MessageCircle className="h-4 w-4" />
-          <span className="text-sm sm:text-base">Request New Program</span>
-        </Button>
       </div>
+
+      {/* Trainer Status Card */}
+      {!subscriptionLoading && (
+        <TrainerStatusCard
+          hasHumanTrainer={hasHumanTrainer}
+          hasPersonalAIAccess={hasPersonalAIAccess}
+          isEarlyAdopter={isEarlyAdopter}
+          earlyAdopterNumber={subscription?.early_adopter_number}
+          onRequestNewProgram={handleRequestNewProgram}
+          onInviteTrainer={handleInviteTrainer}
+          onUpgradeSubscription={() => setShowUpgradeSubscription(true)}
+        />
+      )}
 
       {trainingPlans.length === 0 ? (
         <Card>
@@ -1133,6 +1174,18 @@ export function UserTrainingProgram() {
           </TabsContent>
         </Tabs>
       )}
+
+      {/* Dialogs */}
+      <InviteTrainerDialog
+        open={showInviteTrainer}
+        onOpenChange={setShowInviteTrainer}
+      />
+
+      <UpgradeSubscriptionDialog
+        open={showUpgradeSubscription}
+        onOpenChange={setShowUpgradeSubscription}
+        onUpgrade={handleUpgradeSubscription}
+      />
     </div>
   );
 }

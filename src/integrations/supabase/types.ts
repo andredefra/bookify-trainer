@@ -2217,6 +2217,78 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          early_adopter_number: number | null
+          id: string
+          subscription_end_date: string | null
+          subscription_start_date: string | null
+          subscription_status: string
+          subscription_tier: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          early_adopter_number?: number | null
+          id?: string
+          subscription_end_date?: string | null
+          subscription_start_date?: string | null
+          subscription_status?: string
+          subscription_tier?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          early_adopter_number?: number | null
+          id?: string
+          subscription_end_date?: string | null
+          subscription_start_date?: string | null
+          subscription_status?: string
+          subscription_tier?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_trainer_assignments: {
+        Row: {
+          assigned_date: string
+          assignment_type: string
+          created_at: string
+          id: string
+          notes: string | null
+          status: string
+          trainer_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_date?: string
+          assignment_type?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          trainer_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_date?: string
+          assignment_type?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          trainer_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
