@@ -608,20 +608,26 @@ export function UserMessages() {
                     className="flex-1 text-sm lg:text-base"
                   />
                 </div>
+                {/* DEBUG: Always show current state */}
+                <div className="text-xs text-gray-500 mb-1">
+                  Debug: isLoading={isLoading.toString()}, uploadingMedia={uploadingMedia.toString()}
+                </div>
+                
                 {/* Loading State - Non cliccabile */}
                 {(isLoading || uploadingMedia) ? (
-                  <div className="px-4 py-2 bg-yellow-100 border-2 border-yellow-400 rounded-md text-yellow-800 text-sm flex items-center gap-2 font-medium">
-                    <Loader2 className="h-4 w-4 animate-spin text-yellow-600" />
-                    {uploadingMedia ? '📁 UPLOADING FILE...' : '🤖 AI IS WRITING...'}
+                  <div className="px-6 py-3 bg-red-500 border-4 border-red-700 rounded-lg text-white text-base flex items-center gap-3 font-bold animate-pulse">
+                    <Loader2 className="h-6 w-6 animate-spin text-white" />
+                    {uploadingMedia ? '⚠️ UPLOADING FILE - PLEASE WAIT!' : '⚠️ AI IS PROCESSING - PLEASE WAIT!'}
                   </div>
                 ) : (
                   <Button 
                     type="submit" 
                     disabled={!input.trim()} 
                     size="sm" 
-                    className="px-3"
+                    className="px-3 bg-green-500 hover:bg-green-600"
                   >
                     <Send className="h-3 w-3 lg:h-4 lg:w-4" />
+                    SEND MESSAGE
                   </Button>
                 )}
               </form>
