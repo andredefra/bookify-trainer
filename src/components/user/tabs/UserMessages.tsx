@@ -116,6 +116,7 @@ export function UserMessages() {
     const activeConv = conversations.find(c => c.id === activeConversation);
     if (!activeConv) return;
 
+    console.log('🔥 SETTING LOADING STATES:', { isLoading: true, isTyping: true });
     setIsLoading(true);
     setIsTyping(true);
 
