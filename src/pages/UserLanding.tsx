@@ -23,7 +23,7 @@ const UserLanding = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-6 md:space-y-10">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-primary mx-auto max-w-5xl md:leading-tight text-balance">
-                Allena corpo e mente. Con Trainer.ai, non sei mai da solo.
+                Allena corpo e mente. Con il Trainer AI di MyPersonal, non sei mai da solo.
               </h1>
               
               <p className="mx-auto max-w-3xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
@@ -64,7 +64,7 @@ const UserLanding = () => {
                   </p>
                   
                   <p>
-                    Con <strong className="text-primary">Trainer.ai</strong>, finalmente puoi costruire una routine personalizzata 
+                    Con <strong className="text-primary">il Trainer AI di MyPersonal</strong>, finalmente puoi costruire una routine personalizzata 
                     senza dover dipendere da un coach umano.
                   </p>
                 </div>
@@ -106,7 +106,7 @@ const UserLanding = () => {
                           <Bot className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">Trainer.ai</div>
+                          <div className="text-sm font-semibold">Trainer AI di MyPersonal</div>
                           <div className="text-xs text-muted-foreground">Online ora</div>
                         </div>
                       </div>
@@ -155,7 +155,7 @@ const UserLanding = () => {
             <div className="text-center mb-12 animate-fade-in">
               <Badge variant="outline" className="mb-4">🤖 Intelligenza Artificiale</Badge>
               <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                Trainer.ai: il tuo nuovo<br />
+                Il Trainer AI di MyPersonal: il tuo nuovo<br />
                 <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">alleato virtuale</span>
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -199,7 +199,7 @@ const UserLanding = () => {
             <div className="max-w-4xl mx-auto">
               <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg">
                 <h3 className="text-2xl font-semibold text-primary mb-6 text-center">
-                  💬 Domande che puoi fare a Trainer.ai:
+                  💬 Domande che puoi fare al Trainer AI di MyPersonal:
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   {[
@@ -215,7 +215,7 @@ const UserLanding = () => {
                 </div>
                 <div className="text-center mt-8">
                   <p className="text-lg">
-                    <strong className="text-primary">Trainer.ai risponde sempre.</strong> Concreto, semplice, efficace.<br />
+                    <strong className="text-primary">Il Trainer AI di MyPersonal risponde sempre.</strong> Concreto, semplice, efficace.<br />
                     <span className="text-muted-foreground">Come avere un coach in tasca, ma più economico e sempre disponibile.</span>
                   </p>
                 </div>
