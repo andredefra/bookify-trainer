@@ -76,29 +76,27 @@ export function CreateProgramDialog({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-6">
-              <ProgramCreationForm 
-                clientId="mock-client-id" 
-                clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
-                onSend={handleSend}
-                isPremium={true}
-                initialData={program ? {
-                  id: String(program.id),
-                  title: program.title,
-                  weekStart: "",
-                  duration: duration,
-                  targetFrequency: targetFrequency,
-                  objective: program.objective || "",
-                  description: "",
-                  isPaid: program.isPaid || false,
-                  price: program.price || 0,
-                  sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
-                } : undefined}
-              />
-            </div>
-          </ScrollArea>
+        <div className="flex-1 overflow-auto">
+          <div className="min-w-max p-6">
+            <ProgramCreationForm 
+              clientId="mock-client-id" 
+              clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
+              onSend={handleSend}
+              isPremium={true}
+              initialData={program ? {
+                id: String(program.id),
+                title: program.title,
+                weekStart: "",
+                duration: duration,
+                targetFrequency: targetFrequency,
+                objective: program.objective || "",
+                description: "",
+                isPaid: program.isPaid || false,
+                price: program.price || 0,
+                sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
+              } : undefined}
+            />
+          </div>
         </div>
       </DialogContent>
     </Dialog>
