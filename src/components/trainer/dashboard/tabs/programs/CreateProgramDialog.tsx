@@ -64,8 +64,8 @@ export function CreateProgramDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden">
-        <DialogHeader className="pb-4">
+      <DialogContent className="w-full max-w-6xl h-[95vh] flex flex-col p-0">
+        <DialogHeader className="p-6 pb-4 border-b">
           <DialogTitle className="text-xl font-semibold">
             {editMode ? 'Edit Program' : 'Create New Program'}
           </DialogTitle>
@@ -76,28 +76,30 @@ export function CreateProgramDialog({
           </DialogDescription>
         </DialogHeader>
         
-        <ScrollArea className="max-h-[calc(90vh-120px)] pr-4">
-          <div className="px-2 py-2">
-            <ProgramCreationForm 
-              clientId="mock-client-id" 
-              clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
-              onSend={handleSend}
-              isPremium={true}
-              initialData={program ? {
-                id: String(program.id),
-                title: program.title,
-                weekStart: "",
-                duration: duration,
-                targetFrequency: targetFrequency,
-                objective: program.objective || "",
-                description: "",
-                isPaid: program.isPaid || false,
-                price: program.price || 0,
-                sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
-              } : undefined}
-            />
-          </div>
-        </ScrollArea>
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full">
+            <div className="p-6">
+              <ProgramCreationForm 
+                clientId="mock-client-id" 
+                clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
+                onSend={handleSend}
+                isPremium={true}
+                initialData={program ? {
+                  id: String(program.id),
+                  title: program.title,
+                  weekStart: "",
+                  duration: duration,
+                  targetFrequency: targetFrequency,
+                  objective: program.objective || "",
+                  description: "",
+                  isPaid: program.isPaid || false,
+                  price: program.price || 0,
+                  sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
+                } : undefined}
+              />
+            </div>
+          </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
