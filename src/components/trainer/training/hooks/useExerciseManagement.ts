@@ -12,6 +12,13 @@ export function useExerciseManagement(
     // Update exercise name
     onUpdate("name", exerciseData.name);
     
+    // Set exercise database fields for linking
+    onUpdate("exerciseDbId", exerciseData.id);
+    onUpdate("muscleGroups", exerciseData.muscleGroup || []);
+    onUpdate("equipment", exerciseData.equipment || []);
+    onUpdate("difficulty", exerciseData.difficulty);
+    onUpdate("alternativeExercises", exerciseData.alternativeExercises || []);
+    
     // Auto-fill notes if they're empty
     if (!exercise.notes || exercise.notes.trim() === '') {
       onUpdate("notes", exerciseData.notes || "");

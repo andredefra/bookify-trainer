@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Exercise } from "@/data/training/types";
 import { ExerciseSelector } from "./ExerciseSelector";
 import { useExerciseManagement } from "./hooks/useExerciseManagement";
+import { AlternativeExercisesList } from "../dashboard/tabs/programs/AlternativeExercisesList";
 
 interface ExerciseFormProps {
   exercise: Exercise;
@@ -94,6 +95,17 @@ export function ExerciseForm({ exercise, onUpdate, onRemove }: ExerciseFormProps
           className="resize-none"
         />
       </div>
+
+      {/* Alternative Exercises */}
+      {isExerciseSelected && exercise.alternativeExercises && exercise.alternativeExercises.length > 0 && (
+        <div className="space-y-3">
+          <FormLabel>Alternative Exercises</FormLabel>
+          <AlternativeExercisesList
+            alternativeExerciseIds={exercise.alternativeExercises}
+            className="border-0 p-0"
+          />
+        </div>
+      )}
       
       <div className="flex justify-end pt-3 border-t">
         <Button
