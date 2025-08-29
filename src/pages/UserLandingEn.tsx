@@ -403,7 +403,7 @@ const UserLandingEn = () => {
                     </div>
                   </div>
                   <CardDescription className="text-base">
-                    Same exact features, available after the first 100 users
+                    Same features except early access updates, which are reserved for the first 100 users
                   </CardDescription>
                   
                   <div className="bg-primary/10 rounded-lg p-4 mt-4">
@@ -423,7 +423,6 @@ const UserLandingEn = () => {
                       { text: "All device integrations", icon: Smartphone },
                       { text: "Advanced AI features", icon: Zap },
                       { text: "Priority 24/7 support", icon: Shield },
-                      { text: "Early access updates", icon: Infinity }
                     ].map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">
