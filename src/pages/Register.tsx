@@ -14,9 +14,9 @@ const Register = () => {
   const handleRegister = (data: z.infer<typeof registerSchema>) => {
     console.log("Registration data:", data);
     
-    // Demo mode: Accept any credentials
-    toast.success("Demo registration successful!");
-    // Store user data
+    // Demo mode for MyPersonalFit: Accept any credentials
+    toast.success("Welcome to MyPersonalFit!");
+    // Store user data for MyPersonalFit
     localStorage.setItem('demo-user', JSON.stringify({
       name: data.name,
       email: data.email,
@@ -24,7 +24,7 @@ const Register = () => {
       plan: data.plan || 'free'
     }));
     
-    // Redirect based on user type
+    // Redirect based on user type for MyPersonalFit (trainers, clients, gyms)
     if (data.userType === "client") {
       navigate('/client-dashboard');
     } else if (data.userType === "trainer") {
