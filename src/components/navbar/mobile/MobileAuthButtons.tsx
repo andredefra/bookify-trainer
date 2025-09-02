@@ -22,7 +22,7 @@ const MobileAuthButtons = ({ onButtonClick }: MobileAuthButtonsProps) => {
         </Button>
       </Link>
       <Link 
-        to="/dashboard" 
+        to="/register" 
         className="w-full block"
         onClick={onButtonClick}
       >
