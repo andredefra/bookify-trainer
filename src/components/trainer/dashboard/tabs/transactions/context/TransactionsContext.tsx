@@ -1,23 +1,22 @@
-
 import { createContext, useState, useContext, ReactNode } from "react";
 import { TransactionType } from "../types/transactionTypes";
 import { ClientSummary, ClientData } from "../types/TransactionsTabTypes";
 import { toast } from "sonner";
 
-// Enhanced mock transaction data with packages and receipt tracking
+// Enhanced mock transaction data - INVOICE ONLY
 const initialTransactions = [
-  { id: 1, client: "Sarah Johnson", type: "Package", name: "Personal Training Package (10 sessions)", amount: 500, date: "2023-06-15", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, receiptSent: false, isPackagePayment: true, packageId: "pkg-001" },
-  { id: 2, client: "Mike Peterson", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-12", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: true, receiptSent: true, receiptSentAt: "2023-06-12T15:30:00Z", receiptNumber: "RCP-001", packageId: "pkg-002" },
-  { id: 3, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package", amount: 750, date: "2023-06-10", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, receiptSent: false, isPackagePayment: true, installmentNumber: 1, totalInstallments: 2 },
-  { id: 4, client: "David Kim", type: "Session", name: "Group Session", amount: 20, date: "2023-06-08", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false, receiptSent: false },
-  { id: 5, client: "Sarah Johnson", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-05", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: true, receiptSent: false, packageId: "pkg-001" },
-  { id: 6, client: "Mike Peterson", type: "Program", name: "Mobility & Recovery", amount: 39.99, date: "2023-06-03", status: "paid" as const, paymentMethod: "cash" as const, invoiceSent: false, receiptSent: false },
-  { id: 7, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package (2nd installment)", amount: 375, date: "2023-06-01", status: "pending" as const, paymentMethod: "card" as const, invoiceSent: true, receiptSent: false, isPackagePayment: true, installmentNumber: 2, totalInstallments: 2 },
-  { id: 8, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2023-06-18", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false, receiptSent: false },
-  { id: 9, client: "Emma Thompson", type: "Package", name: "Beginner Package (6 sessions)", amount: 240, date: "2023-06-17", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, receiptSent: false, isPackagePayment: true },
-  { id: 10, client: "Ryan Murphy", type: "Program", name: "Fat Loss Program", amount: 89.99, date: "2023-06-14", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false, receiptSent: false },
-  { id: 11, client: "Olivia Chen", type: "Session", name: "Nutrition Consultation", amount: 55, date: "2023-06-09", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false, receiptSent: false },
-  { id: 12, client: "Daniel Lee", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-07", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, receiptSent: false, packageId: "pkg-003" },
+  { id: 1, client: "Sarah Johnson", type: "Package", name: "Personal Training Package (10 sessions)", amount: 500, date: "2023-06-15", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, isPackagePayment: true, packageId: "pkg-001" },
+  { id: 2, client: "Mike Peterson", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-12", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: true, packageId: "pkg-002" },
+  { id: 3, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package", amount: 750, date: "2023-06-10", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, isPackagePayment: true, installmentNumber: 1, totalInstallments: 2 },
+  { id: 4, client: "David Kim", type: "Session", name: "Group Session", amount: 20, date: "2023-06-08", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false },
+  { id: 5, client: "Sarah Johnson", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-05", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: true, packageId: "pkg-001" },
+  { id: 6, client: "Mike Peterson", type: "Program", name: "Mobility & Recovery", amount: 39.99, date: "2023-06-03", status: "paid" as const, paymentMethod: "cash" as const, invoiceSent: false },
+  { id: 7, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package (2nd installment)", amount: 375, date: "2023-06-01", status: "pending" as const, paymentMethod: "card" as const, invoiceSent: true, isPackagePayment: true, installmentNumber: 2, totalInstallments: 2 },
+  { id: 8, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2023-06-18", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false },
+  { id: 9, client: "Emma Thompson", type: "Package", name: "Beginner Package (6 sessions)", amount: 240, date: "2023-06-17", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, isPackagePayment: true },
+  { id: 10, client: "Ryan Murphy", type: "Program", name: "Fat Loss Program", amount: 89.99, date: "2023-06-14", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false },
+  { id: 11, client: "Olivia Chen", type: "Session", name: "Nutrition Consultation", amount: 55, date: "2023-06-09", status: "pending" as const, paymentMethod: "cash" as const, invoiceSent: false },
+  { id: 12, client: "Daniel Lee", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-07", status: "paid" as const, paymentMethod: "card" as const, invoiceSent: false, packageId: "pkg-003" },
 ];
 
 const clientList: ClientData[] = [
@@ -41,16 +40,12 @@ interface TransactionsContextType {
   clientSummaries: ClientSummary[];
   filteredTransactions: TransactionType[];
   filteredClients: ClientSummary[];
-  receiptFilter: 'all' | 'sent' | 'unsent';
   setSearchQuery: (query: string) => void;
   setShowAddDialog: (show: boolean) => void;
   setSelectedTransactions: (transactions: Set<number>) => void;
-  setReceiptFilter: (filter: 'all' | 'sent' | 'unsent') => void;
   handleAddTransaction: (newTransaction: Omit<TransactionType, 'id'>) => void;
   handleConfirmCashPayment: (transactionId: number) => void;
   handleToggleInvoice: (transactionId: number) => void;
-  handleBulkSendReceipts: (transactionIds: number[]) => void;
-  handleSendSingleReceipt: (transactionId: number) => void;
   selectAllPaidTransactions: () => void;
   clearSelection: () => void;
 }
@@ -62,65 +57,54 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedTransactions, setSelectedTransactions] = useState<Set<number>>(new Set());
-  const [receiptFilter, setReceiptFilter] = useState<'all' | 'sent' | 'unsent'>('all');
   
   const generateClientSummary = (): ClientSummary[] => {
-    const summary: Record<string, ClientSummary> = {};
+    const summary: Record<string, any> = {};
     
     transactions.forEach(transaction => {
       if (!summary[transaction.client]) {
         summary[transaction.client] = {
-          id: Math.random(),
+          id: Math.random(), // Generate a simple id
           name: transaction.client,
           totalSpent: 0,
-          lastPayment: "",
+          lastPayment: transaction.date,
           sessions: 0,
           programs: 0
         };
       }
       
+      const clientSummary = summary[transaction.client];
+      
       if (transaction.status === 'paid') {
-        summary[transaction.client].totalSpent += transaction.amount;
+        clientSummary.totalSpent += transaction.amount;
+      }
+      
+      if (new Date(transaction.date) > new Date(clientSummary.lastPayment)) {
+        clientSummary.lastPayment = transaction.date;
       }
       
       if (transaction.type === 'Session') {
-        summary[transaction.client].sessions += 1;
+        clientSummary.sessions++;
       } else if (transaction.type === 'Program') {
-        summary[transaction.client].programs += 1;
-      }
-      
-      if (!summary[transaction.client].lastPayment || 
-          new Date(transaction.date) > new Date(summary[transaction.client].lastPayment)) {
-        summary[transaction.client].lastPayment = transaction.date;
+        clientSummary.programs++;
       }
     });
     
     return Object.values(summary);
   };
-  
+
   const clientSummaries = generateClientSummary();
-  
+
   const handleAddTransaction = (newTransaction: Omit<TransactionType, 'id'>) => {
     const transaction: TransactionType = {
       ...newTransaction,
-      id: transactions.length + 1,
-      invoiceSent: false,
-      receiptSent: false,
+      id: Math.max(...transactions.map(t => t.id)) + 1
     };
-    
-    setTransactions([transaction, ...transactions]);
-    
-    if (transaction.paymentMethod === 'cash') {
-      toast.success("Cash transaction added. Remember to confirm receipt when paid.", {
-        duration: 3000
-      });
-    } else {
-      toast.success("Transaction added successfully", {
-        duration: 3000
-      });
-    }
+    setTransactions(prev => [transaction, ...prev]);
+    setShowAddDialog(false);
+    toast.success("Transaction added successfully", { duration: 2000 });
   };
-  
+
   const handleConfirmCashPayment = (transactionId: number) => {
     setTransactions(prev => 
       prev.map(t => 
@@ -150,28 +134,24 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   };
 
   const getFilteredTransactions = () => {
-    let filtered = transactions.filter(t => 
+    return transactions.filter(t => 
       t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
-    if (receiptFilter === 'sent') {
-      filtered = filtered.filter(t => t.receiptSent);
-    } else if (receiptFilter === 'unsent') {
-      filtered = filtered.filter(t => t.status === 'paid' && !t.receiptSent);
-    }
-
-    return filtered;
   };
 
   const filteredTransactions = getFilteredTransactions();
   
-  const filteredClients = clientSummaries.filter(c => 
-    c.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const getFilteredClients = () => {
+    return clientSummaries.filter(client => 
+      client.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
 
-  const value = {
+  const filteredClients = getFilteredClients();
+
+  const value: TransactionsContextType = {
     transactions,
     searchQuery,
     showAddDialog,
@@ -180,16 +160,12 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     clientSummaries,
     filteredTransactions,
     filteredClients,
-    receiptFilter,
     setSearchQuery,
     setShowAddDialog,
     setSelectedTransactions,
-    setReceiptFilter,
     handleAddTransaction,
     handleConfirmCashPayment,
     handleToggleInvoice,
-    handleBulkSendReceipts,
-    handleSendSingleReceipt,
     selectAllPaidTransactions,
     clearSelection
   };

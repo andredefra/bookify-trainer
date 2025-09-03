@@ -9,10 +9,6 @@ export interface Transaction {
   status: 'paid' | 'pending' | 'failed';
   paymentMethod?: 'card' | 'cash';
   invoiceSent?: boolean;
-  receiptSent?: boolean;
-  receiptSentAt?: string;
-  receiptNumber?: string;
-  receiptUrl?: string;
 }
 
 export interface TransactionHistoryProps {
