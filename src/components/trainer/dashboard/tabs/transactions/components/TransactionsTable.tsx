@@ -13,14 +13,13 @@ import { Badge } from "@/components/ui/badge";
 import { Transaction } from "../types/TransactionHistoryTypes";
 import { PaymentMethodBadge } from "./PaymentMethodBadge";
 import { TransactionStatusBadge } from "./TransactionStatusBadge";
-import { FileText, CheckCircle, Receipt } from "lucide-react";
+import { FileText, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
   onConfirmCashPayment?: (transactionId: number) => void;
   onToggleInvoice?: (transactionId: number) => void;
-  onSendReceipt?: (transactionId: number) => void;
   selectedTransactions?: Set<number>;
   onToggleSelection?: (transactionId: number) => void;
 }
@@ -29,7 +28,6 @@ export function TransactionsTable({
   transactions, 
   onConfirmCashPayment, 
   onToggleInvoice,
-  onSendReceipt,
   selectedTransactions = new Set(),
   onToggleSelection
 }: TransactionsTableProps) {
@@ -58,12 +56,12 @@ export function TransactionsTable({
             <TableHead className="w-[50px]">
               <Checkbox 
                 checked={transactions.length > 0 && transactions
-                  .filter(t => t.status === 'paid' && !t.receiptSent)
+                  .filter(t => t.status === 'paid' && !t.invoiceSent)
                   .every(t => selectedTransactions.has(t.id))}
                 onCheckedChange={(checked) => {
                   if (onToggleSelection) {
                     transactions.forEach(t => {
-                      if (t.status === 'paid' && !t.receiptSent) {
+                      if (t.status === 'paid' && !t.invoiceSent) {
                         if (checked && !selectedTransactions.has(t.id)) {
                           onToggleSelection(t.id);
                         } else if (!checked && selectedTransactions.has(t.id)) {
@@ -89,7 +87,7 @@ export function TransactionsTable({
           {transactions.length > 0 ? (
             transactions.map((transaction) => {
               const isSelected = selectedTransactions.has(transaction.id);
-              const canSelect = transaction.status === 'paid' && !transaction.receiptSent;
+              const canSelect = transaction.status === 'paid' && !transaction.invoiceSent;
               
               return (
                 <TableRow key={transaction.id} className={isSelected ? 'bg-primary/5' : ''}>
@@ -112,15 +110,7 @@ export function TransactionsTable({
                     )}
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-col gap-1">
-                      <TransactionStatusBadge status={transaction.status} />
-                      {transaction.receiptSent && (
-                        <Badge variant="outline" className="text-xs flex items-center gap-1">
-                          <CheckCircle className="h-3 w-3" />
-                          Scontrino
-                        </Badge>
-                      )}
-                    </div>
+                    <TransactionStatusBadge status={transaction.status} />
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
@@ -133,19 +123,6 @@ export function TransactionsTable({
                           onClick={() => onConfirmCashPayment && onConfirmCashPayment(transaction.id)}
                         >
                           Confirm Receipt
-                        </Button>
-                      )}
-                      
-                      {/* Receipt button - only for paid transactions without receipt */}
-                      {transaction.status === 'paid' && !transaction.receiptSent && (
-                        <Button 
-                          variant="outline"
-                          size="sm" 
-                          className="h-7 text-xs" 
-                          onClick={() => onSendReceipt?.(transaction.id)}
-                        >
-                          <Receipt className="h-3 w-3 mr-1" />
-                          Scontrino
                         </Button>
                       )}
                       

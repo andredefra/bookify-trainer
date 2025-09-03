@@ -7,7 +7,6 @@ export function TransactionHistory() {
     filteredTransactions, 
     handleConfirmCashPayment, 
     handleToggleInvoice,
-    handleSendSingleReceipt,
     selectedTransactions,
     setSelectedTransactions
   } = useTransactions();
@@ -27,7 +26,6 @@ export function TransactionHistory() {
       transactions={filteredTransactions} 
       onConfirmCashPayment={handleConfirmCashPayment}
       onToggleInvoice={handleToggleInvoice}
-      onSendReceipt={handleSendSingleReceipt}
       selectedTransactions={selectedTransactions}
       onToggleSelection={handleToggleSelection}
     />

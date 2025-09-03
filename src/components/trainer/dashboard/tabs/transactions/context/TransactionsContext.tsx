@@ -138,38 +138,9 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const handleBulkSendReceipts = (transactionIds: number[]) => {
-    setTransactions(prev => 
-      prev.map(t => 
-        transactionIds.includes(t.id) ? { 
-          ...t, 
-          receiptSent: true, 
-          receiptSentAt: new Date().toISOString(),
-          receiptNumber: `RCP-${String(t.id).padStart(3, '0')}`
-        } : t
-      )
-    );
-    setSelectedTransactions(new Set());
-    toast.success(`${transactionIds.length} receipt(s) sent successfully`, { duration: 3000 });
-  };
-
-  const handleSendSingleReceipt = (transactionId: number) => {
-    setTransactions(prev => 
-      prev.map(t => 
-        t.id === transactionId ? { 
-          ...t, 
-          receiptSent: true, 
-          receiptSentAt: new Date().toISOString(),
-          receiptNumber: `RCP-${String(t.id).padStart(3, '0')}`
-        } : t
-      )
-    );
-    toast.success("Receipt sent successfully", { duration: 2000 });
-  };
-
   const selectAllPaidTransactions = () => {
     const paidTransactionIds = transactions
-      .filter(t => t.status === 'paid' && !t.receiptSent)
+      .filter(t => t.status === 'paid' && !t.invoiceSent)
       .map(t => t.id);
     setSelectedTransactions(new Set(paidTransactionIds));
   };
