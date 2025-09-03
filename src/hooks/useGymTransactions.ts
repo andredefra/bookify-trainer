@@ -14,9 +14,9 @@ export interface GymTransaction {
   package_type: string;
   client_name: string;
   client_email: string;
-  receipt_sent_at?: string | null;
-  receipt_number?: string | null;
-  receipt_url?: string | null;
+  invoice_sent_at?: string | null;
+  invoice_number?: string | null;
+  invoice_url?: string | null;
 }
 
 export interface TransactionStats {
