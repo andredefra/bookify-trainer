@@ -61,10 +61,10 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
     <div className="space-y-6">
       <Tabs defaultValue="messages" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="messages">Messaggi</TabsTrigger>
-          <TabsTrigger value="unread">Non Letti</TabsTrigger>
-          <TabsTrigger value="automation">Automazione</TabsTrigger>
-          <TabsTrigger value="archived">Archiviati</TabsTrigger>
+          <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="unread">Unread</TabsTrigger>
+          <TabsTrigger value="automation">Automation</TabsTrigger>
+          <TabsTrigger value="archived">Archived</TabsTrigger>
         </TabsList>
 
         <TabsContent value="messages" className="space-y-4">
@@ -72,8 +72,8 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <CardTitle>Tutti i Messaggi</CardTitle>
-                  <CardDescription>Comunicazione con clienti e richieste</CardDescription>
+                  <CardTitle>All Messages</CardTitle>
+                  <CardDescription>Communication with clients and requests</CardDescription>
                 </div>
                 <Button 
                   onClick={() => {
@@ -84,7 +84,7 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                   className="flex items-center gap-1.5 self-start"
                 >
                   <Send className="h-4 w-4" />
-                  <span>Invia Messaggio</span>
+                  <span>Send Message</span>
                 </Button>
               </div>
             </CardHeader>
@@ -96,11 +96,11 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                       <MessageSquare className="h-5 w-5 text-yellow-600" />
                     </div>
                     <div>
-                      <p className="text-yellow-800 font-medium">Stato Assistente AI</p>
+                      <p className="text-yellow-800 font-medium">AI Assistant Status</p>
                       <p className="text-yellow-700 mt-1">
                         {trainerStatus === "online" 
-                          ? "Sei attualmente online. Quando imposti il tuo stato su 'In Sessione' o 'Offline', il tuo assistente AI gestirà automaticamente le richieste dei clienti sulla programmazione delle sessioni e domande sui programmi di allenamento utilizzando le conoscenze scientifiche di OpenAI."
-                          : "Il tuo assistente AI sta gestendo attivamente le richieste dei clienti mentre non sei disponibile. Può programmare sessioni e rispondere a domande sui programmi basandosi sulle conoscenze scientifiche di OpenAI."}
+                          ? "You are currently online. When you set your status to 'In Session' or 'Offline', your AI assistant will automatically handle client requests for session scheduling and training program questions using OpenAI's scientific knowledge."
+                          : "Your AI assistant is actively handling client requests while you are unavailable. It can schedule sessions and answer program questions based on OpenAI's scientific knowledge."}
                       </p>
                     </div>
                   </div>
@@ -120,9 +120,9 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                         className="gap-1"
                       >
                         <Reply className="h-4 w-4" />
-                        {!isMobile && <span>Rispondi</span>}
+                        {!isMobile && <span>Reply</span>}
                       </Button>
-                      <Button variant="outline" size="sm">Segna come Letto</Button>
+                      <Button variant="outline" size="sm">Mark as Read</Button>
                     </div>
                   </div>
                 ))}
@@ -134,14 +134,14 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
         <TabsContent value="unread" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Messaggi Non Letti</CardTitle>
-              <CardDescription>Messaggi che richiedono la tua attenzione</CardDescription>
+              <CardTitle>Unread Messages</CardTitle>
+              <CardDescription>Messages requiring your attention</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
                 <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Nessun messaggio non letto</h3>
-                <p className="text-muted-foreground">Tutti i messaggi sono stati letti</p>
+                <h3 className="text-lg font-medium mb-2">No unread messages</h3>
+                <p className="text-muted-foreground">All messages have been read</p>
               </div>
             </CardContent>
           </Card>
@@ -154,14 +154,14 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
         <TabsContent value="archived" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Messaggi Archiviati</CardTitle>
-              <CardDescription>Conversazioni archiviate e completate</CardDescription>
+              <CardTitle>Archived Messages</CardTitle>
+              <CardDescription>Archived and completed conversations</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
                 <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Nessun messaggio archiviato</h3>
-                <p className="text-muted-foreground">I messaggi archiviati appariranno qui</p>
+                <h3 className="text-lg font-medium mb-2">No archived messages</h3>
+                <p className="text-muted-foreground">Archived messages will appear here</p>
               </div>
             </CardContent>
           </Card>
