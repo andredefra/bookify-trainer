@@ -53,7 +53,7 @@ export function ExpirationAlertsCard() {
       <Card>
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-32">
-            <div className="text-muted-foreground">Caricamento scadenze...</div>
+            <div className="text-muted-foreground">Loading expiration dates...</div>
           </div>
         </CardContent>
       </Card>
@@ -66,14 +66,14 @@ export function ExpirationAlertsCard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Scadenze Prossime
+            Upcoming Expirations
           </CardTitle>
-          <CardDescription>Monitora pacchetti e programmi in scadenza</CardDescription>
+          <CardDescription>Monitor expiring packages and programs</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-6">
             <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">Nessuna scadenza nei prossimi giorni</p>
+            <p className="text-muted-foreground">No expirations in the upcoming days</p>
           </div>
         </CardContent>
       </Card>
@@ -87,18 +87,18 @@ export function ExpirationAlertsCard() {
           <div>
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
-              Scadenze Prossime
+              Upcoming Expirations
             </CardTitle>
             <CardDescription>
-              {counts.total} elementi in scadenza - {counts.critical} critici
+              {counts.total} expiring items - {counts.critical} critical
             </CardDescription>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {counts.critical > 0 && (
-              <Badge variant="destructive" className="text-xs">{counts.critical} critici</Badge>
+              <Badge variant="destructive" className="text-xs">{counts.critical} critical</Badge>
             )}
             {counts.warning > 0 && (
-              <Badge variant="secondary" className="text-xs">{counts.warning} attenzione</Badge>
+              <Badge variant="secondary" className="text-xs">{counts.warning} warning</Badge>
             )}
           </div>
         </div>
@@ -119,13 +119,13 @@ export function ExpirationAlertsCard() {
               </div>
               <div className="flex flex-col sm:text-right gap-1">
                 <Badge variant={getStatusBadgeVariant(item.status)} className="text-xs w-fit">
-                  {item.daysLeft} giorni
+                  {item.daysLeft} days
                 </Badge>
                 <p className="text-xs text-muted-foreground hidden sm:block">
-                  Scade il {new Date(item.expiryDate).toLocaleDateString('it-IT')}
+                  Expires on {new Date(item.expiryDate).toLocaleDateString('en-US')}
                 </p>
                 <p className="text-xs text-muted-foreground sm:hidden">
-                  {new Date(item.expiryDate).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
+                  {new Date(item.expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
                 </p>
               </div>
             </div>
@@ -133,7 +133,7 @@ export function ExpirationAlertsCard() {
           
           {expiringItems.length > 5 && (
             <Button variant="outline" className="w-full">
-              Vedi tutti ({expiringItems.length})
+              View all ({expiringItems.length})
             </Button>
           )}
         </div>
