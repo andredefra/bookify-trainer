@@ -5,7 +5,6 @@ import { TransactionsByClient } from "../TransactionsByClient";
 import { useTransactions } from "../context/TransactionsContext";
 import { RevenueCards } from "./RevenueCards";
 import { BulkActionsBar } from "./BulkActionsBar";
-import { ReceiptFilters } from "./ReceiptFilters";
 
 export function TransactionsTabsContent() {
   const { filteredTransactions, filteredClients, transactions } = useTransactions();
@@ -20,7 +19,6 @@ export function TransactionsTabsContent() {
       <TabsContent value="all">
         <div className="space-y-6">
           <RevenueCards />
-          <ReceiptFilters />
           <BulkActionsBar />
           <TransactionHistory />
         </div>

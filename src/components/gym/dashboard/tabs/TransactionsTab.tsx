@@ -60,8 +60,8 @@ export function TransactionsTab() {
       const { error } = await supabase
         .from('gym_package_assignments')
         .update({ 
-          receipt_sent_at: new Date().toISOString(),
-          receipt_number: `INV-${Date.now()}`
+          invoice_sent_at: new Date().toISOString(),
+          invoice_number: `INV-${Date.now()}`
         })
         .eq('id', transactionId);
       
@@ -112,7 +112,7 @@ export function TransactionsTab() {
 
   const handleSelectAll = () => {
     const paidTransactions = filteredTransactions.filter(t => 
-      t.payment_status === 'paid' && !t.receipt_sent_at
+      t.payment_status === 'paid' && !t.invoice_sent_at
     );
     
     if (selectedTransactions.size === paidTransactions.length) {
@@ -174,15 +174,15 @@ export function TransactionsTab() {
 
   const filteredTransactions = transactions?.filter(transaction => {
     if (showInvoiceFilter === 'sent') {
-      return transaction.receipt_sent_at;
+      return transaction.invoice_sent_at;
     } else if (showInvoiceFilter === 'unsent') {
-      return !transaction.receipt_sent_at && transaction.payment_status === 'paid';
+      return !transaction.invoice_sent_at && transaction.payment_status === 'paid';
     }
     return true;
   }) || [];
 
   const paidTransactionsCount = filteredTransactions.filter(t => t.payment_status === 'paid').length;
-  const unsentInvoicesCount = filteredTransactions.filter(t => !t.receipt_sent_at && t.payment_status === 'paid').length;
+  const unsentInvoicesCount = filteredTransactions.filter(t => !t.invoice_sent_at && t.payment_status === 'paid').length;
 
   return (
     <div className="space-y-6">
@@ -318,9 +318,9 @@ export function TransactionsTab() {
                   <TableHead className="w-[50px]">
                     <Checkbox
                       checked={
-                        filteredTransactions.filter(t => t.payment_status === 'paid' && !t.receipt_sent_at).length > 0 &&
+                        filteredTransactions.filter(t => t.payment_status === 'paid' && !t.invoice_sent_at).length > 0 &&
                         filteredTransactions
-                          .filter(t => t.payment_status === 'paid' && !t.receipt_sent_at)
+                          .filter(t => t.payment_status === 'paid' && !t.invoice_sent_at)
                           .every(t => selectedTransactions.has(t.id))
                       }
                       onCheckedChange={handleSelectAll}
@@ -342,7 +342,7 @@ export function TransactionsTab() {
                     className={selectedTransactions.has(transaction.id) ? 'bg-primary/5' : ''}
                   >
                     <TableCell>
-                      {transaction.payment_status === 'paid' && !transaction.receipt_sent_at && (
+                      {transaction.payment_status === 'paid' && !transaction.invoice_sent_at && (
                         <Checkbox
                           checked={selectedTransactions.has(transaction.id)}
                           onCheckedChange={() => handleToggleSelection(transaction.id)}
@@ -377,7 +377,7 @@ export function TransactionsTab() {
                     <TableCell>
                       {transaction.payment_status === 'paid' && (
                         <div className="flex items-center gap-1">
-                          {transaction.receipt_sent_at ? (
+                          {transaction.invoice_sent_at ? (
                             <Badge variant="secondary" className="bg-green-100 text-green-800">
                               <CheckCircle className="w-3 h-3 mr-1" />
                               Sent
