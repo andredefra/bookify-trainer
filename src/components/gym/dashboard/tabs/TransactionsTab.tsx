@@ -57,6 +57,7 @@ export function TransactionsTab() {
 
   const markInvoiceSent = useMutation({
     mutationFn: async (transactionId: string) => {
+      // Update receipt_sent_at to track invoice status
       const { error } = await supabase
         .from('gym_package_assignments')
         .update({ 
