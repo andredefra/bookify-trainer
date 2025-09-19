@@ -9,7 +9,11 @@ import { PaymentMethodSelector } from "./payment/PaymentMethodSelector";
 import { CardPaymentForm } from "./payment/CardPaymentForm";
 import { CashPaymentNotice } from "./payment/CashPaymentNotice";
 import { PaymentItemDetails } from "./payment/PaymentItemDetails";
+import { InstallmentPlanSelector, InstallmentDetails } from "./payment/InstallmentPlanSelector";
 import { PremiumFeatureCard } from "@/components/trainer/training/PremiumFeatureCard";
+
+// Re-export InstallmentDetails for external use
+export type { InstallmentDetails } from "./payment/InstallmentPlanSelector";
 
 // Updated to accept Date objects for consistency across the application
 interface PaymentItem {
@@ -36,6 +40,8 @@ interface PaymentDialogProps {
   userPlan?: string;
   isClientPayment?: boolean;
   trainerPlan?: string;
+  allowInstallments?: boolean;
+  onInstallmentCreate?: (installmentDetails: InstallmentDetails) => void;
 }
 
 // PayPal payment form mockup
@@ -98,9 +104,17 @@ export function PaymentDialog({
   isPremiumFeature = false,
   userPlan = "freemium",
   isClientPayment = false,
-  trainerPlan = "freemium"
+  trainerPlan = "freemium",
+  allowInstallments = false,
+  onInstallmentCreate
 }: PaymentDialogProps) {
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<'plan-selection' | 'payment-details'>('plan-selection');
+  
+  // Installment states
+  const [selectedInstallmentPlan, setSelectedInstallmentPlan] = useState('full');
+  const [installmentDetails, setInstallmentDetails] = useState<InstallmentDetails | null>(null);
+  
   // Default to cash if client payment and trainer doesn't have pro plan
   const defaultPaymentMethod = (isClientPayment && trainerPlan !== "pro") ? 'cash' : 'card';
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash' | 'paypal' | 'klarna'>(defaultPaymentMethod);
@@ -135,23 +149,46 @@ export function PaymentDialog({
       setLoading(false);
       
       let message = "";
-      switch (paymentMethod) {
-        case 'card':
-          if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
-            toast.error("Please fill in all card details");
-            return;
-          }
-          message = "Payment processed successfully";
-          break;
-        case 'paypal':
-          message = "PayPal payment completed successfully";
-          break;
-        case 'klarna':
-          message = "Klarna payment set up successfully. First installment charged.";
-          break;
-        case 'cash':
-          message = "Payment marked as pending. Pay your trainer in cash.";
-          break;
+      
+      // Handle installment payments
+      if (installmentDetails && installmentDetails.planId !== 'full') {
+        if (onInstallmentCreate) {
+          onInstallmentCreate(installmentDetails);
+        }
+        message = `Installment plan set up successfully! First payment of €${installmentDetails.amountPerInstallment.toFixed(2)} processed.`;
+        
+        // Additional messaging based on payment method
+        switch (paymentMethod) {
+          case 'card':
+            if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
+              toast.error("Please fill in all card details");
+              return;
+            }
+            break;
+          case 'cash':
+            message = `Installment plan created. Pay €${installmentDetails.amountPerInstallment.toFixed(2)} to your trainer in cash.`;
+            break;
+        }
+      } else {
+        // Handle full payment
+        switch (paymentMethod) {
+          case 'card':
+            if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
+              toast.error("Please fill in all card details");
+              return;
+            }
+            message = "Payment processed successfully";
+            break;
+          case 'paypal':
+            message = "PayPal payment completed successfully";
+            break;
+          case 'klarna':
+            message = "Klarna payment set up successfully. First installment charged.";
+            break;
+          case 'cash':
+            message = "Payment marked as pending. Pay your trainer in cash.";
+            break;
+        }
       }
       
       toast.success(message);
@@ -161,6 +198,9 @@ export function PaymentDialog({
       setCardHolder('');
       setExpiryDate('');
       setCvv('');
+      setStep('plan-selection');
+      setSelectedInstallmentPlan('full');
+      setInstallmentDetails(null);
       
       // Close dialog and notify parent
       onOpenChange(false);
@@ -168,6 +208,94 @@ export function PaymentDialog({
     }, 1500);
   };
 
+  const handleContinueToPayment = () => {
+    if (allowInstallments && selectedInstallmentPlan !== 'full' && installmentDetails) {
+      setStep('payment-details');
+    } else {
+      // For full payment, proceed directly to payment
+      setStep('payment-details');
+    }
+  };
+
+  const handleBackToPlanSelection = () => {
+    setStep('plan-selection');
+  };
+
+  const getCurrentAmount = () => {
+    if (installmentDetails && installmentDetails.planId !== 'full') {
+      return installmentDetails.amountPerInstallment;
+    }
+    return item.price;
+  };
+
+  const renderStepContent = () => {
+    if (step === 'plan-selection') {
+      return (
+        <div className="space-y-4">
+          <PaymentItemDetails item={item} />
+          
+          {allowInstallments ? (
+            <InstallmentPlanSelector
+              totalAmount={item.price}
+              selectedPlan={selectedInstallmentPlan}
+              onPlanChange={setSelectedInstallmentPlan}
+              onInstallmentDetailsChange={setInstallmentDetails}
+            />
+          ) : (
+            <div className="text-center py-4">
+              <h3 className="font-semibold">Total Amount</h3>
+              <p className="text-2xl font-bold">€{item.price.toFixed(2)}</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Payment details step
+    return (
+      <div className={`grid gap-${isMobile ? '3' : '4'} py-${isMobile ? '3' : '4'}`}>
+        <PaymentItemDetails item={item} />
+        
+        {installmentDetails && installmentDetails.planId !== 'full' && (
+          <div className="bg-primary/5 p-3 rounded-lg">
+            <h4 className="font-medium text-sm">Payment Plan Selected</h4>
+            <p className="text-sm text-muted-foreground">
+              {installmentDetails.installments} payments of €{installmentDetails.amountPerInstallment.toFixed(2)} each
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Today's payment: €{installmentDetails.amountPerInstallment.toFixed(2)}
+            </p>
+          </div>
+        )}
+        
+        {/* Payment reference field */}
+        <div className="space-y-2">
+          <label htmlFor="payment-reference" className="text-sm font-medium">
+            Payment Reference
+          </label>
+          <Input
+            id="payment-reference"
+            value={paymentReference}
+            onChange={(e) => setPaymentReference(e.target.value)}
+            placeholder="Enter payment reference (optional)"
+          />
+          <p className="text-xs text-muted-foreground">
+            Add a reference for this payment (e.g., Personal Training, Consultation, etc.)
+          </p>
+        </div>
+        
+        <PaymentMethodSelector 
+          selectedMethod={paymentMethod} 
+          onMethodChange={setPaymentMethod}
+          isClientPayment={isClientPayment}
+          trainerPlan={trainerPlan}
+        />
+        
+        {renderPaymentForm()}
+      </div>
+    );
+  };
+  
   const renderPaymentForm = () => {
     switch (paymentMethod) {
       case 'card':
@@ -186,7 +314,7 @@ export function PaymentDialog({
       case 'paypal':
         return <PayPalPaymentForm />;
       case 'klarna':
-        return <KlarnaPaymentForm amount={item.price} />;
+        return <KlarnaPaymentForm amount={getCurrentAmount()} />;
       case 'cash':
         return <CashPaymentNotice />;
       default:
@@ -196,64 +324,69 @@ export function PaymentDialog({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`${isMobile ? 'w-[95%] p-4' : 'sm:max-w-[425px]'} max-h-[90vh] overflow-y-auto`}>
+      <DialogContent className={`${isMobile ? 'w-[95%] p-4' : 'sm:max-w-[500px]'} max-h-[90vh] overflow-y-auto`}>
         <DialogHeader className={isMobile ? "space-y-1" : ""}>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle>
+            {step === 'plan-selection' ? title : 'Payment Details'}
+          </DialogTitle>
+          <DialogDescription>
+            {step === 'plan-selection' 
+              ? (allowInstallments ? 'Choose your payment plan and complete your purchase' : description)
+              : 'Complete your payment information'
+            }
+          </DialogDescription>
         </DialogHeader>
         
         {/* Show premium feature card only for trainers, not clients */}
         {showPremiumCard ? (
           <PremiumFeatureCard />
         ) : (
-          <form onSubmit={handleSubmit}>
-            <div className={`grid gap-${isMobile ? '3' : '4'} py-${isMobile ? '3' : '4'}`}>
-              <PaymentItemDetails item={item} />
-              
-              {/* Payment reference field */}
-              <div className="space-y-2">
-                <label htmlFor="payment-reference" className="text-sm font-medium">
-                  Payment Reference
-                </label>
-                <Input
-                  id="payment-reference"
-                  value={paymentReference}
-                  onChange={(e) => setPaymentReference(e.target.value)}
-                  placeholder="Enter payment reference (optional)"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Add a reference for this payment (e.g., Personal Training, Consultation, etc.)
-                </p>
-              </div>
-              
-              <PaymentMethodSelector 
-                selectedMethod={paymentMethod} 
-                onMethodChange={setPaymentMethod}
-                isClientPayment={isClientPayment}
-                trainerPlan={trainerPlan}
-              />
-              
-              {renderPaymentForm()}
-            </div>
-            
-            <DialogFooter className={isMobile ? "mt-4 flex-col gap-2" : ""}>
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => onOpenChange(false)}
-                className={isMobile ? "w-full" : ""}
-              >
-                Cancel
-              </Button>
-              <Button 
-                type="submit" 
-                disabled={loading}
-                className={isMobile ? "w-full" : ""}
-              >
-                {loading ? "Processing..." : `Pay €${item.price}`}
-              </Button>
-            </DialogFooter>
-          </form>
+          <>
+            {step === 'plan-selection' ? (
+              <>
+                {renderStepContent()}
+                <DialogFooter className={isMobile ? "mt-4 flex-col gap-2" : ""}>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => onOpenChange(false)}
+                    className={isMobile ? "w-full" : ""}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="button"
+                    onClick={handleContinueToPayment}
+                    className={isMobile ? "w-full" : ""}
+                  >
+                    Continue to Payment
+                  </Button>
+                </DialogFooter>
+              </>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                {renderStepContent()}
+                
+                <DialogFooter className={isMobile ? "mt-4 flex-col gap-2" : ""}>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={handleBackToPlanSelection}
+                    className={isMobile ? "w-full" : ""}
+                  >
+                    Back
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    className={isMobile ? "w-full" : ""}
+                  >
+                    {loading ? "Processing..." : `Pay €${getCurrentAmount().toFixed(2)}`}
+                  </Button>
+                </DialogFooter>
+              </form>
+            )}
+          </>
         )}
       </DialogContent>
     </Dialog>

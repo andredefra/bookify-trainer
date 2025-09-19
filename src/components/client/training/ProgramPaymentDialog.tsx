@@ -1,6 +1,7 @@
 
 import { TrainingProgram } from "@/data/training/types";
 import { PaymentDialog as SharedPaymentDialog } from "@/components/shared/PaymentDialog";
+import { InstallmentDetails } from "@/components/shared/payment/InstallmentPlanSelector";
 
 interface ProgramPaymentDialogProps {
   open: boolean;
@@ -24,6 +25,11 @@ export function ProgramPaymentDialog({
     description: program.description || `${program.week} training program by ${program.trainerName}`,
     date: program.weekStart // Pass the original date
   };
+
+  const handleInstallmentCreate = (installmentDetails: InstallmentDetails) => {
+    console.log('Program installment plan created:', installmentDetails);
+    // TODO: Create installment transactions for the program
+  };
   
   return (
     <SharedPaymentDialog
@@ -33,6 +39,8 @@ export function ProgramPaymentDialog({
       onPaymentComplete={onPaymentComplete}
       title="Purchase Training Program"
       description={`Get access to ${program.title} by ${program.trainerName}`}
+      allowInstallments={paymentItem.price >= 100} // Allow installments for programs over €100
+      onInstallmentCreate={handleInstallmentCreate}
     />
   );
 }
