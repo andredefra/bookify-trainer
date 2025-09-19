@@ -16,6 +16,17 @@ import { TransactionStatusBadge } from "./TransactionStatusBadge";
 import { FileText, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
+// Helper function to check if payment is complete
+const isPaymentComplete = (transaction: Transaction): boolean => {
+  // Single payment (no installments) is always complete when paid
+  if (!transaction.installmentNumber || !transaction.totalInstallments) {
+    return true;
+  }
+  
+  // Installment payment is complete only when it's the final installment
+  return transaction.installmentNumber === transaction.totalInstallments;
+};
+
 interface TransactionsTableProps {
   transactions: Transaction[];
   onConfirmCashPayment?: (transactionId: number) => void;
@@ -56,12 +67,12 @@ export function TransactionsTable({
             <TableHead className="w-[50px]">
               <Checkbox 
                 checked={transactions.length > 0 && transactions
-                  .filter(t => t.status === 'paid' && !t.invoiceSent)
+                  .filter(t => t.status === 'paid' && !t.invoiceSent && isPaymentComplete(t))
                   .every(t => selectedTransactions.has(t.id))}
                 onCheckedChange={(checked) => {
                   if (onToggleSelection) {
                     transactions.forEach(t => {
-                      if (t.status === 'paid' && !t.invoiceSent) {
+                      if (t.status === 'paid' && !t.invoiceSent && isPaymentComplete(t)) {
                         if (checked && !selectedTransactions.has(t.id)) {
                           onToggleSelection(t.id);
                         } else if (!checked && selectedTransactions.has(t.id)) {
@@ -88,7 +99,7 @@ export function TransactionsTable({
           {transactions.length > 0 ? (
             transactions.map((transaction) => {
               const isSelected = selectedTransactions.has(transaction.id);
-              const canSelect = transaction.status === 'paid' && !transaction.invoiceSent;
+              const canSelect = transaction.status === 'paid' && !transaction.invoiceSent && isPaymentComplete(transaction);
               
               return (
                 <TableRow key={transaction.id} className={isSelected ? 'bg-primary/5' : ''}>
@@ -136,8 +147,8 @@ export function TransactionsTable({
                         </Button>
                       )}
                       
-                      {/* Invoice button - only for paid transactions */}
-                      {transaction.status === 'paid' && (
+                      {/* Invoice button - only for completed payments */}
+                      {transaction.status === 'paid' && isPaymentComplete(transaction) && (
                         <Button 
                           variant={transaction.invoiceSent ? "secondary" : "outline"}
                           size="sm" 
