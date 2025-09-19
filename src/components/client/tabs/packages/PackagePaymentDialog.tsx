@@ -8,6 +8,7 @@ import { PaymentFormRenderer } from "./payment/PaymentForms";
 import { PaymentItemDetails } from "@/components/shared/payment/PaymentItemDetails";
 import { InstallmentPlanSelector, InstallmentDetails } from "@/components/shared/payment/InstallmentPlanSelector";
 import { usePackagePayment } from "./payment/usePackagePayment";
+import { getPaymentSettings } from "@/components/trainer/dashboard/tabs/settings/utils/installmentUtils";
 
 interface PackagePaymentDialogProps {
   open: boolean;
@@ -28,6 +29,8 @@ export function PackagePaymentDialog({
   const [selectedInstallmentPlan, setSelectedInstallmentPlan] = useState('full');
   const [installmentDetails, setInstallmentDetails] = useState<InstallmentDetails | null>(null);
   
+  const settings = getPaymentSettings();
+  
   const {
     paymentMethod,
     setPaymentMethod,
@@ -45,7 +48,7 @@ export function PackagePaymentDialog({
 
   if (!packageData) return null;
 
-  const allowInstallments = packageData.price >= 100; // Allow installments for packages over €100
+  const allowInstallments = settings.allowInstallments && packageData.price >= settings.minAmountForInstallments;
 
   const paymentItem = {
     id: packageData.id,

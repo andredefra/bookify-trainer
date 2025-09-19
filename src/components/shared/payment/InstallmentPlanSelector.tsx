@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Euro, Clock } from "lucide-react";
 import { format, addMonths } from "date-fns";
+import { getPaymentSettings } from "@/components/trainer/dashboard/tabs/settings/utils/installmentUtils";
 
 interface InstallmentPlan {
   id: string;
@@ -35,47 +36,38 @@ export interface InstallmentDetails {
   }>;
 }
 
-const INSTALLMENT_PLANS: InstallmentPlan[] = [
-  {
-    id: 'full',
-    name: 'Pay in Full',
-    installments: 1,
-    frequency: 'monthly',
-    description: 'Pay the complete amount now'
-  },
-  {
-    id: '2-months',
-    name: '2 Monthly Payments',
-    installments: 2,
-    frequency: 'monthly',
-    processingFee: 0,
-    description: 'Split into 2 monthly payments'
-  },
-  {
-    id: '3-months',
-    name: '3 Monthly Payments',
-    installments: 3,
-    frequency: 'monthly',
-    processingFee: 5,
-    description: 'Split into 3 monthly payments'
-  },
-  {
-    id: '4-months', 
-    name: '4 Monthly Payments',
-    installments: 4,
-    frequency: 'monthly',
-    processingFee: 10,
-    description: 'Split into 4 monthly payments'
-  },
-  {
-    id: '6-months',
-    name: '6 Monthly Payments',
-    installments: 6,
-    frequency: 'monthly',
-    processingFee: 15,
-    description: 'Split into 6 monthly payments'
+const generateInstallmentPlans = (): InstallmentPlan[] => {
+  const settings = getPaymentSettings();
+  
+  const plans: InstallmentPlan[] = [
+    {
+      id: 'full',
+      name: 'Pay in Full',
+      installments: 1,
+      frequency: 'monthly',
+      description: 'Pay the complete amount now'
+    }
+  ];
+
+  if (settings.allowInstallments) {
+    settings.defaultInstallmentOptions.forEach(months => {
+      const processingFee = settings.processingFeeEnabled 
+        ? Math.round((settings.processingFeePercentage / 100) * 100) // Base fee calculation
+        : 0;
+
+      plans.push({
+        id: `${months}-months`,
+        name: `${months} Monthly Payments`,
+        installments: months,
+        frequency: 'monthly',
+        processingFee,
+        description: `Split into ${months} monthly payments`
+      });
+    });
   }
-];
+
+  return plans;
+};
 
 export function InstallmentPlanSelector({
   totalAmount,
@@ -83,8 +75,16 @@ export function InstallmentPlanSelector({
   onPlanChange,
   onInstallmentDetailsChange
 }: InstallmentPlanSelectorProps) {
+  const INSTALLMENT_PLANS = generateInstallmentPlans();
   const calculateInstallmentDetails = (plan: InstallmentPlan): InstallmentDetails => {
-    const processingFee = plan.processingFee || 0;
+    const settings = getPaymentSettings();
+    let processingFee = plan.processingFee || 0;
+    
+    // Calculate percentage-based processing fee if enabled
+    if (settings.processingFeeEnabled && plan.installments > 1) {
+      processingFee = Math.round((totalAmount * settings.processingFeePercentage / 100) * 100) / 100;
+    }
+    
     const totalWithFees = totalAmount + processingFee;
     const amountPerInstallment = totalWithFees / plan.installments;
     

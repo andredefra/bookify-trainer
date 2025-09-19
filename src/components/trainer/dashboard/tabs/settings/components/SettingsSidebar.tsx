@@ -14,6 +14,7 @@ export function SettingsSidebar({ selectedSection, setSelectedSection }: Setting
     { id: "public-profile", label: "My Public Profile", icon: "🌟" },
     { id: "availability", label: "Availability", icon: "📅" },
     { id: "my-gyms", label: "My Gyms", icon: "🏢" },
+    { id: "payment-settings", label: "Payment Settings", icon: "💰" },
     { id: "invoicing", label: "Invoicing", icon: "🧾" },
     { id: "membership", label: "Membership", icon: "⭐" },
     { id: "billing", label: "Billing", icon: "💳" }

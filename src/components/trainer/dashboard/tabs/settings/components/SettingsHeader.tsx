@@ -21,6 +21,11 @@ export function SettingsHeader({ selectedSection }: SettingsHeaderProps) {
           title: "Availability Settings",
           description: "Set your working hours and availability preferences"
         };
+      case "payment-settings":
+        return {
+          title: "Payment Settings",
+          description: "Configure installment plans and payment reminders"
+        };
       case "invoicing":
         return {
           title: "Invoicing Integration",

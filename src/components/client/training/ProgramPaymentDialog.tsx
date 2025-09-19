@@ -2,6 +2,7 @@
 import { TrainingProgram } from "@/data/training/types";
 import { PaymentDialog as SharedPaymentDialog } from "@/components/shared/PaymentDialog";
 import { InstallmentDetails } from "@/components/shared/payment/InstallmentPlanSelector";
+import { getPaymentSettings } from "@/components/trainer/dashboard/tabs/settings/utils/installmentUtils";
 
 interface ProgramPaymentDialogProps {
   open: boolean;
@@ -17,6 +18,8 @@ export function ProgramPaymentDialog({
   onPaymentComplete 
 }: ProgramPaymentDialogProps) {
   if (!program) return null;
+  
+  const settings = getPaymentSettings();
   
   const paymentItem = {
     id: program.id,
@@ -39,7 +42,10 @@ export function ProgramPaymentDialog({
       onPaymentComplete={onPaymentComplete}
       title="Purchase Training Program"
       description={`Get access to ${program.title} by ${program.trainerName}`}
-      allowInstallments={paymentItem.price >= 100} // Allow installments for programs over €100
+      allowInstallments={
+        settings.allowInstallments && 
+        paymentItem.price >= settings.minAmountForInstallments
+      }
       onInstallmentCreate={handleInstallmentCreate}
     />
   );

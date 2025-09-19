@@ -7,6 +7,7 @@ import { SettingsFooter } from "./components/SettingsFooter";
 import { ProfileSection } from "./ProfileSection";
 import { PublicProfileSection } from "./sections/PublicProfileSection";
 import { AvailabilitySection } from "./AvailabilitySection";
+import { PaymentSettingsSection } from "./PaymentSettingsSection";
 import { InvoicingSection } from "./InvoicingSection";
 import { MembershipSection } from "./MembershipSection";
 import { BillingSection } from "./BillingSection";
@@ -73,12 +74,13 @@ export function SettingsTabContent({ user }: SettingsTabContentProps) {
             {selectedSection === "public-profile" && <PublicProfileSection user={updatedUser} />}
             {selectedSection === "availability" && <AvailabilitySection />}
             {selectedSection === "my-gyms" && <MyGymsSection trainerId={user?.email} />}
+            {selectedSection === "payment-settings" && <PaymentSettingsSection />}
             {selectedSection === "invoicing" && <InvoicingSection />}
             {selectedSection === "membership" && <MembershipSection user={updatedUser} />}
             {selectedSection === "billing" && <BillingSection user={updatedUser} />}
           </div>
           
-        {selectedSection !== "invoicing" && selectedSection !== "my-gyms" && (
+        {selectedSection !== "invoicing" && selectedSection !== "my-gyms" && selectedSection !== "payment-settings" && (
           <SettingsFooter onSave={handleSaveChanges} />
         )}
         </div>
