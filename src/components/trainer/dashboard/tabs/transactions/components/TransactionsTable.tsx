@@ -77,6 +77,7 @@ export function TransactionsTable({
             <TableHead>Client</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Product</TableHead>
+            <TableHead>Installment</TableHead>
             <TableHead>Amount</TableHead>
             <TableHead>Method</TableHead>
             <TableHead>Status</TableHead>
@@ -103,6 +104,15 @@ export function TransactionsTable({
                   <TableCell>{transaction.client}</TableCell>
                   <TableCell className="text-xs">{transaction.type}</TableCell>
                   <TableCell className="text-xs">{transaction.name}</TableCell>
+                  <TableCell>
+                    {transaction.installmentNumber && transaction.totalInstallments ? (
+                      <Badge variant="secondary">
+                        {transaction.installmentNumber}/{transaction.totalInstallments}
+                      </Badge>
+                    ) : (
+                      <span className="text-muted-foreground">-</span>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium">€{transaction.amount.toFixed(2)}</TableCell>
                   <TableCell>
                     {transaction.paymentMethod && (
@@ -154,7 +164,7 @@ export function TransactionsTable({
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={9} className="text-center py-6 text-muted-foreground">
+              <TableCell colSpan={10} className="text-center py-6 text-muted-foreground">
                 No transactions found
               </TableCell>
             </TableRow>

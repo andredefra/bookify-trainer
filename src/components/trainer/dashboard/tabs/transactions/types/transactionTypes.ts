@@ -11,15 +11,16 @@ export interface TransactionType {
   status: 'paid' | 'pending' | 'failed';
   paymentMethod?: 'card' | 'cash';
   invoiceSent?: boolean;
-  receiptSent?: boolean;
-  receiptSentAt?: string;
-  receiptNumber?: string;
-  receiptUrl?: string;
   packageId?: string;
   packageAssignmentId?: string;
   isPackagePayment?: boolean;
   installmentNumber?: number;
   totalInstallments?: number;
+  // New installment fields
+  parentTransactionId?: string;
+  dueDate?: string;
+  isInstallment?: boolean;
+  installmentStatus?: 'scheduled' | 'pending' | 'paid' | 'overdue';
 }
 
 // Form validation schema
@@ -33,7 +34,11 @@ export const transactionSchema = z.object({
   paymentMethod: z.enum(['card', 'cash']),
   isPackagePayment: z.boolean().optional(),
   installmentNumber: z.number().optional(),
-  totalInstallments: z.number().optional()
+  totalInstallments: z.number().optional(),
+  parentTransactionId: z.string().optional(),
+  dueDate: z.string().optional(),
+  isInstallment: z.boolean().optional(),
+  installmentStatus: z.enum(['scheduled', 'pending', 'paid', 'overdue']).optional()
 });
 
 // Form values type

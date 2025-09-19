@@ -9,6 +9,12 @@ export interface Transaction {
   status: 'paid' | 'pending' | 'failed';
   paymentMethod?: 'card' | 'cash';
   invoiceSent?: boolean;
+  installmentNumber?: number;
+  totalInstallments?: number;
+  parentTransactionId?: string;
+  dueDate?: string;
+  isInstallment?: boolean;
+  installmentStatus?: 'scheduled' | 'pending' | 'paid' | 'overdue';
 }
 
 export interface TransactionHistoryProps {
