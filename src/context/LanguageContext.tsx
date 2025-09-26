@@ -28,10 +28,15 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         return 'en';
       }
       
+      // Se siamo su /dashboard (trainer), forza inglese
+      if (currentPath === '/dashboard') {
+        return 'en';
+      }
+      
       const saved = localStorage.getItem('language');
-      return (saved === 'en' || saved === 'it') ? saved as Language : 'it';
+      return (saved === 'en' || saved === 'it') ? saved as Language : 'en'; // Default to English
     }
-    return 'it';
+    return 'en'; // Default to English
   };
 
   const [language, setLanguageState] = useState<Language>(() => {
@@ -43,6 +48,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       }
       if (currentPath === '/user-en') {
         return 'en';
+      }
+      if (currentPath === '/dashboard') {
+        return 'en'; // Force English for trainer dashboard
       }
     }
     return getSavedLanguage();
@@ -57,6 +65,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       setLanguageState('it');
     } else if (currentPath === '/user-en' && language !== 'en') {
       setLanguageState('en');
+    } else if (currentPath === '/dashboard' && language !== 'en') {
+      setLanguageState('en'); // Force English for trainer dashboard
     }
   }, [location.pathname, language]);
 
