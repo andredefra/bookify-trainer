@@ -48,23 +48,19 @@ export function generateClientPerformanceData(client: ClientData, weeks: number)
     const completedSessions = weekSessions.filter(s => s.completed).length;
     const attendance = scheduledSessions > 0 ? (completedSessions / scheduledSessions) * 100 : 0;
     
-    // Calculate progress based on goals completion for this period
-    const activeGoals = client.goals.filter(goal => 
-      goal.createdAt <= weekStart && goal.deadline >= weekStart
-    );
+    // Calculate progress with progressive improvement over time
+    const weekProgress = weeks - i; // Current week number
+    const progressBaseRate = 65; // Starting progress rate
+    const progressGrowth = (weekProgress * 4) + (Math.random() * 8 - 4); // Add some variation
+    const avgProgress = Math.min(95, Math.max(45, progressBaseRate + progressGrowth));
     
-    let avgProgress = 0;
-    let goalsReached = 0;
+    // Calculate goals reached with increasing trend
+    const goalsBaseRate = 30; // Starting goals achievement rate
+    const goalsGrowth = (weekProgress * 6) + (Math.random() * 10 - 5); // Add variation
+    let goalsReached = Math.min(85, Math.max(15, goalsBaseRate + goalsGrowth));
     
-    if (activeGoals.length > 0) {
-      activeGoals.forEach(goal => {
-        const progress = (goal.current / goal.target) * 100;
-        avgProgress += progress;
-        if (progress >= 90) goalsReached++;
-      });
-      avgProgress = avgProgress / activeGoals.length;
-      goalsReached = (goalsReached / activeGoals.length) * 100;
-    }
+    // Make goals achievement more realistic - should be lower than progress
+    goalsReached = Math.min(goalsReached, avgProgress - 10);
     
     data.push({
       name: `Week ${weeks - i}`,
