@@ -35,7 +35,7 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
       href: "overview",
     },
     {
-      title: "Sales",
+      title: "CRM",
       icon: FolderKanban,
       href: "sales",
     },
