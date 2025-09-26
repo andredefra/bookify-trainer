@@ -19,7 +19,7 @@ function RevenueAnalyticsContent() {
   const calculateRealRevenueData = () => {
     const paidTransactions = transactions.filter(t => t.status === 'paid');
     
-    // Calculate monthly revenue with programs vs sessions breakdown
+    // Calculate monthly revenue with programs vs sessions vs packages breakdown
     const monthlyData = monthlyRevenue.map(month => {
       const monthTransactions = paidTransactions.filter(t => {
         const transactionMonth = new Date(t.date).getMonth();
@@ -34,13 +34,21 @@ function RevenueAnalyticsContent() {
       const sessionRevenue = monthTransactions
         .filter(t => t.type === 'Session')
         .reduce((sum, t) => sum + t.amount, 0);
+
+      const packageRevenue = monthTransactions
+        .filter(t => t.type === 'Package')
+        .reduce((sum, t) => sum + t.amount, 0);
+      
+      const calculatedPrograms = programRevenue > 0 ? programRevenue : month.programs;
+      const calculatedSessions = sessionRevenue > 0 ? sessionRevenue : month.sessions;
+      const calculatedPackages = packageRevenue > 0 ? packageRevenue : month.packages;
       
       return {
         ...month,
-        programs: programRevenue > 0 ? programRevenue : month.programs,
-        sessions: sessionRevenue > 0 ? sessionRevenue : month.sessions,
-        total: (programRevenue > 0 ? programRevenue : month.programs) + 
-               (sessionRevenue > 0 ? sessionRevenue : month.sessions)
+        programs: calculatedPrograms,
+        sessions: calculatedSessions,
+        packages: calculatedPackages,
+        total: calculatedPrograms + calculatedSessions + calculatedPackages
       };
     });
 
@@ -69,14 +77,14 @@ function RevenueAnalyticsContent() {
       <div>
         <h3 className="text-lg font-semibold">Revenue Analytics</h3>
         <p className="text-sm text-muted-foreground">
-          Analisi delle entrate per tipologia di servizio (Sessions vs Programs)
+          Revenue analysis by service type (Sessions vs Programs vs Packages)
         </p>
       </div>
       
       {/* Summary cards with real data */}
       <MonthlySummaryCards data={monthlyData} />
       
-      {/* Monthly Revenue Chart - Sessions vs Programs */}
+      {/* Monthly Revenue Chart - Sessions vs Programs vs Packages */}
       <MonthlyRevenueChart data={monthlyData} />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

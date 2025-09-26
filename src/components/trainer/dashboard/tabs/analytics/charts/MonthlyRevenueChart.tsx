@@ -48,6 +48,7 @@ export function MonthlyRevenueChart({ data }: MonthlyRevenueChartProps) {
               <Legend iconSize={10} />
               <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={40} />
               <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="packages" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
             </BarChart>
           </ResponsiveContainer>
         </div>
