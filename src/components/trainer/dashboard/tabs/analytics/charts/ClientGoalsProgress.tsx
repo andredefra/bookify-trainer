@@ -7,7 +7,7 @@ import { Target, TrendingUp, Award, Calendar } from "lucide-react";
 interface ClientGoal {
   id: string;
   name: string;
-  type: 'weight_loss' | 'strength' | 'endurance' | 'body_composition';
+  type: 'weight_management' | 'strength_progress' | 'cardiovascular_endurance' | 'body_composition' | 'activity_level';
   current: number;
   target: number;
   unit: string;
@@ -24,36 +24,58 @@ interface ClientGoalsProgressProps {
 const defaultGoals: ClientGoal[] = [
   {
     id: '1',
-    name: 'Target Weight',
-    type: 'weight_loss',
-    current: 78,
-    target: 75,
+    name: 'Target Weight Loss',
+    type: 'weight_management',
+    current: 68.5,
+    target: 65,
     unit: 'kg',
-    progress: 73,
+    progress: 70,
     deadline: '2024-06-15',
     status: 'on_track'
   },
   {
     id: '2',
-    name: 'Bench Press Max',
-    type: 'strength',
-    current: 85,
-    target: 100,
+    name: 'Bench Press Maximum',
+    type: 'strength_progress',
+    current: 75,
+    target: 80,
     unit: 'kg',
-    progress: 85,
+    progress: 94,
     deadline: '2024-05-30',
     status: 'on_track'
   },
   {
     id: '3',
-    name: '5K Run Time',
-    type: 'endurance',
-    current: 25,
-    target: 22,
-    unit: 'min',
-    progress: 60,
+    name: '5K Running Distance',
+    type: 'cardiovascular_endurance',
+    current: 3.2,
+    target: 5,
+    unit: 'km',
+    progress: 64,
     deadline: '2024-07-01',
+    status: 'on_track'
+  },
+  {
+    id: '4',
+    name: 'Body Fat Percentage',
+    type: 'body_composition',
+    current: 22,
+    target: 15,
+    unit: '%',
+    progress: 43,
+    deadline: '2024-08-01',
     status: 'behind'
+  },
+  {
+    id: '5',
+    name: 'Daily Step Count',
+    type: 'activity_level',
+    current: 8500,
+    target: 10000,
+    unit: 'steps',
+    progress: 85,
+    deadline: '2024-12-31',
+    status: 'on_track'
   }
 ];
 
@@ -82,10 +104,11 @@ export function ClientGoalsProgress({ clientName, goals = defaultGoals }: Client
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'weight_loss': return '⚖️';
-      case 'strength': return '💪';
-      case 'endurance': return '🏃';
+      case 'weight_management': return '⚖️';
+      case 'strength_progress': return '💪';
+      case 'cardiovascular_endurance': return '🏃';
       case 'body_composition': return '📏';
+      case 'activity_level': return '🚶';
       default: return '🎯';
     }
   };
@@ -129,7 +152,7 @@ export function ClientGoalsProgress({ clientName, goals = defaultGoals }: Client
         {/* Individual Goals */}
         <div className="space-y-4">
           {goals.map((goal) => {
-            const isReverse = goal.type === 'endurance'; // For goals where lower is better
+            const isReverse = goal.type === 'body_composition' && goal.unit === '%'; // For body fat % where lower is better
             const progressValue = isReverse 
               ? Math.max(0, Math.min(100, ((goal.target - goal.current + goal.target) / goal.target) * 100))
               : goal.progress;
