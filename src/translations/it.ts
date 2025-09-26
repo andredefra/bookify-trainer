@@ -352,5 +352,12 @@ export const it = {
   'aiSummary.recommendations.title': 'Raccomandazioni AI',
   'aiSummary.recommendations.focusStrength': 'Concentrati di più sui programmi di allenamento di forza',
   'aiSummary.recommendations.morningSlots': 'Aggiungi più slot mattutini',
-  'aiSummary.recommendations.followUp': 'Segui i clienti che hanno saltato 2+ sessioni'
+  'aiSummary.recommendations.followUp': 'Segui i clienti che hanno saltato 2+ sessioni',
+  
+  // Analytics Tab
+  'analytics.title': 'Analytics Business',
+  'analytics.tabs.revenue': 'Ricavi',
+  'analytics.tabs.packages': 'Pacchetti',
+  'analytics.tabs.clients': 'Tipi Clienti',
+  'analytics.tabs.aiSummary': 'Riassunto AI'
 };

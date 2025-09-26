@@ -352,5 +352,12 @@ export const en = {
   'aiSummary.recommendations.title': 'AI Recommendations',
   'aiSummary.recommendations.focusStrength': 'Focus more on strength training programs',
   'aiSummary.recommendations.morningSlots': 'Add more morning time slots',
-  'aiSummary.recommendations.followUp': 'Follow up with clients who missed 2+ sessions'
+  'aiSummary.recommendations.followUp': 'Follow up with clients who missed 2+ sessions',
+  
+  // Analytics Tab
+  'analytics.title': 'Business Analytics',
+  'analytics.tabs.revenue': 'Revenue',
+  'analytics.tabs.packages': 'Packages', 
+  'analytics.tabs.clients': 'Client Types',
+  'analytics.tabs.aiSummary': 'AI Summary'
 };
