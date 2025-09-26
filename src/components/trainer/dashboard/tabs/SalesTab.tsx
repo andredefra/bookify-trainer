@@ -35,7 +35,7 @@ export function SalesTab() {
           {/* Sales Funnel Section */}
           <div className="space-y-2 sm:space-y-3 md:space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm sm:text-base md:text-lg font-semibold">Sales Funnel</h3>
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold">Clients Funnel</h3>
             </div>
             
             {/* Client and Prospect Metrics */}

@@ -11,7 +11,7 @@ export function SalesHeader({ onAddLead }: SalesHeaderProps) {
   return (
     <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <CardTitle>Sales Management</CardTitle>
+        <CardTitle>CRM</CardTitle>
         <CardDescription>Manage your leads, prospects and clients in one place</CardDescription>
       </div>
       <Button 
