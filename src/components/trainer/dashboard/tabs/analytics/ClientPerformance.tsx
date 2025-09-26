@@ -12,9 +12,10 @@ import {
   calculateGoalAchievementData,
   calculateSingleClientGoals
 } from "./utils/metricsCalculator";
-import { PerformanceLineChart } from "./charts/PerformanceLineChart";
-import { ExerciseMaxChart } from "./charts/ExerciseMaxChart";
-import { getClientExerciseData } from "./data/exerciseMaxData";
+import { ClientProgressChart } from "./charts/ClientProgressChart";
+import { ClientGoalsProgress } from "./charts/ClientGoalsProgress";
+import { ClientWorkoutInsights } from "./charts/ClientWorkoutInsights";
+import { ClientAnalyticsInsights } from "./charts/ClientAnalyticsInsights";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -57,9 +58,11 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
     }
   };
 
-  // Get exercise max data based on selected client
-  const getExerciseMaxData = () => {
-    return getClientExerciseData(selectedClient);
+  // Get selected client name for display
+  const getSelectedClientName = () => {
+    if (selectedClient === "all") return undefined;
+    const client = mockClients.find(c => c.id === selectedClient);
+    return client?.name;
   };
   
   return (
@@ -97,13 +100,28 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
         </Select>
       </div>
       
-      {/* Performance Metrics Chart */}
-      <PerformanceLineChart data={getPerformanceData()} />
+      {/* Client Progress Chart - Enhanced with area charts and better visualization */}
+      <ClientProgressChart 
+        data={getPerformanceData()} 
+        clientName={getSelectedClientName()}
+      />
       
-      {/* Exercise Maxes Chart - now full width with increased height */}
-      <div className="w-full">
-        <ExerciseMaxChart data={getExerciseMaxData()} />
-      </div>
+      {/* Client Goals Progress - New component for goal tracking */}
+      <ClientGoalsProgress 
+        clientName={getSelectedClientName()}
+      />
+      
+      {/* AI Analytics Insights - Similar to client analytics */}
+      <ClientAnalyticsInsights 
+        clientName={getSelectedClientName()}
+        fitnessScore={78}
+        progressTrend="improving"
+      />
+      
+      {/* Client Workout Insights - Replaces Exercise Maxes with personalized insights */}
+      <ClientWorkoutInsights 
+        clientName={getSelectedClientName()}
+      />
     </div>
   );
 }
