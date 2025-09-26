@@ -116,12 +116,12 @@ export function ClientProgressChart({ data, clientName }: ClientProgressChartPro
                 fill="url(#attendanceGradient)"
                 name="Session Attendance"
               />
-              <Line 
+              <Area 
                 type="monotone" 
                 dataKey="goalsReached" 
                 stroke="#f59e0b" 
-                strokeWidth={2}
-                dot={{ r: 3, fill: "#f59e0b" }}
+                strokeWidth={3}
+                fill="rgba(245, 158, 11, 0.2)"
                 name="Goals Achievement"
               />
             </AreaChart>
