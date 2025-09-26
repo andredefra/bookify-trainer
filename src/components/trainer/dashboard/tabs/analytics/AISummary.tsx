@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { useLanguage } from '@/context/LanguageContext';
 import { 
   Brain, 
   Send, 
@@ -34,10 +35,12 @@ interface TrainerInsight {
 }
 
 export function AISummary() {
+  const { t } = useLanguage();
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "Ciao! Sono il tuo assistente AI per l'analisi dei dati. Posso aiutarti a capire le performance dei tuoi clienti, analizzare trend e darti suggerimenti personalizzati. Cosa vorresti sapere oggi?",
+      content: t('aiSummary.chat.title'),
       isUser: false,
       timestamp: new Date()
     }
@@ -48,41 +51,40 @@ export function AISummary() {
 
   const insights: TrainerInsight[] = [
     {
-      title: 'Performance Clienti',
+      title: 'Client Performance',
       value: '+12%',
       trend: 'up',
-      description: 'Miglioramento medio nelle ultime 4 settimane',
+      description: 'Average improvement in the last 4 weeks',
       icon: <TrendingUp className="h-4 w-4" />
     },
     {
-      title: 'Tasso di Ritenzione',
+      title: 'Retention Rate',
       value: '94%',
       trend: 'up',
-      description: 'Cliente attivi vs mese precedente',
+      description: 'Active clients vs previous month',
       icon: <Users className="h-4 w-4" />
     },
     {
-      title: 'Obiettivi Raggiunti',
+      title: 'Goals Achieved',
       value: '78%',
       trend: 'stable',
-      description: 'Media obiettivi completati questo mese',
+      description: 'Average goals completed this month',
       icon: <Target className="h-4 w-4" />
     },
     {
-      title: 'Sessioni Completate',
+      title: 'Sessions Completed',
       value: '156',
       trend: 'up',
-      description: 'Sessioni totali questa settimana',
+      description: 'Total sessions this week',
       icon: <Calendar className="h-4 w-4" />
     }
   ];
 
   const quickQuestions = [
-    "Mostrami il progresso di Sarah Johnson",
-    "Quali clienti hanno bisogno di più attenzione?",
-    "Come stanno andando gli obiettivi di peso?",
-    "Analizza le tendenze della settimana",
-    "Suggerimenti per migliorare le performance"
+    t('aiSummary.faq.topPerformer'),
+    t('aiSummary.faq.strugglingClients'),
+    t('aiSummary.faq.popularExercises'),
+    t('aiSummary.faq.weeklyTrends')
   ];
 
   useEffect(() => {
@@ -177,7 +179,7 @@ export function AISummary() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            AI Insights Dashboard
+            {t('aiSummary.insights')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -212,7 +214,7 @@ export function AISummary() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            AI Assistant - Analisi Dati Personalizzata
+            {t('aiSummary.chat.title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -258,7 +260,7 @@ export function AISummary() {
           <div className="space-y-2">
             <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <MessageCircle className="h-4 w-4" />
-              Domande frequenti
+              {t('aiSummary.faq.title')}
             </p>
             <div className="flex flex-wrap gap-2">
               {quickQuestions.map((question, index) => (
@@ -279,7 +281,7 @@ export function AISummary() {
           {/* Input Area */}
           <div className="flex gap-2">
             <Input
-              placeholder="Chiedi qualsiasi cosa sui tuoi dati..."
+              placeholder={t('aiSummary.chat.placeholder')}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
@@ -298,7 +300,7 @@ export function AISummary() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <BarChart3 className="h-4 w-4" />
-              Analisi Settimanale
+              {t('aiSummary.analysis.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -327,7 +329,7 @@ export function AISummary() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Activity className="h-4 w-4" />
-              Raccomandazioni AI
+              {t('aiSummary.recommendations.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>

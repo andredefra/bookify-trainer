@@ -322,5 +322,35 @@ export const en = {
   // User Landing
   'user.hero.title': 'Train body and mind. With Trainer.ai, you\'re never alone.',
   'user.hero.subtitle': 'Discover the first virtual personal trainer that truly listens to you. Create your plan, track progress, receive personalized advice.',
-  'user.hero.cta': 'Start now – Free for 1 year for the first 100 users!'
+  'user.hero.cta': 'Start now – Free for 1 year for the first 100 users!',
+  
+  // AI Summary
+  'aiSummary.title': 'AI Summary',
+  'aiSummary.insights': 'AI Insights',
+  'aiSummary.chat.title': 'Chat with AI Assistant',
+  'aiSummary.chat.placeholder': 'Ask me about your clients, training analytics, or any data...',
+  'aiSummary.chat.send': 'Send',
+  'aiSummary.metrics.totalClients': 'Total Active Clients',
+  'aiSummary.metrics.avgProgress': 'Average Progress',
+  'aiSummary.metrics.completionRate': 'Session Completion Rate',
+  'aiSummary.trends.title': 'Key Trends',
+  'aiSummary.trends.clientEngagement': 'Client engagement increased 15% this week',
+  'aiSummary.trends.goalCompletion': 'Goal completion rate improved by 8%',
+  'aiSummary.trends.newClients': '3 new clients started programs this month',
+  'aiSummary.faq.title': 'Quick Questions',
+  'aiSummary.faq.topPerformer': 'Who is my top performing client this week?',
+  'aiSummary.faq.strugglingClients': 'Which clients need more attention?',
+  'aiSummary.faq.popularExercises': 'What are the most popular exercises?',
+  'aiSummary.faq.weeklyTrends': 'Show me this week\'s trends',
+  'aiSummary.analysis.title': 'Weekly Analysis',
+  'aiSummary.analysis.clientRetention': 'Client Retention',
+  'aiSummary.analysis.clientRetention.desc': 'Strong client retention this month with 94% active participation',
+  'aiSummary.analysis.programEffectiveness': 'Program Effectiveness',
+  'aiSummary.analysis.programEffectiveness.desc': 'Strength programs showing 23% better results than cardio',
+  'aiSummary.analysis.engagement': 'Client Engagement',
+  'aiSummary.analysis.engagement.desc': 'Peak engagement hours: 7-9 AM and 6-8 PM',
+  'aiSummary.recommendations.title': 'AI Recommendations',
+  'aiSummary.recommendations.focusStrength': 'Focus more on strength training programs',
+  'aiSummary.recommendations.morningSlots': 'Add more morning time slots',
+  'aiSummary.recommendations.followUp': 'Follow up with clients who missed 2+ sessions'
 };

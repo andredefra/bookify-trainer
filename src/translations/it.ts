@@ -322,5 +322,35 @@ export const it = {
   // User Landing
   'user.hero.title': 'Allena corpo e mente. Con Trainer.ai, non sei mai da solo.',
   'user.hero.subtitle': 'Scopri il primo personal trainer virtuale che ti ascolta davvero. Crea il tuo piano, registra i progressi, ricevi consigli su misura.',
-  'user.hero.cta': 'Inizia ora – Gratis per 1 anno per i primi 100 utenti!'
+  'user.hero.cta': 'Inizia ora – Gratis per 1 anno per i primi 100 utenti!',
+  
+  // AI Summary
+  'aiSummary.title': 'Riassunto AI',
+  'aiSummary.insights': 'Insights AI',
+  'aiSummary.chat.title': 'Chat con Assistente AI',
+  'aiSummary.chat.placeholder': 'Chiedimi dei tuoi clienti, analytics di allenamento, o qualsiasi dato...',
+  'aiSummary.chat.send': 'Invia',
+  'aiSummary.metrics.totalClients': 'Clienti Attivi Totali',
+  'aiSummary.metrics.avgProgress': 'Progresso Medio',
+  'aiSummary.metrics.completionRate': 'Tasso Completamento Sessioni',
+  'aiSummary.trends.title': 'Tendenze Chiave',
+  'aiSummary.trends.clientEngagement': 'Coinvolgimento clienti aumentato del 15% questa settimana',
+  'aiSummary.trends.goalCompletion': 'Tasso completamento obiettivi migliorato dell\'8%',
+  'aiSummary.trends.newClients': '3 nuovi clienti hanno iniziato programmi questo mese',
+  'aiSummary.faq.title': 'Domande Rapide',
+  'aiSummary.faq.topPerformer': 'Chi è il mio cliente con le migliori performance questa settimana?',
+  'aiSummary.faq.strugglingClients': 'Quali clienti hanno bisogno di più attenzione?',
+  'aiSummary.faq.popularExercises': 'Quali sono gli esercizi più popolari?',
+  'aiSummary.faq.weeklyTrends': 'Mostrami le tendenze di questa settimana',
+  'aiSummary.analysis.title': 'Analisi Settimanale',
+  'aiSummary.analysis.clientRetention': 'Retention Clienti',
+  'aiSummary.analysis.clientRetention.desc': 'Forte retention clienti questo mese con 94% di partecipazione attiva',
+  'aiSummary.analysis.programEffectiveness': 'Efficacia Programmi',
+  'aiSummary.analysis.programEffectiveness.desc': 'Programmi di forza mostrano risultati migliori del 23% rispetto al cardio',
+  'aiSummary.analysis.engagement': 'Coinvolgimento Clienti',
+  'aiSummary.analysis.engagement.desc': 'Orari di picco coinvolgimento: 7-9 AM e 18-20 PM',
+  'aiSummary.recommendations.title': 'Raccomandazioni AI',
+  'aiSummary.recommendations.focusStrength': 'Concentrati di più sui programmi di allenamento di forza',
+  'aiSummary.recommendations.morningSlots': 'Aggiungi più slot mattutini',
+  'aiSummary.recommendations.followUp': 'Segui i clienti che hanno saltato 2+ sessioni'
 };
