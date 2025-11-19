@@ -1,5 +1,6 @@
 
 import { ProgressItem, BodyMeasurements } from "./types";
+import { calculateBodyFatPercentage } from "@/components/client/analytics/utils/bodyFatCalculations";
 
 // Calculate progress percentage and ensure it's between 0-100
 export const calculateProgress = (current: number, target: number): number => {
@@ -9,26 +10,35 @@ export const calculateProgress = (current: number, target: number): number => {
 // Get current date in ISO format for tracking updates
 export const getCurrentDate = (): string => new Date().toISOString();
 
-// Calculate body composition based on measurements
-export const calculateBodyComposition = (measurements: BodyMeasurements) => {
-  // Simplified body fat calculation using waist and neck measurements
-  // This is a basic implementation - in a real app you'd use more sophisticated algorithms
+// Calculate body composition based on measurements and user profile
+export const calculateBodyComposition = (
+  measurements: BodyMeasurements,
+  userProfile?: { height?: number; gender?: 'male' | 'female'; weight?: number }
+) => {
   let bodyFatPercentage = undefined;
   let leanMass = undefined;
   
-  if (measurements.waist && measurements.neck) {
-    // Basic Navy Body Fat formula approximation
-    const waistNeckRatio = measurements.waist / measurements.neck;
-    bodyFatPercentage = Math.max(5, Math.min(50, waistNeckRatio * 15 - 10));
+  // Use Navy Body Fat formula if we have all required measurements
+  if (measurements.waist && measurements.neck && userProfile?.height && userProfile?.gender) {
+    bodyFatPercentage = calculateBodyFatPercentage({
+      waist: measurements.waist,
+      neck: measurements.neck,
+      hips: measurements.hips,
+      height: userProfile.height,
+      gender: userProfile.gender,
+    });
     
-    // If we have weight data from goals, calculate lean mass
-    // This would typically come from integrated weight tracking
-    const estimatedWeight = 70; // Default estimate - would come from weight goals
-    leanMass = estimatedWeight * (1 - bodyFatPercentage / 100);
+    // Calculate lean mass if we have weight
+    const weight = userProfile.weight || measurements.weight;
+    if (bodyFatPercentage !== null && weight) {
+      leanMass = weight * (1 - bodyFatPercentage / 100);
+    }
   }
   
   return {
-    bodyFatPercentage: bodyFatPercentage ? Math.round(bodyFatPercentage * 10) / 10 : undefined,
+    bodyFatPercentage: bodyFatPercentage !== null && bodyFatPercentage !== undefined 
+      ? Math.round(bodyFatPercentage * 10) / 10 
+      : undefined,
     leanMass: leanMass ? Math.round(leanMass * 10) / 10 : undefined
   };
 };

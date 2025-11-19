@@ -1,12 +1,14 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Camera, Info } from "lucide-react";
 import { toast } from "sonner";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface AccountSectionProps {
   user: { 
@@ -21,23 +23,46 @@ export function AccountSection({ user }: AccountSectionProps) {
   // Use a general image as default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
+  const { profile, saveProfile, uploadProfileImage, loading } = useUserProfile();
+  
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState("");
   const [height, setHeight] = useState("");
+  const [gender, setGender] = useState<'male' | 'female' | ''>("");
   const [age, setAge] = useState("");
   const [profileImage, setProfileImage] = useState<string>(user.profileImage || defaultImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSaveAccount = () => {
-    toast.success("Account information saved successfully");
+  // Initialize from profile
+  useEffect(() => {
+    if (profile) {
+      setHeight(profile.height?.toString() || "");
+      setGender(profile.gender || "");
+      if (profile.profile_image_url) {
+        setProfileImage(profile.profile_image_url);
+      }
+    }
+  }, [profile]);
+
+  const handleSaveAccount = async () => {
+    try {
+      await saveProfile({
+        first_name: name,
+        height: height ? parseInt(height) : undefined,
+        gender: gender || undefined,
+      });
+      toast.success("Account information saved successfully");
+    } catch (error) {
+      toast.error("Failed to save account information");
+    }
   };
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
   
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       // Check if the file is an image
@@ -52,13 +77,12 @@ export function AccountSection({ user }: AccountSectionProps) {
         return;
       }
       
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setProfileImage(result);
+      const imageUrl = await uploadProfileImage(file);
+      if (imageUrl) {
+        setProfileImage(imageUrl);
+        await saveProfile({ profile_image_url: imageUrl });
         toast.success("Profile image updated");
-      };
-      reader.readAsDataURL(file);
+      }
     }
   };
   
@@ -164,6 +188,18 @@ export function AccountSection({ user }: AccountSectionProps) {
               min="100"
               max="250"
             />
+          </div>
+          <div>
+            <Label htmlFor="gender">Gender</Label>
+            <Select value={gender} onValueChange={(value) => setGender(value as 'male' | 'female')}>
+              <SelectTrigger id="gender">
+                <SelectValue placeholder="Select gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         

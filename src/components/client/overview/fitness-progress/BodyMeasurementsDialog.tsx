@@ -17,8 +17,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMea
   const measurementsForm = useForm({
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
-      height: 0,
-      gender: '',
       waist: 0,
       hips: 0,
       thighs: 0,
@@ -47,7 +45,7 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMea
             Log Body Measurements
           </DialogTitle>
           <DialogDescription>
-            Record your body measurements to track changes in body composition over time.
+            Record your body measurements to track changes over time. Height and gender are set in your account settings.
           </DialogDescription>
         </DialogHeader>
         
@@ -66,50 +64,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMea
                 </FormItem>
               )}
             />
-            
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <FormField
-                control={measurementsForm.control}
-                name="height"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Height (cm)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.1"
-                        placeholder="170" 
-                        {...field} 
-                        onChange={e => field.onChange(Number(e.target.value))} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={measurementsForm.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Gender</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select gender" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="female">Female</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             
             <div className="grid grid-cols-2 gap-4">
               <FormField
