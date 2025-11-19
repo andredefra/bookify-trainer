@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -2396,22 +2396,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      expire_old_invitations: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      expire_old_invitations: { Args: never; Returns: undefined }
       generate_expiring_program_notifications: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: undefined
       }
-      generate_trainer_slug: {
-        Args: { trainer_name: string }
-        Returns: string
-      }
-      get_user_age: {
-        Args: { birth_date: string }
-        Returns: number
-      }
+      generate_trainer_slug: { Args: { trainer_name: string }; Returns: string }
+      get_user_age: { Args: { birth_date: string }; Returns: number }
       initialize_default_email_templates: {
         Args: { gym_user_id: string }
         Returns: undefined

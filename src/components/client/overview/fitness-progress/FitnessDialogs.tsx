@@ -27,6 +27,7 @@ interface FitnessDialogsProps {
   onWeightSubmit: (data: any) => void;
   onMeasurementsSubmit: (data: any) => void;
   onDeleteGoal: () => void;
+  onManageGoalTypes?: () => void;
 }
 
 export function FitnessDialogs({
@@ -48,7 +49,8 @@ export function FitnessDialogs({
   onLogSubmit,
   onWeightSubmit,
   onMeasurementsSubmit,
-  onDeleteGoal
+  onDeleteGoal,
+  onManageGoalTypes
 }: FitnessDialogsProps) {
   return (
     <>
@@ -56,6 +58,7 @@ export function FitnessDialogs({
         open={openDialog}
         onOpenChange={setOpenDialog}
         onSubmit={onSubmit}
+        onManageGoalTypes={onManageGoalTypes}
       />
       
       <UpdateGoalDialog 
