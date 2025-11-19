@@ -25,6 +25,11 @@ export function useMessages(trainerId: string) {
   useEffect(() => {
     if (trainerId) {
       initializeConversation();
+    } else {
+      // If trainerId is empty, stop loading
+      setLoading(false);
+      setMessages([]);
+      setConversationId(null);
     }
   }, [trainerId]);
 
