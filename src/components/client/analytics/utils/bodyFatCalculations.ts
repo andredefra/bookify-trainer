@@ -37,21 +37,29 @@ export const calculateFemaleBodyFat = (waist: number, hips: number, neck: number
 
 /**
  * Calculate Body Fat percentage based on gender and measurements
- * @param measurements Body measurements including gender
+ * @param params Object containing waist, neck, hips (for female), height, and gender
  * @returns Body fat percentage or null if insufficient data
  */
-export const calculateBodyFatPercentage = (measurements: BodyMeasurements): number | null => {
-  if (!measurements.gender || !measurements.height || !measurements.waist || !measurements.neck) {
+export const calculateBodyFatPercentage = (params: {
+  waist: number;
+  neck: number;
+  hips?: number;
+  height: number;
+  gender: 'male' | 'female';
+}): number | null => {
+  const { waist, neck, hips, height, gender } = params;
+  
+  if (!gender || !height || !waist || !neck) {
     return null;
   }
 
-  if (measurements.gender === 'male') {
-    return calculateMaleBodyFat(measurements.waist, measurements.neck, measurements.height);
-  } else if (measurements.gender === 'female') {
-    if (!measurements.hips) {
+  if (gender === 'male') {
+    return calculateMaleBodyFat(waist, neck, height);
+  } else if (gender === 'female') {
+    if (!hips) {
       return null; // Hips required for female calculation
     }
-    return calculateFemaleBodyFat(measurements.waist, measurements.hips, measurements.neck, measurements.height);
+    return calculateFemaleBodyFat(waist, hips, neck, height);
   }
 
   return null;
@@ -80,22 +88,28 @@ export const getBodyFatStatus = (bodyFat: number, gender: 'male' | 'female'): { 
 };
 
 /**
- * Check if measurements are sufficient for body fat calculation
- * @param measurements Body measurements
+ * Check if measurements and profile data are sufficient for body fat calculation
+ * @param params Object containing height, gender, waist, neck, hips
  * @returns Object with sufficiency status and missing fields
  */
-export const checkBodyFatRequirements = (measurements: BodyMeasurements): { 
+export const checkBodyFatRequirements = (params: {
+  height?: number;
+  gender?: 'male' | 'female';
+  waist?: number;
+  neck?: number;
+  hips?: number;
+}): { 
   sufficient: boolean; 
   missing: string[] 
 } => {
   const missing: string[] = [];
   
-  if (!measurements.height) missing.push('Height');
-  if (!measurements.gender) missing.push('Gender');
-  if (!measurements.waist) missing.push('Waist');
-  if (!measurements.neck) missing.push('Neck');
+  if (!params.height) missing.push('Height');
+  if (!params.gender) missing.push('Gender');
+  if (!params.waist) missing.push('Waist');
+  if (!params.neck) missing.push('Neck');
   
-  if (measurements.gender === 'female' && !measurements.hips) {
+  if (params.gender === 'female' && !params.hips) {
     missing.push('Hips');
   }
   

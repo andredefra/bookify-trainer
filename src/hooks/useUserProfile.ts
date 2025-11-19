@@ -10,6 +10,8 @@ export interface UserProfile {
   date_of_birth?: string;
   city?: string;
   profile_image_url?: string;
+  height?: number; // Altezza in cm
+  gender?: 'male' | 'female'; // Genere per calcoli body composition
   allergies?: string;
   health_conditions?: string;
   physical_limitations?: string;

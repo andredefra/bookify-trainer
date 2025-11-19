@@ -137,8 +137,9 @@ export interface BodyMeasurements {
   id?: string;
   date: string;
   weight?: number; // peso in kg
-  height?: number; // altezza in centimetri
-  gender?: 'male' | 'female'; // genere per formula body fat
+  // DEPRECATED: height e gender ora sono nel profilo utente (user_profiles table)
+  // height?: number; 
+  // gender?: 'male' | 'female';
   waist?: number; // vita
   hips?: number; // fianchi
   thighs?: number; // cosce

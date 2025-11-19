@@ -3,6 +3,7 @@ import React from "react";
 import { ProgressItem, BodyMeasurements } from "@/components/client/overview/fitness-progress/types";
 import { getLatestMeasurements, getWeightData, calculateBMI, getBMIStatus } from "./body-composition/utils";
 import { calculateBodyFatPercentage, getBodyFatStatus, checkBodyFatRequirements } from "../utils/bodyFatCalculations";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { 
   WeightGoalCard, 
   BMIWeightCard, 
@@ -18,13 +19,15 @@ interface GoalsProgressProps {
 }
 
 export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressProps) {
+  const { profile } = useUserProfile();
+  
   // Get data using utility functions
   const latestMeasurements = getLatestMeasurements(bodyMeasurements);
   const weightData = getWeightData(progressData);
   
   // Calculate BMI and body fat data
   const currentWeight = weightData?.current || 70;
-  const bmi = calculateBMI(currentWeight);
+  const bmi = profile?.height ? calculateBMI(currentWeight, profile.height) : calculateBMI(currentWeight);
   const bmiStatus = getBMIStatus(bmi);
 
   // Get specific goals from progress data
@@ -32,11 +35,26 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
   const workoutGoal = progressData.find(goal => goal.goalType === 'activity_level') || 
                      progressData.find(goal => goal.goalType === 'strength_progress');
 
-  // Calculate body fat data
-  const bodyFatPercentage = latestMeasurements ? calculateBodyFatPercentage(latestMeasurements) : null;
-  const bodyFatRequirements = latestMeasurements ? checkBodyFatRequirements(latestMeasurements) : { sufficient: false, missing: [] };
-  const bodyFatStatus = bodyFatPercentage && latestMeasurements?.gender ? 
-    getBodyFatStatus(bodyFatPercentage, latestMeasurements.gender) : null;
+  // Calculate body fat data using profile height and gender
+  const bodyFatPercentage = latestMeasurements && profile?.height && profile?.gender && latestMeasurements.waist && latestMeasurements.neck ? 
+    calculateBodyFatPercentage({
+      waist: latestMeasurements.waist,
+      neck: latestMeasurements.neck,
+      hips: latestMeasurements.hips,
+      height: profile.height,
+      gender: profile.gender
+    }) : null;
+    
+  const bodyFatRequirements = checkBodyFatRequirements({
+    height: profile?.height,
+    gender: profile?.gender,
+    waist: latestMeasurements?.waist,
+    neck: latestMeasurements?.neck,
+    hips: latestMeasurements?.hips
+  });
+  
+  const bodyFatStatus = bodyFatPercentage && profile?.gender ? 
+    getBodyFatStatus(bodyFatPercentage, profile.gender) : null;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
