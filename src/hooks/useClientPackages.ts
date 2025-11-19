@@ -113,6 +113,12 @@ export function useClientPackages() {
       const transformedAssignments: ClientPackageAssignment[] = assignments?.map(assignment => {
         const pkg = assignment.package;
         
+        // Check if package exists
+        if (!pkg) {
+          console.warn(`Assignment ${assignment.id} has no associated package`);
+          return null;
+        }
+        
         // Ensure package_type is valid
         if (!isValidPackageType(pkg.package_type)) {
           console.warn(`Invalid package_type: ${pkg.package_type}, defaulting to sessions_only`);
@@ -146,7 +152,7 @@ export function useClientPackages() {
           },
           trainer_name: getTrainerName(assignment.trainer_id)
         };
-      }) || [];
+      }).filter(Boolean) as ClientPackageAssignment[] || [];
 
       console.log('Transformed assignments:', transformedAssignments);
       
