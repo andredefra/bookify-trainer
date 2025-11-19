@@ -46,9 +46,9 @@ export function BodyFatCard({
   const bodyCompositionData = calculateBodyComposition();
   
   const renderTrendIcon = () => {
-    if (!bodyFatTrend || bodyFatTrend.trend === 'stable') return <Minus className="h-3 w-3 text-muted-foreground" />;
-    if (bodyFatTrend.trend === 'down') return <TrendingDown className="h-3 w-3 text-green-600" />;
-    return <TrendingUp className="h-3 w-3 text-red-500" />;
+    if (!bodyFatTrend || bodyFatTrend.trend === 'stable') return <Minus className="h-4 w-4 text-muted-foreground" />;
+    if (bodyFatTrend.trend === 'down') return <TrendingDown className="h-4 w-4 text-green-600" />;
+    return <TrendingUp className="h-4 w-4 text-red-500" />;
   };
 
   const formatLastMeasured = () => {
@@ -60,8 +60,8 @@ export function BodyFatCard({
   };
 
   return (
-    <div className="bg-card border rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between mb-3">
+    <div className="bg-card border rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <div className="bg-purple-500 rounded-md p-1.5">
             <Users className="h-4 w-4 text-white" />
@@ -78,37 +78,41 @@ export function BodyFatCard({
         )}
       </div>
       
-      <div className="space-y-3">
+      <div>
         {bodyFatRequirements.sufficient && bodyFatPercentage ? (
-          <>
-            <div className="text-center bg-muted/30 rounded-md p-2">
-              <div className="flex items-center justify-center space-x-2 mb-1">
-                <span className="text-xl font-bold text-purple-700">{bodyFatPercentage}%</span>
-                {renderTrendIcon()}
-              </div>
-              {bodyFatTrend && bodyFatTrend.previousDate && (
-                <div className={`text-xs font-medium ${bodyFatTrend.trend === 'down' ? 'text-green-600' : bodyFatTrend.trend === 'up' ? 'text-red-500' : 'text-muted-foreground'}`}>
-                  {formatTrendChange(bodyFatTrend, '%')} vs {new Date(bodyFatTrend.previousDate).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
+          <div className="grid grid-cols-5 gap-3">
+            {/* Left Column - Body Fat Percentage */}
+            <div className="col-span-2 bg-muted/50 rounded-md p-4 flex flex-col justify-center">
+              <div className="text-center">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <span className="text-3xl font-bold text-purple-700">{bodyFatPercentage}%</span>
+                  {renderTrendIcon()}
                 </div>
-              )}
+                {bodyFatTrend && bodyFatTrend.previousDate && (
+                  <div className={`text-sm font-medium ${bodyFatTrend.trend === 'down' ? 'text-green-600' : bodyFatTrend.trend === 'up' ? 'text-red-500' : 'text-muted-foreground'}`}>
+                    {formatTrendChange(bodyFatTrend, '%')} vs {new Date(bodyFatTrend.previousDate).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
+                  </div>
+                )}
+              </div>
             </div>
             
+            {/* Right Column - Body Composition Chart */}
             {bodyCompositionData && (
-              <div className="bg-muted/20 rounded-md p-2">
-                <h5 className="text-[10px] font-medium text-muted-foreground mb-1 text-center">Body Composition</h5>
-                <ResponsiveContainer width="100%" height={90}>
+              <div className="col-span-3 bg-muted/20 rounded-md p-3">
+                <h5 className="text-xs font-medium text-muted-foreground mb-2 text-center">Body Composition</h5>
+                <ResponsiveContainer width="100%" height={140}>
                   <PieChart>
                     <Pie
                       data={bodyCompositionData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={20}
-                      outerRadius={35}
+                      innerRadius={28}
+                      outerRadius={50}
                       paddingAngle={2}
                       dataKey="value"
                       label={({ value }) => `${value}kg`}
                       labelLine={false}
-                      style={{ fontSize: '9px' }}
+                      style={{ fontSize: '10px' }}
                     >
                       {bodyCompositionData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -120,25 +124,25 @@ export function BodyFatCard({
                         backgroundColor: 'hsl(var(--background))',
                         border: '1px solid hsl(var(--border))',
                         borderRadius: '6px',
-                        fontSize: '10px'
+                        fontSize: '11px'
                       }}
                     />
                     <Legend 
                       verticalAlign="bottom" 
-                      height={24}
+                      height={28}
                       iconType="circle"
-                      wrapperStyle={{ fontSize: '9px' }}
+                      wrapperStyle={{ fontSize: '11px' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
-                <p className="text-[9px] text-muted-foreground text-center mt-1">
+                <p className="text-[10px] text-muted-foreground text-center mt-1">
                   *Estimate based on algorithms and body measurements
                 </p>
               </div>
             )}
-          </>
+          </div>
         ) : (
-          <div className="text-center bg-muted/30 rounded-md p-2">
+          <div className="text-center bg-muted/30 rounded-md p-3">
             <div className="text-xs text-muted-foreground mb-1">Missing:</div>
             <div className="text-xs font-medium text-purple-700">
               {bodyFatRequirements.missing.join(', ')}
