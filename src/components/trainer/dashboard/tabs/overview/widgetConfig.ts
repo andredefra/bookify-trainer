@@ -19,25 +19,25 @@ export const WIDGET_CATALOG: WidgetConfig[] = [
     id: "quick-actions",
     title: "Quick Actions",
     isCore: true,
-    defaultLayout: { w: 1, h: 3, x: 0, y: 0, minW: 1, minH: 2 }
+    defaultLayout: { w: 1, h: 2, x: 0, y: 0, minW: 1, minH: 2 }
   },
   {
     id: "todays-agenda",
     title: "Today's Agenda",
     isCore: true,
-    defaultLayout: { w: 1, h: 3, x: 1, y: 0, minW: 1, minH: 2 }
+    defaultLayout: { w: 1, h: 2, x: 1, y: 0, minW: 1, minH: 2 }
   },
   {
     id: "messages",
     title: "Messages",
     isCore: true,
-    defaultLayout: { w: 1, h: 3, x: 2, y: 0, minW: 1, minH: 2 }
+    defaultLayout: { w: 1, h: 2, x: 2, y: 0, minW: 1, minH: 2 }
   },
   {
     id: "expiration-alerts",
     title: "Expiration Alerts",
     isCore: true,
-    defaultLayout: { w: 1, h: 3, x: 0, y: 3, minW: 1, minH: 1 }
+    defaultLayout: { w: 1, h: 2, x: 0, y: 2, minW: 1, minH: 2 }
   },
   {
     id: "revenue-chart",
