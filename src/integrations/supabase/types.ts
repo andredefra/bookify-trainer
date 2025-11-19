@@ -331,6 +331,7 @@ export type Database = {
           sessions_count: number | null
           title: string
           trainer_id: string
+          training_program_data: Json | null
           updated_at: string | null
           validity_days: number | null
         }
@@ -345,6 +346,7 @@ export type Database = {
           sessions_count?: number | null
           title: string
           trainer_id: string
+          training_program_data?: Json | null
           updated_at?: string | null
           validity_days?: number | null
         }
@@ -359,6 +361,7 @@ export type Database = {
           sessions_count?: number | null
           title?: string
           trainer_id?: string
+          training_program_data?: Json | null
           updated_at?: string | null
           validity_days?: number | null
         }
