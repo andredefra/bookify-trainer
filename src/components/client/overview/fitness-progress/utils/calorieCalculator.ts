@@ -1,5 +1,9 @@
 import { ActivityType } from "../types";
 import { calculateCaloriesFromMET } from "../data/metValues";
+import { getCardioMETValue } from "../data/cardioMetValues";
+import { estimateStrengthCalories } from "./strengthCalorieEstimator";
+import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
+import { ExerciseData } from "@/data/exercises/types";
 
 export const calculateCalories = (
   activityType: ActivityType,
@@ -33,6 +37,34 @@ export const calculateCalories = (
       }
       
       return calculateCaloriesFromMET(adjustedMET, userWeight, Number(durationMins));
+    
+    case 'met-dynamic':
+      // Dynamic MET calculation for cardio exercises
+      const cardioExerciseId = fieldValues.cardioExercise || fieldValues.exercise;
+      if (!cardioExerciseId) return 0;
+      
+      const intensity = String(fieldValues.intensity || 'moderate').toLowerCase() as 'light' | 'moderate' | 'vigorous';
+      const cardioMET = getCardioMETValue(cardioExerciseId, intensity);
+      const cardioDuration = fieldValues.duration || fieldValues.minutes || 0;
+      
+      return calculateCaloriesFromMET(cardioMET, userWeight, Number(cardioDuration));
+    
+    case 'strength-formula':
+      // Strength training calorie estimation
+      const exerciseId = fieldValues.exercise;
+      if (!exerciseId) return 0;
+      
+      const exercise = completeExerciseDatabase.find(ex => ex.id === exerciseId);
+      if (!exercise) return 0;
+      
+      return estimateStrengthCalories({
+        exercise,
+        weight: Number(fieldValues.weight || 0),
+        sets: Number(fieldValues.sets || 0),
+        reps: Number(fieldValues.reps || 0),
+        duration: Number(fieldValues.duration || 0),
+        userWeight
+      });
     
     case 'formula':
       // Safe formula evaluation with limited scope
