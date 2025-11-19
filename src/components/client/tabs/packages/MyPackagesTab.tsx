@@ -237,8 +237,8 @@ export function MyPackagesTab() {
       <BrowsePackagesDialog
         open={showBrowsePackages}
         onOpenChange={setShowBrowsePackages}
-        packages={availablePackages}
-        assignedPackages={assignedPackages}
+        packages={availablePackages || []}
+        assignedPackages={assignedPackages || []}
         onPaymentComplete={handlePaymentComplete}
       />
     </div>
