@@ -24,6 +24,10 @@ interface SettingsTabContentProps {
 export function SettingsTabContent({ user, goals, activeSection }: SettingsTabContentProps) {
   const [activeTab, setActiveTab] = useState("account");
 
+  const handleNavigateToSubscriptions = () => {
+    setActiveTab("subscriptions");
+  };
+
   useEffect(() => {
     if (activeSection) {
       setActiveTab(activeSection);
@@ -126,7 +130,12 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
         </div>
         
         <div className="space-y-6">
-          {activeTab === "account" && <AccountSection user={user} />}
+        {activeTab === "account" && (
+          <AccountSection 
+            user={user} 
+            onNavigateToSubscriptions={handleNavigateToSubscriptions}
+          />
+        )}
           {activeTab === "payments" && <PaymentsSection />}
           {activeTab === "preferences" && <PreferencesSection goals={goals} />}
           {activeTab === "integrations" && <IntegrationsSection user={user} />}

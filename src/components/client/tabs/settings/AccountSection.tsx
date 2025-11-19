@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Camera, Info } from "lucide-react";
+import { Camera, Info, Crown } from "lucide-react";
 import { toast } from "sonner";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
@@ -17,9 +17,10 @@ interface AccountSectionProps {
     name?: string; 
     profileImage?: string;
   };
+  onNavigateToSubscriptions?: () => void;
 }
 
-export function AccountSection({ user }: AccountSectionProps) {
+export function AccountSection({ user, onNavigateToSubscriptions }: AccountSectionProps) {
   // Use a general image as default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
@@ -213,11 +214,22 @@ export function AccountSection({ user }: AccountSectionProps) {
       <div className="bg-blue-50 border border-blue-100 rounded-md p-4">
         <div className="flex gap-3">
           <Info className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-          <div>
+          <div className="flex-1">
             <h3 className="font-medium text-blue-700 mb-1">Client Account</h3>
-            <p className="text-sm text-blue-600">
-              The app is always free for clients. Premium features like custom training programs and advanced progress tracking are available based on your trainer's subscription plan.
+            <p className="text-sm text-blue-600 mb-3">
+              MyPersonal.fit is free for clients. Training programs assigned by your trainer are included at no cost. Advanced AI features (workout coach, form analysis, exercise demos) require a Pro subscription.
             </p>
+            {onNavigateToSubscriptions && (
+              <Button 
+                variant="link" 
+                size="sm"
+                onClick={onNavigateToSubscriptions}
+                className="p-0 h-auto text-amber-600 hover:text-amber-700 font-medium"
+              >
+                <Crown className="h-4 w-4 mr-1" />
+                View Subscription Plans →
+              </Button>
+            )}
           </div>
         </div>
       </div>
