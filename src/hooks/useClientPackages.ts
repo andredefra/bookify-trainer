@@ -24,9 +24,14 @@ export interface ClientPackageAssignment {
   sessions_used: number;
   sessions_total: number;
   total_paid: number;
-  status: 'active' | 'expired' | 'completed' | 'cancelled';
+  status: 'active' | 'expired' | 'completed' | 'cancelled' | 'proposed';
   package: ClientPackage;
   trainer_name?: string;
+}
+
+export interface AssignedPackage extends ClientPackage {
+  assignmentId: string;
+  assignedByTrainer: boolean;
 }
 
 // Type guards to ensure database values match our expected types
@@ -34,12 +39,21 @@ const isValidPackageType = (type: string): type is 'sessions_only' | 'program_on
   return ['sessions_only', 'program_only', 'hybrid', 'service'].includes(type);
 };
 
-const isValidStatus = (status: string): status is 'active' | 'expired' | 'completed' | 'cancelled' => {
-  return ['active', 'expired', 'completed', 'cancelled'].includes(status);
+const isValidStatus = (status: string): status is 'active' | 'expired' | 'completed' | 'cancelled' | 'proposed' => {
+  return ['active', 'expired', 'completed', 'cancelled', 'proposed'].includes(status);
 };
 
 // Function to determine actual status based on expiry date
-const getActualStatus = (dbStatus: string, expiryDate: string): 'active' | 'expired' | 'completed' | 'cancelled' => {
+const getActualStatus = (dbStatus: string, expiryDate: string | null): 'active' | 'expired' | 'completed' | 'cancelled' | 'proposed' => {
+  // Proposed packages don't have expiry date yet
+  if (dbStatus === 'proposed') {
+    return 'proposed';
+  }
+  
+  if (!expiryDate) {
+    return isValidStatus(dbStatus) ? dbStatus : 'active';
+  }
+  
   const today = new Date();
   const expiry = new Date(expiryDate);
   
@@ -65,6 +79,7 @@ const getTrainerName = (trainerId: string): string => {
 export function useClientPackages() {
   const [packages, setPackages] = useState<ClientPackageAssignment[]>([]);
   const [availablePackages, setAvailablePackages] = useState<ClientPackage[]>([]);
+  const [assignedPackages, setAssignedPackages] = useState<AssignedPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,14 +108,15 @@ export function useClientPackages() {
       const trainerIds = trainerRelationships?.map(r => r.trainer_id) || [];
       console.log('Client trainers:', trainerIds);
 
-      // Fetch package assignments with package details
+      // Fetch package assignments with package details (exclude proposed)
       const { data: assignments, error: assignmentsError } = await supabase
         .from('client_package_assignments')
         .select(`
           *,
           package:client_packages(*)
         `)
-        .eq('client_id', clientId);
+        .eq('client_id', clientId)
+        .neq('status', 'proposed');
 
       if (assignmentsError) {
         console.error('Error fetching assignments:', assignmentsError);
@@ -199,7 +215,40 @@ export function useClientPackages() {
         };
       }) || [];
 
+      console.log('Transformed available packages:', transformedPackages);
       setAvailablePackages(transformedPackages);
+
+      // Fetch assigned packages (status 'proposed')
+      const { data: proposedAssignments } = await supabase
+        .from('client_package_assignments')
+        .select(`
+          *,
+          package:client_packages(*)
+        `)
+        .eq('client_id', clientId)
+        .eq('status', 'proposed');
+
+      const transformedAssignedPackages: AssignedPackage[] = proposedAssignments?.map(assignment => {
+        const pkg = assignment.package;
+        if (!pkg) return null;
+
+        return {
+          id: pkg.id,
+          title: pkg.title,
+          description: pkg.description,
+          package_type: pkg.package_type as 'sessions_only' | 'program_only' | 'hybrid' | 'service',
+          sessions_count: pkg.sessions_count || 0,
+          price: pkg.price,
+          validity_days: pkg.validity_days || 90,
+          trainer_id: pkg.trainer_id,
+          is_public: false,
+          assignmentId: assignment.id,
+          assignedByTrainer: true
+        };
+      }).filter(Boolean) as AssignedPackage[] || [];
+
+      console.log('Transformed assigned packages:', transformedAssignedPackages);
+      setAssignedPackages(transformedAssignedPackages);
     } catch (err) {
       console.error('Error fetching packages:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch packages');
@@ -211,6 +260,7 @@ export function useClientPackages() {
   return {
     packages,
     availablePackages,
+    assignedPackages,
     loading,
     error,
     refetch: fetchPackages

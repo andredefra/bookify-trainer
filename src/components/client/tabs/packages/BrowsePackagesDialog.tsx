@@ -9,15 +9,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Clock, User, Plus } from "lucide-react";
-import { ClientPackage } from "@/hooks/useClientPackages";
+import { Package, Clock, User, Plus, Star, UserCheck } from "lucide-react";
+import { ClientPackage, AssignedPackage } from "@/hooks/useClientPackages";
 import { PackagePaymentDialog } from "./PackagePaymentDialog";
 import { CustomPackageRequestDialog } from "./CustomPackageRequestDialog";
 
 interface BrowsePackagesDialogProps {
   packages: ClientPackage[];
+  assignedPackages: AssignedPackage[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onPaymentComplete: () => void;
 }
 
 // Trainer name mapping function
@@ -31,10 +33,11 @@ const getTrainerName = (trainerId: string): string => {
   return trainerNames[trainerId] || 'Unknown Trainer';
 };
 
-export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePackagesDialogProps) {
+export function BrowsePackagesDialog({ packages, assignedPackages, open, onOpenChange, onPaymentComplete }: BrowsePackagesDialogProps) {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showCustomRequestDialog, setShowCustomRequestDialog] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<ClientPackage | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<ClientPackage | AssignedPackage | null>(null);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | undefined>(undefined);
   const [selectedTrainerName, setSelectedTrainerName] = useState('');
 
   // Group packages by trainer
@@ -60,14 +63,16 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
     }
   };
 
-  const handlePurchasePackage = (pkg: ClientPackage) => {
+  const handlePurchasePackage = (pkg: ClientPackage | AssignedPackage, assignmentId?: string) => {
     setSelectedPackage(pkg);
+    setSelectedAssignmentId(assignmentId);
     setSelectedTrainerName(getTrainerName(pkg.trainer_id));
     setShowPaymentDialog(true);
   };
 
-  const handlePaymentComplete = () => {
-    console.log('Payment completed for package:', selectedPackage?.title);
+  const handlePaymentCompleteInternal = () => {
+    onPaymentComplete();
+    setShowPaymentDialog(false);
   };
 
   const handleCustomRequestSubmitted = () => {
@@ -95,7 +100,64 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
             </div>
           </DialogHeader>
           
-          {packages.length === 0 ? (
+          {/* Assigned by Trainer Section */}
+          {assignedPackages.length > 0 && (
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <UserCheck className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Assigned by Your Trainer</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Your trainer has recommended these packages specifically for you
+              </p>
+              <div className="grid gap-4 md:grid-cols-2">
+                {assignedPackages.map((pkg) => (
+                  <Card key={pkg.id} className="hover:shadow-lg transition-shadow border-primary/20">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="flex items-center gap-2">
+                          <Package className="h-5 w-5" />
+                          {pkg.title}
+                        </CardTitle>
+                        <Badge className="bg-purple-100 text-purple-800">
+                          <Star className="h-3 w-3 mr-1" />
+                          Recommended
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-muted-foreground">{pkg.description}</p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm">
+                          <User className="h-4 w-4 text-muted-foreground" />
+                          <span className="font-medium">{getTrainerName(pkg.trainer_id)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Package className="h-4 w-4 text-muted-foreground" />
+                          <span>{pkg.sessions_count} sessions included</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span>{pkg.validity_days} days validity</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-4 border-t">
+                        <span className="text-2xl font-bold">€{pkg.price.toFixed(2)}</span>
+                        <Button onClick={() => handlePurchasePackage(pkg, pkg.assignmentId)}>
+                          Purchase Package
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Available Packages Section */}
+          {packages.length === 0 && assignedPackages.length === 0 ? (
             <div className="text-center py-12">
               <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4 opacity-50" />
               <h3 className="text-lg font-semibold mb-2">No Packages Available</h3>
@@ -110,10 +172,14 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
                 Request Custom Package
               </Button>
             </div>
-          ) : (
-            <div className="space-y-8">
+          ) : packages.length > 0 ? (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Package className="h-5 w-5" />
+                <h3 className="text-lg font-semibold">Available Packages</h3>
+              </div>
               {Object.entries(packagesByTrainer).map(([trainerId, { trainerName, packages: trainerPackages }]) => (
-                <div key={trainerId}>
+                <div key={trainerId} className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
                     <User className="h-5 w-5 text-muted-foreground" />
                     <h3 className="text-lg font-semibold">{trainerName}'s Packages</h3>
@@ -142,7 +208,7 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
 
                           <div className="flex items-center justify-between">
                             <div className="text-2xl font-bold">
-                              ${pkg.price}
+                              €{pkg.price.toFixed(2)}
                             </div>
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Clock className="h-4 w-4" />
@@ -171,13 +237,10 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
 
                           <div className="flex gap-2">
                             <Button 
-                              className="flex-1"
                               onClick={() => handlePurchasePackage(pkg)}
+                              className="flex-1"
                             >
-                              Purchase Package
-                            </Button>
-                            <Button variant="outline" size="sm">
-                              More Info
+                              Purchase
                             </Button>
                           </div>
                         </CardContent>
@@ -187,7 +250,7 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
                 </div>
               ))}
             </div>
-          )}
+          ) : null}
         </DialogContent>
       </Dialog>
 
@@ -196,12 +259,13 @@ export function BrowsePackagesDialog({ packages, open, onOpenChange }: BrowsePac
           open={showPaymentDialog}
           onOpenChange={setShowPaymentDialog}
           packageData={selectedPackage}
+          assignmentId={selectedAssignmentId}
           trainerName={selectedTrainerName}
-          onPaymentComplete={handlePaymentComplete}
+          onPaymentComplete={handlePaymentCompleteInternal}
         />
       )}
 
-      <CustomPackageRequestDialog
+      <CustomPackageRequestDialog 
         open={showCustomRequestDialog}
         onOpenChange={setShowCustomRequestDialog}
         onRequestSubmitted={handleCustomRequestSubmitted}
