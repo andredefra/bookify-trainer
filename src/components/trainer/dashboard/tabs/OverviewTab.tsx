@@ -149,7 +149,7 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavi
         layouts={{ lg: layout }}
         breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 0 }}
         cols={{ lg: 3, md: 2, sm: 1, xs: 1 }}
-        rowHeight={150}
+        rowHeight={180}
         onLayoutChange={handleLayoutChange}
         draggableHandle=".widget-drag-handle"
         isDraggable={true}
