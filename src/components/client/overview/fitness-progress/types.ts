@@ -33,6 +33,21 @@ export interface GoalLog {
   duration?: number; // For cardio tracking (minutes)
   reps?: number; // For strength tracking
   sets?: number; // For strength tracking
+  exerciseDbId?: string;
+  exerciseMetadata?: {
+    name: string;
+    category: string;
+    muscleGroups: string[];
+    equipment: string[];
+    difficulty: string;
+  };
+  calorieBreakdown?: {
+    method: string;
+    baseMET?: number;
+    adjustedMET?: number;
+    duration: number;
+    totalCalories: number;
+  };
 }
 
 export interface Milestone {
@@ -70,7 +85,7 @@ export interface CustomActivityType {
   isCustom: true;
   fields: ActivityField[];
   calorieCalculation: {
-    method: 'fixed' | 'per-minute' | 'per-distance' | 'formula' | 'met';
+    method: 'fixed' | 'per-minute' | 'per-distance' | 'formula' | 'met' | 'met-dynamic' | 'strength-formula';
     value?: number;
     formula?: string;
     metValue?: number;
@@ -81,7 +96,7 @@ export interface CustomActivityType {
 export interface ActivityField {
   name: string;
   label: string;
-  type: 'number' | 'text' | 'select';
+  type: 'number' | 'text' | 'select' | 'exercise-selector';
   unit?: string;
   required: boolean;
   options?: string[];
@@ -89,6 +104,8 @@ export interface ActivityField {
   min?: number;
   max?: number;
   step?: number;
+  filterCategory?: string[] | "cardio";
+  helperText?: string;
 }
 
 export interface GoalImpact {
@@ -106,7 +123,7 @@ export interface ActivityType {
   isCustom?: boolean;
   fields: ActivityField[];
   calorieCalculation: {
-    method: 'fixed' | 'per-minute' | 'per-distance' | 'formula' | 'met';
+    method: 'fixed' | 'per-minute' | 'per-distance' | 'formula' | 'met' | 'met-dynamic' | 'strength-formula';
     value?: number;
     formula?: string;
     metValue?: number;

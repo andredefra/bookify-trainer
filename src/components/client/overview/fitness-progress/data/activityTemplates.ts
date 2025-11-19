@@ -64,65 +64,81 @@ export const PREDEFINED_ACTIVITY_TYPES: ActivityType[] = [
   {
     id: "cardio",
     title: "Cardio Exercise",
-    description: "Track cardiovascular activities like running, cycling, or swimming",
-    icon: "Heart",
+    description: "Track specific cardio exercises like running, cycling, swimming, and more",
+    icon: "Activity",
     isCustom: false,
     fields: [
+      {
+        name: "cardioExercise",
+        label: "Exercise Type",
+        type: "exercise-selector",
+        required: true,
+        filterCategory: "cardio"
+      },
+      {
+        name: "intensity",
+        label: "Intensity Level",
+        type: "select",
+        required: true,
+        options: ["Light", "Moderate", "Vigorous"]
+      },
+      {
+        name: "duration",
+        label: "Duration (minutes)",
+        type: "number",
+        unit: "mins",
+        required: true,
+        placeholder: "30"
+      },
       {
         name: "distance",
         label: "Distance (km)",
         type: "number",
         unit: "km",
         required: false,
-        placeholder: "5.0",
-        min: 0,
-        step: 0.1
-      },
-      {
-        name: "cardioMinutes",
-        label: "Duration (minutes)",
-        type: "number",
-        unit: "mins",
-        required: false,
-        placeholder: "30",
-        min: 0
+        placeholder: "5"
       }
     ],
     calorieCalculation: {
-      method: "per-minute",
-      value: 8
+      method: "met-dynamic"
     },
     goalImpacts: [
       {
-        goalType: "cardiovascular_endurance",
+        goalType: "activity_level",
+        unitMapping: "mins",
+        calculation: "add",
+        sourceField: "duration"
+      },
+      {
+        goalType: "activity_level",
+        unitMapping: "kcal",
+        calculation: "add",
+        sourceField: "calculated_calories"
+      },
+      {
+        goalType: "cardio_endurance",
         unitMapping: "km",
         calculation: "add",
         sourceField: "distance"
-      },
-      {
-        goalType: "cardiovascular_endurance",
-        unitMapping: "mins",
-        calculation: "add",
-        sourceField: "cardioMinutes"
       }
     ]
   },
   {
     id: "strength",
     title: "Strength Training",
-    description: "Track strength exercises with weight, sets, and reps",
+    description: "Track strength exercises from the exercise database with accurate calorie estimation",
     icon: "Dumbbell",
     isCustom: false,
     fields: [
       {
-        name: "exerciseName",
-        label: "Exercise Name",
-        type: "text",
-        required: false,
-        placeholder: "Bench Press"
+        name: "exercise",
+        label: "Exercise",
+        type: "exercise-selector",
+        required: true,
+        filterCategory: ["legs", "chest", "back", "shoulders", "arms", "core"]
       },
       {
-        name: "strengthWeight",
+        name: "weight",
         label: "Weight (kg)",
         type: "number",
         unit: "kg",
@@ -135,29 +151,50 @@ export const PREDEFINED_ACTIVITY_TYPES: ActivityType[] = [
         name: "sets",
         label: "Sets",
         type: "number",
-        required: false,
+        required: true,
         placeholder: "3",
         min: 1
       },
       {
         name: "reps",
-        label: "Reps",
+        label: "Reps per Set",
         type: "number",
-        required: false,
+        required: true,
         placeholder: "10",
+        min: 1
+      },
+      {
+        name: "duration",
+        label: "Total Duration (minutes)",
+        type: "number",
+        unit: "mins",
+        required: true,
+        placeholder: "45",
+        helperText: "Total time including rest between sets",
         min: 1
       }
     ],
     calorieCalculation: {
-      method: "per-minute",
-      value: 6
+      method: "strength-formula"
     },
     goalImpacts: [
       {
         goalType: "strength_progress",
         unitMapping: "kg",
         calculation: "max",
-        sourceField: "strengthWeight"
+        sourceField: "weight"
+      },
+      {
+        goalType: "activity_level",
+        unitMapping: "mins",
+        calculation: "add",
+        sourceField: "duration"
+      },
+      {
+        goalType: "activity_level",
+        unitMapping: "kcal",
+        calculation: "add",
+        sourceField: "calculated_calories"
       }
     ]
   },

@@ -68,12 +68,31 @@ export function useActivityLogging() {
       
       if (shouldUpdate) {
         updatedGoals++;
+        
+        // Extract exercise metadata
+        const exerciseMetadata: any = {};
+        if (data.exercise_metadata) {
+          exerciseMetadata.exerciseDbId = data.exercise;
+          exerciseMetadata.exerciseMetadata = data.exercise_metadata;
+        } else if (data.cardioExercise_metadata) {
+          exerciseMetadata.exerciseDbId = data.cardioExercise;
+          exerciseMetadata.exerciseMetadata = data.cardioExercise_metadata;
+        }
+        
         const newLog: GoalLog = {
           id: `log-${Date.now()}-${item.id}`,
           date: currentDate,
-          value: newValue - item.current, // Log the increment
+          value: newValue - item.current,
           source: 'manual',
           note: `${activityName}${data.note ? ` - ${data.note}` : ''}`,
+          ...exerciseMetadata,
+          ...(calculatedCalories > 0 && {
+            calorieBreakdown: {
+              method: activityType.calorieCalculation.method,
+              duration: Number(data.duration || data.cardioMinutes || 0),
+              totalCalories: calculatedCalories
+            }
+          }),
           ...logData
         };
         
