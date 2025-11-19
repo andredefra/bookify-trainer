@@ -14,6 +14,7 @@ interface PackagePaymentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   packageData: ClientPackage | null;
+  assignmentId?: string;
   trainerName: string;
   onPaymentComplete: () => void;
 }
@@ -21,7 +22,8 @@ interface PackagePaymentDialogProps {
 export function PackagePaymentDialog({ 
   open, 
   onOpenChange, 
-  packageData, 
+  packageData,
+  assignmentId, 
   trainerName,
   onPaymentComplete 
 }: PackagePaymentDialogProps) {
@@ -85,7 +87,7 @@ export function PackagePaymentDialog({
       handleInstallmentCreate(installmentDetails);
     }
     
-    handleSubmit(e, onPaymentComplete, () => onOpenChange(false), getCurrentAmount());
+    handleSubmit(e, packageData, assignmentId, onPaymentComplete, () => onOpenChange(false));
   };
 
   const renderStepContent = () => {

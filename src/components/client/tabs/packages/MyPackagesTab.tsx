@@ -11,10 +11,15 @@ import { BrowsePackagesDialog } from "./BrowsePackagesDialog";
 import { useState } from "react";
 
 export function MyPackagesTab() {
-  const { packages, availablePackages, loading, error } = useClientPackages();
+  const { packages, availablePackages, assignedPackages, loading, error, refetch } = useClientPackages();
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showPackageDetails, setShowPackageDetails] = useState(false);
   const [showBrowsePackages, setShowBrowsePackages] = useState(false);
+
+  const handlePaymentComplete = () => {
+    refetch(); // Refresh package list after purchase
+    setShowBrowsePackages(false);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -230,9 +235,11 @@ export function MyPackagesTab() {
       />
       
       <BrowsePackagesDialog
-        packages={availablePackages}
         open={showBrowsePackages}
         onOpenChange={setShowBrowsePackages}
+        packages={availablePackages}
+        assignedPackages={assignedPackages}
+        onPaymentComplete={handlePaymentComplete}
       />
     </div>
   );
