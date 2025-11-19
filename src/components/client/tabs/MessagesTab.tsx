@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function MessagesTab() {
   const [trainerId, setTrainerId] = useState<string>("");
+  const [loadingTrainer, setLoadingTrainer] = useState(true);
   const [inputMessage, setInputMessage] = useState("");
   const [showVideoUpload, setShowVideoUpload] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
@@ -21,8 +22,12 @@ export function MessagesTab() {
 
   useEffect(() => {
     const fetchTrainerId = async () => {
+      setLoadingTrainer(true);
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setLoadingTrainer(false);
+        return;
+      }
 
       const { data: assignments } = await supabase
         .from('client_package_assignments')
@@ -33,6 +38,7 @@ export function MessagesTab() {
       if (assignments && assignments.length > 0) {
         setTrainerId(assignments[0].trainer_id);
       }
+      setLoadingTrainer(false);
     };
 
     fetchTrainerId();
@@ -64,7 +70,7 @@ export function MessagesTab() {
     setShowImageUpload(false);
   };
 
-  if (loading) {
+  if (loadingTrainer) {
     return (
       <Card className="h-[600px] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
