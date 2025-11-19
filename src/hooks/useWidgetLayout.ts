@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Layout } from "react-grid-layout";
 import { getDefaultLayout, getDefaultEnabledWidgets } from "@/components/trainer/dashboard/tabs/overview/widgetConfig";
 
-const STORAGE_KEY_LAYOUT = "trainer-dashboard-layout-v2"; // v2: increased widget heights
+const STORAGE_KEY_LAYOUT = "trainer-dashboard-layout-v3"; // v3: uniform widget sizes (1×3)
 const STORAGE_KEY_ENABLED = "trainer-dashboard-enabled-widgets";
 
 export function useWidgetLayout() {
