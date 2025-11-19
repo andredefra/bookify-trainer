@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Search, Dumbbell, Activity } from "lucide-react";
+import { Search, Dumbbell, Activity, Sun, Home } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +7,13 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
 import { ExerciseData } from "@/data/exercises/types";
-import { isCardioExercise } from "../data/cardioMetValues";
+import { isCardioExercise, CARDIO_MET_VALUES } from "../data/cardioMetValues";
+
+// Helper function to get exercise environment
+const getExerciseEnvironment = (exerciseId: string): 'indoor' | 'outdoor' | null => {
+  const cardioExercise = CARDIO_MET_VALUES.find(e => e.exerciseId === exerciseId);
+  return cardioExercise?.environment || null;
+};
 
 interface ExerciseSelectorFieldProps {
   value: string | null;
@@ -69,7 +75,13 @@ export function ExerciseSelectorField({
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-primary/10">
               {filterCategory === "cardio" ? (
-                <Activity className="h-5 w-5 text-primary" />
+                getExerciseEnvironment(selectedExercise.id) === 'outdoor' ? (
+                  <Sun className="h-5 w-5 text-primary" />
+                ) : getExerciseEnvironment(selectedExercise.id) === 'indoor' ? (
+                  <Home className="h-5 w-5 text-primary" />
+                ) : (
+                  <Activity className="h-5 w-5 text-primary" />
+                )
               ) : (
                 <Dumbbell className="h-5 w-5 text-primary" />
               )}
@@ -130,7 +142,13 @@ export function ExerciseSelectorField({
                 <div className="flex items-start gap-2">
                   <div className={`p-1.5 rounded ${value === exercise.id ? 'bg-primary/20' : 'bg-muted'}`}>
                     {filterCategory === "cardio" ? (
-                      <Activity className="h-3.5 w-3.5" />
+                      getExerciseEnvironment(exercise.id) === 'outdoor' ? (
+                        <Sun className="h-3.5 w-3.5" />
+                      ) : getExerciseEnvironment(exercise.id) === 'indoor' ? (
+                        <Home className="h-3.5 w-3.5" />
+                      ) : (
+                        <Activity className="h-3.5 w-3.5" />
+                      )
                     ) : (
                       <Dumbbell className="h-3.5 w-3.5" />
                     )}
@@ -144,6 +162,11 @@ export function ExerciseSelectorField({
                       <Badge variant="outline" className="text-xs h-5">
                         {exercise.difficulty}
                       </Badge>
+                      {filterCategory === "cardio" && getExerciseEnvironment(exercise.id) && (
+                        <Badge variant="outline" className="text-xs h-5">
+                          {getExerciseEnvironment(exercise.id) === 'outdoor' ? '☀️ Outdoor' : '🏠 Indoor'}
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 </div>
