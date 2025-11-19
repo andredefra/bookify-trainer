@@ -143,7 +143,7 @@ export function SubscriptionsSection() {
               Upgrade to Pro
             </CardTitle>
             <CardDescription>
-              Unlock unlimited AI coaching for just €14.99/month
+              Unlock unlimited AI coaching for just €4.99/month
             </CardDescription>
           </CardHeader>
           
@@ -171,7 +171,7 @@ export function SubscriptionsSection() {
               onClick={() => setShowUpgrade(true)}
               className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
             >
-              Upgrade Now - €14.99/month
+              Upgrade Now - €4.99/month
             </Button>
           </CardContent>
         </Card>
@@ -186,7 +186,7 @@ export function SubscriptionsSection() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Plan</span>
-                <span className="font-medium">Pro - €14.99/month</span>
+                <span className="font-medium">Pro - €4.99/month</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Started</span>
