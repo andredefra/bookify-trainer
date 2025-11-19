@@ -118,6 +118,7 @@ export function ExerciseSelectorField({
           ) : (
             filteredExercises.map((exercise) => (
               <button
+                type="button"
                 key={exercise.id}
                 onClick={() => onChange(exercise.id, exercise)}
                 className={`

@@ -38,6 +38,17 @@ export const calculateCalories = (
       
       return calculateCaloriesFromMET(adjustedMET, userWeight, Number(durationMins));
     
+    case 'manual-or-estimated':
+      // Use manual calories if provided, otherwise estimate
+      if (fieldValues.calories && Number(fieldValues.calories) > 0) {
+        return Math.round(Number(fieldValues.calories));
+      }
+      
+      // Estimate from steps and minutes
+      const steps = Number(fieldValues.steps || 0);
+      const minutes = Number(fieldValues.minutes || 0);
+      return Math.round(steps * 0.04 + minutes * 5);
+    
     case 'met-dynamic':
       // Dynamic MET calculation for cardio exercises
       const cardioExerciseId = fieldValues.cardioExercise || fieldValues.exercise;
@@ -97,6 +108,12 @@ export const estimateCaloriesPreview = (
   fieldValues: Record<string, any>,
   userWeight?: number
 ): string => {
+  // Check if manual calories are provided
+  if (activityType.calorieCalculation.method === 'manual-or-estimated' && 
+      fieldValues.calories && Number(fieldValues.calories) > 0) {
+    return `Manual entry: ${fieldValues.calories} kcal`;
+  }
+  
   const calories = calculateCalories(activityType, fieldValues, userWeight);
   
   if (calories === 0) {

@@ -37,8 +37,8 @@ export const PREDEFINED_ACTIVITY_TYPES: ActivityType[] = [
       }
     ],
     calorieCalculation: {
-      method: "fixed",
-      value: 0
+      method: "manual-or-estimated",
+      fallbackFormula: "steps * 0.04 + minutes * 5"
     },
     goalImpacts: [
       {
