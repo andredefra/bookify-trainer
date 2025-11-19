@@ -19,6 +19,7 @@ interface PackageData {
   description: string;
   objective: string;
   type: PackageType;
+  isPublic: boolean;
   
   // Sessions
   sessions: {
@@ -65,6 +66,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
     description: "",
     objective: "",
     type: "sessions_only",
+    isPublic: false,
     sessions: {
       individual: { count: 0, pricePerSession: 50 },
       group: { count: 0, pricePerSession: 30 },
@@ -116,6 +118,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
         description: "",
         objective: "",
         type: "sessions_only",
+        isPublic: false,
         sessions: {
           individual: { count: 0, pricePerSession: 50 },
           group: { count: 0, pricePerSession: 30 },

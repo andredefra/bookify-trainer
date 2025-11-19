@@ -3,8 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Dumbbell, Users, Wrench } from "lucide-react";
+import { Package, Dumbbell, Users, Wrench, Eye, Lock } from "lucide-react";
 import { PackageType } from "../PackageBuilder";
 
 interface PackageData {
@@ -12,6 +14,7 @@ interface PackageData {
   description: string;
   objective: string;
   type: PackageType;
+  isPublic: boolean;
   [key: string]: any;
 }
 
@@ -121,6 +124,32 @@ export function BasicInfoStep({ data, onChange }: BasicInfoStepProps) {
         <p className="text-sm text-muted-foreground">
           The package type determines which sections will be available in the configuration
         </p>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label>Package Visibility</Label>
+            <p className="text-sm text-muted-foreground">
+              Make this package visible to your clients
+            </p>
+          </div>
+          <Switch
+            checked={data.isPublic}
+            onCheckedChange={(checked) => onChange({ isPublic: checked })}
+          />
+        </div>
+        {data.isPublic ? (
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+            <Eye className="h-3 w-3 mr-1" />
+            Public - Visible to your clients
+          </Badge>
+        ) : (
+          <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-100">
+            <Lock className="h-3 w-3 mr-1" />
+            Private - Manual assignment only
+          </Badge>
+        )}
       </div>
     </div>
   );

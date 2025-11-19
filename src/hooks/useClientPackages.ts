@@ -11,6 +11,7 @@ export interface ClientPackage {
   price: number;
   validity_days: number;
   trainer_id: string;
+  is_public: boolean;
 }
 
 export interface ClientPackageAssignment {
@@ -82,6 +83,16 @@ export function useClientPackages() {
 
       console.log('Fetching packages for client ID:', clientId);
 
+      // First, fetch the client's trainers
+      const { data: trainerRelationships } = await supabase
+        .from('trainer_client_relationships')
+        .select('trainer_id')
+        .eq('client_id', clientId)
+        .eq('status', 'active');
+
+      const trainerIds = trainerRelationships?.map(r => r.trainer_id) || [];
+      console.log('Client trainers:', trainerIds);
+
       // Fetch package assignments with package details
       const { data: assignments, error: assignmentsError } = await supabase
         .from('client_package_assignments')
@@ -130,7 +141,8 @@ export function useClientPackages() {
             sessions_count: pkg.sessions_count || 0,
             price: pkg.price,
             validity_days: pkg.validity_days || 90,
-            trainer_id: pkg.trainer_id
+            trainer_id: pkg.trainer_id,
+            is_public: pkg.is_public || false
           },
           trainer_name: getTrainerName(assignment.trainer_id)
         };
@@ -146,26 +158,22 @@ export function useClientPackages() {
       });
       
       setPackages(sortedPackages);
-      
-      // Get trainer IDs for this client's packages to filter available packages
-      const clientTrainerIds = transformedAssignments.map(pkg => pkg.trainer_id);
-      const uniqueTrainerIds = [...new Set(clientTrainerIds)];
-      
-      // Fetch available packages from client's trainers only
-      const { data, error } = await supabase
+
+      // Fetch available public packages from client's trainers
+      const { data: availablePackagesData, error: availableError } = await supabase
         .from('client_packages')
         .select('*')
         .eq('is_active', true)
-        .in('trainer_id', uniqueTrainerIds.length > 0 ? uniqueTrainerIds : ['00000000-0000-0000-0000-000000000001'])
+        .eq('is_public', true)
+        .in('trainer_id', trainerIds.length > 0 ? trainerIds : ['00000000-0000-0000-0000-000000000001'])
         .order('price', { ascending: true });
 
-      if (error) {
-        console.error('Error fetching available packages:', error);
-        throw error;
+      if (availableError) {
+        console.error('Error fetching available packages:', availableError);
       }
 
       // Transform the data to match our interface with proper type checking
-      const transformedPackages: ClientPackage[] = data?.map(pkg => {
+      const transformedPackages: ClientPackage[] = availablePackagesData?.map(pkg => {
         // Ensure package_type is valid
         if (!isValidPackageType(pkg.package_type)) {
           console.warn(`Invalid package_type: ${pkg.package_type}, defaulting to sessions_only`);
@@ -180,7 +188,8 @@ export function useClientPackages() {
           sessions_count: pkg.sessions_count || 0,
           price: pkg.price,
           validity_days: pkg.validity_days || 90,
-          trainer_id: pkg.trainer_id
+          trainer_id: pkg.trainer_id,
+          is_public: pkg.is_public || false
         };
       }) || [];
 
