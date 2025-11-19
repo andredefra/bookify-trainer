@@ -51,7 +51,14 @@ export function useUserProfile() {
         return;
       }
 
-      setProfile(data);
+      if (data) {
+        setProfile({
+          ...data,
+          gender: data.gender as 'male' | 'female' | undefined
+        });
+      } else {
+        setProfile(null);
+      }
     } catch (error) {
       console.error('Error:', error);
       toast.error('Failed to load profile');
