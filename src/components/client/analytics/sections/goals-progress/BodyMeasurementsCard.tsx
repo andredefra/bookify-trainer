@@ -56,12 +56,12 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements }: B
   };
 
   const renderMeasurementItem = (label: string, value: number, unit: string, trend: any) => (
-    <div className="bg-muted/30 rounded-md p-2">
+    <div className="bg-muted/30 rounded-md p-3">
       <div className="flex items-center justify-between mb-1">
-        <div className="text-sm font-bold text-foreground">{value}{unit}</div>
+        <div className="text-base font-bold text-foreground">{value}{unit}</div>
         {renderTrendIcon(trend)}
       </div>
-      <div className="text-xs text-muted-foreground mb-1">{label}</div>
+      <div className="text-sm text-muted-foreground mb-1.5">{label}</div>
       {trend && previousDate && (
         <div className={`text-xs font-medium ${trend.trend === 'down' ? 'text-green-600' : trend.trend === 'up' ? 'text-red-500' : 'text-muted-foreground'}`}>
           {formatTrendChange(trend, 'cm', 1)} vs {previousDate}
@@ -71,8 +71,8 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements }: B
   );
 
   return (
-    <div className="bg-card border rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between mb-3">
+    <div className="bg-card border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <div className="bg-orange-500 rounded-md p-1.5">
             <Activity className="h-4 w-4 text-white" />
@@ -96,7 +96,7 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements }: B
         </div>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 gap-3">
         {latestMeasurements.waist && renderMeasurementItem('Waist', latestMeasurements.waist, 'cm', waistTrend)}
         {latestMeasurements.hips && renderMeasurementItem('Hips', latestMeasurements.hips, 'cm', hipsTrend)}
         {latestMeasurements.arms && renderMeasurementItem('Arms', latestMeasurements.arms, 'cm', armsTrend)}
