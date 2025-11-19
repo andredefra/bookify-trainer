@@ -38,13 +38,16 @@ export const getWHRStatus = (whr: number, gender: 'male' | 'female'): { status: 
 };
 
 // Main function to get overall measurements status
-export const getMeasurementsStatus = (measurements: BodyMeasurements): MeasurementsStatus | null => {
+export const getMeasurementsStatus = (
+  measurements: BodyMeasurements,
+  userProfile?: { height?: number; gender?: 'male' | 'female' }
+): MeasurementsStatus | null => {
   // Need at least waist and height for WHtR (most important)
-  if (!measurements.waist || !measurements.height) {
+  if (!measurements.waist || !userProfile?.height) {
     return null;
   }
 
-  const height = measurements.height;
+  const height = userProfile.height;
   const waist = measurements.waist;
   
   // Calculate WHtR (primary indicator)
@@ -53,9 +56,9 @@ export const getMeasurementsStatus = (measurements: BodyMeasurements): Measureme
   
   // Calculate WHR if hips available (secondary indicator)
   let whrStatus = null;
-  if (measurements.hips) {
+  if (measurements.hips && userProfile?.gender) {
     const whr = calculateWHR(waist, measurements.hips);
-    whrStatus = getWHRStatus(whr, measurements.gender || 'male');
+    whrStatus = getWHRStatus(whr, userProfile.gender);
   }
 
   // Determine overall status (WHtR is primary, WHR can worsen it)
