@@ -36,15 +36,14 @@ export function AnalyticsTab() {
         lastUpdated: "2024-03-15"
       },
       { 
-        goal: "Daily steps target", 
-        current: 8500, 
-        target: 10000, 
+        goal: "Annual step goal (healthy lifestyle)", 
+        current: 900000, 
+        target: 3650000, 
         unit: "steps", 
-        progress: 85,
+        progress: 25,
         goalType: "activity_level",
         targetDate: "2024-12-31",
-        frequency: { value: 10000, period: "daily" },
-        createdAt: "2024-03-01",
+        createdAt: "2024-01-01",
         lastUpdated: "2024-03-15"
       },
       { 
