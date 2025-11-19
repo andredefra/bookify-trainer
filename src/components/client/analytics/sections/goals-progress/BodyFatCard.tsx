@@ -102,9 +102,9 @@ export function BodyFatCard({
         {bodyFatRequirements.sufficient && bodyFatPercentage ? (
           <div className="space-y-4">
             {/* Body Fat Percentage - Top */}
-            <div className="text-center bg-muted/50 rounded-md p-4">
+            <div className="text-center bg-muted/40 rounded-md p-3">
               <div className="flex items-center justify-center space-x-2 mb-1">
-                <span className="text-4xl font-bold text-purple-700">{bodyFatPercentage}%</span>
+                <span className="text-3xl font-bold text-purple-700">{bodyFatPercentage}%</span>
                 {renderTrendIcon()}
               </div>
               {bodyFatTrend && bodyFatTrend.previousDate && (
@@ -118,14 +118,14 @@ export function BodyFatCard({
             {bodyCompositionData && (
               <div className="bg-muted/20 rounded-md p-4">
                 <h5 className="text-xs font-semibold text-foreground mb-3 text-center">Body Composition</h5>
-                <ResponsiveContainer width="100%" height={170}>
-                  <PieChart margin={{ top: 18, bottom: 6 }}>
+                <ResponsiveContainer width="100%" height={140}>
+                  <PieChart margin={{ top: 10, bottom: 4 }}>
                     <Pie
                       data={bodyCompositionData}
                       cx="50%"
-                      cy="50%"
-                      innerRadius={35}
-                      outerRadius={60}
+                      cy="52%"
+                      innerRadius={32}
+                      outerRadius={52}
                       paddingAngle={3}
                       dataKey="value"
                     >
