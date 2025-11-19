@@ -31,9 +31,11 @@ export function BodyFatCard({
     const fatMass = (weight * bodyFatPercentage) / 100;
     const leanMass = weight - fatMass;
     
-    // Estimate muscle mass (typically 40-45% of body weight for active individuals)
-    // This is a simplified estimation - in real apps would come from smart scales or body scans
-    const muscleMass = weight * 0.42;
+    // Estimate muscle mass as percentage of lean mass (not total weight)
+    // Typical values: 45-50% for active individuals, up to 55% for athletes
+    // The remaining lean mass includes bones (~15% of body weight), organs, water, and connective tissue
+    const muscleMassPercentage = 0.48; // 48% as a balanced estimate
+    const muscleMass = leanMass * muscleMassPercentage;
     const otherLeanMass = leanMass - muscleMass;
     
     return [
