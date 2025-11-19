@@ -361,6 +361,33 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          id: string
+          last_message_at: string | null
+          trainer_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          trainer_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          trainer_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       email_campaigns: {
         Row: {
           assignment_id: string
@@ -1906,6 +1933,65 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      trainer_client_messages: {
+        Row: {
+          content: string | null
+          conversation_id: string
+          created_at: string | null
+          file_name: string | null
+          id: string
+          media_duration: number | null
+          media_size: number | null
+          media_thumbnail_url: string | null
+          media_url: string | null
+          message_type: string
+          read_at: string | null
+          sender_id: string
+          sender_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          conversation_id: string
+          created_at?: string | null
+          file_name?: string | null
+          id?: string
+          media_duration?: number | null
+          media_size?: number | null
+          media_thumbnail_url?: string | null
+          media_url?: string | null
+          message_type?: string
+          read_at?: string | null
+          sender_id: string
+          sender_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          conversation_id?: string
+          created_at?: string | null
+          file_name?: string | null
+          id?: string
+          media_duration?: number | null
+          media_size?: number | null
+          media_thumbnail_url?: string | null
+          media_url?: string | null
+          message_type?: string
+          read_at?: string | null
+          sender_id?: string
+          sender_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trainer_client_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trainer_client_relationships: {
         Row: {
