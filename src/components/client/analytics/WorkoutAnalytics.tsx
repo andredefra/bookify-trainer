@@ -492,12 +492,10 @@ export function WorkoutAnalytics({
 
         {/* Enhanced Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full h-auto gap-1 p-1">
+          <TabsList className="grid grid-cols-3 w-full h-auto gap-1 p-1">
             <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-2">Overview</TabsTrigger>
             <TabsTrigger value="ai-insights" className="text-xs sm:text-sm px-2 py-2">AI Insights</TabsTrigger>
             <TabsTrigger value="activity" className="text-xs sm:text-sm px-2 py-2">Activity</TabsTrigger>
-            <TabsTrigger value="goals" className="text-xs sm:text-sm px-2 py-2">Goals</TabsTrigger>
-            <TabsTrigger value="body" className="text-xs sm:text-sm px-2 py-2 col-span-2 md:col-span-1">Body Data</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
@@ -614,29 +612,6 @@ export function WorkoutAnalytics({
 
           <TabsContent value="activity">
             <WeeklyActivityChart weeklyData={actualWeeklyData} chartType="bar" />
-          </TabsContent>
-
-          <TabsContent value="goals">
-            <GoalsProgressChart goalsData={goalsProgress} />
-          </TabsContent>
-
-          <TabsContent value="body">
-            <Card>
-              <CardHeader>
-                <CardTitle>Body Composition</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={bodyComposition}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="weight" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
 
