@@ -51,8 +51,8 @@ export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
   
   return (
     <div className="bg-card border rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-start justify-between mb-3 gap-4">
+        <div className="flex items-center space-x-2 flex-1 max-w-[65%]">
           <div className="bg-teal-500 rounded-md p-1.5">
             <Dumbbell className="h-4 w-4 text-white" />
           </div>
@@ -60,7 +60,7 @@ export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
             <h4 className="font-medium text-foreground text-sm">
               {isActivityGoal && isAnnualStepGoal ? 'Monthly Step Target' : isActivityGoal ? 'Activity Goal' : 'Strength Goal'}
             </h4>
-            <p className="text-xs text-muted-foreground truncate">
+            <p className="text-xs text-muted-foreground">
               {isActivityGoal && isAnnualStepGoal ? 'Based on your annual healthy steps goal' : workoutGoal.goal}
             </p>
           </div>
