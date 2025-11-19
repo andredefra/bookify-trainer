@@ -3,13 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Building2, Calendar, Package, MessageSquare, Users, Clock, MapPin, Settings, AlertCircle, Activity, ShoppingBag } from "lucide-react";
-import { useGymConnection } from "@/hooks/useGymConnection";
+import { useGymConnection, calculatePackageRemaining } from "@/hooks/useGymConnection";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { GymSessionsCard } from "@/components/client/gym/GymSessionsCard";
 import { GymMessagingCard } from "@/components/client/gym/GymMessagingCard";
 import { GymActivitiesCard } from "@/components/client/gym/GymActivitiesCard";
 import { PackageMarketplaceDialog } from "@/components/client/gym/PackageMarketplaceDialog";
+import { GymPackageDetailsDialog } from "@/components/client/gym/GymPackageDetailsDialog";
 import { useState } from "react";
 
 interface MyGymTabProps {
@@ -27,6 +28,8 @@ export function MyGymTab({ user }: MyGymTabProps) {
   const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
   const navigate = useNavigate();
   const [marketplaceOpen, setMarketplaceOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<any>(null);
+  const [showPackageDetails, setShowPackageDetails] = useState(false);
   
   console.log('🔍 MyGymTab HOOK DATA:', { 
     connection, 
@@ -195,9 +198,8 @@ export function MyGymTab({ user }: MyGymTabProps) {
               </div>
             ) : (
               packages.map((pkg) => {
-                const progressPercentage = pkg.sessions_total > 0 ? (pkg.sessions_used / pkg.sessions_total) * 100 : 0;
-                const endDate = pkg.end_date ? new Date(pkg.end_date) : null;
-                const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0;
+                const packageInfo = calculatePackageRemaining(pkg);
+                const isSessionBased = pkg.package_type === 'sessions';
                 
                 return (
                   <div key={pkg.id} className="border rounded-lg p-4 space-y-3">
@@ -205,22 +207,45 @@ export function MyGymTab({ user }: MyGymTabProps) {
                       <div>
                         <h4 className="font-medium">{pkg.title}</h4>
                         <p className="text-sm text-muted-foreground">
-                          {pkg.sessions_used}/{pkg.sessions_total} sessions used
+                          {packageInfo.displayText}
                         </p>
                       </div>
-                      <Badge variant={daysLeft < 7 ? "destructive" : "secondary"}>
-                        {daysLeft} days left
+                      <Badge variant={packageInfo.daysLeft < 7 ? "destructive" : "secondary"}>
+                        {packageInfo.daysLeft === Infinity ? '∞' : `${packageInfo.daysLeft} days left`}
                       </Badge>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full transition-all" 
-                        style={{ width: `${progressPercentage}%` }}
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Expires: {endDate ? format(endDate, 'dd/MM/yyyy') : 'No expiry'}</span>
-                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
+                    
+                    {/* Progress bar solo per pacchetti a sessioni */}
+                    {isSessionBased && (
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div 
+                          className="bg-primary h-2 rounded-full transition-all" 
+                          style={{ width: `${packageInfo.progressPercentage}%` }}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Time remaining bar per pacchetti mensili */}
+                    {!isSessionBased && (
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div 
+                          className="bg-green-500 h-2 rounded-full transition-all" 
+                          style={{ width: `${100 - packageInfo.progressPercentage}%` }}
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="flex justify-between text-xs text-muted-foreground items-center">
+                      <span>Expires: {packageInfo.daysLeft === Infinity ? 'Never' : (pkg.end_date ? format(new Date(pkg.end_date), 'dd/MM/yyyy') : 'No expiry')}</span>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs"
+                        onClick={() => {
+                          setSelectedPackage(pkg);
+                          setShowPackageDetails(true);
+                        }}
+                      >
                         View Details
                       </Button>
                     </div>
@@ -262,6 +287,12 @@ export function MyGymTab({ user }: MyGymTabProps) {
         open={marketplaceOpen}
         onOpenChange={setMarketplaceOpen}
         gymId={connection?.gym_id}
+      />
+      
+      <GymPackageDetailsDialog
+        package={selectedPackage}
+        open={showPackageDetails}
+        onOpenChange={setShowPackageDetails}
       />
     </div>
   );
