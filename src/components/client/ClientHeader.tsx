@@ -36,13 +36,12 @@ export function ClientHeader({
     try {
       console.log('Cleaning up demo data before logout...');
       
-      // Step 1: Delete all package assignments purchased today (demo purchases)
+      // Step 1: Delete all active package assignments (demo purchases)
       const { error: deleteError } = await supabase
         .from('client_package_assignments')
         .delete()
         .eq('client_id', DEMO_CLIENT_ID)
-        .eq('status', 'active')
-        .gte('created_at', new Date().toISOString().split('T')[0]);
+        .eq('status', 'active');
 
       if (deleteError) {
         console.error('Error cleaning up demo purchases:', deleteError);
