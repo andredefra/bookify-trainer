@@ -4,6 +4,8 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ClientPackage } from "@/hooks/useClientPackages";
 
+const DEMO_CLIENT_ID = '00000000-0000-0000-0000-000000000002';
+
 const createPackageAssignment = async (
   packageData: ClientPackage,
   clientId: string,
@@ -69,9 +71,9 @@ export function usePackagePayment() {
     
     // Simulate payment processing
     setTimeout(async () => {
-      // Get current user or use demo client
-      const { data: { user } } = await supabase.auth.getUser();
-      const clientId = user?.id || '00000000-0000-0000-0000-000000000002';
+      // For demo: always use the demo client ID so purchases appear in the mock data
+      const clientId = DEMO_CLIENT_ID;
+      console.log('Creating package assignment for demo client:', clientId);
 
       // Create or update package assignment
       const { error } = await createPackageAssignment(packageData, clientId, assignmentId);

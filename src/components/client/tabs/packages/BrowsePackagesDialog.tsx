@@ -180,10 +180,6 @@ export function BrowsePackagesDialog({
             </div>
           ) : packages.length > 0 ? (
             <div className="space-y-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Package className="h-5 w-5" />
-                <h3 className="text-lg font-semibold">Available Packages</h3>
-              </div>
               {Object.entries(packagesByTrainer).map(([trainerId, { trainerName, packages: trainerPackages }]) => (
                 <div key={trainerId} className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
