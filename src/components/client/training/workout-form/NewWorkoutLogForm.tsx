@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useWorkoutLogs } from "@/hooks/useWorkoutLogs";
+import { Button } from "@/components/ui/button";
+import { MessageCircle } from "lucide-react";
 import { ExercisesList } from "./NewExercisesList";
 import { WorkoutFormHeader } from "./NewWorkoutFormHeader";
 import { WorkoutFormButtons } from "./NewWorkoutFormButtons";
 import { WorkoutFormProvider, useWorkoutForm } from "./NewWorkoutFormContext";
+import { WorkoutAIAssistant } from "../WorkoutAIAssistant";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
@@ -15,6 +19,7 @@ interface NewWorkoutLogFormProps {
 function WorkoutLogFormContent({ onComplete, existingWorkout }: NewWorkoutLogFormProps) {
   const { toast } = useToast();
   const { addWorkoutLog, updateWorkoutLog } = useWorkoutLogs();
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
   const { 
     date, 
     workoutName, 
@@ -72,7 +77,8 @@ function WorkoutLogFormContent({ onComplete, existingWorkout }: NewWorkoutLogFor
   };
   
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <>
+      <form onSubmit={handleSubmit} className="space-y-6">
       <WorkoutFormHeader />
       
       <ExercisesList />
@@ -91,6 +97,27 @@ function WorkoutLogFormContent({ onComplete, existingWorkout }: NewWorkoutLogFor
       
       <WorkoutFormButtons onCancel={onComplete} />
     </form>
+    
+    {/* AI Assistant FAB */}
+    <Button
+      onClick={() => setShowAIAssistant(true)}
+      className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+      size="icon"
+      type="button"
+    >
+      <MessageCircle className="h-6 w-6" />
+    </Button>
+    
+    <WorkoutAIAssistant
+      open={showAIAssistant}
+      onOpenChange={setShowAIAssistant}
+      workoutContext={{
+        workoutName: workoutName || "Workout",
+        exercises,
+        isLogging: true
+      }}
+    />
+    </>
   );
 }
 

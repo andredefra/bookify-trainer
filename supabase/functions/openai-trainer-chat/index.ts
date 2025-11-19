@@ -18,7 +18,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message, conversation_id, user_context } = await req.json();
+    const { message, conversation_id, user_context, workoutContext, imageUrl } = await req.json();
     
     if (!openAIApiKey) {
       throw new Error('OpenAI API key not configured');
@@ -39,6 +39,40 @@ serve(async (req) => {
     
     if (authError || !user) {
       throw new Error('Invalid user token');
+    }
+
+    // Check client subscription and rate limits
+    const { data: clientSub } = await supabase
+      .from('client_subscriptions')
+      .select('subscription_plan, subscription_status')
+      .eq('user_id', user.id)
+      .single();
+
+    const isPro = clientSub?.subscription_plan === 'pro' && 
+                  (clientSub?.subscription_status === 'active' || clientSub?.subscription_status === 'trialing');
+
+    // Check rate limits for free users
+    if (!isPro) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const { count } = await supabase
+        .from('ai_usage_tracking')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .gte('created_at', today.toISOString());
+      
+      if ((count || 0) >= 5) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'rate_limit_exceeded',
+            message: 'Daily AI limit reached. Upgrade to Pro for unlimited access.',
+            remaining: 0,
+            isPro: false
+          }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     // Save user message to database

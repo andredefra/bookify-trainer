@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_usage_tracking: {
+        Row: {
+          context: string | null
+          cost_estimate: number | null
+          created_at: string
+          feature: string
+          id: string
+          tokens_used: number | null
+          user_id: string
+        }
+        Insert: {
+          context?: string | null
+          cost_estimate?: number | null
+          created_at?: string
+          feature: string
+          id?: string
+          tokens_used?: number | null
+          user_id: string
+        }
+        Update: {
+          context?: string | null
+          cost_estimate?: number | null
+          created_at?: string
+          feature?: string
+          id?: string
+          tokens_used?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       automated_messages: {
         Row: {
           content: string
@@ -364,6 +394,54 @@ export type Database = {
           training_program_data?: Json | null
           updated_at?: string | null
           validity_days?: number | null
+        }
+        Relationships: []
+      }
+      client_subscriptions: {
+        Row: {
+          cancelled_at: string | null
+          created_at: string
+          id: string
+          stripe_customer_id: string | null
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
+          subscription_end_date: string | null
+          subscription_plan: string
+          subscription_start_date: string | null
+          subscription_status: string
+          trial_end_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          created_at?: string
+          id?: string
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_end_date?: string | null
+          subscription_plan?: string
+          subscription_start_date?: string | null
+          subscription_status?: string
+          trial_end_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          created_at?: string
+          id?: string
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_end_date?: string | null
+          subscription_plan?: string
+          subscription_start_date?: string | null
+          subscription_status?: string
+          trial_end_date?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
