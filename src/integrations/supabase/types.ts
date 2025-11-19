@@ -2356,7 +2356,9 @@ export type Database = {
           experience_level: string | null
           first_name: string | null
           fitness_goals: string[] | null
+          gender: string | null
           health_conditions: string | null
+          height: number | null
           id: string
           last_name: string | null
           physical_limitations: string | null
@@ -2375,7 +2377,9 @@ export type Database = {
           experience_level?: string | null
           first_name?: string | null
           fitness_goals?: string[] | null
+          gender?: string | null
           health_conditions?: string | null
+          height?: number | null
           id?: string
           last_name?: string | null
           physical_limitations?: string | null
@@ -2394,7 +2398,9 @@ export type Database = {
           experience_level?: string | null
           first_name?: string | null
           fitness_goals?: string[] | null
+          gender?: string | null
           health_conditions?: string | null
+          height?: number | null
           id?: string
           last_name?: string | null
           physical_limitations?: string | null
