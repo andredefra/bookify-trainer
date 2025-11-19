@@ -51,11 +51,15 @@ export function useTrainingPrograms() {
         .eq('client_id', DEMO_CLIENT_ID)
         .in('status', ['active', 'expired', 'completed']);
 
+      console.log('📦 [useTrainingPrograms] Fetched assignments:', assignments);
+
       if (fetchError) {
+        console.error('❌ [useTrainingPrograms] Fetch error:', fetchError);
         throw fetchError;
       }
 
       if (!assignments) {
+        console.log('⚠️ [useTrainingPrograms] No assignments found');
         setActivePrograms([]);
         setPreviousPrograms([]);
         return;
@@ -68,16 +72,33 @@ export function useTrainingPrograms() {
       for (const assignment of assignments as any[]) {
         const pkg = assignment.package;
         
+        console.log(`📋 [useTrainingPrograms] Processing assignment:`, {
+          id: assignment.id,
+          status: assignment.status,
+          package: pkg?.title,
+          has_program_data: !!pkg?.training_program_data,
+          package_type: pkg?.package_type
+        });
+        
         // Only include packages with training_program_data
-        if (!pkg?.training_program_data) continue;
+        if (!pkg?.training_program_data) {
+          console.log(`⏭️ [useTrainingPrograms] Skipping: no training_program_data`);
+          continue;
+        }
         
         // Only include program_only or hybrid packages
-        if (pkg.package_type !== 'program_only' && pkg.package_type !== 'hybrid') continue;
+        if (pkg.package_type !== 'program_only' && pkg.package_type !== 'hybrid') {
+          console.log(`⏭️ [useTrainingPrograms] Skipping: package_type is ${pkg.package_type}`);
+          continue;
+        }
 
         const program: TrainingProgram = {
           ...pkg.training_program_data,
           id: `${assignment.id}-${pkg.id}`,
         };
+
+        const completedSessions = program.sessions?.filter(s => s.completed).length || 0;
+        console.log(`✅ [useTrainingPrograms] Including program: ${program.title} (${completedSessions}/${program.totalSessions} sessions)`);
 
         if (assignment.status === 'active') {
           active.push(program);
@@ -85,6 +106,12 @@ export function useTrainingPrograms() {
           previous.push(program);
         }
       }
+
+      console.log('🎯 [useTrainingPrograms] Result:', {
+        active: active.length,
+        previous: previous.length,
+        activePrograms: active.map(p => ({ title: p.title, progress: `${p.sessions?.filter(s => s.completed).length || 0}/${p.totalSessions}` }))
+      });
 
       setActivePrograms(active);
       setPreviousPrograms(previous);

@@ -17,6 +17,15 @@ export function ProgramListView({
   onSelectProgram 
 }: ProgramListViewProps) {
   
+  console.log('🎨 [ProgramListView] Rendering with:', {
+    activeCount: activePrograms.length,
+    previousCount: previousPrograms.length,
+    activePrograms: activePrograms.map(p => ({
+      title: p.title,
+      sessions: `${p.sessions?.filter(s => s.completed).length || 0}/${p.totalSessions}`
+    }))
+  });
+  
   const calculateProgress = (program: TrainingProgram): number => {
     const completedSessions = program.sessions.filter(s => s.completed).length;
     return (completedSessions / program.totalSessions) * 100;
