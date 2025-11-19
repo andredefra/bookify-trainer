@@ -88,42 +88,40 @@ export function ExpirationAlertsWidget() {
         </div>
       }
     >
-      <div className="space-y-4">
-        {expiringItems.slice(0, 5).map((item) => (
-          <div key={item.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className={`w-2 h-2 rounded-full ${getStatusColor(item.status)}`} />
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                {getTypeIcon(item.type)}
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium truncate">{item.clientName}</p>
-                  <p className="text-sm text-muted-foreground truncate">{item.title}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <Badge variant={getStatusBadgeVariant(item.status)} className="text-xs whitespace-nowrap">
-                {item.daysLeft} days left
-              </Badge>
-              <div className="flex gap-1">
-                <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
-                  Reminder
-                </Button>
-                <Button size="sm" variant="default" className="h-7 px-2 text-xs">
-                  Offer
-                </Button>
+      {expiringItems.slice(0, 5).map((item) => (
+        <div key={item.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3 mb-4">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className={`w-2 h-2 rounded-full ${getStatusColor(item.status)}`} />
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              {getTypeIcon(item.type)}
+              <div className="min-w-0 flex-1">
+                <p className="font-medium truncate">{item.clientName}</p>
+                <p className="text-sm text-muted-foreground truncate">{item.title}</p>
               </div>
             </div>
           </div>
-        ))}
-        
-        {expiringItems.length > 5 && (
-          <Button variant="outline" className="w-full">
-            View All {expiringItems.length} Expirations
-          </Button>
-        )}
-      </div>
+          
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Badge variant={getStatusBadgeVariant(item.status)} className="text-xs whitespace-nowrap">
+              {item.daysLeft} days left
+            </Badge>
+            <div className="flex gap-1">
+              <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
+                Reminder
+              </Button>
+              <Button size="sm" variant="default" className="h-7 px-2 text-xs">
+                Offer
+              </Button>
+            </div>
+          </div>
+        </div>
+      ))}
+      
+      {expiringItems.length > 5 && (
+        <Button variant="outline" className="w-full mt-4">
+          View All {expiringItems.length} Expirations
+        </Button>
+      )}
     </BaseWidget>
   );
 }

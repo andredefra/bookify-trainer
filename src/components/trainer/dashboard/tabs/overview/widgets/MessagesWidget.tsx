@@ -40,13 +40,13 @@ export function MessagesWidget() {
       title="Messages"
       icon={MessageSquare}
       className="col-span-full lg:col-span-1"
-      contentClassName="p-0"
+      contentClassName="p-0 flex flex-col"
       action={
         <Badge variant="destructive">{unreadCount} new</Badge>
       }
     >
-      <div className="max-h-[400px] overflow-y-auto px-6 pb-4">
-        <div className="space-y-3 pt-4">
+      <div className="flex-1 px-6 pt-4">
+        <div className="space-y-3">
           {messages.map((message) => (
           <div
             key={message.id}
@@ -84,11 +84,13 @@ export function MessagesWidget() {
             </div>
           </div>
           ))}
-          
-          <Button variant="outline" className="w-full mt-2">
-            View All Messages
-          </Button>
         </div>
+      </div>
+      
+      <div className="flex-shrink-0 px-6 pb-4 pt-4 border-t">
+        <Button variant="outline" className="w-full">
+          View All Messages
+        </Button>
       </div>
     </BaseWidget>
   );
