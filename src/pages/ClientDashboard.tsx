@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClientProfile } from "@/components/ClientProfile";
 import { ClientHeader } from "@/components/client/ClientHeader";
@@ -34,6 +34,7 @@ const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeSettingsSection, setActiveSettingsSection] = useState<string | undefined>(undefined);
+  const mainRef = useRef<HTMLDivElement | null>(null);
   
   const upcomingSessions: SessionItem[] = [
     { 
@@ -120,6 +121,21 @@ const ClientDashboard = () => {
     }
   }, [location.state]);
 
+  // Scroll to top when changing tabs
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [activeTab]);
+
   const handleLogout = () => {
     localStorage.removeItem('demo-user');
     navigate('/');
@@ -150,7 +166,7 @@ const ClientDashboard = () => {
           onLogout={handleLogout}
         />
         
-        <main className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
+        <main ref={mainRef} className="flex-1 overflow-y-auto bg-muted/20 p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-6xl">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsContent value="overview" className="mt-0">
