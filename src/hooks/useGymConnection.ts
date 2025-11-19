@@ -25,6 +25,8 @@ export interface GymPackageAssignment {
   title: string;
   description: string;
   package_type: string;
+  duration_days?: number;
+  session_limit?: number | null;
   price: number;
   sessions_used: number;
   sessions_total: number | null;
@@ -32,6 +34,50 @@ export interface GymPackageAssignment {
   end_date: string | null;
   status: string;
   payment_status: string;
+}
+
+// Utility function to calculate package remaining units
+export function calculatePackageRemaining(pkg: GymPackageAssignment) {
+  const now = new Date();
+  const endDate = pkg.end_date ? new Date(pkg.end_date) : null;
+  const startDate = new Date(pkg.start_date);
+  
+  if (!endDate) {
+    return { daysLeft: Infinity, displayText: 'No expiry', progressPercentage: 0 };
+  }
+  
+  const daysLeft = Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+  
+  // For session-based packages
+  if (pkg.package_type === 'sessions' && pkg.sessions_total) {
+    const sessionsRemaining = pkg.sessions_total - pkg.sessions_used;
+    const progressPercentage = (pkg.sessions_used / pkg.sessions_total) * 100;
+    return {
+      daysLeft,
+      sessionsRemaining,
+      progressPercentage,
+      displayText: `${pkg.sessions_used}/${pkg.sessions_total} sessions used`,
+      remainingText: `${sessionsRemaining} sessions left`
+    };
+  }
+  
+  // For duration-based packages (monthly, annual, weekly)
+  const totalDays = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+  const elapsedDays = (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+  const progressPercentage = Math.min(100, (elapsedDays / totalDays) * 100);
+  
+  // Calculate months remaining for monthly/annual packages
+  const monthsRemaining = Math.ceil(daysLeft / 30);
+  
+  return {
+    daysLeft,
+    monthsRemaining,
+    progressPercentage,
+    displayText: pkg.package_type === 'annual' || pkg.package_type === 'monthly' 
+      ? `${monthsRemaining} month${monthsRemaining !== 1 ? 's' : ''} remaining`
+      : `${daysLeft} days remaining`,
+    remainingText: `${daysLeft} days left`
+  };
 }
 
 export interface GymCommunication {
@@ -86,9 +132,11 @@ export function useGymConnection() {
         title: 'Premium Monthly',
         description: 'Full access to all facilities and unlimited group classes',
         package_type: 'monthly',
+        duration_days: 30,
+        session_limit: null,
         price: 99.99,
-        start_date: '2025-01-01',
-        end_date: '2025-01-31',
+        start_date: '2025-11-01',
+        end_date: '2026-11-01', // 12 months in the future
         sessions_used: 0,
         sessions_total: null,
         status: 'active',
@@ -101,9 +149,11 @@ export function useGymConnection() {
         title: 'Personal Training 10 Sessions',
         description: '10 one-on-one personal training sessions with expert trainers',
         package_type: 'sessions',
+        duration_days: 90,
+        session_limit: 10,
         price: 750.00,
-        start_date: '2025-01-05',
-        end_date: '2025-04-05',
+        start_date: '2025-10-01',
+        end_date: '2026-01-01', // 3 months in the future
         sessions_used: 3,
         sessions_total: 10,
         status: 'active',
@@ -214,7 +264,7 @@ export function useGymConnection() {
         .from('gym_package_assignments')
         .select(`
           *,
-          gym_packages(title, description)
+          gym_packages(title, description, package_type, duration_days, session_limit)
         `)
         .eq('gym_id', gymId)
         .eq('client_id', clientId)
@@ -229,10 +279,12 @@ export function useGymConnection() {
         package_id: pkg.package_id,
         title: pkg.gym_packages?.title || 'Pacchetto',
         description: pkg.gym_packages?.description || '',
-        package_type: 'monthly',
+        package_type: pkg.gym_packages?.package_type || 'monthly',
+        duration_days: pkg.gym_packages?.duration_days || 30,
+        session_limit: pkg.gym_packages?.session_limit || null,
         price: pkg.total_paid || 0,
         sessions_used: pkg.sessions_used || 0,
-        sessions_total: pkg.sessions_total || null,
+        sessions_total: pkg.sessions_total || pkg.gym_packages?.session_limit || null,
         start_date: pkg.start_date,
         end_date: pkg.end_date || null,
         status: pkg.status,
