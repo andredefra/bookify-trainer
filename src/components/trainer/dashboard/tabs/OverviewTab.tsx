@@ -11,7 +11,7 @@ import { PerformanceMetricsWidget } from "./overview/widgets/PerformanceMetricsW
 import { PackageSalesWidget } from "./overview/widgets/PackageSalesWidget";
 import { GoalsWidget } from "./overview/widgets/GoalsWidget";
 import { RecentActivitiesWidget } from "./overview/widgets/RecentActivitiesWidget";
-import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
+import { ExpirationAlertsWidget } from "./overview/widgets/ExpirationAlertsWidget";
 import { WidgetSettingsDialog } from "./overview/WidgetSettingsDialog";
 import { useWidgetLayout } from "@/hooks/useWidgetLayout";
 import { Responsive, WidthProvider, Layout } from "react-grid-layout";
@@ -29,9 +29,10 @@ interface OverviewTabProps {
   upcomingSessions: TrainerSessionItem[];
   clients: Array<{ id: number; name: string; sessions: number; lastSession: string }>;
   messageRequests: Array<{ id: number; from: string; preview: string; time: string }>;
+  onNavigateToTab?: (tab: string) => void;
 }
 
-export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
+export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavigateToTab }: OverviewTabProps) {
   const stats = {
     totalClients: clients.length,
     monthlyRevenue: 3200,
@@ -54,9 +55,9 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
         return (
           <QuickActionsWidget
             onAddClient={() => setShowAddClient(true)}
-            onScheduleSession={() => console.log("Navigate to calendar")}
-            onCreatePackage={() => console.log("Navigate to packages")}
-            onSendMessage={() => console.log("Navigate to messages")}
+            onScheduleSession={() => onNavigateToTab?.("calendar")}
+            onCreatePackage={() => onNavigateToTab?.("packages")}
+            onSendMessage={() => onNavigateToTab?.("messages")}
             onRecordPayment={() => setShowRecordPayment(true)}
             onSetGoal={() => setShowSetGoal(true)}
           />
@@ -66,7 +67,7 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests }: Over
       case "messages":
         return <MessagesWidget />;
       case "expiration-alerts":
-        return <ExpirationAlertsCard />;
+        return <ExpirationAlertsWidget />;
       case "revenue-chart":
         return <RevenueChartWidget />;
       case "client-activity":

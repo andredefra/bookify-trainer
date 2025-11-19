@@ -106,6 +106,7 @@ export function DashboardContainer({ customName }: DashboardContainerProps) {
                 upcomingSessions={sampleSessions}
                 clients={sampleClients}
                 messageRequests={sampleMessageRequests}
+                onNavigateToTab={setActiveTab}
               />
             )}
             {activeTab === "clients" && <ClientsTab clients={sampleClients} />}
