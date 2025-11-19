@@ -78,6 +78,30 @@ export function generateMilestones(goal: ProgressItem): Array<{value: number; da
   const targetDate = new Date(goal.targetDate);
   const totalDuration = targetDate.getTime() - startDate.getTime();
   
+  // Per activity_level, genera milestone mensili
+  if (goal.goalType === 'activity_level' && goal.unit === 'steps') {
+    const milestones = [];
+    const yearInMs = 365 * 24 * 60 * 60 * 1000;
+    
+    // Se il goal dura circa un anno, crea 12 milestone mensili
+    if (totalDuration >= yearInMs * 0.9 && totalDuration <= yearInMs * 1.1) {
+      for (let month = 1; month <= 12; month++) {
+        const milestoneDate = new Date(startDate);
+        milestoneDate.setMonth(startDate.getMonth() + month);
+        
+        // Target mensile cumulativo: goal annuale / 12 * mese corrente
+        const monthlyTarget = Math.round((goal.target / 12) * month);
+        
+        milestones.push({
+          value: monthlyTarget,
+          date: milestoneDate.toISOString().split('T')[0]
+        });
+      }
+      return milestones;
+    }
+  }
+  
+  // Fallback: milestone percentuali per altri tipi di goal
   const milestones = [];
   const milestoneCount = 4; // 25%, 50%, 75%, 100%
   

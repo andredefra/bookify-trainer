@@ -46,16 +46,16 @@ export const GOAL_TEMPLATES: Record<string, GoalTemplate> = {
   },
   activity_level: {
     type: 'activity_level',
-    name: 'Daily Activity',
-    description: 'Maintain consistent daily activity levels',
+    name: 'Annual Step Goal',
+    description: 'Maintain a healthy lifestyle with consistent yearly activity',
     unit: 'steps',
-    defaultTarget: 10000,
+    defaultTarget: 3650000,
     requiresFrequency: true,
-    examplePlaceholder: 'E.g. Walk 10,000 steps daily for 30 days',
+    examplePlaceholder: 'E.g. Walk 3,650,000 steps in a year (10k/day average)',
     examples: [
-      'Walk 10,000 steps daily for 30 days',
-      'Burn 300 calories daily for 4 weeks',
-      'Be active for 60 minutes daily'
+      'Walk 3,650,000 steps in a year (10k/day average)',
+      'Reach 4,000,000 steps annually for optimal health',
+      'Achieve 3,285,000 steps per year (9k/day average)'
     ]
   },
   body_composition: {
