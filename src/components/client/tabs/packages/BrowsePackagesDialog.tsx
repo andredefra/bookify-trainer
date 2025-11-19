@@ -33,7 +33,13 @@ const getTrainerName = (trainerId: string): string => {
   return trainerNames[trainerId] || 'Unknown Trainer';
 };
 
-export function BrowsePackagesDialog({ packages, assignedPackages, open, onOpenChange, onPaymentComplete }: BrowsePackagesDialogProps) {
+export function BrowsePackagesDialog({ 
+  packages = [], 
+  assignedPackages = [], 
+  open, 
+  onOpenChange, 
+  onPaymentComplete 
+}: BrowsePackagesDialogProps) {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showCustomRequestDialog, setShowCustomRequestDialog] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<ClientPackage | AssignedPackage | null>(null);
