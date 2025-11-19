@@ -1,10 +1,12 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, MessageCircle } from "lucide-react";
 import { TrainingProgramHeader } from "./TrainingProgramHeader";
 import { SessionSelector } from "./SessionSelector";
 import { SessionWorkoutDetails } from "./SessionWorkoutDetails";
+import { WorkoutAIAssistant } from "./WorkoutAIAssistant";
 import { TrainingProgram, WorkoutSession, Exercise } from "@/data/training";
 
 interface TrainingProgramProps {
@@ -13,6 +15,7 @@ interface TrainingProgramProps {
 
 export function TrainingProgramCard({ program }: TrainingProgramProps) {
   const [activeSession, setActiveSession] = useState<string | null>(program.sessions[0]?.id || null);
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
   
   const handleSaveWeight = (exerciseId: string, sessionId: string, value: number) => {
     console.log(`Saved weight ${value} for exercise ${exerciseId} in session ${sessionId}`);
@@ -25,9 +28,11 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
   };
   
   const completedSessions = program.sessions.filter(session => session.completed).length;
+  const currentSession = program.sessions.find(s => s.id === activeSession);
   
   return (
-    <Card className="border-primary/10 overflow-hidden">
+    <>
+      <Card className="border-primary/10 overflow-hidden relative">
       <TrainingProgramHeader 
         title={program.title} 
         week={program.week} 
@@ -68,6 +73,26 @@ export function TrainingProgramCard({ program }: TrainingProgramProps) {
           </span>
         </div>
       </CardFooter>
+      
+      {/* AI Assistant FAB */}
+      <Button
+        onClick={() => setShowAIAssistant(true)}
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+        size="icon"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </Button>
     </Card>
+    
+    <WorkoutAIAssistant
+      open={showAIAssistant}
+      onOpenChange={setShowAIAssistant}
+      workoutContext={{
+        program: program.title,
+        session: currentSession,
+        exercises: currentSession?.exercises || []
+      }}
+    />
+    </>
   );
 }
