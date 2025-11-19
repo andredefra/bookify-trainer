@@ -75,7 +75,7 @@ export function UserTrainingLog() {
             <CardContent className="p-8 text-center">
               <p className="text-muted-foreground">No workouts logged yet.</p>
               <p className="text-sm text-muted-foreground mt-2">
-                Start logging your workouts to see AI analysis!
+                Start logging your workouts to track your progress!
               </p>
             </CardContent>
           </Card>
