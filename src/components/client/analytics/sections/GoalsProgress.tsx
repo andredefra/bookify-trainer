@@ -54,14 +54,8 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
       {/* Workout Goal Card */}
       {workoutGoal && <WorkoutGoalCard workoutGoal={workoutGoal} />}
 
-      {/* Body Fat % Card */}
-      <BodyFatCard 
-        bodyFatPercentage={bodyFatPercentage}
-        bodyFatStatus={bodyFatStatus}
-        bodyFatRequirements={bodyFatRequirements}
-        latestMeasurements={latestMeasurements}
-        bodyMeasurements={bodyMeasurements}
-      />
+      {/* Progress Trends Card */}
+      <ProgressTrendsCard progressData={progressData} />
 
       {/* Body Measurements Card */}
       {latestMeasurements && (
@@ -71,8 +65,14 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
         />
       )}
 
-      {/* Progress Trends Card */}
-      <ProgressTrendsCard progressData={progressData} />
+      {/* Body Fat % Card */}
+      <BodyFatCard 
+        bodyFatPercentage={bodyFatPercentage}
+        bodyFatStatus={bodyFatStatus}
+        bodyFatRequirements={bodyFatRequirements}
+        latestMeasurements={latestMeasurements}
+        bodyMeasurements={bodyMeasurements}
+      />
     </div>
   );
 }
