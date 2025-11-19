@@ -61,6 +61,59 @@ export interface GoalTemplate {
   guide?: string;
 }
 
+// Custom Activity Types
+export interface CustomActivityType {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string;
+  isCustom: true;
+  fields: ActivityField[];
+  calorieCalculation: {
+    method: 'fixed' | 'per-minute' | 'per-distance' | 'formula' | 'met';
+    value?: number;
+    formula?: string;
+    metValue?: number;
+  };
+  goalImpacts: GoalImpact[];
+}
+
+export interface ActivityField {
+  name: string;
+  label: string;
+  type: 'number' | 'text' | 'select';
+  unit?: string;
+  required: boolean;
+  options?: string[];
+  placeholder?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+export interface GoalImpact {
+  goalType: string;
+  unitMapping: string;
+  calculation: 'add' | 'max' | 'average';
+  sourceField: string;
+}
+
+export interface ActivityType {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string;
+  isCustom?: boolean;
+  fields: ActivityField[];
+  calorieCalculation: {
+    method: 'fixed' | 'per-minute' | 'per-distance' | 'formula' | 'met';
+    value?: number;
+    formula?: string;
+    metValue?: number;
+  };
+  goalImpacts: GoalImpact[];
+}
+
 export interface BodyMeasurements {
   id?: string;
   date: string;

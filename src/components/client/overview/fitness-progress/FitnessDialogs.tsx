@@ -6,6 +6,7 @@ import { LogActivityDialog } from "./LogActivityDialog";
 import { LogWeightDialog } from "./LogWeightDialog";
 import { DeleteGoalDialog } from "./DeleteGoalDialog";
 import { BodyMeasurementsDialog } from "./BodyMeasurementsDialog";
+import { ManageActivityTypesDialog } from "./ManageActivityTypesDialog";
 
 interface FitnessDialogsProps {
   openDialog: boolean;
@@ -20,6 +21,8 @@ interface FitnessDialogsProps {
   setOpenDeleteDialog: (open: boolean) => void;
   openMeasurementsDialog: boolean;
   setOpenMeasurementsDialog: (open: boolean) => void;
+  openManageActivityTypesDialog: boolean;
+  setOpenManageActivityTypesDialog: (open: boolean) => void;
   selectedGoal: ProgressItem | null;
   onSubmit: (data: any) => void;
   onUpdateSubmit: (data: any) => void;
@@ -31,67 +34,21 @@ interface FitnessDialogsProps {
 }
 
 export function FitnessDialogs({
-  openDialog,
-  setOpenDialog,
-  openUpdateDialog,
-  setOpenUpdateDialog,
-  openLogDialog,
-  setOpenLogDialog,
-  openWeightDialog,
-  setOpenWeightDialog,
-  openDeleteDialog,
-  setOpenDeleteDialog,
-  openMeasurementsDialog,
-  setOpenMeasurementsDialog,
-  selectedGoal,
-  onSubmit,
-  onUpdateSubmit,
-  onLogSubmit,
-  onWeightSubmit,
-  onMeasurementsSubmit,
-  onDeleteGoal,
-  onManageGoalTypes
+  openDialog, setOpenDialog, openUpdateDialog, setOpenUpdateDialog, openLogDialog, setOpenLogDialog,
+  openWeightDialog, setOpenWeightDialog, openDeleteDialog, setOpenDeleteDialog, openMeasurementsDialog,
+  setOpenMeasurementsDialog, openManageActivityTypesDialog, setOpenManageActivityTypesDialog,
+  selectedGoal, onSubmit, onUpdateSubmit, onLogSubmit, onWeightSubmit, onMeasurementsSubmit,
+  onDeleteGoal, onManageGoalTypes
 }: FitnessDialogsProps) {
   return (
     <>
-      <AddGoalDialog 
-        open={openDialog}
-        onOpenChange={setOpenDialog}
-        onSubmit={onSubmit}
-        onManageGoalTypes={onManageGoalTypes}
-      />
-      
-      <UpdateGoalDialog 
-        open={openUpdateDialog}
-        onOpenChange={setOpenUpdateDialog}
-        onSubmit={onUpdateSubmit}
-        selectedGoal={selectedGoal}
-      />
-      
-      <LogActivityDialog 
-        open={openLogDialog}
-        onOpenChange={setOpenLogDialog}
-        onSubmit={onLogSubmit}
-      />
-      
-      <LogWeightDialog 
-        open={openWeightDialog}
-        onOpenChange={setOpenWeightDialog}
-        onSubmit={onWeightSubmit}
-      />
-      
-      <BodyMeasurementsDialog 
-        open={openMeasurementsDialog}
-        onOpenChange={setOpenMeasurementsDialog}
-        onSubmit={onMeasurementsSubmit}
-      />
-      
-      <DeleteGoalDialog 
-        open={openDeleteDialog}
-        onOpenChange={setOpenDeleteDialog}
-        onDelete={onDeleteGoal}
-        selectedGoal={selectedGoal}
-      />
+      <AddGoalDialog open={openDialog} onOpenChange={setOpenDialog} onSubmit={onSubmit} onManageGoalTypes={onManageGoalTypes} />
+      <UpdateGoalDialog open={openUpdateDialog} onOpenChange={setOpenUpdateDialog} onSubmit={onUpdateSubmit} selectedGoal={selectedGoal} />
+      <LogActivityDialog open={openLogDialog} onOpenChange={setOpenLogDialog} onSubmit={onLogSubmit} onManageActivityTypes={() => { setOpenLogDialog(false); setOpenManageActivityTypesDialog(true); }} />
+      <LogWeightDialog open={openWeightDialog} onOpenChange={setOpenWeightDialog} onSubmit={onWeightSubmit} />
+      <BodyMeasurementsDialog open={openMeasurementsDialog} onOpenChange={setOpenMeasurementsDialog} onSubmit={onMeasurementsSubmit} />
+      <DeleteGoalDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog} onDelete={onDeleteGoal} selectedGoal={selectedGoal} />
+      <ManageActivityTypesDialog open={openManageActivityTypesDialog} onOpenChange={setOpenManageActivityTypesDialog} />
     </>
   );
 }

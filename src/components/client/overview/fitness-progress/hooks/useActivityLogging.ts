@@ -2,89 +2,78 @@
 import { toast } from "sonner";
 import { ProgressItem, GoalLog } from "../types";
 import { calculateProgress, getCurrentDate } from "../utils";
+import { getActivityTypeById } from "../data/activityTemplates";
+import { calculateCalories } from "../utils/calorieCalculator";
 
 export function useActivityLogging() {
-  // Simplified activity logging for user-friendly goal types
+  // Enhanced activity logging with custom activity types support
   const logActivity = (data: any, progressData: ProgressItem[], setProgressData: (updater: (prev: ProgressItem[]) => ProgressItem[]) => void) => {
     const currentDate = data.date || getCurrentDate();
     let updatedGoals = 0;
     
+    // Get activity type configuration
+    const activityType = getActivityTypeById(data.activityTypeId || "general");
+    if (!activityType) {
+      toast.error("Invalid activity type");
+      return false;
+    }
+    
+    // Calculate calories
+    const calculatedCalories = calculateCalories(activityType, data);
+    
     setProgressData(prev => prev.map(item => {
       let shouldUpdate = false;
       let newValue = item.current;
-      let activityType = '';
+      let activityName = activityType.title;
       let logData: Partial<GoalLog> = {};
       
-      // Map activity to specific goals based on goal type and units
-      switch (item.goalType) {
-        case 'activity_level':
-          if (item.unit === "steps" && data.steps > 0) {
-            newValue += Number(data.steps);
-            activityType = 'steps';
-            shouldUpdate = true;
-          } else if (item.unit === "kcal" && data.calories > 0) {
-            newValue += Number(data.calories);
-            activityType = 'calories burned';
-            shouldUpdate = true;
-          } else if (item.unit === "mins" && data.minutes > 0) {
-            newValue += Number(data.minutes);
-            activityType = 'activity minutes';
-            shouldUpdate = true;
+      // Check if this activity impacts this goal
+      const impacts = activityType.goalImpacts.filter(
+        impact => impact.goalType === item.goalType && impact.unitMapping === item.unit
+      );
+      
+      impacts.forEach(impact => {
+        let sourceValue: number;
+        
+        if (impact.sourceField === "calculated_calories") {
+          sourceValue = calculatedCalories;
+        } else {
+          sourceValue = Number(data[impact.sourceField]) || 0;
+        }
+        
+        if (sourceValue > 0) {
+          shouldUpdate = true;
+          
+          switch (impact.calculation) {
+            case 'add':
+              newValue += sourceValue;
+              break;
+            case 'max':
+              newValue = Math.max(newValue, sourceValue);
+              break;
+            case 'average':
+              const logsCount = (item.logs?.length || 0) + 1;
+              newValue = ((item.current * (logsCount - 1)) + sourceValue) / logsCount;
+              break;
           }
-          break;
-
-        case 'cardiovascular_endurance':
-          if (item.unit === "km" && data.distance > 0) {
-            newValue += Number(data.distance);
-            activityType = 'distance covered';
-            logData.distance = Number(data.distance);
-            shouldUpdate = true;
-          } else if (item.unit === "mins" && data.cardioMinutes > 0) {
-            newValue += Number(data.cardioMinutes);
-            activityType = 'cardio minutes';
-            logData.duration = Number(data.cardioMinutes);
-            shouldUpdate = true;
-          }
-          break;
-
-        case 'strength_progress':
-          if (item.unit === "kg" && data.strengthWeight > 0 && 
-              (!item.exerciseId || item.exerciseId === data.exerciseId)) {
-            newValue = Math.max(newValue, Number(data.strengthWeight)); // Use max weight for strength goals
-            activityType = 'weight lifted';
-            logData.exerciseWeight = Number(data.strengthWeight);
-            logData.exerciseName = data.exerciseName || item.exerciseName;
-            logData.reps = data.reps;
-            logData.sets = data.sets;
-            shouldUpdate = true;
-          }
-          break;
-
-        default:
-          // Fallback for generic logging
-          if (item.unit === "steps" && data.steps > 0) {
-            newValue += Number(data.steps);
-            activityType = 'steps';
-            shouldUpdate = true;
-          } else if (item.unit === "kcal" && data.calories > 0) {
-            newValue += Number(data.calories);
-            activityType = 'calories burned';
-            shouldUpdate = true;
-          } else if (item.unit === "mins" && data.minutes > 0) {
-            newValue += Number(data.minutes);
-            activityType = 'workout minutes';
-            shouldUpdate = true;
-          }
-      }
+          
+          // Build log data
+          Object.keys(data).forEach(key => {
+            if (data[key] && key !== 'date' && key !== 'note' && key !== 'activityTypeId') {
+              logData[key] = data[key];
+            }
+          });
+        }
+      });
       
       if (shouldUpdate) {
         updatedGoals++;
         const newLog: GoalLog = {
           id: `log-${Date.now()}-${item.id}`,
           date: currentDate,
-          value: shouldUpdate ? Number(data[activityType.split(' ')[0]] || newValue) : newValue,
+          value: newValue - item.current, // Log the increment
           source: 'manual',
-          note: `Logged ${activityType}${data.note ? ` - ${data.note}` : ''}`,
+          note: `${activityName}${data.note ? ` - ${data.note}` : ''}`,
           ...logData
         };
         
