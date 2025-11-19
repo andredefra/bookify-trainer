@@ -208,6 +208,21 @@ export function useWorkoutLogs() {
     return newWorkout;
   };
 
+  const updateWorkoutLog = (id: string, workout: Omit<WorkoutLog, 'id'>) => {
+    const updatedLogs = workoutLogs.map(log => 
+      log.id === id ? { ...workout, id } : log
+    );
+    
+    const sortedLogs = updatedLogs.sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    
+    setWorkoutLogs(sortedLogs);
+    localStorage.setItem('workoutLogs', JSON.stringify(sortedLogs));
+    
+    return { ...workout, id };
+  };
+
   const deleteWorkoutLog = (id: string) => {
     const updatedLogs = workoutLogs.filter(log => log.id !== id);
     setWorkoutLogs(updatedLogs);
@@ -217,6 +232,7 @@ export function useWorkoutLogs() {
   return {
     workoutLogs,
     addWorkoutLog,
+    updateWorkoutLog,
     deleteWorkoutLog,
     refreshLogs: loadWorkoutLogs
   };

@@ -9,11 +9,12 @@ import { Label } from "@/components/ui/label";
 
 interface NewWorkoutLogFormProps {
   onComplete: () => void;
+  existingWorkout?: any;
 }
 
-function WorkoutLogFormContent({ onComplete }: NewWorkoutLogFormProps) {
+function WorkoutLogFormContent({ onComplete, existingWorkout }: NewWorkoutLogFormProps) {
   const { toast } = useToast();
-  const { addWorkoutLog } = useWorkoutLogs();
+  const { addWorkoutLog, updateWorkoutLog } = useWorkoutLogs();
   const { 
     date, 
     workoutName, 
@@ -38,19 +39,34 @@ function WorkoutLogFormContent({ onComplete }: NewWorkoutLogFormProps) {
       return;
     }
     
-    // Create workout log
-    addWorkoutLog({
-      date: date.toISOString(),
-      name: workoutName || "Workout",
-      exercises: validExercises,
-      duration: duration || undefined,
-      notes: notes || undefined
-    });
-    
-    toast({
-      title: "Workout logged successfully",
-      description: `Your ${workoutName || "workout"} has been saved`
-    });
+    // Create or update workout log
+    if (existingWorkout?.id) {
+      updateWorkoutLog(existingWorkout.id, {
+        date: date.toISOString(),
+        name: workoutName || "Workout",
+        exercises: validExercises,
+        duration: duration || undefined,
+        notes: notes || undefined
+      });
+      
+      toast({
+        title: "Workout updated successfully",
+        description: `Your ${workoutName || "workout"} has been updated`
+      });
+    } else {
+      addWorkoutLog({
+        date: date.toISOString(),
+        name: workoutName || "Workout",
+        exercises: validExercises,
+        duration: duration || undefined,
+        notes: notes || undefined
+      });
+      
+      toast({
+        title: "Workout logged successfully",
+        description: `Your ${workoutName || "workout"} has been saved`
+      });
+    }
     
     onComplete();
   };
@@ -80,7 +96,7 @@ function WorkoutLogFormContent({ onComplete }: NewWorkoutLogFormProps) {
 
 export function NewWorkoutLogForm(props: NewWorkoutLogFormProps) {
   return (
-    <WorkoutFormProvider>
+    <WorkoutFormProvider initialWorkout={props.existingWorkout}>
       <WorkoutLogFormContent {...props} />
     </WorkoutFormProvider>
   );

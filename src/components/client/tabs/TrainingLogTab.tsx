@@ -11,6 +11,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export function TrainingLogTab() {
   const [showAddWorkout, setShowAddWorkout] = useState(false);
   const [selectedWorkoutForAnalysis, setSelectedWorkoutForAnalysis] = useState<any>(null);
+  const [editingWorkout, setEditingWorkout] = useState<any>(null);
   const { workoutLogs } = useWorkoutLogs();
   const isMobile = useIsMobile();
   
@@ -103,7 +104,13 @@ export function TrainingLogTab() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <NewWorkoutLogForm onComplete={() => setShowAddWorkout(false)} />
+            <NewWorkoutLogForm 
+              onComplete={() => {
+                setShowAddWorkout(false);
+                setEditingWorkout(null);
+              }} 
+              existingWorkout={editingWorkout}
+            />
           </CardContent>
         </Card>
       )}
@@ -181,7 +188,14 @@ export function TrainingLogTab() {
                       >
                         <Brain className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => {
+                          setEditingWorkout(workout);
+                          setShowAddWorkout(true);
+                        }}
+                      >
                         <Edit3 className="h-4 w-4" />
                       </Button>
                     </div>
