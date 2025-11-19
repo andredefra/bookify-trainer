@@ -36,12 +36,14 @@ export function ClientHeader({
     try {
       console.log('Cleaning up demo data before logout...');
       
-      // Step 1: Delete all active package assignments (demo purchases)
+      // Step 1: Delete only package assignments created today (new demo purchases)
+      // This preserves the default active program with past created_at date
       const { error: deleteError } = await supabase
         .from('client_package_assignments')
         .delete()
         .eq('client_id', DEMO_CLIENT_ID)
-        .eq('status', 'active');
+        .eq('status', 'active')
+        .gte('created_at', new Date().toISOString().split('T')[0]); // created today
 
       if (deleteError) {
         console.error('Error cleaning up demo purchases:', deleteError);
