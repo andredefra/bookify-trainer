@@ -1,6 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+
+const DEMO_CLIENT_ID = '00000000-0000-0000-0000-000000000002';
 
 export interface ClientPackage {
   id: string;
@@ -92,11 +93,9 @@ export function useClientPackages() {
       setLoading(true);
       setError(null);
 
-      // Get current user or use demo client ID
-      const { data: { user } } = await supabase.auth.getUser();
-      const clientId = user?.id || '00000000-0000-0000-0000-000000000002';
-
-      console.log('Fetching packages for client ID:', clientId);
+      // For demo: force using the demo client ID so all mock data is visible
+      const clientId = DEMO_CLIENT_ID;
+      console.log('Using demo client ID for packages:', clientId);
 
       // First, fetch the client's trainers
       const { data: trainerRelationships } = await supabase
