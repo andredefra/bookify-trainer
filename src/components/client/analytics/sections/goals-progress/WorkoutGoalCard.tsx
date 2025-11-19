@@ -10,13 +10,24 @@ interface WorkoutGoalCardProps {
 export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
   const isActivityGoal = workoutGoal.goalType === 'activity_level';
   
+  // Raccomandazione annuale per uno stile di vita sano (10k passi/giorno)
+  const RECOMMENDED_ANNUAL_STEPS = 3650000;
+  
+  // Determina il target annuale da usare
+  let annualTarget = workoutGoal.target;
+  if (isActivityGoal && workoutGoal.unit === 'steps') {
+    if (!annualTarget || annualTarget < 1000000) {
+      annualTarget = RECOMMENDED_ANNUAL_STEPS;
+    }
+  }
+  
   // Calcola il mese corrente e target mensile per activity goals annuali
-  let currentMonthTarget = workoutGoal.target;
+  let currentMonthTarget = annualTarget;
   let currentMonthProgress = workoutGoal.progress;
   let monthLabel = '';
   
   // Rileva se è un goal annuale basandosi sul target (>= 1M steps = annuale)
-  const isAnnualStepGoal = isActivityGoal && workoutGoal.unit === 'steps' && workoutGoal.target >= 1000000;
+  const isAnnualStepGoal = isActivityGoal && workoutGoal.unit === 'steps' && annualTarget >= 1000000;
   
   if (isAnnualStepGoal) {
     const now = new Date();
@@ -29,7 +40,7 @@ export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
     const currentMonth = Math.min(Math.max(0, monthsElapsed), 11); // 0-11 (12 mesi)
     
     // Target cumulativo per il mese corrente (ogni mese è 1/12 del target annuale)
-    currentMonthTarget = Math.round((workoutGoal.target / 12) * (currentMonth + 1));
+    currentMonthTarget = Math.round((annualTarget / 12) * (currentMonth + 1));
     
     // Calcola progresso rispetto al target mensile corrente
     currentMonthProgress = Math.min(100, Math.round((workoutGoal.current / currentMonthTarget) * 100));
@@ -47,9 +58,11 @@ export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
           </div>
           <div>
             <h4 className="font-medium text-foreground text-sm">
-              {isActivityGoal ? 'Activity Goal' : 'Strength Goal'}
+              {isActivityGoal && isAnnualStepGoal ? 'Monthly Step Target' : isActivityGoal ? 'Activity Goal' : 'Strength Goal'}
             </h4>
-            <p className="text-xs text-muted-foreground truncate">{workoutGoal.goal}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {isActivityGoal && isAnnualStepGoal ? 'Based on your annual healthy steps goal' : workoutGoal.goal}
+            </p>
           </div>
         </div>
         <div className="text-right">
@@ -66,7 +79,10 @@ export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
           <span className="text-muted-foreground">{isActivityGoal && monthLabel ? 'Month Target' : 'Target'}: <span className="font-medium text-foreground">{currentMonthTarget.toLocaleString()}{workoutGoal.unit}</span></span>
         </div>
         
-        <Progress value={workoutGoal.progress} className="h-2" />
+        <Progress 
+          value={isActivityGoal && isAnnualStepGoal ? currentMonthProgress : workoutGoal.progress} 
+          className="h-2" 
+        />
         
         <div className="text-center">
           <span className="text-xs font-medium text-teal-700">
