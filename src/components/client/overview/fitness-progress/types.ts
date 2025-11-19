@@ -136,6 +136,7 @@ export interface ActivityType {
 export interface BodyMeasurements {
   id?: string;
   date: string;
+  weight?: number; // peso in kg
   height?: number; // altezza in centimetri
   gender?: 'male' | 'female'; // genere per formula body fat
   waist?: number; // vita

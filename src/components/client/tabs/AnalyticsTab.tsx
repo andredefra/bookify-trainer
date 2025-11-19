@@ -78,6 +78,7 @@ export function AnalyticsTab() {
       {
         id: "measurement-1",
         date: "2024-03-15",
+        weight: 75,
         height: 175,
         gender: "male" as const,
         waist: 82,
@@ -91,6 +92,7 @@ export function AnalyticsTab() {
       {
         id: "measurement-2", 
         date: "2024-03-01",
+        weight: 77,
         height: 175,
         gender: "male" as const,
         waist: 85,
