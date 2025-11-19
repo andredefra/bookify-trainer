@@ -6,6 +6,7 @@ interface ExerciseTrackingState {
     currentSets: SetData[];
     history: ExerciseHistory[];
     suggestedWeight: number;
+    isCompleted: boolean;
   };
 }
 
@@ -47,6 +48,7 @@ export function useExerciseTracking() {
           currentSets: initialSets,
           history: prev[exercise.id]?.history || [],
           suggestedWeight,
+          isCompleted: false,
         }
       }));
     }
@@ -92,12 +94,26 @@ export function useExerciseTracking() {
       
       setTrackingData(prev => ({
         ...prev,
+        [exerciseId]: {
+          ...prev[exerciseId],
+          isCompleted: true,
+        },
         [baseExerciseId]: {
           ...prev[baseExerciseId],
           history: [...(prev[baseExerciseId]?.history || []), historyEntry],
         }
       }));
     }
+  };
+
+  const resetExerciseCompletion = (exerciseId: string) => {
+    setTrackingData(prev => ({
+      ...prev,
+      [exerciseId]: {
+        ...prev[exerciseId],
+        isCompleted: false,
+      }
+    }));
   };
 
   const calculateSuggestedWeight = (exerciseId: string, defaultWeight: number): number => {
@@ -136,6 +152,7 @@ export function useExerciseTracking() {
     initializeExercise,
     updateSet,
     completeExercise,
+    resetExerciseCompletion,
     getExerciseProgress,
     calculateSuggestedWeight,
   };

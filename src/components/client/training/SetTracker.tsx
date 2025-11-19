@@ -12,6 +12,7 @@ interface SetTrackerProps {
   onUpdate: (data: Partial<SetData>) => void;
   previousPerformance?: { weight: number; reps: number } | null;
   showProgress?: boolean;
+  disabled?: boolean;
 }
 
 export function SetTracker({ 
@@ -19,7 +20,8 @@ export function SetTracker({
   suggestedWeight, 
   onUpdate, 
   previousPerformance,
-  showProgress = false 
+  showProgress = false,
+  disabled = false
 }: SetTrackerProps) {
   const [showNotes, setShowNotes] = useState(false);
   const [tempNotes, setTempNotes] = useState(setData.notes || '');
@@ -60,7 +62,7 @@ export function SetTracker({
   };
 
   return (
-    <div className="space-y-3 p-3 bg-muted/30 rounded-lg border">
+    <div className={`space-y-3 p-3 bg-muted/30 rounded-lg border ${disabled ? 'opacity-60' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
@@ -68,6 +70,7 @@ export function SetTracker({
             size="sm"
             onClick={toggleCompleted}
             className="h-8 w-8 p-0"
+            disabled={disabled}
           >
             {setData.completed ? (
               <CheckCircle className="h-4 w-4 text-green-600" />
@@ -102,6 +105,7 @@ export function SetTracker({
               value={setData.weight || ''}
               onChange={(e) => handleWeightChange(e.target.value)}
               className="h-8 text-sm"
+              disabled={disabled}
             />
             {suggestedWeight && (
               <Button
@@ -109,6 +113,7 @@ export function SetTracker({
                 size="sm"
                 onClick={() => onUpdate({ weight: suggestedWeight })}
                 className="h-8 px-2 text-xs"
+                disabled={disabled}
               >
                 Use {suggestedWeight}kg
               </Button>
@@ -124,6 +129,7 @@ export function SetTracker({
             value={setData.actualReps || ''}
             onChange={(e) => handleRepsChange(e.target.value)}
             className="h-8 text-sm"
+            disabled={disabled}
           />
         </div>
       </div>
@@ -135,6 +141,7 @@ export function SetTracker({
             size="sm"
             onClick={() => setShowNotes(true)}
             className="h-7 px-2 text-xs text-muted-foreground"
+            disabled={disabled}
           >
             {setData.notes ? 'Edit notes' : 'Add notes'}
           </Button>
@@ -146,12 +153,13 @@ export function SetTracker({
               placeholder="Add notes for this set..."
               rows={2}
               className="text-sm"
+              disabled={disabled}
             />
             <div className="flex gap-2">
-              <Button onClick={saveNotes} size="sm" variant="outline">
+              <Button onClick={saveNotes} size="sm" variant="outline" disabled={disabled}>
                 Save
               </Button>
-              <Button onClick={() => setShowNotes(false)} size="sm" variant="ghost">
+              <Button onClick={() => setShowNotes(false)} size="sm" variant="ghost" disabled={disabled}>
                 Cancel
               </Button>
             </div>

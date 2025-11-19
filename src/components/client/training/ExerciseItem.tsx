@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp, Play, Shuffle, TrendingUp, Info } from "lucide-react";
+import { ChevronDown, ChevronUp, Play, Shuffle, TrendingUp, Info, CheckCircle2, Edit } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Exercise } from "@/data/training/types";
 import { SetTracker } from "./SetTracker";
@@ -13,6 +13,8 @@ import { AlternativeExercises } from "./AlternativeExercises";
 import { useExerciseTracking } from "@/hooks/useExerciseTracking";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
 import { exerciseVideoUrls } from "@/data/exercises/videoUrls";
+import { toast } from "@/hooks/use-toast";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 interface ExerciseItemProps {
   exercise: Exercise;
   dayId: string;
@@ -22,7 +24,7 @@ interface ExerciseItemProps {
 export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProps) {
   const isMobile = useIsMobile();
   const [isExpanded, setIsExpanded] = useState(false);
-  const { trackingData, initializeExercise, updateSet, completeExercise, getExerciseProgress } = useExerciseTracking();
+  const { trackingData, initializeExercise, updateSet, completeExercise, resetExerciseCompletion, getExerciseProgress } = useExerciseTracking();
 
   const exerciseTrackingId = `${exercise.id}-${dayId}`;
   
@@ -61,7 +63,27 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
       const avgWeight = completedSets.reduce((sum, set) => sum + (set.weight || 0), 0) / completedSets.length;
       onSaveWeight(exercise.id, dayId, avgWeight);
     }
+
+    // Show success feedback
+    toast({
+      title: "Exercise Completed! ✓",
+      description: "Your workout data has been saved successfully.",
+    });
+
+    // Close the collapsible
+    setIsExpanded(false);
   };
+
+  const handleEditExercise = () => {
+    resetExerciseCompletion(exerciseTrackingId);
+    setIsExpanded(true);
+  };
+
+  const isExerciseCompleted = currentTracking?.isCompleted || false;
+  const hasCompletedSets = currentTracking?.currentSets.some(set => set.completed) || false;
+  const allSetsCompleted = currentTracking?.currentSets.every(set => set.completed) || false;
+  const completedSetsCount = currentTracking?.currentSets.filter(set => set.completed).length || 0;
+  const totalSets = currentTracking?.currentSets.length || exercise.sets;
 
   const getPreviousPerformance = (setNumber: number) => {
     const history = trackingData[exercise.id]?.history;
@@ -74,13 +96,21 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
   };
 
   return (
-    <div className="border-b last:border-b-0">
+    <div className={`border-b last:border-b-0 ${isExerciseCompleted ? 'border-l-4 border-l-green-500' : ''}`}>
       <div className="p-3 sm:p-4">
         {/* Exercise Header - Mobile Optimized */}
         <div className="flex flex-col gap-3 mb-4">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-medium text-base sm:text-lg mb-2 truncate">{exercise.name}</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="font-medium text-base sm:text-lg truncate">{exercise.name}</h3>
+                {isExerciseCompleted && (
+                  <Badge variant="default" className="bg-green-500 hover:bg-green-600 text-white text-xs">
+                    <CheckCircle2 className="w-3 h-3 mr-1" />
+                    Completed
+                  </Badge>
+                )}
+              </div>
               <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
                 <Badge variant="outline" className="text-xs">
                   {exercise.sets} sets × {exercise.reps}
@@ -99,7 +129,18 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
             </div>
             
             {/* Exercise Actions - Mobile Stacked */}
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-1">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              {isExerciseCompleted && (
+                <Button
+                  variant="outline"
+                  size={isMobile ? "sm" : "default"}
+                  onClick={handleEditExercise}
+                  className="text-xs"
+                >
+                  <Edit className="w-4 h-4 mr-1" />
+                  Edit
+                </Button>
+              )}
               {videoUrl ? (
                 <ExerciseVideoPlayer
                   videoUrl={videoUrl}
@@ -151,7 +192,11 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
         {/* Collapsible Content */}
         <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-3 h-auto min-h-[44px] bg-gray-50 hover:bg-gray-100">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-between p-3 h-auto min-h-[44px] bg-gray-50 hover:bg-gray-100"
+              disabled={isExerciseCompleted}
+            >
               <span className="text-sm font-medium">
                 {isExpanded ? 'Hide Set Tracking' : 'Track Sets'}
               </span>
@@ -160,6 +205,16 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
           </CollapsibleTrigger>
           
           <CollapsibleContent className="space-y-4 mt-4">
+            {/* Guidance Text */}
+            {!isExerciseCompleted && (
+              <div className="bg-muted/50 p-3 rounded-md flex items-start gap-2 text-xs sm:text-sm">
+                <Info className="w-4 h-4 mt-0.5 text-muted-foreground flex-shrink-0" />
+                <p className="text-muted-foreground">
+                  Click the circle icon next to each set to mark it as completed. Complete at least one set to finish the exercise.
+                </p>
+              </div>
+            )}
+
             {/* Trainer notes */}
             {exercise.notes && (
               <div className="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-200">
@@ -189,18 +244,9 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
 
             {/* Set tracking - Mobile optimized */}
             <div className="space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <h4 className="font-medium text-sm sm:text-base">Set Tracking</h4>
-                <Button
-                  onClick={handleCompleteExercise}
-                  size="sm"
-                  variant="default"
-                  disabled={!currentTracking?.currentSets.some(set => set.completed)}
-                  className="w-full sm:w-auto min-h-[44px] sm:min-h-[36px]"
-                >
-                  Complete Exercise
-                </Button>
-              </div>
+              <h4 className="font-medium text-sm sm:text-base">
+                Set Tracking ({completedSetsCount}/{totalSets} completed)
+              </h4>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {currentTracking?.currentSets.map((setData, index) => (
@@ -211,9 +257,43 @@ export function ExerciseItem({ exercise, dayId, onSaveWeight }: ExerciseItemProp
                     onUpdate={(data) => handleSetUpdate(setData.setNumber, data)}
                     previousPerformance={getPreviousPerformance(setData.setNumber)}
                     showProgress={true}
+                    disabled={isExerciseCompleted}
                   />
                 ))}
               </div>
+
+              {/* Complete Exercise Button */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button
+                        onClick={handleCompleteExercise}
+                        disabled={!hasCompletedSets || isExerciseCompleted}
+                        className={`w-full min-h-[44px] sm:min-h-[36px] ${
+                          isExerciseCompleted 
+                            ? 'bg-green-500 hover:bg-green-600' 
+                            : allSetsCompleted 
+                            ? 'bg-green-500 hover:bg-green-600' 
+                            : hasCompletedSets 
+                            ? 'bg-orange-500 hover:bg-orange-600' 
+                            : ''
+                        }`}
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-2" />
+                        {isExerciseCompleted 
+                          ? 'Exercise Completed' 
+                          : `Complete Exercise (${completedSetsCount}/${totalSets} sets)`}
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  {!hasCompletedSets && !isExerciseCompleted && (
+                    <TooltipContent>
+                      <p>Complete at least one set first</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </CollapsibleContent>
         </Collapsible>
