@@ -22,18 +22,28 @@ interface WorkoutFormContextType {
 
 const WorkoutFormContext = createContext<WorkoutFormContextType | undefined>(undefined);
 
-export function WorkoutFormProvider({ children }: { children: React.ReactNode }) {
-  const [date, setDate] = useState<Date>(new Date());
-  const [workoutName, setWorkoutName] = useState("");
-  const [duration, setDuration] = useState("");
-  const [notes, setNotes] = useState("");
-  const [exercises, setExercises] = useState<WorkoutExercise[]>([
-    {
-      id: "1",
-      name: "",
-      setsData: []
-    }
-  ]);
+export function WorkoutFormProvider({ 
+  children, 
+  initialWorkout 
+}: { 
+  children: React.ReactNode;
+  initialWorkout?: any;
+}) {
+  const [date, setDate] = useState<Date>(
+    initialWorkout?.date ? new Date(initialWorkout.date) : new Date()
+  );
+  const [workoutName, setWorkoutName] = useState(initialWorkout?.name || "");
+  const [duration, setDuration] = useState(initialWorkout?.duration || "");
+  const [notes, setNotes] = useState(initialWorkout?.notes || "");
+  const [exercises, setExercises] = useState<WorkoutExercise[]>(
+    initialWorkout?.exercises && initialWorkout.exercises.length > 0
+      ? initialWorkout.exercises
+      : [{
+          id: "1",
+          name: "",
+          setsData: []
+        }]
+  );
 
   const addExercise = () => {
     const newExercise: WorkoutExercise = {
