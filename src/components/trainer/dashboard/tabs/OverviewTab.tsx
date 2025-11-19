@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Target, DollarSign, Calendar } from "lucide-react";
+import { Users, DollarSign, Calendar, Settings } from "lucide-react";
 import { TrainerSessionItem } from "@/types/sessions";
 import { QuickActionsWidget } from "./overview/widgets/QuickActionsWidget";
 import { TodaysAgendaWidget } from "./overview/widgets/TodaysAgendaWidget";
@@ -11,6 +12,18 @@ import { PackageSalesWidget } from "./overview/widgets/PackageSalesWidget";
 import { GoalsWidget } from "./overview/widgets/GoalsWidget";
 import { RecentActivitiesWidget } from "./overview/widgets/RecentActivitiesWidget";
 import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
+import { WidgetSettingsDialog } from "./overview/WidgetSettingsDialog";
+import { useWidgetLayout } from "@/hooks/useWidgetLayout";
+import { Responsive, WidthProvider, Layout } from "react-grid-layout";
+import { Button } from "@/components/ui/button";
+import { AddClientDialog } from "../../dialogs/AddClientDialog";
+import { RecordPaymentDialog } from "../../dialogs/RecordPaymentDialog";
+import { SetGoalDialog } from "../../dialogs/SetGoalDialog";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+import "./overview/widget-grid.css";
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 interface OverviewTabProps {
   upcomingSessions: TrainerSessionItem[];
@@ -21,85 +34,155 @@ interface OverviewTabProps {
 export function OverviewTab({ upcomingSessions, clients, messageRequests }: OverviewTabProps) {
   const stats = {
     totalClients: clients.length,
-    activePrograms: 18,
     monthlyRevenue: 3200,
     upcomingToday: upcomingSessions.length,
   };
 
+  const { layout, enabledWidgets, saveLayout, toggleWidget, resetToDefault } = useWidgetLayout();
+  const [showSettings, setShowSettings] = useState(false);
+  const [showAddClient, setShowAddClient] = useState(false);
+  const [showRecordPayment, setShowRecordPayment] = useState(false);
+  const [showSetGoal, setShowSetGoal] = useState(false);
+
+  const handleLayoutChange = (newLayout: Layout[]) => {
+    saveLayout(newLayout);
+  };
+
+  const renderWidget = (widgetId: string) => {
+    switch (widgetId) {
+      case "quick-actions":
+        return (
+          <QuickActionsWidget
+            onAddClient={() => setShowAddClient(true)}
+            onScheduleSession={() => console.log("Navigate to calendar")}
+            onCreatePackage={() => console.log("Navigate to packages")}
+            onSendMessage={() => console.log("Navigate to messages")}
+            onRecordPayment={() => setShowRecordPayment(true)}
+            onSetGoal={() => setShowSetGoal(true)}
+          />
+        );
+      case "todays-agenda":
+        return <TodaysAgendaWidget />;
+      case "messages":
+        return <MessagesWidget />;
+      case "expiration-alerts":
+        return <ExpirationAlertsCard />;
+      case "revenue-chart":
+        return <RevenueChartWidget />;
+      case "client-activity":
+        return <ClientActivityWidget />;
+      case "performance-metrics":
+        return <PerformanceMetricsWidget />;
+      case "package-sales":
+        return <PackageSalesWidget />;
+      case "goals":
+        return <GoalsWidget />;
+      case "recent-activities":
+        return <RecentActivitiesWidget />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Top 4 KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-lg bg-blue-100">
-                <Users className="h-6 w-6 text-blue-600" />
+      {/* Top 3 KPI Cards + Settings Button */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+          <Card className="hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-lg bg-blue-100">
+                  <Users className="h-6 w-6 text-blue-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-muted-foreground">Active Clients</p>
+                  <p className="text-2xl font-bold">{stats.totalClients}</p>
+                </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Active Clients</p>
-                <p className="text-2xl font-bold">{stats.totalClients}</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-lg bg-purple-100">
+                  <DollarSign className="h-6 w-6 text-purple-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-muted-foreground">Monthly Revenue</p>
+                  <p className="text-2xl font-bold">€{stats.monthlyRevenue}</p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+          
+          <Card className="hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-lg bg-orange-100">
+                  <Calendar className="h-6 w-6 text-orange-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-muted-foreground">Today's Sessions</p>
+                  <p className="text-2xl font-bold">{stats.upcomingToday}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
         
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-lg bg-green-100">
-                <Target className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Active Programs</p>
-                <p className="text-2xl font-bold">{stats.activePrograms}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-lg bg-purple-100">
-                <DollarSign className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Monthly Revenue</p>
-                <p className="text-2xl font-bold">€{stats.monthlyRevenue}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <div className="p-3 rounded-lg bg-orange-100">
-                <Calendar className="h-6 w-6 text-orange-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Today's Sessions</p>
-                <p className="text-2xl font-bold">{stats.upcomingToday}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setShowSettings(true)}
+          className="shrink-0"
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
       </div>
 
-      {/* Modular Widget Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <QuickActionsWidget />
-        <TodaysAgendaWidget />
-        <ClientActivityWidget />
-        <MessagesWidget />
-        <RevenueChartWidget />
-        <PerformanceMetricsWidget />
-        <PackageSalesWidget />
-        <GoalsWidget />
-        <ExpirationAlertsCard />
-        <RecentActivitiesWidget />
-      </div>
+      {/* Modular Widget Grid with Drag & Drop */}
+      <ResponsiveGridLayout
+        className="layout"
+        layouts={{ lg: layout }}
+        breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 0 }}
+        cols={{ lg: 3, md: 2, sm: 1, xs: 1 }}
+        rowHeight={150}
+        onLayoutChange={handleLayoutChange}
+        draggableHandle=".widget-drag-handle"
+        isDraggable={true}
+        isResizable={true}
+        compactType="vertical"
+        preventCollision={false}
+      >
+        {enabledWidgets.map((widgetId) => (
+          <div key={widgetId} className="widget-fade-in">
+            {renderWidget(widgetId)}
+          </div>
+        ))}
+      </ResponsiveGridLayout>
+
+      {/* Dialogs */}
+      <WidgetSettingsDialog
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        enabledWidgets={enabledWidgets}
+        onToggleWidget={toggleWidget}
+        onReset={resetToDefault}
+      />
+      <AddClientDialog
+        open={showAddClient}
+        onOpenChange={setShowAddClient}
+      />
+      <RecordPaymentDialog
+        open={showRecordPayment}
+        onOpenChange={setShowRecordPayment}
+      />
+      <SetGoalDialog
+        open={showSetGoal}
+        onOpenChange={setShowSetGoal}
+      />
     </div>
   );
 }

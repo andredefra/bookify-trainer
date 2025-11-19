@@ -1,56 +1,71 @@
 import { BaseWidget } from "./BaseWidget";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Calendar, Package, MessageSquare, CreditCard, Target } from "lucide-react";
-import { QuickAction } from "./types";
 
-export function QuickActionsWidget() {
-  const actions: QuickAction[] = [
+interface QuickActionsWidgetProps {
+  onAddClient?: () => void;
+  onScheduleSession?: () => void;
+  onCreatePackage?: () => void;
+  onSendMessage?: () => void;
+  onRecordPayment?: () => void;
+  onSetGoal?: () => void;
+}
+
+export function QuickActionsWidget({
+  onAddClient,
+  onScheduleSession,
+  onCreatePackage,
+  onSendMessage,
+  onRecordPayment,
+  onSetGoal
+}: QuickActionsWidgetProps) {
+  const actions = [
     {
       id: "add-client",
       label: "Add Client",
       icon: UserPlus,
-      onClick: () => console.log("Add client"),
-      variant: "default"
+      onClick: onAddClient,
+      variant: "default" as const
     },
     {
       id: "schedule-session",
       label: "Schedule",
       icon: Calendar,
-      onClick: () => console.log("Schedule"),
-      variant: "secondary"
+      onClick: onScheduleSession,
+      variant: "secondary" as const
     },
     {
       id: "create-package",
       label: "New Package",
       icon: Package,
-      onClick: () => console.log("New package"),
-      variant: "outline"
+      onClick: onCreatePackage,
+      variant: "outline" as const
     },
     {
       id: "send-message",
       label: "Message",
       icon: MessageSquare,
-      onClick: () => console.log("Message"),
-      variant: "outline"
+      onClick: onSendMessage,
+      variant: "outline" as const
     },
     {
       id: "record-payment",
       label: "Payment",
       icon: CreditCard,
-      onClick: () => console.log("Payment"),
-      variant: "outline"
+      onClick: onRecordPayment,
+      variant: "outline" as const
     },
     {
       id: "set-goal",
       label: "Set Goal",
       icon: Target,
-      onClick: () => console.log("Set goal"),
-      variant: "outline"
+      onClick: onSetGoal,
+      variant: "outline" as const
     }
   ];
 
   return (
-    <BaseWidget title="Quick Actions" className="col-span-full lg:col-span-1">
+    <BaseWidget title="Quick Actions">
       <div className="grid grid-cols-2 gap-3">
         {actions.map((action) => {
           const Icon = action.icon;
