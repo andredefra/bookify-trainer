@@ -27,11 +27,31 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
   const conversationId = 'main-chat'; // Shared conversation ID
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Scroll only the ScrollArea viewport, not the entire page
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector(
+        '[data-radix-scroll-area-viewport]'
+      ) as HTMLDivElement | null;
+
+      if (viewport) {
+        viewport.scrollTo({
+          top: viewport.scrollHeight,
+          behavior: 'smooth',
+        });
+        return;
+      }
+    }
+
+    // Fallback: use scrollIntoView with 'nearest' to avoid page scroll
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    });
   };
 
   useEffect(() => {
@@ -170,7 +190,7 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
       
       <CardContent className="flex-1 flex flex-col p-0">
         {/* Messages Area */}
-        <ScrollArea className="flex-1 px-4">
+        <ScrollArea ref={scrollAreaRef} className="flex-1 px-4">
           <div className="space-y-4 pb-4">
             {isLoadingHistory ? (
               <div className="flex justify-center py-8">
