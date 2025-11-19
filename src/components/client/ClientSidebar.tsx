@@ -50,12 +50,6 @@ export function ClientSidebar({
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
     setShowSidebar(false);
-    
-    // Scroll to top of the page when changing tabs
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
   };
 
   const getUserInitials = (name?: string, email?: string) => {
