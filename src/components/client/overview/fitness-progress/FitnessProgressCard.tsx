@@ -21,6 +21,7 @@ export function FitnessProgressCard({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openMeasurementsDialog, setOpenMeasurementsDialog] = useState(false);
   const [openManageGoalTypesDialog, setOpenManageGoalTypesDialog] = useState(false);
+  const [openManageActivityTypesDialog, setOpenManageActivityTypesDialog] = useState(false);
   
   const {
     progressData,
@@ -166,6 +167,8 @@ export function FitnessProgressCard({
         setOpenDeleteDialog={handleCloseDeleteDialog}
         openMeasurementsDialog={openMeasurementsDialog}
         setOpenMeasurementsDialog={setOpenMeasurementsDialog}
+        openManageActivityTypesDialog={openManageActivityTypesDialog}
+        setOpenManageActivityTypesDialog={setOpenManageActivityTypesDialog}
         selectedGoal={selectedGoal}
         onSubmit={handleSubmit}
         onUpdateSubmit={handleUpdateSubmit}
