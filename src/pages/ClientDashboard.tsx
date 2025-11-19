@@ -190,7 +190,7 @@ const ClientDashboard = () => {
               </TabsContent>
 
               <TabsContent value="messages" className="mt-0">
-                <MessagesTab messages={trainerMessages} />
+                <MessagesTab />
               </TabsContent>
 
               <TabsContent value="settings" className="mt-0">

@@ -1,153 +1,171 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useRef, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge"; 
-import { Circle, Paperclip } from "lucide-react";
-import { getTrainerById } from "@/data/trainerMockData";
-import { useState } from "react";
-import { ChatDialog } from "@/components/trainer/ChatDialog";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Send, Video as VideoIcon, Image as ImageIcon, Loader2 } from "lucide-react";
+import { useMessages } from "@/hooks/useMessages";
+import { MessageBubble } from "../messages/MessageBubble";
+import { VideoUploader } from "../messages/VideoUploader";
+import { FileUpload } from "@/components/user/chat/FileUpload";
+import { supabase } from "@/integrations/supabase/client";
 
-interface MessageItem {
-  id: number;
-  from: string;
-  preview: string;
-  time: string;
-  read: boolean;
-  trainerId?: string; // Add trainerId to fetch status
-  hasAttachments?: boolean;
-}
+export function MessagesTab() {
+  const [trainerId, setTrainerId] = useState<string>("");
+  const [inputMessage, setInputMessage] = useState("");
+  const [showVideoUpload, setShowVideoUpload] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-interface MessagesTabProps {
-  messages: MessageItem[];
-}
+  const { messages, loading, sendMessage } = useMessages(trainerId);
 
-export function MessagesTab({ messages }: MessagesTabProps) {
-  const [showChatDialog, setShowChatDialog] = useState(false);
-  const [selectedTrainer, setSelectedTrainer] = useState<string>("");
-  const isMobile = useIsMobile();
+  useEffect(() => {
+    const fetchTrainerId = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-  // Function to get trainer status color
-  const getStatusColor = (status: string) => {
-    switch(status) {
-      case "online":
-        return "bg-emerald-500";
-      case "in-session":
-        return "bg-amber-500";
-      default:
-        return "bg-slate-500";
+      const { data: assignments } = await supabase
+        .from('client_package_assignments')
+        .select('trainer_id')
+        .eq('client_id', user.id)
+        .limit(1);
+
+      if (assignments && assignments.length > 0) {
+        setTrainerId(assignments[0].trainer_id);
+      }
+    };
+
+    fetchTrainerId();
+  }, []);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
+  }, [messages]);
+
+  const handleSendText = () => {
+    if (!inputMessage.trim()) return;
+    sendMessage(inputMessage, 'text');
+    setInputMessage("");
   };
 
-  // Function to get trainer status text
-  const getStatusText = (status: string) => {
-    switch(status) {
-      case "online":
-        return "Available";
-      case "in-session":
-        return "In Session";
-      default:
-        return "Offline";
-    }
+  const handleSendVideo = (url: string, thumbnail: string, duration: number, size: number) => {
+    sendMessage("", 'video', url, thumbnail, duration, undefined, size);
+    setShowVideoUpload(false);
   };
 
-  // Mock conversation for the AI chat dialog
-  const mockConversation = [
-    { 
-      sender: "client" as const, 
-      message: "Hi Sarah, is our session still scheduled for tomorrow?",
-      time: "10:30 AM"
-    },
-    {
-      sender: "ai" as const,
-      message: "Hello! This is Sarah's AI assistant. Sarah is currently in a training session. Yes, your session is confirmed for tomorrow at 3:00 PM. Is there anything else I can help with?",
-      time: "10:32 AM"
+  const handleFileSelect = (file: File, url: string) => {
+    if (file.type.startsWith('image/')) {
+      sendMessage("", 'image', url);
+    } else {
+      sendMessage("", 'file', url, undefined, undefined, file.name, file.size);
     }
-  ];
-
-  const handleOpenChat = (trainerName: string, trainerStatus: string) => {
-    if (trainerStatus === "in-session") {
-      setSelectedTrainer(trainerName);
-      setShowChatDialog(true);
-    }
+    setShowImageUpload(false);
   };
+
+  if (loading) {
+    return (
+      <Card className="h-[600px] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </Card>
+    );
+  }
+
+  if (!trainerId) {
+    return (
+      <Card className="h-[600px] flex items-center justify-center">
+        <div className="text-center text-muted-foreground">
+          <p>No trainer assigned yet</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-[600px] flex flex-col">
+      <CardHeader className="border-b">
         <CardTitle>Messages</CardTitle>
-        <CardDescription>Communicate with your trainers</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {messages.map((message) => {
-            // Get trainer status based on the name
-            let trainerStatus = "offline";
-            if (message.trainerId) {
-              const trainerData = getTrainerById(message.trainerId);
-              trainerStatus = trainerData?.status || "offline";
-            } else {
-              // Fallback to match by name for demo purposes
-              if (message.from === "Sarah Johnson") {
-                trainerStatus = "in-session";
-              } else if (message.from === "Alex Thompson") {
-                trainerStatus = "online";
-              }
-            }
+      <CardContent className="flex-1 flex flex-col p-0">
+        <ScrollArea ref={scrollRef} className="flex-1 p-4">
+          {messages.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              <p>No messages yet. Start a conversation!</p>
+            </div>
+          ) : (
+            messages.map((msg) => (
+              <MessageBubble
+                key={msg.id}
+                sender={msg.sender_type}
+                content={msg.content}
+                messageType={msg.message_type}
+                mediaUrl={msg.media_url}
+                thumbnailUrl={msg.media_thumbnail_url}
+                fileName={msg.file_name}
+                duration={msg.media_duration}
+                timestamp={msg.created_at}
+                read={!!msg.read_at}
+              />
+            ))
+          )}
+        </ScrollArea>
+
+        <div className="p-4 border-t space-y-2 bg-background">
+          {showVideoUpload && (
+            <div className="pb-2">
+              <VideoUploader onVideoUploaded={handleSendVideo} />
+            </div>
+          )}
+          
+          {showImageUpload && (
+            <div className="pb-2">
+              <FileUpload onFileSelect={handleFileSelect} />
+            </div>
+          )}
+          
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                setShowVideoUpload(!showVideoUpload);
+                setShowImageUpload(false);
+              }}
+            >
+              <VideoIcon className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                setShowImageUpload(!showImageUpload);
+                setShowVideoUpload(false);
+              }}
+            >
+              <ImageIcon className="h-4 w-4" />
+            </Button>
             
-            return (
-              <div key={message.id} className={`border rounded-lg p-4 ${!message.read ? 'bg-primary/5 border-primary/20' : ''}`}>
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium">
-                      {message.from.charAt(0)}
-                    </div>
-                    <div>
-                      <h3 className="font-medium">{message.from}</h3>
-                      <Badge 
-                        variant="secondary" 
-                        className={`flex items-center gap-1.5 px-2 py-0.5 mt-1 ${getStatusColor(trainerStatus)} text-white text-xs`}
-                      >
-                        <Circle className="h-2 w-2 fill-white text-white" />
-                        <span className="text-xs font-medium">{getStatusText(trainerStatus)}</span>
-                      </Badge>
-                    </div>
-                  </div>
-                  <span className="text-xs text-muted-foreground">{message.time}</span>
-                </div>
-                <p className="text-sm mb-3">
-                  {message.preview}
-                  {message.hasAttachments && (
-                    <Badge variant="outline" className="ml-2 flex items-center gap-1 text-xs">
-                      <Paperclip className="h-3 w-3" />
-                      Attachments
-                    </Badge>
-                  )}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Button 
-                    size="sm"
-                    onClick={() => handleOpenChat(message.from, trainerStatus)}
-                  >
-                    {trainerStatus === "in-session" ? "Message AI Assistant" : "Reply"}
-                  </Button>
-                  {!message.read && (
-                    <Button variant="outline" size="sm">Mark as Read</Button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+            <Input
+              placeholder="Type a message..."
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendText();
+                }
+              }}
+              className="flex-1"
+            />
+            
+            <Button onClick={handleSendText} disabled={!inputMessage.trim()}>
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </CardContent>
-
-      {/* AI Chat Dialog */}
-      <ChatDialog
-        open={showChatDialog}
-        onOpenChange={setShowChatDialog}
-        trainerName={selectedTrainer}
-        conversation={mockConversation}
-      />
     </Card>
   );
 }

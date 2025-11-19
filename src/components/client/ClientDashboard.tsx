@@ -151,7 +151,7 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
             {activeTab === "training-log" && <TrainingLogTab />}
             {activeTab === "trainers" && <TrainersTab />}
             {activeTab === "analytics" && <AnalyticsTab />}
-            {activeTab === "messages" && <MessagesTab messages={trainerMessages} />}
+            {activeTab === "messages" && <MessagesTab />}
             {activeTab === "settings" && <SettingsTab user={sampleUser} goals={goals} />}
           </div>
         </main>
