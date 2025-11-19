@@ -55,7 +55,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
-    "react-grid-layout": "^1.5.2",
+    "react-grid-layout": "^1.4.4",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.53.0",
     "react-resizable-panels": "^2.1.3",
