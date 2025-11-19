@@ -182,6 +182,75 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
     }
   },
   
+  // Outdoor running
+  {
+    exerciseId: "jogging-outdoor",
+    exerciseName: "Jogging Outdoor (Corsetta)",
+    metValues: {
+      light: 5.0,
+      moderate: 6.5,
+      vigorous: 8.0
+    }
+  },
+  {
+    exerciseId: "sprint-intervals",
+    exerciseName: "Sprint Intervals (Scatti)",
+    metValues: {
+      light: 8.0,
+      moderate: 10.0,
+      vigorous: 15.0
+    }
+  },
+  {
+    exerciseId: "trail-running",
+    exerciseName: "Trail Running",
+    metValues: {
+      light: 6.5,
+      moderate: 9.0,
+      vigorous: 12.5
+    }
+  },
+  
+  // Outdoor cycling
+  {
+    exerciseId: "road-cycling",
+    exerciseName: "Road Cycling (Bici da Corsa)",
+    metValues: {
+      light: 5.0,
+      moderate: 8.0,
+      vigorous: 11.0
+    }
+  },
+  {
+    exerciseId: "mountain-biking",
+    exerciseName: "Mountain Biking (MTB)",
+    metValues: {
+      light: 6.0,
+      moderate: 9.0,
+      vigorous: 14.0
+    }
+  },
+  
+  // Other outdoor activities
+  {
+    exerciseId: "hiking",
+    exerciseName: "Hiking (Escursionismo)",
+    metValues: {
+      light: 4.0,
+      moderate: 6.0,
+      vigorous: 8.5
+    }
+  },
+  {
+    exerciseId: "outdoor-stairs",
+    exerciseName: "Outdoor Stairs Running",
+    metValues: {
+      light: 6.0,
+      moderate: 10.0,
+      vigorous: 15.0
+    }
+  },
+  
   // HIIT and intervals
   {
     exerciseId: "hiit-training",

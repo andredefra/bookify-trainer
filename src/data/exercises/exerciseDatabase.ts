@@ -1719,6 +1719,85 @@ export const completeExerciseDatabase: ExerciseData[] = [
     notes: "Isometric hold in squat position",
     alternativeExercises: ["wall-sits", "squat-pulses", "bodyweight-squats", "chair-squats"],
     isDeletable: true
+  },
+  
+  // CARDIO OUTDOOR EXERCISES
+  {
+    id: "jogging-outdoor",
+    name: "Jogging Outdoor (Corsetta)",
+    category: "cardio",
+    difficulty: "beginner",
+    muscleGroup: ["Legs", "Core"],
+    equipment: ["None"],
+    notes: "Light running pace outdoors on flat terrain",
+    alternativeExercises: ["treadmill-running", "outdoor-running", "trail-running"],
+    isDeletable: false
+  },
+  {
+    id: "sprint-intervals",
+    name: "Sprint Intervals (Scatti)",
+    category: "cardio",
+    difficulty: "advanced",
+    muscleGroup: ["Legs", "Core"],
+    equipment: ["None"],
+    notes: "High-intensity sprint training with recovery periods",
+    alternativeExercises: ["hiit-training", "outdoor-running", "burpees"],
+    isDeletable: false
+  },
+  {
+    id: "trail-running",
+    name: "Trail Running",
+    category: "cardio",
+    difficulty: "intermediate",
+    muscleGroup: ["Legs", "Core"],
+    equipment: ["None"],
+    notes: "Running on natural terrain with elevation changes",
+    alternativeExercises: ["outdoor-running", "hiking", "incline-walking"],
+    isDeletable: false
+  },
+  {
+    id: "road-cycling",
+    name: "Road Cycling (Bici da Corsa)",
+    category: "cardio",
+    difficulty: "intermediate",
+    muscleGroup: ["Legs", "Core"],
+    equipment: ["Road Bike"],
+    notes: "Cycling on paved roads at various speeds",
+    alternativeExercises: ["stationary-bike", "spinning-bike", "outdoor-cycling"],
+    isDeletable: false
+  },
+  {
+    id: "mountain-biking",
+    name: "Mountain Biking (MTB)",
+    category: "cardio",
+    difficulty: "advanced",
+    muscleGroup: ["Legs", "Core", "Upper Body"],
+    equipment: ["Mountain Bike"],
+    notes: "Off-road cycling on trails with varying difficulty",
+    alternativeExercises: ["road-cycling", "stationary-bike", "outdoor-cycling"],
+    isDeletable: false
+  },
+  {
+    id: "hiking",
+    name: "Hiking (Escursionismo)",
+    category: "cardio",
+    difficulty: "beginner",
+    muscleGroup: ["Legs", "Core"],
+    equipment: ["None"],
+    notes: "Walking on trails with elevation, often with backpack",
+    alternativeExercises: ["incline-walking", "stair-climber", "trail-running"],
+    isDeletable: false
+  },
+  {
+    id: "outdoor-stairs",
+    name: "Outdoor Stairs Running",
+    category: "cardio",
+    difficulty: "intermediate",
+    muscleGroup: ["Legs", "Glutes", "Core"],
+    equipment: ["None"],
+    notes: "Running up outdoor stairs or stadium steps",
+    alternativeExercises: ["stair-climber", "climbing-stairs", "stair-stepper"],
+    isDeletable: false
   }
 ];
 
