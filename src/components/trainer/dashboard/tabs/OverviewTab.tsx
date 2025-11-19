@@ -144,11 +144,11 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavi
       </div>
 
       {/* Modular Widget Grid with Drag & Drop */}
-      <ResponsiveGridLayout
-        className="layout"
-        layouts={{ lg: layout }}
-        breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 0 }}
-        cols={{ lg: 3, md: 2, sm: 1, xs: 1 }}
+          <ResponsiveGridLayout
+            className="layout"
+            layouts={{ lg: layout }}
+            breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 0 }}
+            cols={{ lg: 2, md: 2, sm: 1, xs: 1 }}
         rowHeight={180}
         onLayoutChange={handleLayoutChange}
         draggableHandle=".widget-drag-handle"

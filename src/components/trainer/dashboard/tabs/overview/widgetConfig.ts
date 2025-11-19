@@ -31,49 +31,49 @@ export const WIDGET_CATALOG: WidgetConfig[] = [
     id: "messages",
     title: "Messages",
     isCore: true,
-    defaultLayout: { w: 1, h: 2, x: 2, y: 0, minW: 1, minH: 2 }
+    defaultLayout: { w: 1, h: 2, x: 0, y: 2, minW: 1, minH: 2 }
   },
   {
     id: "expiration-alerts",
     title: "Expiration Alerts",
     isCore: true,
-    defaultLayout: { w: 1, h: 2, x: 0, y: 2, minW: 1, minH: 2 }
+    defaultLayout: { w: 1, h: 2, x: 1, y: 2, minW: 1, minH: 2 }
   },
   {
     id: "revenue-chart",
     title: "Revenue Chart",
     isCore: false,
-    defaultLayout: { w: 2, h: 2, x: 0, y: 3, minW: 2, minH: 2 }
+    defaultLayout: { w: 2, h: 2, x: 0, y: 4, minW: 2, minH: 2 }
   },
   {
     id: "client-activity",
     title: "Client Activity",
     isCore: false,
-    defaultLayout: { w: 1, h: 2, x: 2, y: 3, minW: 1, minH: 2 }
+    defaultLayout: { w: 2, h: 2, x: 0, y: 6, minW: 2, minH: 2 }
   },
   {
     id: "performance-metrics",
     title: "Performance Metrics",
     isCore: false,
-    defaultLayout: { w: 1, h: 2, x: 0, y: 5, minW: 1, minH: 2 }
+    defaultLayout: { w: 2, h: 2, x: 0, y: 8, minW: 2, minH: 2 }
   },
   {
     id: "package-sales",
     title: "Package Sales",
     isCore: false,
-    defaultLayout: { w: 1, h: 2, x: 1, y: 5, minW: 1, minH: 2 }
+    defaultLayout: { w: 2, h: 2, x: 0, y: 10, minW: 2, minH: 2 }
   },
   {
     id: "goals",
     title: "Goals",
     isCore: false,
-    defaultLayout: { w: 1, h: 2, x: 2, y: 5, minW: 1, minH: 2 }
+    defaultLayout: { w: 2, h: 2, x: 0, y: 12, minW: 2, minH: 2 }
   },
   {
     id: "recent-activities",
     title: "Recent Activities",
     isCore: false,
-    defaultLayout: { w: 3, h: 2, x: 0, y: 7, minW: 2, minH: 2 }
+    defaultLayout: { w: 2, h: 2, x: 0, y: 14, minW: 2, minH: 2 }
   }
 ];
 
