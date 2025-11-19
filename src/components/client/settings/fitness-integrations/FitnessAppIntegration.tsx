@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FitnessAppList } from "./FitnessAppList";
 import { DataSyncSettings } from "./DataSyncSettings";
 
@@ -44,29 +43,21 @@ export function FitnessAppIntegration({ user }: FitnessAppIntegrationProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Fitness App Integration</CardTitle>
-        <CardDescription>
-          Connect your fitness apps to sync your health and activity data automatically
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <FitnessAppList 
-          googleFitConnected={googleFitConnected}
-          appleHealthConnected={appleHealthConnected}
-          setGoogleFitConnected={setGoogleFitConnected}
-          setAppleHealthConnected={setAppleHealthConnected}
-        />
+    <div className="space-y-6">
+      <FitnessAppList 
+        googleFitConnected={googleFitConnected}
+        appleHealthConnected={appleHealthConnected}
+        setGoogleFitConnected={setGoogleFitConnected}
+        setAppleHealthConnected={setAppleHealthConnected}
+      />
 
-        {(googleFitConnected || appleHealthConnected) && (
-          <DataSyncSettings 
-            dataSync={dataSync} 
-            toggleDataSync={toggleDataSync} 
-            appName={googleFitConnected ? "Google Fit" : (appleHealthConnected ? "Apple Health" : undefined)}
-          />
-        )}
-      </CardContent>
-    </Card>
+      {(googleFitConnected || appleHealthConnected) && (
+        <DataSyncSettings 
+          dataSync={dataSync} 
+          toggleDataSync={toggleDataSync} 
+          appName={googleFitConnected ? "Google Fit" : (appleHealthConnected ? "Apple Health" : undefined)}
+        />
+      )}
+    </div>
   );
 }
