@@ -118,8 +118,8 @@ export function BodyFatCard({
             {bodyCompositionData && (
               <div className="bg-muted/20 rounded-md p-4">
                 <h5 className="text-xs font-semibold text-foreground mb-3 text-center">Body Composition</h5>
-                <ResponsiveContainer width="100%" height={160}>
-                  <PieChart>
+                <ResponsiveContainer width="100%" height={170}>
+                  <PieChart margin={{ top: 18, bottom: 6 }}>
                     <Pie
                       data={bodyCompositionData}
                       cx="50%"
