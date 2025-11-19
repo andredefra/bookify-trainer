@@ -15,7 +15,10 @@ export function WorkoutGoalCard({ workoutGoal }: WorkoutGoalCardProps) {
   let currentMonthProgress = workoutGoal.progress;
   let monthLabel = '';
   
-  if (isActivityGoal && workoutGoal.unit === 'steps' && workoutGoal.logs && workoutGoal.logs.length > 0) {
+  // Rileva se è un goal annuale basandosi sul target (>= 1M steps = annuale)
+  const isAnnualStepGoal = isActivityGoal && workoutGoal.unit === 'steps' && workoutGoal.target >= 1000000;
+  
+  if (isAnnualStepGoal) {
     const now = new Date();
     const startDate = new Date(workoutGoal.createdAt || now);
     
