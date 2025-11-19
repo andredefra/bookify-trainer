@@ -99,7 +99,7 @@ export function TrainingLogTab() {
               Log New Workout
             </CardTitle>
             <CardDescription>
-              Add your workout details to track progress and performance
+              Record your completed workout with all exercises, sets, and performance details
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -128,7 +128,7 @@ export function TrainingLogTab() {
             Recent Workouts
           </CardTitle>
           <CardDescription>
-            Track your training performance and workout history
+            View your workout history and analyze performance over time
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -137,7 +137,7 @@ export function TrainingLogTab() {
               <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-2">No workouts logged yet</p>
               <p className="text-sm text-muted-foreground">
-                Start logging your workouts to track your performance and progress!
+                Start recording your completed workouts to track your training performance and analyze your progress!
               </p>
             </div>
           ) : (

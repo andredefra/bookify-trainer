@@ -29,7 +29,7 @@ const sidebarItems = [
   { id: "mygym", label: "My Gym", icon: Building2 },
   { id: "packages", label: "My Packages", icon: Package },
   { id: "training-program", label: "Training Program", icon: Dumbbell },
-  { id: "training-log", label: "Training Log", icon: BookOpen },
+  { id: "training-log", label: "Workout Log", icon: BookOpen },
   { id: "trainers", label: "Trainers", icon: Users },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "messages", label: "Messages", icon: MessageSquare, badge: true },
