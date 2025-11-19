@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, GripVertical } from "lucide-react";
 
 interface BaseWidgetProps {
   title: string;
@@ -22,10 +22,13 @@ export function BaseWidget({
   contentClassName
 }: BaseWidgetProps) {
   return (
-    <Card className={cn("hover:shadow-md transition-shadow", className)}>
+    <Card className={cn("hover:shadow-md transition-shadow h-full", className)}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <div className="widget-drag-handle p-1 -ml-2 rounded hover:bg-muted cursor-move">
+              <GripVertical className="h-4 w-4 text-muted-foreground" />
+            </div>
             {Icon && <Icon className="h-5 w-5 text-primary" />}
             <CardTitle className="text-lg">{title}</CardTitle>
           </div>
