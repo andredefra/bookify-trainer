@@ -5,6 +5,7 @@
 export interface CardioMETMapping {
   exerciseId: string;
   exerciseName: string;
+  environment: 'indoor' | 'outdoor';
   metValues: {
     light: number;
     moderate: number;
@@ -16,7 +17,8 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   // Running variations
   {
     exerciseId: "treadmill-running",
-    exerciseName: "TreadMill Running",
+    exerciseName: "Treadmill Running",
+    environment: 'indoor',
     metValues: {
       light: 6.0,      // Jogging, slow pace (4-5 mph)
       moderate: 9.0,   // Running (6-7 mph)
@@ -26,6 +28,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "outdoor-running",
     exerciseName: "Outdoor Running",
+    environment: 'outdoor',
     metValues: {
       light: 6.5,
       moderate: 9.5,
@@ -37,6 +40,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "stationary-bike",
     exerciseName: "Stationary Bike",
+    environment: 'indoor',
     metValues: {
       light: 3.5,      // Light effort (<10 mph)
       moderate: 6.8,   // Moderate effort (10-14 mph)
@@ -46,6 +50,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "spinning-bike",
     exerciseName: "Spinning Bike",
+    environment: 'indoor',
     metValues: {
       light: 5.0,
       moderate: 8.5,
@@ -55,6 +60,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "outdoor-cycling",
     exerciseName: "Outdoor Cycling",
+    environment: 'outdoor',
     metValues: {
       light: 4.0,
       moderate: 8.0,
@@ -65,7 +71,8 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   // Walking variations
   {
     exerciseId: "treadmill-walking",
-    exerciseName: "TreadMill Walking",
+    exerciseName: "Treadmill Walking",
+    environment: 'indoor',
     metValues: {
       light: 2.5,      // Slow walking (2 mph)
       moderate: 3.5,   // Normal pace (3-4 mph)
@@ -75,6 +82,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "outdoor-walking",
     exerciseName: "Outdoor Walking",
+    environment: 'outdoor',
     metValues: {
       light: 2.8,
       moderate: 4.0,
@@ -84,6 +92,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "incline-walking",
     exerciseName: "Incline Walking",
+    environment: 'indoor',
     metValues: {
       light: 4.5,
       moderate: 6.0,
@@ -95,6 +104,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "stair-climber",
     exerciseName: "Stair Climber Machine",
+    environment: 'indoor',
     metValues: {
       light: 5.0,
       moderate: 8.0,
@@ -104,6 +114,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "stair-stepper",
     exerciseName: "Stair Stepper",
+    environment: 'indoor',
     metValues: {
       light: 4.5,
       moderate: 7.0,
@@ -113,6 +124,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "climbing-stairs",
     exerciseName: "Climbing Stairs",
+    environment: 'outdoor',
     metValues: {
       light: 4.0,
       moderate: 8.0,
@@ -124,6 +136,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "elliptical",
     exerciseName: "Elliptical Machine",
+    environment: 'indoor',
     metValues: {
       light: 4.0,
       moderate: 5.0,
@@ -133,6 +146,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "cross-trainer",
     exerciseName: "Cross Trainer",
+    environment: 'indoor',
     metValues: {
       light: 4.5,
       moderate: 6.0,
@@ -144,6 +158,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "rowing-machine",
     exerciseName: "Rowing Machine",
+    environment: 'indoor',
     metValues: {
       light: 4.8,
       moderate: 7.0,
@@ -155,6 +170,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "swimming-freestyle",
     exerciseName: "Swimming Freestyle",
+    environment: 'indoor',
     metValues: {
       light: 5.8,
       moderate: 8.0,
@@ -164,6 +180,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "swimming-backstroke",
     exerciseName: "Swimming Backstroke",
+    environment: 'indoor',
     metValues: {
       light: 4.8,
       moderate: 7.0,
@@ -175,6 +192,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "jump-rope",
     exerciseName: "Jump Rope",
+    environment: 'indoor',
     metValues: {
       light: 8.0,
       moderate: 11.0,
@@ -185,65 +203,72 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   // Outdoor running
   {
     exerciseId: "jogging-outdoor",
-    exerciseName: "Jogging Outdoor (Corsetta)",
+    exerciseName: "Jogging Outdoor",
+    environment: 'outdoor',
     metValues: {
-      light: 5.0,
-      moderate: 6.5,
-      vigorous: 8.0
+      light: 5.0,      // Flat terrain
+      moderate: 6.5,   // Rolling hills
+      vigorous: 8.0    // Steep inclines
     }
   },
   {
     exerciseId: "sprint-intervals",
-    exerciseName: "Sprint Intervals (Scatti)",
+    exerciseName: "Sprint Intervals",
+    environment: 'outdoor',
     metValues: {
-      light: 8.0,
-      moderate: 10.0,
-      vigorous: 15.0
+      light: 8.0,      // Recovery jog between sprints
+      moderate: 10.0,  // Medium intensity sprints
+      vigorous: 15.0   // All-out sprints
     }
   },
   {
     exerciseId: "trail-running",
     exerciseName: "Trail Running",
+    environment: 'outdoor',
     metValues: {
-      light: 6.5,
-      moderate: 9.0,
-      vigorous: 12.5
+      light: 6.5,      // Flat trails
+      moderate: 9.0,   // Rolling hills
+      vigorous: 12.5   // Steep mountain trails
     }
   },
   
   // Outdoor cycling
   {
     exerciseId: "road-cycling",
-    exerciseName: "Road Cycling (Bici da Corsa)",
+    exerciseName: "Road Cycling",
+    environment: 'outdoor',
     metValues: {
-      light: 5.0,
-      moderate: 8.0,
-      vigorous: 11.0
+      light: 5.0,      // <15 km/h
+      moderate: 8.0,   // 15-25 km/h
+      vigorous: 11.0   // >25 km/h
     }
   },
   {
     exerciseId: "mountain-biking",
-    exerciseName: "Mountain Biking (MTB)",
+    exerciseName: "Mountain Biking",
+    environment: 'outdoor',
     metValues: {
-      light: 6.0,
-      moderate: 9.0,
-      vigorous: 14.0
+      light: 6.0,      // Flat trails
+      moderate: 9.0,   // Rolling hills
+      vigorous: 14.0   // Steep climbs
     }
   },
   
   // Other outdoor activities
   {
     exerciseId: "hiking",
-    exerciseName: "Hiking (Escursionismo)",
+    exerciseName: "Hiking",
+    environment: 'outdoor',
     metValues: {
-      light: 4.0,
-      moderate: 6.0,
-      vigorous: 8.5
+      light: 4.0,      // Flat terrain
+      moderate: 6.0,   // Hills with backpack
+      vigorous: 8.5    // Steep mountain hiking
     }
   },
   {
     exerciseId: "outdoor-stairs",
     exerciseName: "Outdoor Stairs Running",
+    environment: 'outdoor',
     metValues: {
       light: 6.0,
       moderate: 10.0,
@@ -255,6 +280,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "hiit-training",
     exerciseName: "HIIT Training",
+    environment: 'indoor',
     metValues: {
       light: 8.0,
       moderate: 10.0,
@@ -264,6 +290,7 @@ export const CARDIO_MET_VALUES: CardioMETMapping[] = [
   {
     exerciseId: "burpees",
     exerciseName: "Burpees",
+    environment: 'indoor',
     metValues: {
       light: 6.0,
       moderate: 8.0,
