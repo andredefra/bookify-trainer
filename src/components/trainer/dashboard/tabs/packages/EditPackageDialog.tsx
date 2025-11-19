@@ -6,6 +6,7 @@ interface PackageFormData {
   description: string;
   objective: string;
   type: PackageType;
+  isPublic: boolean;
   sessions: {
     individual: { count: number; pricePerSession: number; };
     group: { count: number; pricePerSession: number; };
@@ -55,6 +56,7 @@ export function EditPackageDialog({ open, onOpenChange, onSubmit, package: packa
       description: oldPackage.description || "",
       objective: oldPackage.objective || "",
       type: (oldPackage.type as PackageType) || "sessions_only",
+      isPublic: oldPackage.isPublic || false,
       sessions: {
         individual: { count: oldPackage.sessions || 0, pricePerSession: 50 },
         group: { count: 0, pricePerSession: 30 },

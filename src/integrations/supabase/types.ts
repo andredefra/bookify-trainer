@@ -325,6 +325,7 @@ export type Database = {
           description: string | null
           id: string
           is_active: boolean | null
+          is_public: boolean | null
           package_type: string
           price: number
           sessions_count: number | null
@@ -338,6 +339,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean | null
+          is_public?: boolean | null
           package_type: string
           price: number
           sessions_count?: number | null
@@ -351,6 +353,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean | null
+          is_public?: boolean | null
           package_type?: string
           price?: number
           sessions_count?: number | null
