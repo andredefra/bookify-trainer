@@ -6,17 +6,21 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { GOAL_TEMPLATES } from "./data/goalTemplates";
+import { getAllGoalTemplates } from "./data/goalTemplates";
 import { GoalType } from "./types";
+import { Badge } from "@/components/ui/badge";
+import { Settings2 } from "lucide-react";
 
 interface AddGoalDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => void;
+  onManageGoalTypes?: () => void;
 }
 
-export function AddGoalDialog({ open, onOpenChange, onSubmit }: AddGoalDialogProps) {
+export function AddGoalDialog({ open, onOpenChange, onSubmit, onManageGoalTypes }: AddGoalDialogProps) {
   const [selectedGoalType, setSelectedGoalType] = useState<GoalType | null>(null);
+  const [allTemplates, setAllTemplates] = useState(getAllGoalTemplates());
   
   const form = useForm({
     defaultValues: {
@@ -31,9 +35,13 @@ export function AddGoalDialog({ open, onOpenChange, onSubmit }: AddGoalDialogPro
     }
   });
 
+  const refreshTemplates = () => {
+    setAllTemplates(getAllGoalTemplates());
+  };
+
   const handleGoalTypeChange = (type: GoalType) => {
     setSelectedGoalType(type);
-    const template = GOAL_TEMPLATES[type];
+    const template = allTemplates[type];
     form.setValue('goalType', type);
     form.setValue('target', template.defaultTarget || 0);
     
@@ -47,8 +55,8 @@ export function AddGoalDialog({ open, onOpenChange, onSubmit }: AddGoalDialogPro
     const goalData = {
       ...data,
       goalType: selectedGoalType,
-      unit: selectedGoalType ? GOAL_TEMPLATES[selectedGoalType].unit : 'units',
-      frequency: GOAL_TEMPLATES[selectedGoalType]?.requiresFrequency ? {
+      unit: selectedGoalType ? allTemplates[selectedGoalType].unit : 'units',
+      frequency: allTemplates[selectedGoalType]?.requiresFrequency ? {
         value: data.frequencyValue,
         period: data.frequencyPeriod
       } : undefined
@@ -59,7 +67,7 @@ export function AddGoalDialog({ open, onOpenChange, onSubmit }: AddGoalDialogPro
     setSelectedGoalType(null);
   };
 
-  const selectedTemplate = selectedGoalType ? GOAL_TEMPLATES[selectedGoalType] : null;
+  const selectedTemplate = selectedGoalType ? allTemplates[selectedGoalType] : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -86,9 +94,14 @@ export function AddGoalDialog({ open, onOpenChange, onSubmit }: AddGoalDialogPro
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.values(GOAL_TEMPLATES).map((template) => (
+                      {Object.values(allTemplates).map((template) => (
                         <SelectItem key={template.type} value={template.type}>
-                          {template.name}
+                          <div className="flex items-center gap-2">
+                            <span>{template.name}</span>
+                            {template.isCustom && (
+                              <Badge variant="default" className="text-xs bg-purple-600">Custom</Badge>
+                            )}
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -251,13 +264,33 @@ export function AddGoalDialog({ open, onOpenChange, onSubmit }: AddGoalDialogPro
               </>
             )}
             
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={!selectedGoalType}>
-                Add Goal
-              </Button>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
+              {onManageGoalTypes && (
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => {
+                    onManageGoalTypes();
+                    refreshTemplates();
+                  }}
+                  className="gap-2 sm:mr-auto"
+                >
+                  <Settings2 className="h-4 w-4" />
+                  Manage Goal Types
+                </Button>
+              )}
+              <div className="flex gap-2 sm:ml-auto">
+                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit"
+                  disabled={!selectedGoalType}
+                >
+                  Add Goal
+                </Button>
+              </div>
             </DialogFooter>
           </form>
         </Form>

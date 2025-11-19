@@ -1,13 +1,15 @@
 
 import { GoalTemplate, GoalType } from "../types";
+import { customGoalTypesService } from "../services/customGoalTypesService";
 
-export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
+export const GOAL_TEMPLATES: Record<string, GoalTemplate> = {
   weight_management: {
     type: 'weight_management',
     name: 'Weight Management',
     description: 'Lose or gain weight within a specific timeframe',
     unit: 'kg',
     defaultTarget: 5,
+    examplePlaceholder: 'E.g. Lose 5kg in 3 months',
     examples: [
       'Lose 5kg in 3 months',
       'Gain 3kg of muscle in 6 months',
@@ -20,6 +22,7 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
     description: 'Improve running distance, duration, or cardiovascular fitness',
     unit: 'km',
     defaultTarget: 5,
+    examplePlaceholder: 'E.g. Run 10km without stopping',
     examples: [
       'Run 10km without stopping',
       'Complete a 5km run under 25 minutes',
@@ -33,6 +36,7 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
     description: 'Increase weight lifted in specific exercises',
     unit: 'kg',
     requiresExercise: true,
+    examplePlaceholder: 'E.g. Bench press 80kg',
     examples: [
       'Bench press 80kg',
       'Squat 100kg',
@@ -47,6 +51,7 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
     unit: 'steps',
     defaultTarget: 10000,
     requiresFrequency: true,
+    examplePlaceholder: 'E.g. Walk 10,000 steps daily for 30 days',
     examples: [
       'Walk 10,000 steps daily for 30 days',
       'Burn 300 calories daily for 4 weeks',
@@ -59,6 +64,7 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
     description: 'Achieve target body fat percentage or muscle mass',
     unit: '%',
     defaultTarget: 15,
+    examplePlaceholder: 'E.g. Reach 15% body fat',
     examples: [
       'Reach 15% body fat',
       'Reduce body fat by 5%',
@@ -68,10 +74,33 @@ export const GOAL_TEMPLATES: Record<GoalType, GoalTemplate> = {
   }
 };
 
+export const getAllGoalTemplates = (): Record<string, GoalTemplate> => {
+  const customTypes = customGoalTypesService.getCustomGoalTypes();
+  const customTemplates: Record<string, GoalTemplate> = {};
+  
+  customTypes.forEach(custom => {
+    customTemplates[custom.type] = {
+      type: custom.type,
+      name: custom.title,
+      description: custom.guide,
+      unit: custom.customUnit || custom.unit,
+      defaultTarget: custom.defaultTarget,
+      examplePlaceholder: custom.examplePlaceholder,
+      examples: custom.examples || [],
+      customUnit: custom.customUnit,
+      isCustom: true
+    };
+  });
+  
+  return { ...GOAL_TEMPLATES, ...customTemplates };
+};
+
 export const getGoalTypeLabel = (type: GoalType): string => {
-  return GOAL_TEMPLATES[type]?.name || type;
+  const allTemplates = getAllGoalTemplates();
+  return allTemplates[type]?.name || type;
 };
 
 export const getGoalTypeUnit = (type: GoalType): string => {
-  return GOAL_TEMPLATES[type]?.unit || '';
+  const allTemplates = getAllGoalTemplates();
+  return allTemplates[type]?.unit || '';
 };

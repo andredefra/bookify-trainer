@@ -8,6 +8,7 @@ import { CardActions } from "./CardActions";
 import { ConnectionStatus } from "./ConnectionStatus";
 import { FitnessDialogs } from "./FitnessDialogs";
 import { useFitnessGoals } from "./hooks/useFitnessGoals";
+import { ManageGoalTypesDialog } from "./ManageGoalTypesDialog";
 
 export function FitnessProgressCard({ 
   progressData: initialProgressData, 
@@ -19,6 +20,7 @@ export function FitnessProgressCard({
   const [openWeightDialog, setOpenWeightDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openMeasurementsDialog, setOpenMeasurementsDialog] = useState(false);
+  const [openManageGoalTypesDialog, setOpenManageGoalTypesDialog] = useState(false);
   
   const {
     progressData,
@@ -171,6 +173,12 @@ export function FitnessProgressCard({
         onWeightSubmit={handleWeightSubmit}
         onMeasurementsSubmit={handleMeasurementsSubmit}
         onDeleteGoal={handleDeleteGoal}
+        onManageGoalTypes={() => setOpenManageGoalTypesDialog(true)}
+      />
+
+      <ManageGoalTypesDialog 
+        open={openManageGoalTypesDialog}
+        onOpenChange={setOpenManageGoalTypesDialog}
       />
     </>
   );

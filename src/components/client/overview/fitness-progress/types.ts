@@ -43,12 +43,7 @@ export interface Milestone {
   achievedDate?: string;
 }
 
-export type GoalType = 
-  | 'weight_management'
-  | 'cardiovascular_endurance' 
-  | 'strength_progress'
-  | 'activity_level'
-  | 'body_composition';
+export type GoalType = string;
 
 export interface GoalTemplate {
   type: GoalType;
@@ -59,6 +54,11 @@ export interface GoalTemplate {
   requiresExercise?: boolean;
   requiresFrequency?: boolean;
   examples: string[];
+  examplePlaceholder?: string;
+  customUnit?: string;
+  isCustom?: boolean;
+  title?: string;
+  guide?: string;
 }
 
 export interface BodyMeasurements {
