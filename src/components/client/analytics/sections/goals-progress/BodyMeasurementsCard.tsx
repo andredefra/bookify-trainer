@@ -3,6 +3,7 @@ import { Activity, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BodyMeasurements } from "@/components/client/overview/fitness-progress/types";
 import { getMeasurementTrend, formatTrendChange } from "./utils/trendCalculations";
+import { getMeasurementsStatus } from "./utils/measurementsStatus";
 
 interface BodyMeasurementsCardProps {
   latestMeasurements: BodyMeasurements;
@@ -10,32 +11,40 @@ interface BodyMeasurementsCardProps {
 }
 
 export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements }: BodyMeasurementsCardProps) {
-  const getSourceInfo = () => {
-    switch (latestMeasurements.source) {
-      case 'manual':
-        return { label: 'Manual', color: 'bg-orange-100 text-orange-800' };
-      case 'googleFit':
-        return { label: 'Google Fit', color: 'bg-blue-100 text-blue-800' };
-      case 'appleHealth':
-        return { label: 'Apple Health', color: 'bg-muted text-muted-foreground' };
-      default:
-        return { label: 'Unknown', color: 'bg-muted text-muted-foreground' };
+  const getStatusInfo = () => {
+    const status = getMeasurementsStatus(latestMeasurements);
+    
+    if (!status) {
+      // Fallback if not enough data
+      return { 
+        label: 'Insufficient Data', 
+        color: 'bg-muted text-muted-foreground',
+        detail: null
+      };
     }
+    
+    return {
+      label: status.label,
+      color: status.color,
+      detail: status.primaryIndicator
+    };
   };
 
-  const sourceInfo = getSourceInfo();
+  const statusInfo = getStatusInfo();
 
   // Calculate trends for each measurement
   const waistTrend = getMeasurementTrend(bodyMeasurements, 'waist');
   const hipsTrend = getMeasurementTrend(bodyMeasurements, 'hips');
   const armsTrend = getMeasurementTrend(bodyMeasurements, 'arms');
   const neckTrend = getMeasurementTrend(bodyMeasurements, 'neck');
+  const thighsTrend = getMeasurementTrend(bodyMeasurements, 'thighs');
+  const shouldersTrend = getMeasurementTrend(bodyMeasurements, 'shoulders');
 
   // Get previous measurement date for reference
   const getPreviousDate = () => {
     if (bodyMeasurements.length < 2) return null;
     const sorted = bodyMeasurements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    return new Date(sorted[1].date).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
+    return new Date(sorted[1].date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
   };
 
   const previousDate = getPreviousDate();
@@ -71,20 +80,29 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements }: B
           <div>
             <h4 className="font-medium text-foreground text-sm">Measurements</h4>
             <p className="text-xs text-muted-foreground">
-              {new Date(latestMeasurements.date).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
+              {new Date(latestMeasurements.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
             </p>
           </div>
         </div>
-        <Badge className={`${sourceInfo.color} border-0 text-xs`}>
-          {sourceInfo.label}
-        </Badge>
+        <div className="text-right">
+          <Badge className={`${statusInfo.color} border-0 text-xs`}>
+            {statusInfo.label}
+          </Badge>
+          {statusInfo.detail && (
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              {statusInfo.detail}
+            </p>
+          )}
+        </div>
       </div>
       
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {latestMeasurements.waist && renderMeasurementItem('Waist', latestMeasurements.waist, 'cm', waistTrend)}
         {latestMeasurements.hips && renderMeasurementItem('Hips', latestMeasurements.hips, 'cm', hipsTrend)}
         {latestMeasurements.arms && renderMeasurementItem('Arms', latestMeasurements.arms, 'cm', armsTrend)}
         {latestMeasurements.neck && renderMeasurementItem('Neck', latestMeasurements.neck, 'cm', neckTrend)}
+        {latestMeasurements.thighs && renderMeasurementItem('Thighs', latestMeasurements.thighs, 'cm', thighsTrend)}
+        {latestMeasurements.shoulders && renderMeasurementItem('Shoulders', latestMeasurements.shoulders, 'cm', shouldersTrend)}
       </div>
     </div>
   );
