@@ -37,9 +37,9 @@ export function BodyFatCard({
     const otherLeanMass = leanMass - muscleMass;
     
     return [
-      { name: "Massa Grassa", value: parseFloat(fatMass.toFixed(1)), color: "#ef4444" },
-      { name: "Massa Muscolare", value: parseFloat(muscleMass.toFixed(1)), color: "#3b82f6" },
-      { name: "Altra Massa Magra", value: parseFloat(otherLeanMass.toFixed(1)), color: "#10b981" }
+      { name: "Fat Mass", value: parseFloat(fatMass.toFixed(1)), color: "#ef4444" },
+      { name: "Muscle Mass", value: parseFloat(muscleMass.toFixed(1)), color: "#3b82f6" },
+      { name: "Other Lean Mass", value: parseFloat(otherLeanMass.toFixed(1)), color: "#10b981" }
     ];
   };
   
@@ -94,20 +94,21 @@ export function BodyFatCard({
             </div>
             
             {bodyCompositionData && (
-              <div className="bg-muted/20 rounded-md p-3">
-                <h5 className="text-xs font-medium text-muted-foreground mb-2 text-center">Composizione Corporea</h5>
-                <ResponsiveContainer width="100%" height={180}>
+              <div className="bg-muted/20 rounded-md p-2">
+                <h5 className="text-[10px] font-medium text-muted-foreground mb-1 text-center">Body Composition</h5>
+                <ResponsiveContainer width="100%" height={90}>
                   <PieChart>
                     <Pie
                       data={bodyCompositionData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={40}
-                      outerRadius={70}
+                      innerRadius={20}
+                      outerRadius={35}
                       paddingAngle={2}
                       dataKey="value"
-                      label={({ name, value }) => `${value} kg`}
+                      label={({ value }) => `${value}kg`}
                       labelLine={false}
+                      style={{ fontSize: '9px' }}
                     >
                       {bodyCompositionData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -118,19 +119,20 @@ export function BodyFatCard({
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))',
                         border: '1px solid hsl(var(--border))',
-                        borderRadius: '6px'
+                        borderRadius: '6px',
+                        fontSize: '10px'
                       }}
                     />
                     <Legend 
                       verticalAlign="bottom" 
-                      height={36}
+                      height={24}
                       iconType="circle"
-                      wrapperStyle={{ fontSize: '11px' }}
+                      wrapperStyle={{ fontSize: '9px' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
-                <p className="text-xs text-muted-foreground text-center mt-2">
-                  *Stima basata su algoritmi e misurazioni corporee
+                <p className="text-[9px] text-muted-foreground text-center mt-1">
+                  *Estimate based on algorithms and body measurements
                 </p>
               </div>
             )}
