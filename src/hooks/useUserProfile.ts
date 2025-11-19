@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { getCurrentDemoUserId } from '@/utils/demoUserUtils';
 
 export interface UserProfile {
   id?: string;
@@ -34,11 +35,39 @@ export function useUserProfile() {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       
+      // Demo mode: no Supabase user, use mock profile
       if (!user) {
-        setProfile(null);
+        try {
+          const demoUserRaw = localStorage.getItem('demo-user');
+          
+          if (demoUserRaw) {
+            const demoUser = JSON.parse(demoUserRaw);
+            const demoId = getCurrentDemoUserId();
+
+            const mockProfile: UserProfile = {
+              id: demoId,
+              user_id: undefined,
+              first_name: demoUser.name?.split(' ')[0],
+              last_name: demoUser.name?.split(' ').slice(1).join(' '),
+              height: 175,
+              gender: 'male',
+              profile_image_url: demoUser.profileImage,
+            };
+
+            setProfile(mockProfile);
+          } else {
+            setProfile(null);
+          }
+        } catch (e) {
+          console.error("Error parsing demo-user from localStorage", e);
+          setProfile(null);
+        } finally {
+          setLoading(false);
+        }
         return;
       }
 
+      // Real user: fetch from Supabase
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
@@ -72,9 +101,14 @@ export function useUserProfile() {
       setSaving(true);
       const { data: { user } } = await supabase.auth.getUser();
       
+      // Demo mode: update local state only
       if (!user) {
-        toast.error('You must be logged in to save profile');
-        return false;
+        setProfile((prev) => ({
+          ...(prev || {}),
+          ...profileData,
+        } as UserProfile));
+        toast.success('Profile updated in demo mode');
+        return true;
       }
 
       const dataToSave = {
