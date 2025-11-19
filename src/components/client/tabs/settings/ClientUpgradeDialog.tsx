@@ -39,7 +39,7 @@ export function ClientUpgradeDialog({ open, onOpenChange }: ClientUpgradeDialogP
         
         <div className="space-y-6 py-4">
           <div className="text-center">
-            <div className="text-4xl font-bold">€14.99</div>
+            <div className="text-4xl font-bold">€4.99</div>
             <div className="text-sm text-muted-foreground">per month</div>
           </div>
           
