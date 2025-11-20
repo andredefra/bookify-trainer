@@ -1,8 +1,8 @@
 
 import React from "react";
 import { 
-  BarChart, 
-  Bar, 
+  LineChart, 
+  Line, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
@@ -23,9 +23,9 @@ export function MonthlyRevenueChart({ data, title = "Monthly Revenue" }: Monthly
     <Card>
       <CardContent className="pt-6">
         <h3 className="text-base font-medium mb-4">{title}</h3>
-        <div className="w-full h-[300px]">
+        <div className="w-full h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart 
+            <LineChart 
               data={data}
               margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
             >
@@ -47,10 +47,10 @@ export function MonthlyRevenueChart({ data, title = "Monthly Revenue" }: Monthly
                 contentStyle={{ borderRadius: '4px', border: '1px solid #e2e8f0' }}
               />
               <Legend iconSize={10} />
-              <Bar dataKey="programs" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              <Bar dataKey="sessions" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              <Bar dataKey="packages" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
-            </BarChart>
+              <Line type="monotone" dataKey="programs" stroke="#4f46e5" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="sessions" stroke="#06b6d4" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="packages" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
