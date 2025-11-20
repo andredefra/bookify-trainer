@@ -12,9 +12,10 @@ interface SalesKanbanProps {
   onMoveContact: (id: string, status: SalesContact['status']) => void;
   onUpdateContact: (updatedContact: SalesContact) => void;
   onConfirmClientConversion?: (id: string) => void;
+  onAddContact: (status: SalesContact['status']) => void;
 }
 
-export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfirmClientConversion }: SalesKanbanProps) {
+export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfirmClientConversion, onAddContact }: SalesKanbanProps) {
   const [showProspectDialog, setShowProspectDialog] = useState(false);
   const [selectedContact, setSelectedContact] = useState<SalesContact | null>(null);
   
@@ -73,6 +74,7 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfir
             status="lead"
             onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
+            onAddContact={() => onAddContact('lead')}
           />
           <SalesColumn 
             title="Prospect" 
@@ -80,6 +82,7 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfir
             status="prospect"
             onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
+            onAddContact={() => onAddContact('prospect')}
           />
           <SalesColumn 
             title="Client" 
@@ -87,6 +90,7 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfir
             status="client"
             onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
+            onAddContact={() => onAddContact('client')}
           />
           <SalesColumn 
             title="Lost" 
@@ -94,6 +98,7 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfir
             status="lost"
             onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
+            onAddContact={() => onAddContact('lost')}
           />
           <SalesColumn 
             title="Terminated" 
@@ -101,6 +106,7 @@ export function SalesKanban({ contacts, onMoveContact, onUpdateContact, onConfir
             status="terminated"
             onMoveContact={handleMoveContact}
             onUpdateContact={onUpdateContact}
+            onAddContact={() => onAddContact('terminated')}
           />
         </div>
       </ScrollArea>

@@ -31,8 +31,6 @@ export function useTimeAnalytics(contacts: SalesContact[], timeFrame: TimeFrame,
       const date = new Date(dateStr);
       
       switch (timeFrame) {
-        case "day":
-          return isSameDay(date, now);
         case "week":
           return isSameWeek(date, now, { weekStartsOn: 1 });
         case "month":
@@ -69,17 +67,6 @@ export function useTimeAnalytics(contacts: SalesContact[], timeFrame: TimeFrame,
     let labelFormat = "";
     
     switch (timeFrame) {
-      case "day":
-        timeSeriesData = Array.from({ length: 24 }, (_, i) => ({
-          name: `${i}:00`,
-          value: recentContacts.filter(c => {
-            const date = new Date(c.createdAt);
-            return date.getHours() === i;
-          }).length
-        }));
-        labelFormat = "HH:mm";
-        break;
-        
       case "week":
         timeSeriesData = Array.from({ length: 7 }, (_, i) => {
           const day = (i + 1) % 7;
@@ -147,7 +134,6 @@ export function useTimeAnalytics(contacts: SalesContact[], timeFrame: TimeFrame,
     const getPreviousPeriodContacts = () => {
       const startOfCurrentPeriod = (() => {
         switch (timeFrame) {
-          case "day": return startOfDay(now);
           case "week": return startOfWeek(now, { weekStartsOn: 1 });
           case "month": return startOfMonth(now);
           case "quarter": return startOfQuarter(now);
@@ -159,7 +145,6 @@ export function useTimeAnalytics(contacts: SalesContact[], timeFrame: TimeFrame,
       
       const startOfPreviousPeriod = (() => {
         switch (timeFrame) {
-          case "day": return subDays(startOfCurrentPeriod, 1);
           case "week": return subWeeks(startOfCurrentPeriod, 1);
           case "month": return subMonths(startOfCurrentPeriod, 1);
           case "quarter": return subQuarters(startOfCurrentPeriod, 1);
@@ -189,7 +174,6 @@ export function useTimeAnalytics(contacts: SalesContact[], timeFrame: TimeFrame,
       growthRate,
       timeFrameLabel: (() => {
         switch (timeFrame) {
-          case "day": return "Today";
           case "week": return "This Week";
           case "month": return "This Month";
           case "quarter": return "This Quarter";

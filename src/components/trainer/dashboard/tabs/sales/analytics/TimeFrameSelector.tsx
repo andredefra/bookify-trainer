@@ -16,7 +16,6 @@ export function TimeFrameSelector({
       
       <div className="overflow-x-auto pb-2">
         <TabsList className="w-full min-w-max flex justify-start">
-          <TabsTrigger value="day" onClick={() => onTimeFrameChange("day")}>Daily</TabsTrigger>
           <TabsTrigger value="week" onClick={() => onTimeFrameChange("week")}>Weekly</TabsTrigger>
           <TabsTrigger value="month" onClick={() => onTimeFrameChange("month")}>Monthly</TabsTrigger>
           <TabsTrigger value="quarter" onClick={() => onTimeFrameChange("quarter")}>Quarterly</TabsTrigger>

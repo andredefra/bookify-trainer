@@ -8,7 +8,7 @@ import { TimeFrameSelector } from "./TimeFrameSelector";
 import { SalesChart } from "./SalesChart";
 
 export function SalesTimeAnalytics({ contacts }: SalesTimeAnalyticsProps) {
-  const [timeFrame, setTimeFrame] = useState<TimeFrame>("day");
+  const [timeFrame, setTimeFrame] = useState<TimeFrame>("week");
   const [customPeriod, setCustomPeriod] = useState(7); // Default 7 days
   
   // Use the hook to generate analytics data

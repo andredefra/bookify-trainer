@@ -1,7 +1,7 @@
 
 import { SalesContact } from "../types";
 
-export type TimeFrame = "day" | "week" | "month" | "quarter" | "year" | "custom";
+export type TimeFrame = "week" | "month" | "quarter" | "year" | "custom";
 
 export interface TimeAnalyticsData {
   totalNew: number;

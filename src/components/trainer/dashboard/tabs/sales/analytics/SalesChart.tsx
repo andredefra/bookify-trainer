@@ -18,15 +18,6 @@ import { useMediaQuery } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 const mockTimeSeriesData = {
-  day: [
-    { name: "08:00", leads: 3, prospects: 1, clients: 0 },
-    { name: "10:00", leads: 5, prospects: 2, clients: 1 },
-    { name: "12:00", leads: 8, prospects: 3, clients: 1 },
-    { name: "14:00", leads: 6, prospects: 4, clients: 2 },
-    { name: "16:00", leads: 9, prospects: 5, clients: 3 },
-    { name: "18:00", leads: 4, prospects: 3, clients: 1 },
-    { name: "20:00", leads: 2, prospects: 1, clients: 0 },
-  ],
   week: [
     { name: "Mon", leads: 12, prospects: 5, clients: 2 },
     { name: "Tue", leads: 19, prospects: 8, clients: 4 },
@@ -108,33 +99,17 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
   const renderTimeframeChart = () => {
     const data = mockTimeSeriesData[timeFrame];
     
-    // Calculate dynamic dimensions based on screen size - optimized for mobile visibility
-    const chartWidth = isVeryNarrow ? 360 : isMobile ? 480 : isTablet ? 580 : 800;
-    const chartHeight = isVeryNarrow ? 240 : isMobile ? 280 : isTablet ? 320 : 360;
-    
-    console.log('SalesChart Debug:', {
-      timeFrame,
-      data: data?.length,
-      chartWidth,
-      chartHeight,
-      isVeryNarrow,
-      isMobile,
-      isTablet,
-      isDesktop
-    });
-    
     return (
-      <BarChart 
-        data={data}
-        width={chartWidth}
-        height={chartHeight}
-        margin={{ 
-          right: isVeryNarrow ? 8 : isMobile ? 12 : isTablet ? 16 : 24, 
-          left: isVeryNarrow ? 8 : isMobile ? 12 : 16, 
-          bottom: isVeryNarrow ? 25 : isMobile ? 30 : 20,
-          top: isVeryNarrow ? 15 : 20
-        }}
-      >
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 500}>
+        <BarChart 
+          data={data}
+          margin={{ 
+            right: isVeryNarrow ? 8 : isMobile ? 12 : isTablet ? 16 : 24, 
+            left: isVeryNarrow ? 8 : isMobile ? 12 : 16, 
+            bottom: isVeryNarrow ? 25 : isMobile ? 30 : 20,
+            top: isVeryNarrow ? 15 : 20
+          }}
+        >
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis 
           dataKey="name" 
@@ -177,7 +152,8 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
           radius={[1, 1, 0, 0]} 
           barSize={isVeryNarrow ? 12 : isMobile ? 14 : isTablet ? 16 : 20} 
         />
-      </BarChart>
+        </BarChart>
+      </ResponsiveContainer>
     );
   };
 
@@ -186,42 +162,8 @@ export function SalesChart({ analytics, timeFrame }: SalesChartProps) {
 
   return (
     <div className="w-full mt-2 md:mt-4">
-      <div className={cn(
-        "relative w-full border border-border/20 rounded-lg bg-card/50 p-2",
-        isVeryNarrow && "h-[260px] min-h-[260px]",
-        isMobile && !isVeryNarrow && "h-[300px] min-h-[300px]",
-        isTablet && "h-[340px] min-h-[340px]", 
-        isDesktop && "h-[380px] min-h-[380px]"
-      )}>
-        {isVeryNarrow ? (
-          <div className="h-full w-full overflow-hidden">
-            <ScrollArea className="h-full w-full" orientation="horizontal">
-              <div className="h-full min-w-[320px] pr-2">
-                {chartContent}
-              </div>
-            </ScrollArea>
-          </div>
-        ) : isMobile ? (
-          <div className="h-full w-full overflow-hidden">
-            <ScrollArea className="h-full w-full" orientation="horizontal">
-              <div className="h-full min-w-[420px] pr-3">
-                {chartContent}
-              </div>
-            </ScrollArea>
-          </div>
-        ) : isTablet ? (
-          <div className="h-full w-full overflow-hidden">
-            <ScrollArea className="h-full w-full" orientation="horizontal">
-              <div className="h-full min-w-[600px] pr-4">
-                {chartContent}
-              </div>
-            </ScrollArea>
-          </div>
-        ) : (
-          <div className="h-full w-full max-w-full">
-            {chartContent}
-          </div>
-        )}
+      <div className="relative w-full border border-border/20 rounded-lg bg-card/50 p-4">
+        {chartContent}
       </div>
     </div>
   );

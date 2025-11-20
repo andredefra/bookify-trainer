@@ -4,6 +4,8 @@ import { SalesContact } from "./types";
 import { SalesCard } from "./SalesCard";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 interface SalesColumnProps {
   title: string;
@@ -11,6 +13,7 @@ interface SalesColumnProps {
   status: SalesContact['status'];
   onMoveContact: (id: string, status: SalesContact['status']) => void;
   onUpdateContact: (updatedContact: SalesContact) => void;
+  onAddContact?: () => void;
 }
 
 export function SalesColumn({ 
@@ -18,7 +21,8 @@ export function SalesColumn({
   contacts, 
   status, 
   onMoveContact,
-  onUpdateContact
+  onUpdateContact,
+  onAddContact
 }: SalesColumnProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
@@ -44,7 +48,7 @@ export function SalesColumn({
         isOver ? "bg-muted/80" : "bg-muted/30"
       )}
     >
-      <div className="p-3 font-medium border-b bg-muted/50 sticky top-0 z-10 rounded-t-md flex justify-between items-center">
+      <div className="p-3 font-medium border-b bg-muted/50 sticky top-0 z-10 rounded-t-md flex justify-between items-center gap-2">
         <span className={cn(
           "font-semibold",
           isMobile && "text-xs",
@@ -53,9 +57,21 @@ export function SalesColumn({
         )}>
           {title}
         </span>
-        <span className="text-xs font-normal px-2 py-1 bg-background rounded-full">
-          {contacts.length}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-normal px-2 py-1 bg-background rounded-full">
+            {contacts.length}
+          </span>
+          {onAddContact && (
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="h-6 w-6"
+              onClick={onAddContact}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
       
       <div className={cn(
