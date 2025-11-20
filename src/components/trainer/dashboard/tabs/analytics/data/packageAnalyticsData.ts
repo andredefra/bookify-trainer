@@ -10,6 +10,7 @@ export interface PackageData {
   conversionRate: number;
   completionRate: number;
   trend: 'up' | 'down';
+  salesDates: string[]; // ISO date strings for each sale
 }
 
 export interface PackageTypeDistribution {
@@ -31,7 +32,12 @@ export const packageData: PackageData[] = [
     growthRate: 25,
     conversionRate: 85,
     completionRate: 92,
-    trend: "up"
+    trend: "up",
+    salesDates: [
+      "2025-11-01", "2025-11-03", "2025-11-05", "2025-11-08", "2025-11-10",
+      "2025-11-12", "2025-11-14", "2025-11-16", "2025-11-18", "2025-11-19",
+      "2025-10-25", "2025-10-28", "2025-10-30", "2025-10-15", "2025-10-10"
+    ]
   },
   {
     id: 2,
@@ -44,7 +50,12 @@ export const packageData: PackageData[] = [
     growthRate: 15,
     conversionRate: 78,
     completionRate: 88,
-    trend: "up"
+    trend: "up",
+    salesDates: [
+      "2025-11-02", "2025-11-04", "2025-11-07", "2025-11-09", "2025-11-11",
+      "2025-11-13", "2025-11-15", "2025-11-17", "2025-10-28", "2025-10-20",
+      "2025-10-12", "2025-10-05"
+    ]
   },
   {
     id: 3,
@@ -57,7 +68,11 @@ export const packageData: PackageData[] = [
     growthRate: -5,
     conversionRate: 65,
     completionRate: 90,
-    trend: "down"
+    trend: "down",
+    salesDates: [
+      "2025-11-06", "2025-11-08", "2025-11-11", "2025-11-14",
+      "2025-10-30", "2025-10-22", "2025-10-15", "2025-10-08"
+    ]
   },
   {
     id: 4,
@@ -70,7 +85,11 @@ export const packageData: PackageData[] = [
     growthRate: 10,
     conversionRate: 72,
     completionRate: 85,
-    trend: "up"
+    trend: "up",
+    salesDates: [
+      "2025-11-09", "2025-11-12", "2025-11-15", "2025-11-18",
+      "2025-10-25", "2025-10-18"
+    ]
   }
 ];
 

@@ -1,11 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, TrendingDown, Award, Package, Users, DollarSign } from "lucide-react";
-import { packageData, getAnalyticsMetrics, getPackageTypeColor, getRankColor } from "../data/packageAnalyticsData";
+import { PackageData, getPackageTypeColor, getRankColor } from "../data/packageAnalyticsData";
 
-export function TopPerformingPackagesChart() {
-  const metrics = getAnalyticsMetrics();
-  
+interface TopPerformingPackagesChartProps {
+  packages: PackageData[];
+}
+
+export function TopPerformingPackagesChart({ packages }: TopPerformingPackagesChartProps) {
+  if (packages.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Award className="h-5 w-5" />
+            Top Performing Package Templates
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground text-center py-8">
+            No packages sold in this period
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -16,7 +36,7 @@ export function TopPerformingPackagesChart() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {packageData.map((pkg) => (
+          {packages.map((pkg) => (
             <div
               key={pkg.id}
               className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/5 transition-colors"
