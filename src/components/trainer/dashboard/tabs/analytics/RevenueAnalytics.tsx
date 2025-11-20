@@ -4,6 +4,7 @@ import { MonthlySummaryCards } from "./charts/MonthlySummaryCards";
 import { MonthlyRevenueChart } from "./charts/MonthlyRevenueChart";
 import { TransactionsProvider, useTransactions } from "../transactions/context/TransactionsContext";
 import { TimeFrameSelector } from "../sales/analytics/TimeFrameSelector";
+import { Tabs } from "@/components/ui/tabs";
 import { useRevenueTimeAnalytics, TimeFrame } from "./hooks/useRevenueTimeAnalytics";
 
 function RevenueAnalyticsContent() {
@@ -40,13 +41,15 @@ function RevenueAnalyticsContent() {
       
       {/* Time Frame Selector */}
       <div className="flex justify-center">
-        <TimeFrameSelector
-          timeFrame={timeFrame}
-          onTimeFrameChange={(value) => setTimeFrame(value as TimeFrame)}
-          customPeriod={customPeriod}
-          onCustomPeriodChange={setCustomPeriod}
-          showTitle={false}
-        />
+        <Tabs value={timeFrame} onValueChange={(value) => setTimeFrame(value as TimeFrame)}>
+          <TimeFrameSelector
+            timeFrame={timeFrame}
+            onTimeFrameChange={(value) => setTimeFrame(value as TimeFrame)}
+            customPeriod={customPeriod}
+            onCustomPeriodChange={setCustomPeriod}
+            showTitle={false}
+          />
+        </Tabs>
       </div>
       
       {/* Revenue Chart - Sessions vs Programs vs Packages */}
