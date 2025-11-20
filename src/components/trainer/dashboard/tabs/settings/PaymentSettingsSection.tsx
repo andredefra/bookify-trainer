@@ -14,7 +14,6 @@ import { toast } from "@/hooks/use-toast";
 interface PaymentSettings {
   allowInstallments: boolean;
   defaultInstallmentOptions: number[];
-  maxInstallments: number;
   minAmountForInstallments: number;
   automaticReminders: boolean;
   reminderDaysBefore: number;
@@ -26,7 +25,6 @@ interface PaymentSettings {
 const DEFAULT_SETTINGS: PaymentSettings = {
   allowInstallments: true,
   defaultInstallmentOptions: [2, 3, 4, 6],
-  maxInstallments: 6,
   minAmountForInstallments: 100,
   automaticReminders: true,
   reminderDaysBefore: 7,
@@ -57,9 +55,17 @@ export function PaymentSettingsSection() {
   };
 
   const addInstallmentOption = () => {
-    const newOption = prompt("Enter number of installments (e.g., 12):");
+    const newOption = prompt("Enter number of months (minimum 2):");
     if (newOption && !isNaN(Number(newOption))) {
       const option = Number(newOption);
+      if (option < 2) {
+        toast({
+          title: "Invalid option",
+          description: "Installment plans must be at least 2 months.",
+          variant: "destructive"
+        });
+        return;
+      }
       if (!settings.defaultInstallmentOptions.includes(option)) {
         updateSetting('defaultInstallmentOptions', [...settings.defaultInstallmentOptions, option].sort((a, b) => a - b));
       }
@@ -115,29 +121,16 @@ export function PaymentSettingsSection() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Maximum Installments</Label>
-                  <Select
-                    value={settings.maxInstallments.toString()}
-                    onValueChange={(value) => updateSetting('maxInstallments', Number(value))}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[3, 4, 6, 12, 24].map(num => (
-                        <SelectItem key={num} value={num.toString()}>
-                          {num} months
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
+                <div>
                   <Label>Available Installment Options</Label>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Choose which installment plans to offer your clients (e.g., 2, 3, 6, 12 months). Minimum is 2 months.
+                  </p>
+                </div>
+                <div className="flex items-center justify-between">
                   <Button 
                     variant="outline" 
                     size="sm"
@@ -147,7 +140,7 @@ export function PaymentSettingsSection() {
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {settings.defaultInstallmentOptions.map(option => (
+                  {settings.defaultInstallmentOptions.filter(option => option >= 2).map(option => (
                     <Badge
                       key={option}
                       variant="secondary"
@@ -159,7 +152,7 @@ export function PaymentSettingsSection() {
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Click on a badge to remove it
+                  Click on a badge to remove it. Minimum is 2 months.
                 </p>
               </div>
             </>
