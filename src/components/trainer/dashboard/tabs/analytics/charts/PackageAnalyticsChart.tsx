@@ -1,21 +1,11 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Card, CardContent } from "@/components/ui/card";
 import { Package, TrendingUp, Users, DollarSign } from "lucide-react";
 import { TopPerformingPackagesChart } from "./TopPerformingPackagesChart";
-import { PackageClientsChart } from "./PackageClientsChart";
-import { packageData, packageTypeData, CHART_COLORS, getAnalyticsMetrics } from "../data/packageAnalyticsData";
+import { getAnalyticsMetrics } from "../data/packageAnalyticsData";
 
 export function PackageAnalyticsChart() {
   const metrics = getAnalyticsMetrics();
-  
-  // Create chart data from unified source
-  const chartData = packageData.map(pkg => ({
-    name: pkg.title.replace(' Package', '').replace("'s Program", ''),
-    sold: pkg.salesCount,
-    revenue: pkg.revenue,
-    avgValue: pkg.avgValue
-  }));
   
   return (
     <div className="space-y-6">
@@ -72,55 +62,6 @@ export function PackageAnalyticsChart() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Package Performance Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Package Performance</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#0088FE" name="Revenue (€)" />
-              <Bar dataKey="sold" fill="#00C49F" name="Units Sold" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Package Type Distribution */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Package Type Distribution</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={packageTypeData}
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, value }) => `${name}: ${value}%`}
-              >
-                {packageTypeData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Package Clients Analysis */}
-      <PackageClientsChart />
     </div>
   );
 }
