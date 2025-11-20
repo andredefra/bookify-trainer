@@ -1,317 +1,309 @@
-
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { useState, useEffect } from "react";
-import { GOAL_TEMPLATES } from "../analytics/data/goalTemplates";
-import { GoalType } from "@/components/client/overview/fitness-progress/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { getAllGoalTemplates } from "@/components/client/overview/fitness-progress/data/goalTemplates";
+import { GoalType, GoalTemplate } from "@/components/client/overview/fitness-progress/types";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Target, TrendingUp } from "lucide-react";
+import { Settings2, Target, Info } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ClientGoalsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   selectedClient: string | null;
+  onManageGoalTypes?: () => void;
 }
 
-export function ClientGoalsDialog({ open, onOpenChange, selectedClient }: ClientGoalsDialogProps) {
+export function ClientGoalsDialog({ open, onOpenChange, selectedClient, onManageGoalTypes }: ClientGoalsDialogProps) {
   const [selectedGoalType, setSelectedGoalType] = useState<GoalType | null>(null);
-  const [formData, setFormData] = useState({
-    goalType: "",
-    description: "",
-    current: "",
-    target: "",
-    targetDate: "",
-    exerciseId: "",
-    notes: "",
-    frequencyValue: "3",
-    frequencyPeriod: "weekly"
+  const [allTemplates, setAllTemplates] = useState(getAllGoalTemplates());
+  const { toast } = useToast();
+  
+  const form = useForm({
+    defaultValues: {
+      goalType: "",
+      goal: "",
+      current: 0,
+      target: 0,
+      targetDate: "",
+      exerciseId: "",
+      frequencyValue: 3,
+      frequencyPeriod: "weekly"
+    }
   });
 
-  // Reset form when dialog opens
-  useEffect(() => {
-    if (open) {
-      setSelectedGoalType(null);
-      setFormData({
-        goalType: "",
-        description: "",
-        current: "",
-        target: "",
-        targetDate: "",
-        exerciseId: "",
-        notes: "",
-        frequencyValue: "3",
-        frequencyPeriod: "weekly"
-      });
-    }
-  }, [open]);
+  const refreshTemplates = () => {
+    setAllTemplates(getAllGoalTemplates());
+  };
 
   const handleGoalTypeChange = (type: GoalType) => {
     setSelectedGoalType(type);
-    const template = GOAL_TEMPLATES[type];
+    const template = allTemplates[type];
+    form.setValue('goalType', type);
+    form.setValue('target', template.defaultTarget || 0);
     
-    // Set default target date (3 months from now)
+    // Set a default target date (3 months from now)
     const defaultDate = new Date();
     defaultDate.setMonth(defaultDate.getMonth() + 3);
-    
-    setFormData(prev => ({
-      ...prev,
-      goalType: type,
-      target: template.defaultTarget?.toString() || "",
-      targetDate: defaultDate.toISOString().split('T')[0]
-    }));
+    form.setValue('targetDate', defaultDate.toISOString().split('T')[0]);
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleSubmit = (data: any) => {
+    const goalData = {
+      ...data,
+      goalType: selectedGoalType,
+      unit: selectedGoalType ? allTemplates[selectedGoalType].unit : 'units',
+      frequency: allTemplates[selectedGoalType]?.requiresFrequency ? {
+        value: data.frequencyValue,
+        period: data.frequencyPeriod
+      } : undefined,
+      clientName: selectedClient
+    };
+    
+    // Here you would typically save to database
+    console.log('Saving goal for client:', goalData);
+    
+    toast({
+      title: "Goal Created",
+      description: `Goal successfully set for ${selectedClient}`,
+    });
+    
+    form.reset();
+    setSelectedGoalType(null);
+    onOpenChange(false);
   };
 
-  const selectedTemplate = selectedGoalType ? GOAL_TEMPLATES[selectedGoalType] : null;
-
-  const getCurrentGoals = () => {
-    if (selectedClient === "Sarah Johnson") {
-      return [
-        {
-          type: "weight_management",
-          description: "Lose 5kg",
-          current: "68.5kg",
-          target: "65kg",
-          deadline: "Aug 30, 2024",
-          progress: "70%"
-        },
-        {
-          type: "strength_progress", 
-          description: "Bench Press 60kg",
-          current: "50kg",
-          target: "60kg",
-          deadline: "Jul 15, 2024",
-          progress: "83%"
-        }
-      ];
-    }
-    
-    if (selectedClient === "Mike Peterson") {
-      return [
-        {
-          type: "cardiovascular_endurance",
-          description: "Run 10K under 45 min",
-          current: "48 min",
-          target: "45 min",
-          deadline: "Sep 15, 2024",
-          progress: "60%"
-        }
-      ];
-    }
-    
-    return [];
-  };
-
-  const currentGoals = getCurrentGoals();
+  const selectedTemplate = selectedGoalType ? allTemplates[selectedGoalType] : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
             {selectedClient ? `Set Goals for ${selectedClient}` : "Set Client Goals"}
           </DialogTitle>
+          <DialogDescription>
+            Create a specific, measurable fitness goal with a target date for your client.
+          </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-6 py-4">
-          {/* Current Goals Section */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-medium flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Current Goals ({currentGoals.length})
-            </h4>
-            
-            {currentGoals.length > 0 ? (
-              <div className="space-y-2">
-                {currentGoals.map((goal, index) => (
-                  <div key={index} className="p-3 bg-gray-50 rounded-lg border">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge variant="outline" className="text-xs">
-                            {GOAL_TEMPLATES[goal.type as GoalType]?.name}
-                          </Badge>
-                          <span className="text-xs text-gray-500">{goal.progress}</span>
-                        </div>
-                        <p className="font-medium text-sm">{goal.description}</p>
-                        <div className="text-xs text-gray-600 mt-1">
-                          {goal.current} → {goal.target} by {goal.deadline}
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm" className="h-7 text-red-500 hover:text-red-700">
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">
-                No goals set yet for this client.
-              </div>
-            )}
-          </div>
-
-          {/* Add New Goal Section */}
-          <div className="border-t pt-4">
-            <h4 className="text-sm font-medium mb-4">Add New Goal</h4>
-            
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="goal-type">Goal Type</Label>
-                <Select value={formData.goalType} onValueChange={handleGoalTypeChange}>
-                  <SelectTrigger id="goal-type">
-                    <SelectValue placeholder="Select goal type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(GOAL_TEMPLATES).map((template) => (
-                      <SelectItem key={template.type} value={template.type}>
-                        <div className="flex flex-col">
-                          <span>{template.name}</span>
-                          <span className="text-xs text-gray-500">{template.description}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {selectedTemplate && (
-                <>
-                  <div className="p-3 bg-blue-50 rounded-lg border">
-                    <h5 className="font-medium text-blue-900 text-sm">{selectedTemplate.name}</h5>
-                    <p className="text-xs text-blue-700 mt-1">{selectedTemplate.description}</p>
-                    <div className="mt-2">
-                      <p className="text-xs text-blue-600 font-medium">Examples:</p>
-                      <ul className="text-xs text-blue-600 list-disc list-inside">
-                        {selectedTemplate.examples.slice(0, 2).map((example, idx) => (
-                          <li key={idx}>{example}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Goal Description</Label>
-                    <Input 
-                      id="description" 
-                      placeholder={`e.g., ${selectedTemplate.examples[0]}`}
-                      value={formData.description}
-                      onChange={(e) => handleInputChange('description', e.target.value)}
-                    />
-                  </div>
-
-                  {selectedTemplate.requiresExercise && (
-                    <div className="space-y-2">
-                      <Label htmlFor="exercise">Exercise</Label>
-                      <Input 
-                        id="exercise" 
-                        placeholder="e.g., Bench Press, Squat, Deadlift"
-                        value={formData.exerciseId}
-                        onChange={(e) => handleInputChange('exerciseId', e.target.value)}
-                      />
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="current">Current Value ({selectedTemplate.unit})</Label>
-                      <Input 
-                        id="current" 
-                        type="number" 
-                        step="0.1"
-                        value={formData.current}
-                        onChange={(e) => handleInputChange('current', e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="target">Target Value ({selectedTemplate.unit})</Label>
-                      <Input 
-                        id="target" 
-                        type="number" 
-                        step="0.1"
-                        value={formData.target}
-                        onChange={(e) => handleInputChange('target', e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="deadline" className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      Target Date
-                    </Label>
-                    <Input 
-                      type="date" 
-                      id="deadline" 
-                      value={formData.targetDate}
-                      onChange={(e) => handleInputChange('targetDate', e.target.value)}
-                    />
-                  </div>
-
-                  {selectedTemplate.requiresFrequency && (
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="frequency">Frequency</Label>
-                        <Input 
-                          id="frequency" 
-                          type="number" 
-                          min="1"
-                          value={formData.frequencyValue}
-                          onChange={(e) => handleInputChange('frequencyValue', e.target.value)}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="period">Period</Label>
-                        <Select 
-                          value={formData.frequencyPeriod} 
-                          onValueChange={(value) => handleInputChange('frequencyPeriod', value)}
-                        >
-                          <SelectTrigger id="period">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="daily">Daily</SelectItem>
-                            <SelectItem value="weekly">Weekly</SelectItem>
-                            <SelectItem value="monthly">Monthly</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label htmlFor="notes">Notes</Label>
-                    <Textarea 
-                      id="notes" 
-                      placeholder="Additional details, motivation tips, or specific instructions"
-                      value={formData.notes}
-                      onChange={(e) => handleInputChange('notes', e.target.value)}
-                    />
-                  </div>
-                </>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="goalType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Goal Type</FormLabel>
+                  <Select onValueChange={(value) => handleGoalTypeChange(value as GoalType)}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose a goal type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(allTemplates).map((template) => (
+                        <SelectItem key={template.type} value={template.type}>
+                          <div className="flex items-center gap-2">
+                            <span>{template.name}</span>
+                            {template.isCustom && (
+                              <Badge variant="default" className="text-xs bg-purple-600">Custom</Badge>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
-          </div>
-        </div>
-        
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button 
-            onClick={() => onOpenChange(false)}
-            disabled={!selectedGoalType || !formData.description || !formData.target}
-          >
-            Save Goal
-          </Button>
-        </DialogFooter>
+            />
+
+            {selectedTemplate && (
+              <>
+                <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg space-y-2">
+                  <p className="text-sm font-medium text-blue-900 dark:text-blue-100 flex items-center gap-2">
+                    <Info className="h-4 w-4" />
+                    {selectedTemplate.description}
+                  </p>
+                  <p className="text-xs text-blue-700 dark:text-blue-300">
+                    Examples: {selectedTemplate.examples.join(', ')}
+                  </p>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="goal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Goal Description</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder={selectedTemplate.examplePlaceholder || `e.g., ${selectedTemplate.examples[0]}`}
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {selectedTemplate.requiresExercise && (
+                  <FormField
+                    control={form.control}
+                    name="exerciseId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Exercise</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="e.g., Bench Press, Squat, Deadlift"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="current"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Current Value ({selectedTemplate.unit})</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            step="0.1"
+                            {...field} 
+                            onChange={e => field.onChange(Number(e.target.value))} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="target"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Target Value ({selectedTemplate.unit})</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            step="0.1"
+                            {...field} 
+                            onChange={e => field.onChange(Number(e.target.value))} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="targetDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Target Date</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {selectedTemplate.requiresFrequency && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="frequencyValue"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Frequency</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              min="1"
+                              {...field} 
+                              onChange={e => field.onChange(Number(e.target.value))} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="frequencyPeriod"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Period</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="daily">Daily</SelectItem>
+                              <SelectItem value="weekly">Weekly</SelectItem>
+                              <SelectItem value="monthly">Monthly</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+            
+            <DialogFooter className="flex-col sm:flex-row gap-2">
+              {onManageGoalTypes && (
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => {
+                    onManageGoalTypes();
+                    refreshTemplates();
+                  }}
+                  className="gap-2 sm:mr-auto"
+                >
+                  <Settings2 className="h-4 w-4" />
+                  Manage Goal Types
+                </Button>
+              )}
+              <div className="flex gap-2 sm:ml-auto">
+                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit"
+                  disabled={!selectedGoalType}
+                >
+                  Save Goal
+                </Button>
+              </div>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
