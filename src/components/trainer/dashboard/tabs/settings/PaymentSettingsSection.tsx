@@ -16,8 +16,6 @@ interface PaymentSettings {
   defaultInstallmentOptions: number[];
   maxInstallments: number;
   minAmountForInstallments: number;
-  processingFeeEnabled: boolean;
-  processingFeePercentage: number;
   automaticReminders: boolean;
   reminderDaysBefore: number;
   overdueGraceDays: number;
@@ -30,8 +28,6 @@ const DEFAULT_SETTINGS: PaymentSettings = {
   defaultInstallmentOptions: [2, 3, 4, 6],
   maxInstallments: 6,
   minAmountForInstallments: 100,
-  processingFeeEnabled: false,
-  processingFeePercentage: 2.5,
   automaticReminders: true,
   reminderDaysBefore: 7,
   overdueGraceDays: 3,
@@ -165,38 +161,6 @@ export function PaymentSettingsSection() {
                 <p className="text-xs text-muted-foreground">
                   Click on a badge to remove it
                 </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-base">Processing Fees</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Add processing fees for installment payments
-                    </p>
-                  </div>
-                  <Switch
-                    checked={settings.processingFeeEnabled}
-                    onCheckedChange={(checked) => updateSetting('processingFeeEnabled', checked)}
-                  />
-                </div>
-
-                {settings.processingFeeEnabled && (
-                  <div className="space-y-2">
-                    <Label>Processing Fee (%)</Label>
-                    <div className="relative">
-                      <Input
-                        type="number"
-                        step="0.1"
-                        max="10"
-                        className="pr-8"
-                        value={settings.processingFeePercentage}
-                        onChange={(e) => updateSetting('processingFeePercentage', Number(e.target.value))}
-                      />
-                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">%</span>
-                    </div>
-                  </div>
-                )}
               </div>
             </>
           )}
