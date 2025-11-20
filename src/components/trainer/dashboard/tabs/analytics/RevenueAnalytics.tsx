@@ -24,15 +24,23 @@ function RevenueAnalyticsContent() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">Revenue Analytics</h3>
-          <p className="text-sm text-muted-foreground">
-            Revenue analysis by service type (Sessions vs Programs vs Packages)
-          </p>
-        </div>
-        
-        {/* Time Frame Selector */}
+      <div>
+        <h3 className="text-lg font-semibold">Revenue Analytics</h3>
+        <p className="text-sm text-muted-foreground">
+          Revenue analysis by service type (Sessions vs Programs vs Packages)
+        </p>
+      </div>
+      
+      {/* Summary cards with real data */}
+      <MonthlySummaryCards 
+        yearToDateRevenue={yearToDateRevenue}
+        monthlyAverage={monthlyAverage}
+        lastCompleteMonthRevenue={lastCompleteMonthRevenue}
+        currentMonthRevenue={currentMonthRevenue}
+      />
+      
+      {/* Time Frame Selector */}
+      <div className="flex justify-end">
         <Tabs value={timeFrame} onValueChange={(value) => setTimeFrame(value as TimeFrame)}>
           <TabsList>
             <TimeFrameSelector
@@ -44,14 +52,6 @@ function RevenueAnalyticsContent() {
           </TabsList>
         </Tabs>
       </div>
-      
-      {/* Summary cards with real data */}
-      <MonthlySummaryCards 
-        yearToDateRevenue={yearToDateRevenue}
-        monthlyAverage={monthlyAverage}
-        lastCompleteMonthRevenue={lastCompleteMonthRevenue}
-        currentMonthRevenue={currentMonthRevenue}
-      />
       
       {/* Revenue Chart - Sessions vs Programs vs Packages */}
       <MonthlyRevenueChart data={chartData} title={`${timeFrameLabel} Revenue`} />
