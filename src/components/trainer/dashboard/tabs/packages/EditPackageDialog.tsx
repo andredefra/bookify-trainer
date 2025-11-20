@@ -7,6 +7,7 @@ interface PackageFormData {
   objective: string;
   type: PackageType;
   isPublic: boolean;
+  isSequential?: boolean;
   sessions: {
     individual: { count: number; pricePerSession: number; };
     group: { count: number; pricePerSession: number; };
@@ -17,6 +18,8 @@ interface PackageFormData {
     title: string;
     duration: number;
     price: number;
+    sequenceOrder: number;
+    trainingProgramData?: any;
   }>;
   additionalServices: Array<{
     id: string;
@@ -57,6 +60,7 @@ export function EditPackageDialog({ open, onOpenChange, onSubmit, package: packa
       objective: oldPackage.objective || "",
       type: (oldPackage.type as PackageType) || "sessions_only",
       isPublic: oldPackage.isPublic || false,
+      isSequential: oldPackage.isSequential || false,
       sessions: {
         individual: { count: oldPackage.sessions || 0, pricePerSession: 50 },
         group: { count: 0, pricePerSession: 30 },

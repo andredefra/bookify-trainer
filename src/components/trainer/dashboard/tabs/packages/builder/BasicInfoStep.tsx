@@ -6,7 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Dumbbell, Users, Wrench, Eye, Lock } from "lucide-react";
+import { Package, Dumbbell, Users, Wrench, Eye, Lock, ArrowRight } from "lucide-react";
 import { PackageType } from "../PackageBuilder";
 
 interface PackageData {
@@ -15,6 +15,8 @@ interface PackageData {
   objective: string;
   type: PackageType;
   isPublic: boolean;
+  isSequential?: boolean;
+  selectedPrograms?: Array<{ id: string; title: string; }>;
   [key: string]: any;
 }
 
@@ -151,6 +153,28 @@ export function BasicInfoStep({ data, onChange }: BasicInfoStepProps) {
           </Badge>
         )}
       </div>
+
+      {(data.type === 'program_only' || data.type === 'hybrid') && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>Sequential Programs</Label>
+              <p className="text-sm text-muted-foreground">
+                Programs unlock one after another (e.g. assessment → specific training)
+              </p>
+            </div>
+            <Switch
+              checked={data.isSequential || false}
+              onCheckedChange={(checked) => onChange({ isSequential: checked })}
+            />
+          </div>
+          {data.isSequential && (
+            <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+              Sequential - Programs unlock after completion
+            </Badge>
+          )}
+        </div>
+      )}
     </div>
   );
 }
