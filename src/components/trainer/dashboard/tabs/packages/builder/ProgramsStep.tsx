@@ -3,17 +3,22 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Target, Euro } from "lucide-react";
+import { Calendar, Target, Euro, ArrowRight } from "lucide-react";
+import { ProgramSequencer } from "./ProgramSequencer";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Program {
   id: string;
   title: string;
   duration: number; // weeks
   price: number;
+  sequenceOrder: number;
+  trainingProgramData?: any;
 }
 
 interface PackageData {
   selectedPrograms: Program[];
+  isSequential?: boolean;
   [key: string]: any;
 }
 
@@ -28,31 +33,36 @@ const availablePrograms: Program[] = [
     id: "1",
     title: "Strength Building Program",
     duration: 8,
-    price: 150
+    price: 150,
+    sequenceOrder: 0
   },
   {
     id: "2",
     title: "Weight Loss Intensive",
     duration: 12,
-    price: 200
+    price: 200,
+    sequenceOrder: 0
   },
   {
     id: "3",
     title: "Beginner Fitness Foundation",
     duration: 6,
-    price: 100
+    price: 100,
+    sequenceOrder: 0
   },
   {
     id: "4",
     title: "Advanced Muscle Building",
     duration: 10,
-    price: 180
+    price: 180,
+    sequenceOrder: 0
   },
   {
     id: "5",
     title: "Functional Movement",
     duration: 4,
-    price: 80
+    price: 80,
+    sequenceOrder: 0
   }
 ];
 
@@ -68,11 +78,23 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
     
     if (isSelected) {
       const newPrograms = data.selectedPrograms.filter(p => p.id !== program.id);
-      onChange({ selectedPrograms: newPrograms });
+      // Reorder sequence numbers
+      const reorderedPrograms = newPrograms.map((p, idx) => ({
+        ...p,
+        sequenceOrder: idx + 1
+      }));
+      onChange({ selectedPrograms: reorderedPrograms });
     } else {
-      const newPrograms = [...data.selectedPrograms, program];
+      // Add new program at the end of the sequence
+      const newSequenceOrder = data.selectedPrograms.length + 1;
+      const newProgram = { ...program, sequenceOrder: newSequenceOrder };
+      const newPrograms = [...data.selectedPrograms, newProgram];
       onChange({ selectedPrograms: newPrograms });
     }
+  };
+
+  const handleReorder = (reorderedPrograms: Program[]) => {
+    onChange({ selectedPrograms: reorderedPrograms });
   };
 
   return (
@@ -85,15 +107,35 @@ export function ProgramsStep({ data, onChange }: ProgramsStepProps) {
       </div>
 
       {data.selectedPrograms.length > 0 && (
-        <div className="mb-4 p-4 bg-green-50 rounded-lg">
-          <h4 className="font-medium text-green-800 mb-2">Selected Programs:</h4>
-          <div className="flex flex-wrap gap-2">
-            {data.selectedPrograms.map(program => (
-              <Badge key={program.id} variant="secondary" className="bg-green-100 text-green-800">
-                {program.title} ({program.duration} weeks - €{program.price})
-              </Badge>
-            ))}
-          </div>
+        <div className="mb-4 space-y-4">
+          {!data.isSequential ? (
+            <div className="p-4 bg-green-50 rounded-lg">
+              <h4 className="font-medium text-green-800 mb-2">Selected Programs:</h4>
+              <div className="flex flex-wrap gap-2">
+                {data.selectedPrograms.map(program => (
+                  <Badge key={program.id} variant="secondary" className="bg-green-100 text-green-800">
+                    {program.title} ({program.duration} weeks - €{program.price})
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <ArrowRight className="h-5 w-5 text-blue-700" />
+                <h4 className="font-medium text-blue-800">Program Sequence:</h4>
+              </div>
+              <Alert className="mb-3 bg-blue-50 border-blue-200">
+                <AlertDescription className="text-sm text-blue-800">
+                  Programs will unlock sequentially. The client must complete each program before the next one becomes available.
+                </AlertDescription>
+              </Alert>
+              <ProgramSequencer 
+                programs={data.selectedPrograms}
+                onReorder={handleReorder}
+              />
+            </div>
+          )}
         </div>
       )}
 

@@ -20,6 +20,7 @@ interface PackageData {
   objective: string;
   type: PackageType;
   isPublic: boolean;
+  isSequential?: boolean; // Optional: if true, programs unlock sequentially
   
   // Sessions
   sessions: {
@@ -34,6 +35,8 @@ interface PackageData {
     title: string;
     duration: number; // weeks
     price: number;
+    sequenceOrder: number; // Order in which programs should be completed (1, 2, 3...)
+    trainingProgramData?: any; // Full program data to be stored in client_packages
   }>;
   
   // Additional Services
@@ -67,6 +70,7 @@ export function PackageBuilder({ open, onOpenChange, onSubmit, editData }: Packa
     objective: "",
     type: "sessions_only",
     isPublic: false,
+    isSequential: false,
     sessions: {
       individual: { count: 0, pricePerSession: 50 },
       group: { count: 0, pricePerSession: 30 },
