@@ -2,14 +2,10 @@
 import React, { useState } from "react";
 import { 
   enhancedMonthlyRevenue, 
-  clientTypeBreakdown,
-  calculateRevenueFromTransactions,
-  ENHANCED_COLORS 
+  calculateRevenueFromTransactions
 } from "./data/enhancedRevenueData";
 import { EnhancedSummaryCards } from "./charts/EnhancedSummaryCards";
 import { ClientTypeRevenueChart } from "./charts/ClientTypeRevenueChart";
-import { RevenueBreakdownChart } from "./charts/RevenueBreakdownChart";
-import { ConversionMetricsChart } from "./charts/ConversionMetricsChart";
 import { TransactionsProvider, useTransactions } from "../transactions/context/TransactionsContext";
 
 // Recurring clients list (these are the established clients)
@@ -43,18 +39,6 @@ function EnhancedRevenueAnalyticsContent() {
       
       {/* Client Type Revenue Chart */}
       <ClientTypeRevenueChart data={enhancedMonthlyRevenue} />
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Revenue Breakdown Pie Chart */}
-        <RevenueBreakdownChart 
-          data={clientTypeBreakdown.data} 
-          colors={ENHANCED_COLORS}
-          revenueBreakdown={revenueBreakdown}
-        />
-        
-        {/* Conversion Metrics */}
-        <ConversionMetricsChart revenueBreakdown={revenueBreakdown} />
-      </div>
     </div>
   );
 }
