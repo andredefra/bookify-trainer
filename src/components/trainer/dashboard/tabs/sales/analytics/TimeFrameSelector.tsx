@@ -8,11 +8,12 @@ export function TimeFrameSelector({
   timeFrame, 
   onTimeFrameChange, 
   customPeriod, 
-  onCustomPeriodChange 
+  onCustomPeriodChange,
+  showTitle = true
 }: TimeFrameSelectorProps) {
   return (
     <div className="w-full space-y-3">
-      <h3 className="text-lg font-semibold">Business Development Metrics</h3>
+      {showTitle && <h3 className="text-lg font-semibold">Business Development Metrics</h3>}
       
       <div className="overflow-x-auto pb-2">
         <TabsList className="w-full min-w-max flex justify-start">

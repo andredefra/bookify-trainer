@@ -48,6 +48,7 @@ function RevenueAnalyticsContent() {
               onTimeFrameChange={(value) => setTimeFrame(value as TimeFrame)}
               customPeriod={customPeriod}
               onCustomPeriodChange={setCustomPeriod}
+              showTitle={false}
             />
           </TabsList>
         </Tabs>

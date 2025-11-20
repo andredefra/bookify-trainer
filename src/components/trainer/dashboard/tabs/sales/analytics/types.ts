@@ -32,6 +32,7 @@ export interface TimeFrameSelectorProps {
   onTimeFrameChange: (value: TimeFrame) => void;
   customPeriod: number;
   onCustomPeriodChange: (period: number) => void;
+  showTitle?: boolean;
 }
 
 export interface SalesChartProps {
