@@ -86,14 +86,6 @@ function RevenueAnalyticsContent() {
       
       {/* Monthly Revenue Chart - Sessions vs Programs vs Packages */}
       <MonthlyRevenueChart data={monthlyData} />
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Revenue by Product */}
-        <RevenueByProductChart data={productRevenue} colors={COLORS} />
-        
-        {/* Client Growth */}
-        <ClientGrowthChart data={clientGrowth} />
-      </div>
     </div>
   );
 }
