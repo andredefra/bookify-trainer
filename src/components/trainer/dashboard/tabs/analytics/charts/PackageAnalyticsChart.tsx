@@ -9,9 +9,12 @@ export function PackageAnalyticsChart() {
   
   return (
     <div className="space-y-6">
-      {/* Top Performing Packages Ranking */}
-      <TopPerformingPackagesChart />
-      
+      {/* Section Header with Time Context */}
+      <div>
+        <h3 className="text-lg font-semibold mb-1">Package Performance</h3>
+        <p className="text-sm text-muted-foreground">Last 30 Days</p>
+      </div>
+
       {/* Package Performance Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
@@ -62,6 +65,9 @@ export function PackageAnalyticsChart() {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Top Performing Packages Ranking */}
+      <TopPerformingPackagesChart />
     </div>
   );
 }
