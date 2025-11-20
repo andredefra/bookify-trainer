@@ -21,9 +21,9 @@ export function EnhancedSummaryCards({ data, revenueBreakdown }: EnhancedSummary
 
   const cards = [
     {
-      title: "Total Revenue (6 months)",
+      title: "Total Revenue",
       value: `€${totalRevenue.toLocaleString()}`,
-      subtitle: `Monthly average: €${Math.round(monthlyAverage).toLocaleString()}`,
+      subtitle: `Average: €${Math.round(monthlyAverage).toLocaleString()}`,
       color: "bg-blue-50 border-blue-200"
     },
     {
