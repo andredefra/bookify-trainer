@@ -1,12 +1,11 @@
 
 import React, { useState } from "react";
-import { 
-  enhancedMonthlyRevenue, 
-  calculateRevenueFromTransactions
-} from "./data/enhancedRevenueData";
 import { EnhancedSummaryCards } from "./charts/EnhancedSummaryCards";
 import { ClientTypeRevenueChart } from "./charts/ClientTypeRevenueChart";
 import { TransactionsProvider, useTransactions } from "../transactions/context/TransactionsContext";
+import { Tabs } from "@/components/ui/tabs";
+import { TimeFrameSelector } from "../sales/analytics/TimeFrameSelector";
+import { useClientTypeTimeAnalytics, TimeFrame } from "./hooks/useClientTypeTimeAnalytics";
 
 // Recurring clients list (these are the established clients)
 const recurringClientsList = [
@@ -17,28 +16,43 @@ const recurringClientsList = [
 
 function EnhancedRevenueAnalyticsContent() {
   const { transactions } = useTransactions();
+  const [timeFrame, setTimeFrame] = useState<TimeFrame>("month");
+  const [customPeriod, setCustomPeriod] = useState(30);
   
-  // Calculate real revenue breakdown from transactions
-  const revenueBreakdown = calculateRevenueFromTransactions(transactions, recurringClientsList);
+  const analytics = useClientTypeTimeAnalytics(
+    transactions,
+    timeFrame,
+    customPeriod,
+    recurringClientsList
+  );
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h3 className="text-lg font-semibold">Client Type Analytics</h3>
-        <p className="text-sm text-muted-foreground">
-          Revenue breakdown between recurring clients and occasional participants
-        </p>
+        <p className="text-sm text-muted-foreground">{analytics.timeFrameLabel}</p>
       </div>
+
+      {/* Time Frame Selector */}
+      <Tabs value={timeFrame} onValueChange={(value) => setTimeFrame(value as TimeFrame)} className="w-full">
+        <TimeFrameSelector
+          timeFrame={timeFrame}
+          onTimeFrameChange={setTimeFrame}
+          customPeriod={customPeriod}
+          onCustomPeriodChange={setCustomPeriod}
+          showTitle={false}
+        />
+      </Tabs>
       
-      {/* Enhanced summary cards with real data */}
+      {/* Enhanced summary cards with real filtered data */}
       <EnhancedSummaryCards 
-        data={enhancedMonthlyRevenue} 
-        revenueBreakdown={revenueBreakdown}
+        data={analytics.chartData} 
+        revenueBreakdown={analytics.revenueBreakdown}
       />
       
-      {/* Client Type Revenue Chart */}
-      <ClientTypeRevenueChart data={enhancedMonthlyRevenue} />
+      {/* Client Type Revenue Chart with filtered data */}
+      <ClientTypeRevenueChart data={analytics.chartData} />
     </div>
   );
 }
