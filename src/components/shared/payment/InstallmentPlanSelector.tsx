@@ -48,15 +48,17 @@ const generateInstallmentPlans = (): InstallmentPlan[] => {
   ];
 
   if (settings.allowInstallments) {
-    settings.defaultInstallmentOptions.forEach(months => {
-      plans.push({
-        id: `${months}-months`,
-        name: `${months} Monthly Payments`,
-        installments: months,
-        frequency: 'monthly',
-        description: `Split into ${months} monthly payments`
+    settings.defaultInstallmentOptions
+      .filter(option => option >= 2)
+      .forEach(months => {
+        plans.push({
+          id: `${months}-months`,
+          name: `${months} Monthly Payments`,
+          installments: months,
+          frequency: 'monthly',
+          description: `Split into ${months} monthly payments`
+        });
       });
-    });
   }
 
   return plans;

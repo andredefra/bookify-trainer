@@ -1,7 +1,6 @@
 export interface PaymentSettings {
   allowInstallments: boolean;
   defaultInstallmentOptions: number[];
-  maxInstallments: number;
   minAmountForInstallments: number;
   automaticReminders: boolean;
   reminderDaysBefore: number;
@@ -13,7 +12,6 @@ export interface PaymentSettings {
 export const DEFAULT_PAYMENT_SETTINGS: PaymentSettings = {
   allowInstallments: true,
   defaultInstallmentOptions: [2, 3, 4, 6],
-  maxInstallments: 6,
   minAmountForInstallments: 100,
   automaticReminders: true,
   reminderDaysBefore: 7,
