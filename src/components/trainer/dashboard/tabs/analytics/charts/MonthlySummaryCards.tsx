@@ -1,38 +1,49 @@
 
 import React from "react";
-import { MonthlyRevenueDataPoint } from "../types";
 
 interface MonthlySummaryCardsProps {
-  data: MonthlyRevenueDataPoint[];
+  yearToDateRevenue: number;
+  monthlyAverage: number;
+  lastCompleteMonthRevenue: number;
+  currentMonthRevenue: number;
 }
 
-export function MonthlySummaryCards({ data }: MonthlySummaryCardsProps) {
-  // Calculate summary metrics
-  const totalRevenue = data.reduce((sum, month) => sum + month.total, 0);
-  const averageMonthlyRevenue = totalRevenue / data.length;
-  const lastMonthRevenue = data[data.length - 1].total;
-  const prevMonthRevenue = data[data.length - 2].total;
-  const percentChange = ((lastMonthRevenue - prevMonthRevenue) / prevMonthRevenue) * 100;
+export function MonthlySummaryCards({ 
+  yearToDateRevenue, 
+  monthlyAverage, 
+  lastCompleteMonthRevenue, 
+  currentMonthRevenue 
+}: MonthlySummaryCardsProps) {
+  // Calculate growth percentage (last complete month vs current month to date)
+  const growthPercentage = lastCompleteMonthRevenue > 0
+    ? ((currentMonthRevenue - lastCompleteMonthRevenue) / lastCompleteMonthRevenue) * 100
+    : 0;
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <div className="text-sm font-medium text-muted-foreground">Total Revenue</div>
-        <div className="text-2xl font-bold mt-1">€{totalRevenue.toLocaleString()}</div>
-        <div className="text-xs text-muted-foreground mt-1">All time</div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="bg-card p-4 rounded-lg border shadow-sm">
+        <div className="text-sm font-medium text-muted-foreground">Total Revenue (YTD)</div>
+        <div className="text-2xl font-bold mt-1">€{yearToDateRevenue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+        <div className="text-xs text-muted-foreground mt-1">Year to date</div>
       </div>
       
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
+      <div className="bg-card p-4 rounded-lg border shadow-sm">
         <div className="text-sm font-medium text-muted-foreground">Monthly Average</div>
-        <div className="text-2xl font-bold mt-1">€{averageMonthlyRevenue.toLocaleString()}</div>
-        <div className="text-xs text-muted-foreground mt-1">Per month</div>
+        <div className="text-2xl font-bold mt-1">€{monthlyAverage.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+        <div className="text-xs text-muted-foreground mt-1">Per month (2025)</div>
       </div>
       
-      <div className="bg-white p-4 rounded-lg border shadow-sm">
-        <div className="text-sm font-medium text-muted-foreground">Last Month</div>
-        <div className="text-2xl font-bold mt-1">€{lastMonthRevenue.toLocaleString()}</div>
-        <div className={`text-xs mt-1 ${percentChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-          {percentChange >= 0 ? '↑' : '↓'} {Math.abs(percentChange).toFixed(1)}% vs previous
+      <div className="bg-card p-4 rounded-lg border shadow-sm">
+        <div className="text-sm font-medium text-muted-foreground">Last Complete Month</div>
+        <div className="text-2xl font-bold mt-1">€{lastCompleteMonthRevenue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+        <div className="text-xs text-muted-foreground mt-1">October 2025</div>
+      </div>
+      
+      <div className="bg-card p-4 rounded-lg border shadow-sm">
+        <div className="text-sm font-medium text-muted-foreground">Current Month (To Date)</div>
+        <div className="text-2xl font-bold mt-1">€{currentMonthRevenue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+        <div className={`text-xs mt-1 ${growthPercentage >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          {growthPercentage >= 0 ? '↑' : '↓'} {Math.abs(growthPercentage).toFixed(1)}% vs last month
         </div>
       </div>
     </div>

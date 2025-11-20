@@ -24,6 +24,10 @@ interface RevenueTimeAnalyticsData {
   averageRevenue: number;
   growthRate: number;
   timeFrameLabel: string;
+  yearToDateRevenue: number;
+  currentMonthRevenue: number;
+  lastCompleteMonthRevenue: number;
+  monthlyAverage: number;
 }
 
 export function useRevenueTimeAnalytics(
@@ -253,12 +257,46 @@ export function useRevenueTimeAnalytics(
       ? `Last ${customPeriod} Days`
       : `This ${timeFrame.charAt(0).toUpperCase() + timeFrame.slice(1)}`;
 
+    // Calculate year-to-date revenue (all paid transactions in current year)
+    const currentYear = now.getFullYear();
+    const yearToDateRevenue = transactions
+      .filter(t => {
+        const date = new Date(t.date);
+        return t.status === 'paid' && date.getFullYear() === currentYear;
+      })
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    // Calculate current month revenue (up to today)
+    const currentMonthRevenue = transactions
+      .filter(t => {
+        const date = new Date(t.date);
+        return t.status === 'paid' && isSameMonth(date, now);
+      })
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    // Calculate last complete month revenue
+    const lastMonth = subMonths(now, 1);
+    const lastCompleteMonthRevenue = transactions
+      .filter(t => {
+        const date = new Date(t.date);
+        return t.status === 'paid' && isSameMonth(date, lastMonth);
+      })
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    // Calculate monthly average for the year
+    const currentMonth = now.getMonth() + 1; // 1-12
+    const monthlyAverage = currentMonth > 0 ? yearToDateRevenue / currentMonth : 0;
+
     return {
       chartData,
       totalRevenue,
       averageRevenue,
       growthRate,
-      timeFrameLabel
+      timeFrameLabel,
+      yearToDateRevenue,
+      currentMonthRevenue,
+      lastCompleteMonthRevenue,
+      monthlyAverage
     };
   }, [transactions, timeFrame, customPeriod]);
 }
