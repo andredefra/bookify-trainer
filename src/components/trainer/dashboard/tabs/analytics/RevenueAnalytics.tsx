@@ -12,8 +12,14 @@ function RevenueAnalyticsContent() {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("month");
   const [customPeriod, setCustomPeriod] = useState<number>(30);
 
-  const { chartData, totalRevenue, averageRevenue, growthRate, timeFrameLabel } = 
-    useRevenueTimeAnalytics(transactions, timeFrame, customPeriod);
+  const { 
+    chartData, 
+    timeFrameLabel, 
+    yearToDateRevenue, 
+    monthlyAverage, 
+    lastCompleteMonthRevenue, 
+    currentMonthRevenue 
+  } = useRevenueTimeAnalytics(transactions, timeFrame, customPeriod);
 
   return (
     <div className="space-y-6">
@@ -40,7 +46,12 @@ function RevenueAnalyticsContent() {
       </div>
       
       {/* Summary cards with real data */}
-      <MonthlySummaryCards data={chartData} />
+      <MonthlySummaryCards 
+        yearToDateRevenue={yearToDateRevenue}
+        monthlyAverage={monthlyAverage}
+        lastCompleteMonthRevenue={lastCompleteMonthRevenue}
+        currentMonthRevenue={currentMonthRevenue}
+      />
       
       {/* Revenue Chart - Sessions vs Programs vs Packages */}
       <MonthlyRevenueChart data={chartData} title={`${timeFrameLabel} Revenue`} />

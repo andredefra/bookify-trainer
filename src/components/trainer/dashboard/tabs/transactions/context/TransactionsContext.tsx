@@ -3,20 +3,93 @@ import { TransactionType } from "../types/transactionTypes";
 import { ClientSummary, ClientData } from "../types/TransactionsTabTypes";
 import { toast } from "sonner";
 
-// Enhanced mock transaction data - INVOICE ONLY with installments
+// Enhanced mock transaction data - 2025 with realistic revenue distribution
 const initialTransactions: TransactionType[] = [
-  { id: 1, client: "Sarah Johnson", type: "Package", name: "Personal Training Package (10 sessions)", amount: 250, date: "2023-06-15", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, packageId: "pkg-001", isInstallment: true, installmentNumber: 1, totalInstallments: 2, installmentStatus: "paid", parentTransactionId: "parent-1" },
-  { id: 2, client: "Sarah Johnson", type: "Package", name: "Personal Training Package (10 sessions)", amount: 250, date: "2023-07-15", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, packageId: "pkg-001", isInstallment: true, installmentNumber: 2, totalInstallments: 2, installmentStatus: "paid", parentTransactionId: "parent-1" },
-  { id: 3, client: "Mike Peterson", type: "Session", name: "Personal Training (from package)", amount: 0, date: "2023-06-12", status: "paid", paymentMethod: "card", invoiceSent: true, packageId: "pkg-002" },
-  { id: 4, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package", amount: 250, date: "2023-06-10", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, isInstallment: true, installmentNumber: 1, totalInstallments: 3, installmentStatus: "paid", parentTransactionId: "parent-2" },
-  { id: 5, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package", amount: 250, date: "2023-07-10", status: "pending", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, isInstallment: true, installmentNumber: 2, totalInstallments: 3, installmentStatus: "overdue", parentTransactionId: "parent-2", dueDate: "2023-07-01" },
-  { id: 6, client: "Lisa Garcia", type: "Package", name: "Complete Transformation Package", amount: 250, date: "2023-08-10", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, isInstallment: true, installmentNumber: 3, totalInstallments: 3, installmentStatus: "paid", parentTransactionId: "parent-2" },
-  { id: 7, client: "David Kim", type: "Session", name: "Group Session", amount: 20, date: "2023-06-08", status: "pending", paymentMethod: "cash", invoiceSent: false },
-  { id: 8, client: "Mike Peterson", type: "Program", name: "Mobility & Recovery", amount: 39.99, date: "2023-06-03", status: "paid", paymentMethod: "cash", invoiceSent: false },
-  { id: 9, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2023-06-18", status: "pending", paymentMethod: "cash", invoiceSent: false },
-  { id: 10, client: "Emma Thompson", type: "Package", name: "Beginner Package (6 sessions)", amount: 120, date: "2023-06-17", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, isInstallment: true, installmentNumber: 1, totalInstallments: 2, installmentStatus: "paid", parentTransactionId: "parent-3" },
-  { id: 11, client: "Emma Thompson", type: "Package", name: "Beginner Package (6 sessions)", amount: 120, date: "2023-07-17", status: "pending", paymentMethod: "card", invoiceSent: false, isPackagePayment: true, isInstallment: true, installmentNumber: 2, totalInstallments: 2, installmentStatus: "pending", parentTransactionId: "parent-3", dueDate: "2023-07-17" },
-  { id: 12, client: "Ryan Murphy", type: "Program", name: "Fat Loss Program", amount: 89.99, date: "2023-06-14", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  // January 2025
+  { id: 1, client: "Sarah Johnson", type: "Package", name: "Elite Training Package (12 sessions)", amount: 450, date: "2025-01-05", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 2, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-01-08", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 3, client: "Lisa Garcia", type: "Program", name: "Strength Building Program", amount: 120, date: "2025-01-12", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 4, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-01-15", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 5, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-01-18", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  
+  // February 2025
+  { id: 6, client: "James Wilson", type: "Package", name: "Transformation Package (20 sessions)", amount: 500, date: "2025-02-03", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 7, client: "Ryan Murphy", type: "Program", name: "Fat Loss Program", amount: 95, date: "2025-02-07", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 8, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-02-10", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 9, client: "Olivia Chen", type: "Session", name: "Personal Training", amount: 40, date: "2025-02-14", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 10, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-02-20", status: "paid", paymentMethod: "card", invoiceSent: false },
+  
+  // March 2025
+  { id: 11, client: "Daniel Lee", type: "Package", name: "Beginner Package (8 sessions)", amount: 280, date: "2025-03-02", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 12, client: "Lisa Garcia", type: "Program", name: "Mobility & Flexibility", amount: 85, date: "2025-03-08", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 13, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-03-12", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 14, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-03-15", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 15, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-03-22", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 16, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-03-28", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  
+  // April 2025
+  { id: 17, client: "Sarah Johnson", type: "Package", name: "Advanced Training Package (15 sessions)", amount: 520, date: "2025-04-05", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 18, client: "Olivia Chen", type: "Program", name: "Core Strength Program", amount: 110, date: "2025-04-09", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 19, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-04-13", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 20, client: "Lisa Garcia", type: "Session", name: "Personal Training", amount: 40, date: "2025-04-18", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 21, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-04-24", status: "paid", paymentMethod: "card", invoiceSent: false },
+  
+  // May 2025
+  { id: 22, client: "Daniel Lee", type: "Program", name: "Hypertrophy Program", amount: 135, date: "2025-05-02", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 23, client: "Emma Thompson", type: "Package", name: "Premium Package (10 sessions)", amount: 380, date: "2025-05-06", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 24, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-05-11", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 25, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-05-16", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 26, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-05-22", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 27, client: "Olivia Chen", type: "Session", name: "Personal Training", amount: 40, date: "2025-05-28", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  
+  // June 2025
+  { id: 28, client: "Mike Peterson", type: "Package", name: "Summer Shred Package (12 sessions)", amount: 460, date: "2025-06-03", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 29, client: "Lisa Garcia", type: "Program", name: "Athletic Performance", amount: 145, date: "2025-06-08", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 30, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-06-14", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 31, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-06-19", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 32, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-06-25", status: "paid", paymentMethod: "card", invoiceSent: false },
+  
+  // July 2025
+  { id: 33, client: "James Wilson", type: "Program", name: "Endurance Training", amount: 115, date: "2025-07-02", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 34, client: "Ryan Murphy", type: "Package", name: "Intensive Training Package (16 sessions)", amount: 550, date: "2025-07-07", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 35, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-07-12", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 36, client: "Olivia Chen", type: "Session", name: "Personal Training", amount: 40, date: "2025-07-18", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 37, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-07-24", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 38, client: "Lisa Garcia", type: "Session", name: "Personal Training", amount: 40, date: "2025-07-29", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  
+  // August 2025
+  { id: 39, client: "David Kim", type: "Package", name: "Back to Basics Package (10 sessions)", amount: 350, date: "2025-08-04", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 40, client: "Daniel Lee", type: "Program", name: "Power Building", amount: 125, date: "2025-08-09", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 41, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-08-15", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 42, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-08-20", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 43, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-08-26", status: "paid", paymentMethod: "card", invoiceSent: false },
+  
+  // September 2025
+  { id: 44, client: "Sarah Johnson", type: "Program", name: "Competition Prep", amount: 150, date: "2025-09-03", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 45, client: "Olivia Chen", type: "Package", name: "Fall Fitness Package (14 sessions)", amount: 490, date: "2025-09-08", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 46, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-09-13", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 47, client: "Lisa Garcia", type: "Session", name: "Personal Training", amount: 40, date: "2025-09-19", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 48, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-09-24", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 49, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-09-28", status: "paid", paymentMethod: "card", invoiceSent: false },
+  
+  // October 2025
+  { id: 50, client: "Emma Thompson", type: "Program", name: "Functional Fitness", amount: 105, date: "2025-10-02", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 51, client: "James Wilson", type: "Package", name: "Ultimate Package (18 sessions)", amount: 600, date: "2025-10-07", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 52, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-10-12", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 53, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-10-17", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 54, client: "Olivia Chen", type: "Session", name: "Personal Training", amount: 40, date: "2025-10-23", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 55, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-10-28", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  
+  // November 2025 (current month with partial data)
+  { id: 56, client: "Lisa Garcia", type: "Package", name: "Year-End Package (12 sessions)", amount: 480, date: "2025-11-02", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
+  { id: 57, client: "David Kim", type: "Program", name: "Injury Prevention", amount: 95, date: "2025-11-06", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceSent: false },
+  { id: 59, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-11-14", status: "paid", paymentMethod: "cash", invoiceSent: false },
+  { id: 60, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-18", status: "paid", paymentMethod: "card", invoiceSent: false },
+  
+  // Pending transactions
+  { id: 61, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-25", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  { id: 62, client: "Sarah Johnson", type: "Program", name: "New Year Program", amount: 130, date: "2025-11-28", status: "pending", paymentMethod: "card", invoiceSent: false },
 ];
 
 const clientList: ClientData[] = [
