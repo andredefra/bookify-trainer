@@ -12,6 +12,7 @@ import { ClientPerformance } from "./analytics/ClientPerformance";
 import { MessageClientDialog } from "./clients/dialogs/MessageClientDialog";
 import { EnhancedScheduleSessionDialog } from "./clients/dialogs/EnhancedScheduleSessionDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-progress/ManageGoalTypesDialog";
 
 interface ClientItem {
   id: number;
@@ -35,6 +36,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
   const [messageClientName, setMessageClientName] = useState("");
+  const [showManageGoalTypesDialog, setShowManageGoalTypesDialog] = useState(false);
   
   const handleSetGoals = (clientName: string) => {
     setSelectedClient(clientName);
@@ -136,6 +138,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         open={showGoalDialog}
         onOpenChange={setShowGoalDialog}
         selectedClient={selectedClient}
+        onManageGoalTypes={() => setShowManageGoalTypesDialog(true)}
       />
       
       <ClientProfileDialog 
@@ -156,6 +159,11 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         open={showScheduleDialog}
         onOpenChange={setShowScheduleDialog}
         clientName={messageClientName}
+      />
+      
+      <ManageGoalTypesDialog
+        open={showManageGoalTypesDialog}
+        onOpenChange={setShowManageGoalTypesDialog}
       />
     </div>
   );
