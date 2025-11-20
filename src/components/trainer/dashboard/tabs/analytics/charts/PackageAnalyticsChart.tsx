@@ -38,10 +38,10 @@ export function PackageAnalyticsChart() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Packages Sold</p>
-                <p className="text-2xl font-bold">{analytics.totalSales}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Total Packages Sold</p>
+                <p className="text-xl md:text-2xl font-bold">{analytics.totalSales}</p>
               </div>
-              <Package className="h-8 w-8 text-muted-foreground" />
+              <Package className="h-6 w-6 md:h-8 md:w-8 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -50,10 +50,10 @@ export function PackageAnalyticsChart() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Package Revenue</p>
-                <p className="text-2xl font-bold">€{analytics.totalRevenue.toLocaleString()}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Package Revenue</p>
+                <p className="text-xl md:text-2xl font-bold">€{analytics.totalRevenue.toLocaleString()}</p>
               </div>
-              <DollarSign className="h-8 w-8 text-muted-foreground" />
+              <DollarSign className="h-6 w-6 md:h-8 md:w-8 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -62,10 +62,10 @@ export function PackageAnalyticsChart() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Avg Package Value</p>
-                <p className="text-2xl font-bold">€{analytics.avgValue}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Avg Package Value</p>
+                <p className="text-xl md:text-2xl font-bold">€{analytics.avgValue}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-muted-foreground" />
+              <TrendingUp className="h-6 w-6 md:h-8 md:w-8 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -74,10 +74,10 @@ export function PackageAnalyticsChart() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Package Clients</p>
-                <p className="text-2xl font-bold">{analytics.estimatedClients}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Package Clients</p>
+                <p className="text-xl md:text-2xl font-bold">{analytics.estimatedClients}</p>
               </div>
-              <Users className="h-8 w-8 text-muted-foreground" />
+              <Users className="h-6 w-6 md:h-8 md:w-8 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>

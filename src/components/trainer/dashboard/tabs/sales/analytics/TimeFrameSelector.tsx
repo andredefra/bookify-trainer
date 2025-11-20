@@ -16,13 +16,23 @@ export function TimeFrameSelector({
     <div className="w-full space-y-3">
       {showTitle && <h3 className="text-lg font-semibold">Business Development Metrics</h3>}
       
-      <div className="flex justify-center overflow-x-auto pb-2">
+      <div className="flex justify-center overflow-x-auto pb-2 scrollbar-hide">
         <TabsList className="inline-flex">
-          <TabsTrigger value="week" onClick={() => onTimeFrameChange("week")}>Weekly</TabsTrigger>
-          <TabsTrigger value="month" onClick={() => onTimeFrameChange("month")}>Monthly</TabsTrigger>
-          <TabsTrigger value="quarter" onClick={() => onTimeFrameChange("quarter")}>Quarterly</TabsTrigger>
-          <TabsTrigger value="year" onClick={() => onTimeFrameChange("year")}>Yearly</TabsTrigger>
-          <TabsTrigger value="custom" onClick={() => onTimeFrameChange("custom")}>Custom</TabsTrigger>
+          <TabsTrigger value="week" onClick={() => onTimeFrameChange("week")} className="text-xs md:text-sm px-2 md:px-3">
+            Weekly
+          </TabsTrigger>
+          <TabsTrigger value="month" onClick={() => onTimeFrameChange("month")} className="text-xs md:text-sm px-2 md:px-3">
+            Monthly
+          </TabsTrigger>
+          <TabsTrigger value="quarter" onClick={() => onTimeFrameChange("quarter")} className="text-xs md:text-sm px-2 md:px-3">
+            Quarterly
+          </TabsTrigger>
+          <TabsTrigger value="year" onClick={() => onTimeFrameChange("year")} className="text-xs md:text-sm px-2 md:px-3">
+            Yearly
+          </TabsTrigger>
+          <TabsTrigger value="custom" onClick={() => onTimeFrameChange("custom")} className="text-xs md:text-sm px-2 md:px-3">
+            Custom
+          </TabsTrigger>
         </TabsList>
       </div>
       
@@ -39,7 +49,7 @@ export function TimeFrameSelector({
             variant="outline" 
             size="sm" 
             onClick={() => onCustomPeriodChange(7)}
-            className={customPeriod === 7 ? "bg-primary/10" : ""}
+            className={cn("text-xs px-2 md:px-3", customPeriod === 7 && "bg-primary/10")}
           >
             7 Days
           </Button>
@@ -47,7 +57,7 @@ export function TimeFrameSelector({
             variant="outline" 
             size="sm" 
             onClick={() => onCustomPeriodChange(14)}
-            className={customPeriod === 14 ? "bg-primary/10" : ""}
+            className={cn("text-xs px-2 md:px-3", customPeriod === 14 && "bg-primary/10")}
           >
             14 Days
           </Button>
@@ -55,7 +65,7 @@ export function TimeFrameSelector({
             variant="outline" 
             size="sm" 
             onClick={() => onCustomPeriodChange(30)}
-            className={customPeriod === 30 ? "bg-primary/10" : ""}
+            className={cn("text-xs px-2 md:px-3", customPeriod === 30 && "bg-primary/10")}
           >
             30 Days
           </Button>
@@ -63,7 +73,7 @@ export function TimeFrameSelector({
             variant="outline" 
             size="sm" 
             onClick={() => onCustomPeriodChange(90)}
-            className={customPeriod === 90 ? "bg-primary/10" : ""}
+            className={cn("text-xs px-2 md:px-3", customPeriod === 90 && "bg-primary/10")}
           >
             90 Days
           </Button>
