@@ -15,13 +15,14 @@ import { MonthlyRevenueDataPoint } from "../types";
 
 interface MonthlyRevenueChartProps {
   data: MonthlyRevenueDataPoint[];
+  title?: string;
 }
 
-export function MonthlyRevenueChart({ data }: MonthlyRevenueChartProps) {
+export function MonthlyRevenueChart({ data, title = "Monthly Revenue" }: MonthlyRevenueChartProps) {
   return (
     <Card>
       <CardContent className="pt-6">
-        <h3 className="text-base font-medium mb-4">Monthly Revenue</h3>
+        <h3 className="text-base font-medium mb-4">{title}</h3>
         <div className="w-full h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
