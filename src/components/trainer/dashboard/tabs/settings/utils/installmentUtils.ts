@@ -3,8 +3,6 @@ export interface PaymentSettings {
   defaultInstallmentOptions: number[];
   maxInstallments: number;
   minAmountForInstallments: number;
-  processingFeeEnabled: boolean;
-  processingFeePercentage: number;
   automaticReminders: boolean;
   reminderDaysBefore: number;
   overdueGraceDays: number;
@@ -17,8 +15,6 @@ export const DEFAULT_PAYMENT_SETTINGS: PaymentSettings = {
   defaultInstallmentOptions: [2, 3, 4, 6],
   maxInstallments: 6,
   minAmountForInstallments: 100,
-  processingFeeEnabled: false,
-  processingFeePercentage: 2.5,
   automaticReminders: true,
   reminderDaysBefore: 7,
   overdueGraceDays: 3,

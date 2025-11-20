@@ -12,7 +12,6 @@ interface InstallmentPlan {
   name: string;
   installments: number;
   frequency: 'monthly' | 'weekly';
-  processingFee?: number;
   description?: string;
 }
 
@@ -27,8 +26,7 @@ export interface InstallmentDetails {
   planId: string;
   installments: number;
   amountPerInstallment: number;
-  totalWithFees: number;
-  processingFee: number;
+  totalAmount: number;
   schedule: Array<{
     installmentNumber: number;
     dueDate: string;
@@ -51,16 +49,11 @@ const generateInstallmentPlans = (): InstallmentPlan[] => {
 
   if (settings.allowInstallments) {
     settings.defaultInstallmentOptions.forEach(months => {
-      const processingFee = settings.processingFeeEnabled 
-        ? Math.round((settings.processingFeePercentage / 100) * 100) // Base fee calculation
-        : 0;
-
       plans.push({
         id: `${months}-months`,
         name: `${months} Monthly Payments`,
         installments: months,
         frequency: 'monthly',
-        processingFee,
         description: `Split into ${months} monthly payments`
       });
     });
@@ -77,16 +70,7 @@ export function InstallmentPlanSelector({
 }: InstallmentPlanSelectorProps) {
   const INSTALLMENT_PLANS = generateInstallmentPlans();
   const calculateInstallmentDetails = (plan: InstallmentPlan): InstallmentDetails => {
-    const settings = getPaymentSettings();
-    let processingFee = plan.processingFee || 0;
-    
-    // Calculate percentage-based processing fee if enabled
-    if (settings.processingFeeEnabled && plan.installments > 1) {
-      processingFee = Math.round((totalAmount * settings.processingFeePercentage / 100) * 100) / 100;
-    }
-    
-    const totalWithFees = totalAmount + processingFee;
-    const amountPerInstallment = totalWithFees / plan.installments;
+    const amountPerInstallment = totalAmount / plan.installments;
     
     const schedule = Array.from({ length: plan.installments }, (_, index) => ({
       installmentNumber: index + 1,
@@ -98,8 +82,7 @@ export function InstallmentPlanSelector({
       planId: plan.id,
       installments: plan.installments,
       amountPerInstallment,
-      totalWithFees,
-      processingFee,
+      totalAmount,
       schedule
     };
   };
@@ -139,14 +122,9 @@ export function InstallmentPlanSelector({
                   className="flex-1 cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-medium">{plan.name}</span>
-                      {plan.processingFee && plan.processingFee > 0 && (
-                        <Badge variant="secondary" className="ml-2">
-                          +€{plan.processingFee} fee
-                        </Badge>
-                      )}
-                    </div>
+                  <div>
+                    <span className="font-medium">{plan.name}</span>
+                  </div>
                     <div className="text-right">
                       {plan.installments === 1 ? (
                         <span className="font-semibold">€{totalAmount.toFixed(2)}</span>
@@ -176,7 +154,7 @@ export function InstallmentPlanSelector({
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <Euro className="h-3 w-3" />
-                        <span>Total: €{installmentDetails.totalWithFees.toFixed(2)}</span>
+                        <span>Total: €{installmentDetails.totalAmount.toFixed(2)}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="h-3 w-3" />
@@ -207,12 +185,6 @@ export function InstallmentPlanSelector({
                         )}
                       </div>
                     </div>
-                    
-                    {installmentDetails.processingFee > 0 && (
-                      <div className="text-xs text-muted-foreground border-t pt-2">
-                        Processing fee: €{installmentDetails.processingFee.toFixed(2)}
-                      </div>
-                    )}
                   </CardContent>
                 </Card>
               )}
