@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TimeFrameSelectorProps } from "./types";
+import { cn } from "@/lib/utils";
 
 export function TimeFrameSelector({ 
   timeFrame, 
@@ -15,8 +16,8 @@ export function TimeFrameSelector({
     <div className="w-full space-y-3">
       {showTitle && <h3 className="text-lg font-semibold">Business Development Metrics</h3>}
       
-      <div className="overflow-x-auto pb-2">
-        <TabsList className="w-full min-w-max flex justify-start">
+      <div className="flex justify-center overflow-x-auto pb-2">
+        <TabsList className="inline-flex">
           <TabsTrigger value="week" onClick={() => onTimeFrameChange("week")}>Weekly</TabsTrigger>
           <TabsTrigger value="month" onClick={() => onTimeFrameChange("month")}>Monthly</TabsTrigger>
           <TabsTrigger value="quarter" onClick={() => onTimeFrameChange("quarter")}>Quarterly</TabsTrigger>
@@ -25,8 +26,15 @@ export function TimeFrameSelector({
         </TabsList>
       </div>
       
-      {timeFrame === "custom" && (
-        <div className="flex flex-wrap gap-2">
+      <div 
+        className={cn(
+          "transition-all duration-300 ease-in-out overflow-hidden",
+          timeFrame === "custom" 
+            ? "max-h-20 opacity-100" 
+            : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="flex flex-wrap gap-2 justify-center">
           <Button 
             variant="outline" 
             size="sm" 
@@ -60,7 +68,7 @@ export function TimeFrameSelector({
             90 Days
           </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
