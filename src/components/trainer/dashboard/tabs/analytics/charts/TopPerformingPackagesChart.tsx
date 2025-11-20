@@ -80,24 +80,6 @@ export function TopPerformingPackagesChart() {
             </div>
           ))}
         </div>
-        
-        {/* Summary Stats */}
-        <div className="mt-6 pt-4 border-t">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary">{metrics.totalSales}</div>
-              <div className="text-sm text-muted-foreground">Total Sales</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">€{metrics.totalRevenue.toLocaleString()}</div>
-              <div className="text-sm text-muted-foreground">Total Revenue</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">{metrics.avgConversion}%</div>
-              <div className="text-sm text-muted-foreground">Avg. Conversion</div>
-            </div>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
