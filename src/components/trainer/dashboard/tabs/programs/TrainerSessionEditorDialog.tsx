@@ -112,7 +112,7 @@ export function TrainerSessionEditorDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+      <DialogContent className="max-w-4xl max-h-[90vh] p-0 flex flex-col overflow-hidden">
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center gap-2 mb-2">
             <DialogTitle>Edit Training Data</DialogTitle>
@@ -126,7 +126,7 @@ export function TrainerSessionEditorDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 px-6">
+        <ScrollArea className="flex-1 px-6 overflow-y-auto">
           <div className="space-y-6 pb-6">
             {/* Session Selector */}
             <SessionSelector
