@@ -359,5 +359,73 @@ export const it = {
   'analytics.tabs.revenue': 'Ricavi',
   'analytics.tabs.packages': 'Pacchetti',
   'analytics.tabs.clients': 'Tipi Clienti',
-  'analytics.tabs.aiSummary': 'Riassunto AI'
+  'analytics.tabs.aiSummary': 'Riassunto AI',
+
+  // Message Automation
+  'messageAutomation.title': 'Automazione Messaggi',
+  'messageAutomation.templatesTab': 'Templates',
+  'messageAutomation.rulesTab': 'Regole',
+  'messageAutomation.analyticsTab': 'Analytics',
+
+  // KPIs
+  'messageAutomation.activeTemplates': 'Templates Attivi',
+  'messageAutomation.activeRules': 'Regole Attive',
+  'messageAutomation.messagesSent': 'Messaggi Inviati',
+  'messageAutomation.successRate': 'Tasso Successo',
+
+  // Templates Section
+  'messageAutomation.templates.title': 'Templates Messaggi',
+  'messageAutomation.templates.description': 'Gestisci i modelli per l\'automazione dei messaggi',
+  'messageAutomation.templates.name': 'Nome Template',
+  'messageAutomation.templates.type': 'Tipo',
+  'messageAutomation.templates.subject': 'Oggetto',
+  'messageAutomation.templates.message': 'Messaggio',
+  'messageAutomation.templates.create': 'Crea Template',
+  'messageAutomation.templates.namePlaceholder': 'Es. Pacchetto in scadenza',
+  'messageAutomation.templates.subjectPlaceholder': 'Oggetto del messaggio',
+  'messageAutomation.templates.messagePlaceholder': 'Contenuto del messaggio...',
+
+  // Template Types
+  'messageAutomation.types.packageExpiring': 'Pacchetto in Scadenza',
+  'messageAutomation.types.packageExpired': 'Pacchetto Scaduto',
+  'messageAutomation.types.sessionReminder': 'Promemoria Sessione',
+  'messageAutomation.types.programEnding': 'Programma in Chiusura',
+  'messageAutomation.types.welcome': 'Benvenuto',
+  'messageAutomation.types.custom': 'Personalizzato',
+
+  // Template Status
+  'messageAutomation.status.active': 'Attivo',
+  'messageAutomation.status.inactive': 'Inattivo',
+
+  // Rules Section
+  'messageAutomation.rules.title': 'Regole di Automazione',
+  'messageAutomation.rules.description': 'Configura quando e come inviare i messaggi automatici',
+  'messageAutomation.rules.template': 'Template',
+  'messageAutomation.rules.trigger': 'Trigger',
+  'messageAutomation.rules.daysBefore': 'Giorni Prima',
+  'messageAutomation.rules.create': 'Crea Regola',
+  'messageAutomation.rules.selectTemplate': 'Seleziona template',
+
+  // Trigger Types
+  'messageAutomation.triggers.packageExpiry': 'Scadenza Pacchetto',
+  'messageAutomation.triggers.sessionUpcoming': 'Sessione Imminente',
+  'messageAutomation.triggers.programEnding': 'Fine Programma',
+  'messageAutomation.triggers.welcome': 'Benvenuto',
+
+  // Analytics Section
+  'messageAutomation.analytics.title': 'Analytics Automazione',
+  'messageAutomation.analytics.description': 'Statistiche sui messaggi automatici',
+  'messageAutomation.analytics.totalSent': 'Messaggi Inviati',
+  'messageAutomation.analytics.scheduled': 'In Programmazione',
+  'messageAutomation.analytics.failed': 'Falliti',
+  'messageAutomation.analytics.successRateLabel': 'Tasso di successo',
+
+  // Toast Messages
+  'messageAutomation.toast.requiredFields': 'Compila tutti i campi obbligatori',
+  'messageAutomation.toast.templateCreated': 'Template creato con successo!',
+  'messageAutomation.toast.selectTemplate': 'Seleziona un template',
+  'messageAutomation.toast.ruleCreated': 'Regola di automazione creata!',
+
+  // Loading
+  'messageAutomation.loading': 'Caricamento automazione messaggi...'
 };

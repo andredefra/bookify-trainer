@@ -359,5 +359,73 @@ export const en = {
   'analytics.tabs.revenue': 'Revenue',
   'analytics.tabs.packages': 'Packages', 
   'analytics.tabs.clients': 'Client Types',
-  'analytics.tabs.aiSummary': 'AI Summary'
+  'analytics.tabs.aiSummary': 'AI Summary',
+
+  // Message Automation
+  'messageAutomation.title': 'Message Automation',
+  'messageAutomation.templatesTab': 'Templates',
+  'messageAutomation.rulesTab': 'Rules',
+  'messageAutomation.analyticsTab': 'Analytics',
+
+  // KPIs
+  'messageAutomation.activeTemplates': 'Active Templates',
+  'messageAutomation.activeRules': 'Active Rules',
+  'messageAutomation.messagesSent': 'Messages Sent',
+  'messageAutomation.successRate': 'Success Rate',
+
+  // Templates Section
+  'messageAutomation.templates.title': 'Message Templates',
+  'messageAutomation.templates.description': 'Manage templates for message automation',
+  'messageAutomation.templates.name': 'Template Name',
+  'messageAutomation.templates.type': 'Type',
+  'messageAutomation.templates.subject': 'Subject',
+  'messageAutomation.templates.message': 'Message',
+  'messageAutomation.templates.create': 'Create Template',
+  'messageAutomation.templates.namePlaceholder': 'E.g. Package expiring',
+  'messageAutomation.templates.subjectPlaceholder': 'Message subject',
+  'messageAutomation.templates.messagePlaceholder': 'Message content...',
+
+  // Template Types
+  'messageAutomation.types.packageExpiring': 'Package Expiring',
+  'messageAutomation.types.packageExpired': 'Package Expired',
+  'messageAutomation.types.sessionReminder': 'Session Reminder',
+  'messageAutomation.types.programEnding': 'Program Ending',
+  'messageAutomation.types.welcome': 'Welcome',
+  'messageAutomation.types.custom': 'Custom',
+
+  // Template Status
+  'messageAutomation.status.active': 'Active',
+  'messageAutomation.status.inactive': 'Inactive',
+
+  // Rules Section
+  'messageAutomation.rules.title': 'Automation Rules',
+  'messageAutomation.rules.description': 'Configure when and how to send automatic messages',
+  'messageAutomation.rules.template': 'Template',
+  'messageAutomation.rules.trigger': 'Trigger',
+  'messageAutomation.rules.daysBefore': 'Days Before',
+  'messageAutomation.rules.create': 'Create Rule',
+  'messageAutomation.rules.selectTemplate': 'Select template',
+
+  // Trigger Types
+  'messageAutomation.triggers.packageExpiry': 'Package Expiry',
+  'messageAutomation.triggers.sessionUpcoming': 'Upcoming Session',
+  'messageAutomation.triggers.programEnding': 'Program Ending',
+  'messageAutomation.triggers.welcome': 'Welcome',
+
+  // Analytics Section
+  'messageAutomation.analytics.title': 'Automation Analytics',
+  'messageAutomation.analytics.description': 'Statistics on automatic messages',
+  'messageAutomation.analytics.totalSent': 'Messages Sent',
+  'messageAutomation.analytics.scheduled': 'Scheduled',
+  'messageAutomation.analytics.failed': 'Failed',
+  'messageAutomation.analytics.successRateLabel': 'Success rate',
+
+  // Toast Messages
+  'messageAutomation.toast.requiredFields': 'Fill in all required fields',
+  'messageAutomation.toast.templateCreated': 'Template created successfully!',
+  'messageAutomation.toast.selectTemplate': 'Select a template',
+  'messageAutomation.toast.ruleCreated': 'Automation rule created!',
+
+  // Loading
+  'messageAutomation.loading': 'Loading message automation...'
 };
