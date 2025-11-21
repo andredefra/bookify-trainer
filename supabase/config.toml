@@ -37,3 +37,6 @@ verify_jwt = true
 
 [functions.openai-realtime]
 verify_jwt = false
+
+[functions.detect-installment]
+verify_jwt = false
