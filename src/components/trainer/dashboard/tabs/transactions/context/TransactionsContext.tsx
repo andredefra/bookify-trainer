@@ -90,6 +90,100 @@ const initialTransactions: TransactionType[] = [
   // Pending transactions
   { id: 61, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-25", status: "pending", paymentMethod: "cash", invoiceSent: false },
   { id: 62, client: "Sarah Johnson", type: "Program", name: "New Year Program", amount: 130, date: "2025-11-28", status: "pending", paymentMethod: "card", invoiceSent: false },
+  
+  // Example installment payments - Sarah Johnson paying Elite Annual Package in 3 installments
+  { 
+    id: 63, 
+    client: "Sarah Johnson", 
+    type: "Package", 
+    name: "Elite Annual Package - Installment 1/3", 
+    amount: 200, 
+    date: "2025-09-15", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 1,
+    totalInstallments: 3,
+    parentTransactionId: "63"
+  },
+  { 
+    id: 64, 
+    client: "Sarah Johnson", 
+    type: "Package", 
+    name: "Elite Annual Package - Installment 2/3", 
+    amount: 200, 
+    date: "2025-10-15", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 2,
+    totalInstallments: 3,
+    parentTransactionId: "63"
+  },
+  { 
+    id: 65, 
+    client: "Sarah Johnson", 
+    type: "Package", 
+    name: "Elite Annual Package - Installment 3/3", 
+    amount: 200, 
+    date: "2025-11-15", 
+    status: "pending", 
+    paymentMethod: "card",
+    invoiceSent: false,
+    isInstallment: true,
+    installmentNumber: 3,
+    totalInstallments: 3,
+    parentTransactionId: "63"
+  },
+  
+  // Example installment payments - Mike Wilson paying in 4 monthly installments
+  { 
+    id: 66, 
+    client: "Mike Peterson", 
+    type: "Package", 
+    name: "Premium Training Package - Installment 1/4", 
+    amount: 150, 
+    date: "2025-08-01", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 1,
+    totalInstallments: 4,
+    parentTransactionId: "66"
+  },
+  { 
+    id: 67, 
+    client: "Mike Peterson", 
+    type: "Package", 
+    name: "Premium Training Package - Installment 2/4", 
+    amount: 150, 
+    date: "2025-09-01", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 2,
+    totalInstallments: 4,
+    parentTransactionId: "66"
+  },
+  { 
+    id: 68, 
+    client: "Mike Peterson", 
+    type: "Package", 
+    name: "Premium Training Package - Installment 3/4", 
+    amount: 150, 
+    date: "2025-10-01", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 3,
+    totalInstallments: 4,
+    parentTransactionId: "66"
+  },
 ];
 
 const clientList: ClientData[] = [

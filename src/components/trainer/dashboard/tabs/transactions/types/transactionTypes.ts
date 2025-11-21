@@ -39,7 +39,18 @@ export const transactionSchema = z.object({
   dueDate: z.string().optional(),
   isInstallment: z.boolean().optional(),
   installmentStatus: z.enum(['scheduled', 'pending', 'paid', 'overdue']).optional()
-});
+}).refine(
+  (data) => {
+    // If isInstallment is true, all installment fields are required
+    if (data.isInstallment) {
+      return data.installmentNumber && data.totalInstallments && data.parentTransactionId;
+    }
+    return true;
+  },
+  {
+    message: "When marking as installment, all installment fields are required",
+  }
+);
 
 // Form values type
 export type TransactionFormValues = z.infer<typeof transactionSchema>;
