@@ -12,9 +12,10 @@ interface AssignedProgramItemProps {
   };
   currentProgram: string;
   onChangeProgram: (clientName: string) => void;
+  onViewProgress: (clientId: number) => void;
 }
 
-export function AssignedProgramItem({ client, currentProgram, onChangeProgram }: AssignedProgramItemProps) {
+export function AssignedProgramItem({ client, currentProgram, onChangeProgram, onViewProgress }: AssignedProgramItemProps) {
   const { updateSessionsCompleted } = useProgramAssignments();
   
   // Enhanced mock data with progress tracking
@@ -149,6 +150,7 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram }:
         <Button 
           variant="ghost" 
           size="sm"
+          onClick={() => onViewProgress(client.id)}
           className="flex-1 sm:flex-auto"
         >
           View Progress
