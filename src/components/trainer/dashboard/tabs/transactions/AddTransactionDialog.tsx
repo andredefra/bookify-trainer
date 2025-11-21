@@ -49,6 +49,7 @@ export function AddTransactionDialog({ open, onOpenChange, onAdd, clients }: Add
   const watchClient = form.watch("client");
   const watchAmount = form.watch("amount");
   const watchIsInstallment = form.watch("isInstallment");
+  const watchInstallmentNumber = form.watch("installmentNumber");
   
   // AI Detection when client or amount changes
   useEffect(() => {
@@ -68,7 +69,11 @@ export function AddTransactionDialog({ open, onOpenChange, onAdd, clients }: Add
             form.setValue("isInstallment", true);
             form.setValue("installmentNumber", result.suggestedInstallmentNumber);
             form.setValue("totalInstallments", result.totalInstallmentsDetected);
-            form.setValue("parentTransactionId", result.parentTransactionId || undefined);
+            
+            // Only set parentTransactionId if NOT the first installment
+            if (result.suggestedInstallmentNumber > 1 && result.parentTransactionId) {
+              form.setValue("parentTransactionId", result.parentTransactionId);
+            }
           }
         } catch (error) {
           console.error('Error detecting installment:', error);
@@ -221,26 +226,33 @@ export function AddTransactionDialog({ open, onOpenChange, onAdd, clients }: Add
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="parentTransaction">Parent Transaction</Label>
-                  <Select
-                    value={form.watch("parentTransactionId") || ""}
-                    onValueChange={(value) => form.setValue("parentTransactionId", value)}
-                  >
-                    <SelectTrigger id="parentTransaction">
-                      <SelectValue placeholder="Select first payment in series" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {transactions
-                        .filter(t => t.client === watchClient)
-                        .map((t) => (
-                          <SelectItem key={t.id} value={t.id.toString()}>
-                            {t.name} - €{t.amount} ({t.date})
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* Parent Transaction - only show if installment number > 1 */}
+                {watchInstallmentNumber > 1 && (
+                  <div className="space-y-2">
+                    <Label htmlFor="parentTransaction">Parent Transaction (First Payment) *</Label>
+                    <Select
+                      value={form.watch("parentTransactionId") || ""}
+                      onValueChange={(value) => form.setValue("parentTransactionId", value)}
+                    >
+                      <SelectTrigger id="parentTransaction">
+                        <SelectValue placeholder="Select the first installment payment" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {transactions
+                          .filter(t => 
+                            t.client === watchClient && 
+                            t.isInstallment && 
+                            t.installmentNumber === 1  // Show ONLY first installments
+                          )
+                          .map((t) => (
+                            <SelectItem key={t.id} value={t.id.toString()}>
+                              {t.name} - €{t.amount} ({t.date})
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
             )}
 
