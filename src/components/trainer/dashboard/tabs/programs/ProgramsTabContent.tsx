@@ -86,16 +86,60 @@ export function ProgramsTabContent({
               sets: 4,
               reps: "8-10",
               weight: 60,
-              notes: "Focus on form",
+              notes: "Focus on form and full range of motion",
               setsData: []
             },
             {
               id: "ex-2",
-              name: "Rows",
+              name: "Barbell Rows",
               sets: 4,
               reps: "10-12",
               weight: 50,
-              notes: "Controlled movement",
+              notes: "Keep back straight, controlled movement",
+              setsData: []
+            },
+            {
+              id: "ex-3",
+              name: "Shoulder Press",
+              sets: 3,
+              reps: "8-10",
+              weight: 35,
+              notes: "Press overhead, avoid arching back",
+              setsData: []
+            },
+            {
+              id: "ex-4",
+              name: "Lateral Raises",
+              sets: 3,
+              reps: "12-15",
+              weight: 10,
+              notes: "Light weight, focus on shoulders",
+              setsData: []
+            },
+            {
+              id: "ex-5",
+              name: "Tricep Dips",
+              sets: 3,
+              reps: "10-12",
+              notes: "Use assisted machine if needed",
+              setsData: []
+            },
+            {
+              id: "ex-6",
+              name: "Bicep Curls",
+              sets: 3,
+              reps: "10-12",
+              weight: 12,
+              notes: "Alternate arms or both together",
+              setsData: []
+            },
+            {
+              id: "ex-7",
+              name: "Face Pulls",
+              sets: 3,
+              reps: "15-20",
+              weight: 20,
+              notes: "Great for rear delts and posture",
               setsData: []
             }
           ],
@@ -107,12 +151,133 @@ export function ProgramsTabContent({
           title: "Lower Body Strength",
           exercises: [
             {
-              id: "ex-3",
+              id: "ex-8",
               name: "Squats",
               sets: 4,
               reps: "8-10",
               weight: 80,
-              notes: "Full depth",
+              notes: "Go to parallel or below",
+              setsData: []
+            },
+            {
+              id: "ex-9",
+              name: "Romanian Deadlifts",
+              sets: 4,
+              reps: "8-10",
+              weight: 70,
+              notes: "Feel the stretch in hamstrings",
+              setsData: []
+            },
+            {
+              id: "ex-10",
+              name: "Leg Press",
+              sets: 3,
+              reps: "12-15",
+              weight: 120,
+              notes: "Full range of motion",
+              setsData: []
+            },
+            {
+              id: "ex-11",
+              name: "Walking Lunges",
+              sets: 3,
+              reps: "10 per leg",
+              weight: 15,
+              notes: "Hold dumbbells, keep torso upright",
+              setsData: []
+            },
+            {
+              id: "ex-12",
+              name: "Leg Curls",
+              sets: 3,
+              reps: "12-15",
+              weight: 40,
+              notes: "Controlled tempo",
+              setsData: []
+            },
+            {
+              id: "ex-13",
+              name: "Calf Raises",
+              sets: 4,
+              reps: "15-20",
+              weight: 60,
+              notes: "Full stretch and contraction",
+              setsData: []
+            }
+          ],
+          completed: false
+        },
+        {
+          id: "session-3",
+          sessionNumber: 3,
+          title: "Full Body & Core",
+          exercises: [
+            {
+              id: "ex-14",
+              name: "Deadlifts",
+              sets: 4,
+              reps: "6-8",
+              weight: 90,
+              notes: "Heavy compound movement",
+              setsData: []
+            },
+            {
+              id: "ex-15",
+              name: "Pull-ups",
+              sets: 3,
+              reps: "8-10",
+              notes: "Use assistance if needed",
+              setsData: []
+            },
+            {
+              id: "ex-16",
+              name: "Dumbbell Chest Press",
+              sets: 3,
+              reps: "10-12",
+              weight: 25,
+              notes: "Each hand",
+              setsData: []
+            },
+            {
+              id: "ex-17",
+              name: "Cable Rows",
+              sets: 3,
+              reps: "12-15",
+              weight: 45,
+              notes: "Squeeze shoulder blades together",
+              setsData: []
+            },
+            {
+              id: "ex-18",
+              name: "Plank",
+              sets: 3,
+              reps: "60 sec",
+              notes: "Hold position, engage core",
+              setsData: []
+            },
+            {
+              id: "ex-19",
+              name: "Russian Twists",
+              sets: 3,
+              reps: "20 per side",
+              weight: 10,
+              notes: "Medicine ball or plate",
+              setsData: []
+            },
+            {
+              id: "ex-20",
+              name: "Leg Raises",
+              sets: 3,
+              reps: "12-15",
+              notes: "Controlled lowering",
+              setsData: []
+            },
+            {
+              id: "ex-21",
+              name: "Mountain Climbers",
+              sets: 3,
+              reps: "30 sec",
+              notes: "High intensity finisher",
               setsData: []
             }
           ],
