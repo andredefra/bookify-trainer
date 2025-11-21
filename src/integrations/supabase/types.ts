@@ -445,6 +445,42 @@ export type Database = {
         }
         Relationships: []
       }
+      client_training_session_progress: {
+        Row: {
+          client_id: string
+          completed_by: string | null
+          created_at: string | null
+          exercise_data: Json
+          id: string
+          program_id: string
+          session_completed: boolean | null
+          session_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          completed_by?: string | null
+          created_at?: string | null
+          exercise_data?: Json
+          id?: string
+          program_id: string
+          session_completed?: boolean | null
+          session_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          completed_by?: string | null
+          created_at?: string | null
+          exercise_data?: Json
+          id?: string
+          program_id?: string
+          session_completed?: boolean | null
+          session_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           client_id: string
