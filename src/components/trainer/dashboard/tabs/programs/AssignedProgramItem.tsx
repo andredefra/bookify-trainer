@@ -153,7 +153,7 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram, o
           onClick={() => onViewProgress(client.id)}
           className="flex-1 sm:flex-auto"
         >
-          View Progress
+          Manage Program
         </Button>
       </div>
     </div>
