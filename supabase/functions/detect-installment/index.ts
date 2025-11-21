@@ -43,8 +43,13 @@ Return ONLY valid JSON with this exact structure:
   "totalInstallmentsDetected": number (minimum 2),
   "confidence": number (0-1, e.g., 0.85),
   "reasoning": "brief explanation in English",
-  "parentTransactionId": "string or null (ID of first payment in series)"
+  "parentTransactionId": "string or null (ID of the FIRST payment in this installment series)"
 }
+
+CRITICAL RULES for parentTransactionId:
+- If this is the FIRST installment (1/N): parentTransactionId MUST be null
+- If this is installment 2 or higher: Find the transaction with installmentNumber = 1 in this series and return its ID
+- If no previous installment series exists, this is installment 1/N with parentTransactionId = null
 
 Be conservative - only suggest installments when there's clear evidence of a payment series.`;
 

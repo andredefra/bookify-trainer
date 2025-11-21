@@ -41,14 +41,23 @@ export const transactionSchema = z.object({
   installmentStatus: z.enum(['scheduled', 'pending', 'paid', 'overdue']).optional()
 }).refine(
   (data) => {
-    // If isInstallment is true, all installment fields are required
+    // If isInstallment is true, installmentNumber and totalInstallments are required
     if (data.isInstallment) {
-      return data.installmentNumber && data.totalInstallments && data.parentTransactionId;
+      if (!data.installmentNumber || !data.totalInstallments) {
+        return false;
+      }
+      
+      // parentTransactionId is required ONLY if installmentNumber > 1
+      if (data.installmentNumber > 1 && !data.parentTransactionId) {
+        return false;
+      }
+      
+      return true;
     }
     return true;
   },
   {
-    message: "When marking as installment, all installment fields are required",
+    message: "Installment number and total are required. Parent transaction required for installments 2+",
   }
 );
 
