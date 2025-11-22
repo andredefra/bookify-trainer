@@ -38,8 +38,8 @@ export function useClientSubscription() {
         return;
       }
       
-      // For demo mode, create Pro subscription in memory
-      if (demoUser) {
+      // For demo mode OR demo UUID, create Pro subscription in memory
+      if (demoUser || userId === '00000000-0000-0000-0000-000000000002') {
         setSubscription({
           plan: 'pro',
           status: 'active',
