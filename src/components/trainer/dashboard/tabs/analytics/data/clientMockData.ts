@@ -5,43 +5,35 @@ import { ClientData } from '../utils/metricsCalculator';
 export const mockClients: ClientData[] = [
   {
     id: '1',
-    name: 'Sarah Johnson',
-    age: 28,
-    height: 165, // cm
-    currentWeight: 68, // kg
-    targetWeight: 65, // kg
+    name: 'Emma Thompson',
+    age: 29,
+    height: 168, // cm
+    currentWeight: 62, // kg
+    targetWeight: 58, // kg
     goals: [
       {
         id: 'goal1',
-        target: 65,
-        current: 68.5,
+        target: 58,
+        current: 62,
         type: 'weight_management',
-        deadline: new Date('2024-06-01'),
-        createdAt: new Date('2024-01-01')
+        deadline: new Date('2024-07-01'),
+        createdAt: new Date('2024-01-15')
       },
       {
         id: 'goal2',
-        target: 80,
-        current: 75,
+        target: 75,
+        current: 68,
         type: 'strength_progress',
-        deadline: new Date('2024-05-01'),
-        createdAt: new Date('2024-01-15')
+        deadline: new Date('2024-06-01'),
+        createdAt: new Date('2024-02-01')
       },
       {
         id: 'goal3',
         target: 10000,
-        current: 8500,
+        current: 7500,
         type: 'activity_level',
-        deadline: new Date('2024-07-01'),
-        createdAt: new Date('2024-02-01')
-      },
-      {
-        id: 'goal4',
-        target: 15,
-        current: 22,
-        type: 'body_composition',
-        deadline: new Date('2024-08-01'),
-        createdAt: new Date('2024-02-15')
+        deadline: new Date('2024-12-31'),
+        createdAt: new Date('2024-01-01')
       }
     ],
     sessions: [
@@ -49,22 +41,20 @@ export const mockClients: ClientData[] = [
       ...generateSessionsForWeeks(6, 0.85), // 85% attendance rate
     ],
     bodyMeasurements: [
-      { date: new Date('2024-01-01'), weight: 72, bodyFat: 25 },
-      { date: new Date('2024-01-15'), weight: 71.5, bodyFat: 24.5 },
-      { date: new Date('2024-02-01'), weight: 71, bodyFat: 24 },
-      { date: new Date('2024-02-15'), weight: 70.2, bodyFat: 23.5 },
-      { date: new Date('2024-03-01'), weight: 69.8, bodyFat: 23 },
-      { date: new Date('2024-03-15'), weight: 69.2, bodyFat: 22.5 },
-      { date: new Date('2024-04-01'), weight: 68.8, bodyFat: 22 },
-      { date: new Date('2024-04-15'), weight: 68.4, bodyFat: 21.5 },
-      { date: new Date('2024-05-01'), weight: 68, bodyFat: 21 },
-      { date: new Date('2024-05-15'), weight: 67.8, bodyFat: 20.8 },
-      { date: new Date('2024-05-29'), weight: 67.5, bodyFat: 20.5 }
+      { date: new Date('2024-01-15'), weight: 65, bodyFat: 26 },
+      { date: new Date('2024-02-01'), weight: 64.5, bodyFat: 25.5 },
+      { date: new Date('2024-02-15'), weight: 64, bodyFat: 25 },
+      { date: new Date('2024-03-01'), weight: 63.5, bodyFat: 24.5 },
+      { date: new Date('2024-03-15'), weight: 63.2, bodyFat: 24 },
+      { date: new Date('2024-04-01'), weight: 62.8, bodyFat: 23.5 },
+      { date: new Date('2024-04-15'), weight: 62.5, bodyFat: 23.2 },
+      { date: new Date('2024-05-01'), weight: 62.2, bodyFat: 23 },
+      { date: new Date('2024-05-15'), weight: 62, bodyFat: 22.8 },
     ]
   },
   {
     id: '2',
-    name: 'Mike Peterson',
+    name: 'Michael Chen',
     age: 35,
     height: 180, // cm
     currentWeight: 85, // kg
@@ -116,6 +106,65 @@ export const mockClients: ClientData[] = [
       { date: new Date('2024-05-01'), weight: 85.5, bodyFat: 15.2 },
       { date: new Date('2024-05-15'), weight: 85.2, bodyFat: 15 },
       { date: new Date('2024-05-29'), weight: 85, bodyFat: 14.8 }
+    ]
+  },
+  {
+    id: '3',
+    name: 'Sarah Johnson',
+    age: 28,
+    height: 165, // cm
+    currentWeight: 68, // kg
+    targetWeight: 65, // kg
+    goals: [
+      {
+        id: 'goal9',
+        target: 65,
+        current: 68.5,
+        type: 'weight_management',
+        deadline: new Date('2024-06-01'),
+        createdAt: new Date('2024-01-01')
+      },
+      {
+        id: 'goal10',
+        target: 80,
+        current: 75,
+        type: 'strength_progress',
+        deadline: new Date('2024-05-01'),
+        createdAt: new Date('2024-01-15')
+      },
+      {
+        id: 'goal11',
+        target: 10000,
+        current: 8500,
+        type: 'activity_level',
+        deadline: new Date('2024-07-01'),
+        createdAt: new Date('2024-02-01')
+      },
+      {
+        id: 'goal12',
+        target: 15,
+        current: 22,
+        type: 'body_composition',
+        deadline: new Date('2024-08-01'),
+        createdAt: new Date('2024-02-15')
+      }
+    ],
+    sessions: [
+      // Last 6 weeks of sessions with realistic attendance patterns
+      ...generateSessionsForWeeks(6, 0.85), // 85% attendance rate
+    ],
+    bodyMeasurements: [
+      { date: new Date('2024-01-01'), weight: 72, bodyFat: 25 },
+      { date: new Date('2024-01-15'), weight: 71.5, bodyFat: 24.5 },
+      { date: new Date('2024-02-01'), weight: 71, bodyFat: 24 },
+      { date: new Date('2024-02-15'), weight: 70.2, bodyFat: 23.5 },
+      { date: new Date('2024-03-01'), weight: 69.8, bodyFat: 23 },
+      { date: new Date('2024-03-15'), weight: 69.2, bodyFat: 22.5 },
+      { date: new Date('2024-04-01'), weight: 68.8, bodyFat: 22 },
+      { date: new Date('2024-04-15'), weight: 68.4, bodyFat: 21.5 },
+      { date: new Date('2024-05-01'), weight: 68, bodyFat: 21 },
+      { date: new Date('2024-05-15'), weight: 67.8, bodyFat: 20.8 },
+      { date: new Date('2024-05-29'), weight: 67.5, bodyFat: 20.5 }
     ]
   }
 ];
