@@ -16,6 +16,8 @@ import { ClientProgressChart } from "./charts/ClientProgressChart";
 import { ClientGoalsProgress } from "./charts/ClientGoalsProgress";
 import { ClientWorkoutInsights } from "./charts/ClientWorkoutInsights";
 import { ClientAnalyticsInsights } from "./charts/ClientAnalyticsInsights";
+import { AllClientsOverview } from "./charts/AllClientsOverview";
+import { AggregatedGoalStats } from "./charts/AggregatedGoalStats";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -66,6 +68,8 @@ export function ClientPerformance({ initialClientFilter = "all", onClientChange 
     return client?.name;
   };
   
+  const isAllClientsView = selectedClient === "all";
+  
   return (
     <div className="space-y-6">
       {/* Filter controls */}
@@ -102,28 +106,39 @@ export function ClientPerformance({ initialClientFilter = "all", onClientChange 
         </Select>
       </div>
       
-      {/* Client Progress Chart - Enhanced with area charts and better visualization */}
+      {/* Client Progress Chart - Always visible */}
       <ClientProgressChart 
         data={getPerformanceData()} 
         clientName={getSelectedClientName()}
       />
       
-      {/* Client Goals Progress - New component for goal tracking */}
-      <ClientGoalsProgress 
-        clientName={getSelectedClientName()}
-      />
-      
-      {/* AI Analytics Insights - Similar to client analytics */}
-      <ClientAnalyticsInsights 
-        clientName={getSelectedClientName()}
-        fitnessScore={78}
-        progressTrend="improving"
-      />
-      
-      {/* Client Workout Insights - Replaces Exercise Maxes with personalized insights */}
-      <ClientWorkoutInsights 
-        clientName={getSelectedClientName()}
-      />
+      {isAllClientsView ? (
+        // Aggregated view for "All Clients"
+        <>
+          <AllClientsOverview clients={mockClients} />
+          <AggregatedGoalStats clients={mockClients} />
+        </>
+      ) : (
+        // Individual client view
+        <>
+          {/* Client Goals Progress - New component for goal tracking */}
+          <ClientGoalsProgress 
+            clientName={getSelectedClientName()}
+          />
+          
+          {/* AI Analytics Insights - Similar to client analytics */}
+          <ClientAnalyticsInsights 
+            clientName={getSelectedClientName()}
+            fitnessScore={78}
+            progressTrend="improving"
+          />
+          
+          {/* Client Workout Insights - Replaces Exercise Maxes with personalized insights */}
+          <ClientWorkoutInsights 
+            clientName={getSelectedClientName()}
+          />
+        </>
+      )}
     </div>
   );
 }
