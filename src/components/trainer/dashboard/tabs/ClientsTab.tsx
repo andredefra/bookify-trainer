@@ -121,7 +121,10 @@ export function ClientsTab({ clients }: ClientsTabProps) {
                     </Button>
                   </div>
                 )}
-                <ClientPerformance initialClientFilter={analyticsClientFilter} />
+            <ClientPerformance 
+              initialClientFilter={analyticsClientFilter}
+              onClientChange={setAnalyticsClientFilter}
+            />
               </div>
             </TabsContent>
           </Tabs>

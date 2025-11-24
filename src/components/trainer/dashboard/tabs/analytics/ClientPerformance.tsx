@@ -25,9 +25,10 @@ const clients = [
 
 interface ClientPerformanceProps {
   initialClientFilter?: string;
+  onClientChange?: (clientId: string) => void;
 }
 
-export function ClientPerformance({ initialClientFilter = "all" }: ClientPerformanceProps) {
+export function ClientPerformance({ initialClientFilter = "all", onClientChange }: ClientPerformanceProps) {
   const [timeframe, setTimeframe] = useState("weekly");
   const [selectedClient, setSelectedClient] = useState(initialClientFilter);
   
@@ -72,6 +73,7 @@ export function ClientPerformance({ initialClientFilter = "all" }: ClientPerform
         <Select value={selectedClient} onValueChange={(value) => {
           console.log("Client selection changed to:", value);
           setSelectedClient(value);
+          onClientChange?.(value);
         }}>
           <SelectTrigger className="w-full md:w-[200px] bg-white border border-gray-300 shadow-sm">
             <SelectValue placeholder="Select Client" />
