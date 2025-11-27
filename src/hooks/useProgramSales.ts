@@ -19,8 +19,11 @@ export interface ProgramSale {
 
 export interface ProgramSalesData {
   weeklyRevenue: number;
+  previousWeekRevenue: number;
   monthlyRevenue: number;
+  previousMonthRevenue: number;
   quarterlyRevenue: number;
+  previousQuarterRevenue: number;
   pendingRequests: ProgramSale[];
   confirmedSales: ProgramSale[];
   rejectedSales: ProgramSale[];
@@ -94,8 +97,8 @@ const getMockConfirmedSales = (): ProgramSale[] => [
     packageId: 'pkg-5',
     packageTitle: 'Core Strength',
     price: 79.99,
-    purchaseDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
-    requestDate: new Date(Date.now() - 46 * 24 * 60 * 60 * 1000).toISOString(),
+    purchaseDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
     status: 'active',
     packageType: 'program_only',
   },
@@ -107,8 +110,8 @@ const getMockConfirmedSales = (): ProgramSale[] => [
     packageId: 'pkg-6',
     packageTitle: 'Bodybuilding Program',
     price: 129.99,
-    purchaseDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
-    requestDate: new Date(Date.now() - 61 * 24 * 60 * 60 * 1000).toISOString(),
+    purchaseDate: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 36 * 24 * 60 * 60 * 1000).toISOString(),
     status: 'active',
     packageType: 'program_only',
   },
@@ -120,10 +123,36 @@ const getMockConfirmedSales = (): ProgramSale[] => [
     packageId: 'pkg-7',
     packageTitle: 'HIIT Training',
     price: 89.99,
-    purchaseDate: new Date(Date.now() - 75 * 24 * 60 * 60 * 1000).toISOString(),
-    requestDate: new Date(Date.now() - 76 * 24 * 60 * 60 * 1000).toISOString(),
+    purchaseDate: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 41 * 24 * 60 * 60 * 1000).toISOString(),
     status: 'active',
     packageType: 'program_only',
+  },
+  {
+    id: 'mock-sale-6',
+    clientId: 'client-10',
+    clientName: 'Rachel Green',
+    clientEmail: 'rachel@example.com',
+    packageId: 'pkg-10',
+    packageTitle: 'Yoga Fundamentals',
+    price: 59.99,
+    purchaseDate: new Date(Date.now() - 50 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 51 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'program_only',
+  },
+  {
+    id: 'mock-sale-7',
+    clientId: 'client-11',
+    clientName: 'Tom Harris',
+    clientEmail: 'tom@example.com',
+    packageId: 'pkg-11',
+    packageTitle: 'Athletic Performance',
+    price: 179.99,
+    purchaseDate: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 56 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'hybrid',
   },
 ];
 
@@ -176,12 +205,40 @@ const getDateRange = (period: 'week' | 'month' | 'quarter') => {
   return { start: start.toISOString().split('T')[0], end: now.toISOString().split('T')[0] };
 };
 
+const getPreviousDateRange = (period: 'week' | 'month' | 'quarter') => {
+  const now = new Date();
+  const start = new Date();
+  const end = new Date();
+  
+  switch (period) {
+    case 'week':
+      end.setDate(now.getDate() - 7);
+      start.setDate(now.getDate() - 14);
+      break;
+    case 'month':
+      end.setMonth(now.getMonth() - 1);
+      end.setDate(0); // Last day of previous month
+      start.setMonth(now.getMonth() - 2);
+      start.setDate(1); // First day of previous month
+      break;
+    case 'quarter':
+      end.setMonth(now.getMonth() - 3);
+      start.setMonth(now.getMonth() - 6);
+      break;
+  }
+  
+  return { start: start.toISOString().split('T')[0], end: end.toISOString().split('T')[0] };
+};
+
 export function useProgramSales(trainerId?: string) {
   const effectiveTrainerId = trainerId || getCurrentDemoUserId();
   const [salesData, setSalesData] = useState<ProgramSalesData>({
     weeklyRevenue: 0,
+    previousWeekRevenue: 0,
     monthlyRevenue: 0,
+    previousMonthRevenue: 0,
     quarterlyRevenue: 0,
+    previousQuarterRevenue: 0,
     pendingRequests: [],
     confirmedSales: [],
     rejectedSales: [],
@@ -225,22 +282,41 @@ export function useProgramSales(trainerId?: string) {
         const monthRange = getDateRange('month');
         const quarterRange = getDateRange('quarter');
 
+        const previousWeekRange = getPreviousDateRange('week');
+        const previousMonthRange = getPreviousDateRange('month');
+        const previousQuarterRange = getPreviousDateRange('quarter');
+
         const weeklyRevenue = mockConfirmed
           .filter(s => s.purchaseDate >= weekRange.start)
+          .reduce((sum, s) => sum + s.price, 0);
+
+        const previousWeekRevenue = mockConfirmed
+          .filter(s => s.purchaseDate >= previousWeekRange.start && s.purchaseDate <= previousWeekRange.end)
           .reduce((sum, s) => sum + s.price, 0);
 
         const monthlyRevenue = mockConfirmed
           .filter(s => s.purchaseDate >= monthRange.start)
           .reduce((sum, s) => sum + s.price, 0);
 
+        const previousMonthRevenue = mockConfirmed
+          .filter(s => s.purchaseDate >= previousMonthRange.start && s.purchaseDate <= previousMonthRange.end)
+          .reduce((sum, s) => sum + s.price, 0);
+
         const quarterlyRevenue = mockConfirmed
           .filter(s => s.purchaseDate >= quarterRange.start)
           .reduce((sum, s) => sum + s.price, 0);
 
+        const previousQuarterRevenue = mockConfirmed
+          .filter(s => s.purchaseDate >= previousQuarterRange.start && s.purchaseDate <= previousQuarterRange.end)
+          .reduce((sum, s) => sum + s.price, 0);
+
         setSalesData({
           weeklyRevenue,
+          previousWeekRevenue,
           monthlyRevenue,
+          previousMonthRevenue,
           quarterlyRevenue,
+          previousQuarterRevenue,
           pendingRequests: mockPending,
           confirmedSales: mockConfirmed,
           rejectedSales: mockRejected,
@@ -289,22 +365,41 @@ export function useProgramSales(trainerId?: string) {
       const monthRange = getDateRange('month');
       const quarterRange = getDateRange('quarter');
 
+      const previousWeekRange = getPreviousDateRange('week');
+      const previousMonthRange = getPreviousDateRange('month');
+      const previousQuarterRange = getPreviousDateRange('quarter');
+
       const weeklyRevenue = confirmedSales
         .filter(s => s.purchaseDate >= weekRange.start)
+        .reduce((sum, s) => sum + s.price, 0);
+
+      const previousWeekRevenue = confirmedSales
+        .filter(s => s.purchaseDate >= previousWeekRange.start && s.purchaseDate <= previousWeekRange.end)
         .reduce((sum, s) => sum + s.price, 0);
 
       const monthlyRevenue = confirmedSales
         .filter(s => s.purchaseDate >= monthRange.start)
         .reduce((sum, s) => sum + s.price, 0);
 
+      const previousMonthRevenue = confirmedSales
+        .filter(s => s.purchaseDate >= previousMonthRange.start && s.purchaseDate <= previousMonthRange.end)
+        .reduce((sum, s) => sum + s.price, 0);
+
       const quarterlyRevenue = confirmedSales
         .filter(s => s.purchaseDate >= quarterRange.start)
         .reduce((sum, s) => sum + s.price, 0);
 
+      const previousQuarterRevenue = confirmedSales
+        .filter(s => s.purchaseDate >= previousQuarterRange.start && s.purchaseDate <= previousQuarterRange.end)
+        .reduce((sum, s) => sum + s.price, 0);
+
       setSalesData({
         weeklyRevenue,
+        previousWeekRevenue,
         monthlyRevenue,
+        previousMonthRevenue,
         quarterlyRevenue,
+        previousQuarterRevenue,
         pendingRequests,
         confirmedSales,
         rejectedSales,
