@@ -2,7 +2,8 @@ import { useState } from "react";
 import { PlusCircle, Settings } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CreateProgramDialog } from "./programs/CreateProgramDialog";
 import { AssignProgramDialog } from "./programs/AssignProgramDialog";
 import { ExerciseLibraryDialog } from "./programs/ExerciseLibraryDialog";
@@ -11,9 +12,10 @@ import { currentProgram } from "@/data/training/mockPrograms/currentProgram";
 import { Exercise } from "@/data/training/types";
 import { ProgramProgressCard } from './programs/ProgramProgressCard';
 import { ProgramExpirationAlert } from './programs/ProgramExpirationAlert';
-import { ProgramSalesAnalytics } from './programs/ProgramSalesAnalytics';
+import { ProgramSalesContent } from './programs/ProgramSalesContent';
 import { useProgramAssignments } from '@/hooks/useProgramAssignments';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useProgramSales } from '@/hooks/useProgramSales';
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 
@@ -46,6 +48,10 @@ export function ProgramsTab() {
   // Get current demo user ID for data isolation
   const currentUserId = getCurrentDemoUserId();
   console.log('ProgramsTab - Using user ID:', currentUserId);
+  
+  // Get pending count for badge
+  const { pendingRequests } = useProgramSales(currentUserId);
+  const pendingCount = pendingRequests.length;
   
   // Mock programs with extended data and exercises
   const sampleExercises: Exercise[] = currentProgram.sessions[0].exercises.map(ex => ({
@@ -209,18 +215,20 @@ export function ProgramsTab() {
             </div>
           )}
 
-          {/* Program Sales Analytics - for Essential and Pro trainers */}
-          {showSalesAnalytics && (
-            <ProgramSalesAnalytics 
-              trainerId={currentUserId}
-              isProTrainer={isProTrainer} 
-            />
-          )}
-          
           <Tabs defaultValue="programs" className="w-full">
             <TabsList className="mb-6 w-full sm:w-auto">
               <TabsTrigger value="programs" className="flex-1 sm:flex-none">My Programs</TabsTrigger>
               <TabsTrigger value="assigned" className="flex-1 sm:flex-none">Assigned Programs</TabsTrigger>
+              {showSalesAnalytics && (
+                <TabsTrigger value="sales" className="flex-1 sm:flex-none">
+                  Sales
+                  {pendingCount > 0 && (
+                    <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                      {pendingCount}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+              )}
             </TabsList>
             
             <ProgramsTabContent
@@ -231,6 +239,15 @@ export function ProgramsTab() {
               setShowEditProgram={setShowEditProgram}
               setActiveProgramId={setActiveProgramId}
             />
+            
+            {showSalesAnalytics && (
+              <TabsContent value="sales">
+                <ProgramSalesContent 
+                  trainerId={currentUserId}
+                  isProTrainer={isProTrainer}
+                />
+              </TabsContent>
+            )}
           </Tabs>
           
           {/* Dialogs */}
