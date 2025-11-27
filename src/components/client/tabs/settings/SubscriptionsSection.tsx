@@ -50,7 +50,7 @@ export function SubscriptionsSection() {
               </Badge>
             ) : (
               <Button onClick={() => setShowUpgrade(true)} size="sm">
-                Upgrade to AI Plan
+                Upgrade to Pro
               </Button>
             )}
           </div>
@@ -98,7 +98,7 @@ export function SubscriptionsSection() {
                   <Zap className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 )}
                 <div>
-                  <p className="text-sm">AI Workout Coach {!isPro && '(AI Plan)'}</p>
+                  <p className="text-sm">AI Workout Coach {!isPro && '(Pro)'}</p>
                   <p className="text-xs text-muted-foreground">
                     {isPro 
                       ? 'Unlimited AI chat during workouts'
@@ -114,7 +114,7 @@ export function SubscriptionsSection() {
                   <Sparkles className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 )}
                 <div>
-                  <p className="text-sm">Form Analysis {!isPro && '(AI Plan)'}</p>
+                  <p className="text-sm">Form Analysis {!isPro && '(Pro)'}</p>
                   <p className="text-xs text-muted-foreground">AI-powered form checking with Vision</p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export function SubscriptionsSection() {
                   <Sparkles className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 )}
                 <div>
-                  <p className="text-sm">Exercise Demos {!isPro && '(AI Plan)'}</p>
+                  <p className="text-sm">Exercise Demos {!isPro && '(Pro)'}</p>
                   <p className="text-xs text-muted-foreground">AI-generated setup images and videos</p>
                 </div>
               </div>
@@ -138,13 +138,13 @@ export function SubscriptionsSection() {
       {!isPro && (
         <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
           <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Crown className="h-5 w-5 text-amber-500" />
-            Upgrade to AI Plan
-          </CardTitle>
-          <CardDescription>
-            Unlock unlimited AI coaching for just €1.99/month
-          </CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <Crown className="h-5 w-5 text-amber-500" />
+              Upgrade to Pro
+            </CardTitle>
+            <CardDescription>
+              Unlock unlimited AI coaching for just €4.99/month
+            </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-4">
@@ -171,7 +171,7 @@ export function SubscriptionsSection() {
               onClick={() => setShowUpgrade(true)}
               className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
             >
-              Upgrade Now - €1.99/month
+              Upgrade Now - €4.99/month
             </Button>
           </CardContent>
         </Card>
@@ -186,7 +186,7 @@ export function SubscriptionsSection() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Plan</span>
-                <span className="font-medium">AI Plan - €1.99/month</span>
+                <span className="font-medium">Pro - €4.99/month</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Started</span>
