@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircle, Package, CreditCard, Users, Clock, Edit, UserPlus, Eye } from "lucide-react";
+import { PlusCircle, Package, CreditCard, Users, Clock, Edit, UserPlus, Eye, Calendar, CheckCircle2, AlertCircle, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CreatePackageDialog } from "./packages/CreatePackageDialog";
 import { EditPackageDialog } from "./packages/EditPackageDialog";
 import { AssignPackageDialog } from "./packages/AssignPackageDialog";
+import { ActivePackageManagementDialog } from "./packages/ActivePackageManagementDialog";
 import { toast } from "sonner";
 
 export function PackagesTab() {
@@ -14,6 +15,7 @@ export function PackagesTab() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
+  const [showManagementDialog, setShowManagementDialog] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<any>(null);
 
   // Mock data for demonstration
@@ -74,25 +76,37 @@ export function PackagesTab() {
 
   const activePackages = [
     {
-      id: 1,
+      id: "pkg-1",
       clientName: "Sarah Johnson",
       packageTitle: "Personal Training Package",
       sessionsUsed: 6,
-      totalSessions: 10,
+      sessionsTotal: 10,
+      sessionsCompleted: 4,
+      sessionsConfirmed: 2,
+      sessionsAvailable: 4,
+      status: "active",
       paymentStatus: "paid",
-      expiryDate: "2024-08-15",
-      totalPaid: 500
+      purchaseDate: "2024-06-15",
+      expiryDate: "2025-08-15",
+      totalPaid: 500,
+      nextSession: "Tomorrow 10:00 AM"
     },
     {
-      id: 2,
+      id: "pkg-2",
       clientName: "Mike Peterson",
       packageTitle: "Complete Transformation",
       sessionsUsed: 3,
-      totalSessions: 8,
+      sessionsTotal: 8,
+      sessionsCompleted: 2,
+      sessionsConfirmed: 1,
+      sessionsAvailable: 5,
+      status: "active",
       paymentStatus: "pending",
-      expiryDate: "2024-09-20",
+      purchaseDate: "2024-07-20",
+      expiryDate: "2025-09-20",
       totalPaid: 375,
-      remainingPayment: 375
+      remainingPayment: 375,
+      nextSession: "Dec 5, 2:00 PM"
     }
   ];
 
@@ -139,6 +153,11 @@ export function PackagesTab() {
   const handleAssignClick = (pkg: any) => {
     setSelectedPackage(pkg);
     setShowAssignDialog(true);
+  };
+
+  const handleManageClick = (pkg: any) => {
+    setSelectedPackage(pkg);
+    setShowManagementDialog(true);
   };
 
   const getPackageTypeColor = (type: string) => {
@@ -271,51 +290,110 @@ export function PackagesTab() {
 
             <TabsContent value="active" className="space-y-4">
               <div className="space-y-4">
-                {activePackages.map((pkg) => (
-                  <Card key={pkg.id}>
-                    <CardContent className="p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="space-y-3">
-                          <div>
-                            <h3 className="font-semibold text-lg">{pkg.clientName}</h3>
+                {activePackages.map((pkg) => {
+                  const progressPercentage = (pkg.sessionsUsed / pkg.sessionsTotal) * 100;
+                  
+                  return (
+                    <Card key={pkg.id} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                              <h3 className="font-semibold text-lg">{pkg.clientName}</h3>
+                              <Badge className={getPaymentStatusColor(pkg.paymentStatus)}>
+                                {pkg.paymentStatus}
+                              </Badge>
+                            </div>
                             <p className="text-sm text-muted-foreground">{pkg.packageTitle}</p>
                           </div>
-                          <div className="flex items-center gap-6 text-sm">
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              <span>Sessions: {pkg.sessionsUsed}/{pkg.totalSessions}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <CreditCard className="h-4 w-4" />
-                              <span>Paid: €{pkg.totalPaid}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex flex-col sm:items-end gap-3">
-                          <Badge className={getPaymentStatusColor(pkg.paymentStatus)}>
-                            {pkg.paymentStatus}
-                          </Badge>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm text-muted-foreground sm:text-right">
                             <p>Expires: {pkg.expiryDate}</p>
                             {pkg.remainingPayment && (
-                              <p className="text-red-600 font-medium">
+                              <p className="text-red-600 font-medium mt-1">
                                 Remaining: €{pkg.remainingPayment}
                               </p>
                             )}
                           </div>
                         </div>
-                      </div>
-                      <div className="mt-4">
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all" 
-                            style={{ width: `${(pkg.sessionsUsed / pkg.totalSessions) * 100}%` }}
-                          />
+
+                        {/* Session Progress */}
+                        <div className="space-y-3 mb-4">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="font-medium">Sessions: {pkg.sessionsUsed}/{pkg.sessionsTotal}</span>
+                            <span className="text-muted-foreground">{Math.round(progressPercentage)}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2.5">
+                            <div 
+                              className="bg-blue-600 h-2.5 rounded-full transition-all" 
+                              style={{ width: `${progressPercentage}%` }}
+                            />
+                          </div>
+                          
+                          {/* Session Stats */}
+                          <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-1.5">
+                              <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              <span>{pkg.sessionsCompleted} Completed</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="h-4 w-4 text-blue-600" />
+                              <span>{pkg.sessionsConfirmed} Scheduled</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="h-4 w-4 text-gray-600" />
+                              <span>{pkg.sessionsAvailable} Available</span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+
+                        {/* Next Session */}
+                        {pkg.nextSession && (
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4 p-3 bg-blue-50 rounded-lg">
+                            <AlertCircle className="h-4 w-4 text-blue-600" />
+                            <span><strong>Next:</strong> {pkg.nextSession}</span>
+                          </div>
+                        )}
+
+                        {/* Payment Info */}
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                          <CreditCard className="h-4 w-4" />
+                          <span>Total Paid: €{pkg.totalPaid}</span>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          <Button 
+                            size="sm" 
+                            variant="default"
+                            onClick={() => handleManageClick(pkg)}
+                            className="flex items-center gap-1.5"
+                          >
+                            <Settings className="h-3.5 w-3.5" />
+                            Manage Sessions
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => toast.info("Book session functionality coming soon")}
+                            className="flex items-center gap-1.5"
+                          >
+                            <Calendar className="h-3.5 w-3.5" />
+                            Book Next
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleEditClick(pkg)}
+                            className="flex items-center gap-1.5"
+                          >
+                            <Edit className="h-3.5 w-3.5" />
+                            Edit Package
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             </TabsContent>
           </Tabs>
@@ -342,6 +420,14 @@ export function PackagesTab() {
         onAssign={handleAssignPackage}
         packageData={selectedPackage}
       />
+
+      {selectedPackage && (
+        <ActivePackageManagementDialog
+          open={showManagementDialog}
+          onOpenChange={setShowManagementDialog}
+          packageAssignment={selectedPackage}
+        />
+      )}
     </>
   );
 }

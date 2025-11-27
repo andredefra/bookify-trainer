@@ -1617,6 +1617,81 @@ export type Database = {
           },
         ]
       }
+      package_session_bookings: {
+        Row: {
+          calendar_event_id: string | null
+          client_id: string
+          completed_datetime: string | null
+          confirmed_datetime: string | null
+          created_at: string | null
+          duration_minutes: number | null
+          id: string
+          location: string | null
+          notes: string | null
+          package_assignment_id: string
+          proposed_by: string | null
+          proposed_datetime: string | null
+          session_number: number
+          session_type: string | null
+          status: string | null
+          trainer_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          calendar_event_id?: string | null
+          client_id: string
+          completed_datetime?: string | null
+          confirmed_datetime?: string | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          package_assignment_id: string
+          proposed_by?: string | null
+          proposed_datetime?: string | null
+          session_number: number
+          session_type?: string | null
+          status?: string | null
+          trainer_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          calendar_event_id?: string | null
+          client_id?: string
+          completed_datetime?: string | null
+          confirmed_datetime?: string | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          package_assignment_id?: string
+          proposed_by?: string | null
+          proposed_datetime?: string | null
+          session_number?: number
+          session_type?: string | null
+          status?: string | null
+          trainer_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_session_bookings_calendar_event_id_fkey"
+            columns: ["calendar_event_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "package_session_bookings_package_assignment_id_fkey"
+            columns: ["package_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "client_package_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       packages: {
         Row: {
           created_at: string
