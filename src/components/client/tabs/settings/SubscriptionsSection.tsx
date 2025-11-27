@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle2, Sparkles, Zap, Crown, CreditCard } from "lucide-react";
+import { CheckCircle2, Sparkles, Zap, Crown, CreditCard, BarChart2 } from "lucide-react";
 import { toast } from "sonner";
 import { useClientSubscription } from "@/hooks/useClientSubscription";
 import { useAIAccess } from "@/hooks/useAIAccess";
@@ -131,6 +131,18 @@ export function SubscriptionsSection() {
                   <p className="text-xs text-muted-foreground">AI-generated setup images and videos</p>
                 </div>
               </div>
+              
+              <div className="flex items-start gap-2">
+                {isPro ? (
+                  <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                ) : (
+                  <BarChart2 className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                )}
+                <div>
+                  <p className="text-sm">Advanced Workout Insights {!isPro && '(AI Plan)'}</p>
+                  <p className="text-xs text-muted-foreground">AI-powered analytics and fitness score</p>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -161,6 +173,10 @@ export function SubscriptionsSection() {
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-amber-500 flex-shrink-0" />
                 <span className="text-sm">AI-generated exercise demos</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <BarChart2 className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                <span className="text-sm">Advanced workout insights & AI analytics</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-amber-500 flex-shrink-0" />
