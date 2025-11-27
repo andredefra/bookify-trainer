@@ -23,6 +23,8 @@ export interface ProgramSalesData {
   quarterlyRevenue: number;
   pendingRequests: ProgramSale[];
   confirmedSales: ProgramSale[];
+  rejectedSales: ProgramSale[];
+  allSales: ProgramSale[];
   totalSalesCount: number;
   loading: boolean;
 }
@@ -97,6 +99,61 @@ const getMockConfirmedSales = (): ProgramSale[] => [
     status: 'active',
     packageType: 'program_only',
   },
+  {
+    id: 'mock-sale-4',
+    clientId: 'client-6',
+    clientName: 'John Martinez',
+    clientEmail: 'john.m@example.com',
+    packageId: 'pkg-6',
+    packageTitle: 'Bodybuilding Program',
+    price: 129.99,
+    purchaseDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 61 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'program_only',
+  },
+  {
+    id: 'mock-sale-5',
+    clientId: 'client-7',
+    clientName: 'Sophie Chen',
+    clientEmail: 'sophie@example.com',
+    packageId: 'pkg-7',
+    packageTitle: 'HIIT Training',
+    price: 89.99,
+    purchaseDate: new Date(Date.now() - 75 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 76 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'program_only',
+  },
+];
+
+const getMockRejectedSales = (): ProgramSale[] => [
+  {
+    id: 'mock-reject-1',
+    clientId: 'client-8',
+    clientName: 'Alex Brown',
+    clientEmail: 'alex.b@example.com',
+    packageId: 'pkg-8',
+    packageTitle: 'Beginner Plan',
+    price: 39.99,
+    purchaseDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 31 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'rejected',
+    packageType: 'program_only',
+  },
+  {
+    id: 'mock-reject-2',
+    clientId: 'client-9',
+    clientName: 'Maria Lopez',
+    clientEmail: 'maria@example.com',
+    packageId: 'pkg-9',
+    packageTitle: 'Advanced Training',
+    price: 199.99,
+    purchaseDate: new Date(Date.now() - 50 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 51 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'rejected',
+    packageType: 'hybrid',
+  },
 ];
 
 // Calculate date ranges
@@ -127,6 +184,8 @@ export function useProgramSales(trainerId?: string) {
     quarterlyRevenue: 0,
     pendingRequests: [],
     confirmedSales: [],
+    rejectedSales: [],
+    allSales: [],
     totalSalesCount: 0,
     loading: true,
   });
@@ -158,6 +217,8 @@ export function useProgramSales(trainerId?: string) {
       if (useMockData) {
         const mockPending = getMockPendingRequests();
         const mockConfirmed = getMockConfirmedSales();
+        const mockRejected = getMockRejectedSales();
+        const allMockSales = [...mockPending, ...mockConfirmed, ...mockRejected];
         
         // Calculate revenue from mock data
         const weekRange = getDateRange('week');
@@ -182,6 +243,8 @@ export function useProgramSales(trainerId?: string) {
           quarterlyRevenue,
           pendingRequests: mockPending,
           confirmedSales: mockConfirmed,
+          rejectedSales: mockRejected,
+          allSales: allMockSales,
           totalSalesCount: mockConfirmed.length,
           loading: false,
         });
@@ -216,9 +279,10 @@ export function useProgramSales(trainerId?: string) {
         })
       );
 
-      // Separate pending and confirmed
+      // Separate pending, confirmed, and rejected
       const pendingRequests = sales.filter(s => s.status === 'pending_confirmation');
       const confirmedSales = sales.filter(s => s.status === 'active');
+      const rejectedSales = sales.filter(s => s.status === 'rejected');
 
       // Calculate revenue for different periods
       const weekRange = getDateRange('week');
@@ -243,6 +307,8 @@ export function useProgramSales(trainerId?: string) {
         quarterlyRevenue,
         pendingRequests,
         confirmedSales,
+        rejectedSales,
+        allSales: sales,
         totalSalesCount: confirmedSales.length,
         loading: false,
       });
