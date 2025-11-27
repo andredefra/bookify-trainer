@@ -7,19 +7,17 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Crown, Sparkles, Zap } from "lucide-react";
-import { useClientSubscription } from "@/hooks/useClientSubscription";
 import { toast } from "sonner";
 
 interface ClientUpgradeDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onUpgrade: () => Promise<void>;
 }
 
-export function ClientUpgradeDialog({ open, onOpenChange }: ClientUpgradeDialogProps) {
-  const { upgradeToProViaMock } = useClientSubscription();
-  
+export function ClientUpgradeDialog({ open, onOpenChange, onUpgrade }: ClientUpgradeDialogProps) {
   const handleUpgrade = async () => {
-    await upgradeToProViaMock();
+    await onUpgrade();
     toast.success('Upgraded to AI Plan! 🎉');
     onOpenChange(false);
   };

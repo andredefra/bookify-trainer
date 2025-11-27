@@ -220,10 +220,11 @@ export function SubscriptionsSection() {
         </Card>
       )}
       
-      <ClientUpgradeDialog 
-        open={showUpgrade}
-        onOpenChange={setShowUpgrade}
-      />
+        <ClientUpgradeDialog 
+          open={showUpgrade}
+          onOpenChange={setShowUpgrade}
+          onUpgrade={upgradeToProViaMock}
+        />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Paperclip, Send, Loader2, Image as ImageIcon, Video } from "lucide-react";
 import { useAIAccess } from "@/hooks/useAIAccess";
+import { useClientSubscription } from "@/hooks/useClientSubscription";
 import { ClientUpgradeDialog } from "../tabs/settings/ClientUpgradeDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -43,6 +44,7 @@ export function WorkoutAIAssistant({ open, onOpenChange, workoutContext }: Worko
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { checkAIAccess, trackAIUsage, isPro, dailyUsage } = useAIAccess();
+  const { upgradeToProViaMock } = useClientSubscription();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -303,7 +305,7 @@ export function WorkoutAIAssistant({ open, onOpenChange, workoutContext }: Worko
         </SheetContent>
       </Sheet>
 
-      <ClientUpgradeDialog open={showUpgrade} onOpenChange={setShowUpgrade} />
+      <ClientUpgradeDialog open={showUpgrade} onOpenChange={setShowUpgrade} onUpgrade={upgradeToProViaMock} />
     </>
   );
 }
