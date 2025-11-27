@@ -11,7 +11,9 @@ import { currentProgram } from "@/data/training/mockPrograms/currentProgram";
 import { Exercise } from "@/data/training/types";
 import { ProgramProgressCard } from './programs/ProgramProgressCard';
 import { ProgramExpirationAlert } from './programs/ProgramExpirationAlert';
+import { ProgramSalesAnalytics } from './programs/ProgramSalesAnalytics';
 import { useProgramAssignments } from '@/hooks/useProgramAssignments';
+import { useSubscription } from '@/hooks/useSubscription';
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 
@@ -22,6 +24,11 @@ export function ProgramsTab() {
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   const [showEditProgram, setShowEditProgram] = useState(false);
   const [activeProgramId, setActiveProgramId] = useState<number | null>(null);
+  
+  // Get subscription data
+  const { subscription_tier } = useSubscription();
+  const isEssentialOrPro = subscription_tier === 'essential' || subscription_tier === 'pro';
+  const isProTrainer = subscription_tier === 'pro';
   
   // Get current demo user ID for data isolation
   const currentUserId = getCurrentDemoUserId();
@@ -187,6 +194,14 @@ export function ProgramsTab() {
                 ))}
               </div>
             </div>
+          )}
+
+          {/* Program Sales Analytics - for Essential and Pro trainers */}
+          {isEssentialOrPro && (
+            <ProgramSalesAnalytics 
+              trainerId={currentUserId}
+              isProTrainer={isProTrainer} 
+            />
           )}
           
           <Tabs defaultValue="programs" className="w-full">
