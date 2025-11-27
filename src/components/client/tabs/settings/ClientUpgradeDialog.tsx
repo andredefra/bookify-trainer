@@ -20,7 +20,7 @@ export function ClientUpgradeDialog({ open, onOpenChange }: ClientUpgradeDialogP
   
   const handleUpgrade = async () => {
     await upgradeToProViaMock();
-    toast.success('Upgraded to Pro! 🎉');
+    toast.success('Upgraded to AI Plan! 🎉');
     onOpenChange(false);
   };
   
@@ -30,16 +30,16 @@ export function ClientUpgradeDialog({ open, onOpenChange }: ClientUpgradeDialogP
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Crown className="h-6 w-6 text-amber-500" />
-            Upgrade to Pro
+            Upgrade to AI Plan
           </DialogTitle>
           <DialogDescription>
             Unlock unlimited AI coaching and advanced features
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-6 py-4">
+          <div className="space-y-6 py-4">
           <div className="text-center">
-            <div className="text-4xl font-bold">€4.99</div>
+            <div className="text-4xl font-bold">€1.99</div>
             <div className="text-sm text-muted-foreground">per month</div>
           </div>
           
@@ -96,7 +96,7 @@ export function ClientUpgradeDialog({ open, onOpenChange }: ClientUpgradeDialogP
               size="lg"
             >
               <Crown className="mr-2 h-5 w-5" />
-              Upgrade to Pro Now
+              Upgrade to AI Plan Now
             </Button>
             
             <p className="text-xs text-center text-muted-foreground">

@@ -2,14 +2,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle2, Sparkles, Zap, Crown } from "lucide-react";
+import { CheckCircle2, Sparkles, Zap, Crown, CreditCard } from "lucide-react";
+import { toast } from "sonner";
 import { useClientSubscription } from "@/hooks/useClientSubscription";
 import { useAIAccess } from "@/hooks/useAIAccess";
 import { useState } from "react";
 import { ClientUpgradeDialog } from "./ClientUpgradeDialog";
 
 export function SubscriptionsSection() {
-  const { subscription, loading: subLoading } = useClientSubscription();
+  const { subscription, loading: subLoading, upgradeToProViaMock, downgradeToFreeViaMock } = useClientSubscription();
   const { dailyUsage, loading: usageLoading } = useAIAccess();
   const [showUpgrade, setShowUpgrade] = useState(false);
   
@@ -31,7 +32,7 @@ export function SubscriptionsSection() {
                 {isPro ? (
                   <>
                     <Crown className="h-5 w-5 text-amber-500" />
-                    Pro Plan
+                    AI Plan
                   </>
                 ) : (
                   'Free Plan'
@@ -50,7 +51,7 @@ export function SubscriptionsSection() {
               </Badge>
             ) : (
               <Button onClick={() => setShowUpgrade(true)} size="sm">
-                Upgrade to Pro
+                Upgrade to AI Plan
               </Button>
             )}
           </div>
@@ -98,7 +99,7 @@ export function SubscriptionsSection() {
                   <Zap className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 )}
                 <div>
-                  <p className="text-sm">AI Workout Coach {!isPro && '(Pro)'}</p>
+                  <p className="text-sm">AI Workout Coach {!isPro && '(AI Plan)'}</p>
                   <p className="text-xs text-muted-foreground">
                     {isPro 
                       ? 'Unlimited AI chat during workouts'
@@ -114,7 +115,7 @@ export function SubscriptionsSection() {
                   <Sparkles className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 )}
                 <div>
-                  <p className="text-sm">Form Analysis {!isPro && '(Pro)'}</p>
+                  <p className="text-sm">Form Analysis {!isPro && '(AI Plan)'}</p>
                   <p className="text-xs text-muted-foreground">AI-powered form checking with Vision</p>
                 </div>
               </div>
@@ -126,7 +127,7 @@ export function SubscriptionsSection() {
                   <Sparkles className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 )}
                 <div>
-                  <p className="text-sm">Exercise Demos {!isPro && '(Pro)'}</p>
+                  <p className="text-sm">Exercise Demos {!isPro && '(AI Plan)'}</p>
                   <p className="text-xs text-muted-foreground">AI-generated setup images and videos</p>
                 </div>
               </div>
@@ -140,10 +141,10 @@ export function SubscriptionsSection() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Crown className="h-5 w-5 text-amber-500" />
-              Upgrade to Pro
+              Upgrade to AI Plan
             </CardTitle>
             <CardDescription>
-              Unlock unlimited AI coaching for just €4.99/month
+              Unlock unlimited AI coaching for just €1.99/month
             </CardDescription>
           </CardHeader>
           
@@ -171,7 +172,7 @@ export function SubscriptionsSection() {
               onClick={() => setShowUpgrade(true)}
               className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
             >
-              Upgrade Now - €4.99/month
+              Upgrade Now - €1.99/month
             </Button>
           </CardContent>
         </Card>
@@ -186,7 +187,7 @@ export function SubscriptionsSection() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Plan</span>
-                <span className="font-medium">Pro - €4.99/month</span>
+                <span className="font-medium">AI Plan - €1.99/month</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Started</span>
@@ -201,7 +202,19 @@ export function SubscriptionsSection() {
             </div>
             
             <Button variant="outline" className="w-full mt-4">
+              <CreditCard className="mr-2 h-4 w-4" />
               Manage Subscription
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="w-full mt-2 text-muted-foreground"
+              onClick={async () => {
+                await downgradeToFreeViaMock();
+                toast.info('Downgraded to Free plan (Demo)');
+              }}
+            >
+              Downgrade to Free (Demo)
             </Button>
           </CardContent>
         </Card>

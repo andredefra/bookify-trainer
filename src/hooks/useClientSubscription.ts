@@ -118,10 +118,21 @@ export function useClientSubscription() {
     });
   };
 
+  const downgradeToFreeViaMock = async () => {
+    // For demo: simulate downgrade to Free (in-memory only)
+    setSubscription({
+      plan: 'free',
+      status: 'active',
+      isActive: true,
+      isPro: false
+    });
+  };
+
   return {
     subscription,
     loading,
     refetch: fetchSubscription,
-    upgradeToProViaMock
+    upgradeToProViaMock,
+    downgradeToFreeViaMock
   };
 }
