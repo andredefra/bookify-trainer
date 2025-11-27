@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { getCurrentDemoUserId } from '@/utils/demoUserUtils';
 
 export interface ProgramSale {
   id: string;
@@ -26,7 +27,77 @@ export interface ProgramSalesData {
   loading: boolean;
 }
 
-const DEMO_TRAINER_ID = '00000000-0000-0000-0000-000000000001';
+// Mock data for demo mode
+const getMockPendingRequests = (): ProgramSale[] => [
+  {
+    id: 'mock-pending-1',
+    clientId: 'client-1',
+    clientName: 'Sarah Johnson',
+    clientEmail: 'sarah@example.com',
+    packageId: 'pkg-1',
+    packageTitle: 'Strength & Conditioning',
+    price: 69.99,
+    purchaseDate: new Date().toISOString(),
+    requestDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'pending_confirmation',
+    packageType: 'program_only',
+  },
+  {
+    id: 'mock-pending-2',
+    clientId: 'client-2',
+    clientName: 'Mike Peterson',
+    clientEmail: 'mike@example.com',
+    packageId: 'pkg-2',
+    packageTitle: 'Weight Loss Program',
+    price: 99.99,
+    purchaseDate: new Date().toISOString(),
+    requestDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'pending_confirmation',
+    packageType: 'program_only',
+  },
+];
+
+const getMockConfirmedSales = (): ProgramSale[] => [
+  {
+    id: 'mock-sale-1',
+    clientId: 'client-3',
+    clientName: 'Lisa Garcia',
+    clientEmail: 'lisa@example.com',
+    packageId: 'pkg-3',
+    packageTitle: 'Flexibility Program',
+    price: 49.99,
+    purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'program_only',
+  },
+  {
+    id: 'mock-sale-2',
+    clientId: 'client-4',
+    clientName: 'David Kim',
+    clientEmail: 'david@example.com',
+    packageId: 'pkg-4',
+    packageTitle: 'Nutrition + Training Combo',
+    price: 149.99,
+    purchaseDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'hybrid',
+  },
+  {
+    id: 'mock-sale-3',
+    clientId: 'client-5',
+    clientName: 'Emma Wilson',
+    clientEmail: 'emma@example.com',
+    packageId: 'pkg-5',
+    packageTitle: 'Core Strength',
+    price: 79.99,
+    purchaseDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+    requestDate: new Date(Date.now() - 46 * 24 * 60 * 60 * 1000).toISOString(),
+    status: 'active',
+    packageType: 'program_only',
+  },
+];
 
 // Calculate date ranges
 const getDateRange = (period: 'week' | 'month' | 'quarter') => {
@@ -48,7 +119,8 @@ const getDateRange = (period: 'week' | 'month' | 'quarter') => {
   return { start: start.toISOString().split('T')[0], end: now.toISOString().split('T')[0] };
 };
 
-export function useProgramSales(trainerId: string = DEMO_TRAINER_ID) {
+export function useProgramSales(trainerId?: string) {
+  const effectiveTrainerId = trainerId || getCurrentDemoUserId();
   const [salesData, setSalesData] = useState<ProgramSalesData>({
     weeklyRevenue: 0,
     monthlyRevenue: 0,
@@ -75,10 +147,46 @@ export function useProgramSales(trainerId: string = DEMO_TRAINER_ID) {
             package_type
           )
         `)
-        .eq('trainer_id', trainerId)
+        .eq('trainer_id', effectiveTrainerId)
         .in('status', ['active', 'pending_confirmation', 'rejected']);
 
       if (error) throw error;
+
+      // If no real data, use mock data for demo
+      const useMockData = !assignments || assignments.length === 0;
+      
+      if (useMockData) {
+        const mockPending = getMockPendingRequests();
+        const mockConfirmed = getMockConfirmedSales();
+        
+        // Calculate revenue from mock data
+        const weekRange = getDateRange('week');
+        const monthRange = getDateRange('month');
+        const quarterRange = getDateRange('quarter');
+
+        const weeklyRevenue = mockConfirmed
+          .filter(s => s.purchaseDate >= weekRange.start)
+          .reduce((sum, s) => sum + s.price, 0);
+
+        const monthlyRevenue = mockConfirmed
+          .filter(s => s.purchaseDate >= monthRange.start)
+          .reduce((sum, s) => sum + s.price, 0);
+
+        const quarterlyRevenue = mockConfirmed
+          .filter(s => s.purchaseDate >= quarterRange.start)
+          .reduce((sum, s) => sum + s.price, 0);
+
+        setSalesData({
+          weeklyRevenue,
+          monthlyRevenue,
+          quarterlyRevenue,
+          pendingRequests: mockPending,
+          confirmedSales: mockConfirmed,
+          totalSalesCount: mockConfirmed.length,
+          loading: false,
+        });
+        return;
+      }
 
       // Transform data
       const sales: ProgramSale[] = await Promise.all(
@@ -208,7 +316,7 @@ export function useProgramSales(trainerId: string = DEMO_TRAINER_ID) {
 
   useEffect(() => {
     fetchProgramSales();
-  }, [trainerId]);
+  }, [effectiveTrainerId]);
 
   return {
     ...salesData,

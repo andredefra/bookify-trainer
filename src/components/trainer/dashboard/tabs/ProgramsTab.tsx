@@ -27,8 +27,21 @@ export function ProgramsTab() {
   
   // Get subscription data
   const { subscription_tier } = useSubscription();
-  const isEssentialOrPro = subscription_tier === 'essential' || subscription_tier === 'pro';
-  const isProTrainer = subscription_tier === 'pro';
+  
+  // Check if demo mode
+  const demoUser = localStorage.getItem('demo-user');
+  const isDemoTrainer = demoUser && JSON.parse(demoUser).type === 'trainer';
+  
+  // Show Sales Analytics for Essential, Pro, Enterprise, Early Adopter, Premium, or demo trainers
+  const showSalesAnalytics = 
+    subscription_tier === 'essential' || 
+    subscription_tier === 'pro' ||
+    subscription_tier === 'Premium' ||
+    subscription_tier === 'Enterprise' ||
+    subscription_tier === 'Early Adopter' ||
+    isDemoTrainer;
+    
+  const isProTrainer = subscription_tier === 'pro' || subscription_tier === 'Premium' || subscription_tier === 'Enterprise';
   
   // Get current demo user ID for data isolation
   const currentUserId = getCurrentDemoUserId();
@@ -197,7 +210,7 @@ export function ProgramsTab() {
           )}
 
           {/* Program Sales Analytics - for Essential and Pro trainers */}
-          {isEssentialOrPro && (
+          {showSalesAnalytics && (
             <ProgramSalesAnalytics 
               trainerId={currentUserId}
               isProTrainer={isProTrainer} 
