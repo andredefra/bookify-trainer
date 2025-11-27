@@ -30,7 +30,7 @@ export function HeaderActions({ user, onLogout }: HeaderActionsProps) {
         </Badge>
         {user?.plan && (
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            {user.plan === 'pro' ? 'Pro Plan' : 'Freemium'}
+            {user.plan === 'pro' ? 'AI Plan' : 'Freemium'}
           </Badge>
         )}
       </div>
