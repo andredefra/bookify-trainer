@@ -22,8 +22,11 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
 
   const {
     weeklyRevenue,
+    previousWeekRevenue,
     monthlyRevenue,
+    previousMonthRevenue,
     quarterlyRevenue,
+    previousQuarterRevenue,
     pendingRequests,
     allSales,
     loading,
@@ -31,24 +34,40 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
     rejectPurchase,
   } = useProgramSales(trainerId);
 
+  const calculateChange = (current: number, previous: number): string => {
+    if (previous === 0) return current > 0 ? '+100%' : '0%';
+    const change = ((current - previous) / previous) * 100;
+    const sign = change >= 0 ? '+' : '';
+    return `${sign}${change.toFixed(0)}%`;
+  };
+
   const kpiCards = [
     {
       title: "This Week",
       value: formatCurrency(weeklyRevenue),
       icon: TrendingUp,
-      change: "+15%",
+      change: calculateChange(weeklyRevenue, previousWeekRevenue),
+      isPositive: weeklyRevenue >= previousWeekRevenue,
     },
     {
       title: "This Month",
       value: formatCurrency(monthlyRevenue),
       icon: Calendar,
-      change: "+8%",
+      change: calculateChange(monthlyRevenue, previousMonthRevenue),
+      isPositive: monthlyRevenue >= previousMonthRevenue,
+    },
+    {
+      title: "Last Month",
+      value: formatCurrency(previousMonthRevenue),
+      icon: Calendar,
+      subtitle: "comparison",
     },
     {
       title: "Quarter",
       value: formatCurrency(quarterlyRevenue),
       icon: TrendingUp,
-      change: "+12%",
+      change: calculateChange(quarterlyRevenue, previousQuarterRevenue),
+      isPositive: quarterlyRevenue >= previousQuarterRevenue,
     },
     {
       title: "Pending",
@@ -77,7 +96,7 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
   return (
     <div className="space-y-6">
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {kpiCards.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
@@ -94,7 +113,11 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
                   )}
                 </div>
                 {kpi.change && (
-                  <span className="text-xs text-green-600 dark:text-green-400">
+                  <span className={`text-xs ${
+                    kpi.isPositive 
+                      ? 'text-green-600 dark:text-green-400' 
+                      : 'text-red-600 dark:text-red-400'
+                  }`}>
                     {kpi.change}
                   </span>
                 )}
