@@ -1,8 +1,9 @@
 
-import { useState } from "react";
 import { TrainerSessionItem } from "@/types/sessions";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { SessionHeader } from "./sessions/components/SessionHeader";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SessionList } from "./sessions/components/SessionList";
 import { CalendarView } from "./sessions/components/CalendarView";
 import { SessionDialogs } from "./sessions/components/SessionDialogs";
@@ -15,7 +16,6 @@ interface SessionsTabProps {
 }
 
 export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
-  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   const {
     showCreateSessionDialog,
     setShowCreateSessionDialog,
@@ -41,30 +41,45 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   return (
     <ErrorBoundary>
       <Card className="overflow-hidden">
-        <CardHeader>
-          <SessionHeader 
-            viewMode={viewMode} 
-            setViewMode={setViewMode} 
-            onCreateSession={() => setShowCreateSessionDialog(true)} 
-          />
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle>Training Sessions</CardTitle>
+            <CardDescription>Create and manage your training sessions</CardDescription>
+          </div>
+          <Button 
+            className="flex items-center w-full sm:w-auto"
+            onClick={() => setShowCreateSessionDialog(true)}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Create Session
+          </Button>
         </CardHeader>
-        <CardContent className="overflow-x-hidden">
-          {viewMode === "calendar" ? (
-            <CalendarView 
-              sessions={sessionsToDisplay}
-              onEditSession={handleEditSession}
-              onCancelSession={handleCancelSession}
-              onStartVideoSession={handleStartVideoSession}
-            />
-          ) : (
-            <SessionList 
-              sessions={sessionsToDisplay} 
-              onEditSession={handleEditSession} 
-              onCancelSession={handleCancelSession}
-              onStartVideoSession={handleStartVideoSession}
-              onPostponeSession={handlePostponeSession}
-            />
-          )}
+        <CardContent className="space-y-6">
+          <Tabs defaultValue="list" className="w-full">
+            <TabsList className="mb-6 w-full sm:w-auto">
+              <TabsTrigger value="list" className="flex-1 sm:flex-none">List</TabsTrigger>
+              <TabsTrigger value="calendar" className="flex-1 sm:flex-none">Calendar</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="list" className="mt-0">
+              <SessionList 
+                sessions={sessionsToDisplay} 
+                onEditSession={handleEditSession} 
+                onCancelSession={handleCancelSession}
+                onStartVideoSession={handleStartVideoSession}
+                onPostponeSession={handlePostponeSession}
+              />
+            </TabsContent>
+            
+            <TabsContent value="calendar" className="mt-0">
+              <CalendarView 
+                sessions={sessionsToDisplay}
+                onEditSession={handleEditSession}
+                onCancelSession={handleCancelSession}
+                onStartVideoSession={handleStartVideoSession}
+              />
+            </TabsContent>
+          </Tabs>
           
           <SessionDialogs
             showCreateSessionDialog={showCreateSessionDialog}
