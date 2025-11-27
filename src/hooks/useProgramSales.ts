@@ -62,20 +62,23 @@ const getMockPendingRequests = (): ProgramSale[] => [
   },
 ];
 
-const getMockConfirmedSales = (): ProgramSale[] => [
-  {
-    id: 'mock-sale-1',
-    clientId: 'client-3',
-    clientName: 'Lisa Garcia',
-    clientEmail: 'lisa@example.com',
-    packageId: 'pkg-3',
-    packageTitle: 'Flexibility Program',
-    price: 49.99,
-    purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    requestDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'active',
-    packageType: 'program_only',
-  },
+const getMockConfirmedSales = (): ProgramSale[] => {
+  const now = new Date();
+  
+  return [
+    {
+      id: 'mock-sale-1',
+      clientId: 'client-3',
+      clientName: 'Lisa Garcia',
+      clientEmail: 'lisa@example.com',
+      packageId: 'pkg-3',
+      packageTitle: 'Flexibility Program',
+      price: 49.99,
+      purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      requestDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+      status: 'active',
+      packageType: 'program_only',
+    },
   {
     id: 'mock-sale-2',
     clientId: 'client-4',
@@ -154,7 +157,35 @@ const getMockConfirmedSales = (): ProgramSale[] => [
     status: 'active',
     packageType: 'hybrid',
   },
+  // Last month sales
+  {
+    id: 'mock-sale-lastmonth-1',
+    clientId: 'client-12',
+    clientName: 'Anna Rossi',
+    clientEmail: 'anna.r@example.com',
+    packageId: 'pkg-12',
+    packageTitle: 'Personal Training Package',
+    price: 119.99,
+    purchaseDate: new Date(now.getFullYear(), now.getMonth() - 1, 10).toISOString(),
+    requestDate: new Date(now.getFullYear(), now.getMonth() - 1, 9).toISOString(),
+    status: 'active',
+    packageType: 'hybrid',
+  },
+  {
+    id: 'mock-sale-lastmonth-2',
+    clientId: 'client-13',
+    clientName: 'Marco Bianchi',
+    clientEmail: 'marco.b@example.com',
+    packageId: 'pkg-13',
+    packageTitle: 'Functional Training',
+    price: 89.99,
+    purchaseDate: new Date(now.getFullYear(), now.getMonth() - 1, 20).toISOString(),
+    requestDate: new Date(now.getFullYear(), now.getMonth() - 1, 19).toISOString(),
+    status: 'active',
+    packageType: 'program_only',
+  },
 ];
+};
 
 const getMockRejectedSales = (): ProgramSale[] => [
   {
@@ -212,18 +243,22 @@ const getPreviousDateRange = (period: 'week' | 'month' | 'quarter') => {
   
   switch (period) {
     case 'week':
-      end.setDate(now.getDate() - 7);
+      // Previous week: 14 days ago to 8 days ago
       start.setDate(now.getDate() - 14);
+      end.setDate(now.getDate() - 8);
       break;
     case 'month':
-      end.setMonth(now.getMonth() - 1);
-      end.setDate(0); // Last day of previous month
-      start.setMonth(now.getMonth() - 2);
-      start.setDate(1); // First day of previous month
+      // Previous month: First day to last day of previous month
+      start.setMonth(now.getMonth() - 1);
+      start.setDate(1);
+      end.setMonth(now.getMonth());
+      end.setDate(0); // Day 0 of current month = last day of previous month
       break;
     case 'quarter':
-      end.setMonth(now.getMonth() - 3);
+      // Previous quarter: 6-3 months ago
       start.setMonth(now.getMonth() - 6);
+      end.setMonth(now.getMonth() - 3);
+      end.setDate(0);
       break;
   }
   
