@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Crown, Sparkles, Zap } from "lucide-react";
+import { CheckCircle2, Crown, Sparkles, Zap, BarChart2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface ClientUpgradeDialogProps {
@@ -71,6 +71,16 @@ export function ClientUpgradeDialog({ open, onOpenChange, onUpgrade }: ClientUpg
                   <p className="font-medium">Exercise Demonstrations</p>
                   <p className="text-sm text-muted-foreground">
                     AI-generated images showing correct equipment setup and angles
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <BarChart2 className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium">Advanced Workout Insights</p>
+                  <p className="text-sm text-muted-foreground">
+                    AI analytics, fitness score & personalized trends
                   </p>
                 </div>
               </div>
