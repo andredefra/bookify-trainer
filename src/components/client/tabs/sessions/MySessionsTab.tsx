@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SessionCard } from "./SessionCard";
 import { InvitedSessionCard } from "./InvitedSessionCard";
 import { AcceptInvitePaymentDialog } from "./AcceptInvitePaymentDialog";
+import { PaymentDialog } from "./dialogs/PaymentDialog";
 import { SessionItem } from "@/types/sessions";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -24,7 +25,9 @@ export function MySessionsTab({
   onCancel
 }: MySessionsTabProps) {
   const [selectedInvite, setSelectedInvite] = useState<SessionItem | null>(null);
+  const [showAcceptDialog, setShowAcceptDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [sessionToPay, setSessionToPay] = useState<SessionItem | null>(null);
 
   // Handler for joining a video session
   const handleJoinSession = (session: SessionItem) => {
@@ -35,18 +38,39 @@ export function MySessionsTab({
 
   const handleAcceptInvite = (session: SessionItem) => {
     setSelectedInvite(session);
-    setShowPaymentDialog(true);
+    setShowAcceptDialog(true);
   };
 
   const handleDeclineInvite = (session: SessionItem) => {
     toast.success(`Declined invitation to ${session.name}`);
+    setSelectedInvite(null);
     // In real app, update the session status in the database
   };
 
-  const handleConfirmPayment = () => {
-    if (selectedInvite) {
-      toast.success(`Successfully registered for ${selectedInvite.name}!`);
-      // In real app, move session to upcomingSessions
+  const handleConfirmInvite = () => {
+    setShowAcceptDialog(false);
+    
+    if (selectedInvite?.paymentRequired && selectedInvite.price) {
+      // If payment required, open payment dialog
+      setSessionToPay(selectedInvite);
+      setShowPaymentDialog(true);
+    } else {
+      // Free session - confirm directly
+      handleCompleteRegistration(selectedInvite);
+    }
+  };
+
+  const handlePaymentComplete = () => {
+    handleCompleteRegistration(sessionToPay);
+    setShowPaymentDialog(false);
+    setSessionToPay(null);
+  };
+
+  const handleCompleteRegistration = (session: SessionItem | null) => {
+    if (session) {
+      toast.success(`Successfully registered for ${session.name}!`);
+      setSelectedInvite(null);
+      // In real app, update session status and move to upcomingSessions
     }
   };
 
@@ -96,13 +120,23 @@ export function MySessionsTab({
         </div>
       )}
 
-      {/* Payment Dialog */}
+      {/* Accept Invitation Dialog */}
       <AcceptInvitePaymentDialog
-        open={showPaymentDialog}
-        onOpenChange={setShowPaymentDialog}
+        open={showAcceptDialog}
+        onOpenChange={setShowAcceptDialog}
         session={selectedInvite}
-        onConfirm={handleConfirmPayment}
+        onAccept={handleConfirmInvite}
       />
+
+      {/* Payment Dialog */}
+      {sessionToPay && (
+        <PaymentDialog
+          open={showPaymentDialog}
+          onOpenChange={setShowPaymentDialog}
+          session={sessionToPay}
+          onPaymentComplete={handlePaymentComplete}
+        />
+      )}
     </div>
   );
 }

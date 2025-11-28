@@ -24,6 +24,7 @@ export interface SessionItem {
   paymentRequired?: boolean;
   paymentStatus?: 'pending' | 'paid';
   inviteMessage?: string;
+  trainerPlan?: 'free' | 'essential' | 'pro';
 }
 
 export interface TrainerSessionItem {
