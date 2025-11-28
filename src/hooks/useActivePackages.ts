@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+const DEMO_TRAINER_ID = '00000000-0000-0000-0000-000000000001';
+
 export interface ActivePackage {
   id: string;
   clientId: string;
@@ -28,8 +30,10 @@ export const useActivePackages = (trainerId?: string) => {
     try {
       setLoading(true);
       
+      const effectiveTrainerId = trainerId || DEMO_TRAINER_ID;
+      
       // Fetch package assignments with client profiles
-      const { data: assignments, error } = await supabase
+      let { data: assignments, error } = await supabase
         .from('client_package_assignments')
         .select(`
           id,
@@ -44,11 +48,37 @@ export const useActivePackages = (trainerId?: string) => {
           total_paid,
           client_packages!inner(title)
         `)
-        .eq('trainer_id', trainerId)
+        .eq('trainer_id', effectiveTrainerId)
         .eq('status', 'active')
         .order('purchase_date', { ascending: false });
 
       if (error) throw error;
+
+      // If no packages found and not using demo trainer, try with demo trainer
+      if ((!assignments || assignments.length === 0) && effectiveTrainerId !== DEMO_TRAINER_ID) {
+        const { data: demoAssignments, error: demoError } = await supabase
+          .from('client_package_assignments')
+          .select(`
+            id,
+            client_id,
+            package_id,
+            trainer_id,
+            sessions_total,
+            sessions_used,
+            status,
+            purchase_date,
+            expiry_date,
+            total_paid,
+            client_packages!inner(title)
+          `)
+          .eq('trainer_id', DEMO_TRAINER_ID)
+          .eq('status', 'active')
+          .order('purchase_date', { ascending: false });
+
+        if (!demoError && demoAssignments) {
+          assignments = demoAssignments;
+        }
+      }
 
       // Fetch client profiles for the assignments
       const clientIds = assignments?.map(a => a.client_id) || [];

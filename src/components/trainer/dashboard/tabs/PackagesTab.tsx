@@ -26,11 +26,12 @@ export function PackagesTab() {
   const [bookNextSession, setBookNextSession] = useState<PackageSessionBooking | null>(null);
   const [trainerId, setTrainerId] = useState<string | null>(null);
 
-  // Fetch trainer ID
+  // Fetch trainer ID with demo fallback
   useEffect(() => {
     const fetchTrainerId = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) setTrainerId(user.id);
+      const effectiveTrainerId = user?.id || '00000000-0000-0000-0000-000000000001';
+      setTrainerId(effectiveTrainerId);
     };
     fetchTrainerId();
   }, []);
