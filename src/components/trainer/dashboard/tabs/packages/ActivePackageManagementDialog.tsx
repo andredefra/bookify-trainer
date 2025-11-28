@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ interface ActivePackageManagementDialogProps {
   onOpenChange: (open: boolean) => void;
   packageAssignment: {
     id: string;
+    clientId: string;
     clientName: string;
     packageTitle: string;
     sessionsTotal: number;
@@ -24,6 +25,7 @@ interface ActivePackageManagementDialogProps {
     purchaseDate: string;
     expiryDate?: string;
     totalPaid: number;
+    trainerId: string;
   };
 }
 
@@ -32,11 +34,23 @@ export const ActivePackageManagementDialog = ({
   onOpenChange,
   packageAssignment,
 }: ActivePackageManagementDialogProps) => {
-  const { sessions, loading, proposeSession, confirmSession, completeSession, cancelSession, markNoShow } =
+  const { sessions, loading, proposeSession, confirmSession, completeSession, cancelSession, markNoShow, initializePackageSessions } =
     usePackageSessionBookings(open ? packageAssignment.id : undefined);
   
   const [bookSessionOpen, setBookSessionOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<PackageSessionBooking | null>(null);
+
+  // Auto-initialize sessions if none exist
+  useEffect(() => {
+    if (open && !loading && sessions.length === 0 && packageAssignment.sessionsTotal > 0) {
+      initializePackageSessions(
+        packageAssignment.id,
+        packageAssignment.trainerId,
+        packageAssignment.clientId,
+        packageAssignment.sessionsTotal
+      );
+    }
+  }, [open, loading, sessions.length, packageAssignment.sessionsTotal]);
 
   const handleBookSession = (session: PackageSessionBooking) => {
     setSelectedSession(session);
