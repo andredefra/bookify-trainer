@@ -263,13 +263,13 @@ export function AnalyticsChat({ analyticsStats, progressData }: AnalyticsChatPro
         {messages.length <= 1 && (
           <div className="px-4 py-2 border-t">
             <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
               {suggestedQuestions.map((question, index) => (
                 <Button
                   key={index}
                   variant="outline"
                   size="sm"
-                  className="text-xs h-7"
+                  className="text-xs h-auto py-1.5 w-full sm:w-auto text-left justify-start"
                   onClick={() => sendMessage(question)}
                   disabled={isLoading}
                 >
