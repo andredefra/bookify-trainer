@@ -49,8 +49,9 @@ export function useUserProfile() {
               user_id: undefined,
               first_name: demoUser.name?.split(' ')[0],
               last_name: demoUser.name?.split(' ').slice(1).join(' '),
-              height: 175,
-              gender: 'male',
+              height: demoUser.height || 175,
+              gender: demoUser.gender || 'male',
+              date_of_birth: demoUser.date_of_birth,
               profile_image_url: demoUser.profileImage,
             };
 

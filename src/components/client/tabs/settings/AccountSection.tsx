@@ -26,7 +26,7 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
   // Use a general image as default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
-  const { profile, saveProfile, uploadProfileImage, loading } = useUserProfile();
+  const { profile, saveProfile, uploadProfileImage, loading, calculateAge } = useUserProfile();
   
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email);
@@ -69,6 +69,15 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
       if (profile.profile_image_url) {
         setProfileImage(profile.profile_image_url);
       }
+      
+      // Calculate age from date_of_birth
+      if (profile.date_of_birth) {
+        const calculatedAge = calculateAge(profile.date_of_birth);
+        if (calculatedAge) {
+          setAge(calculatedAge.toString());
+        }
+      }
+      
       setAllergies(profile.allergies || "");
       setHealthConditions(profile.health_conditions || "");
       setPhysicalLimitations(profile.physical_limitations || "");
@@ -77,7 +86,7 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
       setExperienceLevel(profile.experience_level || "beginner");
       setPreferredWorkoutTime(profile.preferred_workout_time || "");
     }
-  }, [profile]);
+  }, [profile, calculateAge]);
 
   const handleSaveAccount = async () => {
     try {
