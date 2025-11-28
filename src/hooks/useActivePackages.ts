@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-const DEMO_TRAINER_ID = '00000000-0000-0000-0000-000000000001';
+const DEMO_TRAINER_IDS = [
+  '00000000-0000-0000-0000-000000000001',
+  '22222222-2222-2222-2222-222222222222'
+];
 
 export interface ActivePackage {
   id: string;
@@ -30,7 +33,7 @@ export const useActivePackages = (trainerId?: string) => {
     try {
       setLoading(true);
       
-      const effectiveTrainerId = trainerId || DEMO_TRAINER_ID;
+      const effectiveTrainerId = trainerId || DEMO_TRAINER_IDS[0];
       
       // Fetch package assignments with client profiles
       let { data: assignments, error } = await supabase
@@ -54,8 +57,8 @@ export const useActivePackages = (trainerId?: string) => {
 
       if (error) throw error;
 
-      // If no packages found and not using demo trainer, try with demo trainer
-      if ((!assignments || assignments.length === 0) && effectiveTrainerId !== DEMO_TRAINER_ID) {
+      // If no packages found and not using demo trainers, try with all demo trainers
+      if ((!assignments || assignments.length === 0) && !DEMO_TRAINER_IDS.includes(effectiveTrainerId)) {
         const { data: demoAssignments, error: demoError } = await supabase
           .from('client_package_assignments')
           .select(`
@@ -71,7 +74,7 @@ export const useActivePackages = (trainerId?: string) => {
             total_paid,
             client_packages!inner(title)
           `)
-          .eq('trainer_id', DEMO_TRAINER_ID)
+          .in('trainer_id', DEMO_TRAINER_IDS)
           .eq('status', 'active')
           .order('purchase_date', { ascending: false });
 
