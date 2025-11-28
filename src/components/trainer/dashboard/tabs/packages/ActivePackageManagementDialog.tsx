@@ -213,7 +213,7 @@ export const ActivePackageManagementDialog = ({
             </TabsContent>
 
             <TabsContent value="sessions" className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full pr-4">
+              <ScrollArea className="h-[400px] pr-4">
                 <div className="space-y-3">
                   {loading ? (
                     <p className="text-center text-muted-foreground py-8">Loading sessions...</p>

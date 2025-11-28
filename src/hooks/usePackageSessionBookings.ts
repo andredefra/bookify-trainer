@@ -54,24 +54,39 @@ export const usePackageSessionBookings = (packageAssignmentId?: string) => {
     totalSessions: number
   ) => {
     try {
-      const sessionRecords = Array.from({ length: totalSessions }, (_, i) => ({
-        package_assignment_id: assignmentId,
-        trainer_id: trainerId,
-        client_id: clientId,
-        session_number: i + 1,
-        status: 'available',
-        duration_minutes: 60,
-        session_type: 'in-person',
-      }));
-
-      const { error } = await supabase
+      // Check if sessions already exist
+      const { data: existingSessions, error: fetchError } = await supabase
         .from('package_session_bookings')
-        .insert(sessionRecords);
+        .select('session_number')
+        .eq('package_assignment_id', assignmentId);
 
-      if (error) throw error;
+      if (fetchError) throw fetchError;
+
+      const existingNumbers = new Set(existingSessions?.map(s => s.session_number) || []);
+      
+      // Only create sessions that don't exist
+      const sessionRecords = Array.from({ length: totalSessions }, (_, i) => i + 1)
+        .filter(num => !existingNumbers.has(num))
+        .map(num => ({
+          package_assignment_id: assignmentId,
+          trainer_id: trainerId,
+          client_id: clientId,
+          session_number: num,
+          status: 'available',
+          duration_minutes: 60,
+          session_type: 'in-person',
+        }));
+
+      if (sessionRecords.length > 0) {
+        const { error } = await supabase
+          .from('package_session_bookings')
+          .insert(sessionRecords);
+
+        if (error) throw error;
+        toast.success(`Initialized ${sessionRecords.length} sessions`);
+      }
       
       await fetchPackageSessions(assignmentId);
-      toast.success('Package sessions initialized');
     } catch (error) {
       console.error('Error initializing sessions:', error);
       toast.error('Failed to initialize sessions');
