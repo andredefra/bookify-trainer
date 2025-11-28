@@ -41,10 +41,12 @@ export function useTrainingPrograms() {
           status,
           purchase_date,
           expiry_date,
+          total_paid,
           package:client_packages(
             id,
             title,
             package_type,
+            price,
             training_program_data
           )
         `)
@@ -92,9 +94,27 @@ export function useTrainingPrograms() {
           continue;
         }
 
+        // Calculate payment status
+        const totalPaid = assignment.total_paid || 0;
+        const totalPrice = pkg.price || 0;
+        let paymentStatus: 'pending' | 'partial' | 'paid' = 'pending';
+        if (totalPaid >= totalPrice) {
+          paymentStatus = 'paid';
+        } else if (totalPaid > 0) {
+          paymentStatus = 'partial';
+        }
+
         const program: TrainingProgram = {
           ...pkg.training_program_data,
           id: `${assignment.id}-${pkg.id}`,
+          
+          // Add payment fields from package assignment
+          packageAssignmentId: assignment.id,
+          isStandalone: false,
+          totalPrice: pkg.price,
+          amountPaid: assignment.total_paid || 0,
+          paymentStatus,
+          paymentMethod: totalPaid > 0 && totalPaid < totalPrice ? 'installments' : 'card',
         };
 
         const completedSessions = program.sessions?.filter(s => s.completed).length || 0;

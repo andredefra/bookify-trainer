@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TrainingProgram } from "@/data/training/types";
-import { Calendar, User, Target, DollarSign, Package, CheckCircle, AlertCircle, ExternalLink } from "lucide-react";
+import { usePackagePayments } from "@/hooks/usePackagePayments";
+import { Calendar, User, Target, DollarSign, Package, CheckCircle, AlertCircle, ExternalLink, Clock, CreditCard } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 interface ProgramManagementDialogProps {
@@ -13,15 +14,27 @@ interface ProgramManagementDialogProps {
   program: TrainingProgram | null;
   onConfirmPayment?: () => void;
   onViewPackage?: () => void;
+  onPayNow?: (amount: number) => void;
 }
 
-export function ProgramManagementDialog({
-  open,
-  onOpenChange,
-  program,
+export function ProgramManagementDialog({ 
+  open, 
+  onOpenChange, 
+  program, 
   onConfirmPayment,
-  onViewPackage
+  onViewPackage,
+  onPayNow
 }: ProgramManagementDialogProps) {
+  // Fetch payment data for package-based programs
+  const { 
+    payments, 
+    totalPaid, 
+    remainingAmount, 
+    nextPayment,
+    packagePrice,
+    loading: paymentsLoading 
+  } = usePackagePayments(program?.packageAssignmentId || null);
+
   if (!program) return null;
 
   const getPaymentStatusBadge = () => {
@@ -37,6 +50,13 @@ export function ProgramManagementDialog({
   };
 
   const formatCurrency = (amount: number) => `€${amount.toFixed(2)}`;
+
+  // Use real data from hook if available, otherwise fallback to program data
+  const displayTotalPrice = program.isStandalone ? program.totalPrice : packagePrice;
+  const displayAmountPaid = program.isStandalone ? program.amountPaid : totalPaid;
+  const displayRemaining = program.isStandalone 
+    ? (program.totalPrice || 0) - (program.amountPaid || 0)
+    : remainingAmount;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -143,18 +163,18 @@ export function ProgramManagementDialog({
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Total Amount</p>
-                  <p className="text-lg font-bold">{formatCurrency(program.totalPrice || 0)}</p>
+                  <p className="text-lg font-bold">{formatCurrency(displayTotalPrice || 0)}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Amount Paid</p>
                   <p className="text-lg font-bold text-green-600">
-                    {formatCurrency(program.amountPaid || 0)}
+                    {formatCurrency(displayAmountPaid || 0)}
                   </p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Remaining</p>
                   <p className="text-lg font-bold text-destructive">
-                    {formatCurrency((program.totalPrice || 0) - (program.amountPaid || 0))}
+                    {formatCurrency(displayRemaining || 0)}
                   </p>
                 </div>
               </div>
@@ -167,6 +187,72 @@ export function ProgramManagementDialog({
                 </div>
               </div>
             </div>
+
+            {/* Installment schedule for package-based programs */}
+            {!program.isStandalone && payments.length > 0 && (
+              <>
+                <Separator />
+                <div className="space-y-3">
+                  <h4 className="font-medium">Payment Schedule</h4>
+                  <div className="space-y-2">
+                    {payments.map((payment, index) => (
+                      <div key={payment.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          {payment.paymentStatus === 'paid' ? (
+                            <CheckCircle className="h-5 w-5 text-green-500" />
+                          ) : (
+                            <Clock className="h-5 w-5 text-orange-500" />
+                          )}
+                          <div>
+                            <p className="font-medium">Installment {index + 1}</p>
+                            {payment.paymentDate && payment.paymentStatus === 'paid' ? (
+                              <p className="text-sm text-muted-foreground">
+                                Paid: {new Date(payment.paymentDate).toLocaleDateString()}
+                              </p>
+                            ) : payment.dueDate ? (
+                              <p className="text-sm text-muted-foreground">
+                                Due: {new Date(payment.dueDate).toLocaleDateString()}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium">{formatCurrency(payment.amount)}</p>
+                          <Badge variant={payment.paymentStatus === 'paid' ? 'default' : 'secondary'}>
+                            {payment.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Next payment alert with Pay Now button */}
+            {nextPayment && onPayNow && (
+              <>
+                <Separator />
+                <Alert>
+                  <AlertDescription className="flex items-center justify-between gap-4">
+                    <span className="text-sm">
+                      Next payment: <strong>{formatCurrency(nextPayment.amount)}</strong>
+                      {nextPayment.dueDate && (
+                        <> due {new Date(nextPayment.dueDate).toLocaleDateString()}</>
+                      )}
+                    </span>
+                    <Button 
+                      size="sm" 
+                      className="gap-2 shrink-0"
+                      onClick={() => onPayNow(nextPayment.amount)}
+                    >
+                      <CreditCard className="h-4 w-4" />
+                      Pay Now
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              </>
+            )}
 
             <Separator />
 
