@@ -151,8 +151,8 @@ export function TrainingLogTab() {
             <div className="space-y-4">
               {workoutLogs.slice(0, 5).map((workout) => (
                 <div key={workout.id} className="border rounded-lg p-4 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div className="flex items-start sm:items-center space-x-3 sm:space-x-4">
                       <div className="text-center">
                         <div className="text-sm font-medium">
                           {new Date(workout.date).toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}
@@ -176,8 +176,8 @@ export function TrainingLogTab() {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary">Completed</Badge>
+                    <div className="flex items-center space-x-2 sm:ml-auto">
+                      <Badge variant="secondary" className="hidden sm:inline-flex">Completed</Badge>
                       <Button 
                         variant="ghost" 
                         size="sm"
