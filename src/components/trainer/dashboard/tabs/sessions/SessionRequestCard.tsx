@@ -123,32 +123,34 @@ export function SessionRequestCard({ request, onViewDetails, onApprove, onDeclin
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2 pt-2 border-t flex-wrap">
-          {onAddToCRM && (
+        <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t">
+          <div className="flex gap-2 w-full sm:w-auto">
+            {onAddToCRM && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => onAddToCRM(request)}
+                className="gap-1 flex-1 sm:flex-none"
+              >
+                📋 Add to CRM
+              </Button>
+            )}
             <Button
-              variant="secondary"
+              variant="outline"
               size="sm"
-              onClick={() => onAddToCRM(request)}
-              className="gap-1"
+              onClick={() => onViewDetails(request)}
+              className="gap-2 flex-1 sm:flex-none"
             >
-              📋 Add to CRM
+              <Eye className="h-4 w-4" />
+              View Details
             </Button>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onViewDetails(request)}
-            className="gap-2"
-          >
-            <Eye className="h-4 w-4" />
-            View Details
-          </Button>
-          <div className="ml-auto flex gap-2">
+          </div>
+          <div className="flex gap-2 w-full sm:w-auto sm:ml-auto">
             <Button
               variant="destructive"
               size="sm"
               onClick={() => onDecline(request)}
-              className="gap-2"
+              className="gap-2 flex-1 sm:flex-none"
             >
               <XCircle className="h-4 w-4" />
               Decline
@@ -157,7 +159,7 @@ export function SessionRequestCard({ request, onViewDetails, onApprove, onDeclin
               variant="default"
               size="sm"
               onClick={() => onApprove(request)}
-              className="gap-2"
+              className="gap-2 flex-1 sm:flex-none"
             >
               <CheckCircle2 className="h-4 w-4" />
               Accept

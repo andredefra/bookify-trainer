@@ -59,33 +59,33 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
             )}
           </div>
         </div>
-        <div className="flex items-center space-x-2 mt-2 sm:mt-0">
+        <div className="flex items-center gap-2 mt-2 sm:mt-0 flex-wrap">
           <Button 
             variant="outline" 
             size="sm" 
             onClick={() => onSetGoals(client.name)}
+            className="flex-1 sm:flex-none min-w-[80px]"
           >
-            <Target className="mr-1 h-4 w-4" />
-            <span className="hidden sm:inline">Set Goals</span>
-            <span className="sm:hidden">Goals</span>
+            <Target className="h-4 w-4 sm:mr-1" />
+            <span className="hidden xs:inline ml-1">Goals</span>
           </Button>
           <Button 
             variant="outline" 
             size="sm"
             onClick={() => onViewAnalytics(client)}
+            className="flex-1 sm:flex-none min-w-[80px]"
           >
-            <TrendingUp className="mr-1 h-4 w-4" />
-            <span className="hidden sm:inline">Analytics</span>
-            <span className="sm:hidden">Stats</span>
+            <TrendingUp className="h-4 w-4 sm:mr-1" />
+            <span className="hidden xs:inline ml-1">Stats</span>
           </Button>
           <Button 
             variant="ghost" 
             size="sm"
             onClick={() => onViewProfile(client)}
+            className="flex-1 sm:flex-none min-w-[80px]"
           >
-            <Eye className="mr-1 h-4 w-4" />
-            <span className="hidden sm:inline">View Profile</span>
-            <span className="sm:hidden">View</span>
+            <Eye className="h-4 w-4 sm:mr-1" />
+            <span className="hidden xs:inline ml-1">View</span>
           </Button>
         </div>
       </div>

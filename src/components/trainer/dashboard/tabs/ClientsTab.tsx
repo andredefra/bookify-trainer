@@ -84,9 +84,9 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6">
-              <TabsTrigger value="clients">Client List</TabsTrigger>
-              <TabsTrigger value="analytics">Performance Analytics</TabsTrigger>
+            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex-nowrap">
+              <TabsTrigger value="clients" className="flex-1 sm:flex-none whitespace-nowrap">Client List</TabsTrigger>
+              <TabsTrigger value="analytics" className="flex-1 sm:flex-none whitespace-nowrap">Performance Analytics</TabsTrigger>
             </TabsList>
             
             <TabsContent value="clients" className="mt-0">

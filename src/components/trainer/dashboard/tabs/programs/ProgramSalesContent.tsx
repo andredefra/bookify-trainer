@@ -164,14 +164,14 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
           {/* Content based on active sub-tab */}
           {activeSubTab === "pending" ? (
             pendingRequests.length > 0 ? (
-              <div className="border rounded-lg overflow-hidden">
-                <table className="w-full">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[500px] border rounded-lg overflow-hidden">
                   <thead className="bg-muted/50">
                     <tr>
                       <th className="text-left p-3 text-xs font-medium">Client</th>
                       <th className="text-left p-3 text-xs font-medium hidden sm:table-cell">Package</th>
                       <th className="text-right p-3 text-xs font-medium">Price</th>
-                      <th className="text-right p-3 text-xs font-medium">Actions</th>
+                      <th className="text-right p-3 text-xs font-medium whitespace-nowrap">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -179,8 +179,8 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
                       <tr key={request.id} className="hover:bg-muted/30 transition-colors">
                         <td className="p-3">
                           <div>
-                            <p className="font-medium text-sm">{request.clientName}</p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="font-medium text-sm whitespace-nowrap">{request.clientName}</p>
+                            <p className="text-xs text-muted-foreground whitespace-nowrap">
                               {format(new Date(request.requestDate), 'MMM dd, yyyy')}
                             </p>
                           </div>
@@ -194,19 +194,19 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
                           </div>
                         </td>
                         <td className="p-3 text-right">
-                          <span className="font-semibold">
+                          <span className="font-semibold whitespace-nowrap">
                             {formatCurrency(request.price)}
                           </span>
                         </td>
                         <td className="p-3">
-                          <div className="flex items-center justify-end gap-2">
+                          <div className="flex items-center justify-end gap-2 whitespace-nowrap">
                             <Button
                               size="sm"
                               variant="default"
                               onClick={() => confirmPurchase(request.id, isProTrainer)}
                               className="h-8"
                             >
-                              <Check className="h-3 w-3 mr-1" />
+                              <Check className="h-3 w-3 sm:mr-1" />
                               <span className="hidden sm:inline">Confirm</span>
                             </Button>
                             <Button
@@ -215,7 +215,7 @@ export function ProgramSalesContent({ trainerId, isProTrainer = false }: Program
                               onClick={() => rejectPurchase(request.id)}
                               className="h-8"
                             >
-                              <X className="h-3 w-3 mr-1" />
+                              <X className="h-3 w-3 sm:mr-1" />
                               <span className="hidden sm:inline">Reject</span>
                             </Button>
                           </div>
