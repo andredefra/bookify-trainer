@@ -13,6 +13,7 @@ interface SessionRequestDetailDialogProps {
   onApprove: (request: SessionRequest) => void;
   onDecline: (request: SessionRequest) => void;
   onAddToCRM: (request: SessionRequest) => void;
+  isAddedToCRM?: boolean;
 }
 
 export function SessionRequestDetailDialog({
@@ -21,7 +22,8 @@ export function SessionRequestDetailDialog({
   request,
   onApprove,
   onDecline,
-  onAddToCRM
+  onAddToCRM,
+  isAddedToCRM = false
 }: SessionRequestDetailDialogProps) {
   if (!request) return null;
 
@@ -44,7 +46,7 @@ export function SessionRequestDetailDialog({
 
         <div className="space-y-6 py-4">
           {/* Prospect Alert with Add to CRM */}
-          {isProspect && (
+          {isProspect && !isAddedToCRM && (
             <Alert className="border-primary/50 bg-primary/5">
               <TrendingUp className="h-4 w-4 text-primary" />
               <AlertDescription className="flex items-center justify-between">
@@ -56,12 +58,21 @@ export function SessionRequestDetailDialog({
                   variant="default"
                   onClick={() => {
                     onAddToCRM(request);
-                    onOpenChange(false);
                   }}
                   className="ml-4"
                 >
                   📋 Add to CRM as Lead
                 </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {/* Added to CRM confirmation */}
+          {isProspect && isAddedToCRM && (
+            <Alert className="border-green-500/50 bg-green-500/5">
+              <TrendingUp className="h-4 w-4 text-green-600" />
+              <AlertDescription className="text-sm text-green-600">
+                ✓ This prospect has been added to your CRM as a Lead
               </AlertDescription>
             </Alert>
           )}
