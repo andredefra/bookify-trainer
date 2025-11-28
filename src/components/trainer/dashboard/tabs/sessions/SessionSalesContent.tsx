@@ -4,12 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, TrendingUp, Calendar, AlertCircle, Check, X, Inbox } from "lucide-react";
-import { useSessionSales, SessionRequest } from "@/hooks/useSessionSales";
+import { Search, TrendingUp, Calendar, AlertCircle, Check, X } from "lucide-react";
+import { useSessionSales } from "@/hooks/useSessionSales";
 import { SessionSalesHistoryTable } from "./SessionSalesHistoryTable";
-import { SessionRequestCard } from "./SessionRequestCard";
-import { ApproveSessionRequestDialog } from "./ApproveSessionRequestDialog";
-import { DeclineRequestDialog } from "./DeclineRequestDialog";
 import { format } from "date-fns";
 
 const formatCurrency = (amount: number) => `€${amount.toFixed(2)}`;
@@ -21,10 +18,7 @@ interface SessionSalesContentProps {
 
 export function SessionSalesContent({ trainerId, isProTrainer = false }: SessionSalesContentProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeSubTab, setActiveSubTab] = useState<"all" | "pending" | "requests">("all");
-  const [selectedRequest, setSelectedRequest] = useState<SessionRequest | null>(null);
-  const [approveDialogOpen, setApproveDialogOpen] = useState(false);
-  const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
+  const [activeSubTab, setActiveSubTab] = useState<"all" | "pending">("all");
 
   const {
     weeklyRevenue,
@@ -35,12 +29,9 @@ export function SessionSalesContent({ trainerId, isProTrainer = false }: Session
     previousQuarterRevenue,
     pendingPayments,
     allSales,
-    sessionRequests,
     loading,
     confirmPayment,
     rejectPayment,
-    approveRequest,
-    declineRequest,
   } = useSessionSales(trainerId);
 
   const calculateChange = (current: number, previous: number): string => {
@@ -48,24 +39,6 @@ export function SessionSalesContent({ trainerId, isProTrainer = false }: Session
     const change = ((current - previous) / previous) * 100;
     const sign = change >= 0 ? '+' : '';
     return `${sign}${change.toFixed(0)}%`;
-  };
-
-  const handleApproveClick = (request: SessionRequest) => {
-    setSelectedRequest(request);
-    setApproveDialogOpen(true);
-  };
-
-  const handleDeclineClick = (request: SessionRequest) => {
-    setSelectedRequest(request);
-    setDeclineDialogOpen(true);
-  };
-
-  const handleApproveConfirm = (requestId: string, paymentMethod: 'cash' | 'online') => {
-    approveRequest(requestId, paymentMethod, isProTrainer);
-  };
-
-  const handleDeclineConfirm = (requestId: string, reason?: string) => {
-    declineRequest(requestId, reason);
   };
 
   const kpiCards = [
@@ -163,7 +136,7 @@ export function SessionSalesContent({ trainerId, isProTrainer = false }: Session
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <Tabs value={activeSubTab} onValueChange={(v) => setActiveSubTab(v as "all" | "pending" | "requests")} className="w-full sm:w-auto">
+            <Tabs value={activeSubTab} onValueChange={(v) => setActiveSubTab(v as "all" | "pending")} className="w-full sm:w-auto">
               <TabsList>
                 <TabsTrigger value="all">All Sales</TabsTrigger>
                 <TabsTrigger value="pending">
@@ -171,14 +144,6 @@ export function SessionSalesContent({ trainerId, isProTrainer = false }: Session
                   {pendingPayments.length > 0 && (
                     <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
                       {pendingPayments.length}
-                    </Badge>
-                  )}
-                </TabsTrigger>
-                <TabsTrigger value="requests">
-                  Requests
-                  {sessionRequests.length > 0 && (
-                    <Badge variant="default" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                      {sessionRequests.length}
                     </Badge>
                   )}
                 </TabsTrigger>
@@ -197,30 +162,7 @@ export function SessionSalesContent({ trainerId, isProTrainer = false }: Session
           </div>
 
           {/* Content based on active sub-tab */}
-          {activeSubTab === "requests" ? (
-            sessionRequests.length > 0 ? (
-              <div className="space-y-4">
-                {sessionRequests.map((request) => (
-                  <SessionRequestCard
-                    key={request.id}
-                    request={request}
-                    onViewDetails={(req) => {
-                      setSelectedRequest(req);
-                      // Could open a detail dialog here if needed
-                    }}
-                    onApprove={handleApproveClick}
-                    onDecline={handleDeclineClick}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Inbox className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p className="text-sm font-medium">No session requests</p>
-                <p className="text-xs mt-1">New session requests will appear here</p>
-              </div>
-            )
-          ) : activeSubTab === "pending" ? (
+          {activeSubTab === "pending" ? (
             pendingPayments.length > 0 ? (
               <div className="border rounded-lg overflow-hidden">
                 <table className="w-full">
@@ -301,23 +243,6 @@ export function SessionSalesContent({ trainerId, isProTrainer = false }: Session
           )}
         </CardContent>
       </Card>
-
-      {/* Approve Request Dialog */}
-      <ApproveSessionRequestDialog
-        open={approveDialogOpen}
-        onOpenChange={setApproveDialogOpen}
-        request={selectedRequest}
-        isProTrainer={isProTrainer}
-        onConfirm={handleApproveConfirm}
-      />
-
-      {/* Decline Request Dialog */}
-      <DeclineRequestDialog
-        open={declineDialogOpen}
-        onOpenChange={setDeclineDialogOpen}
-        request={selectedRequest}
-        onConfirm={handleDeclineConfirm}
-      />
     </div>
   );
 }
