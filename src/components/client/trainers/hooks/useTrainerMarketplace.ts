@@ -96,10 +96,11 @@ export function useTrainerMarketplace(
   
   // Get trainers data based on gym filter
   const getTrainersData = (): MarketplaceTrainer[] => {
+    // If filter is ON, show ONLY gym trainers
     if (isGymFilterActive && gymId) {
       const gymTrainers = getGymTrainers(gymId);
       return gymTrainers.map(t => ({
-        id: `t${t.id}`,
+        id: `gym-${t.id}`,
         name: t.name,
         specialty: t.specialty,
         location: "FitLife Gym",
@@ -111,7 +112,29 @@ export function useTrainerMarketplace(
         image: t.image
       }));
     }
-    return trainersData;
+    
+    // If filter is OFF, show ALL trainers (gym + marketplace)
+    const gymTrainers = getGymTrainers('11111111-1111-1111-1111-111111111111');
+    const convertedGymTrainers: MarketplaceTrainer[] = gymTrainers.map(t => ({
+      id: `gym-${t.id}`,
+      name: t.name,
+      specialty: t.specialty,
+      location: "FitLife Gym",
+      rating: t.rating,
+      reviews: t.reviews,
+      price: `€${t.hourlyRate}`,
+      availability: t.status === "online" ? "Available now" : 
+                    t.status === "in-session" ? "In session" : "Check availability",
+      image: t.image
+    }));
+    
+    // Filter out Sarah Johnson from marketplace trainers (she's already in gym trainers)
+    const otherTrainers = trainersData.filter(t => 
+      !gymTrainers.some(gt => gt.name.toLowerCase() === t.name.toLowerCase())
+    );
+    
+    // Combine: gym trainers first, then other marketplace trainers
+    return [...convertedGymTrainers, ...otherTrainers];
   };
   
   const currentTrainersData = getTrainersData();
