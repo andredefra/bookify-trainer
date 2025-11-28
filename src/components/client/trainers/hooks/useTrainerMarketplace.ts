@@ -152,29 +152,13 @@ export function useTrainerMarketplace(
       )
     : filteredTrainers;
   
-  // Debug all trainers before filtering
-  console.log("Trainers before filtering:", locationFilteredTrainers.map(t => `${t.id} (${parseInt(t.id.replace(/\D/g, ''))}) - ${t.name}`));
-  
-  // Debug followedTrainers for comparison
-  console.log("Looking to filter out trainers with IDs:", followedTrainers);
-  
-  // Filter out trainers that are already followed - with explicit mapping for debugging
-  const nonFollowedTrainers = locationFilteredTrainers.filter(trainer => {
-    // Extract the numeric part of the trainer ID
-    const trainerId = parseInt(trainer.id.replace(/\D/g, ''));
-    const isFollowed = followedTrainers.includes(trainerId);
-    console.log(`Checking trainer ${trainer.name} with ID ${trainerId}: ${isFollowed ? 'is followed' : 'not followed'}`);
-    return !isFollowed;
-  });
-  
-  console.log("Trainers after filtering:", nonFollowedTrainers.map(t => t.name));
-  
+  // Show ALL trainers in marketplace - user can see follow status on cards
   return {
     searchQuery,
     setSearchQuery,
     location,
     setLocation,
-    trainers: nonFollowedTrainers,
+    trainers: locationFilteredTrainers,
     showBookingDialog,
     setShowBookingDialog,
     selectedTrainer,
