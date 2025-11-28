@@ -216,20 +216,22 @@ export function ProgramsTab() {
           )}
 
           <Tabs defaultValue="programs" className="w-full">
-            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap justify-start min-w-max">
-              <TabsTrigger value="programs" className="flex-shrink-0 whitespace-nowrap px-3">My Programs</TabsTrigger>
-              <TabsTrigger value="assigned" className="flex-shrink-0 whitespace-nowrap px-3">Assigned Programs</TabsTrigger>
-              {showSalesAnalytics && (
-                <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
-                  Sales
-                  {pendingCount > 0 && (
-                    <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                      {pendingCount}
-                    </Badge>
-                  )}
-                </TabsTrigger>
-              )}
-            </TabsList>
+            <div className="overflow-x-auto mb-6">
+              <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
+                <TabsTrigger value="programs" className="flex-shrink-0 whitespace-nowrap px-3">My Programs</TabsTrigger>
+                <TabsTrigger value="assigned" className="flex-shrink-0 whitespace-nowrap px-3">Assigned Programs</TabsTrigger>
+                {showSalesAnalytics && (
+                  <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
+                    Sales
+                    {pendingCount > 0 && (
+                      <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                        {pendingCount}
+                      </Badge>
+                    )}
+                  </TabsTrigger>
+                )}
+              </TabsList>
+            </div>
             
             <ProgramsTabContent
               programs={programs}
