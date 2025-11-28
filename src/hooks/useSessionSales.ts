@@ -18,6 +18,27 @@ export interface SessionSale {
   status: 'paid' | 'pending' | 'unpaid';
 }
 
+export interface SessionRequest {
+  id: string;
+  requesterType: 'existing_client' | 'prospect';
+  clientId?: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  previousSessionsCount?: number;
+  sessionTitle: string;
+  sessionType: 'video' | 'in-person';
+  requestedDate: string;
+  requestedTime: string;
+  duration: number;
+  message: string;
+  price: number;
+  paymentStatus: 'pending' | 'confirmed';
+  paymentMethod?: 'cash' | 'card' | 'online';
+  status: 'pending' | 'approved' | 'declined';
+  requestDate: string;
+}
+
 export interface SessionSalesData {
   weeklyRevenue: number;
   previousWeekRevenue: number;
@@ -28,9 +49,50 @@ export interface SessionSalesData {
   pendingPayments: SessionSale[];
   confirmedSales: SessionSale[];
   allSales: SessionSale[];
+  sessionRequests: SessionRequest[];
   totalSalesCount: number;
   loading: boolean;
 }
+
+// Mock session requests data
+const getMockSessionRequests = (): SessionRequest[] => [
+  {
+    id: 'request-1',
+    requesterType: 'prospect',
+    clientName: 'Maria Rossi',
+    clientEmail: 'maria.rossi@example.com',
+    clientPhone: '+39 333 1234567',
+    sessionTitle: 'Personal Training - First Session',
+    sessionType: 'video',
+    requestedDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+    requestedTime: '10:00',
+    duration: 60,
+    message: 'Hi! I\'m interested in starting a fitness journey and would love to schedule an introductory session. I\'m available mornings and prefer video sessions for now.',
+    price: 45.00,
+    paymentStatus: 'pending',
+    status: 'pending',
+    requestDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'request-2',
+    requesterType: 'existing_client',
+    clientId: 'client-existing-1',
+    clientName: 'John Smith',
+    clientEmail: 'john.smith@example.com',
+    clientPhone: '+39 345 9876543',
+    previousSessionsCount: 8,
+    sessionTitle: 'Advanced Strength Training',
+    sessionType: 'in-person',
+    requestedDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+    requestedTime: '15:30',
+    duration: 90,
+    message: 'Would like to schedule another session focusing on powerlifting techniques. My schedule is flexible this week.',
+    price: 50.00,
+    paymentStatus: 'pending',
+    status: 'pending',
+    requestDate: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+  },
+];
 
 // Mock data for demo mode
 const getMockPendingPayments = (): SessionSale[] => [
@@ -256,6 +318,7 @@ export function useSessionSales(trainerId?: string) {
     pendingPayments: [],
     confirmedSales: [],
     allSales: [],
+    sessionRequests: [],
     totalSalesCount: 0,
     loading: true,
   });
@@ -269,6 +332,7 @@ export function useSessionSales(trainerId?: string) {
       const mockPending = getMockPendingPayments();
       const mockConfirmed = getMockConfirmedSales();
       const allMockSales = [...mockPending, ...mockConfirmed];
+      const mockRequests = getMockSessionRequests();
       
       // Calculate revenue from mock data
       const weekRange = getDateRange('week');
@@ -313,6 +377,7 @@ export function useSessionSales(trainerId?: string) {
         pendingPayments: mockPending,
         confirmedSales: mockConfirmed,
         allSales: allMockSales,
+        sessionRequests: mockRequests,
         totalSalesCount: mockConfirmed.length,
         loading: false,
       });
@@ -369,6 +434,54 @@ export function useSessionSales(trainerId?: string) {
     }
   };
 
+  const approveRequest = async (requestId: string, paymentMethod: 'cash' | 'online', isProTrainer: boolean = false) => {
+    try {
+      // Mock implementation - in real app would create session booking and update database
+      const message = paymentMethod === 'online' 
+        ? 'Request approved! Payment link sent to client.'
+        : 'Request approved! Session scheduled.';
+      
+      toast({
+        title: "Request Approved",
+        description: isProTrainer 
+          ? `${message} Added to calendar and transactions.` 
+          : message,
+      });
+
+      // Refresh data
+      await fetchSessionSales();
+    } catch (error) {
+      console.error('Error approving request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to approve request",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const declineRequest = async (requestId: string, reason?: string) => {
+    try {
+      // Mock implementation - in real app would update database
+      toast({
+        title: "Request Declined",
+        description: reason 
+          ? `Request declined. Reason sent to client.`
+          : "Request has been declined",
+      });
+
+      // Refresh data
+      await fetchSessionSales();
+    } catch (error) {
+      console.error('Error declining request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to decline request",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
     if (effectiveTrainerId) {
       fetchSessionSales();
@@ -379,6 +492,8 @@ export function useSessionSales(trainerId?: string) {
     ...salesData,
     confirmPayment,
     rejectPayment,
+    approveRequest,
+    declineRequest,
     refreshSales: fetchSessionSales,
   };
 }
