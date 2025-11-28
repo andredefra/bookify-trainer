@@ -84,10 +84,12 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap justify-start min-w-max">
-              <TabsTrigger value="clients" className="flex-1 sm:flex-none whitespace-nowrap">Client List</TabsTrigger>
-              <TabsTrigger value="analytics" className="flex-1 sm:flex-none whitespace-nowrap">Performance Analytics</TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto mb-6">
+              <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
+                <TabsTrigger value="clients" className="flex-1 sm:flex-none whitespace-nowrap">Client List</TabsTrigger>
+                <TabsTrigger value="analytics" className="flex-1 sm:flex-none whitespace-nowrap">Performance Analytics</TabsTrigger>
+              </TabsList>
+            </div>
             
             <TabsContent value="clients" className="mt-0">
               <ScrollArea className="h-[500px] pr-4">

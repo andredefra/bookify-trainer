@@ -11,11 +11,13 @@ export function TransactionsTabsContent() {
   
   return (
     <Tabs defaultValue="all">
-      <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap justify-start min-w-max">
-        <TabsTrigger value="all" className="flex-shrink-0 whitespace-nowrap">All Transactions</TabsTrigger>
-        <TabsTrigger value="installments" className="flex-shrink-0 whitespace-nowrap">Pending Installments</TabsTrigger>
-        <TabsTrigger value="by-client" className="flex-shrink-0 whitespace-nowrap">By Client</TabsTrigger>
-      </TabsList>
+      <div className="overflow-x-auto mb-6">
+        <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
+          <TabsTrigger value="all" className="flex-shrink-0 whitespace-nowrap">All Transactions</TabsTrigger>
+          <TabsTrigger value="installments" className="flex-shrink-0 whitespace-nowrap">Pending Installments</TabsTrigger>
+          <TabsTrigger value="by-client" className="flex-shrink-0 whitespace-nowrap">By Client</TabsTrigger>
+        </TabsList>
+      </div>
       
       <TabsContent value="all">
         <div className="space-y-6">
