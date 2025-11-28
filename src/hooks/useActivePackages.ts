@@ -7,6 +7,11 @@ const DEMO_TRAINER_IDS = [
   '22222222-2222-2222-2222-222222222222'
 ];
 
+const DEMO_CLIENT_NAMES: Record<string, string> = {
+  '00000000-0000-0000-0000-000000000002': 'Sarah Johnson',
+  '11111111-1111-1111-1111-111111111111': 'Mike Chen',
+};
+
 export interface ActivePackage {
   id: string;
   clientId: string;
@@ -34,8 +39,10 @@ export const useActivePackages = (trainerId?: string) => {
       setLoading(true);
       
       const effectiveTrainerId = trainerId || DEMO_TRAINER_IDS[0];
+      const isDemo = DEMO_TRAINER_IDS.includes(effectiveTrainerId);
       
       // Fetch package assignments with client profiles
+      // If demo trainer, fetch for ALL demo trainers to show multiple packages
       let { data: assignments, error } = await supabase
         .from('client_package_assignments')
         .select(`
@@ -51,7 +58,7 @@ export const useActivePackages = (trainerId?: string) => {
           total_paid,
           client_packages!inner(title)
         `)
-        .eq('trainer_id', effectiveTrainerId)
+        .in('trainer_id', isDemo ? DEMO_TRAINER_IDS : [effectiveTrainerId])
         .eq('status', 'active')
         .order('purchase_date', { ascending: false });
 
@@ -99,7 +106,9 @@ export const useActivePackages = (trainerId?: string) => {
       const transformedPackages: ActivePackage[] = (assignments || []).map((assignment) => ({
         id: assignment.id,
         clientId: assignment.client_id,
-        clientName: profileMap.get(assignment.client_id) || 'Unknown Client',
+        clientName: profileMap.get(assignment.client_id) 
+          || DEMO_CLIENT_NAMES[assignment.client_id] 
+          || 'Unknown Client',
         packageTitle: assignment.client_packages?.title || 'Unknown Package',
         sessionsTotal: assignment.sessions_total,
         sessionsUsed: assignment.sessions_used || 0,
