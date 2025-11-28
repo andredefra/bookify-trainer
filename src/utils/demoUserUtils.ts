@@ -32,13 +32,27 @@ export function getDemoUserData(email: string, name: string, type: string) {
     userId = generateDemoUserId(email);
   }
   
-  return {
+  // Base demo user data
+  const baseData = {
     id: userId,
     name,
     email,
     type,
     profileImage: getDefaultProfileImage()
   };
+  
+  // Add demographic data for client users (needed for Body Fat % chart)
+  if (type === 'client') {
+    return {
+      ...baseData,
+      height: 175,           // 175 cm
+      gender: 'male' as const,
+      date_of_birth: '1989-03-15',  // ~36 years old
+      phone: '+39 123 456 7890'
+    };
+  }
+  
+  return baseData;
 }
 
 export function getDefaultProfileImage(): string {
