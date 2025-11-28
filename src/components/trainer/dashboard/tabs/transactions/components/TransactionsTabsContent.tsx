@@ -11,7 +11,7 @@ export function TransactionsTabsContent() {
   
   return (
     <Tabs defaultValue="all">
-      <div className="overflow-x-auto mb-6">
+      <div className="overflow-x-auto mb-6 max-w-full">
         <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
           <TabsTrigger value="all" className="flex-shrink-0 whitespace-nowrap">All Transactions</TabsTrigger>
           <TabsTrigger value="installments" className="flex-shrink-0 whitespace-nowrap">Pending Installments</TabsTrigger>

@@ -216,7 +216,7 @@ export function ProgramsTab() {
           )}
 
           <Tabs defaultValue="programs" className="w-full">
-            <div className="overflow-x-auto mb-6">
+            <div className="overflow-x-auto mb-6 max-w-full">
               <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
                 <TabsTrigger value="programs" className="flex-shrink-0 whitespace-nowrap px-3">My Programs</TabsTrigger>
                 <TabsTrigger value="assigned" className="flex-shrink-0 whitespace-nowrap px-3">Assigned Programs</TabsTrigger>
