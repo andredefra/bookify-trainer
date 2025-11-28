@@ -216,7 +216,7 @@ export function ProgramsTab() {
           )}
 
           <Tabs defaultValue="programs" className="w-full">
-            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap justify-start">
+            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap justify-start min-w-max">
               <TabsTrigger value="programs" className="flex-shrink-0 whitespace-nowrap px-3">My Programs</TabsTrigger>
               <TabsTrigger value="assigned" className="flex-shrink-0 whitespace-nowrap px-3">Assigned Programs</TabsTrigger>
               {showSalesAnalytics && (
