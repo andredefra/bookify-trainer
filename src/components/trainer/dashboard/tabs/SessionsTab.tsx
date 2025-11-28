@@ -21,6 +21,8 @@ import { useSalesContacts } from "./sales/useSalesContacts";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
 import { toast } from "sonner";
 import { useState } from "react";
+import { AddLeadDialog } from "./sales/AddLeadDialog";
+import { SalesContact } from "./sales/types";
 
 interface SessionsTabProps {
   upcomingSessions?: TrainerSessionItem[];
@@ -80,6 +82,12 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [approveDialogOpen, setApproveDialogOpen] = useState(false);
   const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
+  
+  // Add to CRM state
+  const [addedToCRM, setAddedToCRM] = useState<Set<string>>(new Set());
+  const [addLeadDialogOpen, setAddLeadDialogOpen] = useState(false);
+  const [leadInitialData, setLeadInitialData] = useState<any>(null);
+  const [pendingRequestId, setPendingRequestId] = useState<string | null>(null);
 
   // Request handlers
   const handleViewDetails = (request: SessionRequest) => {
@@ -112,19 +120,32 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   };
 
   const handleAddToCRM = (request: SessionRequest) => {
-    const newLead = {
+    // Prepare initial data for the dialog
+    setLeadInitialData({
       name: request.clientName,
       email: request.clientEmail,
       phone: request.clientPhone,
-      status: 'lead' as const,
       source: 'Session Request',
       notes: `Session request: ${request.sessionTitle}\nMessage: ${request.message || 'No message'}`,
       value: request.price,
       nextAction: 'Follow up on session request'
-    };
-    
+    });
+    setPendingRequestId(request.id);
+    setAddLeadDialogOpen(true);
+  };
+
+  const handleConfirmAddLead = (newLead: Omit<SalesContact, 'id' | 'createdAt' | 'lastUpdated'>) => {
     handleAddContact(newLead);
-    toast.success(`${request.clientName} added to CRM as Lead!`);
+    
+    // Mark the request as added to CRM
+    if (pendingRequestId) {
+      setAddedToCRM(prev => new Set(prev).add(pendingRequestId));
+    }
+    
+    toast.success(`${newLead.name} added to CRM as Lead!`);
+    setAddLeadDialogOpen(false);
+    setPendingRequestId(null);
+    setLeadInitialData(null);
   };
 
   // Ensure we have data by combining props with sample data if needed
@@ -202,7 +223,11 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
                         onViewDetails={handleViewDetails}
                         onApprove={handleApproveClick}
                         onDecline={handleDeclineClick}
-                        onAddToCRM={request.requesterType === 'prospect' ? handleAddToCRM : undefined}
+                        onAddToCRM={
+                          request.requesterType === 'prospect' && !addedToCRM.has(request.id)
+                            ? handleAddToCRM
+                            : undefined
+                        }
                       />
                     ))
                 ) : (
@@ -246,6 +271,7 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             onApprove={handleApproveClick}
             onDecline={handleDeclineClick}
             onAddToCRM={handleAddToCRM}
+            isAddedToCRM={selectedRequest ? addedToCRM.has(selectedRequest.id) : false}
           />
 
           <ApproveSessionRequestDialog
@@ -261,6 +287,20 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             onOpenChange={setDeclineDialogOpen}
             request={selectedRequest}
             onConfirm={handleDeclineConfirm}
+          />
+
+          {/* Add Lead Dialog */}
+          <AddLeadDialog
+            open={addLeadDialogOpen}
+            onOpenChange={(open) => {
+              setAddLeadDialogOpen(open);
+              if (!open) {
+                setPendingRequestId(null);
+                setLeadInitialData(null);
+              }
+            }}
+            onAdd={handleConfirmAddLead}
+            initialData={leadInitialData}
           />
         </CardContent>
       </Card>

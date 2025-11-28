@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,20 @@ interface AddLeadDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onAdd: (contact: Omit<SalesContact, 'id' | 'createdAt' | 'lastUpdated'>) => void;
+  initialData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    company?: string;
+    source?: string;
+    value?: number;
+    notes?: string;
+    nextAction?: string;
+    nextActionDate?: string;
+  };
 }
 
-export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps) {
+export function AddLeadDialog({ open, onOpenChange, onAdd, initialData }: AddLeadDialogProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,6 +36,23 @@ export function AddLeadDialog({ open, onOpenChange, onAdd }: AddLeadDialogProps)
     nextAction: '',
     nextActionDate: ''
   });
+
+  // Pre-fill form when initialData changes
+  useEffect(() => {
+    if (initialData && open) {
+      setFormData({
+        name: initialData.name || '',
+        email: initialData.email || '',
+        phone: initialData.phone || '',
+        company: initialData.company || '',
+        source: initialData.source || '',
+        value: initialData.value?.toString() || '',
+        notes: initialData.notes || '',
+        nextAction: initialData.nextAction || '',
+        nextActionDate: initialData.nextActionDate || ''
+      });
+    }
+  }, [initialData, open]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
