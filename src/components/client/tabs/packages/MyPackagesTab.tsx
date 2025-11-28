@@ -4,17 +4,14 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Package, Calendar, Clock, CreditCard, User, AlertCircle, Plus } from "lucide-react";
+import { Package, Calendar, Clock, CreditCard, AlertCircle, Plus } from "lucide-react";
 import { useClientPackages } from "@/hooks/useClientPackages";
-import { PackageDetailsDialog } from "./PackageDetailsDialog";
 import { BrowsePackagesDialog } from "./BrowsePackagesDialog";
 import { ClientPackageManagementDialog } from "./ClientPackageManagementDialog";
 import { useState } from "react";
 
 export function MyPackagesTab() {
   const { packages, availablePackages, assignedPackages, loading, error, refetch } = useClientPackages();
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [showPackageDetails, setShowPackageDetails] = useState(false);
   const [showBrowsePackages, setShowBrowsePackages] = useState(false);
   const [showManageDialog, setShowManageDialog] = useState(false);
   const [managePackage, setManagePackage] = useState(null);
@@ -151,40 +148,17 @@ export function MyPackagesTab() {
 
                       <div className="flex gap-2 pt-2 flex-wrap">
                         <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedPackage(pkg);
-                            setShowPackageDetails(true);
-                          }}
-                        >
-                          View Details
-                        </Button>
-                        {(pkg.package.package_type === 'sessions_only' || pkg.package.package_type === 'hybrid') && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => {
-                              setManagePackage(pkg);
-                              setShowManageDialog(true);
-                            }}
-                          >
-                            Manage Sessions
-                          </Button>
-                        )}
-                        <Button 
-                          size="sm" 
-                          variant="outline"
+                          size="sm"
                           onClick={() => {
                             setManagePackage(pkg);
                             setShowManageDialog(true);
                           }}
                         >
-                          <CreditCard className="w-4 h-4 mr-1" />
-                          Manage Payments
+                          <Package className="w-4 h-4 mr-1" />
+                          Manage Package
                         </Button>
                         {pkg.sessions_used === pkg.sessions_total && (
-                          <Button size="sm">
+                          <Button size="sm" variant="outline">
                             Renew Package
                           </Button>
                         )}
@@ -249,12 +223,6 @@ export function MyPackagesTab() {
       </Tabs>
 
       {/* Dialogs */}
-      <PackageDetailsDialog
-        package={selectedPackage}
-        open={showPackageDetails}
-        onOpenChange={setShowPackageDetails}
-      />
-      
       <BrowsePackagesDialog
         open={showBrowsePackages}
         onOpenChange={setShowBrowsePackages}
