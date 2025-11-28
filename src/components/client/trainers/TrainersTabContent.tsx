@@ -7,6 +7,7 @@ import { FollowedTrainersSection } from "./FollowedTrainersSection";
 import { MyTrainerExplanation } from "./MyTrainerExplanation";
 import { TrainersGymFilter } from "./TrainersGymFilter";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { getGymTrainers } from "@/data/gymTrainersMockData";
 
 interface Trainer {
   id: number;
@@ -82,14 +83,14 @@ export function TrainersTabContent({
       return myTrainers;
     }
     
-    // Filter trainers who work at the connected gym
-    // For demo purposes, we'll assume Sarah Johnson and Alex Thompson work at FitLife Gym
-    const gymTrainerIds = [1, 2]; // These would come from real data
+    // Filter trainers who work at the connected gym using mock data
+    const gymTrainers = getGymTrainers(gymConnection.gym_id);
+    const gymTrainerIds = gymTrainers.map(t => t.id);
     return myTrainers.filter(trainer => gymTrainerIds.includes(trainer.id));
   };
 
   const filteredTrainers = getFilteredTrainers();
-  const gymTrainersCount = gymConnection ? 2 : 0;
+  const gymTrainersCount = gymConnection ? getGymTrainers(gymConnection.gym_id).length : 0;
 
   const renderContent = () => {
     switch (activeTab) {

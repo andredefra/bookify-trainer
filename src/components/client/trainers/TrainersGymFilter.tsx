@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Filter, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
+import { getGymTrainers } from "@/data/gymTrainersMockData";
 
 interface TrainersGymFilterProps {
   isGymFilterActive: boolean;
@@ -21,26 +21,10 @@ export function TrainersGymFilter({
   const [affiliatedTrainersCount, setAffiliatedTrainersCount] = useState(gymTrainersCount);
 
   useEffect(() => {
-    const fetchAffiliatedTrainersCount = async () => {
-      try {
-        // Count trainers affiliated with demo gym
-        const { count, error } = await supabase
-          .from('trainer_gym_affiliations')
-          .select('*', { count: 'exact', head: true })
-          .eq('gym_id', '11111111-1111-1111-1111-111111111111')
-          .eq('status', 'approved');
-
-        if (error) throw error;
-        setAffiliatedTrainersCount(count || 0);
-      } catch (error) {
-        console.error('Error fetching affiliated trainers count:', error);
-        // Fallback to provided count
-        setAffiliatedTrainersCount(gymTrainersCount);
-      }
-    };
-
-    fetchAffiliatedTrainersCount();
-  }, [gymTrainersCount]);
+    // Use mock data for gym trainers
+    const gymTrainers = getGymTrainers('11111111-1111-1111-1111-111111111111');
+    setAffiliatedTrainersCount(gymTrainers.length);
+  }, []);
   return (
     <div className="flex items-center gap-3">
       <Button
