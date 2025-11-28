@@ -2,18 +2,15 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircle, Package, CreditCard, Users, Clock, Edit, UserPlus, Eye, Calendar, CheckCircle2, AlertCircle, Settings } from "lucide-react";
+import { PlusCircle, Package, CreditCard, Users, Clock, Edit, UserPlus, Eye, CheckCircle2, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CreatePackageDialog } from "./packages/CreatePackageDialog";
 import { EditPackageDialog } from "./packages/EditPackageDialog";
 import { AssignPackageDialog } from "./packages/AssignPackageDialog";
 import { ActivePackageManagementDialog } from "./packages/ActivePackageManagementDialog";
-import { BookSessionDialog } from "./packages/BookSessionDialog";
 import { toast } from "sonner";
 import { useActivePackages } from "@/hooks/useActivePackages";
-import { usePackageSessionBookings } from "@/hooks/usePackageSessionBookings";
 import { supabase } from "@/integrations/supabase/client";
-import { PackageSessionBooking, SessionBookingStatus, SessionType } from "@/types/packageSessions";
 
 export function PackagesTab() {
   const [activeTab, setActiveTab] = useState("templates");
@@ -21,9 +18,7 @@ export function PackagesTab() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   const [showManagementDialog, setShowManagementDialog] = useState(false);
-  const [showBookNextDialog, setShowBookNextDialog] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<any>(null);
-  const [bookNextSession, setBookNextSession] = useState<PackageSessionBooking | null>(null);
   const [trainerId, setTrainerId] = useState<string | null>(null);
 
   // Fetch trainer ID with demo fallback
@@ -146,123 +141,6 @@ export function PackagesTab() {
     setShowManagementDialog(true);
   };
 
-  const handleBookNext = async (pkg: any) => {
-    try {
-      // Fetch sessions for this package
-      const { data: sessions, error } = await supabase
-        .from('package_session_bookings')
-        .select('*')
-        .eq('package_assignment_id', pkg.id)
-        .order('session_number', { ascending: true });
-
-      if (error) throw error;
-
-      // If no sessions exist, initialize them first
-      if (!sessions || sessions.length === 0) {
-        const sessionRecords = Array.from({ length: pkg.sessionsTotal }, (_, i) => ({
-          package_assignment_id: pkg.id,
-          trainer_id: pkg.trainerId,
-          client_id: pkg.clientId,
-          session_number: i + 1,
-          status: 'available',
-          duration_minutes: 60,
-          session_type: 'in-person',
-        }));
-
-        const { data: newSessions, error: insertError } = await supabase
-          .from('package_session_bookings')
-          .insert(sessionRecords)
-          .select();
-
-        if (insertError) throw insertError;
-
-        // Find first available session
-        const firstAvailable = newSessions?.find((s) => s.status === 'available');
-        if (firstAvailable) {
-          const transformedSession: PackageSessionBooking = {
-            id: firstAvailable.id,
-            packageAssignmentId: firstAvailable.package_assignment_id,
-            trainerId: firstAvailable.trainer_id,
-            clientId: firstAvailable.client_id,
-            sessionNumber: firstAvailable.session_number,
-            status: firstAvailable.status as SessionBookingStatus,
-            sessionType: firstAvailable.session_type as SessionType,
-            durationMinutes: firstAvailable.duration_minutes,
-            createdAt: firstAvailable.created_at,
-            updatedAt: firstAvailable.updated_at,
-          };
-          setBookNextSession(transformedSession);
-          setSelectedPackage(pkg);
-          setShowBookNextDialog(true);
-        }
-      } else {
-        // Find next available session
-        const nextAvailable = sessions.find((s) => s.status === 'available');
-        if (nextAvailable) {
-          const transformedSession: PackageSessionBooking = {
-            id: nextAvailable.id,
-            packageAssignmentId: nextAvailable.package_assignment_id,
-            trainerId: nextAvailable.trainer_id,
-            clientId: nextAvailable.client_id,
-            sessionNumber: nextAvailable.session_number,
-            status: nextAvailable.status as SessionBookingStatus,
-            proposedBy: nextAvailable.proposed_by as 'trainer' | 'client' | undefined,
-            proposedDatetime: nextAvailable.proposed_datetime,
-            confirmedDatetime: nextAvailable.confirmed_datetime,
-            completedDatetime: nextAvailable.completed_datetime,
-            calendarEventId: nextAvailable.calendar_event_id,
-            sessionType: nextAvailable.session_type as SessionType,
-            location: nextAvailable.location,
-            notes: nextAvailable.notes,
-            durationMinutes: nextAvailable.duration_minutes,
-            createdAt: nextAvailable.created_at,
-            updatedAt: nextAvailable.updated_at,
-          };
-          setBookNextSession(transformedSession);
-          setSelectedPackage(pkg);
-          setShowBookNextDialog(true);
-        } else {
-          toast.info('All sessions have been booked');
-        }
-      }
-    } catch (error) {
-      console.error('Error booking next session:', error);
-      toast.error('Failed to book session');
-    }
-  };
-
-  const handleProposeSession = async (
-    sessionId: string,
-    datetime: Date,
-    sessionType: 'in-person' | 'video',
-    location: string,
-    notes: string,
-    durationMinutes: number
-  ) => {
-    try {
-      const { error } = await supabase
-        .from('package_session_bookings')
-        .update({
-          status: 'proposed',
-          proposed_by: 'trainer',
-          proposed_datetime: datetime.toISOString(),
-          session_type: sessionType,
-          location,
-          notes,
-          duration_minutes: durationMinutes,
-        })
-        .eq('id', sessionId);
-
-      if (error) throw error;
-
-      toast.success('Session proposed successfully');
-      setShowBookNextDialog(false);
-      refetch();
-    } catch (error) {
-      console.error('Error proposing session:', error);
-      toast.error('Failed to propose session');
-    }
-  };
 
   const getPackageTypeColor = (type: string) => {
     switch (type) {
@@ -449,17 +327,8 @@ export function PackagesTab() {
                             onClick={() => handleManageClick(pkg)}
                             className="flex items-center gap-1.5"
                           >
-                            <Settings className="h-3.5 w-3.5" />
-                            Manage Sessions
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => handleBookNext(pkg)}
-                            className="flex items-center gap-1.5"
-                          >
-                            <Calendar className="h-3.5 w-3.5" />
-                            Book Next
+                            <Package className="h-3.5 w-3.5" />
+                            Manage Package
                           </Button>
                           <Button 
                             size="sm" 
@@ -508,17 +377,6 @@ export function PackagesTab() {
           open={showManagementDialog}
           onOpenChange={setShowManagementDialog}
           packageAssignment={selectedPackage}
-        />
-      )}
-
-      {bookNextSession && selectedPackage && (
-        <BookSessionDialog
-          open={showBookNextDialog}
-          onOpenChange={setShowBookNextDialog}
-          session={bookNextSession}
-          clientName={selectedPackage.clientName}
-          packageTitle={selectedPackage.packageTitle}
-          onBookSession={handleProposeSession}
         />
       )}
     </>
