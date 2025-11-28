@@ -97,7 +97,8 @@ export const invitedSessions: SessionItem[] = [
     inviteStatus: 'pending',
     paymentRequired: true,
     paymentStatus: 'pending',
-    inviteMessage: "Hi! I'd love to do a comprehensive strength assessment with you. This will help me create a personalized training plan that matches your goals perfectly. Looking forward to working together! 💪"
+    inviteMessage: "Hi! I'd love to do a comprehensive strength assessment with you. This will help me create a personalized training plan that matches your goals perfectly. Looking forward to working together! 💪",
+    trainerPlan: 'pro'
   }
 ];
 

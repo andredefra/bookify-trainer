@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { SessionItem } from "@/types/sessions";
 import {
   Dialog,
@@ -12,47 +11,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Calendar, Clock, MapPin, Video, Euro, MessageSquare } from "lucide-react";
-import { CardPaymentForm } from "@/components/shared/payment/CardPaymentForm";
-import { toast } from "sonner";
 
 interface AcceptInvitePaymentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   session: SessionItem | null;
-  onConfirm: () => void;
+  onAccept: () => void;
 }
 
 export function AcceptInvitePaymentDialog({
   open,
   onOpenChange,
   session,
-  onConfirm
+  onAccept
 }: AcceptInvitePaymentDialogProps) {
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardHolder, setCardHolder] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-
   if (!session) return null;
-
-  const handleConfirmPayment = async () => {
-    setIsProcessing(true);
-    
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success("Payment successful! Session confirmed.");
-    setIsProcessing(false);
-    onConfirm();
-    onOpenChange(false);
-    
-    // Reset form
-    setCardNumber("");
-    setCardHolder("");
-    setExpiryDate("");
-    setCvv("");
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -60,7 +33,7 @@ export function AcceptInvitePaymentDialog({
         <DialogHeader>
           <DialogTitle className="text-2xl">Accept Session Invitation</DialogTitle>
           <DialogDescription>
-            Review session details and complete payment
+            Review session details and confirm your attendance
           </DialogDescription>
         </DialogHeader>
 
@@ -77,7 +50,7 @@ export function AcceptInvitePaymentDialog({
               </Badge>
             </div>
 
-          <div className="grid gap-2">
+            <div className="grid gap-2">
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="w-4 h-4 text-muted-foreground" />
                 <span>{typeof session.date === 'string' ? session.date : session.date.toLocaleDateString()}</span>
@@ -106,11 +79,13 @@ export function AcceptInvitePaymentDialog({
             )}
           </div>
 
+          <Separator />
+
           {/* Trainer Message */}
           {session.inviteMessage && (
             <div className="bg-muted/50 rounded-lg p-4 border border-border">
               <div className="flex items-start gap-2 mb-2">
-                <MessageSquare className="w-4 h-4 text-muted-foreground mt-0.5" />
+                <MessageSquare className="w-4 h-4 text-primary mt-0.5" />
                 <span className="text-sm font-medium">Message from {session.trainer}</span>
               </div>
               <p className="text-sm italic text-muted-foreground ml-6">
@@ -119,30 +94,23 @@ export function AcceptInvitePaymentDialog({
             </div>
           )}
 
-          <Separator />
-
-          {/* Payment Section */}
+          {/* Price Info */}
           {session.paymentRequired && session.price && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-semibold">Payment Details</h4>
-                <div className="text-2xl font-bold text-primary flex items-center gap-1">
-                  <Euro className="w-5 h-5" />
-                  {session.price}
+            <>
+              <Separator />
+              <div className="bg-primary/5 rounded-lg p-4 border border-primary/20">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold">Session Price</span>
+                  <div className="text-2xl font-bold text-primary flex items-center gap-1">
+                    <Euro className="w-5 h-5" />
+                    {session.price}
+                  </div>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  You'll complete payment in the next step after accepting this invitation
+                </p>
               </div>
-
-              <CardPaymentForm
-                cardNumber={cardNumber}
-                setCardNumber={setCardNumber}
-                cardHolder={cardHolder}
-                setCardHolder={setCardHolder}
-                expiryDate={expiryDate}
-                setExpiryDate={setExpiryDate}
-                cvv={cvv}
-                setCvv={setCvv}
-              />
-            </div>
+            </>
           )}
         </div>
 
@@ -150,21 +118,15 @@ export function AcceptInvitePaymentDialog({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            disabled={isProcessing}
             className="w-full sm:w-auto"
           >
             Cancel
           </Button>
           <Button
-            onClick={handleConfirmPayment}
-            disabled={isProcessing}
+            onClick={onAccept}
             className="w-full sm:w-auto"
           >
-            {isProcessing ? (
-              "Processing..."
-            ) : (
-              <>Confirm & Pay €{session.price}</>
-            )}
+            Accept Invitation
           </Button>
         </DialogFooter>
       </DialogContent>
