@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 import { toast } from "@/hooks/use-toast";
 import { bookingSchema } from "@/components/trainer/BookingForm";
+import { getGymTrainers, GymTrainer } from "@/data/gymTrainersMockData";
 
 // Define Trainer type for better type safety
 export interface MarketplaceTrainer {
@@ -65,7 +66,11 @@ const trainersData: MarketplaceTrainer[] = [
   }
 ];
 
-export function useTrainerMarketplace(followedTrainers: number[] = []) {
+export function useTrainerMarketplace(
+  followedTrainers: number[] = [],
+  isGymFilterActive: boolean = false,
+  gymId?: string
+) {
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [showBookingDialog, setShowBookingDialog] = useState(false);
@@ -73,6 +78,7 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
   
   // Debug logs
   console.log("useTrainerMarketplace received followedTrainers:", followedTrainers);
+  console.log("useTrainerMarketplace gym filter active:", isGymFilterActive, "gymId:", gymId);
   
   const handleBookSession = (trainerName: string) => {
     setSelectedTrainer(trainerName);
@@ -88,8 +94,30 @@ export function useTrainerMarketplace(followedTrainers: number[] = []) {
     setShowBookingDialog(false);
   };
   
+  // Get trainers data based on gym filter
+  const getTrainersData = (): MarketplaceTrainer[] => {
+    if (isGymFilterActive && gymId) {
+      const gymTrainers = getGymTrainers(gymId);
+      return gymTrainers.map(t => ({
+        id: `t${t.id}`,
+        name: t.name,
+        specialty: t.specialty,
+        location: "FitLife Gym",
+        rating: t.rating,
+        reviews: t.reviews,
+        price: `€${t.hourlyRate}`,
+        availability: t.status === "online" ? "Available now" : 
+                      t.status === "in-session" ? "In session" : "Check availability",
+        image: t.image
+      }));
+    }
+    return trainersData;
+  };
+  
+  const currentTrainersData = getTrainersData();
+  
   // Filter trainers based on search query
-  const filteredTrainers = trainersData.filter(trainer => 
+  const filteredTrainers = currentTrainersData.filter(trainer => 
     trainer.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     trainer.specialty.toLowerCase().includes(searchQuery.toLowerCase())
   );

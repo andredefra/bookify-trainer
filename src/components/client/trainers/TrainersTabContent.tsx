@@ -90,7 +90,16 @@ export function TrainersTabContent({
   };
 
   const filteredTrainers = getFilteredTrainers();
-  const gymTrainersCount = gymConnection ? getGymTrainers(gymConnection.gym_id).length : 0;
+  
+  // Calculate gym trainers count based on context
+  const myGymTrainersCount = gymConnection ? 
+    myTrainers.filter(trainer => {
+      const gymTrainers = getGymTrainers(gymConnection.gym_id);
+      const gymTrainerIds = gymTrainers.map(t => t.id);
+      return gymTrainerIds.includes(trainer.id);
+    }).length : 0;
+  
+  const allGymTrainersCount = gymConnection ? getGymTrainers(gymConnection.gym_id).length : 0;
 
   const renderContent = () => {
     switch (activeTab) {
@@ -102,10 +111,13 @@ export function TrainersTabContent({
                 isGymFilterActive={isGymFilterActive}
                 onToggleGymFilter={onToggleGymFilter}
                 gymName={gymConnection.gym_name}
-                gymTrainersCount={gymTrainersCount}
+                gymTrainersCount={allGymTrainersCount}
               />
             )}
-            <TrainerMarketplace />
+            <TrainerMarketplace 
+              isGymFilterActive={isGymFilterActive}
+              gymId={gymConnection?.gym_id}
+            />
           </div>
         );
       
@@ -117,7 +129,7 @@ export function TrainersTabContent({
                 isGymFilterActive={isGymFilterActive}
                 onToggleGymFilter={onToggleGymFilter}
                 gymName={gymConnection.gym_name}
-                gymTrainersCount={gymTrainersCount}
+                gymTrainersCount={myGymTrainersCount}
               />
             )}
             <MyTrainerExplanation />
