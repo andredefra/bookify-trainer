@@ -216,11 +216,11 @@ export function ProgramsTab() {
           )}
 
           <Tabs defaultValue="programs" className="w-full">
-            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex-nowrap">
-              <TabsTrigger value="programs" className="flex-1 sm:flex-none whitespace-nowrap">My Programs</TabsTrigger>
-              <TabsTrigger value="assigned" className="flex-1 sm:flex-none whitespace-nowrap">Assigned Programs</TabsTrigger>
+            <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap">
+              <TabsTrigger value="programs" className="flex-shrink-0 whitespace-nowrap px-3">My Programs</TabsTrigger>
+              <TabsTrigger value="assigned" className="flex-shrink-0 whitespace-nowrap px-3">Assigned Programs</TabsTrigger>
               {showSalesAnalytics && (
-                <TabsTrigger value="sales" className="flex-1 sm:flex-none whitespace-nowrap">
+                <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
                   Sales
                   {pendingCount > 0 && (
                     <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
