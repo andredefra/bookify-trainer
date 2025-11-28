@@ -3,19 +3,52 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { TrainingProgramContent } from "@/components/client/training/TrainingProgramContent";
 import { ProgramListView } from "@/components/client/training/ProgramListView";
+import { ProgramManagementDialog } from "@/components/client/training/ProgramManagementDialog";
+import { ConfirmPaymentDialog } from "@/components/client/training/ConfirmPaymentDialog";
 import { useTrainingPrograms } from "@/hooks/useTrainingPrograms";
 import { TrainingProgram } from "@/data/training/types";
-import { previousProgram, incompletePreviousProgram } from "@/data/training";
+import { previousProgram, incompletePreviousProgram, standaloneEssentialProgram } from "@/data/training";
+import { useToast } from "@/hooks/use-toast";
 
 export function TrainingProgramTab() {
   const [selectedProgram, setSelectedProgram] = useState<TrainingProgram | null>(null);
+  const [showManageDialog, setShowManageDialog] = useState(false);
+  const [showConfirmPaymentDialog, setShowConfirmPaymentDialog] = useState(false);
+  const [programToManage, setProgramToManage] = useState<TrainingProgram | null>(null);
   const { activePrograms, previousPrograms: dbPreviousPrograms, loading } = useTrainingPrograms();
+  const { toast } = useToast();
 
-  // Combine DB programs with mock data for now
+  // Combine DB programs with mock data and standalone programs
+  const allActivePrograms = [...activePrograms, standaloneEssentialProgram];
   const allPreviousPrograms = [...dbPreviousPrograms, previousProgram, incompletePreviousProgram];
 
   const handleBackToList = () => {
     setSelectedProgram(null);
+  };
+
+  const handleManageProgram = (program: TrainingProgram) => {
+    setProgramToManage(program);
+    setShowManageDialog(true);
+  };
+
+  const handleConfirmPaymentClick = () => {
+    setShowManageDialog(false);
+    setShowConfirmPaymentDialog(true);
+  };
+
+  const handleConfirmPayment = (notes?: string) => {
+    console.log('Payment confirmed with notes:', notes);
+    
+    // In a real app, this would update the database
+    // For now, we'll just show a success message
+    toast({
+      title: "Payment Confirmed!",
+      description: "Your trainer has been notified. Thank you for confirming your payment.",
+    });
+
+    setShowConfirmPaymentDialog(false);
+    setShowManageDialog(false);
+    setProgramToManage(null);
   };
 
   if (loading) {
@@ -44,11 +77,28 @@ export function TrainingProgramTab() {
           />
         </div>
       ) : (
-        <ProgramListView
-          activePrograms={activePrograms}
-          previousPrograms={allPreviousPrograms}
-          onSelectProgram={setSelectedProgram}
-        />
+        <>
+          <ProgramListView
+            activePrograms={allActivePrograms}
+            previousPrograms={allPreviousPrograms}
+            onSelectProgram={setSelectedProgram}
+            onManageProgram={handleManageProgram}
+          />
+
+          <ProgramManagementDialog
+            open={showManageDialog}
+            onOpenChange={setShowManageDialog}
+            program={programToManage}
+            onConfirmPayment={handleConfirmPaymentClick}
+          />
+
+          <ConfirmPaymentDialog
+            open={showConfirmPaymentDialog}
+            onOpenChange={setShowConfirmPaymentDialog}
+            program={programToManage}
+            onConfirm={handleConfirmPayment}
+          />
+        </>
       )}
     </div>
   );

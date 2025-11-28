@@ -3,18 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TrainingProgram } from "@/data/training/types";
-import { Calendar, User, Target, ChevronRight } from "lucide-react";
+import { Calendar, User, Target, ChevronRight, Settings } from "lucide-react";
 
 interface ProgramListViewProps {
   activePrograms: TrainingProgram[];
   previousPrograms: TrainingProgram[];
   onSelectProgram: (program: TrainingProgram) => void;
+  onManageProgram?: (program: TrainingProgram) => void;
 }
 
 export function ProgramListView({ 
   activePrograms, 
   previousPrograms, 
-  onSelectProgram 
+  onSelectProgram,
+  onManageProgram
 }: ProgramListViewProps) {
   
   console.log('🎨 [ProgramListView] Rendering with:', {
@@ -51,9 +53,16 @@ export function ProgramListView({
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 space-y-1">
-              <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                {program.title}
-              </CardTitle>
+              <div className="flex items-center gap-2 flex-wrap">
+                <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                  {program.title}
+                </CardTitle>
+                {program.paymentStatus === 'pending' && (
+                  <Badge variant="destructive" className="text-xs">
+                    Payment Pending
+                  </Badge>
+                )}
+              </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <User className="h-3.5 w-3.5" />
                 <span>{program.trainerName}</span>
@@ -86,10 +95,34 @@ export function ProgramListView({
                 </div>
               )}
             </div>
-            <Button variant="ghost" size="sm" className="gap-1">
-              View Details
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="gap-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelectProgram(program);
+                }}
+              >
+                View Details
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              {onManageProgram && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="gap-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onManageProgram(program);
+                  }}
+                >
+                  <Settings className="h-4 w-4" />
+                  Manage
+                </Button>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
