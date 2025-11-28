@@ -210,7 +210,7 @@ export function PackagesTab() {
                       <div className="flex items-start justify-between mb-3">
                         <Package className="h-5 w-5 text-muted-foreground mt-1" />
                         <Badge className={getPackageTypeColor(pkg.type)}>
-                          {pkg.type.replace('_', ' ')}
+                          {pkg.type?.replace('_', ' ') || 'Package'}
                         </Badge>
                       </div>
                       <div className="space-y-2">
