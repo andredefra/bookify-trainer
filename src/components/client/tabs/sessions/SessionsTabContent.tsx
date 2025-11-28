@@ -12,7 +12,7 @@ import { SessionDiscoveryTab } from "./SessionDiscoveryTab";
 import { PastSessionsTab } from "./PastSessionsTab";
 import { CalendarSessionView } from "./CalendarSessionView";
 import { SessionProvider, useSessionContext } from "./SessionContext";
-import { availableTrainers, availableSessions, featuredSession, pastSessions } from "./sessionData";
+import { availableTrainers, availableSessions, featuredSession, pastSessions, invitedSessions } from "./sessionData";
 import { SessionsHeader } from "./components/SessionsHeader";
 import { ViewToggle } from "./components/ViewToggle";
 import { SessionDialogs } from "./components/SessionDialogs";
@@ -119,6 +119,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
             <TabsContent value="upcoming">
               <MySessionsTab
                 upcomingSessions={upcomingSessions}
+                invitedSessions={invitedSessions}
                 onViewDetails={handleViewSessionDetails}
                 onRegister={handleRegisterForSession}
                 onAddToCalendar={handleAddToCalendar}

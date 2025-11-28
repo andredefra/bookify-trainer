@@ -19,6 +19,11 @@ export interface SessionItem {
   longitude?: number;
   description?: string;
   packageSession?: boolean;
+  isInvited?: boolean;
+  inviteStatus?: 'pending' | 'accepted' | 'declined';
+  paymentRequired?: boolean;
+  paymentStatus?: 'pending' | 'paid';
+  inviteMessage?: string;
 }
 
 export interface TrainerSessionItem {

@@ -77,6 +77,30 @@ export const featuredSession: SessionItem = {
   description: "A premium high-intensity interval training session with one of our top trainers. This session is designed for all fitness levels with modifications provided."
 };
 
+// Invited sessions from trainer
+export const invitedSessions: SessionItem[] = [
+  {
+    id: 301,
+    name: "Private Strength Assessment",
+    trainer: "Sarah Johnson",
+    time: "14:00 - 15:30",
+    date: "Friday, July 7",
+    status: "pending" as SessionStatus,
+    price: 75,
+    mode: "in-person",
+    address: "789 Elite Fitness Boulevard, Premium Gym, Manhattan, NY 10016",
+    locationNotes: "Private training room on the 2nd floor. Please bring your workout gear and water bottle.",
+    latitude: 40.7505,
+    longitude: -73.9934,
+    description: "A comprehensive one-on-one strength assessment session to evaluate your current fitness level and design a personalized training program.",
+    isInvited: true,
+    inviteStatus: 'pending',
+    paymentRequired: true,
+    paymentStatus: 'pending',
+    inviteMessage: "Hi! I'd love to do a comprehensive strength assessment with you. This will help me create a personalized training plan that matches your goals perfectly. Looking forward to working together! 💪"
+  }
+];
+
 // Past sessions
 export const pastSessions: SessionItem[] = [
   {
