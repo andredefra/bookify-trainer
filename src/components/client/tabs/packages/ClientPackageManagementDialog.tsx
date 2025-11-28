@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { ClientPackagePaymentsTab } from './ClientPackagePaymentsTab';
-import { Package } from 'lucide-react';
+import { ClientPackageSessionsTab } from './ClientPackageSessionsTab';
 
 interface ClientPackageManagementDialogProps {
   open: boolean;
@@ -13,7 +13,9 @@ interface ClientPackageManagementDialogProps {
     package: {
       title: string;
       description?: string;
+      package_type?: string;
     };
+    trainer_id: string;
     trainer_name: string;
     sessions_total: number;
     sessions_used: number;
@@ -91,13 +93,18 @@ export const ClientPackageManagementDialog = ({
           </TabsContent>
 
           <TabsContent value="sessions" className="flex-1 overflow-auto">
-            <div className="flex items-center justify-center py-8 text-muted-foreground">
-              <div className="text-center">
-                <Package className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>Session management coming soon</p>
-                <p className="text-sm">You'll be able to propose dates and manage your sessions here</p>
+            {(packageData.package.package_type === 'sessions_only' || 
+              packageData.package.package_type === 'hybrid') ? (
+              <ClientPackageSessionsTab
+                packageAssignmentId={packageData.id}
+                trainerId={packageData.trainer_id}
+                totalSessions={packageData.sessions_total}
+              />
+            ) : (
+              <div className="flex items-center justify-center py-8 text-muted-foreground">
+                <p className="text-sm">This package does not include sessions</p>
               </div>
-            </div>
+            )}
           </TabsContent>
 
           <TabsContent value="payments" className="flex-1 overflow-hidden">
