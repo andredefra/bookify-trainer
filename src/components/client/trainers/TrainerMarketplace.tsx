@@ -7,9 +7,15 @@ import { useFollowedTrainers } from "./hooks/useFollowedTrainers";
 
 interface TrainerMarketplaceProps {
   isMyTrainersView?: boolean;
+  isGymFilterActive?: boolean;
+  gymId?: string;
 }
 
-export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketplaceProps) {
+export function TrainerMarketplace({ 
+  isMyTrainersView = false,
+  isGymFilterActive = false,
+  gymId
+}: TrainerMarketplaceProps) {
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
   
   // Adding explicit debug log to check followed trainers
@@ -26,7 +32,7 @@ export function TrainerMarketplace({ isMyTrainersView = false }: TrainerMarketpl
     selectedTrainer,
     handleBookSession,
     handleBookingSubmit
-  } = useTrainerMarketplace(followedTrainers);
+  } = useTrainerMarketplace(followedTrainers, isGymFilterActive, gymId);
   
   // Add explicit debug log to check filtered trainers
   console.log("Filtered trainers in marketplace:", trainers.map(t => `${t.id} - ${t.name}`));
