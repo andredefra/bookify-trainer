@@ -31,6 +31,24 @@ export function TrainingProgramTab() {
     setShowManageDialog(true);
   };
 
+  const handleViewPackage = () => {
+    // Navigate to packages section or open package details
+    toast({
+      title: "Coming Soon",
+      description: "Package details view coming soon",
+    });
+    setShowManageDialog(false);
+  };
+
+  const handlePayNow = (amount: number) => {
+    // Open payment dialog or navigate to payment flow
+    toast({
+      title: "Payment Initiated",
+      description: `Payment of €${amount.toFixed(2)} initiated`,
+    });
+    // TODO: Implement actual payment flow
+  };
+
   const handleConfirmPaymentClick = () => {
     setShowManageDialog(false);
     setShowConfirmPaymentDialog(true);
