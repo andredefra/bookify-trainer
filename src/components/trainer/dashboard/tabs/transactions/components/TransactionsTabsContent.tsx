@@ -11,10 +11,10 @@ export function TransactionsTabsContent() {
   
   return (
     <Tabs defaultValue="all">
-      <TabsList className="mb-6">
-        <TabsTrigger value="all">All Transactions</TabsTrigger>
-        <TabsTrigger value="installments">Pending Installments</TabsTrigger>
-        <TabsTrigger value="by-client">By Client</TabsTrigger>
+      <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto flex flex-nowrap">
+        <TabsTrigger value="all" className="flex-shrink-0 whitespace-nowrap">All Transactions</TabsTrigger>
+        <TabsTrigger value="installments" className="flex-shrink-0 whitespace-nowrap">Pending Installments</TabsTrigger>
+        <TabsTrigger value="by-client" className="flex-shrink-0 whitespace-nowrap">By Client</TabsTrigger>
       </TabsList>
       
       <TabsContent value="all">
