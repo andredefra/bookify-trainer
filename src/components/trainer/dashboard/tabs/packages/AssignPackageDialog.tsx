@@ -69,7 +69,7 @@ export function AssignPackageDialog({ open, onOpenChange, onAssign, packageData 
               </div>
               <div className="space-y-1 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <Badge variant="outline">{packageData.type.replace('_', ' ')}</Badge>
+                  <Badge variant="outline">{packageData.type?.replace('_', ' ') || 'Package'}</Badge>
                   {packageData.sessions && (
                     <span>{packageData.sessions} sessions</span>
                   )}
