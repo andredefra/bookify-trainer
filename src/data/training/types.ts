@@ -68,6 +68,32 @@ export interface TrainingProgram {
   // Session tracking
   targetFrequency: number; // sessions per week (e.g., 4)
   totalSessions: number; // total sessions in program
+  
+  // Standalone program fields
+  isStandalone?: boolean;           // true if not part of a package
+  packageAssignmentId?: string;     // ID assignment if part of package
+  
+  // Trainer info
+  trainerId?: string;
+  trainerSubscriptionTier?: 'free' | 'essential' | 'pro';
+  
+  // Payment status
+  paymentStatus?: 'pending' | 'partial' | 'paid' | 'confirmed';
+  paymentMethod?: 'cash' | 'card' | 'installments';
+  totalPrice?: number;
+  amountPaid?: number;
+  
+  // Installments info
+  installments?: {
+    totalInstallments: number;
+    paidInstallments: number;
+    nextDueDate?: string;
+    nextAmount?: number;
+  };
+  
+  // Client confirmation
+  clientConfirmedPayment?: boolean;
+  clientConfirmedAt?: string;
 }
 
 // Keep backward compatibility
