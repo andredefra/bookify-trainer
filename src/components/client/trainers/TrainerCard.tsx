@@ -68,11 +68,8 @@ export function TrainerCard({
         <TrainerCardActions 
           id={id}
           name={name}
-          onPayClick={onPayClick}
           onViewProfile={onViewProfile}
           onLeaveReview={onLeaveReview}
-          hourlyRate={hourlyRate}
-          plan={plan}
         />
       </div>
     </Card>
