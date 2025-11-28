@@ -8,8 +8,10 @@ import { usePackageSessionBookings } from '@/hooks/usePackageSessionBookings';
 import { SessionStatusBadge } from './SessionStatusBadge';
 import { BookSessionDialog } from './BookSessionDialog';
 import { format } from 'date-fns';
-import { Calendar, CheckCircle2, XCircle, Clock, UserX } from 'lucide-react';
+import { Calendar, CheckCircle2, XCircle, Clock, UserX, CreditCard } from 'lucide-react';
 import { PackageSessionBooking } from '@/types/packageSessions';
+import { PackagePaymentsTab } from './PackagePaymentsTab';
+import { usePackagePayments } from '@/hooks/usePackagePayments';
 
 interface ActivePackageManagementDialogProps {
   open: boolean;
@@ -36,6 +38,8 @@ export const ActivePackageManagementDialog = ({
 }: ActivePackageManagementDialogProps) => {
   const { sessions, loading, proposeSession, confirmSession, completeSession, cancelSession, markNoShow, initializePackageSessions } =
     usePackageSessionBookings(open ? packageAssignment.id : undefined);
+  
+  const { payments } = usePackagePayments(open ? packageAssignment.id : undefined);
   
   const [bookSessionOpen, setBookSessionOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<PackageSessionBooking | null>(null);
@@ -135,13 +139,21 @@ export const ActivePackageManagementDialog = ({
           </DialogHeader>
 
           <Tabs defaultValue="sessions" className="flex-1 flex flex-col overflow-hidden">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="sessions">
                 Sessions
                 {sessionStats.proposed > 0 && (
                   <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-800 rounded-full">
                     {sessionStats.proposed}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="payments">
+                Payments
+                {payments.filter(p => p.paymentStatus === 'pending').length > 0 && (
+                  <span className="ml-2 px-2 py-0.5 text-xs bg-orange-100 text-orange-800 rounded-full">
+                    {payments.filter(p => p.paymentStatus === 'pending').length}
                   </span>
                 )}
               </TabsTrigger>
@@ -259,6 +271,13 @@ export const ActivePackageManagementDialog = ({
                   )}
                 </div>
               </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="payments" className="flex-1 overflow-hidden">
+              <PackagePaymentsTab 
+                packageAssignmentId={packageAssignment.id} 
+                clientName={packageAssignment.clientName}
+              />
             </TabsContent>
 
             <TabsContent value="history" className="flex-1 overflow-auto">

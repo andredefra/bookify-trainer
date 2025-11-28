@@ -8,6 +8,7 @@ import { Package, Calendar, Clock, CreditCard, User, AlertCircle, Plus } from "l
 import { useClientPackages } from "@/hooks/useClientPackages";
 import { PackageDetailsDialog } from "./PackageDetailsDialog";
 import { BrowsePackagesDialog } from "./BrowsePackagesDialog";
+import { ClientPackageManagementDialog } from "./ClientPackageManagementDialog";
 import { useState } from "react";
 
 export function MyPackagesTab() {
@@ -15,6 +16,8 @@ export function MyPackagesTab() {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showPackageDetails, setShowPackageDetails] = useState(false);
   const [showBrowsePackages, setShowBrowsePackages] = useState(false);
+  const [showManageDialog, setShowManageDialog] = useState(false);
+  const [managePackage, setManagePackage] = useState(null);
 
   const handlePaymentComplete = () => {
     refetch(); // Refresh package list after purchase
@@ -146,7 +149,7 @@ export function MyPackagesTab() {
                         </p>
                       )}
 
-                      <div className="flex gap-2 pt-2">
+                      <div className="flex gap-2 pt-2 flex-wrap">
                         <Button 
                           size="sm" 
                           variant="outline"
@@ -158,10 +161,28 @@ export function MyPackagesTab() {
                           View Details
                         </Button>
                         {(pkg.package.package_type === 'sessions_only' || pkg.package.package_type === 'hybrid') && (
-                          <Button size="sm" variant="outline">
-                            Book Session
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => {
+                              setManagePackage(pkg);
+                              setShowManageDialog(true);
+                            }}
+                          >
+                            Manage Sessions
                           </Button>
                         )}
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => {
+                            setManagePackage(pkg);
+                            setShowManageDialog(true);
+                          }}
+                        >
+                          <CreditCard className="w-4 h-4 mr-1" />
+                          Manage Payments
+                        </Button>
                         {pkg.sessions_used === pkg.sessions_total && (
                           <Button size="sm">
                             Renew Package
@@ -240,6 +261,12 @@ export function MyPackagesTab() {
         packages={availablePackages || []}
         assignedPackages={assignedPackages || []}
         onPaymentComplete={handlePaymentComplete}
+      />
+
+      <ClientPackageManagementDialog
+        open={showManageDialog}
+        onOpenChange={setShowManageDialog}
+        packageData={managePackage}
       />
     </div>
   );
