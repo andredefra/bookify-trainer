@@ -8,12 +8,19 @@ import { SessionList } from "./sessions/components/SessionList";
 import { CalendarView } from "./sessions/components/CalendarView";
 import { SessionDialogs } from "./sessions/components/SessionDialogs";
 import { SessionSalesContent } from "./sessions/SessionSalesContent";
+import { SessionRequestCard } from "./sessions/SessionRequestCard";
+import { SessionRequestDetailDialog } from "./sessions/SessionRequestDetailDialog";
+import { ApproveSessionRequestDialog } from "./sessions/ApproveSessionRequestDialog";
+import { DeclineRequestDialog } from "./sessions/DeclineRequestDialog";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { sampleSessions } from "./sessions/data/sampleSessionData";
 import { useSessionManagement } from "./sessions/hooks/useSessionManagement";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useSessionSales } from "@/hooks/useSessionSales";
+import { useSessionSales, SessionRequest } from "@/hooks/useSessionSales";
+import { useSalesContacts } from "./sales/useSalesContacts";
 import { getCurrentDemoUserId } from "@/utils/demoUserUtils";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface SessionsTabProps {
   upcomingSessions?: TrainerSessionItem[];
@@ -61,8 +68,64 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   const currentUserId = getCurrentDemoUserId();
   
   // Get pending count for badge
-  const { pendingPayments } = useSessionSales(currentUserId);
+  const { pendingPayments, sessionRequests, approveRequest, declineRequest } = useSessionSales(currentUserId);
   const pendingCount = pendingPayments.length;
+  const requestsCount = sessionRequests.filter(r => r.status === 'pending').length;
+
+  // CRM integration
+  const { handleAddContact } = useSalesContacts();
+
+  // Request dialogs state
+  const [selectedRequest, setSelectedRequest] = useState<SessionRequest | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false);
+  const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
+
+  // Request handlers
+  const handleViewDetails = (request: SessionRequest) => {
+    setSelectedRequest(request);
+    setDetailDialogOpen(true);
+  };
+
+  const handleApproveClick = (request: SessionRequest) => {
+    setSelectedRequest(request);
+    setDetailDialogOpen(false);
+    setApproveDialogOpen(true);
+  };
+
+  const handleDeclineClick = (request: SessionRequest) => {
+    setSelectedRequest(request);
+    setDetailDialogOpen(false);
+    setDeclineDialogOpen(true);
+  };
+
+  const handleApproveConfirm = (requestId: string, paymentMethod?: 'online' | 'cash') => {
+    approveRequest(requestId, paymentMethod, isProTrainer);
+    setApproveDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
+  const handleDeclineConfirm = (requestId: string, reason?: string) => {
+    declineRequest(requestId, reason);
+    setDeclineDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
+  const handleAddToCRM = (request: SessionRequest) => {
+    const newLead = {
+      name: request.clientName,
+      email: request.clientEmail,
+      phone: request.clientPhone,
+      status: 'lead' as const,
+      source: 'Session Request',
+      notes: `Session request: ${request.sessionTitle}\nMessage: ${request.message || 'No message'}`,
+      value: request.price,
+      nextAction: 'Follow up on session request'
+    };
+    
+    handleAddContact(newLead);
+    toast.success(`${request.clientName} added to CRM as Lead!`);
+  };
 
   // Ensure we have data by combining props with sample data if needed
   const sessionsToDisplay = upcomingSessions.length > 0 ? upcomingSessions : sampleSessions;
@@ -88,6 +151,14 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             <TabsList className="mb-6 w-full sm:w-auto">
               <TabsTrigger value="list" className="flex-1 sm:flex-none">List</TabsTrigger>
               <TabsTrigger value="calendar" className="flex-1 sm:flex-none">Calendar</TabsTrigger>
+              <TabsTrigger value="requests" className="flex-1 sm:flex-none">
+                Requests
+                {requestsCount > 0 && (
+                  <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                    {requestsCount}
+                  </Badge>
+                )}
+              </TabsTrigger>
               {showSalesAnalytics && (
                 <TabsTrigger value="sales" className="flex-1 sm:flex-none">
                   Sales
@@ -118,6 +189,29 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
                 onStartVideoSession={handleStartVideoSession}
               />
             </TabsContent>
+
+            <TabsContent value="requests" className="mt-0">
+              <div className="space-y-4">
+                {sessionRequests.filter(r => r.status === 'pending').length > 0 ? (
+                  sessionRequests
+                    .filter(r => r.status === 'pending')
+                    .map((request) => (
+                      <SessionRequestCard
+                        key={request.id}
+                        request={request}
+                        onViewDetails={handleViewDetails}
+                        onApprove={handleApproveClick}
+                        onDecline={handleDeclineClick}
+                        onAddToCRM={request.requesterType === 'prospect' ? handleAddToCRM : undefined}
+                      />
+                    ))
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground">No pending session requests</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
             
             {showSalesAnalytics && (
               <TabsContent value="sales" className="mt-0">
@@ -142,6 +236,31 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
             onCreateSession={handleCreateSession}
             onUpdateSession={handleUpdateSession}
             onConfirmCancel={confirmCancelSession}
+          />
+
+          {/* Request Dialogs */}
+          <SessionRequestDetailDialog
+            open={detailDialogOpen}
+            onOpenChange={setDetailDialogOpen}
+            request={selectedRequest}
+            onApprove={handleApproveClick}
+            onDecline={handleDeclineClick}
+            onAddToCRM={handleAddToCRM}
+          />
+
+          <ApproveSessionRequestDialog
+            open={approveDialogOpen}
+            onOpenChange={setApproveDialogOpen}
+            request={selectedRequest}
+            isProTrainer={isProTrainer}
+            onConfirm={handleApproveConfirm}
+          />
+
+          <DeclineRequestDialog
+            open={declineDialogOpen}
+            onOpenChange={setDeclineDialogOpen}
+            request={selectedRequest}
+            onConfirm={handleDeclineConfirm}
           />
         </CardContent>
       </Card>

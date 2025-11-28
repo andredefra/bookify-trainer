@@ -13,9 +13,10 @@ interface SessionRequestCardProps {
   onViewDetails: (request: SessionRequest) => void;
   onApprove: (request: SessionRequest) => void;
   onDecline: (request: SessionRequest) => void;
+  onAddToCRM?: (request: SessionRequest) => void;
 }
 
-export function SessionRequestCard({ request, onViewDetails, onApprove, onDecline }: SessionRequestCardProps) {
+export function SessionRequestCard({ request, onViewDetails, onApprove, onDecline, onAddToCRM }: SessionRequestCardProps) {
   const [showFullMessage, setShowFullMessage] = useState(false);
   const messagePreview = request.message.slice(0, 80);
   const needsTruncation = request.message.length > 80;
@@ -122,7 +123,17 @@ export function SessionRequestCard({ request, onViewDetails, onApprove, onDeclin
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2 pt-2 border-t">
+        <div className="flex items-center gap-2 pt-2 border-t flex-wrap">
+          {onAddToCRM && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => onAddToCRM(request)}
+              className="gap-1"
+            >
+              📋 Add to CRM
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"
