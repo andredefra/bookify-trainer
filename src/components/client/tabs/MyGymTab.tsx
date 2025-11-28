@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { GymSessionsCard } from "@/components/client/gym/GymSessionsCard";
 import { GymMessagingCard } from "@/components/client/gym/GymMessagingCard";
 import { GymActivitiesCard } from "@/components/client/gym/GymActivitiesCard";
+import { GymTrainersCard } from "@/components/client/gym/GymTrainersCard";
 import { PackageMarketplaceDialog } from "@/components/client/gym/PackageMarketplaceDialog";
 import { GymPackageDetailsDialog } from "@/components/client/gym/GymPackageDetailsDialog";
 import { useState } from "react";
@@ -269,6 +270,9 @@ export function MyGymTab({ user }: MyGymTabProps) {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
+        {/* Gym Trainers */}
+        <GymTrainersCard gymId={connection?.gym_id} />
+        
         {/* Communication */}
         <GymMessagingCard 
           gymId={connection?.gym_id} 
@@ -278,10 +282,10 @@ export function MyGymTab({ user }: MyGymTabProps) {
             // This could be enhanced with real-time updates
           }}
         />
-        
-        {/* Gym Activities */}
-        <GymActivitiesCard gymId={connection?.gym_id} />
       </div>
+
+      {/* Gym Activities - Full Width */}
+      <GymActivitiesCard gymId={connection?.gym_id} />
       
       <PackageMarketplaceDialog
         open={marketplaceOpen}
