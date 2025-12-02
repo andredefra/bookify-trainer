@@ -4,39 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  TrendingUp, 
-  Users, 
-  Calendar, 
-  DollarSign, 
-  Activity, 
-  Target,
-  BarChart3,
-  Download,
-  RefreshCw,
-  CalendarRange,
-  Filter,
-  TrendingDown,
-  ArrowUpIcon,
-  ArrowDownIcon
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  Legend
-} from "recharts";
+import { TrendingUp, Users, Calendar, DollarSign, Activity, Target, BarChart3, Download, RefreshCw, CalendarRange, Filter, TrendingDown, ArrowUpIcon, ArrowDownIcon } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from "recharts";
 import { useGymAnalytics } from "@/hooks/gym/useGymAnalytics";
-
 export function AnalyticsTab() {
   const {
     sessionAnalytics,
@@ -55,10 +25,8 @@ export function AnalyticsTab() {
     loading,
     error
   });
-
   if (loading) {
-    return (
-      <div className="space-y-6">
+    return <div className="space-y-6">
         {/* Header Skeleton */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-2">
@@ -73,8 +41,9 @@ export function AnalyticsTab() {
 
         {/* KPI Cards Skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i}>
+          {Array.from({
+          length: 4
+        }).map((_, i) => <Card key={i}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <Skeleton className="h-4 w-24" />
                 <Skeleton className="h-4 w-4" />
@@ -83,8 +52,7 @@ export function AnalyticsTab() {
                 <Skeleton className="h-8 w-20 mb-2" />
                 <Skeleton className="h-3 w-32" />
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
 
         {/* Tabs Skeleton */}
@@ -95,13 +63,10 @@ export function AnalyticsTab() {
             <Skeleton className="h-80" />
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (error) {
-    return (
-      <div className="text-center py-12">
+    return <div className="text-center py-12">
         <div className="space-y-4">
           <Activity className="h-12 w-12 mx-auto text-muted-foreground" />
           <div>
@@ -113,18 +78,15 @@ export function AnalyticsTab() {
             Retry
           </Button>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Analytics Dashboard</h2>
           <p className="text-muted-foreground">
-            Comprehensive insights into your gym's performance
+            Comprehensive insights into your studio's performance
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
@@ -237,8 +199,7 @@ export function AnalyticsTab() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {sessionAnalytics?.popularSessionTypes.map((sessionType, index) => (
-                  <div key={sessionType.type} className="space-y-2">
+                {sessionAnalytics?.popularSessionTypes.map((sessionType, index) => <div key={sessionType.type} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <Badge variant="outline">#{index + 1}</Badge>
@@ -250,12 +211,8 @@ export function AnalyticsTab() {
                         {sessionType.attendance} participants
                       </div>
                     </div>
-                    <Progress 
-                      value={(sessionType.attendance / (sessionAnalytics?.totalParticipants || 1)) * 100} 
-                      className="h-2"
-                    />
-                  </div>
-                ))}
+                    <Progress value={sessionType.attendance / (sessionAnalytics?.totalParticipants || 1) * 100} className="h-2" />
+                  </div>)}
               </CardContent>
             </Card>
 
@@ -271,9 +228,7 @@ export function AnalyticsTab() {
                 <div className="text-center text-sm text-muted-foreground mb-4">
                   Package usage analysis based on member activity
                 </div>
-                {sessionAnalytics?.packageUtilization?.length ? (
-                  sessionAnalytics.packageUtilization.map((pkg, index) => (
-                    <div key={pkg.packageType} className="space-y-3 p-3 rounded-lg border hover:shadow-sm transition-shadow">
+                {sessionAnalytics?.packageUtilization?.length ? sessionAnalytics.packageUtilization.map((pkg, index) => <div key={pkg.packageType} className="space-y-3 p-3 rounded-lg border hover:shadow-sm transition-shadow">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <Badge variant="outline" className="text-xs">#{index + 1}</Badge>
@@ -293,15 +248,11 @@ export function AnalyticsTab() {
                         <span>{pkg.usedSessions} sessions used</span>
                         <span>{pkg.totalSessions} total sessions</span>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8">
+                    </div>) : <div className="text-center py-8">
                     <Target className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
                     <p className="text-muted-foreground">No package utilization data available</p>
                     <p className="text-sm text-muted-foreground">Data will appear when packages are purchased</p>
-                  </div>
-                )}
+                  </div>}
               </CardContent>
             </Card>
           </div>
@@ -312,57 +263,53 @@ export function AnalyticsTab() {
               <CardTitle>Weekly Attendance Trend</CardTitle>
             </CardHeader>
             <CardContent>
-              {sessionAnalytics?.weeklyAttendance?.length ? (
-                <div className="h-[350px] w-full">
+              {sessionAnalytics?.weeklyAttendance?.length ? <div className="h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart 
-                      data={sessionAnalytics.weeklyAttendance}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    >
+                    <BarChart data={sessionAnalytics.weeklyAttendance} margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 5
+                }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis 
-                        dataKey="date" 
-                        tickFormatter={(value) => {
-                          const date = new Date(value);
-                          return date.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
-                        }}
-                        tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-                        axisLine={{ stroke: 'hsl(var(--border))' }}
-                      />
-                      <YAxis 
-                        tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-                        axisLine={{ stroke: 'hsl(var(--border))' }}
-                      />
-                      <Tooltip 
-                        labelFormatter={(value) => {
-                          const date = new Date(value);
-                          return date.toLocaleDateString('en-US', { 
-                            weekday: 'long', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          });
-                        }}
-                        formatter={(value: any) => [`${value} people`, 'Attendance']}
-                        contentStyle={{ 
-                          backgroundColor: 'hsl(var(--card))', 
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px',
-                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                        }}
-                        labelStyle={{ color: 'hsl(var(--foreground))' }}
-                      />
-                      <Bar 
-                        dataKey="attendance" 
-                        fill="hsl(var(--primary))" 
-                        radius={[6, 6, 0, 0]}
-                        stroke="hsl(var(--primary))"
-                        strokeWidth={0}
-                      />
+                      <XAxis dataKey="date" tickFormatter={value => {
+                    const date = new Date(value);
+                    return date.toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'numeric',
+                      day: 'numeric'
+                    });
+                  }} tick={{
+                    fontSize: 12,
+                    fill: 'hsl(var(--muted-foreground))'
+                  }} axisLine={{
+                    stroke: 'hsl(var(--border))'
+                  }} />
+                      <YAxis tick={{
+                    fontSize: 12,
+                    fill: 'hsl(var(--muted-foreground))'
+                  }} axisLine={{
+                    stroke: 'hsl(var(--border))'
+                  }} />
+                      <Tooltip labelFormatter={value => {
+                    const date = new Date(value);
+                    return date.toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'long',
+                      day: 'numeric'
+                    });
+                  }} formatter={(value: any) => [`${value} people`, 'Attendance']} contentStyle={{
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }} labelStyle={{
+                    color: 'hsl(var(--foreground))'
+                  }} />
+                      <Bar dataKey="attendance" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} stroke="hsl(var(--primary))" strokeWidth={0} />
                     </BarChart>
                   </ResponsiveContainer>
-                </div>
-              ) : (
-                <div className="h-[350px] flex items-center justify-center">
+                </div> : <div className="h-[350px] flex items-center justify-center">
                   <div className="text-center space-y-4">
                     <BarChart3 className="h-16 w-16 mx-auto text-muted-foreground/40" />
                     <div>
@@ -370,8 +317,7 @@ export function AnalyticsTab() {
                       <p className="text-sm text-muted-foreground">Check back after sessions are completed</p>
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
@@ -385,23 +331,18 @@ export function AnalyticsTab() {
                 <CardTitle>Membership Distribution</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {memberAnalytics?.membershipTypes.map((type) => (
-                  <div key={type.type} className="space-y-2">
+                {memberAnalytics?.membershipTypes.map(type => <div key={type.type} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{type.type}</span>
                       <span className="text-sm text-muted-foreground">
                         {type.count} members
                       </span>
                     </div>
-                    <Progress 
-                      value={(type.count / (memberAnalytics?.totalMembers || 1)) * 100} 
-                      className="h-2"
-                    />
+                    <Progress value={type.count / (memberAnalytics?.totalMembers || 1) * 100} className="h-2" />
                     <div className="text-xs text-muted-foreground">
                       ${type.revenue.toLocaleString()} revenue
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
 
@@ -411,8 +352,7 @@ export function AnalyticsTab() {
                 <CardTitle>Top Performing Members</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {memberAnalytics?.topMembers.map((member, index) => (
-                  <div key={member.id} className="flex items-center justify-between p-3 rounded-lg border">
+                {memberAnalytics?.topMembers.map((member, index) => <div key={member.id} className="flex items-center justify-between p-3 rounded-lg border">
                     <div className="flex items-center space-x-3">
                       <Badge variant="outline">#{index + 1}</Badge>
                       <div>
@@ -426,8 +366,7 @@ export function AnalyticsTab() {
                       <div className="font-medium">{member.sessionsAttended}</div>
                       <div className="text-xs text-muted-foreground">sessions</div>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
           </div>
@@ -439,14 +378,12 @@ export function AnalyticsTab() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {memberAnalytics?.memberRetention.map((period) => (
-                  <div key={period.period} className="text-center p-4 rounded-lg border hover:shadow-md transition-shadow">
+                {memberAnalytics?.memberRetention.map(period => <div key={period.period} className="text-center p-4 rounded-lg border hover:shadow-md transition-shadow">
                     <div className="text-2xl font-bold text-primary">
                       {period.retentionRate}%
                     </div>
                     <div className="text-sm text-muted-foreground">{period.period}</div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -461,23 +398,18 @@ export function AnalyticsTab() {
                 <CardTitle>Package Sales Performance</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {financialAnalytics?.packageSales.map((pkg) => (
-                  <div key={pkg.packageType} className="space-y-2">
+                {financialAnalytics?.packageSales.map(pkg => <div key={pkg.packageType} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{pkg.packageType}</span>
                       <span className="text-sm text-muted-foreground">
                         ${pkg.revenue.toLocaleString()}
                       </span>
                     </div>
-                    <Progress 
-                      value={(pkg.revenue / (financialAnalytics?.totalRevenue || 1)) * 100} 
-                      className="h-2"
-                    />
+                    <Progress value={pkg.revenue / (financialAnalytics?.totalRevenue || 1) * 100} className="h-2" />
                     <div className="text-xs text-muted-foreground">
                       {pkg.count} packages sold
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
 
@@ -487,15 +419,13 @@ export function AnalyticsTab() {
                 <CardTitle>Trainer Commission Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {financialAnalytics?.trainerCommissions.map((trainer) => (
-                  <div key={trainer.trainerId} className="flex items-center justify-between p-3 rounded-lg border">
+                {financialAnalytics?.trainerCommissions.map(trainer => <div key={trainer.trainerId} className="flex items-center justify-between p-3 rounded-lg border">
                     <div className="font-medium">{trainer.trainerName}</div>
                     <div className="text-right">
                       <div className="font-medium">${trainer.commission.toLocaleString()}</div>
                       <div className="text-xs text-muted-foreground">commission</div>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
           </div>
@@ -510,40 +440,20 @@ export function AnalyticsTab() {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={financialAnalytics?.monthlyTrends || []}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="month" 
-                      className="text-xs"
-                    />
+                    <XAxis dataKey="month" className="text-xs" />
                     <YAxis yAxisId="revenue" orientation="left" className="text-xs" />
                     <YAxis yAxisId="members" orientation="right" className="text-xs" />
-                    <Tooltip 
-                      formatter={(value, name) => [
-                        name === 'revenue' ? `$${value.toLocaleString()}` : value,
-                        name === 'revenue' ? 'Revenue' : 'Members'
-                      ]}
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '6px'
-                      }}
-                    />
-                    <Line 
-                      yAxisId="revenue"
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="hsl(var(--primary))" 
-                      strokeWidth={3}
-                      dot={{ fill: 'hsl(var(--primary))' }}
-                    />
-                    <Line 
-                      yAxisId="members"
-                      type="monotone" 
-                      dataKey="members" 
-                      stroke="hsl(var(--secondary))" 
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                      dot={{ fill: 'hsl(var(--secondary))' }}
-                    />
+                    <Tooltip formatter={(value, name) => [name === 'revenue' ? `$${value.toLocaleString()}` : value, name === 'revenue' ? 'Revenue' : 'Members']} contentStyle={{
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '6px'
+                  }} />
+                    <Line yAxisId="revenue" type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={3} dot={{
+                    fill: 'hsl(var(--primary))'
+                  }} />
+                    <Line yAxisId="members" type="monotone" dataKey="members" stroke="hsl(var(--secondary))" strokeWidth={2} strokeDasharray="5 5" dot={{
+                    fill: 'hsl(var(--secondary))'
+                  }} />
                     <Legend />
                   </LineChart>
                 </ResponsiveContainer>
@@ -552,6 +462,5 @@ export function AnalyticsTab() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 }
