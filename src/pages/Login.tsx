@@ -56,7 +56,7 @@ const Login = () => {
                   Client
                 </button>
                 <button type="button" className={`flex-1 py-3 text-sm font-medium ${loginType === 'gym' ? 'bg-primary text-white' : 'bg-white text-muted-foreground'}`} onClick={() => setLoginType('gym')}>
-                  Gym
+                  Studio
                 </button>
               </div>
               
@@ -80,7 +80,7 @@ const Login = () => {
               </div>
               
               <button type="submit" className="w-full py-3 bg-primary text-white rounded-full font-medium button-hover">
-                {loginType === 'client' ? 'Access Client Demo' : loginType === 'gym' ? 'Access Gym Demo' : 'Access Trainer Demo'}
+                {loginType === 'client' ? 'Access Client Demo' : loginType === 'gym' ? 'Access Studio Demo' : 'Access Trainer Demo'}
               </button>
             </form>
             
