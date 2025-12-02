@@ -1,5 +1,4 @@
-
-import { Plus } from "lucide-react";
+import { Plus, Bot } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -13,6 +12,7 @@ import { MessageClientDialog } from "./clients/dialogs/MessageClientDialog";
 import { EnhancedScheduleSessionDialog } from "./clients/dialogs/EnhancedScheduleSessionDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-progress/ManageGoalTypesDialog";
+import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
 
 interface ClientItem {
   id: number;
@@ -88,6 +88,10 @@ export function ClientsTab({ clients }: ClientsTabProps) {
               <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
                 <TabsTrigger value="clients" className="flex-1 sm:flex-none whitespace-nowrap">Client List</TabsTrigger>
                 <TabsTrigger value="analytics" className="flex-1 sm:flex-none whitespace-nowrap">Performance Analytics</TabsTrigger>
+                <TabsTrigger value="ai-assistant" className="flex-1 sm:flex-none whitespace-nowrap flex items-center gap-1.5">
+                  <Bot className="h-4 w-4" />
+                  AI Assistant
+                </TabsTrigger>
               </TabsList>
             </div>
             
@@ -123,11 +127,19 @@ export function ClientsTab({ clients }: ClientsTabProps) {
                     </Button>
                   </div>
                 )}
-            <ClientPerformance 
-              initialClientFilter={analyticsClientFilter}
-              onClientChange={setAnalyticsClientFilter}
-            />
+                <ClientPerformance 
+                  initialClientFilter={analyticsClientFilter}
+                  onClientChange={setAnalyticsClientFilter}
+                />
               </div>
+            </TabsContent>
+            
+            <TabsContent value="ai-assistant" className="mt-0">
+              <TrainerClientAIChat 
+                selectedClient={analyticsClientFilter}
+                clientsData={clients}
+                onClientChange={setAnalyticsClientFilter}
+              />
             </TabsContent>
           </Tabs>
         </CardContent>
