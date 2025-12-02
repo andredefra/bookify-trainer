@@ -35,7 +35,7 @@ const GymDashboard = () => {
     <>
       <Helmet>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <title>Gym Dashboard</title>
+        <title>Studio Dashboard</title>
         <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no" />
       </Helmet>
       <div className="max-w-full overflow-x-hidden" data-lpignore="true">

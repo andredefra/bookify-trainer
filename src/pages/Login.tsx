@@ -28,7 +28,7 @@ const Login = () => {
       if (loginType === 'client') {
         navigate('/client-dashboard');
       } else if (loginType === 'gym') {
-        navigate('/gym-dashboard');
+        navigate('/studio-dashboard');
       } else {
         navigate('/dashboard');
       }

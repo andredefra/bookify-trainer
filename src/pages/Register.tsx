@@ -31,7 +31,7 @@ const Register = () => {
     } else if (data.userType === "trainer") {
       navigate('/dashboard');
     } else if (data.userType === "gym") {
-      navigate('/gym-dashboard');
+      navigate('/studio-dashboard');
     }
   };
 
