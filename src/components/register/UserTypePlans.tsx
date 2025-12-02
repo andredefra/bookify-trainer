@@ -61,7 +61,7 @@ export const UserTypePlans = ({ userType, control }: UserTypePlansProps) => {
                   </FormControl>
                   <div className="space-y-1">
                     <FormLabel className="font-medium text-gray-800">Gym Plan</FormLabel>
-                    <p className="text-sm text-muted-foreground">€59/month - Complete solution for gyms with multiple trainers</p>
+                    <p className="text-sm text-muted-foreground">€119/month - Complete solution for gyms with multiple trainers</p>
                   </div>
                 </FormItem>
               )}

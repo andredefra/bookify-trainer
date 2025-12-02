@@ -20,7 +20,7 @@ export function BillingTab({ user }: BillingTabProps) {
           <div className="space-y-4">
             <div className="bg-blue-50 border border-blue-100 rounded-md p-4">
               <h3 className="font-medium text-blue-800">Current Plan: {user?.plan || "Gym"}</h3>
-              <p className="text-sm text-blue-600">€59/month • Billed monthly</p>
+              <p className="text-sm text-blue-600">€119/month • Billed monthly</p>
               <p className="text-xs text-blue-600 mt-2">Next billing date: July 15, 2023</p>
             </div>
             
