@@ -167,8 +167,8 @@ export const RegisterForm = ({ onSubmit, onCancel }: RegisterFormProps) => {
                           <RadioGroupItem value="gym" />
                         </FormControl>
                         <div className="space-y-1">
-                          <FormLabel className="font-medium text-gray-800">Gym Plan</FormLabel>
-                          <p className="text-sm text-muted-foreground">€119/month - Complete solution for gyms with multiple trainers</p>
+                          <FormLabel className="font-medium text-gray-800">Studio Plan</FormLabel>
+                          <p className="text-sm text-muted-foreground">€89/month - Complete solution for personal trainer studios and small gyms</p>
                         </div>
                       </FormItem>
                     )}
