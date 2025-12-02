@@ -411,6 +411,9 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
 
   const getFilteredTransactions = () => {
     return transactions
+      // Exclude card pending transactions (they belong in Pending Installments tab)
+      // Only cash pending should show here as they await manual confirmation
+      .filter(t => !(t.status === 'pending' && t.paymentMethod === 'card'))
       .filter(t => 
         t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
