@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
 interface ProfileTabProps {
@@ -18,6 +19,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
   const [gymName, setGymName] = useState(user?.gymName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [adminName, setAdminName] = useState(user?.name || "");
+  const [facilityType, setFacilityType] = useState<'studio' | 'gym'>('studio');
   const [saving, setSaving] = useState(false);
 
   const handleSaveProfile = () => {
@@ -29,6 +31,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
       userData.gymName = gymName;
       userData.name = adminName;
       userData.email = email;
+      userData.facilityType = facilityType;
       localStorage.setItem('demo-user', JSON.stringify(userData));
       
       setSaving(false);
@@ -40,18 +43,31 @@ export function ProfileTab({ user }: ProfileTabProps) {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Gym Profile</CardTitle>
-          <CardDescription>Manage your gym's profile information</CardDescription>
+          <CardTitle>Studio Profile</CardTitle>
+          <CardDescription>Manage your studio's profile information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="gymName">Gym Name</Label>
+            <Label htmlFor="gymName">Studio Name</Label>
             <Input
               id="gymName"
               value={gymName}
               onChange={(e) => setGymName(e.target.value)}
-              placeholder="Enter gym name"
+              placeholder="Enter studio name"
             />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="facilityType">Facility Type</Label>
+            <Select value={facilityType} onValueChange={(val) => setFacilityType(val as 'studio' | 'gym')}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select facility type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="studio">Personal Training Studio</SelectItem>
+                <SelectItem value="gym">Gym / Fitness Center</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
           <div className="space-y-2">
@@ -83,15 +99,15 @@ export function ProfileTab({ user }: ProfileTabProps) {
       
       <Card>
         <CardHeader>
-          <CardTitle>Gym Details</CardTitle>
-          <CardDescription>Additional information about your gym</CardDescription>
+          <CardTitle>Studio Details</CardTitle>
+          <CardDescription>Additional information about your studio</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="address">Address</Label>
             <Input
               id="address"
-              placeholder="Enter gym address"
+              placeholder="Enter studio address"
               defaultValue="123 Fitness St, Milan, Italy"
             />
           </div>
