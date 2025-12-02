@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Mail, Calendar, DollarSign } from "lucide-react";
+import { Mail, Calendar, DollarSign, BarChart3 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { useProgramAssignments } from '@/hooks/useProgramAssignments';
@@ -13,9 +13,10 @@ interface AssignedProgramItemProps {
   currentProgram: string;
   onChangeProgram: (clientName: string) => void;
   onViewProgress: (clientId: number) => void;
+  onViewStats?: (clientId: number) => void;
 }
 
-export function AssignedProgramItem({ client, currentProgram, onChangeProgram, onViewProgress }: AssignedProgramItemProps) {
+export function AssignedProgramItem({ client, currentProgram, onChangeProgram, onViewProgress, onViewStats }: AssignedProgramItemProps) {
   const { updateSessionsCompleted } = useProgramAssignments();
   
   // Enhanced mock data with progress tracking
@@ -137,6 +138,17 @@ export function AssignedProgramItem({ client, currentProgram, onChangeProgram, o
             className="bg-orange-600 hover:bg-orange-700 text-white flex-1 sm:flex-auto"
           >
             Contact Client
+          </Button>
+        )}
+        {onViewStats && (
+          <Button 
+            variant="secondary" 
+            size="sm"
+            onClick={() => onViewStats(client.id)}
+            className="flex-1 sm:flex-auto"
+          >
+            <BarChart3 className="h-4 w-4 mr-1" />
+            View Stats
           </Button>
         )}
         <Button 
