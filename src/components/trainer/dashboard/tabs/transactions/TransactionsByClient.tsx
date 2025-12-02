@@ -11,16 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BadgeEuro, User } from "lucide-react";
-
-interface Transaction {
-  id: number;
-  client: string;
-  type: string;
-  name: string;
-  amount: number;
-  date: string;
-  status: 'paid' | 'pending' | 'failed';
-}
+import { Transaction } from "./types/TransactionHistoryTypes";
 
 interface ClientSummary {
   id: number;

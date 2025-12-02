@@ -8,7 +8,7 @@ export interface TransactionType {
   name: string;
   amount: number;
   date: string;
-  status: 'paid' | 'pending' | 'failed';
+  status: 'paid' | 'pending' | 'failed' | 'rejected' | 'no_show';
   paymentMethod?: 'card' | 'cash';
   invoiceSent?: boolean;
   packageId?: string;
@@ -30,7 +30,7 @@ export const transactionSchema = z.object({
   name: z.string().min(1, "Description is required"),
   amount: z.number().min(0, "Amount must be positive"),
   date: z.string().min(1, "Date is required"),
-  status: z.enum(['paid', 'pending', 'failed']),
+  status: z.enum(['paid', 'pending', 'failed', 'rejected', 'no_show']),
   paymentMethod: z.enum(['card', 'cash']),
   isPackagePayment: z.boolean().optional(),
   installmentNumber: z.number().optional(),
