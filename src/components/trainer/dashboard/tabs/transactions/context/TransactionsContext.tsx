@@ -96,10 +96,6 @@ const initialTransactions: TransactionType[] = [
   { id: 73, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-12-03", status: "pending", paymentMethod: "cash", invoiceSent: false },
   { id: 74, client: "Lisa Garcia", type: "Program", name: "Core Training Program", amount: 120, date: "2025-12-02", status: "pending", paymentMethod: "cash", invoiceSent: false },
   
-  // Pending card transactions
-  { id: 61, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-25", status: "pending", paymentMethod: "card", invoiceSent: false },
-  { id: 62, client: "Sarah Johnson", type: "Program", name: "New Year Program", amount: 130, date: "2025-11-28", status: "pending", paymentMethod: "card", invoiceSent: false },
-  
   // Sarah Johnson - Elite Annual Package in 3 installments (with installmentStatus and dueDate)
   { 
     id: 63, 
@@ -305,6 +301,8 @@ interface TransactionsContextType {
   setSelectedTransactions: (transactions: Set<number>) => void;
   handleAddTransaction: (newTransaction: Omit<TransactionType, 'id'>) => void;
   handleConfirmCashPayment: (transactionId: number) => void;
+  handleRejectCashPayment: (transactionId: number) => void;
+  handleMarkNoShow: (transactionId: number) => void;
   handleToggleInvoice: (transactionId: number) => void;
   selectAllPaidTransactions: () => void;
   clearSelection: () => void;
@@ -374,6 +372,24 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     toast.success("Cash payment confirmed", { duration: 2000 });
   };
 
+  const handleRejectCashPayment = (transactionId: number) => {
+    setTransactions(prev => 
+      prev.map(t => 
+        t.id === transactionId ? { ...t, status: 'rejected' as const } : t
+      )
+    );
+    toast.info("Payment rejected - transaction cancelled", { duration: 2000 });
+  };
+
+  const handleMarkNoShow = (transactionId: number) => {
+    setTransactions(prev => 
+      prev.map(t => 
+        t.id === transactionId ? { ...t, status: 'no_show' as const } : t
+      )
+    );
+    toast.warning("Client marked as no-show", { duration: 2000 });
+  };
+
   const handleToggleInvoice = (transactionId: number) => {
     setTransactions(prev => 
       prev.map(t => 
@@ -427,6 +443,8 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     setSelectedTransactions,
     handleAddTransaction,
     handleConfirmCashPayment,
+    handleRejectCashPayment,
+    handleMarkNoShow,
     handleToggleInvoice,
     selectAllPaidTransactions,
     clearSelection

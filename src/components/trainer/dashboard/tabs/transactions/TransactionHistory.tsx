@@ -6,6 +6,8 @@ export function TransactionHistory() {
   const { 
     filteredTransactions, 
     handleConfirmCashPayment, 
+    handleRejectCashPayment,
+    handleMarkNoShow,
     handleToggleInvoice,
     selectedTransactions,
     setSelectedTransactions
@@ -25,6 +27,8 @@ export function TransactionHistory() {
     <TransactionsTable 
       transactions={filteredTransactions} 
       onConfirmCashPayment={handleConfirmCashPayment}
+      onRejectCashPayment={handleRejectCashPayment}
+      onMarkNoShow={handleMarkNoShow}
       onToggleInvoice={handleToggleInvoice}
       selectedTransactions={selectedTransactions}
       onToggleSelection={handleToggleSelection}
