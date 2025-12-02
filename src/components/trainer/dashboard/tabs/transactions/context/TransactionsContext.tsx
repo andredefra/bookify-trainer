@@ -394,11 +394,13 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   };
 
   const getFilteredTransactions = () => {
-    return transactions.filter(t => 
-      t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return transactions
+      .filter(t => 
+        t.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   };
 
   const filteredTransactions = getFilteredTransactions();
