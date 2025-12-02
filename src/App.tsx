@@ -94,7 +94,7 @@ const AppContent = () => {
         <Route path="/trainer/:idOrSlug" element={<TrainerProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
-        <Route path="/gym-dashboard" element={<GymDashboard />} />
+        <Route path="/studio-dashboard" element={<GymDashboard />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/cookies" element={<Cookies />} />
