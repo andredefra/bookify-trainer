@@ -80,32 +80,43 @@ const initialTransactions: TransactionType[] = [
   { id: 54, client: "Olivia Chen", type: "Session", name: "Personal Training", amount: 40, date: "2025-10-23", status: "paid", paymentMethod: "card", invoiceSent: false },
   { id: 55, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-10-28", status: "paid", paymentMethod: "cash", invoiceSent: false },
   
-  // November 2025 (current month with partial data)
-  { id: 56, client: "Lisa Garcia", type: "Package", name: "Year-End Package (12 sessions)", amount: 480, date: "2025-11-02", status: "paid", paymentMethod: "card", invoiceSent: false, isPackagePayment: true },
-  { id: 57, client: "David Kim", type: "Program", name: "Injury Prevention", amount: 95, date: "2025-11-06", status: "paid", paymentMethod: "card", invoiceSent: false },
-  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceSent: false },
-  { id: 59, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-11-14", status: "paid", paymentMethod: "cash", invoiceSent: false },
-  { id: 60, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-18", status: "paid", paymentMethod: "card", invoiceSent: false },
+  // November 2025
+  { id: 56, client: "Lisa Garcia", type: "Package", name: "Year-End Package (12 sessions)", amount: 480, date: "2025-11-02", status: "paid", paymentMethod: "card", invoiceSent: true, isPackagePayment: true },
+  { id: 57, client: "David Kim", type: "Program", name: "Injury Prevention", amount: 95, date: "2025-11-06", status: "paid", paymentMethod: "card", invoiceSent: true },
+  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceSent: true },
+  { id: 59, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-11-14", status: "paid", paymentMethod: "cash", invoiceSent: true },
+  { id: 60, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-18", status: "paid", paymentMethod: "card", invoiceSent: true },
   
-  // Pending transactions
-  { id: 61, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-25", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  // December 2025 - Paid transactions
+  { id: 70, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceSent: true },
+  { id: 71, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceSent: true },
+  
+  // December 2025 - CASH payments pending confirmation (for demo: confirm receipt flow)
+  { id: 72, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-12-02", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  { id: 73, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-12-02", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  { id: 74, client: "Lisa Garcia", type: "Program", name: "Core Training Program", amount: 120, date: "2025-12-01", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  
+  // Pending card transactions
+  { id: 61, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-25", status: "pending", paymentMethod: "card", invoiceSent: false },
   { id: 62, client: "Sarah Johnson", type: "Program", name: "New Year Program", amount: 130, date: "2025-11-28", status: "pending", paymentMethod: "card", invoiceSent: false },
   
-  // Example installment payments - Sarah Johnson paying Elite Annual Package in 3 installments
+  // Sarah Johnson - Elite Annual Package in 3 installments (with installmentStatus and dueDate)
   { 
     id: 63, 
     client: "Sarah Johnson", 
     type: "Package", 
     name: "Elite Annual Package - Installment 1/3", 
     amount: 200, 
-    date: "2025-09-15", 
+    date: "2025-10-15", 
     status: "paid", 
     paymentMethod: "card",
     invoiceSent: true,
     isInstallment: true,
     installmentNumber: 1,
     totalInstallments: 3,
-    parentTransactionId: "63"
+    parentTransactionId: "63",
+    dueDate: "2025-10-15",
+    installmentStatus: "paid"
   },
   { 
     id: 64, 
@@ -113,14 +124,16 @@ const initialTransactions: TransactionType[] = [
     type: "Package", 
     name: "Elite Annual Package - Installment 2/3", 
     amount: 200, 
-    date: "2025-10-15", 
+    date: "2025-11-15", 
     status: "paid", 
     paymentMethod: "card",
     invoiceSent: true,
     isInstallment: true,
     installmentNumber: 2,
     totalInstallments: 3,
-    parentTransactionId: "63"
+    parentTransactionId: "63",
+    dueDate: "2025-11-15",
+    installmentStatus: "paid"
   },
   { 
     id: 65, 
@@ -128,17 +141,19 @@ const initialTransactions: TransactionType[] = [
     type: "Package", 
     name: "Elite Annual Package - Installment 3/3", 
     amount: 200, 
-    date: "2025-11-15", 
+    date: "2025-12-15", 
     status: "pending", 
     paymentMethod: "card",
     invoiceSent: false,
     isInstallment: true,
     installmentNumber: 3,
     totalInstallments: 3,
-    parentTransactionId: "63"
+    parentTransactionId: "63",
+    dueDate: "2025-12-15",
+    installmentStatus: "pending"
   },
   
-  // Example installment payments - Mike Wilson paying in 4 monthly installments
+  // Mike Peterson - Premium Training Package in 4 installments (with 4/4 overdue)
   { 
     id: 66, 
     client: "Mike Peterson", 
@@ -152,7 +167,9 @@ const initialTransactions: TransactionType[] = [
     isInstallment: true,
     installmentNumber: 1,
     totalInstallments: 4,
-    parentTransactionId: "66"
+    parentTransactionId: "66",
+    dueDate: "2025-08-01",
+    installmentStatus: "paid"
   },
   { 
     id: 67, 
@@ -167,7 +184,9 @@ const initialTransactions: TransactionType[] = [
     isInstallment: true,
     installmentNumber: 2,
     totalInstallments: 4,
-    parentTransactionId: "66"
+    parentTransactionId: "66",
+    dueDate: "2025-09-01",
+    installmentStatus: "paid"
   },
   { 
     id: 68, 
@@ -182,7 +201,115 @@ const initialTransactions: TransactionType[] = [
     isInstallment: true,
     installmentNumber: 3,
     totalInstallments: 4,
-    parentTransactionId: "66"
+    parentTransactionId: "66",
+    dueDate: "2025-10-01",
+    installmentStatus: "paid"
+  },
+  { 
+    id: 69, 
+    client: "Mike Peterson", 
+    type: "Package", 
+    name: "Premium Training Package - Installment 4/4", 
+    amount: 150, 
+    date: "2025-11-01", 
+    status: "pending", 
+    paymentMethod: "card",
+    invoiceSent: false,
+    isInstallment: true,
+    installmentNumber: 4,
+    totalInstallments: 4,
+    parentTransactionId: "66",
+    dueDate: "2025-11-01",
+    installmentStatus: "overdue"
+  },
+  
+  // James Wilson - Transformation Pro Package in 2 installments (1 paid, 1 pending)
+  { 
+    id: 75, 
+    client: "James Wilson", 
+    type: "Package", 
+    name: "Transformation Pro Package - Installment 1/2", 
+    amount: 300, 
+    date: "2025-11-15", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 1,
+    totalInstallments: 2,
+    parentTransactionId: "75",
+    dueDate: "2025-11-15",
+    installmentStatus: "paid"
+  },
+  { 
+    id: 76, 
+    client: "James Wilson", 
+    type: "Package", 
+    name: "Transformation Pro Package - Installment 2/2", 
+    amount: 300, 
+    date: "2025-12-15", 
+    status: "pending", 
+    paymentMethod: "card",
+    invoiceSent: false,
+    isInstallment: true,
+    installmentNumber: 2,
+    totalInstallments: 2,
+    parentTransactionId: "75",
+    dueDate: "2025-12-15",
+    installmentStatus: "pending"
+  },
+  
+  // Olivia Chen - Fitness Journey Package in 3 installments (2 paid, 1 overdue)
+  { 
+    id: 77, 
+    client: "Olivia Chen", 
+    type: "Package", 
+    name: "Fitness Journey Package - Installment 1/3", 
+    amount: 180, 
+    date: "2025-09-20", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 1,
+    totalInstallments: 3,
+    parentTransactionId: "77",
+    dueDate: "2025-09-20",
+    installmentStatus: "paid"
+  },
+  { 
+    id: 78, 
+    client: "Olivia Chen", 
+    type: "Package", 
+    name: "Fitness Journey Package - Installment 2/3", 
+    amount: 180, 
+    date: "2025-10-20", 
+    status: "paid", 
+    paymentMethod: "card",
+    invoiceSent: true,
+    isInstallment: true,
+    installmentNumber: 2,
+    totalInstallments: 3,
+    parentTransactionId: "77",
+    dueDate: "2025-10-20",
+    installmentStatus: "paid"
+  },
+  { 
+    id: 79, 
+    client: "Olivia Chen", 
+    type: "Package", 
+    name: "Fitness Journey Package - Installment 3/3", 
+    amount: 180, 
+    date: "2025-11-20", 
+    status: "pending", 
+    paymentMethod: "card",
+    invoiceSent: false,
+    isInstallment: true,
+    installmentNumber: 3,
+    totalInstallments: 3,
+    parentTransactionId: "77",
+    dueDate: "2025-11-20",
+    installmentStatus: "overdue"
   },
 ];
 
