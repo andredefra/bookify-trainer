@@ -109,13 +109,13 @@ export function GymSidebar({
               <span>Members</span>
             </button>
             
-            {/* Gym Packages */}
+            {/* Packages */}
             <button 
               onClick={() => { setActiveTab("packages"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "packages" ? "bg-primary/5 text-primary" : ""}`}
             >
               <Package className="w-5 h-5 mr-3" />
-              <span>Gym Packages</span>
+              <span>Packages</span>
             </button>
             
             {/* Transactions */}

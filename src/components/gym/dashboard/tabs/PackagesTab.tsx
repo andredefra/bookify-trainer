@@ -79,7 +79,7 @@ export function PackagesTab() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2">
             <Package className="w-5 h-5 md:w-6 md:h-6 text-primary" />
-            <h1 className="text-lg md:text-2xl font-bold">Gym Packages</h1>
+            <h1 className="text-lg md:text-2xl font-bold">Packages</h1>
           </div>
           
           {/* Action buttons - Stack on mobile with full width */}

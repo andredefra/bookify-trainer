@@ -61,11 +61,11 @@ export function GymHeader({
             <div className="hidden sm:flex items-center space-x-2">
               <span className="text-xs sm:text-sm text-muted-foreground">Demo Mode</span>
               <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
-                Gym Admin
+                Studio Admin
               </Badge>
               {user?.plan && (
                 <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
-                  {user.plan === 'pro' ? 'Gym Plan' : 'Basic Plan'}
+                  {user.plan === 'pro' ? 'Studio Plan' : 'Basic Plan'}
                 </Badge>
               )}
             </div>
