@@ -75,7 +75,7 @@ export const en = {
   'howItWorks.cta.button': 'Get Started for Free',
   
   // Gym Section
-  'gym.title': 'The Perfect Solution for PT Studios & Small Gyms',
+  'gym.title': 'The Perfect Solution for PT Studios Gyms',
   'gym.subtitle': 'Manage your team of trainers from a single dashboard. Track client progress, monitor packages sold by each trainer, and publish group sessions - all while providing a premium experience to your members.',
   'gym.mainFeature': 'Complete Control Over Your Training Business',
   'gym.clientConnection': 'Connect your trainers with clients seamlessly. Monitor every package sale, track client fitness progress in real-time, and let your trainers publish their own sessions - all from one centralized platform.',
