@@ -107,7 +107,7 @@ export const RegisterForm = ({ onSubmit, onCancel }: RegisterFormProps) => {
                     <FormControl>
                       <RadioGroupItem value="gym" />
                     </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">Gym</FormLabel>
+                    <FormLabel className="font-normal cursor-pointer">Studio</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
