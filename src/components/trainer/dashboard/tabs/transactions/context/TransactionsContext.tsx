@@ -92,9 +92,9 @@ const initialTransactions: TransactionType[] = [
   { id: 71, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceSent: true },
   
   // December 2025 - CASH payments pending confirmation (for demo: confirm receipt flow)
-  { id: 72, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-12-02", status: "pending", paymentMethod: "cash", invoiceSent: false },
-  { id: 73, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-12-02", status: "pending", paymentMethod: "cash", invoiceSent: false },
-  { id: 74, client: "Lisa Garcia", type: "Program", name: "Core Training Program", amount: 120, date: "2025-12-01", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  { id: 72, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-12-03", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  { id: 73, client: "David Kim", type: "Session", name: "Personal Training", amount: 40, date: "2025-12-03", status: "pending", paymentMethod: "cash", invoiceSent: false },
+  { id: 74, client: "Lisa Garcia", type: "Program", name: "Core Training Program", amount: 120, date: "2025-12-02", status: "pending", paymentMethod: "cash", invoiceSent: false },
   
   // Pending card transactions
   { id: 61, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-25", status: "pending", paymentMethod: "card", invoiceSent: false },
@@ -205,23 +205,6 @@ const initialTransactions: TransactionType[] = [
     dueDate: "2025-10-01",
     installmentStatus: "paid"
   },
-  { 
-    id: 69, 
-    client: "Mike Peterson", 
-    type: "Package", 
-    name: "Premium Training Package - Installment 4/4", 
-    amount: 150, 
-    date: "2025-11-01", 
-    status: "pending", 
-    paymentMethod: "card",
-    invoiceSent: false,
-    isInstallment: true,
-    installmentNumber: 4,
-    totalInstallments: 4,
-    parentTransactionId: "66",
-    dueDate: "2025-11-01",
-    installmentStatus: "overdue"
-  },
   
   // James Wilson - Transformation Pro Package in 2 installments (1 paid, 1 pending)
   { 
@@ -293,23 +276,6 @@ const initialTransactions: TransactionType[] = [
     parentTransactionId: "77",
     dueDate: "2025-10-20",
     installmentStatus: "paid"
-  },
-  { 
-    id: 79, 
-    client: "Olivia Chen", 
-    type: "Package", 
-    name: "Fitness Journey Package - Installment 3/3", 
-    amount: 180, 
-    date: "2025-11-20", 
-    status: "pending", 
-    paymentMethod: "card",
-    invoiceSent: false,
-    isInstallment: true,
-    installmentNumber: 3,
-    totalInstallments: 3,
-    parentTransactionId: "77",
-    dueDate: "2025-11-20",
-    installmentStatus: "overdue"
   },
 ];
 
