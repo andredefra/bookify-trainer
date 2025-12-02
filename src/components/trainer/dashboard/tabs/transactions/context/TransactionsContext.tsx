@@ -273,6 +273,44 @@ const initialTransactions: TransactionType[] = [
     dueDate: "2025-10-20",
     installmentStatus: "paid"
   },
+  
+  // Emily Davis - Coaching Package in 4 installments (3 paid, 1 OVERDUE)
+  { 
+    id: 80, 
+    client: "Emily Davis", 
+    type: "Package", 
+    name: "Coaching Package - Installment 4/4", 
+    amount: 150, 
+    date: "2025-11-01", 
+    status: "pending", 
+    paymentMethod: "card",
+    invoiceSent: false,
+    isInstallment: true,
+    installmentNumber: 4,
+    totalInstallments: 4,
+    parentTransactionId: "80",
+    dueDate: "2025-11-01",
+    installmentStatus: "overdue"
+  },
+  
+  // Alex Thompson - Personal Training Plan in 3 installments (2 paid, 1 OVERDUE)
+  { 
+    id: 81, 
+    client: "Alex Thompson", 
+    type: "Program", 
+    name: "Personal Training Plan - Installment 3/3", 
+    amount: 180, 
+    date: "2025-11-20", 
+    status: "pending", 
+    paymentMethod: "card",
+    invoiceSent: false,
+    isInstallment: true,
+    installmentNumber: 3,
+    totalInstallments: 3,
+    parentTransactionId: "81",
+    dueDate: "2025-11-20",
+    installmentStatus: "overdue"
+  },
 ];
 
 const clientList: ClientData[] = [

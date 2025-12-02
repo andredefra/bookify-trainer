@@ -7,10 +7,10 @@ import { useTransactions } from "../context/TransactionsContext";
 import { TransactionType } from "../types/transactionTypes";
 
 export function PendingInstallments() {
-  const { filteredTransactions } = useTransactions();
+  const { transactions } = useTransactions();
 
-  // Filter for pending installments
-  const pendingInstallments = filteredTransactions.filter(
+  // Filter for pending installments (use full transactions list, not filtered)
+  const pendingInstallments = transactions.filter(
     transaction => 
       transaction.isInstallment && 
       (transaction.installmentStatus === 'pending' || transaction.installmentStatus === 'overdue')
