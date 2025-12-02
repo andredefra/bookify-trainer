@@ -57,10 +57,10 @@ export const plans: Plan[] = [
   },
   {
     id: "gym",
-    name: "Gym",
-    price: "€119",
+    name: "Studio",
+    price: "€89",
     period: "per month",
-    description: "Enterprise solution for gyms with multiple trainers.",
+    description: "Complete solution for personal trainer studios and small gyms.",
     features: [
       "Unlimited Trainers",
       "Unlimited Clients",
