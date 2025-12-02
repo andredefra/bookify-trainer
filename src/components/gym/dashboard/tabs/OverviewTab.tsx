@@ -51,7 +51,7 @@ export function OverviewTab({ user }: OverviewTabProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">{gymName} Dashboard</h1>
+        <h1 className="text-2xl font-bold">{gymName.replace(' Gym', '')} Dashboard</h1>
         <p className="text-muted-foreground">Welcome back! Here's an overview of your gym performance.</p>
       </div>
 
