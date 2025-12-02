@@ -5,19 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Search, 
-  Plus, 
-  Users, 
-  Phone, 
-  Mail, 
-  Calendar,
-  Activity,
-  CreditCard,
-  MoreVertical,
-  UserPlus,
-  Filter
-} from "lucide-react";
+import { Search, Plus, Users, Phone, Mail, Calendar, Activity, CreditCard, MoreVertical, UserPlus, Filter } from "lucide-react";
 import { useGymMembers } from "@/hooks/gym/useGymMembers";
 import { useGymPackages } from "@/hooks/gym/useGymPackages";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -25,63 +13,71 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CreateMemberDialog } from "@/components/gym/members/CreateMemberDialog";
 import { AssignPackageDialog } from "@/components/gym/packages/AssignPackageDialog";
 import type { GymMember } from "@/types/gym/members";
-
 export function MembersTab() {
-  const { members, loading, error, updateMemberStatus, refetch, createMember } = useGymMembers();
-  const { packages, assignPackageToClient } = useGymPackages();
+  const {
+    members,
+    loading,
+    error,
+    updateMemberStatus,
+    refetch,
+    createMember
+  } = useGymMembers();
+  const {
+    packages,
+    assignPackageToClient
+  } = useGymPackages();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   const [memberForAssignment, setMemberForAssignment] = useState<GymMember | null>(null);
-
   const filteredMembers = members.filter(member => {
-    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) || member.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
-
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'inactive': return 'bg-gray-100 text-gray-800';
-      case 'suspended': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'inactive':
+        return 'bg-gray-100 text-gray-800';
+      case 'suspended':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getMembershipTypeColor = (type: string) => {
     switch (type) {
-      case 'monthly': return 'bg-blue-100 text-blue-800';
-      case 'annual': return 'bg-purple-100 text-purple-800';
-      case 'weekly': return 'bg-green-100 text-green-800';
-      case 'sessions': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'monthly':
+        return 'bg-blue-100 text-blue-800';
+      case 'annual':
+        return 'bg-purple-100 text-purple-800';
+      case 'weekly':
+        return 'bg-green-100 text-green-800';
+      case 'sessions':
+        return 'bg-orange-100 text-orange-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getUtilizationColor = (percentage: number) => {
     if (percentage >= 80) return 'text-green-600';
     if (percentage >= 60) return 'text-yellow-600';
     return 'text-red-600';
   };
-
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
+    return <div className="flex items-center justify-center py-12">
         <div className="text-center space-y-4">
           <Users className="h-8 w-8 animate-pulse mx-auto text-primary" />
           <p className="text-muted-foreground">Loading members...</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (error) {
-    return (
-      <div className="text-center py-12">
+    return <div className="text-center py-12">
         <div className="space-y-4">
           <Users className="h-12 w-12 mx-auto text-muted-foreground" />
           <div>
@@ -92,50 +88,37 @@ export function MembersTab() {
             Try Again
           </Button>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   const activeMembers = members.filter(m => m.status === 'active').length;
-  const totalRevenue = members.reduce((sum, member) => 
-    sum + member.currentPackages.reduce((pkgSum, pkg) => 
-      pkgSum + (pkg.paymentStatus === 'paid' ? 1000 : 0), 0), 0); // Placeholder calculation
+  const totalRevenue = members.reduce((sum, member) => sum + member.currentPackages.reduce((pkgSum, pkg) => pkgSum + (pkg.paymentStatus === 'paid' ? 1000 : 0), 0), 0); // Placeholder calculation
 
   const handleAssignPackage = (member: GymMember) => {
     setMemberForAssignment(member);
     setShowAssignDialog(true);
   };
-
   const handlePackageAssignment = async (assignmentData: any) => {
     if (assignmentData.customPackage) {
       // Handle custom package creation and assignment
       // This would need to create a custom package first, then assign it
       console.log('Custom package assignment:', assignmentData);
       // For now, we'll use a simplified approach
-      await assignPackageToClient(
-        'custom', // This would need to be handled differently
-        assignmentData.clientId,
-        assignmentData.trainerId
-      );
+      await assignPackageToClient('custom',
+      // This would need to be handled differently
+      assignmentData.clientId, assignmentData.trainerId);
     } else {
       // Handle regular package assignment
-      await assignPackageToClient(
-        assignmentData.packageId,
-        assignmentData.clientId,
-        assignmentData.trainerId
-      );
+      await assignPackageToClient(assignmentData.packageId, assignmentData.clientId, assignmentData.trainerId);
     }
     await refetch(); // Refresh members data
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Member Management</h2>
           <p className="text-muted-foreground">
-            Manage your gym members, packages, and activities
+            Manage your members, packages, and activities
           </p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>
@@ -166,7 +149,7 @@ export function MembersTab() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {members.length > 0 ? Math.round((activeMembers / members.length) * 100) : 0}%
+              {members.length > 0 ? Math.round(activeMembers / members.length * 100) : 0}%
             </div>
             <p className="text-xs text-muted-foreground">
               Member engagement rate
@@ -181,9 +164,7 @@ export function MembersTab() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {members.length > 0 ? 
-                Math.round(members.reduce((sum, m) => sum + m.totalSessions, 0) / members.length) : 
-                0}
+              {members.length > 0 ? Math.round(members.reduce((sum, m) => sum + m.totalSessions, 0) / members.length) : 0}
             </div>
             <p className="text-xs text-muted-foreground">
               Sessions per member
@@ -210,12 +191,7 @@ export function MembersTab() {
         <div className="flex items-center space-x-4 flex-1">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search members..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+            <Input placeholder="Search members..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[150px]">
@@ -239,25 +215,17 @@ export function MembersTab() {
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
-          {filteredMembers.length === 0 ? (
-            <div className="text-center py-12">
+          {filteredMembers.length === 0 ? <div className="text-center py-12">
               <Users className="mx-auto h-12 w-12 text-muted-foreground" />
               <h3 className="mt-2 text-sm font-semibold text-gray-900">No members found</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                {searchTerm || statusFilter !== "all" 
-                  ? "Try adjusting your search or filters."
-                  : "Get started by adding your first member."}
+                {searchTerm || statusFilter !== "all" ? "Try adjusting your search or filters." : "Get started by adding your first member."}
               </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-              {filteredMembers.map((member) => {
-                const activePackage = member.currentPackages.find(pkg => pkg.status === 'active');
-                const utilizationRate = activePackage ? 
-                  Math.round((activePackage.sessionsUsed / activePackage.sessionsTotal) * 100) : 0;
-                
-                return (
-                  <Card key={member.id} className="hover:shadow-md transition-shadow">
+            </div> : <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filteredMembers.map(member => {
+            const activePackage = member.currentPackages.find(pkg => pkg.status === 'active');
+            const utilizationRate = activePackage ? Math.round(activePackage.sessionsUsed / activePackage.sessionsTotal * 100) : 0;
+            return <Card key={member.id} className="hover:shadow-md transition-shadow">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
@@ -296,10 +264,7 @@ export function MembersTab() {
                             <DropdownMenuItem onClick={() => handleAssignPackage(member)}>
                               Assign Package
                             </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => updateMemberStatus(member.id, 
-                                member.status === 'active' ? 'inactive' : 'active')}
-                            >
+                            <DropdownMenuItem onClick={() => updateMemberStatus(member.id, member.status === 'active' ? 'inactive' : 'active')}>
                               {member.status === 'active' ? 'Deactivate' : 'Activate'}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -313,12 +278,10 @@ export function MembersTab() {
                           <Mail className="h-4 w-4 text-muted-foreground" />
                           <span className="truncate">{member.email}</span>
                         </div>
-                        {member.phone && (
-                          <div className="flex items-center space-x-2">
+                        {member.phone && <div className="flex items-center space-x-2">
                             <Phone className="h-4 w-4 text-muted-foreground" />
                             <span>{member.phone}</span>
-                          </div>
-                        )}
+                          </div>}
                         <div className="flex items-center space-x-2">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           <span>
@@ -327,8 +290,7 @@ export function MembersTab() {
                         </div>
                       </div>
 
-                      {activePackage && (
-                        <div className="p-3 rounded-lg bg-muted/30 space-y-2">
+                      {activePackage && <div className="p-3 rounded-lg bg-muted/30 space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="font-medium text-sm">{activePackage.packageTitle}</span>
                             <span className={`text-sm font-medium ${getUtilizationColor(utilizationRate)}`}>
@@ -336,35 +298,27 @@ export function MembersTab() {
                             </span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2">
-                            <div 
-                              className="bg-primary h-2 rounded-full transition-all"
-                              style={{ width: `${utilizationRate}%` }}
-                            />
+                            <div className="bg-primary h-2 rounded-full transition-all" style={{
+                      width: `${utilizationRate}%`
+                    }} />
                           </div>
                           <div className="text-xs text-muted-foreground">
                             {activePackage.sessionsUsed}/{activePackage.sessionsTotal} sessions used
                           </div>
-                        </div>
-                      )}
+                        </div>}
 
                       <div className="flex items-center justify-between pt-2 border-t">
                         <div className="text-sm text-muted-foreground">
                           <span className="font-medium">{member.totalSessions}</span> total sessions
                         </div>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setSelectedMember(member.id)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setSelectedMember(member.id)}>
                           View Details
                         </Button>
                       </div>
                     </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
+                  </Card>;
+          })}
+            </div>}
         </TabsContent>
 
         <TabsContent value="packages" className="space-y-4">
@@ -375,17 +329,12 @@ export function MembersTab() {
             <CardContent>
               <div className="space-y-4">
                 {["monthly", "annual", "weekly", "sessions"].map(packageType => {
-                  const typeMembers = members.filter(m => m.membershipType === packageType);
-                  const totalSessions = typeMembers.reduce((sum, m) => 
-                    sum + m.currentPackages.reduce((pkgSum, pkg) => pkgSum + pkg.sessionsTotal, 0), 0);
-                  const usedSessions = typeMembers.reduce((sum, m) => 
-                    sum + m.currentPackages.reduce((pkgSum, pkg) => pkgSum + pkg.sessionsUsed, 0), 0);
-                  // For unlimited packages (sessions = 0), show utilization based on usage
-                  const utilization = totalSessions > 0 ? Math.round((usedSessions / totalSessions) * 100) : 
-                    (usedSessions > 0 ? Math.min(Math.round((usedSessions / 30) * 100), 100) : 0);
-
-                  return (
-                    <div key={packageType} className="p-4 rounded-lg border">
+                const typeMembers = members.filter(m => m.membershipType === packageType);
+                const totalSessions = typeMembers.reduce((sum, m) => sum + m.currentPackages.reduce((pkgSum, pkg) => pkgSum + pkg.sessionsTotal, 0), 0);
+                const usedSessions = typeMembers.reduce((sum, m) => sum + m.currentPackages.reduce((pkgSum, pkg) => pkgSum + pkg.sessionsUsed, 0), 0);
+                // For unlimited packages (sessions = 0), show utilization based on usage
+                const utilization = totalSessions > 0 ? Math.round(usedSessions / totalSessions * 100) : usedSessions > 0 ? Math.min(Math.round(usedSessions / 30 * 100), 100) : 0;
+                return <div key={packageType} className="p-4 rounded-lg border">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
                           <Badge className={getMembershipTypeColor(packageType)}>
@@ -398,17 +347,15 @@ export function MembersTab() {
                         </span>
                       </div>
                       <div className="w-full bg-muted rounded-full h-2">
-                        <div 
-                          className="bg-primary h-2 rounded-full transition-all"
-                          style={{ width: `${utilization}%` }}
-                        />
+                        <div className="bg-primary h-2 rounded-full transition-all" style={{
+                      width: `${utilization}%`
+                    }} />
                       </div>
                       <div className="text-sm text-muted-foreground mt-1">
                         {totalSessions > 0 ? `${usedSessions}/${totalSessions} sessions used` : `${usedSessions} sessions completed`}
                       </div>
-                    </div>
-                  );
-                })}
+                    </div>;
+              })}
               </div>
             </CardContent>
           </Card>
@@ -416,20 +363,9 @@ export function MembersTab() {
       </Tabs>
 
       {/* Create Member Dialog */}
-      <CreateMemberDialog
-        open={showCreateDialog}
-        onOpenChange={setShowCreateDialog}
-        onCreateMember={createMember}
-      />
+      <CreateMemberDialog open={showCreateDialog} onOpenChange={setShowCreateDialog} onCreateMember={createMember} />
 
       {/* Assign Package Dialog */}
-      <AssignPackageDialog
-        open={showAssignDialog}
-        onOpenChange={setShowAssignDialog}
-        packages={packages}
-        selectedMember={memberForAssignment}
-        onAssign={handlePackageAssignment}
-      />
-    </div>
-  );
+      <AssignPackageDialog open={showAssignDialog} onOpenChange={setShowAssignDialog} packages={packages} selectedMember={memberForAssignment} onAssign={handlePackageAssignment} />
+    </div>;
 }
