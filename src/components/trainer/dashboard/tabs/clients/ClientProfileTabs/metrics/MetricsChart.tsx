@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Legend
 } from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface MetricDataPoint {
   date: string;
@@ -28,14 +28,15 @@ interface MetricsChartProps {
 }
 
 export function MetricsChart({ clientMetrics }: MetricsChartProps) {
-  // Sample data - in a real application, this would come from an API or props
+  const { t } = useLanguage();
+  
   const sampleData: MetricDataPoint[] = [
-    { date: "Gen", weight: 80, bodyFat: 18, musclePercentage: 45 },
-    { date: "Feb", weight: 79, bodyFat: 17, musclePercentage: 46 },
-    { date: "Mar", weight: 78, bodyFat: 16, musclePercentage: 47 },
-    { date: "Apr", weight: 77, bodyFat: 15, musclePercentage: 48 },
-    { date: "Mag", weight: 76, bodyFat: 14, musclePercentage: 50 },
-    { date: "Giu", weight: 75, bodyFat: 13, musclePercentage: 52 }
+    { date: t('metrics.months.jan'), weight: 80, bodyFat: 18, musclePercentage: 45 },
+    { date: t('metrics.months.feb'), weight: 79, bodyFat: 17, musclePercentage: 46 },
+    { date: t('metrics.months.mar'), weight: 78, bodyFat: 16, musclePercentage: 47 },
+    { date: t('metrics.months.apr'), weight: 77, bodyFat: 15, musclePercentage: 48 },
+    { date: t('metrics.months.may'), weight: 76, bodyFat: 14, musclePercentage: 50 },
+    { date: t('metrics.months.jun'), weight: 75, bodyFat: 13, musclePercentage: 52 }
   ];
 
   return (
@@ -78,7 +79,7 @@ export function MetricsChart({ clientMetrics }: MetricsChartProps) {
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
-            name="Peso (kg)"
+            name={t('metrics.weight')}
           />
           <Line
             type="monotone"
@@ -87,7 +88,7 @@ export function MetricsChart({ clientMetrics }: MetricsChartProps) {
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
-            name="Grasso Corporeo (%)"
+            name={t('metrics.bodyFat')}
           />
           <Line
             type="monotone"
@@ -96,7 +97,7 @@ export function MetricsChart({ clientMetrics }: MetricsChartProps) {
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
-            name="Massa Muscolare (%)"
+            name={t('metrics.musclePercentage')}
           />
         </LineChart>
       </ResponsiveContainer>
