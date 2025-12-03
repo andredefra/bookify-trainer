@@ -41,6 +41,11 @@ export function SettingsHeader({ selectedSection }: SettingsHeaderProps) {
           title: "Billing Information",
           description: "Update your payment methods and billing details"
         };
+      case "my-gyms":
+        return {
+          title: "",
+          description: ""
+        };
       default:
         return {
           title: "Settings",
@@ -50,6 +55,8 @@ export function SettingsHeader({ selectedSection }: SettingsHeaderProps) {
   };
 
   const { title, description } = getTitleAndDescription();
+
+  if (!title) return null;
 
   return (
     <div className="mb-6">
