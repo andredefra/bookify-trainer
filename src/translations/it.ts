@@ -169,7 +169,7 @@ export const it = {
   'pricing.features.reducedProPricing': 'Prezzo Pro Ridotto per Trainers (€19/mese)',
   'pricing.features.directClientChat': 'Chat Diretta con Trainers',
   'pricing.features.clientResults': 'Dashboard Risultati Clienti',
-  'pricing.features.gymIntegration': 'Integrazione Gestione Palestra',
+  'pricing.features.gymIntegration': 'Integrazione Gestionale Palestra',
   'pricing.discoverDetails': 'Scopri i Dettagli',
   'pricing.detailedFeatures.basic.title': 'Funzionalità Piano BASIC',
   'pricing.detailedFeatures.basic.subtitle': 'Perfetto per iniziare',
