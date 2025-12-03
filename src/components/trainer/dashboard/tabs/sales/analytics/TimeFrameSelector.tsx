@@ -10,7 +10,7 @@ export function TimeFrameSelector({
   onTimeFrameChange, 
   customPeriod, 
   onCustomPeriodChange,
-  showTitle = true
+  showTitle = false
 }: TimeFrameSelectorProps) {
   return (
     <div className="w-full space-y-3">
