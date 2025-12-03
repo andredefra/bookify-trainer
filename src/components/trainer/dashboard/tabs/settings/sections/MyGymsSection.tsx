@@ -70,7 +70,7 @@ export function MyGymsSection({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">My Studio or Gym</h2>
-          <p className="text-muted-foreground">Manage your studio or gym affiliations and partnerships</p>
+          <p className="text-muted-foreground">Manage your affiliations and partnerships</p>
         </div>
         
         {affiliations.length > 0 && <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
