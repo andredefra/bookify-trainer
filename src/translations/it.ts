@@ -75,7 +75,18 @@ export const it = {
   'howItWorks.cta.button': 'Inizia Gratuitamente',
 
   // Gym Section
-  'gym.title': 'La Soluzione Perfetta per Studi PT e Palestre',
+'gym.title': 'La Soluzione Perfetta per Studi PT e Palestre',
+  
+  // Metrics Chart
+  'metrics.weight': 'Peso (kg)',
+  'metrics.bodyFat': 'Grasso Corporeo (%)',
+  'metrics.musclePercentage': 'Massa Muscolare (%)',
+  'metrics.months.jan': 'Gen',
+  'metrics.months.feb': 'Feb',
+  'metrics.months.mar': 'Mar',
+  'metrics.months.apr': 'Apr',
+  'metrics.months.may': 'Mag',
+  'metrics.months.jun': 'Giu',
   'gym.subtitle': 'Gestisci il tuo team di trainer da un\'unica dashboard. Monitora i progressi dei clienti, controlla i pacchetti venduti da ogni trainer e pubblica sessioni di gruppo - offrendo un\'esperienza premium ai tuoi membri.',
   'gym.mainFeature': 'Controllo Completo sul Tuo Business di Training',
   'gym.clientConnection': 'Collega i tuoi trainer con i clienti in modo semplice. Monitora ogni vendita di pacchetti, traccia i progressi fitness dei clienti in tempo reale, e permetti ai tuoi trainer di pubblicare le proprie sessioni - tutto da una piattaforma centralizzata.',
