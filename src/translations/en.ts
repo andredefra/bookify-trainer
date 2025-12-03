@@ -166,7 +166,7 @@ export const en = {
   'pricing.features.advancedAnalytics': 'Advanced Analytics & Reports',
   'pricing.features.unlimitedTrainers': 'Unlimited Trainers',
   'pricing.features.gymUnlimitedClients': 'Unlimited Clients',
-  'pricing.features.reducedProPricing': 'Reduced Pro Pricing for Trainers (€9/mo)',
+  'pricing.features.reducedProPricing': 'Reduced Pro Pricing for Trainers (€19/mo)',
   'pricing.features.directClientChat': 'Direct Chat with Trainers',
   'pricing.features.clientResults': 'Client Results Dashboard',
   'pricing.features.gymIntegration': 'Gym Management Integration',
