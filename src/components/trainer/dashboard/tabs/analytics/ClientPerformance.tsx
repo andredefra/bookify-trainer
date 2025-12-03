@@ -18,6 +18,7 @@ import { ClientWorkoutInsights } from "./charts/ClientWorkoutInsights";
 import { ClientAnalyticsInsights } from "./charts/ClientAnalyticsInsights";
 import { AllClientsOverview } from "./charts/AllClientsOverview";
 import { AggregatedGoalStats } from "./charts/AggregatedGoalStats";
+import { ClientFullAnalytics } from "./charts/ClientFullAnalytics";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -119,9 +120,16 @@ export function ClientPerformance({ initialClientFilter = "all", onClientChange 
           <AggregatedGoalStats clients={mockClients} />
         </>
       ) : (
-        // Individual client view
+        // Individual client view with full analytics
         <>
-          {/* Client Goals Progress - New component for goal tracking */}
+          {/* Full Client Analytics - Reuses client dashboard cards */}
+          {selectedClient !== "all" && mockClients.find(c => c.id === selectedClient) && (
+            <ClientFullAnalytics 
+              client={mockClients.find(c => c.id === selectedClient)!}
+            />
+          )}
+          
+          {/* Client Goals Progress - Existing component for goal tracking */}
           <ClientGoalsProgress 
             clientName={getSelectedClientName()}
           />
