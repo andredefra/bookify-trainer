@@ -8,8 +8,10 @@ import { CreatePackageDialog } from "./packages/CreatePackageDialog";
 import { EditPackageDialog } from "./packages/EditPackageDialog";
 import { AssignPackageDialog } from "./packages/AssignPackageDialog";
 import { ActivePackageManagementDialog } from "./packages/ActivePackageManagementDialog";
+import { PackageSalesContent } from "./packages/PackageSalesContent";
 import { toast } from "sonner";
 import { useActivePackages } from "@/hooks/useActivePackages";
+import { usePackageSales } from "@/hooks/usePackageSales";
 import { supabase } from "@/integrations/supabase/client";
 
 export function PackagesTab() {
@@ -33,6 +35,10 @@ export function PackagesTab() {
 
   // Fetch active packages from database
   const { packages: activePackages, loading: packagesLoading, refetch } = useActivePackages(trainerId || undefined);
+
+  // Fetch package sales data
+  const salesData = usePackageSales(trainerId || undefined);
+  const pendingCount = salesData.pendingRequests.length;
 
   // Mock data for demonstration
   const [packageTemplates, setPackageTemplates] = useState([
@@ -179,9 +185,17 @@ export function PackagesTab() {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="templates">Templates</TabsTrigger>
               <TabsTrigger value="active">Active Packages</TabsTrigger>
+              <TabsTrigger value="sales" className="relative">
+                Sales
+                {pendingCount > 0 && (
+                  <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                    {pendingCount}
+                  </Badge>
+                )}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="templates" className="space-y-4">
@@ -346,6 +360,24 @@ export function PackagesTab() {
                   })}
                 </div>
               )}
+            </TabsContent>
+
+            <TabsContent value="sales" className="space-y-4">
+              <PackageSalesContent
+                weeklyRevenue={salesData.weeklyRevenue}
+                previousWeekRevenue={salesData.previousWeekRevenue}
+                monthlyRevenue={salesData.monthlyRevenue}
+                previousMonthRevenue={salesData.previousMonthRevenue}
+                quarterlyRevenue={salesData.quarterlyRevenue}
+                previousQuarterRevenue={salesData.previousQuarterRevenue}
+                pendingRequests={salesData.pendingRequests}
+                confirmedSales={salesData.confirmedSales}
+                allSales={salesData.allSales}
+                loading={salesData.loading}
+                onConfirmPurchase={(id) => salesData.confirmPurchase(id, true)}
+                onRejectPurchase={salesData.rejectPurchase}
+                isProTrainer={true}
+              />
             </TabsContent>
           </Tabs>
         </CardContent>
