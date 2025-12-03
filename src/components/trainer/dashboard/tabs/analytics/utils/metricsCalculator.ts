@@ -6,6 +6,7 @@ export interface ClientData {
   name: string;
   age: number;
   height: number;
+  gender?: 'male' | 'female';
   currentWeight: number;
   targetWeight: number;
   goals: Array<{
@@ -25,6 +26,12 @@ export interface ClientData {
     date: Date;
     weight: number;
     bodyFat: number;
+    waist?: number;
+    hips?: number;
+    arms?: number;
+    neck?: number;
+    thighs?: number;
+    shoulders?: number;
   }>;
 }
 
