@@ -4,6 +4,7 @@ import { plans } from '@/components/trainer/dashboard/tabs/settings/membership/p
 import { PricingHeader } from './pricing/PricingHeader';
 import { PlanCard } from './pricing/PlanCard';
 import { PricingFooter } from './pricing/PricingFooter';
+import GymSection from './GymSection';
 
 const PricingSection = () => {
   const [annual, setAnnual] = useState(false);
@@ -135,8 +136,9 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="pricing" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <>
+      <section id="pricing" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <PricingHeader 
           titleText={t('pricing.title')}
           subtitleText={t('pricing.subtitle')}
@@ -174,9 +176,14 @@ const PricingSection = () => {
           disclaimerText={t('pricing.disclaimer1').replace('All plans', 'Pro plan')}
           clientsAccessText={t('pricing.disclaimer2')}
         />
-        
-        {/* Gym Plan - Separate section with different styling */}
-        <div id="gym-pricing" className="mt-20 pt-12 border-t border-gray-100">
+        </div>
+      </section>
+      
+      <GymSection />
+      
+      {/* Gym Plan - Separate section with different styling */}
+      <section id="gym-pricing" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <h3 className="text-2xl font-display font-bold text-center mb-6 reveal">
             {t('pricing.forGyms')}
           </h3>
@@ -200,8 +207,8 @@ const PricingSection = () => {
             />
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
