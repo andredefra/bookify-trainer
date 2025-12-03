@@ -137,8 +137,7 @@ export function MyGymsSection({
               <Building2 className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="font-medium mb-2">No Affiliations Yet</h3>
               <p className="text-muted-foreground mb-4">
-                Connect with gyms to expand your reach, get more clients, and grow your business. 
-                Gym partnerships provide credibility and access to their member base.
+                Connect with a Gym or Studio to expand your reach, get more clients, and grow your business. Partnerships provide credibility and access to their member base.
               </p>
               <div className="bg-muted/50 rounded-md p-3 mb-4 text-sm text-muted-foreground">
                 <div className="font-medium mb-1">Benefits of gym affiliations:</div>
