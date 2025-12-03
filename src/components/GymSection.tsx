@@ -85,11 +85,6 @@ const GymSection = () => {
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <a href="#gym-pricing" className="reveal inline-flex px-6 py-3 bg-gray-800 text-white rounded-full text-base font-medium button-hover">
-            {t('gym.cta')}
-          </a>
-        </div>
       </div>
     </section>
   );
