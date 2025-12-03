@@ -69,8 +69,8 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">My Gyms</h2>
-          <p className="text-muted-foreground">Manage your gym affiliations and partnerships</p>
+          <h2 className="text-2xl font-bold">My Studio or Gym</h2>
+          <p className="text-muted-foreground">Manage your studio or gym affiliations and partnerships</p>
         </div>
         
         {affiliations.length > 0 && (
