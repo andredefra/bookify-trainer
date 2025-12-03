@@ -138,7 +138,7 @@ export const en = {
   'pricing.gym.fee': 'Complete solution',
   'pricing.gym.transactionFeeNote': '(2% transaction fee applies to digital payments from platform trainers)',
   'pricing.gym.cta': 'Get Started with Studio Plan',
-  'pricing.forGyms': 'For Personal Trainer Studios & Gyms',
+  'pricing.forGyms': 'Pricing for Personal Trainer Studios & Gyms',
   'pricing.gymPlanDescription': 'Complete solution for personal trainer studios and gyms with multiple trainers',
   'pricing.features.salesManagement': 'Basic CRM & Lead Management',
   'pricing.features.clientManagement': 'Unlimited Clients',

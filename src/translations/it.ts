@@ -138,7 +138,7 @@ export const it = {
   'pricing.gym.fee': 'Soluzione completa',
   'pricing.gym.transactionFeeNote': '(2% di commissione si applica ai pagamenti digitali dei trainers inseriti in piattaforma)',
   'pricing.gym.cta': 'Inizia con il Piano Studio',
-  'pricing.forGyms': 'Per Studi di Personal Trainer e Palestre',
+  'pricing.forGyms': 'Prezzi per Studi di Personal Trainer e Palestre',
   'pricing.gymPlanDescription': 'Soluzione completa per studi di personal trainer e palestre con più trainer',
   'pricing.features.salesManagement': 'CRM Base & Gestione Lead',
   'pricing.features.clientManagement': 'Clienti Illimitati',
