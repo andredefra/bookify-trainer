@@ -154,6 +154,7 @@ export const it = {
 'pricing.features.programsAnalytics': 'Analisi Programmi',
 'pricing.features.exerciseList': 'Lista Esercizi',
 'pricing.features.exerciseManagement': 'Gestione Esercizi',
+  'pricing.features.cashPayments': 'Pagamenti in Contanti',
   'pricing.features.everythingEssential': 'Tutto di Essenziale',
   'pricing.features.digitalCashPayments': 'Pagamenti Digitali e in Contanti',
   'pricing.features.paymentInstallments': 'Paga in 3 Rate',
