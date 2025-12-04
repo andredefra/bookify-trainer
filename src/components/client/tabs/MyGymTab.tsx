@@ -59,7 +59,7 @@ export function MyGymTab({
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">My Gym or Studio </h1>
-            <p className="text-muted-foreground">Loading your gym connection...</p>
+            <p className="text-muted-foreground">Manage your membership and sessions</p>
           </div>
         </div>
 
