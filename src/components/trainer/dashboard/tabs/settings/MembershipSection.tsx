@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, AlertCircle } from "lucide-react";
+import { Check, X, AlertCircle, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { plans } from "./membership/plansData";
 
@@ -65,7 +65,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
       <p className="text-sm text-muted-foreground mb-4">Choose the plan that works best for your training business</p>
       
       <div className="grid grid-cols-1 gap-4">
-        {plans.map((plan) => (
+        {plans.filter(plan => plan.id !== "gym").map((plan) => (
           <Card 
             key={plan.id}
             className={`overflow-hidden transition-all ${
@@ -79,7 +79,7 @@ export function MembershipSection({ user }: MembershipSectionProps) {
                 <div>
                   <h3 className="font-semibold text-lg">{plan.name}</h3>
                   <div className="flex items-baseline mt-1">
-                    <span className="text-2xl font-bold">${plan.price}</span>
+                    <span className="text-2xl font-bold">{plan.price}</span>
                     <span className="text-muted-foreground ml-1 text-sm">/month</span>
                   </div>
                 </div>
@@ -110,6 +110,56 @@ export function MembershipSection({ user }: MembershipSectionProps) {
             </div>
           </Card>
         ))}
+      </div>
+      
+      {/* Expand to Studio Section */}
+      <div className="mt-8 pt-6 border-t border-border">
+        <div className="rounded-lg border-2 border-dashed border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10 p-6">
+          <div className="flex items-start justify-between flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <Building2 className="h-6 w-6 text-primary" />
+                <h3 className="text-xl font-bold">Expand to Studio</h3>
+                <Badge className="bg-green-500 hover:bg-green-600 text-white">25% Trainer Discount</Badge>
+              </div>
+              <p className="text-muted-foreground mb-4">
+                Become both a Personal Trainer and Studio Admin. Manage your own studio while keeping all your trainer features.
+              </p>
+              
+              <div className="flex items-baseline gap-2 mb-4">
+                <span className="text-3xl font-bold text-primary">€66.75</span>
+                <span className="text-muted-foreground line-through">€89</span>
+                <span className="text-muted-foreground">/month</span>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  "Unlimited Trainers",
+                  "Unlimited Clients", 
+                  "Reduced Pro Pricing (€19/month)",
+                  "Direct Chat with Clients",
+                  "Comprehensive Client Results",
+                  "Integrated with Gym Management",
+                  "White Label Options"
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-center text-sm">
+                    <Check className="h-4 w-4 mr-2 text-green-500" />
+                    <span>{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="w-full sm:w-auto">
+              <Button 
+                className="w-full sm:w-auto"
+                onClick={() => toast.success("Studio plan added! You're now both a PT and Studio Admin")}
+              >
+                Add Studio Plan
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
       
       {/* Delete Account Section */}
