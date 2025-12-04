@@ -5,6 +5,7 @@ import { PricingHeader } from './pricing/PricingHeader';
 import { PlanCard } from './pricing/PlanCard';
 import { PricingFooter } from './pricing/PricingFooter';
 import GymSection from './GymSection';
+import AIPricingSection from './pricing/AIPricingSection';
 
 const PricingSection = () => {
   const [annual, setAnnual] = useState(false);
@@ -178,6 +179,8 @@ const PricingSection = () => {
         />
         </div>
       </section>
+      
+      <AIPricingSection />
       
       <GymSection />
       
