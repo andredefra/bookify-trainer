@@ -13,7 +13,6 @@ import { GymTrainersCard } from "@/components/client/gym/GymTrainersCard";
 import { PackageMarketplaceDialog } from "@/components/client/gym/PackageMarketplaceDialog";
 import { GymPackageDetailsDialog } from "@/components/client/gym/GymPackageDetailsDialog";
 import { useState } from "react";
-
 interface MyGymTabProps {
   user?: {
     name?: string;
@@ -22,42 +21,44 @@ interface MyGymTabProps {
     plan?: string;
   };
 }
-
-export function MyGymTab({ user }: MyGymTabProps) {
+export function MyGymTab({
+  user
+}: MyGymTabProps) {
   console.log('🔍 MyGymTab START - Component inizializzato');
-  
-  const { connection, packages, communications, loading, error, isConnected } = useGymConnection();
+  const {
+    connection,
+    packages,
+    communications,
+    loading,
+    error,
+    isConnected
+  } = useGymConnection();
   const navigate = useNavigate();
   const [marketplaceOpen, setMarketplaceOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<any>(null);
   const [showPackageDetails, setShowPackageDetails] = useState(false);
-  
-  console.log('🔍 MyGymTab HOOK DATA:', { 
-    connection, 
-    packages: packages?.length || 0, 
-    communications: communications?.length || 0, 
-    loading, 
-    error, 
-    isConnected 
+  console.log('🔍 MyGymTab HOOK DATA:', {
+    connection,
+    packages: packages?.length || 0,
+    communications: communications?.length || 0,
+    loading,
+    error,
+    isConnected
   });
-
   console.log('🔍 MyGymTab RENDER STATE:', {
     shouldShowLoading: loading,
     shouldShowError: error,
     shouldShowNotConnected: !isConnected,
     shouldShowMain: isConnected && !loading && !error
   });
-
   const handleConnectToGym = () => {
     navigate("/client-dashboard?tab=settings&section=gym");
   };
-
   if (loading) {
-    return (
-      <div className="space-y-6">
+    return <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">My Gym</h1>
+            <h1 className="text-3xl font-bold tracking-tight">My Gym or Studio </h1>
             <p className="text-muted-foreground">Loading your gym connection...</p>
           </div>
         </div>
@@ -68,13 +69,10 @@ export function MyGymTab({ user }: MyGymTabProps) {
             <p className="text-muted-foreground">Loading gym data...</p>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
   if (error) {
-    return (
-      <div className="space-y-6">
+    return <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">My Gym</h1>
@@ -94,13 +92,10 @@ export function MyGymTab({ user }: MyGymTabProps) {
             </Button>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
   if (!isConnected) {
-    return (
-      <div className="space-y-6">
+    return <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">My Gym</h1>
@@ -125,15 +120,11 @@ export function MyGymTab({ user }: MyGymTabProps) {
             </Button>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
   const activePackagesCount = packages.filter(pkg => pkg.status === 'active').length;
   const totalSessionsUsed = packages.reduce((sum, pkg) => sum + pkg.sessions_used, 0);
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">My Gym</h1>
@@ -192,18 +183,13 @@ export function MyGymTab({ user }: MyGymTabProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {packages.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+            {packages.length === 0 ? <div className="text-center py-8 text-muted-foreground">
                 <Package className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p>No active packages</p>
-              </div>
-            ) : (
-              packages.map((pkg) => {
-                const packageInfo = calculatePackageRemaining(pkg);
-                const isSessionBased = pkg.package_type === 'sessions';
-                
-                return (
-                  <div key={pkg.id} className="border rounded-lg p-4 space-y-3">
+              </div> : packages.map(pkg => {
+            const packageInfo = calculatePackageRemaining(pkg);
+            const isSessionBased = pkg.package_type === 'sessions';
+            return <div key={pkg.id} className="border rounded-lg p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">{pkg.title}</h4>
@@ -217,48 +203,32 @@ export function MyGymTab({ user }: MyGymTabProps) {
                     </div>
                     
                     {/* Progress bar solo per pacchetti a sessioni */}
-                    {isSessionBased && (
-                      <div className="w-full bg-muted rounded-full h-2">
-                        <div 
-                          className="bg-primary h-2 rounded-full transition-all" 
-                          style={{ width: `${packageInfo.progressPercentage}%` }}
-                        />
-                      </div>
-                    )}
+                    {isSessionBased && <div className="w-full bg-muted rounded-full h-2">
+                        <div className="bg-primary h-2 rounded-full transition-all" style={{
+                  width: `${packageInfo.progressPercentage}%`
+                }} />
+                      </div>}
                     
                     {/* Time remaining bar per pacchetti mensili */}
-                    {!isSessionBased && (
-                      <div className="w-full bg-muted rounded-full h-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full transition-all" 
-                          style={{ width: `${100 - packageInfo.progressPercentage}%` }}
-                        />
-                      </div>
-                    )}
+                    {!isSessionBased && <div className="w-full bg-muted rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full transition-all" style={{
+                  width: `${100 - packageInfo.progressPercentage}%`
+                }} />
+                      </div>}
                     
                     <div className="flex justify-between text-xs text-muted-foreground items-center">
-                      <span>Expires: {packageInfo.daysLeft === Infinity ? 'Never' : (pkg.end_date ? format(new Date(pkg.end_date), 'dd/MM/yyyy') : 'No expiry')}</span>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-6 px-2 text-xs"
-                        onClick={() => {
-                          setSelectedPackage(pkg);
-                          setShowPackageDetails(true);
-                        }}
-                      >
+                      <span>Expires: {packageInfo.daysLeft === Infinity ? 'Never' : pkg.end_date ? format(new Date(pkg.end_date), 'dd/MM/yyyy') : 'No expiry'}</span>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => {
+                  setSelectedPackage(pkg);
+                  setShowPackageDetails(true);
+                }}>
                         View Details
                       </Button>
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  </div>;
+          })}
             
-            <Button 
-              className="w-full mt-4" 
-              onClick={() => setMarketplaceOpen(true)}
-            >
+            <Button className="w-full mt-4" onClick={() => setMarketplaceOpen(true)}>
               <ShoppingBag className="h-4 w-4 mr-2" />
               Browse New Packages
             </Button>
@@ -274,31 +244,17 @@ export function MyGymTab({ user }: MyGymTabProps) {
         <GymTrainersCard gymId={connection?.gym_id} />
         
         {/* Communication */}
-        <GymMessagingCard 
-          gymId={connection?.gym_id} 
-          communications={communications}
-          onNewMessage={() => {
-            // Refresh communications when a new message is sent
-            // This could be enhanced with real-time updates
-          }}
-        />
+        <GymMessagingCard gymId={connection?.gym_id} communications={communications} onNewMessage={() => {
+        // Refresh communications when a new message is sent
+        // This could be enhanced with real-time updates
+      }} />
       </div>
 
       {/* Gym Activities - Full Width */}
       <GymActivitiesCard gymId={connection?.gym_id} />
       
-      <PackageMarketplaceDialog
-        open={marketplaceOpen}
-        onOpenChange={setMarketplaceOpen}
-        gymId={connection?.gym_id}
-      />
+      <PackageMarketplaceDialog open={marketplaceOpen} onOpenChange={setMarketplaceOpen} gymId={connection?.gym_id} />
       
-      <GymPackageDetailsDialog
-        package={selectedPackage}
-        open={showPackageDetails}
-        onOpenChange={setShowPackageDetails}
-      />
-    </div>
-  );
+      <GymPackageDetailsDialog package={selectedPackage} open={showPackageDetails} onOpenChange={setShowPackageDetails} />
+    </div>;
 }
-
