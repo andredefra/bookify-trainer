@@ -154,6 +154,7 @@ export const en = {
 'pricing.features.programsAnalytics': 'Programs Analytics',
 'pricing.features.exerciseList': 'Exercise List',
 'pricing.features.exerciseManagement': 'Exercise Management',
+  'pricing.features.cashPayments': 'Cash Payments',
   'pricing.features.everythingEssential': 'Everything in Essential',
   'pricing.features.digitalCashPayments': 'Digital & Cash Payments',
   'pricing.features.paymentInstallments': 'Payment Installments (Pay in 3)',
