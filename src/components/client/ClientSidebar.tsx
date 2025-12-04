@@ -26,7 +26,7 @@ interface ClientSidebarProps {
 const sidebarItems = [
   { id: "overview", label: "Overview", icon: User },
   { id: "sessions", label: "Sessions", icon: Calendar },
-  { id: "mygym", label: "My Gym", icon: Building2 },
+  { id: "mygym", label: "My Gym or Studio", icon: Building2 },
   { id: "packages", label: "My Packages", icon: Package },
   { id: "training-program", label: "Training Program", icon: Dumbbell },
   { id: "training-log", label: "Workout Log", icon: BookOpen },
