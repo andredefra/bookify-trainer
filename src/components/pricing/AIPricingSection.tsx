@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Crown, Sparkles, Check } from 'lucide-react';
+import AIFeatureDialog from './AIFeatureDialog';
 
 const AIPricingSection = () => {
   const { t } = useLanguage();
+  const [clientDialogOpen, setClientDialogOpen] = useState(false);
+  const [trainerDialogOpen, setTrainerDialogOpen] = useState(false);
 
   const clientFeatures = [
     {
@@ -96,6 +100,7 @@ const AIPricingSection = () => {
               <Button 
                 variant="outline" 
                 className="w-full mt-6 border-amber-300 hover:bg-amber-50"
+                onClick={() => setClientDialogOpen(true)}
               >
                 {t('aiPricing.client.cta')}
               </Button>
@@ -142,6 +147,7 @@ const AIPricingSection = () => {
               <Button 
                 variant="outline" 
                 className="w-full mt-6 border-violet-300 hover:bg-violet-50"
+                onClick={() => setTrainerDialogOpen(true)}
               >
                 {t('aiPricing.trainer.cta')}
               </Button>
@@ -149,6 +155,18 @@ const AIPricingSection = () => {
           </Card>
         </div>
       </div>
+
+      {/* AI Feature Dialogs */}
+      <AIFeatureDialog 
+        type="client" 
+        open={clientDialogOpen} 
+        onOpenChange={setClientDialogOpen} 
+      />
+      <AIFeatureDialog 
+        type="trainer" 
+        open={trainerDialogOpen} 
+        onOpenChange={setTrainerDialogOpen} 
+      />
     </section>
   );
 };
