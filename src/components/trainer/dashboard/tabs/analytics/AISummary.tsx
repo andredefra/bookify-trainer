@@ -6,6 +6,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useLanguage } from '@/context/LanguageContext';
+import { useTrainerAISubscription } from '@/hooks/useTrainerAISubscription';
+import { AIUpgradePrompt } from '@/components/trainer/AIUpgradePrompt';
 import { 
   Brain, 
   Send, 
@@ -36,6 +38,12 @@ interface TrainerInsight {
 
 export function AISummary() {
   const { t } = useLanguage();
+  const { hasAIAccess, loading: aiLoading } = useTrainerAISubscription();
+  
+  // If no AI access, show upgrade prompt
+  if (!aiLoading && !hasAIAccess) {
+    return <AIUpgradePrompt feature="AI Business Insights" />;
+  }
   
   const [messages, setMessages] = useState<Message[]>([
     {

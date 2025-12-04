@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Bot, Send, User, Users, TrendingUp, Target, Dumbbell, Activity } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useTrainerAISubscription } from '@/hooks/useTrainerAISubscription';
+import { AIUpgradePrompt } from '@/components/trainer/AIUpgradePrompt';
 
 interface ChatMessage {
   id: string;
@@ -40,7 +42,13 @@ export function TrainerClientAIChat({ selectedClient, clientsData, onClientChang
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
+  const { hasAIAccess, loading: aiLoading } = useTrainerAISubscription();
   const conversationId = `trainer-analytics-${selectedClient}`;
+
+  // If no AI access, show upgrade prompt
+  if (!aiLoading && !hasAIAccess) {
+    return <AIUpgradePrompt feature="AI Client Analytics" className="h-[600px]" />;
+  }
 
   const selectedClientData = selectedClient !== 'all' 
     ? clientsData.find(c => c.id.toString() === selectedClient)
