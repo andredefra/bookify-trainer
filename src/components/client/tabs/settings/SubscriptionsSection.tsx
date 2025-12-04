@@ -77,22 +77,6 @@ export function SubscriptionsSection() {
             <h4 className="text-sm font-medium mb-3">Your Features</h4>
             <div className="space-y-2">
               <div className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm">Training Programs</p>
-                  <p className="text-xs text-muted-foreground">Follow trainer-assigned programs</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm">Workout Logging</p>
-                  <p className="text-xs text-muted-foreground">Track your exercises and progress</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-2">
                 {isPro ? (
                   <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                 ) : (
@@ -105,18 +89,6 @@ export function SubscriptionsSection() {
                       ? 'Unlimited AI chat during workouts'
                       : `${Math.max(0, 5 - dailyUsage)} free requests/day remaining`}
                   </p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-2">
-                {isPro ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                ) : (
-                  <Sparkles className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                )}
-                <div>
-                  <p className="text-sm">Form Analysis {!isPro && '(AI Plan)'}</p>
-                  <p className="text-xs text-muted-foreground">AI-powered form checking with Vision</p>
                 </div>
               </div>
               
