@@ -54,6 +54,8 @@ const PricingSection = () => {
     t('pricing.features.programsAnalytics'),
     t('pricing.features.exerciseList'),
     t('pricing.features.exerciseManagement'),
+    t('pricing.features.cashPayments'),
+    t('pricing.features.paymentInstallments'),
   ];
 
   const proFeatures = [
