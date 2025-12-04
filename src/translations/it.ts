@@ -438,5 +438,35 @@ export const it = {
   'messageAutomation.toast.ruleCreated': 'Regola di automazione creata!',
 
   // Loading
-  'messageAutomation.loading': 'Caricamento automazione messaggi...'
+  'messageAutomation.loading': 'Caricamento automazione messaggi...',
+
+  // AI Pricing Section
+  'aiPricing.title': 'Sblocca le Funzionalità AI',
+  'aiPricing.subtitle': 'Migliora la tua esperienza con funzionalità AI avanzate a soli €1,99/mese',
+  
+  // Client AI
+  'aiPricing.client.title': 'Piano AI',
+  'aiPricing.client.badge': 'Per Clienti',
+  'aiPricing.client.price': '€1,99',
+  'aiPricing.client.period': '/mese',
+  'aiPricing.client.description': 'Coaching AI illimitato e funzionalità avanzate',
+  'aiPricing.client.features.trainingPrograms': 'Programmi di Allenamento',
+  'aiPricing.client.features.workoutLogging': 'Registro Allenamenti',
+  'aiPricing.client.features.aiWorkoutCoach': 'AI Workout Coach',
+  'aiPricing.client.features.formAnalysis': 'Analisi della Forma',
+  'aiPricing.client.features.exerciseDemos': 'Demo Esercizi',
+  'aiPricing.client.features.advancedInsights': 'Insights Allenamento Avanzati',
+  'aiPricing.client.cta': 'Scopri di Più',
+
+  // Trainer AI Plus
+  'aiPricing.trainer.title': 'AI Plus',
+  'aiPricing.trainer.badge': 'Per Trainer',
+  'aiPricing.trainer.price': '€1,99',
+  'aiPricing.trainer.period': '/mese',
+  'aiPricing.trainer.description': 'Accesso completo a tutte le funzionalità AI',
+  'aiPricing.trainer.features.businessInsights': 'AI Business Insights',
+  'aiPricing.trainer.features.chatAssistant': 'AI Chat Assistant (Business)',
+  'aiPricing.trainer.features.clientAnalytics': 'AI Client Analytics',
+  'aiPricing.trainer.features.smartRecommendations': 'Raccomandazioni Intelligenti',
+  'aiPricing.trainer.cta': 'Scopri di Più'
 };
