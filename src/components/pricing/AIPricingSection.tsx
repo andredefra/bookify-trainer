@@ -8,16 +8,37 @@ const AIPricingSection = () => {
   const { t } = useLanguage();
 
   const clientFeatures = [
-    t('aiPricing.client.features.aiWorkoutCoach'),
-    t('aiPricing.client.features.exerciseDemos'),
-    t('aiPricing.client.features.advancedInsights'),
+    {
+      name: t('aiPricing.client.features.aiWorkoutCoach'),
+      description: "Real-time guidance and tips during your workouts"
+    },
+    {
+      name: t('aiPricing.client.features.exerciseDemos'),
+      description: "AI-generated visual demonstrations for any exercise"
+    },
+    {
+      name: t('aiPricing.client.features.advancedInsights'),
+      description: "Deep analytics on your progress and personalized recommendations"
+    },
   ];
 
   const trainerFeatures = [
-    t('aiPricing.trainer.features.businessInsights'),
-    t('aiPricing.trainer.features.chatAssistant'),
-    t('aiPricing.trainer.features.clientAnalytics'),
-    t('aiPricing.trainer.features.smartRecommendations'),
+    {
+      name: t('aiPricing.trainer.features.businessInsights'),
+      description: "Revenue forecasts, retention analysis and growth opportunities"
+    },
+    {
+      name: t('aiPricing.trainer.features.chatAssistant'),
+      description: "AI assistant for client questions and content creation"
+    },
+    {
+      name: t('aiPricing.trainer.features.clientAnalytics'),
+      description: "Detailed performance tracking and progress reports"
+    },
+    {
+      name: t('aiPricing.trainer.features.smartRecommendations'),
+      description: "Personalized program suggestions based on client data"
+    },
   ];
 
   return (
@@ -36,7 +57,7 @@ const AIPricingSection = () => {
         {/* Two cards side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Client AI Plan Card */}
-          <Card className="relative overflow-hidden border-2 border-amber-200/50 bg-gradient-to-br from-amber-50/50 to-orange-50/30 reveal">
+          <Card className="relative overflow-hidden border-2 border-amber-200/50 bg-gradient-to-br from-amber-50/50 to-orange-50/30 reveal flex flex-col h-full">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-2 bg-amber-100 rounded-lg">
@@ -59,12 +80,15 @@ const AIPricingSection = () => {
               </p>
             </CardHeader>
             
-            <CardContent>
-              <ul className="space-y-3">
+            <CardContent className="flex-1 flex flex-col">
+              <ul className="space-y-3 flex-1">
                 {clientFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium">{feature.name}</span>
+                      <p className="text-xs text-muted-foreground">{feature.description}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -79,7 +103,7 @@ const AIPricingSection = () => {
           </Card>
 
           {/* Trainer AI Plus Card */}
-          <Card className="relative overflow-hidden border-2 border-violet-200/50 bg-gradient-to-br from-violet-50/50 to-purple-50/30 reveal reveal-delay-1">
+          <Card className="relative overflow-hidden border-2 border-violet-200/50 bg-gradient-to-br from-violet-50/50 to-purple-50/30 reveal reveal-delay-1 flex flex-col h-full">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-2 bg-violet-100 rounded-lg">
@@ -102,12 +126,15 @@ const AIPricingSection = () => {
               </p>
             </CardHeader>
             
-            <CardContent>
-              <ul className="space-y-3">
+            <CardContent className="flex-1 flex flex-col">
+              <ul className="space-y-3 flex-1">
                 {trainerFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-sm font-medium">{feature.name}</span>
+                      <p className="text-xs text-muted-foreground">{feature.description}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
