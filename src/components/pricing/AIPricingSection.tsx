@@ -8,9 +8,7 @@ const AIPricingSection = () => {
   const { t } = useLanguage();
 
   const clientFeatures = [
-    t('aiPricing.client.features.trainingPrograms'),
     t('aiPricing.client.features.aiWorkoutCoach'),
-    t('aiPricing.client.features.formAnalysis'),
     t('aiPricing.client.features.exerciseDemos'),
     t('aiPricing.client.features.advancedInsights'),
   ];
