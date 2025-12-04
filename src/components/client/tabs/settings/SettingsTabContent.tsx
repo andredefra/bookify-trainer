@@ -84,7 +84,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
                 activeTab === "mygym" ? "bg-primary/5 text-primary border-primary md:border-l-2 md:border-t-0" : ""
               } md:border-l-2 md:border-transparent whitespace-nowrap`}
             >
-              <span className="flex-1">My Gym</span>
+              <span className="flex-1">My Gym or Studio</span>
             </button>
             <button
               onClick={() => setActiveTab("notifications")}
@@ -114,7 +114,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             {activeTab === "payments" && "Payment Settings"}
             {activeTab === "preferences" && "Preferences"}
             {activeTab === "integrations" && "App Integrations"}
-            {activeTab === "mygym" && "My Gym"}
+            {activeTab === "mygym" && "My Gym or Studio"}
             {activeTab === "notifications" && "Notification Settings"}
             {activeTab === "subscriptions" && "Subscription & Billing"}
           </h2>
@@ -123,7 +123,7 @@ export function SettingsTabContent({ user, goals, activeSection }: SettingsTabCo
             {activeTab === "payments" && "Manage your payment methods"}
             {activeTab === "preferences" && "Customize your fitness goals and preferences"}
             {activeTab === "integrations" && "Connect with your favorite fitness apps"}
-            {activeTab === "mygym" && "Connect to your gym and manage your gym membership"}
+            {activeTab === "mygym" && "Manage your membership and sessions"}
             {activeTab === "notifications" && "Choose which notifications you want to receive"}
             {activeTab === "subscriptions" && "Manage your subscription and AI features"}
           </p>
