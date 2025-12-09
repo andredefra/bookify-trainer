@@ -204,6 +204,134 @@ export type Database = {
         }
         Relationships: []
       }
+      check_in_settings: {
+        Row: {
+          client_id: string
+          created_at: string
+          custom_questions: Json | null
+          enabled: boolean
+          frequency: string
+          id: string
+          include_measurements: boolean
+          include_mood: boolean
+          include_notes: boolean
+          include_photos: boolean
+          include_weight: boolean
+          reminder_days_before: number | null
+          reminder_time: string | null
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          custom_questions?: Json | null
+          enabled?: boolean
+          frequency?: string
+          id?: string
+          include_measurements?: boolean
+          include_mood?: boolean
+          include_notes?: boolean
+          include_photos?: boolean
+          include_weight?: boolean
+          reminder_days_before?: number | null
+          reminder_time?: string | null
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          custom_questions?: Json | null
+          enabled?: boolean
+          frequency?: string
+          id?: string
+          include_measurements?: boolean
+          include_mood?: boolean
+          include_notes?: boolean
+          include_photos?: boolean
+          include_weight?: boolean
+          reminder_days_before?: number | null
+          reminder_time?: string | null
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      check_in_submissions: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          created_at: string
+          custom_answers: Json | null
+          due_date: string
+          energy_level: number | null
+          id: string
+          measurements: Json | null
+          mood_rating: number | null
+          notes: string | null
+          photos: Json | null
+          settings_id: string
+          sleep_quality: number | null
+          status: string
+          trainer_feedback: string | null
+          trainer_id: string
+          trainer_reviewed_at: string | null
+          updated_at: string
+          weight: number | null
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          created_at?: string
+          custom_answers?: Json | null
+          due_date: string
+          energy_level?: number | null
+          id?: string
+          measurements?: Json | null
+          mood_rating?: number | null
+          notes?: string | null
+          photos?: Json | null
+          settings_id: string
+          sleep_quality?: number | null
+          status?: string
+          trainer_feedback?: string | null
+          trainer_id: string
+          trainer_reviewed_at?: string | null
+          updated_at?: string
+          weight?: number | null
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          created_at?: string
+          custom_answers?: Json | null
+          due_date?: string
+          energy_level?: number | null
+          id?: string
+          measurements?: Json | null
+          mood_rating?: number | null
+          notes?: string | null
+          photos?: Json | null
+          settings_id?: string
+          sleep_quality?: number | null
+          status?: string
+          trainer_feedback?: string | null
+          trainer_id?: string
+          trainer_reviewed_at?: string | null
+          updated_at?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "check_in_submissions_settings_id_fkey"
+            columns: ["settings_id"]
+            isOneToOne: false
+            referencedRelation: "check_in_settings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_invitations: {
         Row: {
           client_email: string
