@@ -86,6 +86,8 @@ export function ClientProfileTabContent({
             height: mockClientDetails.height,
             bodyFat: mockClientDetails.bodyFat
           }}
+          clientId="00000000-0000-0000-0000-000000000002"
+          clientName={mockClientDetails.name}
         />
       </TabsContent>
       
