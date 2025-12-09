@@ -43,6 +43,7 @@ export function MetricsTab({
   clientName = "Client"
 }: MetricsTabProps) {
   const [showConfigureDialog, setShowConfigureDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState("metrics");
   const { settings } = useCheckInSettings(clientId);
   const { pendingReview } = useCheckInSubmissions(clientId);
   
@@ -81,7 +82,7 @@ export function MetricsTab({
                 <Settings2 className="h-4 w-4 mr-2" />
                 Configure Check-ins
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {/* TODO: Open history */}}>
+              <DropdownMenuItem onClick={() => setActiveTab("check-ins")}>
                 <History className="h-4 w-4 mr-2" />
                 View Check-in History
               </DropdownMenuItem>
@@ -89,7 +90,7 @@ export function MetricsTab({
           </DropdownMenu>
         </div>
 
-        <Tabs defaultValue="metrics" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="metrics" className="text-xs">
               <BarChart3 className="h-3.5 w-3.5 mr-1.5" />
