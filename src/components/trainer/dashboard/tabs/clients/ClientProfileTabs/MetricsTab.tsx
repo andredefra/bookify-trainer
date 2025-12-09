@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +12,17 @@ import { Badge } from "@/components/ui/badge";
 import { MetricsChart } from "./metrics/MetricsChart";
 import { RecentMeasurements } from "./metrics/RecentMeasurements";
 import { ConfigureCheckInsDialog } from "./metrics/ConfigureCheckInsDialog";
+import { CheckInHistorySection } from "./metrics/CheckInHistorySection";
 import { useCheckInSettings } from "@/hooks/useCheckInSettings";
+import { useCheckInSubmissions } from "@/hooks/useCheckInSubmissions";
 import { 
   Plus, 
   ChevronDown, 
   ClipboardList, 
   CalendarCheck, 
   History,
-  Settings2
+  Settings2,
+  BarChart3
 } from "lucide-react";
 
 interface MetricsTabProps {
@@ -40,6 +44,7 @@ export function MetricsTab({
 }: MetricsTabProps) {
   const [showConfigureDialog, setShowConfigureDialog] = useState(false);
   const { settings } = useCheckInSettings(clientId);
+  const { pendingReview } = useCheckInSubmissions(clientId);
   
   const frequencyLabel = settings?.frequency 
     ? settings.frequency.charAt(0).toUpperCase() + settings.frequency.slice(1)
@@ -50,7 +55,7 @@ export function MetricsTab({
       <CardContent className="pt-6">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium">Body Metrics</h3>
+            <h3 className="text-sm font-medium">Body Metrics & Check-ins</h3>
             {settings?.enabled && (
               <Badge variant="secondary" className="text-xs">
                 <CalendarCheck className="h-3 w-3 mr-1" />
@@ -83,12 +88,36 @@ export function MetricsTab({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        
-        <MetricsChart />
-        <RecentMeasurements 
-          searchQuery={searchQuery}
-          clientMetrics={clientMetrics}
-        />
+
+        <Tabs defaultValue="metrics" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsTrigger value="metrics" className="text-xs">
+              <BarChart3 className="h-3.5 w-3.5 mr-1.5" />
+              Metrics
+            </TabsTrigger>
+            <TabsTrigger value="check-ins" className="text-xs">
+              <ClipboardList className="h-3.5 w-3.5 mr-1.5" />
+              Check-ins
+              {pendingReview.length > 0 && (
+                <Badge variant="default" className="ml-1.5 h-5 px-1.5 bg-blue-500">
+                  {pendingReview.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="metrics" className="mt-0">
+            <MetricsChart />
+            <RecentMeasurements 
+              searchQuery={searchQuery}
+              clientMetrics={clientMetrics}
+            />
+          </TabsContent>
+
+          <TabsContent value="check-ins" className="mt-0">
+            <CheckInHistorySection clientId={clientId} />
+          </TabsContent>
+        </Tabs>
         
         <ConfigureCheckInsDialog
           open={showConfigureDialog}
