@@ -13,6 +13,7 @@ import { MetricsChart } from "./metrics/MetricsChart";
 import { RecentMeasurements } from "./metrics/RecentMeasurements";
 import { ConfigureCheckInsDialog } from "./metrics/ConfigureCheckInsDialog";
 import { CheckInHistorySection } from "./metrics/CheckInHistorySection";
+import { ManualCheckInDialog } from "./metrics/ManualCheckInDialog";
 import { useCheckInSettings } from "@/hooks/useCheckInSettings";
 import { useCheckInSubmissions } from "@/hooks/useCheckInSubmissions";
 import { 
@@ -20,7 +21,6 @@ import {
   ChevronDown, 
   ClipboardList, 
   CalendarCheck, 
-  History,
   Settings2,
   BarChart3
 } from "lucide-react";
@@ -43,6 +43,7 @@ export function MetricsTab({
   clientName = "Client"
 }: MetricsTabProps) {
   const [showConfigureDialog, setShowConfigureDialog] = useState(false);
+  const [showManualLogDialog, setShowManualLogDialog] = useState(false);
   const [activeTab, setActiveTab] = useState("metrics");
   const { settings } = useCheckInSettings(clientId);
   const { pendingReview } = useCheckInSubmissions(clientId);
@@ -74,17 +75,13 @@ export function MetricsTab({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => {/* TODO: Open manual log dialog */}}>
+              <DropdownMenuItem onClick={() => setShowManualLogDialog(true)}>
                 <ClipboardList className="h-4 w-4 mr-2" />
                 Log Manually
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setShowConfigureDialog(true)}>
                 <Settings2 className="h-4 w-4 mr-2" />
                 Configure Check-ins
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setActiveTab("check-ins")}>
-                <History className="h-4 w-4 mr-2" />
-                View Check-in History
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -123,6 +120,13 @@ export function MetricsTab({
         <ConfigureCheckInsDialog
           open={showConfigureDialog}
           onOpenChange={setShowConfigureDialog}
+          clientId={clientId}
+          clientName={clientName}
+        />
+        
+        <ManualCheckInDialog
+          open={showManualLogDialog}
+          onOpenChange={setShowManualLogDialog}
           clientId={clientId}
           clientName={clientName}
         />
