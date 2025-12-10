@@ -1,6 +1,8 @@
 
 import { z } from "zod";
 
+export type InvoiceStatus = 'none' | 'draft' | 'uploaded' | 'sent_to_client';
+
 export interface TransactionType {
   id: number;
   client: string;
@@ -21,6 +23,11 @@ export interface TransactionType {
   dueDate?: string;
   isInstallment?: boolean;
   installmentStatus?: 'scheduled' | 'pending' | 'paid' | 'overdue';
+  // Invoice workflow fields
+  invoiceStatus?: InvoiceStatus;
+  invoiceUrl?: string;
+  invoiceRequestedByClient?: boolean;
+  invoiceRequestedAt?: string;
 }
 
 // Form validation schema
