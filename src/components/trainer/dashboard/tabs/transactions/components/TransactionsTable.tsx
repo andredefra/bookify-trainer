@@ -11,11 +11,27 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Transaction } from "../types/TransactionHistoryTypes";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Transaction, InvoiceStatus } from "../types/TransactionHistoryTypes";
 import { PaymentMethodBadge } from "./PaymentMethodBadge";
 import { TransactionStatusBadge } from "./TransactionStatusBadge";
 import { CashPaymentConfirmationDialog } from "./CashPaymentConfirmationDialog";
-import { FileText, CheckCircle } from "lucide-react";
+import { InvoiceUploadDialog } from "./InvoiceUploadDialog";
+import { 
+  FileText, 
+  CheckCircle, 
+  FileEdit, 
+  Check, 
+  Paperclip, 
+  Send, 
+  ChevronDown,
+  Upload
+} from "lucide-react";
 import { toast } from "sonner";
 
 // Helper function to check if payment is complete
@@ -35,6 +51,7 @@ interface TransactionsTableProps {
   onRejectCashPayment?: (transactionId: number) => void;
   onMarkNoShow?: (transactionId: number) => void;
   onToggleInvoice?: (transactionId: number) => void;
+  onUpdateInvoiceStatus?: (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => void;
   selectedTransactions?: Set<number>;
   onToggleSelection?: (transactionId: number) => void;
 }
@@ -45,11 +62,14 @@ export function TransactionsTable({
   onRejectCashPayment,
   onMarkNoShow,
   onToggleInvoice,
+  onUpdateInvoiceStatus,
   selectedTransactions = new Set(),
   onToggleSelection
 }: TransactionsTableProps) {
   const [selectedCashTransaction, setSelectedCashTransaction] = useState<Transaction | null>(null);
   const [cashDialogOpen, setCashDialogOpen] = useState(false);
+  const [showInvoiceUploadDialog, setShowInvoiceUploadDialog] = useState(false);
+  const [selectedTransactionForInvoice, setSelectedTransactionForInvoice] = useState<Transaction | null>(null);
 
   const handleOpenCashDialog = (transaction: Transaction) => {
     setSelectedCashTransaction(transaction);
@@ -68,21 +88,60 @@ export function TransactionsTable({
     onMarkNoShow?.(transactionId);
   };
 
-  const handleSendInvoice = (transaction: Transaction) => {
-    // Open popup/modal that redirects to the integrated invoice partner
-    const invoiceUrl = `https://invoice-partner.com/create?amount=${transaction.amount}&client=${encodeURIComponent(transaction.client)}&description=${encodeURIComponent(transaction.name)}`;
+  // Invoice workflow handlers
+  const handleOpenInvoiceSystem = (transaction: Transaction) => {
+    // Simula apertura sistema fatturazione esterno e passa a draft
+    onUpdateInvoiceStatus?.(transaction.id, 'draft');
+    toast.info("Invoice marked as draft. Complete it in your invoicing system.");
+  };
+
+  const handleMarkDone = (transactionId: number) => {
+    onUpdateInvoiceStatus?.(transactionId, 'uploaded');
+    toast.success("Invoice marked as done");
+  };
+
+  const handleDoneAndUpload = (transaction: Transaction) => {
+    setSelectedTransactionForInvoice(transaction);
+    setShowInvoiceUploadDialog(true);
+  };
+
+  const handleDoneAndSend = (transaction: Transaction) => {
+    setSelectedTransactionForInvoice(transaction);
+    setShowInvoiceUploadDialog(true);
+  };
+
+  const handleSendToClient = (transaction: Transaction) => {
+    setSelectedTransactionForInvoice(transaction);
+    setShowInvoiceUploadDialog(true);
+  };
+
+  const handleInvoiceUploadAndSend = (transactionId: number, file: File, sendViaMessages: boolean, sendEmailNotification: boolean) => {
+    // In production: upload file to Supabase Storage
+    const mockInvoiceUrl = URL.createObjectURL(file);
     
-    // Open in new window/tab
-    window.open(invoiceUrl, 'invoice-popup', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    onUpdateInvoiceStatus?.(transactionId, 'sent_to_client', mockInvoiceUrl);
     
-    // Mark invoice as sent
-    if (onToggleInvoice) {
-      onToggleInvoice(transaction.id);
+    if (sendViaMessages) {
+      toast.success("Invoice sent to client via messages");
+    }
+    if (sendEmailNotification) {
+      toast.success("Email notification sent to client");
     }
     
-    toast.success("Invoice integration opened. Complete the process in the new window.", {
-      duration: 4000
-    });
+    setShowInvoiceUploadDialog(false);
+    setSelectedTransactionForInvoice(null);
+  };
+
+  // Get invoice status from transaction (with fallback for old data)
+  const getInvoiceStatus = (transaction: Transaction): InvoiceStatus => {
+    if (transaction.invoiceStatus) {
+      return transaction.invoiceStatus;
+    }
+    // Fallback for legacy data
+    if (transaction.invoiceSent) {
+      return 'sent_to_client';
+    }
+    return 'none';
   };
 
   return (
@@ -127,6 +186,7 @@ export function TransactionsTable({
               transactions.map((transaction) => {
                 const isSelected = selectedTransactions.has(transaction.id);
                 const canSelect = transaction.status === 'paid' && !transaction.invoiceSent && isPaymentComplete(transaction);
+                const invoiceStatus = getInvoiceStatus(transaction);
                 
                 return (
                   <TableRow key={transaction.id} className={isSelected ? 'bg-primary/5' : ''}>
@@ -174,26 +234,78 @@ export function TransactionsTable({
                           </Button>
                         )}
                         
-                        {/* Invoice button - only for completed payments */}
+                        {/* INVOICE WORKFLOW - Solo per pagamenti completati */}
                         {transaction.status === 'paid' && isPaymentComplete(transaction) && (
-                          <Button 
-                            variant={transaction.invoiceSent ? "secondary" : "outline"}
-                            size="sm" 
-                            className="h-7 text-xs" 
-                            onClick={() => handleSendInvoice(transaction)}
-                          >
-                            {transaction.invoiceSent ? (
-                              <>
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                Sent
-                              </>
-                            ) : (
-                              <>
+                          <>
+                            {/* Stato: NONE - Nessuna fattura iniziata */}
+                            {invoiceStatus === 'none' && (
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="h-7 text-xs relative"
+                                onClick={() => handleOpenInvoiceSystem(transaction)}
+                              >
                                 <FileText className="h-3 w-3 mr-1" />
                                 Invoice
-                              </>
+                                {transaction.invoiceRequestedByClient && (
+                                  <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-destructive animate-pulse" />
+                                )}
+                              </Button>
                             )}
-                          </Button>
+                            
+                            {/* Stato: DRAFT - Fattura in lavorazione */}
+                            {invoiceStatus === 'draft' && (
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="secondary" size="sm" className="h-7 text-xs">
+                                    <FileEdit className="h-3 w-3 mr-1" />
+                                    Draft
+                                    <ChevronDown className="h-3 w-3 ml-1" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="bg-popover">
+                                  <DropdownMenuItem onClick={() => handleMarkDone(transaction.id)}>
+                                    <Check className="h-4 w-4 mr-2" />
+                                    Done
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleDoneAndUpload(transaction)}>
+                                    <Paperclip className="h-4 w-4 mr-2" />
+                                    Done and Upload
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleDoneAndSend(transaction)}>
+                                    <Send className="h-4 w-4 mr-2" />
+                                    Done and Send to Client
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            )}
+                            
+                            {/* Stato: UPLOADED - Caricata ma non inviata */}
+                            {invoiceStatus === 'uploaded' && (
+                              <Button 
+                                variant="secondary" 
+                                size="sm" 
+                                className="h-7 text-xs"
+                                onClick={() => handleSendToClient(transaction)}
+                              >
+                                <Upload className="h-3 w-3 mr-1" />
+                                Send to Client
+                              </Button>
+                            )}
+                            
+                            {/* Stato: SENT - Inviata al cliente */}
+                            {invoiceStatus === 'sent_to_client' && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                disabled 
+                                className="h-7 text-xs text-green-600"
+                              >
+                                <CheckCircle className="h-3 w-3 mr-1" />
+                                Sent
+                              </Button>
+                            )}
+                          </>
                         )}
                       </div>
                     </TableCell>
@@ -219,6 +331,14 @@ export function TransactionsTable({
         onConfirm={handleConfirmCash}
         onReject={handleRejectCash}
         onNoShow={handleNoShow}
+      />
+
+      {/* Invoice Upload Dialog */}
+      <InvoiceUploadDialog
+        open={showInvoiceUploadDialog}
+        onOpenChange={setShowInvoiceUploadDialog}
+        transaction={selectedTransactionForInvoice}
+        onUploadAndSend={handleInvoiceUploadAndSend}
       />
     </>
   );
