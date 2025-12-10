@@ -31,8 +31,7 @@ import {
   Check, 
   Paperclip, 
   Send, 
-  ChevronDown,
-  Upload
+  ChevronDown
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -104,8 +103,9 @@ export function TransactionsTable({
   };
 
   const handleMarkDone = (transactionId: number) => {
-    onUpdateInvoiceStatus?.(transactionId, 'uploaded');
-    toast.success("Invoice marked as done");
+    // "Done" marks invoice as sent without PDF
+    onUpdateInvoiceStatus?.(transactionId, 'sent_to_client');
+    toast.success("Invoice marked as sent");
   };
 
   const handleDoneAndUpload = (transaction: Transaction) => {
@@ -114,11 +114,6 @@ export function TransactionsTable({
   };
 
   const handleDoneAndSend = (transaction: Transaction) => {
-    setSelectedTransactionForInvoice(transaction);
-    setShowInvoiceUploadDialog(true);
-  };
-
-  const handleSendToClient = (transaction: Transaction) => {
     setSelectedTransactionForInvoice(transaction);
     setShowInvoiceUploadDialog(true);
   };
@@ -297,18 +292,6 @@ export function TransactionsTable({
                               </DropdownMenu>
                             )}
                             
-                            {/* Stato: UPLOADED - Caricata ma non inviata */}
-                            {invoiceStatus === 'uploaded' && (
-                              <Button 
-                                variant="secondary" 
-                                size="sm" 
-                                className="h-7 text-xs"
-                                onClick={() => handleSendToClient(transaction)}
-                              >
-                                <Upload className="h-3 w-3 mr-1" />
-                                Send to Client
-                              </Button>
-                            )}
                             
                             {/* Stato: SENT - Cliccabile per vedere dettagli */}
                             {invoiceStatus === 'sent_to_client' && (

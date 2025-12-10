@@ -83,7 +83,7 @@ const initialTransactions: TransactionType[] = [
   // November 2025 - Various invoice states for demo
   { id: 56, client: "Lisa Garcia", type: "Package", name: "Year-End Package (12 sessions)", amount: 480, date: "2025-11-02", status: "paid", paymentMethod: "card", invoiceStatus: "sent_to_client", invoiceUrl: "https://example.com/invoices/56.pdf", invoiceSentAt: "2025-11-03T14:30:00Z", isPackagePayment: true },
   { id: 57, client: "David Kim", type: "Program", name: "Injury Prevention", amount: 95, date: "2025-11-06", status: "paid", paymentMethod: "card", invoiceStatus: "draft" },
-  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceStatus: "uploaded", invoiceUrl: "https://example.com/invoices/58.pdf" },
+  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceStatus: "sent_to_client", invoiceUrl: "https://example.com/invoices/58.pdf", invoiceSentAt: "2025-11-11T10:00:00Z" },
   { id: 59, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-11-14", status: "paid", paymentMethod: "cash", invoiceStatus: "none", invoiceRequestedByClient: true, invoiceRequestedAt: "2025-11-15T10:00:00Z" },
   { id: 60, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-18", status: "paid", paymentMethod: "card", invoiceStatus: "sent_to_client", invoiceUrl: "https://example.com/invoices/60.pdf", invoiceSentAt: "2025-11-19T09:15:00Z" },
   
