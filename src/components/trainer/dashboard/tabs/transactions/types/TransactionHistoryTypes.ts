@@ -1,4 +1,6 @@
 
+export type InvoiceStatus = 'none' | 'draft' | 'uploaded' | 'sent_to_client';
+
 export interface Transaction {
   id: number;
   client: string;
@@ -15,6 +17,11 @@ export interface Transaction {
   dueDate?: string;
   isInstallment?: boolean;
   installmentStatus?: 'scheduled' | 'pending' | 'paid' | 'overdue';
+  // New invoice workflow fields
+  invoiceStatus?: InvoiceStatus;
+  invoiceUrl?: string;
+  invoiceRequestedByClient?: boolean;
+  invoiceRequestedAt?: string;
 }
 
 export interface TransactionHistoryProps {
@@ -23,4 +30,5 @@ export interface TransactionHistoryProps {
   onRejectCashPayment?: (transactionId: number) => void;
   onMarkNoShow?: (transactionId: number) => void;
   onToggleInvoice?: (transactionId: number) => void;
+  onUpdateInvoiceStatus?: (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => void;
 }
