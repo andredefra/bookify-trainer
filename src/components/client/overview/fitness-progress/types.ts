@@ -9,6 +9,10 @@ export interface ProgressItem {
   lastUpdated?: string;
   createdAt?: string;
   logs?: GoalLog[];
+  // Goal source tracking
+  source: 'personal' | 'trainer';
+  trainerId?: string;
+  trainerName?: string;
   // Enhanced goal system fields
   goalType: GoalType;
   targetDate: string;

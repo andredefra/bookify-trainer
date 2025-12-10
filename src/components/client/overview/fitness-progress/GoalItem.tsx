@@ -2,7 +2,8 @@
 import { ProgressItem } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Edit, Trash2, User, Award } from "lucide-react";
 
 interface GoalItemProps {
   item: ProgressItem;
@@ -16,11 +17,26 @@ export function GoalItem({ item, onEdit, onDelete }: GoalItemProps) {
     e.stopPropagation(); // Prevent event bubbling
     onDelete(item);
   };
+
+  const isTrainerGoal = item.source === 'trainer';
   
   return (
-    <div className="space-y-2">
+    <div className={`space-y-2 p-3 rounded-lg border ${isTrainerGoal ? 'border-purple-200 bg-purple-50/50 dark:border-purple-900/30 dark:bg-purple-950/20' : 'border-border bg-background'}`}>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-        <span className="font-medium">{item.goal}</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{item.goal}</span>
+          {isTrainerGoal ? (
+            <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+              <Award className="h-3 w-3 mr-1" />
+              Trainer
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="text-xs">
+              <User className="h-3 w-3 mr-1" />
+              Personal
+            </Badge>
+          )}
+        </div>
         <div className="flex flex-row items-center justify-between sm:justify-end gap-2">
           <span className="text-sm text-muted-foreground">
             {item.current} / {item.target} {item.unit}

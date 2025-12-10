@@ -33,7 +33,9 @@ export function AnalyticsTab() {
         goalType: "weight_management",
         targetDate: "2024-06-30",
         createdAt: "2024-03-01",
-        lastUpdated: "2024-03-15"
+        lastUpdated: "2024-03-15",
+        source: "trainer",
+        trainerName: "Sarah Johnson"
       },
       { 
         goal: "Annual step goal (healthy lifestyle)", 
@@ -44,7 +46,8 @@ export function AnalyticsTab() {
         goalType: "activity_level",
         targetDate: "2024-12-31",
         createdAt: "2024-01-01",
-        lastUpdated: "2024-03-15"
+        lastUpdated: "2024-03-15",
+        source: "personal"
       },
       { 
         goal: "Bench press strength", 
@@ -56,7 +59,9 @@ export function AnalyticsTab() {
         targetDate: "2024-05-31",
         exerciseName: "Bench Press",
         createdAt: "2024-03-01",
-        lastUpdated: "2024-03-15"
+        lastUpdated: "2024-03-15",
+        source: "trainer",
+        trainerName: "Sarah Johnson"
       },
     ];
   };

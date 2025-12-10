@@ -25,6 +25,9 @@ export function useGoalManagement(initialProgressData: ProgressItem[]) {
       targetDate: data.targetDate,
       exerciseId: data.exerciseId,
       frequency: data.frequency,
+      source: data.source || 'personal',
+      trainerId: data.trainerId,
+      trainerName: data.trainerName,
       logs: [{
         id: `log-${Date.now()}`,
         date: currentDate,

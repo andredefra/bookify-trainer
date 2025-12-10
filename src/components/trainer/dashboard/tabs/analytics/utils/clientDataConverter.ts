@@ -48,7 +48,8 @@ export function convertGoalsToProgressItems(client: ClientData): ProgressItem[] 
       goalType: goal.type,
       targetDate: goal.deadline.toISOString().split('T')[0],
       createdAt: goal.createdAt.toISOString().split('T')[0],
-      lastUpdated: new Date().toISOString().split('T')[0]
+      lastUpdated: new Date().toISOString().split('T')[0],
+      source: 'trainer'
     });
   }
   

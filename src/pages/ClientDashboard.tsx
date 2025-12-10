@@ -66,7 +66,9 @@ const ClientDashboard = () => {
       goalType: "weight_management",
       targetDate: "2024-06-30",
       createdAt: "2024-03-01",
-      lastUpdated: "2024-03-15"
+      lastUpdated: "2024-03-15",
+      source: "trainer",
+      trainerName: "Sarah Johnson"
     },
     { 
       goal: "Daily steps target", 
@@ -78,7 +80,8 @@ const ClientDashboard = () => {
       targetDate: "2024-12-31",
       frequency: { value: 10000, period: "daily" },
       createdAt: "2024-03-01",
-      lastUpdated: "2024-03-15"
+      lastUpdated: "2024-03-15",
+      source: "personal"
     },
     { 
       goal: "Bench press strength", 
@@ -90,7 +93,9 @@ const ClientDashboard = () => {
       targetDate: "2024-05-31",
       exerciseName: "Bench Press",
       createdAt: "2024-03-01",
-      lastUpdated: "2024-03-15"
+      lastUpdated: "2024-03-15",
+      source: "trainer",
+      trainerName: "Sarah Johnson"
     },
   ];
 
