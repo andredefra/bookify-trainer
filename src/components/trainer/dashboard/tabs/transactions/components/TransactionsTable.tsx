@@ -22,6 +22,7 @@ import { PaymentMethodBadge } from "./PaymentMethodBadge";
 import { TransactionStatusBadge } from "./TransactionStatusBadge";
 import { CashPaymentConfirmationDialog } from "./CashPaymentConfirmationDialog";
 import { InvoiceUploadDialog } from "./InvoiceUploadDialog";
+import { InvoiceDetailsDialog } from "./InvoiceDetailsDialog";
 import { 
   FileText, 
   CheckCircle, 
@@ -69,6 +70,7 @@ export function TransactionsTable({
   const [selectedCashTransaction, setSelectedCashTransaction] = useState<Transaction | null>(null);
   const [cashDialogOpen, setCashDialogOpen] = useState(false);
   const [showInvoiceUploadDialog, setShowInvoiceUploadDialog] = useState(false);
+  const [showInvoiceDetailsDialog, setShowInvoiceDetailsDialog] = useState(false);
   const [selectedTransactionForInvoice, setSelectedTransactionForInvoice] = useState<Transaction | null>(null);
 
   const handleOpenCashDialog = (transaction: Transaction) => {
@@ -113,6 +115,15 @@ export function TransactionsTable({
   const handleSendToClient = (transaction: Transaction) => {
     setSelectedTransactionForInvoice(transaction);
     setShowInvoiceUploadDialog(true);
+  };
+
+  const handleViewInvoiceDetails = (transaction: Transaction) => {
+    setSelectedTransactionForInvoice(transaction);
+    setShowInvoiceDetailsDialog(true);
+  };
+
+  const handleResendInvoice = (transactionId: number) => {
+    toast.success("Invoice resent to client");
   };
 
   const handleInvoiceUploadAndSend = (transactionId: number, file: File, sendViaMessages: boolean, sendEmailNotification: boolean) => {
@@ -293,13 +304,13 @@ export function TransactionsTable({
                               </Button>
                             )}
                             
-                            {/* Stato: SENT - Inviata al cliente */}
+                            {/* Stato: SENT - Cliccabile per vedere dettagli */}
                             {invoiceStatus === 'sent_to_client' && (
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
-                                disabled 
-                                className="h-7 text-xs text-green-600"
+                                className="h-7 text-xs text-green-600 hover:text-green-700 hover:bg-green-50"
+                                onClick={() => handleViewInvoiceDetails(transaction)}
                               >
                                 <CheckCircle className="h-3 w-3 mr-1" />
                                 Sent
@@ -339,6 +350,14 @@ export function TransactionsTable({
         onOpenChange={setShowInvoiceUploadDialog}
         transaction={selectedTransactionForInvoice}
         onUploadAndSend={handleInvoiceUploadAndSend}
+      />
+
+      {/* Invoice Details Dialog */}
+      <InvoiceDetailsDialog
+        open={showInvoiceDetailsDialog}
+        onOpenChange={setShowInvoiceDetailsDialog}
+        transaction={selectedTransactionForInvoice}
+        onResend={handleResendInvoice}
       />
     </>
   );

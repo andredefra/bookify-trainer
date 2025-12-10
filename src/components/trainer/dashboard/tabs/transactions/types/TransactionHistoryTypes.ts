@@ -17,11 +17,12 @@ export interface Transaction {
   dueDate?: string;
   isInstallment?: boolean;
   installmentStatus?: 'scheduled' | 'pending' | 'paid' | 'overdue';
-  // New invoice workflow fields
+  // Invoice workflow fields
   invoiceStatus?: InvoiceStatus;
   invoiceUrl?: string;
   invoiceRequestedByClient?: boolean;
   invoiceRequestedAt?: string;
+  invoiceSentAt?: string;
 }
 
 export interface TransactionHistoryProps {

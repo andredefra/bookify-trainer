@@ -28,6 +28,7 @@ export interface TransactionType {
   invoiceUrl?: string;
   invoiceRequestedByClient?: boolean;
   invoiceRequestedAt?: string;
+  invoiceSentAt?: string;
 }
 
 // Form validation schema
