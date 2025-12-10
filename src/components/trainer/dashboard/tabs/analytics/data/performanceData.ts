@@ -37,7 +37,8 @@ function generateGoalAchievementData(): GoalAchievementDataPoint[] {
           goalType: goal.type as any,
           goal: `${goal.type} goal`,
           unit: 'units',
-          progress: (goal.current / goal.target) * 100
+          progress: (goal.current / goal.target) * 100,
+          source: 'trainer' as const
         };
         
         const progressCalc = calculateProgressWithTimeline(mockProgressItem);

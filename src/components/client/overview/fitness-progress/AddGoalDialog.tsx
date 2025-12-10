@@ -59,7 +59,9 @@ export function AddGoalDialog({ open, onOpenChange, onSubmit, onManageGoalTypes 
       frequency: allTemplates[selectedGoalType]?.requiresFrequency ? {
         value: data.frequencyValue,
         period: data.frequencyPeriod
-      } : undefined
+      } : undefined,
+      // Always set as personal goal when client creates it
+      source: 'personal' as const
     };
     
     onSubmit(goalData);

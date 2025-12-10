@@ -65,7 +65,9 @@ const progressData: ProgressItem[] = [
     goalType: "weight_management",
     targetDate: "2024-06-30",
     createdAt: "2024-03-01",
-    lastUpdated: "2024-03-15"
+    lastUpdated: "2024-03-15",
+    source: "trainer",
+    trainerName: "John Doe"
   },
   { 
     goal: "Daily steps target", 
@@ -77,7 +79,8 @@ const progressData: ProgressItem[] = [
     targetDate: "2024-12-31",
     frequency: { value: 10000, period: "daily" },
     createdAt: "2024-03-01",
-    lastUpdated: "2024-03-15"
+    lastUpdated: "2024-03-15",
+    source: "personal"
   }
 ];
 
