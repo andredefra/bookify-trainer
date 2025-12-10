@@ -11,9 +11,9 @@ import { useGymConnection } from "@/hooks/useGymConnection";
 
 // Mock data for payment history
 const paymentHistory = [
-  { id: 1, trainer: "Sarah Johnson", amount: 50, date: "2023-06-15", type: "Session" },
-  { id: 2, trainer: "Sarah Johnson", amount: 45, date: "2023-06-08", type: "Session" },
-  { id: 3, trainer: "Alex Thompson", amount: 120, date: "2023-06-01", type: "Program" },
+  { id: 1, trainer: "Sarah Johnson", amount: 50, date: "2023-06-15", type: "Session", invoiceSent: true },
+  { id: 2, trainer: "Sarah Johnson", amount: 45, date: "2023-06-08", type: "Session", invoiceSent: false },
+  { id: 3, trainer: "Alex Thompson", amount: 120, date: "2023-06-01", type: "Program", invoiceSent: true, refundStatus: 'pending' as const },
 ];
 
 const myTrainers = [
