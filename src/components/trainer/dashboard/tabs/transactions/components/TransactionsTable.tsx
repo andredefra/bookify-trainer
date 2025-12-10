@@ -23,6 +23,7 @@ import { TransactionStatusBadge } from "./TransactionStatusBadge";
 import { CashPaymentConfirmationDialog } from "./CashPaymentConfirmationDialog";
 import { InvoiceUploadDialog } from "./InvoiceUploadDialog";
 import { InvoiceDetailsDialog } from "./InvoiceDetailsDialog";
+import { OpenInvoiceSystemDialog } from "./OpenInvoiceSystemDialog";
 import { 
   FileText, 
   CheckCircle, 
@@ -71,6 +72,7 @@ export function TransactionsTable({
   const [cashDialogOpen, setCashDialogOpen] = useState(false);
   const [showInvoiceUploadDialog, setShowInvoiceUploadDialog] = useState(false);
   const [showInvoiceDetailsDialog, setShowInvoiceDetailsDialog] = useState(false);
+  const [showOpenInvoiceDialog, setShowOpenInvoiceDialog] = useState(false);
   const [selectedTransactionForInvoice, setSelectedTransactionForInvoice] = useState<Transaction | null>(null);
 
   const handleOpenCashDialog = (transaction: Transaction) => {
@@ -92,8 +94,12 @@ export function TransactionsTable({
 
   // Invoice workflow handlers
   const handleOpenInvoiceSystem = (transaction: Transaction) => {
-    // Simula apertura sistema fatturazione esterno e passa a draft
-    onUpdateInvoiceStatus?.(transaction.id, 'draft');
+    setSelectedTransactionForInvoice(transaction);
+    setShowOpenInvoiceDialog(true);
+  };
+
+  const handleCreateDraft = (transactionId: number) => {
+    onUpdateInvoiceStatus?.(transactionId, 'draft');
     toast.info("Invoice marked as draft. Complete it in your invoicing system.");
   };
 
@@ -358,6 +364,14 @@ export function TransactionsTable({
         onOpenChange={setShowInvoiceDetailsDialog}
         transaction={selectedTransactionForInvoice}
         onResend={handleResendInvoice}
+      />
+
+      {/* Open Invoice System Dialog */}
+      <OpenInvoiceSystemDialog
+        open={showOpenInvoiceDialog}
+        onOpenChange={setShowOpenInvoiceDialog}
+        transaction={selectedTransactionForInvoice}
+        onCreateDraft={handleCreateDraft}
       />
     </>
   );
