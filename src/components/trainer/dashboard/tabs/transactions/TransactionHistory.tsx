@@ -9,6 +9,7 @@ export function TransactionHistory() {
     handleRejectCashPayment,
     handleMarkNoShow,
     handleToggleInvoice,
+    handleUpdateInvoiceStatus,
     selectedTransactions,
     setSelectedTransactions
   } = useTransactions();
@@ -30,6 +31,7 @@ export function TransactionHistory() {
       onRejectCashPayment={handleRejectCashPayment}
       onMarkNoShow={handleMarkNoShow}
       onToggleInvoice={handleToggleInvoice}
+      onUpdateInvoiceStatus={handleUpdateInvoiceStatus}
       selectedTransactions={selectedTransactions}
       onToggleSelection={handleToggleSelection}
     />

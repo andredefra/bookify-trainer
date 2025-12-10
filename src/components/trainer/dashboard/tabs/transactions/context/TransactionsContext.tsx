@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, ReactNode } from "react";
-import { TransactionType } from "../types/transactionTypes";
+import { TransactionType, InvoiceStatus } from "../types/transactionTypes";
 import { ClientSummary, ClientData } from "../types/TransactionsTabTypes";
 import { toast } from "sonner";
 
@@ -80,16 +80,16 @@ const initialTransactions: TransactionType[] = [
   { id: 54, client: "Olivia Chen", type: "Session", name: "Personal Training", amount: 40, date: "2025-10-23", status: "paid", paymentMethod: "card", invoiceSent: false },
   { id: 55, client: "Mike Peterson", type: "Session", name: "Personal Training", amount: 45, date: "2025-10-28", status: "paid", paymentMethod: "cash", invoiceSent: false },
   
-  // November 2025
-  { id: 56, client: "Lisa Garcia", type: "Package", name: "Year-End Package (12 sessions)", amount: 480, date: "2025-11-02", status: "paid", paymentMethod: "card", invoiceSent: true, isPackagePayment: true },
-  { id: 57, client: "David Kim", type: "Program", name: "Injury Prevention", amount: 95, date: "2025-11-06", status: "paid", paymentMethod: "card", invoiceSent: true },
-  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceSent: true },
-  { id: 59, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-11-14", status: "paid", paymentMethod: "cash", invoiceSent: true },
-  { id: 60, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-18", status: "paid", paymentMethod: "card", invoiceSent: true },
+  // November 2025 - Various invoice states for demo
+  { id: 56, client: "Lisa Garcia", type: "Package", name: "Year-End Package (12 sessions)", amount: 480, date: "2025-11-02", status: "paid", paymentMethod: "card", invoiceStatus: "sent_to_client", invoiceUrl: "https://example.com/invoices/56.pdf", invoiceSentAt: "2025-11-03T14:30:00Z", isPackagePayment: true },
+  { id: 57, client: "David Kim", type: "Program", name: "Injury Prevention", amount: 95, date: "2025-11-06", status: "paid", paymentMethod: "card", invoiceStatus: "draft" },
+  { id: 58, client: "Daniel Lee", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-10", status: "paid", paymentMethod: "card", invoiceStatus: "uploaded", invoiceUrl: "https://example.com/invoices/58.pdf" },
+  { id: 59, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-11-14", status: "paid", paymentMethod: "cash", invoiceStatus: "none", invoiceRequestedByClient: true, invoiceRequestedAt: "2025-11-15T10:00:00Z" },
+  { id: 60, client: "James Wilson", type: "Session", name: "Personal Training", amount: 45, date: "2025-11-18", status: "paid", paymentMethod: "card", invoiceStatus: "sent_to_client", invoiceUrl: "https://example.com/invoices/60.pdf", invoiceSentAt: "2025-11-19T09:15:00Z" },
   
-  // December 2025 - Paid transactions
-  { id: 70, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceSent: true },
-  { id: 71, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceSent: true },
+  // December 2025 - Paid transactions (various states)
+  { id: 70, client: "Ryan Murphy", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceStatus: "sent_to_client", invoiceUrl: "https://example.com/invoices/70.pdf", invoiceSentAt: "2025-12-02T11:00:00Z" },
+  { id: 71, client: "Sarah Johnson", type: "Session", name: "Personal Training", amount: 45, date: "2025-12-01", status: "paid", paymentMethod: "card", invoiceStatus: "none" },
   
   // December 2025 - CASH payments pending confirmation (for demo: confirm receipt flow)
   { id: 72, client: "Emma Thompson", type: "Session", name: "Personal Training", amount: 50, date: "2025-12-03", status: "pending", paymentMethod: "cash", invoiceSent: false },
@@ -342,6 +342,7 @@ interface TransactionsContextType {
   handleRejectCashPayment: (transactionId: number) => void;
   handleMarkNoShow: (transactionId: number) => void;
   handleToggleInvoice: (transactionId: number) => void;
+  handleUpdateInvoiceStatus: (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => void;
   selectAllPaidTransactions: () => void;
   clearSelection: () => void;
 }
@@ -436,6 +437,21 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const handleUpdateInvoiceStatus = (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => {
+    setTransactions(prev => 
+      prev.map(t => 
+        t.id === transactionId 
+          ? { 
+              ...t, 
+              invoiceStatus: status,
+              invoiceUrl: invoiceUrl || t.invoiceUrl,
+              invoiceSentAt: status === 'sent_to_client' ? new Date().toISOString() : t.invoiceSentAt
+            } 
+          : t
+      )
+    );
+  };
+
   const selectAllPaidTransactions = () => {
     const paidTransactionIds = transactions
       .filter(t => t.status === 'paid' && !t.invoiceSent)
@@ -487,6 +503,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     handleRejectCashPayment,
     handleMarkNoShow,
     handleToggleInvoice,
+    handleUpdateInvoiceStatus,
     selectAllPaidTransactions,
     clearSelection
   };
