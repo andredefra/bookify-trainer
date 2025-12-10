@@ -1,42 +1,33 @@
-
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { PaymentDialog } from "@/components/shared/PaymentDialog";
 import { TrainerItem } from "./trainers/TrainerItem";
 import { BookSessionDialog } from "./trainers/BookSessionDialog";
+import { TrainerPaymentsHistoryDialog } from "./trainers/TrainerPaymentsHistoryDialog";
 import { z } from "zod";
 import { bookingSchema } from "@/components/trainer/BookingForm";
 
 export function TrainerCard() {
   const navigate = useNavigate();
   const [showBookingDialog, setShowBookingDialog] = useState(false);
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [showPaymentHistoryDialog, setShowPaymentHistoryDialog] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState("");
-  
-  // Mock user plan - in a real app, this would come from your user context or state
-  const userPlan = localStorage.getItem('user-plan') || "freemium";
   
   const handleBookSession = (trainerName: string) => {
     setSelectedTrainer(trainerName);
     setShowBookingDialog(true);
   };
   
-  const handlePayTrainer = (trainerName: string) => {
+  const handleViewPayments = (trainerName: string) => {
     setSelectedTrainer(trainerName);
-    setShowPaymentDialog(true);
+    setShowPaymentHistoryDialog(true);
   };
   
   const handleBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
     toast.success(`Session booked successfully with ${selectedTrainer} for ${data.date.toLocaleDateString()} at ${data.time}`);
     setShowBookingDialog(false);
-  };
-  
-  const handlePaymentComplete = () => {
-    toast.success(`Payment to ${selectedTrainer} completed successfully`);
-    setShowPaymentDialog(false);
   };
   
   const handleMessageTrainer = (trainerName: string) => {
@@ -71,7 +62,7 @@ export function TrainerCard() {
               specialty={trainer.specialty}
               image={trainer.image}
               onMessageClick={() => handleMessageTrainer(trainer.name)}
-              onPayClick={() => handlePayTrainer(trainer.name)}
+              onPayClick={() => handleViewPayments(trainer.name)}
               onBookClick={() => handleBookSession(trainer.name)}
             />
           ))}
@@ -111,22 +102,11 @@ export function TrainerCard() {
         onSubmit={handleBookingSubmit}
       />
       
-      {/* Payment Dialog */}
-      <PaymentDialog
-        open={showPaymentDialog}
-        onOpenChange={setShowPaymentDialog}
-        item={{
-          id: `trainer-payment-${Date.now()}`,
-          name: `Payment to ${selectedTrainer}`,
-          price: 45,
-          description: "Direct payment for trainer services",
-          reference: "Direct Payment"
-        }}
-        onPaymentComplete={handlePaymentComplete}
-        title={`Pay ${selectedTrainer}`}
-        description="Complete payment for trainer services"
-        isPremiumFeature={true}
-        userPlan={userPlan}
+      {/* Payment History Dialog */}
+      <TrainerPaymentsHistoryDialog
+        open={showPaymentHistoryDialog}
+        onOpenChange={setShowPaymentHistoryDialog}
+        trainerName={selectedTrainer}
       />
     </Card>
   );
