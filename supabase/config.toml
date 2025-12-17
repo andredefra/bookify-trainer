@@ -40,3 +40,6 @@ verify_jwt = false
 
 [functions.detect-installment]
 verify_jwt = false
+
+[functions.analyze-program-document]
+verify_jwt = true
