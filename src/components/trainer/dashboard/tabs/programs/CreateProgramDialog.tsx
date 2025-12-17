@@ -1,8 +1,12 @@
 
+import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from "@/components/ui/dialog";
 import { ProgramCreationForm } from "@/components/trainer/training/ProgramCreationForm";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Exercise, WorkoutSession } from "@/data/training/types";
+import { ProgramAIAssistant } from "./ProgramAIAssistant";
+import { Button } from "@/components/ui/button";
+import { Bot, PanelRightClose, PanelRightOpen } from "lucide-react";
+import { useTrainerAISubscription } from "@/hooks/useTrainerAISubscription";
 
 interface CreateProgramDialogProps {
   open: boolean;
@@ -28,13 +32,14 @@ export function CreateProgramDialog({
   editMode = false,
   program = null
 }: CreateProgramDialogProps) {
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const { hasAIAccess } = useTrainerAISubscription();
+  
   const handleSend = (programData: any) => {
-    // Here you would handle saving the program data
     console.log('Program data:', programData);
     onOpenChange(false);
   };
 
-  // Create the exercises data structure for the program form
   const generateInitialSessionsWithExercises = (targetFrequency: number, duration: number): WorkoutSession[] => {
     const totalSessions = duration * targetFrequency;
     
@@ -49,7 +54,6 @@ export function CreateProgramDialog({
     return sessions;
   };
 
-  // Calculate targetFrequency based on program type or use default
   const getTargetFrequency = (programType?: string) => {
     switch (programType) {
       case 'strength': return 4;
@@ -62,41 +66,74 @@ export function CreateProgramDialog({
   const targetFrequency = program ? getTargetFrequency(program.type) : 3;
   const duration = program?.duration || 4;
 
+  const handleAddExercisesFromAI = (exercises: Array<{ name: string; sets: number; reps: string }>) => {
+    // This will be implemented to pass exercises to the form
+    console.log('AI suggested exercises:', exercises);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-6xl h-[95vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4 border-b">
-          <DialogTitle className="text-xl font-semibold">
-            {editMode ? 'Edit Program' : 'Create New Program'}
-          </DialogTitle>
-          <DialogDescription className="text-base">
-            {editMode 
-              ? 'Make changes to your existing program and save when done.' 
-              : 'Create a new training program for your clients.'}
-          </DialogDescription>
+      <DialogContent className="w-full max-w-5xl h-[90vh] flex flex-col p-0">
+        <DialogHeader className="px-6 py-4 border-b flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div>
+              <DialogTitle className="text-lg font-semibold">
+                {editMode ? 'Edit Program' : 'Create New Program'}
+              </DialogTitle>
+              <DialogDescription className="text-sm">
+                {editMode 
+                  ? 'Make changes to your existing program.' 
+                  : 'Create a new training program for your clients.'}
+              </DialogDescription>
+            </div>
+            <Button
+              variant={showAIAssistant ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowAIAssistant(!showAIAssistant)}
+              className="gap-2"
+            >
+              <Bot className="h-4 w-4" />
+              AI Assistant
+              {showAIAssistant ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
+            </Button>
+          </div>
         </DialogHeader>
         
-        <div className="flex-1 overflow-auto">
-          <div className="min-w-max p-6">
-            <ProgramCreationForm 
-              clientId="mock-client-id" 
-              clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
-              onSend={handleSend}
-              isPremium={true}
-              initialData={program ? {
-                id: String(program.id),
-                title: program.title,
-                weekStart: "",
-                duration: duration,
-                targetFrequency: targetFrequency,
-                objective: program.objective || "",
-                description: "",
-                isPaid: program.isPaid || false,
-                price: program.price || 0,
-                sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
-              } : undefined}
-            />
+        <div className="flex-1 flex overflow-hidden">
+          {/* Main Form Area */}
+          <div className={`flex-1 overflow-y-auto transition-all duration-300 ${showAIAssistant ? 'pr-0' : ''}`}>
+            <div className="p-6">
+              <ProgramCreationForm 
+                clientId="mock-client-id" 
+                clientName={editMode && program ? `Edit: ${program.title}` : 'New Program'}
+                onSend={handleSend}
+                isPremium={true}
+                initialData={program ? {
+                  id: String(program.id),
+                  title: program.title,
+                  weekStart: "",
+                  duration: duration,
+                  targetFrequency: targetFrequency,
+                  objective: program.objective || "",
+                  description: "",
+                  isPaid: program.isPaid || false,
+                  price: program.price || 0,
+                  sessions: generateInitialSessionsWithExercises(targetFrequency, duration)
+                } : undefined}
+              />
+            </div>
           </div>
+
+          {/* AI Assistant Sidebar */}
+          {showAIAssistant && (
+            <div className="w-[380px] border-l flex-shrink-0 bg-muted/30">
+              <ProgramAIAssistant
+                hasAIAccess={hasAIAccess}
+                onAddExercises={handleAddExercisesFromAI}
+                onClose={() => setShowAIAssistant(false)}
+              />
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
