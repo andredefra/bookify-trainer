@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useTrainerAISubscription } from '@/hooks/useTrainerAISubscription';
 import { TrainerAIUpgradeDialog } from '@/components/trainer/TrainerAIUpgradeDialog';
-import { Brain, Sparkles, Users, BarChart3, MessageCircle, Check, Zap } from 'lucide-react';
+import { Brain, Sparkles, Users, BarChart3, MessageCircle, Check, Zap, Dumbbell } from 'lucide-react';
 
 export function AIFeaturesSection() {
   const { subscription, loading, hasAIAccess, deactivateAIViaMock } = useTrainerAISubscription();
@@ -35,6 +35,11 @@ export function AIFeaturesSection() {
       icon: <MessageCircle className="h-5 w-5" />,
       title: 'AI Chat Assistant (Business)',
       description: 'Ask questions about your business performance and get intelligent insights'
+    },
+    {
+      icon: <Dumbbell className="h-5 w-5" />,
+      title: 'AI Chat Assistant (Training)',
+      description: 'Smart exercise recommendations, import programs from documents, and auto-match exercises with your database'
     },
     {
       icon: <Users className="h-5 w-5" />,
