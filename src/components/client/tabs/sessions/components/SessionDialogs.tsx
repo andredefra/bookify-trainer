@@ -19,6 +19,7 @@ interface SessionDialogsProps {
   selectedSession: SessionItem | null;
   availableTrainers: { id: number; name: string }[];
   onBookingSubmit: (data: z.infer<typeof bookingSchema>) => void;
+  onSessionRequest: (data: z.infer<typeof bookingSchema>) => void;
   onPaymentComplete: () => void;
   onRegister: (session: SessionItem) => void;
 }
@@ -35,6 +36,7 @@ export function SessionDialogs({
   selectedSession,
   availableTrainers,
   onBookingSubmit,
+  onSessionRequest,
   onPaymentComplete,
   onRegister
 }: SessionDialogsProps) {
@@ -49,6 +51,7 @@ export function SessionDialogs({
         setSelectedTrainer={setSelectedTrainer}
         availableTrainers={availableTrainers}
         onSubmit={onBookingSubmit}
+        onRequest={onSessionRequest}
         isMobile={isMobile}
       />
       

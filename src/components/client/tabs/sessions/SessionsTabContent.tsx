@@ -47,7 +47,8 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
     handlePaymentSubmit,
     handleAddToCalendar,
     handleCancelSession,
-    handleBookingSubmit
+    handleBookingSubmit,
+    handleSessionRequest
   } = useSessionContext();
   
   // Handler for joining a video session
@@ -164,6 +165,7 @@ function SessionsTabContentInner({ upcomingSessions }: SessionsTabContentProps) 
           selectedSession={selectedSession}
           availableTrainers={availableTrainers}
           onBookingSubmit={handleBookingSubmit}
+          onSessionRequest={handleSessionRequest}
           onPaymentComplete={handlePaymentSubmit}
           onRegister={handleRegisterForSession}
         />

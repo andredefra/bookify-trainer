@@ -14,6 +14,7 @@ interface BookingDialogProps {
   setSelectedTrainer: (trainer: string) => void;
   availableTrainers: { id: number; name: string }[];
   onSubmit: (data: z.infer<typeof bookingSchema>) => void;
+  onRequest?: (data: z.infer<typeof bookingSchema>) => void;
   isMobile?: boolean;
 }
 
@@ -24,6 +25,7 @@ export function BookingDialog({
   setSelectedTrainer, 
   availableTrainers, 
   onSubmit,
+  onRequest,
   isMobile = false
 }: BookingDialogProps) {
   // Set default trainer if none selected
@@ -69,6 +71,7 @@ export function BookingDialog({
           <BookingForm 
             trainerName={selectedTrainer}
             onSubmit={onSubmit}
+            onRequest={onRequest}
             onCancel={() => onOpenChange(false)}
             isMobile={isMobile}
           />
