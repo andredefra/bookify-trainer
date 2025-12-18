@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, CreditCard, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -24,6 +24,7 @@ interface BookingFormProps {
   trainerName: string;
   onSubmit: (values: BookingFormValues) => void;
   onCancel: () => void;
+  onRequest?: (values: BookingFormValues) => void;
   isMobile?: boolean;
 }
 
@@ -34,7 +35,7 @@ const timeOptions = Array.from({ length: 26 }, (_, i) => {
   return `${hour.toString().padStart(2, '0')}:${minutes}`;
 });
 
-export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false }: BookingFormProps) {
+export function BookingForm({ trainerName, onSubmit, onCancel, onRequest, isMobile = false }: BookingFormProps) {
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -43,6 +44,15 @@ export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false 
       notes: "",
     },
   });
+
+  const handleRequest = () => {
+    const values = form.getValues();
+    if (!values.date || !values.time) {
+      form.trigger();
+      return;
+    }
+    onRequest?.(values);
+  };
 
   return (
     <Form {...form}>
@@ -91,7 +101,7 @@ export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false 
           name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Time</FormLabel>
+              <FormLabel>Time Slot</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
@@ -130,6 +140,14 @@ export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false 
           )}
         />
 
+        {/* Info text for request option */}
+        {onRequest && (
+          <div className="text-xs text-muted-foreground bg-muted/50 rounded-lg p-3 space-y-1">
+            <p><strong>Book & Pay:</strong> Pay now and confirm your session immediately</p>
+            <p><strong>Send Request:</strong> Request this slot - you'll pay after trainer approval</p>
+          </div>
+        )}
+
         <div className={`flex ${isMobile ? "flex-col space-y-2" : "justify-end space-x-2"} pt-4`}>
           <Button 
             type="button" 
@@ -139,11 +157,25 @@ export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false 
           >
             Cancel
           </Button>
+          
+          {onRequest && (
+            <Button 
+              type="button"
+              variant="secondary"
+              onClick={handleRequest}
+              className={isMobile ? "w-full" : ""}
+            >
+              <Send className="h-4 w-4 mr-2" />
+              Send Request
+            </Button>
+          )}
+          
           <Button 
             type="submit"
             className={isMobile ? "w-full" : ""}
           >
-            Book Session
+            <CreditCard className="h-4 w-4 mr-2" />
+            Book & Pay
           </Button>
         </div>
       </form>

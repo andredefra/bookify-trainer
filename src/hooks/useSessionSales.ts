@@ -3,6 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { getCurrentDemoUserId } from '@/utils/demoUserUtils';
 
+export type PaymentMethod = 'cash' | 'card' | 'paypal' | 'klarna';
+export type PaymentStatus = 'pending' | 'paid' | 'rejected' | 'no_show';
+export type InvoiceStatus = 'none' | 'draft' | 'sent_to_client';
+
 export interface SessionSale {
   id: string;
   clientId: string;
@@ -14,8 +18,27 @@ export interface SessionSale {
   sessionType: 'video' | 'in-person';
   price: number;
   purchaseDate: string;
-  requestDate: string;
-  status: 'paid' | 'pending' | 'unpaid';
+  // New payment fields
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  invoiceStatus: InvoiceStatus;
+  invoiceUrl?: string;
+  invoiceSentAt?: string;
+}
+
+export interface SessionParticipant {
+  id: string;
+  sessionId: string;
+  sessionTitle: string;
+  sessionDate: string;
+  participantName: string;
+  participantEmail: string;
+  participantPhone?: string;
+  isExistingClient: boolean;
+  clientId?: string;
+  source: 'gym' | 'marketplace' | 'public_session';
+  checkInTime?: string;
+  addedToCRM: boolean;
 }
 
 export interface SessionRequest {
@@ -46,10 +69,10 @@ export interface SessionSalesData {
   previousMonthRevenue: number;
   quarterlyRevenue: number;
   previousQuarterRevenue: number;
-  pendingPayments: SessionSale[];
-  confirmedSales: SessionSale[];
   allSales: SessionSale[];
+  pendingCashPayments: SessionSale[];
   sessionRequests: SessionRequest[];
+  sessionParticipants: SessionParticipant[];
   totalSalesCount: number;
   loading: boolean;
 }
@@ -94,44 +117,99 @@ const getMockSessionRequests = (): SessionRequest[] => [
   },
 ];
 
-// Mock data for demo mode
-const getMockPendingPayments = (): SessionSale[] => [
+// Mock participants for pipeline view
+const getMockSessionParticipants = (): SessionParticipant[] => [
   {
-    id: 'mock-pending-sess-1',
-    clientId: 'client-1',
-    clientName: 'Sarah Johnson',
-    clientEmail: 'sarah@example.com',
-    sessionId: 'sess-1',
-    sessionTitle: 'Personal Training Session',
-    sessionDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-    sessionType: 'in-person',
-    price: 45.00,
-    purchaseDate: new Date().toISOString(),
-    requestDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'pending',
+    id: 'part-1',
+    sessionId: 'group-sess-1',
+    sessionTitle: 'HIIT Group Class',
+    sessionDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    participantName: 'Marco Verdi',
+    participantEmail: 'marco.verdi@email.com',
+    participantPhone: '+39 333 5551234',
+    isExistingClient: false,
+    source: 'gym',
+    checkInTime: '09:45',
+    addedToCRM: false,
   },
   {
-    id: 'mock-pending-sess-2',
-    clientId: 'client-2',
-    clientName: 'Mike Peterson',
-    clientEmail: 'mike@example.com',
-    sessionId: 'sess-2',
-    sessionTitle: 'HIIT Training',
-    sessionDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-    sessionType: 'video',
-    price: 35.00,
-    purchaseDate: new Date().toISOString(),
-    requestDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'pending',
+    id: 'part-2',
+    sessionId: 'group-sess-1',
+    sessionTitle: 'HIIT Group Class',
+    sessionDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    participantName: 'Lisa Garcia',
+    participantEmail: 'lisa@example.com',
+    isExistingClient: true,
+    clientId: 'client-3',
+    source: 'gym',
+    checkInTime: '09:50',
+    addedToCRM: true,
+  },
+  {
+    id: 'part-3',
+    sessionId: 'group-sess-2',
+    sessionTitle: 'Yoga Morning',
+    sessionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    participantName: 'Anna Bianchi',
+    participantEmail: 'anna.b@email.com',
+    participantPhone: '+39 347 9876543',
+    isExistingClient: false,
+    source: 'marketplace',
+    checkInTime: '07:00',
+    addedToCRM: false,
+  },
+  {
+    id: 'part-4',
+    sessionId: 'group-sess-3',
+    sessionTitle: 'CrossFit Open',
+    sessionDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    participantName: 'Roberto Neri',
+    participantEmail: 'roberto.n@email.com',
+    isExistingClient: false,
+    source: 'public_session',
+    addedToCRM: true,
   },
 ];
 
-const getMockConfirmedSales = (): SessionSale[] => {
+// Mock data for demo mode with payment fields
+const getMockSales = (): SessionSale[] => {
   const now = new Date();
   
   return [
+    // Pending cash payments (recent)
     {
       id: 'mock-sale-sess-1',
+      clientId: 'client-1',
+      clientName: 'Sarah Johnson',
+      clientEmail: 'sarah@example.com',
+      sessionId: 'sess-1',
+      sessionTitle: 'Personal Training Session',
+      sessionDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+      sessionType: 'in-person',
+      price: 45.00,
+      purchaseDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      paymentMethod: 'cash',
+      paymentStatus: 'pending',
+      invoiceStatus: 'none',
+    },
+    {
+      id: 'mock-sale-sess-2',
+      clientId: 'client-2',
+      clientName: 'Mike Peterson',
+      clientEmail: 'mike@example.com',
+      sessionId: 'sess-2',
+      sessionTitle: 'HIIT Training',
+      sessionDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+      sessionType: 'video',
+      price: 35.00,
+      purchaseDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      paymentMethod: 'cash',
+      paymentStatus: 'pending',
+      invoiceStatus: 'none',
+    },
+    // Paid sessions with various payment methods
+    {
+      id: 'mock-sale-sess-3',
       clientId: 'client-3',
       clientName: 'Lisa Garcia',
       clientEmail: 'lisa@example.com',
@@ -141,11 +219,14 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'in-person',
       price: 50.00,
       purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
+      paymentMethod: 'card',
+      paymentStatus: 'paid',
+      invoiceStatus: 'sent_to_client',
+      invoiceUrl: 'https://storage.example.com/invoices/inv-001.pdf',
+      invoiceSentAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
     },
     {
-      id: 'mock-sale-sess-2',
+      id: 'mock-sale-sess-4',
       clientId: 'client-4',
       clientName: 'David Kim',
       clientEmail: 'david@example.com',
@@ -155,11 +236,12 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'video',
       price: 40.00,
       purchaseDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
+      paymentMethod: 'paypal',
+      paymentStatus: 'paid',
+      invoiceStatus: 'draft',
     },
     {
-      id: 'mock-sale-sess-3',
+      id: 'mock-sale-sess-5',
       clientId: 'client-5',
       clientName: 'Emma Wilson',
       clientEmail: 'emma@example.com',
@@ -169,11 +251,12 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'in-person',
       price: 45.00,
       purchaseDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
+      paymentMethod: 'cash',
+      paymentStatus: 'paid',
+      invoiceStatus: 'none',
     },
     {
-      id: 'mock-sale-sess-4',
+      id: 'mock-sale-sess-6',
       clientId: 'client-6',
       clientName: 'John Martinez',
       clientEmail: 'john.m@example.com',
@@ -183,11 +266,12 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'in-person',
       price: 60.00,
       purchaseDate: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 36 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
+      paymentMethod: 'klarna',
+      paymentStatus: 'paid',
+      invoiceStatus: 'none',
     },
     {
-      id: 'mock-sale-sess-5',
+      id: 'mock-sale-sess-7',
       clientId: 'client-7',
       clientName: 'Sophie Chen',
       clientEmail: 'sophie@example.com',
@@ -197,36 +281,11 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'video',
       price: 38.00,
       purchaseDate: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 41 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
-    },
-    {
-      id: 'mock-sale-sess-6',
-      clientId: 'client-10',
-      clientName: 'Rachel Green',
-      clientEmail: 'rachel@example.com',
-      sessionId: 'sess-10',
-      sessionTitle: 'Functional Training',
-      sessionDate: new Date(Date.now() - 48 * 24 * 60 * 60 * 1000).toISOString(),
-      sessionType: 'in-person',
-      price: 55.00,
-      purchaseDate: new Date(Date.now() - 50 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 51 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
-    },
-    {
-      id: 'mock-sale-sess-7',
-      clientId: 'client-11',
-      clientName: 'Tom Harris',
-      clientEmail: 'tom@example.com',
-      sessionId: 'sess-11',
-      sessionTitle: 'Athletic Performance',
-      sessionDate: new Date(Date.now() - 53 * 24 * 60 * 60 * 1000).toISOString(),
-      sessionType: 'in-person',
-      price: 70.00,
-      purchaseDate: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString(),
-      requestDate: new Date(Date.now() - 56 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'paid',
+      paymentMethod: 'card',
+      paymentStatus: 'paid',
+      invoiceStatus: 'sent_to_client',
+      invoiceUrl: 'https://storage.example.com/invoices/inv-002.pdf',
+      invoiceSentAt: new Date(Date.now() - 39 * 24 * 60 * 60 * 1000).toISOString(),
     },
     // Last month sales
     {
@@ -240,8 +299,9 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'in-person',
       price: 52.00,
       purchaseDate: new Date(now.getFullYear(), now.getMonth() - 1, 10).toISOString(),
-      requestDate: new Date(now.getFullYear(), now.getMonth() - 1, 9).toISOString(),
-      status: 'paid',
+      paymentMethod: 'card',
+      paymentStatus: 'paid',
+      invoiceStatus: 'sent_to_client',
     },
     {
       id: 'mock-sale-lastmonth-sess-2',
@@ -254,8 +314,9 @@ const getMockConfirmedSales = (): SessionSale[] => {
       sessionType: 'video',
       price: 42.00,
       purchaseDate: new Date(now.getFullYear(), now.getMonth() - 1, 20).toISOString(),
-      requestDate: new Date(now.getFullYear(), now.getMonth() - 1, 19).toISOString(),
-      status: 'paid',
+      paymentMethod: 'paypal',
+      paymentStatus: 'paid',
+      invoiceStatus: 'none',
     },
   ];
 };
@@ -315,10 +376,10 @@ export function useSessionSales(trainerId?: string) {
     previousMonthRevenue: 0,
     quarterlyRevenue: 0,
     previousQuarterRevenue: 0,
-    pendingPayments: [],
-    confirmedSales: [],
     allSales: [],
+    pendingCashPayments: [],
     sessionRequests: [],
+    sessionParticipants: [],
     totalSalesCount: 0,
     loading: true,
   });
@@ -327,14 +388,14 @@ export function useSessionSales(trainerId?: string) {
     try {
       setSalesData(prev => ({ ...prev, loading: true }));
 
-      // For now, we'll use mock data since there's no session sales table yet
-      // In the future, you would query a session_sales or session_bookings table
-      const mockPending = getMockPendingPayments();
-      const mockConfirmed = getMockConfirmedSales();
-      const allMockSales = [...mockPending, ...mockConfirmed];
+      const mockSales = getMockSales();
       const mockRequests = getMockSessionRequests();
+      const mockParticipants = getMockSessionParticipants();
       
-      // Calculate revenue from mock data
+      const paidSales = mockSales.filter(s => s.paymentStatus === 'paid');
+      const pendingCash = mockSales.filter(s => s.paymentMethod === 'cash' && s.paymentStatus === 'pending');
+      
+      // Calculate revenue from paid sales only
       const weekRange = getDateRange('week');
       const monthRange = getDateRange('month');
       const quarterRange = getDateRange('quarter');
@@ -343,27 +404,27 @@ export function useSessionSales(trainerId?: string) {
       const previousMonthRange = getPreviousDateRange('month');
       const previousQuarterRange = getPreviousDateRange('quarter');
 
-      const weeklyRevenue = mockConfirmed
+      const weeklyRevenue = paidSales
         .filter(s => s.purchaseDate >= weekRange.start)
         .reduce((sum, s) => sum + s.price, 0);
 
-      const previousWeekRevenue = mockConfirmed
+      const previousWeekRevenue = paidSales
         .filter(s => s.purchaseDate >= previousWeekRange.start && s.purchaseDate <= previousWeekRange.end)
         .reduce((sum, s) => sum + s.price, 0);
 
-      const monthlyRevenue = mockConfirmed
+      const monthlyRevenue = paidSales
         .filter(s => s.purchaseDate >= monthRange.start)
         .reduce((sum, s) => sum + s.price, 0);
 
-      const previousMonthRevenue = mockConfirmed
+      const previousMonthRevenue = paidSales
         .filter(s => s.purchaseDate >= previousMonthRange.start && s.purchaseDate <= previousMonthRange.end)
         .reduce((sum, s) => sum + s.price, 0);
 
-      const quarterlyRevenue = mockConfirmed
+      const quarterlyRevenue = paidSales
         .filter(s => s.purchaseDate >= quarterRange.start)
         .reduce((sum, s) => sum + s.price, 0);
 
-      const previousQuarterRevenue = mockConfirmed
+      const previousQuarterRevenue = paidSales
         .filter(s => s.purchaseDate >= previousQuarterRange.start && s.purchaseDate <= previousQuarterRange.end)
         .reduce((sum, s) => sum + s.price, 0);
 
@@ -374,11 +435,11 @@ export function useSessionSales(trainerId?: string) {
         previousMonthRevenue,
         quarterlyRevenue,
         previousQuarterRevenue,
-        pendingPayments: mockPending,
-        confirmedSales: mockConfirmed,
-        allSales: allMockSales,
+        allSales: mockSales,
+        pendingCashPayments: pendingCash,
         sessionRequests: mockRequests,
-        totalSalesCount: mockConfirmed.length,
+        sessionParticipants: mockParticipants,
+        totalSalesCount: paidSales.length,
         loading: false,
       });
     } catch (error) {
@@ -392,18 +453,21 @@ export function useSessionSales(trainerId?: string) {
     }
   };
 
-  const confirmPayment = async (saleId: string, isProTrainer: boolean = false) => {
+  // Cash payment actions
+  const confirmCashPayment = async (saleId: string) => {
     try {
-      // Mock implementation - in real app would update database
+      setSalesData(prev => ({
+        ...prev,
+        allSales: prev.allSales.map(s => 
+          s.id === saleId ? { ...s, paymentStatus: 'paid' as PaymentStatus } : s
+        ),
+        pendingCashPayments: prev.pendingCashPayments.filter(s => s.id !== saleId),
+      }));
+      
       toast({
         title: "Payment Confirmed",
-        description: isProTrainer 
-          ? "Payment confirmed and added to Transactions" 
-          : "Payment confirmed successfully",
+        description: "Cash payment has been confirmed",
       });
-
-      // Refresh data
-      await fetchSessionSales();
     } catch (error) {
       console.error('Error confirming payment:', error);
       toast({
@@ -414,16 +478,20 @@ export function useSessionSales(trainerId?: string) {
     }
   };
 
-  const rejectPayment = async (saleId: string) => {
+  const rejectCashPayment = async (saleId: string) => {
     try {
-      // Mock implementation - in real app would update database
+      setSalesData(prev => ({
+        ...prev,
+        allSales: prev.allSales.map(s => 
+          s.id === saleId ? { ...s, paymentStatus: 'rejected' as PaymentStatus } : s
+        ),
+        pendingCashPayments: prev.pendingCashPayments.filter(s => s.id !== saleId),
+      }));
+      
       toast({
         title: "Payment Rejected",
-        description: "Payment request has been declined",
+        description: "Cash payment has been rejected",
       });
-
-      // Refresh data
-      await fetchSessionSales();
     } catch (error) {
       console.error('Error rejecting payment:', error);
       toast({
@@ -434,9 +502,62 @@ export function useSessionSales(trainerId?: string) {
     }
   };
 
+  const markNoShow = async (saleId: string) => {
+    try {
+      setSalesData(prev => ({
+        ...prev,
+        allSales: prev.allSales.map(s => 
+          s.id === saleId ? { ...s, paymentStatus: 'no_show' as PaymentStatus } : s
+        ),
+        pendingCashPayments: prev.pendingCashPayments.filter(s => s.id !== saleId),
+      }));
+      
+      toast({
+        title: "Marked as No-Show",
+        description: "Client marked as no-show",
+      });
+    } catch (error) {
+      console.error('Error marking no-show:', error);
+      toast({
+        title: "Error",
+        description: "Failed to mark as no-show",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Invoice actions
+  const updateInvoiceStatus = async (saleId: string, status: InvoiceStatus, url?: string) => {
+    try {
+      setSalesData(prev => ({
+        ...prev,
+        allSales: prev.allSales.map(s => 
+          s.id === saleId ? { 
+            ...s, 
+            invoiceStatus: status,
+            invoiceUrl: url || s.invoiceUrl,
+            invoiceSentAt: status === 'sent_to_client' ? new Date().toISOString() : s.invoiceSentAt,
+          } : s
+        ),
+      }));
+      
+      toast({
+        title: "Invoice Updated",
+        description: status === 'sent_to_client' ? "Invoice sent to client" : "Invoice status updated",
+      });
+    } catch (error) {
+      console.error('Error updating invoice:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update invoice",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Session request actions
   const approveRequest = async (requestId: string, paymentMethod: 'cash' | 'online', isProTrainer: boolean = false) => {
     try {
-      // Mock implementation - in real app would create session booking and update database
       const message = paymentMethod === 'online' 
         ? 'Request approved! Payment link sent to client.'
         : 'Request approved! Session scheduled.';
@@ -448,7 +569,6 @@ export function useSessionSales(trainerId?: string) {
           : message,
       });
 
-      // Refresh data
       await fetchSessionSales();
     } catch (error) {
       console.error('Error approving request:', error);
@@ -462,7 +582,6 @@ export function useSessionSales(trainerId?: string) {
 
   const declineRequest = async (requestId: string, reason?: string) => {
     try {
-      // Mock implementation - in real app would update database
       toast({
         title: "Request Declined",
         description: reason 
@@ -470,13 +589,36 @@ export function useSessionSales(trainerId?: string) {
           : "Request has been declined",
       });
 
-      // Refresh data
       await fetchSessionSales();
     } catch (error) {
       console.error('Error declining request:', error);
       toast({
         title: "Error",
         description: "Failed to decline request",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Participant pipeline actions
+  const addParticipantToCRM = async (participantId: string) => {
+    try {
+      setSalesData(prev => ({
+        ...prev,
+        sessionParticipants: prev.sessionParticipants.map(p =>
+          p.id === participantId ? { ...p, addedToCRM: true } : p
+        ),
+      }));
+      
+      toast({
+        title: "Added to CRM",
+        description: "Participant added as lead",
+      });
+    } catch (error) {
+      console.error('Error adding to CRM:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add to CRM",
         variant: "destructive"
       });
     }
@@ -490,10 +632,13 @@ export function useSessionSales(trainerId?: string) {
 
   return {
     ...salesData,
-    confirmPayment,
-    rejectPayment,
+    confirmCashPayment,
+    rejectCashPayment,
+    markNoShow,
+    updateInvoiceStatus,
     approveRequest,
     declineRequest,
+    addParticipantToCRM,
     refreshSales: fetchSessionSales,
   };
 }

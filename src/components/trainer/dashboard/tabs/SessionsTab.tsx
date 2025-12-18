@@ -70,8 +70,8 @@ export function SessionsTab({ upcomingSessions = [] }: SessionsTabProps) {
   const currentUserId = getCurrentDemoUserId();
   
   // Get pending count for badge
-  const { pendingPayments, sessionRequests, approveRequest, declineRequest } = useSessionSales(currentUserId);
-  const pendingCount = pendingPayments.length;
+  const { pendingCashPayments, sessionRequests, approveRequest, declineRequest } = useSessionSales(currentUserId);
+  const pendingCount = pendingCashPayments.length;
   const requestsCount = sessionRequests.filter(r => r.status === 'pending').length;
 
   // CRM integration
