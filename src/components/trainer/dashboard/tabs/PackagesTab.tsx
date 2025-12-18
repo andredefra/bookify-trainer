@@ -38,7 +38,7 @@ export function PackagesTab() {
 
   // Fetch package sales data
   const salesData = usePackageSales(trainerId || undefined);
-  const pendingCount = salesData.pendingRequests.length;
+  const pendingCount = salesData.pendingCashPayments.length;
 
   // Mock data for demonstration
   const [packageTemplates, setPackageTemplates] = useState([
@@ -370,13 +370,13 @@ export function PackagesTab() {
                 previousMonthRevenue={salesData.previousMonthRevenue}
                 quarterlyRevenue={salesData.quarterlyRevenue}
                 previousQuarterRevenue={salesData.previousQuarterRevenue}
-                pendingRequests={salesData.pendingRequests}
-                confirmedSales={salesData.confirmedSales}
                 allSales={salesData.allSales}
                 loading={salesData.loading}
-                onConfirmPurchase={(id) => salesData.confirmPurchase(id, true)}
-                onRejectPurchase={salesData.rejectPurchase}
                 isProTrainer={true}
+                onConfirmCashPayment={salesData.confirmCashPayment}
+                onRejectCashPayment={salesData.rejectCashPayment}
+                onMarkNoShow={salesData.markNoShow}
+                onUpdateInvoiceStatus={salesData.updateInvoiceStatus}
               />
             </TabsContent>
           </Tabs>
