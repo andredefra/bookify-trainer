@@ -1,4 +1,4 @@
-
+// Sessions Tab Content - manages session booking, discovery and history
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
