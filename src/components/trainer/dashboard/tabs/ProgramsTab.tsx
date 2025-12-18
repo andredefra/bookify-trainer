@@ -49,9 +49,9 @@ export function ProgramsTab() {
   const currentUserId = getCurrentDemoUserId();
   console.log('ProgramsTab - Using user ID:', currentUserId);
   
-  // Get pending count for badge
-  const { pendingRequests } = useProgramSales(currentUserId);
-  const pendingCount = pendingRequests.length;
+  // Get pending cash payments count for badge
+  const { pendingCashPayments } = useProgramSales(currentUserId);
+  const pendingCount = pendingCashPayments.length;
   
   // Mock programs with extended data and exercises
   const sampleExercises: Exercise[] = currentProgram.sessions[0].exercises.map(ex => ({
