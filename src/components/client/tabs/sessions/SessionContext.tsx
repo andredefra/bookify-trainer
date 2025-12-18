@@ -26,13 +26,37 @@ interface SessionContextType {
   handleCancelSession: (session: SessionItem) => void;
 }
 
-const SessionContext = createContext<SessionContextType | undefined>(undefined);
+const defaultSessionContext: SessionContextType = {
+  showBookingDialog: false,
+  setShowBookingDialog: () => {},
+  showPaymentDialog: false,
+  setShowPaymentDialog: () => {},
+  showSessionDetailsDialog: false,
+  setShowSessionDetailsDialog: () => {},
+  selectedTrainer: "Select a trainer",
+  setSelectedTrainer: () => {},
+  selectedSession: null,
+  setSelectedSession: () => {},
+  handleBookSession: () => {},
+  handleBookingSubmit: () => {},
+  handleSessionRequest: () => {},
+  handleViewSessionDetails: () => {},
+  handleRegisterForSession: () => {},
+  handlePaymentSubmit: () => {},
+  handleAddToCalendar: () => {},
+  handleCancelSession: () => {},
+};
+
+const SessionContext = createContext<SessionContextType>(defaultSessionContext);
 
 export const useSessionContext = () => {
   const context = useContext(SessionContext);
-  if (!context) {
-    throw new Error("useSessionContext must be used within a SessionProvider");
+
+  // Avoid blank screen if provider is missing; log a warning for debugging.
+  if (context === defaultSessionContext) {
+    console.warn("useSessionContext is being used without SessionProvider. Falling back to default no-op context.");
   }
+
   return context;
 };
 
