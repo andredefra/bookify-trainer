@@ -18,6 +18,7 @@ interface SessionContextType {
   setSelectedSession: (session: SessionItem | null) => void;
   handleBookSession: () => void;
   handleBookingSubmit: (data: z.infer<typeof bookingSchema>) => void;
+  handleSessionRequest: (data: z.infer<typeof bookingSchema>) => void;
   handleViewSessionDetails: (session: SessionItem) => void;
   handleRegisterForSession: (session: SessionItem) => void;
   handlePaymentSubmit: () => void;
@@ -74,6 +75,15 @@ export const SessionProvider = ({ children, upcomingSessions }: SessionProviderP
       setShowPaymentDialog(true);
     }
   };
+
+  const handleSessionRequest = (data: z.infer<typeof bookingSchema>) => {
+    toast({
+      title: "Request Sent",
+      description: `Your session request for ${data.date.toLocaleDateString()} at ${data.time} has been sent. You'll be notified when approved.`,
+      variant: "default",
+    });
+    setShowBookingDialog(false);
+  };
   
   const handleViewSessionDetails = (session: SessionItem) => {
     setSelectedSession(session);
@@ -125,6 +135,7 @@ export const SessionProvider = ({ children, upcomingSessions }: SessionProviderP
     setSelectedSession,
     handleBookSession,
     handleBookingSubmit,
+    handleSessionRequest,
     handleViewSessionDetails,
     handleRegisterForSession,
     handlePaymentSubmit,
