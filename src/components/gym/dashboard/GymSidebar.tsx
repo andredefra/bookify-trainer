@@ -12,7 +12,8 @@ import {
   Clock,
   Star,
   Package,
-  CreditCard
+  CreditCard,
+  ClipboardList
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -116,6 +117,15 @@ export function GymSidebar({
             >
               <Package className="w-5 h-5 mr-3" />
               <span>Packages</span>
+            </button>
+
+            {/* Service Requests - NEW */}
+            <button 
+              onClick={() => { setActiveTab("service-requests"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "service-requests" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <ClipboardList className="w-5 h-5 mr-3" />
+              <span>Service Requests</span>
             </button>
             
             {/* Transactions */}

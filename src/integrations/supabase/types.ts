@@ -382,11 +382,14 @@ export type Database = {
           client_id: string
           created_at: string | null
           expiry_date: string | null
+          gym_commission_rate: number | null
           id: string
           package_id: string
           purchase_date: string | null
           sessions_total: number
           sessions_used: number | null
+          source_id: string | null
+          source_type: string | null
           status: string | null
           total_paid: number | null
           trainer_id: string
@@ -396,11 +399,14 @@ export type Database = {
           client_id: string
           created_at?: string | null
           expiry_date?: string | null
+          gym_commission_rate?: number | null
           id?: string
           package_id: string
           purchase_date?: string | null
           sessions_total: number
           sessions_used?: number | null
+          source_id?: string | null
+          source_type?: string | null
           status?: string | null
           total_paid?: number | null
           trainer_id: string
@@ -410,11 +416,14 @@ export type Database = {
           client_id?: string
           created_at?: string | null
           expiry_date?: string | null
+          gym_commission_rate?: number | null
           id?: string
           package_id?: string
           purchase_date?: string | null
           sessions_total?: number
           sessions_used?: number | null
+          source_id?: string | null
+          source_type?: string | null
           status?: string | null
           total_paid?: number | null
           trainer_id?: string
@@ -1114,6 +1123,57 @@ export type Database = {
           title?: string
           trainer_commission_percentage?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      gym_service_requests: {
+        Row: {
+          client_id: string
+          commission_rate: number | null
+          completed_at: string | null
+          created_at: string | null
+          details: Json | null
+          gym_id: string
+          id: string
+          notes: string | null
+          request_type: string
+          responded_at: string | null
+          status: string | null
+          trainer_id: string
+          trainer_response: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          commission_rate?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          details?: Json | null
+          gym_id: string
+          id?: string
+          notes?: string | null
+          request_type: string
+          responded_at?: string | null
+          status?: string | null
+          trainer_id: string
+          trainer_response?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          commission_rate?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          details?: Json | null
+          gym_id?: string
+          id?: string
+          notes?: string | null
+          request_type?: string
+          responded_at?: string | null
+          status?: string | null
+          trainer_id?: string
+          trainer_response?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -1826,6 +1886,8 @@ export type Database = {
       packages: {
         Row: {
           created_at: string
+          creator_id: string | null
+          creator_type: string | null
           description: string | null
           discount_percentage: number | null
           id: string
@@ -1842,6 +1904,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          creator_id?: string | null
+          creator_type?: string | null
           description?: string | null
           discount_percentage?: number | null
           id?: string
@@ -1858,6 +1922,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          creator_id?: string | null
+          creator_type?: string | null
           description?: string | null
           discount_percentage?: number | null
           id?: string
@@ -1946,9 +2012,12 @@ export type Database = {
           client_id: string
           created_at: string
           estimated_end_date: string
+          gym_commission_rate: number | null
           id: string
           program_id: string
           sessions_completed: number
+          source_id: string | null
+          source_type: string | null
           start_date: string
           target_frequency: number
           total_sessions_planned: number
@@ -1960,9 +2029,12 @@ export type Database = {
           client_id: string
           created_at?: string
           estimated_end_date: string
+          gym_commission_rate?: number | null
           id?: string
           program_id: string
           sessions_completed?: number
+          source_id?: string | null
+          source_type?: string | null
           start_date?: string
           target_frequency?: number
           total_sessions_planned: number
@@ -1974,9 +2046,12 @@ export type Database = {
           client_id?: string
           created_at?: string
           estimated_end_date?: string
+          gym_commission_rate?: number | null
           id?: string
           program_id?: string
           sessions_completed?: number
+          source_id?: string | null
+          source_type?: string | null
           start_date?: string
           target_frequency?: number
           total_sessions_planned?: number
@@ -2179,6 +2254,130 @@ export type Database = {
           stripe_refund_id?: string | null
           trainer_id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      studio_client_relationships: {
+        Row: {
+          assigned_trainer_id: string | null
+          client_id: string
+          created_at: string | null
+          id: string
+          status: string | null
+          studio_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_trainer_id?: string | null
+          client_id: string
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          studio_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_trainer_id?: string | null
+          client_id?: string
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          studio_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_client_relationships_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studio_trainer_assignments: {
+        Row: {
+          assigned_at: string | null
+          commission_rate: number | null
+          contract_details: Json | null
+          created_at: string | null
+          id: string
+          status: string | null
+          studio_id: string
+          trainer_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_at?: string | null
+          commission_rate?: number | null
+          contract_details?: Json | null
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          studio_id: string
+          trainer_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_at?: string | null
+          commission_rate?: number | null
+          contract_details?: Json | null
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          studio_id?: string
+          trainer_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_trainer_assignments_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      studios: {
+        Row: {
+          address: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          owner_id: string
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          owner_id: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          owner_id?: string
+          updated_at?: string | null
+          website?: string | null
         }
         Relationships: []
       }
@@ -2457,7 +2656,11 @@ export type Database = {
           message: string
           read: boolean
           related_client_id: string | null
+          related_package_assignment_id: string | null
           related_program_assignment_id: string | null
+          request_id: string | null
+          source_id: string | null
+          source_type: string | null
           trainer_id: string
           type: string
         }
@@ -2467,7 +2670,11 @@ export type Database = {
           message: string
           read?: boolean
           related_client_id?: string | null
+          related_package_assignment_id?: string | null
           related_program_assignment_id?: string | null
+          request_id?: string | null
+          source_id?: string | null
+          source_type?: string | null
           trainer_id: string
           type: string
         }
@@ -2477,7 +2684,11 @@ export type Database = {
           message?: string
           read?: boolean
           related_client_id?: string | null
+          related_package_assignment_id?: string | null
           related_program_assignment_id?: string | null
+          request_id?: string | null
+          source_id?: string | null
+          source_type?: string | null
           trainer_id?: string
           type?: string
         }
@@ -2782,6 +2993,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_subscriptions: {
         Row: {
           created_at: string
@@ -2866,12 +3098,20 @@ export type Database = {
       }
       generate_trainer_slug: { Args: { trainer_name: string }; Returns: string }
       get_user_age: { Args: { birth_date: string }; Returns: number }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       initialize_default_email_templates: {
         Args: { gym_user_id: string }
         Returns: undefined
       }
     }
     Enums: {
+      app_role: "client" | "trainer" | "gym" | "studio" | "admin"
       event_category:
         | "session"
         | "program_milestone"
@@ -3018,6 +3258,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["client", "trainer", "gym", "studio", "admin"],
       event_category: [
         "session",
         "program_milestone",
