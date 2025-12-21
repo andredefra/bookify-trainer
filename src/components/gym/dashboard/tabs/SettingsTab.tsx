@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfileTab } from "./settings/ProfileTab";
@@ -6,6 +5,7 @@ import { NotificationsTab } from "./settings/NotificationsTab";
 import { IntegrationsTab } from "./settings/IntegrationsTab";
 import { InvoicingSection } from "./settings/InvoicingSection";
 import { BillingTab } from "./settings/BillingTab";
+import { BrandingSettingsTab } from "@/components/shared/BrandingSettingsTab";
 
 
 interface SettingsTabProps {
@@ -28,17 +28,24 @@ export function SettingsTab({ user }: SettingsTabProps) {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList>
+        <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="branding">Branding</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
           <TabsTrigger value="invoicing">Invoicing</TabsTrigger>
-          
           <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile">
           <ProfileTab user={user} />
+        </TabsContent>
+
+        <TabsContent value="branding">
+          <BrandingSettingsTab 
+            entityType="gym" 
+            onSave={(data) => console.log('Saving gym branding:', data)}
+          />
         </TabsContent>
         
         <TabsContent value="notifications">
@@ -52,7 +59,6 @@ export function SettingsTab({ user }: SettingsTabProps) {
         <TabsContent value="invoicing">
           <InvoicingSection />
         </TabsContent>
-        
         
         <TabsContent value="billing">
           <BillingTab user={user} />

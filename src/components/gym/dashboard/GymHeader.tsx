@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu, LogOut, Building } from "lucide-react";
+import { Menu, LogOut, Building, Home } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaQuery } from "@/hooks/use-mobile";
 import { toast } from "sonner";
@@ -70,6 +70,16 @@ export function GymHeader({
               )}
             </div>
             
+          {/* Home button */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => navigate('/')}
+              title="Torna alla Home"
+            >
+              <Home className="h-5 w-5" />
+            </Button>
+
             <div className="flex items-center space-x-3">
               <GymNotificationBell />
               <Avatar className="h-9 w-9 border border-primary/10">

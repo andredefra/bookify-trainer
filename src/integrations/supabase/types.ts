@@ -1500,6 +1500,60 @@ export type Database = {
         }
         Relationships: []
       }
+      gyms: {
+        Row: {
+          address: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          custom_css: string | null
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          owner_id: string
+          primary_color: string | null
+          secondary_color: string | null
+          sidebar_bg_color: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          custom_css?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          owner_id: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          sidebar_bg_color?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          custom_css?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          owner_id?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          sidebar_bg_color?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           client_user_id: string | null
@@ -2345,11 +2399,15 @@ export type Database = {
           contact_email: string | null
           contact_phone: string | null
           created_at: string | null
+          custom_css: string | null
           description: string | null
           id: string
           logo_url: string | null
           name: string
           owner_id: string
+          primary_color: string | null
+          secondary_color: string | null
+          sidebar_bg_color: string | null
           updated_at: string | null
           website: string | null
         }
@@ -2358,11 +2416,15 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string | null
+          custom_css?: string | null
           description?: string | null
           id?: string
           logo_url?: string | null
           name: string
           owner_id: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          sidebar_bg_color?: string | null
           updated_at?: string | null
           website?: string | null
         }
@@ -2371,11 +2433,15 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string | null
+          custom_css?: string | null
           description?: string | null
           id?: string
           logo_url?: string | null
           name?: string
           owner_id?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          sidebar_bg_color?: string | null
           updated_at?: string | null
           website?: string | null
         }

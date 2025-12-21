@@ -1,4 +1,5 @@
-import { Menu, LogOut, Bell, User } from "lucide-react";
+import { Menu, LogOut, Bell, User, Home } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 interface StudioHeaderProps {
   user: {
@@ -23,9 +25,17 @@ interface StudioHeaderProps {
 }
 
 export function StudioHeader({ user, onLogout, onMobileMenuClick }: StudioHeaderProps) {
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
   const initials = user?.name
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase()
     : user?.email?.charAt(0).toUpperCase() || 'S';
+
+  const handleLogout = () => {
+    onLogout();
+    navigate('/');
+  };
 
   return (
     <header className="h-16 border-b border-border bg-white flex items-center justify-between px-4 md:px-6">
@@ -48,12 +58,24 @@ export function StudioHeader({ user, onLogout, onMobileMenuClick }: StudioHeader
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
+        {/* Home button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => navigate('/')}
+          title="Torna alla Home"
+        >
+          <Home className="h-5 w-5" />
+        </Button>
+
+        {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full" />
         </Button>
 
+        {/* User dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
@@ -73,17 +95,26 @@ export function StudioHeader({ user, onLogout, onMobileMenuClick }: StudioHeader
               </div>
             </div>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate('/')}>
+              <Home className="mr-2 h-4 w-4" />
+              <span>Home</span>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout} className="text-destructive">
+            <DropdownMenuItem onClick={handleLogout} className="text-destructive">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* Visible Logout button */}
+        <Button variant="outline" size="sm" onClick={handleLogout} className="min-h-[44px]">
+          {isMobile ? <LogOut className="h-4 w-4" /> : "Log out"}
+        </Button>
       </div>
     </header>
   );
