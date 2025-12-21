@@ -11,7 +11,8 @@ import { CalendarTab } from "./tabs/CalendarTab";
 import { MembersTab } from "./tabs/MembersTab";
 import { PackagesTab } from "./tabs/PackagesTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
-import { MessagesTab } from "./tabs/messages"; // Updated import path
+import { MessagesTab } from "./tabs/messages";
+import { ServiceRequestsTab } from "./tabs/ServiceRequestsTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { toast } from "sonner";
@@ -86,6 +87,7 @@ export function GymDashboardContainer() {
           {activeTab === "calendar" && <CalendarTab />}
           {activeTab === "members" && <MembersTab />}
           {activeTab === "packages" && <PackagesTab />}
+          {activeTab === "service-requests" && <ServiceRequestsTab />}
           {activeTab === "transactions" && <TransactionsTab />}
           {activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
           {activeTab === "analytics" && <AnalyticsTab />}

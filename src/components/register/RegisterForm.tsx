@@ -12,7 +12,7 @@ export const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  userType: z.enum(["client", "trainer", "gym"]),
+  userType: z.enum(["client", "trainer", "gym", "studio"]),
   plan: z.string().optional()
 });
 
@@ -92,25 +92,37 @@ export const RegisterForm = ({ onSubmit, onCancel, hideUserTypeSelection = false
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className="grid grid-cols-3 gap-4 mt-2"
+                    className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-x-2 space-y-0 border rounded-lg p-3 hover:bg-muted/50 transition-colors">
                       <FormControl>
                         <RadioGroupItem value="client" />
                       </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">Client</FormLabel>
+                      <FormLabel className="font-normal cursor-pointer text-sm">Client</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-x-2 space-y-0 border rounded-lg p-3 hover:bg-muted/50 transition-colors">
                       <FormControl>
                         <RadioGroupItem value="trainer" />
                       </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">Trainer</FormLabel>
+                      <FormLabel className="font-normal cursor-pointer text-sm">Trainer</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-x-2 space-y-0 border rounded-lg p-3 hover:bg-muted/50 transition-colors">
                       <FormControl>
                         <RadioGroupItem value="gym" />
                       </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">Studio</FormLabel>
+                      <div className="flex flex-col">
+                        <FormLabel className="font-normal cursor-pointer text-sm">Gym</FormLabel>
+                        <span className="text-xs text-muted-foreground">Facility</span>
+                      </div>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-2 space-y-0 border rounded-lg p-3 hover:bg-muted/50 transition-colors">
+                      <FormControl>
+                        <RadioGroupItem value="studio" />
+                      </FormControl>
+                      <div className="flex flex-col">
+                        <FormLabel className="font-normal cursor-pointer text-sm">Studio</FormLabel>
+                        <span className="text-xs text-muted-foreground">Coaching</span>
+                      </div>
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
@@ -120,7 +132,7 @@ export const RegisterForm = ({ onSubmit, onCancel, hideUserTypeSelection = false
           />
         )}
         
-        {userType !== "client" && (
+        {(userType === "trainer" || userType === "gym" || userType === "studio") && (
           <UserTypePlans userType={userType} control={form.control} />
         )}
         
