@@ -75,17 +75,17 @@ const PricingSection = () => {
     t('pricing.features.gymUnlimitedClients'),
     t('pricing.features.directClientChat'),
     t('pricing.features.clientResults'),
-    'Create programs & packages directly',
-    'Dynamic PT assignment',
+    t('pricing.features.createProgramsDirectly'),
+    t('pricing.features.dynamicPTAssignment'),
   ];
 
   // Gym features (intermediary - requests services from PTs)
   const gymFeatures = [
     t('pricing.features.unlimitedTrainers'),
     t('pricing.features.gymUnlimitedClients'),
-    'Member subscription management',
-    'Commission on PT services',
-    'Service requests to trainers',
+    t('pricing.features.memberSubscriptionManagement'),
+    t('pricing.features.commissionOnPTServices'),
+    t('pricing.features.serviceRequestsToTrainers'),
     t('pricing.features.gymIntegration'),
   ];
 
