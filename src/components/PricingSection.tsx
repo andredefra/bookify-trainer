@@ -69,17 +69,25 @@ const PricingSection = () => {
     t('pricing.features.advancedAnalytics'),
   ];
   
+  // Studio features (boutique coaching business - creates programs directly)
+  const studioFeatures = [
+    t('pricing.features.unlimitedTrainers'),
+    t('pricing.features.gymUnlimitedClients'),
+    t('pricing.features.directClientChat'),
+    t('pricing.features.clientResults'),
+    'Create programs & packages directly',
+    'Dynamic PT assignment',
+  ];
+
+  // Gym features (intermediary - requests services from PTs)
   const gymFeatures = [
     t('pricing.features.unlimitedTrainers'),
     t('pricing.features.gymUnlimitedClients'),
-    t('pricing.features.reducedProPricing'),
-    t('pricing.features.directClientChat'),
-    t('pricing.features.clientResults'),
+    'Member subscription management',
+    'Commission on PT services',
+    'Service requests to trainers',
     t('pricing.features.gymIntegration'),
   ];
-
-  // Transaction fee note for Gym plan - removing the 2% transaction fee text
-  const gymTransactionFeeNote = ""; // Empty string instead of t('pricing.gym.transactionFeeNote')
 
   // Plans configuration for personal trainers
   const trainerPricingPlans = [
@@ -124,16 +132,28 @@ const PricingSection = () => {
     }
   ];
 
-  // Gym plan configuration (separate)
-  const gymPlan = {
-    name: t('pricing.gym.title'),
-    price: annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price'),
+  // Studio plan configuration (€89 - Super PT, creates programs directly)
+  const studioPlan = {
+    name: t('pricing.gym.title'), // "Studio"
+    price: annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price'), // €89
     period: t('pricing.gym.period'),
-    fee: "", // Removing the transaction fee text completely
-    transactionFeeNote: gymTransactionFeeNote,
-    features: gymFeatures,
+    fee: t('pricing.gym.fee'),
+    features: studioFeatures,
     ctaText: t('pricing.gym.cta'),
-    ctaLink: 'https://andredefra64.typeform.com/to/aUpAYvcM',
+    ctaLink: '/register?plan=studio',
+    isPopular: true,
+    isGymPlan: true
+  };
+
+  // Gym plan configuration (€119 - Intermediary, requests from PTs)
+  const gymPlan = {
+    name: t('pricing.gymPlan.title'), // "Gym"
+    price: annual ? t('pricing.gymPlan.priceAnnual') : t('pricing.gymPlan.price'), // €119
+    period: t('pricing.gymPlan.period'),
+    fee: t('pricing.gymPlan.fee'),
+    features: gymFeatures,
+    ctaText: t('pricing.gymPlan.cta'),
+    ctaLink: '/register?plan=gym',
     isPopular: false,
     isGymPlan: true
   };
@@ -186,7 +206,7 @@ const PricingSection = () => {
       
       <GymSection />
       
-      {/* Gym Plan - Separate section with different styling */}
+      {/* Studio & Gym Plans - Separate section with both plans */}
       <section id="gym-pricing" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <h3 className="text-2xl font-display font-bold text-center mb-6 reveal">
@@ -195,20 +215,34 @@ const PricingSection = () => {
           <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10 reveal reveal-delay-1">
             {t('pricing.gymPlanDescription')}
           </p>
-          <div className="max-w-lg mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Studio Plan - €89 */}
+            <PlanCard
+              name={studioPlan.name}
+              price={studioPlan.price}
+              period={studioPlan.period}
+              fee={studioPlan.fee}
+              features={studioPlan.features}
+              ctaText={studioPlan.ctaText}
+              ctaLink={studioPlan.ctaLink}
+              isPopular={true}
+              isGymPlan={true}
+              isDelayed={false}
+              Icon={plans[3]?.icon}
+            />
+            {/* Gym Plan - €119 */}
             <PlanCard
               name={gymPlan.name}
               price={gymPlan.price}
               period={gymPlan.period}
               fee={gymPlan.fee}
-              transactionFeeNote={gymPlan.transactionFeeNote}
               features={gymPlan.features}
               ctaText={gymPlan.ctaText}
               ctaLink={gymPlan.ctaLink}
               isPopular={false}
               isGymPlan={true}
               isDelayed={false}
-              Icon={plans[3].icon}
+              Icon={plans[3]?.icon}
             />
           </div>
         </div>
