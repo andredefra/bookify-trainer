@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import GymDashboard from "./pages/GymDashboard";
+import StudioDashboard from "./pages/StudioDashboard";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
@@ -94,7 +95,7 @@ const AppContent = () => {
         <Route path="/trainer/:idOrSlug" element={<TrainerProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
-        <Route path="/studio-dashboard" element={<GymDashboard />} />
+        <Route path="/studio-dashboard" element={<StudioDashboard />} />
         <Route path="/gym-dashboard" element={<GymDashboard />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
