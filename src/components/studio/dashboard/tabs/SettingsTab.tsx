@@ -30,6 +30,7 @@ export function SettingsTab({ user }: SettingsTabProps) {
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="branding">Branding</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
           <TabsTrigger value="subscription">Subscription</TabsTrigger>
         </TabsList>
 
@@ -114,6 +115,72 @@ export function SettingsTab({ user }: SettingsTabProps) {
                   <p className="text-sm text-muted-foreground">Get notified about payment activities</p>
                 </div>
                 <Switch defaultChecked />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="payments" className="mt-6 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Settings</CardTitle>
+              <CardDescription>Connect your payment provider and manage revenue</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold">S</div>
+                  <div>
+                    <p className="font-medium">Stripe Connected</p>
+                    <p className="text-sm text-muted-foreground">Account: acct_1234...5678</p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm">Manage</Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-2xl font-bold">€3,450</p>
+                  <p className="text-sm text-muted-foreground">Monthly Revenue</p>
+                </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">€890</p>
+                  <p className="text-sm text-muted-foreground">Pending Payouts</p>
+                </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-2xl font-bold">23</p>
+                  <p className="text-sm text-muted-foreground">Transactions</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Trainer Commissions</CardTitle>
+              <CardDescription>Configure revenue split with your trainers</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { name: "Marco Rossi", split: "70/30", earned: "€1,200" },
+                  { name: "Laura Bianchi", split: "60/40", earned: "€890" },
+                  { name: "Giuseppe Verde", split: "65/35", earned: "€560" },
+                ].map((trainer, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium">
+                        {trainer.name.split(" ").map(n => n[0]).join("")}
+                      </div>
+                      <span className="font-medium">{trainer.name}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-muted-foreground">{trainer.split}</span>
+                      <span className="font-medium">{trainer.earned}</span>
+                      <Button variant="ghost" size="sm">Edit</Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

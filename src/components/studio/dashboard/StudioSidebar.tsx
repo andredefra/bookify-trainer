@@ -8,7 +8,8 @@ import {
   UserCheck,
   Package,
   Dumbbell,
-  Briefcase
+  Briefcase,
+  Clock
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -91,8 +92,16 @@ export function StudioSidebar({
               <Briefcase className="w-5 h-5 mr-3" />
               <span>Services</span>
             </button>
-            
+
             <button 
+              onClick={() => { setActiveTab("sessions"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "sessions" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Clock className="w-5 h-5 mr-3" />
+              <span>Sessions</span>
+            </button>
+            
+            <button
               onClick={() => { setActiveTab("calendar"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "calendar" ? "bg-primary/5 text-primary" : ""}`}
             >
