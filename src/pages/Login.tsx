@@ -86,20 +86,14 @@ const Login = () => {
                   className={`py-3 text-sm font-medium rounded-lg border transition-colors ${loginType === 'gym' ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`} 
                   onClick={() => setLoginType('gym')}
                 >
-                  <div className="flex flex-col items-center">
-                    <span>Gym</span>
-                    <span className="text-xs opacity-70">€119/mo</span>
-                  </div>
+                  Gym
                 </button>
                 <button 
                   type="button" 
                   className={`py-3 text-sm font-medium rounded-lg border transition-colors ${loginType === 'studio' ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`} 
                   onClick={() => setLoginType('studio')}
                 >
-                  <div className="flex flex-col items-center">
-                    <span>Studio</span>
-                    <span className="text-xs opacity-70">€89/mo</span>
-                  </div>
+                  Studio
                 </button>
               </div>
               

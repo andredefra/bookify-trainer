@@ -25,12 +25,14 @@ const Register = () => {
       plan: data.plan || 'free'
     }));
     
-    // Redirect based on user type for MyPersonalFit (trainers, clients, gyms)
+    // Redirect based on user type for MyPersonalFit (trainers, clients, gyms, studios)
     if (data.userType === "client") {
       navigate('/client-dashboard');
     } else if (data.userType === "trainer") {
       navigate('/dashboard');
     } else if (data.userType === "gym") {
+      navigate('/gym-dashboard');
+    } else if (data.userType === "studio") {
       navigate('/studio-dashboard');
     }
   };
