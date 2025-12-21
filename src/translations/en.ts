@@ -144,6 +144,8 @@ export const en = {
   'pricing.gymPlan.period': '/month',
   'pricing.gymPlan.fee': 'Complete gym solution',
   'pricing.gymPlan.cta': 'Get Started with Gym Plan',
+  'pricing.forGyms': 'Pricing for Personal Trainer Studios & Gyms',
+  'pricing.gymPlanDescription': 'Complete solution for personal trainer studios and gyms with multiple trainers',
   'pricing.features.salesManagement': 'Basic CRM & Lead Management',
   'pricing.features.clientManagement': 'Unlimited Clients',
   'pricing.features.basicCalendar': 'Basic Calendar Management',

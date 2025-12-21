@@ -144,6 +144,8 @@ export const it = {
   'pricing.gymPlan.period': '/mese',
   'pricing.gymPlan.fee': 'Soluzione palestra completa',
   'pricing.gymPlan.cta': 'Inizia con il Piano Palestra',
+  'pricing.forGyms': 'Prezzi per Studi di Personal Trainer e Palestre',
+  'pricing.gymPlanDescription': 'Soluzione completa per studi di personal trainer e palestre con più trainer',
   'pricing.features.salesManagement': 'CRM Base & Gestione Lead',
   'pricing.features.clientManagement': 'Clienti Illimitati',
   'pricing.features.basicCalendar': 'Calendario Base',
