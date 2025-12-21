@@ -1,4 +1,4 @@
-import { Menu, LogOut, Bell, User, Home } from "lucide-react";
+import { Menu, LogOut, Bell, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,15 +59,6 @@ export function StudioHeader({ user, onLogout, onMobileMenuClick }: StudioHeader
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Home button */}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={() => navigate('/')}
-          title="Torna alla Home"
-        >
-          <Home className="h-5 w-5" />
-        </Button>
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
@@ -95,10 +86,6 @@ export function StudioHeader({ user, onLogout, onMobileMenuClick }: StudioHeader
               </div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/')}>
-              <Home className="mr-2 h-4 w-4" />
-              <span>Home</span>
-            </DropdownMenuItem>
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
