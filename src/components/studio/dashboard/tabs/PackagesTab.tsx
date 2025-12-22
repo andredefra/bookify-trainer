@@ -29,11 +29,13 @@ import { toast } from "sonner";
 
 // Import Trainer components
 import { StudioCreatePackageDialog } from "./packages/StudioCreatePackageDialog";
+import { ManagePackageTrainersDialog } from "./packages/ManagePackageTrainersDialog";
 import { EditPackageDialog } from "@/components/trainer/dashboard/tabs/packages/EditPackageDialog";
 import { AssignPackageDialog } from "@/components/trainer/dashboard/tabs/packages/AssignPackageDialog";
 import { ActivePackageManagementDialog } from "@/components/trainer/dashboard/tabs/packages/ActivePackageManagementDialog";
 import { PackageSalesContent } from "@/components/trainer/dashboard/tabs/packages/PackageSalesContent";
 import { PackageType } from "@/components/trainer/dashboard/tabs/packages/PackageBuilder";
+import { Crown } from "lucide-react";
 
 // Mock data for trainers
 const mockTrainers = [
@@ -43,6 +45,13 @@ const mockTrainers = [
 ];
 
 // Mock packages with full trainer system data
+// Multi-trainer assignment type
+interface TrainerAssignment {
+  trainerId: string;
+  trainerName: string;
+  isPrimary: boolean;
+}
+
 interface PackageTemplate {
   id: number;
   title: string;
@@ -54,8 +63,10 @@ interface PackageTemplate {
   services: number;
   isActive: boolean;
   isPublic: boolean;
-  trainerId: string;
-  trainerName: string;
+  // Multi-trainer support
+  primaryTrainerId: string;
+  primaryTrainerName: string;
+  assignedTrainers: TrainerAssignment[];
   createdAt: string;
 }
 
@@ -65,8 +76,10 @@ interface ActivePackage {
   clientName: string;
   packageId: number;
   packageTitle: string;
-  trainerId: string;
-  trainerName: string;
+  // Multi-trainer support
+  primaryTrainerId: string;
+  primaryTrainerName: string;
+  assignedTrainers: TrainerAssignment[];
   sessionsTotal: number;
   sessionsUsed: number;
   status: string;
@@ -85,6 +98,7 @@ export function PackagesTab() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [manageDialogOpen, setManageDialogOpen] = useState(false);
+  const [manageTrainersDialogOpen, setManageTrainersDialogOpen] = useState(false);
   
   const [selectedPackage, setSelectedPackage] = useState<PackageTemplate | null>(null);
   const [selectedActivePackage, setSelectedActivePackage] = useState<ActivePackage | null>(null);
@@ -102,8 +116,12 @@ export function PackagesTab() {
       services: 3,
       isActive: true,
       isPublic: true,
-      trainerId: "1",
-      trainerName: "Marco Rossi",
+      primaryTrainerId: "1",
+      primaryTrainerName: "Marco Rossi",
+      assignedTrainers: [
+        { trainerId: "1", trainerName: "Marco Rossi", isPrimary: true },
+        { trainerId: "3", trainerName: "Alessandro Verdi", isPrimary: false },
+      ],
       createdAt: "2024-01-15"
     },
     { 
@@ -117,8 +135,11 @@ export function PackagesTab() {
       services: 0,
       isActive: true,
       isPublic: true,
-      trainerId: "1",
-      trainerName: "Marco Rossi",
+      primaryTrainerId: "1",
+      primaryTrainerName: "Marco Rossi",
+      assignedTrainers: [
+        { trainerId: "1", trainerName: "Marco Rossi", isPrimary: true },
+      ],
       createdAt: "2024-02-10"
     },
     { 
@@ -132,8 +153,12 @@ export function PackagesTab() {
       services: 2,
       isActive: true,
       isPublic: false,
-      trainerId: "2",
-      trainerName: "Giulia Bianchi",
+      primaryTrainerId: "2",
+      primaryTrainerName: "Giulia Bianchi",
+      assignedTrainers: [
+        { trainerId: "2", trainerName: "Giulia Bianchi", isPrimary: true },
+        { trainerId: "1", trainerName: "Marco Rossi", isPrimary: false },
+      ],
       createdAt: "2024-03-05"
     },
   ]);
@@ -145,8 +170,12 @@ export function PackagesTab() {
       clientName: "Sarah Johnson",
       packageId: 1,
       packageTitle: "Complete Transformation",
-      trainerId: "1",
-      trainerName: "Marco Rossi",
+      primaryTrainerId: "1",
+      primaryTrainerName: "Marco Rossi",
+      assignedTrainers: [
+        { trainerId: "1", trainerName: "Marco Rossi", isPrimary: true },
+        { trainerId: "3", trainerName: "Alessandro Verdi", isPrimary: false },
+      ],
       sessionsTotal: 24,
       sessionsUsed: 8,
       status: "active",
@@ -160,8 +189,11 @@ export function PackagesTab() {
       clientName: "Mike Peterson",
       packageId: 2,
       packageTitle: "Strength Builder",
-      trainerId: "1",
-      trainerName: "Marco Rossi",
+      primaryTrainerId: "1",
+      primaryTrainerName: "Marco Rossi",
+      assignedTrainers: [
+        { trainerId: "1", trainerName: "Marco Rossi", isPrimary: true },
+      ],
       sessionsTotal: 16,
       sessionsUsed: 4,
       status: "active",
@@ -174,14 +206,18 @@ export function PackagesTab() {
   const filteredPackages = packages.filter(pkg => {
     const matchesSearch = pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          pkg.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTrainer = trainerFilter === "all" || pkg.trainerId === trainerFilter;
+    const matchesTrainer = trainerFilter === "all" || 
+                          pkg.primaryTrainerId === trainerFilter ||
+                          pkg.assignedTrainers.some(t => t.trainerId === trainerFilter);
     return matchesSearch && matchesTrainer;
   });
 
   const filteredActivePackages = activePackages.filter(pkg => {
     const matchesSearch = pkg.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          pkg.packageTitle.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTrainer = trainerFilter === "all" || pkg.trainerId === trainerFilter;
+    const matchesTrainer = trainerFilter === "all" || 
+                          pkg.primaryTrainerId === trainerFilter ||
+                          pkg.assignedTrainers.some(t => t.trainerId === trainerFilter);
     return matchesSearch && matchesTrainer;
   });
 
@@ -210,7 +246,16 @@ export function PackagesTab() {
   };
 
   const handleCreatePackage = (data: any) => {
-    const trainer = mockTrainers.find(t => t.id === data.trainerId);
+    const primaryTrainer = mockTrainers.find(t => t.id === data.primaryTrainerId);
+    const assignedTrainers: TrainerAssignment[] = data.assignedTrainerIds.map((id: string) => {
+      const trainer = mockTrainers.find(t => t.id === id);
+      return {
+        trainerId: id,
+        trainerName: trainer?.name || "Unknown",
+        isPrimary: id === data.primaryTrainerId,
+      };
+    });
+    
     const newPackage: PackageTemplate = {
       id: Date.now(),
       title: data.title,
@@ -222,8 +267,9 @@ export function PackagesTab() {
       services: data.additionalServices?.length || 0,
       isActive: true,
       isPublic: data.isPublic || false,
-      trainerId: data.trainerId,
-      trainerName: trainer?.name || "Unknown",
+      primaryTrainerId: data.primaryTrainerId,
+      primaryTrainerName: primaryTrainer?.name || "Unknown",
+      assignedTrainers,
       createdAt: new Date().toISOString().split('T')[0],
     };
     setPackages([newPackage, ...packages]);
@@ -419,6 +465,13 @@ export function PackagesTab() {
                         <Edit className="h-4 w-4 mr-2" />
                         Edit Package
                       </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => {
+                        setSelectedPackage(pkg);
+                        setManageTrainersDialogOpen(true);
+                      }}>
+                        <Users className="h-4 w-4 mr-2" />
+                        Manage Trainers
+                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleToggleActive(pkg.id)}>
                         <Eye className="h-4 w-4 mr-2" />
                         {pkg.isActive ? "Deactivate" : "Activate"}
@@ -463,10 +516,15 @@ export function PackagesTab() {
                       )}
                     </div>
 
-                    {/* Trainer */}
+                    {/* Trainers */}
                     <div className="flex items-center gap-2 text-sm text-muted-foreground pt-2 border-t">
                       <User className="h-4 w-4" />
-                      <span>{pkg.trainerName}</span>
+                      <span>{pkg.primaryTrainerName}</span>
+                      {pkg.assignedTrainers.length > 1 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{pkg.assignedTrainers.length - 1} more
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -508,7 +566,12 @@ export function PackagesTab() {
                         <span className="text-muted-foreground">|</span>
                         <span className="flex items-center gap-1 text-muted-foreground">
                           <User className="h-3 w-3" />
-                          {pkg.trainerName}
+                          {pkg.primaryTrainerName}
+                          {pkg.assignedTrainers.length > 1 && (
+                            <Badge variant="outline" className="text-xs ml-1">
+                              +{pkg.assignedTrainers.length - 1}
+                            </Badge>
+                          )}
                         </span>
                       </div>
                     </div>
@@ -585,8 +648,9 @@ export function PackagesTab() {
               clientName: client.name,
               packageId: selectedPackage.id,
               packageTitle: selectedPackage.title,
-              trainerId: selectedPackage.trainerId,
-              trainerName: selectedPackage.trainerName,
+              primaryTrainerId: selectedPackage.primaryTrainerId,
+              primaryTrainerName: selectedPackage.primaryTrainerName,
+              assignedTrainers: [...selectedPackage.assignedTrainers],
               sessionsTotal: selectedPackage.sessions,
               sessionsUsed: 0,
               status: "active",
@@ -622,7 +686,46 @@ export function PackagesTab() {
             purchaseDate: selectedActivePackage.purchaseDate,
             expiryDate: selectedActivePackage.expiryDate,
             totalPaid: selectedActivePackage.totalPaid,
-            trainerId: selectedActivePackage.trainerId,
+            trainerId: selectedActivePackage.primaryTrainerId,
+          }}
+        />
+      )}
+
+      {/* Manage Trainers Dialog */}
+      {selectedPackage && (
+        <ManagePackageTrainersDialog
+          open={manageTrainersDialogOpen}
+          onOpenChange={setManageTrainersDialogOpen}
+          packageTitle={selectedPackage.title}
+          packageId={selectedPackage.id}
+          currentAssignments={selectedPackage.assignedTrainers.map(t => ({
+            trainerId: t.trainerId,
+            isPrimary: t.isPrimary,
+            assignedAt: selectedPackage.createdAt,
+          }))}
+          availableTrainers={mockTrainers}
+          onSave={(newAssignments) => {
+            const primaryAssignment = newAssignments.find(a => a.isPrimary);
+            const primaryTrainer = mockTrainers.find(t => t.id === primaryAssignment?.trainerId);
+            
+            setPackages(packages.map(p => 
+              p.id === selectedPackage.id 
+                ? { 
+                    ...p, 
+                    primaryTrainerId: primaryAssignment?.trainerId || p.primaryTrainerId,
+                    primaryTrainerName: primaryTrainer?.name || p.primaryTrainerName,
+                    assignedTrainers: newAssignments.map(a => {
+                      const trainer = mockTrainers.find(t => t.id === a.trainerId);
+                      return {
+                        trainerId: a.trainerId,
+                        trainerName: trainer?.name || "Unknown",
+                        isPrimary: a.isPrimary,
+                      };
+                    }),
+                  }
+                : p
+            ));
+            toast.success("Trainer assignments updated!");
           }}
         />
       )}
