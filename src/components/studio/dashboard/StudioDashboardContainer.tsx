@@ -8,6 +8,7 @@ import { ProgramsTab } from "./tabs/ProgramsTab";
 import { PackagesTab } from "./tabs/PackagesTab";
 import { ServicesTab } from "./tabs/ServicesTab";
 import { CalendarTab } from "./tabs/CalendarTab";
+import { SessionsTab } from "./tabs/SessionsTab";
 import { MessagesTab } from "./tabs/MessagesTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
@@ -75,6 +76,7 @@ export function StudioDashboardContainer() {
           {activeTab === "programs" && <ProgramsTab />}
           {activeTab === "packages" && <PackagesTab />}
           {activeTab === "services" && <ServicesTab />}
+          {activeTab === "sessions" && <SessionsTab />}
           {activeTab === "calendar" && <CalendarTab />}
           {activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
           {activeTab === "analytics" && <AnalyticsTab />}
