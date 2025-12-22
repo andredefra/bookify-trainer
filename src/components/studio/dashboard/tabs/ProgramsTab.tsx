@@ -27,10 +27,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Plus, MoreVertical, Users, Calendar, Search, Edit, Trash2, Eye, Copy } from "lucide-react";
+import { Plus, MoreVertical, Users, Calendar, Search, Edit, Trash2, Eye, Copy, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ProgramDetailsDialog } from "./programs/ProgramDetailsDialog";
+import { ProgramExerciseEditor } from "./programs/ProgramExerciseEditor";
+import { AssignProgramDialog } from "./programs/AssignProgramDialog";
 
-interface Program {
+export interface ProgramExercise {
+  id: string;
+  name: string;
+  sets: number;
+  reps: string;
+  rest: string;
+  notes?: string;
+}
+
+export interface Program {
   id: string;
   name: string;
   description: string;
@@ -40,12 +52,18 @@ interface Program {
   trainerId?: string;
   trainerName?: string;
   createdAt: string;
+  exercises?: ProgramExercise[];
 }
 
 export function ProgramsTab() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+  const [isEditorDialogOpen, setIsEditorDialogOpen] = useState(false);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+
   const [programs, setPrograms] = useState<Program[]>([
     { 
       id: "1", 
@@ -55,7 +73,12 @@ export function ProgramsTab() {
       weeks: 12,
       status: "active",
       trainerName: "Marco Rossi",
-      createdAt: "2024-01-15"
+      createdAt: "2024-01-15",
+      exercises: [
+        { id: "1", name: "Barbell Squat", sets: 4, reps: "8-10", rest: "90s", notes: "Keep core tight" },
+        { id: "2", name: "Bench Press", sets: 4, reps: "8-10", rest: "90s" },
+        { id: "3", name: "Deadlift", sets: 3, reps: "6-8", rest: "120s", notes: "Focus on form" },
+      ]
     },
     { 
       id: "2", 
@@ -65,7 +88,11 @@ export function ProgramsTab() {
       weeks: 8,
       status: "active",
       trainerName: "Laura Bianchi",
-      createdAt: "2024-02-01"
+      createdAt: "2024-02-01",
+      exercises: [
+        { id: "1", name: "Goblet Squat", sets: 3, reps: "12-15", rest: "60s" },
+        { id: "2", name: "Push-ups", sets: 3, reps: "10-12", rest: "60s" },
+      ]
     },
     { 
       id: "3", 
@@ -75,7 +102,12 @@ export function ProgramsTab() {
       weeks: 6,
       status: "active",
       trainerName: "Giuseppe Verde",
-      createdAt: "2024-01-20"
+      createdAt: "2024-01-20",
+      exercises: [
+        { id: "1", name: "Burpees", sets: 4, reps: "30s", rest: "15s" },
+        { id: "2", name: "Mountain Climbers", sets: 4, reps: "30s", rest: "15s" },
+        { id: "3", name: "Jump Squats", sets: 4, reps: "30s", rest: "15s" },
+      ]
     },
     { 
       id: "4", 
@@ -84,7 +116,8 @@ export function ProgramsTab() {
       clients: 6,
       weeks: 8,
       status: "draft",
-      createdAt: "2024-03-01"
+      createdAt: "2024-03-01",
+      exercises: []
     },
   ]);
 
@@ -99,6 +132,13 @@ export function ProgramsTab() {
     { id: "1", name: "Marco Rossi" },
     { id: "2", name: "Laura Bianchi" },
     { id: "3", name: "Giuseppe Verde" },
+  ];
+
+  const clients = [
+    { id: "c1", name: "Sarah Johnson" },
+    { id: "c2", name: "Michael Brown" },
+    { id: "c3", name: "Emma Wilson" },
+    { id: "c4", name: "Sofia Martinez" },
   ];
 
   const filteredPrograms = programs.filter(program =>
@@ -128,6 +168,7 @@ export function ProgramsTab() {
       trainerId: newProgram.trainerId,
       trainerName: trainer?.name,
       createdAt: new Date().toISOString().split('T')[0],
+      exercises: [],
     };
 
     setPrograms([program, ...programs]);
@@ -172,6 +213,48 @@ export function ProgramsTab() {
       }
       return p;
     }));
+  };
+
+  const handleViewDetails = (program: Program) => {
+    setSelectedProgram(program);
+    setIsDetailsDialogOpen(true);
+  };
+
+  const handleEditProgram = (program: Program) => {
+    setSelectedProgram(program);
+    setIsEditorDialogOpen(true);
+  };
+
+  const handleAssignProgram = (program: Program) => {
+    setSelectedProgram(program);
+    setIsAssignDialogOpen(true);
+  };
+
+  const handleSaveExercises = (exercises: ProgramExercise[]) => {
+    if (selectedProgram) {
+      setPrograms(programs.map(p => 
+        p.id === selectedProgram.id ? { ...p, exercises } : p
+      ));
+      toast({
+        title: "Exercises Updated",
+        description: "Program exercises have been saved",
+      });
+    }
+    setIsEditorDialogOpen(false);
+  };
+
+  const handleAssignToClient = (clientId: string, trainerId: string, startDate: string) => {
+    if (selectedProgram) {
+      setPrograms(programs.map(p => 
+        p.id === selectedProgram.id ? { ...p, clients: p.clients + 1 } : p
+      ));
+      const client = clients.find(c => c.id === clientId);
+      toast({
+        title: "Program Assigned",
+        description: `${selectedProgram.name} assigned to ${client?.name}`,
+      });
+    }
+    setIsAssignDialogOpen(false);
   };
 
   const stats = {
@@ -311,13 +394,17 @@ export function ProgramsTab() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleViewDetails(program)}>
                     <Eye className="h-4 w-4 mr-2" />
                     View Details
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleEditProgram(program)}>
                     <Edit className="h-4 w-4 mr-2" />
-                    Edit Program
+                    Edit Exercises
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAssignProgram(program)}>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Assign to Client
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleDuplicateProgram(program)}>
                     <Copy className="h-4 w-4 mr-2" />
@@ -356,7 +443,9 @@ export function ProgramsTab() {
                 <Badge variant={program.status === "active" ? "default" : "secondary"}>
                   {program.status}
                 </Badge>
-                <Button variant="outline" size="sm">View Details</Button>
+                <Button variant="outline" size="sm" onClick={() => handleViewDetails(program)}>
+                  View Details
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -367,6 +456,42 @@ export function ProgramsTab() {
         <div className="text-center py-12">
           <p className="text-muted-foreground">No programs found. Create your first program to get started.</p>
         </div>
+      )}
+
+      {/* Dialogs */}
+      {selectedProgram && (
+        <>
+          <ProgramDetailsDialog
+            open={isDetailsDialogOpen}
+            onOpenChange={setIsDetailsDialogOpen}
+            program={selectedProgram}
+            onEdit={() => {
+              setIsDetailsDialogOpen(false);
+              setIsEditorDialogOpen(true);
+            }}
+            onAssign={() => {
+              setIsDetailsDialogOpen(false);
+              setIsAssignDialogOpen(true);
+            }}
+          />
+
+          <ProgramExerciseEditor
+            open={isEditorDialogOpen}
+            onOpenChange={setIsEditorDialogOpen}
+            programName={selectedProgram.name}
+            initialExercises={selectedProgram.exercises}
+            onSave={handleSaveExercises}
+          />
+
+          <AssignProgramDialog
+            open={isAssignDialogOpen}
+            onOpenChange={setIsAssignDialogOpen}
+            program={selectedProgram}
+            clients={clients}
+            trainers={trainers}
+            onAssign={handleAssignToClient}
+          />
+        </>
       )}
     </div>
   );
