@@ -1,136 +1,72 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Users, DollarSign, Calendar, ArrowUp, ArrowDown } from "lucide-react";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BarChart3, Package, DollarSign, Users } from "lucide-react";
+import { StudioOverviewAnalytics } from './analytics/StudioOverviewAnalytics';
+import { StudioProgramsAnalytics } from './analytics/StudioProgramsAnalytics';
+import { StudioRevenueDetails } from './analytics/StudioRevenueDetails';
+import { StudioTrainerPerformance } from './analytics/StudioTrainerPerformance';
+import { TimeFrame } from './analytics/types';
 
 export function AnalyticsTab() {
-  const stats = [
-    { label: "Total Revenue", value: "€24,350", change: "+18%", up: true, icon: DollarSign },
-    { label: "Active Clients", value: "47", change: "+12%", up: true, icon: Users },
-    { label: "Sessions Completed", value: "312", change: "+25%", up: true, icon: Calendar },
-    { label: "Client Retention", value: "94%", change: "+3%", up: true, icon: TrendingUp },
-  ];
-
-  const trainerPerformance = [
-    { name: "Marco Rossi", sessions: 48, revenue: 2400, clients: 12, trend: "+15%" },
-    { name: "Laura Bianchi", sessions: 42, revenue: 2100, clients: 10, trend: "+8%" },
-    { name: "Giuseppe Verde", sessions: 36, revenue: 1800, clients: 8, trend: "+12%" },
-  ];
-
-  const revenueBreakdown = [
-    { source: "Session Packages", amount: 15200, percentage: 62 },
-    { source: "Individual Services", amount: 6150, percentage: 25 },
-    { source: "Group Classes", amount: 3000, percentage: 13 },
-  ];
+  const [timeFrame, setTimeFrame] = useState<TimeFrame>('month');
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Analytics</h1>
-        <p className="text-muted-foreground">Track your studio's performance and growth</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold">Analytics</h2>
+          <p className="text-muted-foreground">Monitora le performance e la crescita del tuo studio</p>
+        </div>
+        <Select value={timeFrame} onValueChange={(v) => setTimeFrame(v as TimeFrame)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Periodo" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="week">Questa Settimana</SelectItem>
+            <SelectItem value="month">Questo Mese</SelectItem>
+            <SelectItem value="quarter">Ultimo Trimestre</SelectItem>
+            <SelectItem value="year">Quest'Anno</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.label}
-              </CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="flex items-center gap-1">
-                {stat.up ? <ArrowUp className="h-3 w-3 text-green-600" /> : <ArrowDown className="h-3 w-3 text-red-600" />}
-                <p className={`text-xs ${stat.up ? 'text-green-600' : 'text-red-600'}`}>{stat.change} from last month</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsTrigger value="overview" className="gap-2">
+            <BarChart3 className="h-4 w-4 hidden sm:inline" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="programs" className="gap-2">
+            <Package className="h-4 w-4 hidden sm:inline" />
+            Programmi
+          </TabsTrigger>
+          <TabsTrigger value="revenue" className="gap-2">
+            <DollarSign className="h-4 w-4 hidden sm:inline" />
+            Fatturato
+          </TabsTrigger>
+          <TabsTrigger value="trainers" className="gap-2">
+            <Users className="h-4 w-4 hidden sm:inline" />
+            Trainer
+          </TabsTrigger>
+        </TabsList>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Trainer Performance</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">Trainer</th>
-                  <th className="text-right py-3 px-4 font-medium">Sessions</th>
-                  <th className="text-right py-3 px-4 font-medium">Revenue</th>
-                  <th className="text-right py-3 px-4 font-medium">Clients</th>
-                  <th className="text-right py-3 px-4 font-medium">Trend</th>
-                </tr>
-              </thead>
-              <tbody>
-                {trainerPerformance.map((trainer, index) => (
-                  <tr key={index} className="border-b last:border-0 hover:bg-muted/50">
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-primary text-sm font-medium">{trainer.name.charAt(0)}</span>
-                        </div>
-                        <span className="font-medium">{trainer.name}</span>
-                      </div>
-                    </td>
-                    <td className="text-right py-3 px-4">{trainer.sessions}</td>
-                    <td className="text-right py-3 px-4 font-medium text-green-600">€{trainer.revenue.toLocaleString()}</td>
-                    <td className="text-right py-3 px-4">{trainer.clients}</td>
-                    <td className="text-right py-3 px-4 text-green-600">{trainer.trend}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+        <TabsContent value="overview" className="mt-6">
+          <StudioOverviewAnalytics />
+        </TabsContent>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Revenue by Source</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {revenueBreakdown.map((item, index) => (
-              <div key={index}>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm">{item.source}</span>
-                  <span className="font-bold">€{item.amount.toLocaleString()} ({item.percentage}%)</span>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${item.percentage}%` }} />
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+        <TabsContent value="programs" className="mt-6">
+          <StudioProgramsAnalytics />
+        </TabsContent>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Client Growth</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-              <span>New Clients (This Month)</span>
-              <span className="font-bold text-green-600">+8</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-              <span>Churned Clients</span>
-              <span className="font-bold text-red-600">-2</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-              <span>Net Growth</span>
-              <span className="font-bold text-green-600">+6</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-              <span>Avg. Client Lifetime</span>
-              <span className="font-bold">8.5 months</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        <TabsContent value="revenue" className="mt-6">
+          <StudioRevenueDetails />
+        </TabsContent>
+
+        <TabsContent value="trainers" className="mt-6">
+          <StudioTrainerPerformance />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
