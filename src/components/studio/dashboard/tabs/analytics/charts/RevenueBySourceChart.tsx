@@ -45,7 +45,7 @@ export const RevenueBySourceChart = ({ data }: RevenueBySourceChartProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Fatturato per Fonte</CardTitle>
+        <CardTitle className="text-base">Revenue by Source</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[280px]">

@@ -15,7 +15,7 @@ export const CommissionBreakdownChart = ({ data }: CommissionBreakdownChartProps
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Riepilogo Commissioni</CardTitle>
+        <CardTitle className="text-base">Commission Summary</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Gross Revenue */}
@@ -23,7 +23,7 @@ export const CommissionBreakdownChart = ({ data }: CommissionBreakdownChartProps
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Wallet className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Fatturato Lordo</span>
+              <span className="text-sm text-muted-foreground">Gross Revenue</span>
             </div>
             <span className="font-semibold text-lg">€{data.totalGrossRevenue.toLocaleString()}</span>
           </div>
@@ -35,8 +35,8 @@ export const CommissionBreakdownChart = ({ data }: CommissionBreakdownChartProps
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ArrowDownLeft className="h-4 w-4 text-green-500" />
-              <span className="text-sm text-muted-foreground">Commissioni Guadagnate</span>
-              <span className="text-xs text-muted-foreground">(da Gym Partner)</span>
+              <span className="text-sm text-muted-foreground">Commissions Earned</span>
+              <span className="text-xs text-muted-foreground">(from Gym Partner)</span>
             </div>
             <span className="font-medium text-green-600">+€{data.commissionsEarned.toLocaleString()}</span>
           </div>
@@ -51,8 +51,8 @@ export const CommissionBreakdownChart = ({ data }: CommissionBreakdownChartProps
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ArrowUpRight className="h-4 w-4 text-red-500" />
-              <span className="text-sm text-muted-foreground">Commissioni Pagate</span>
-              <span className="text-xs text-muted-foreground">(a Studio Network)</span>
+              <span className="text-sm text-muted-foreground">Commissions Paid</span>
+              <span className="text-xs text-muted-foreground">(to Studio Network)</span>
             </div>
             <span className="font-medium text-red-600">-€{data.commissionsPaid.toLocaleString()}</span>
           </div>
@@ -68,7 +68,7 @@ export const CommissionBreakdownChart = ({ data }: CommissionBreakdownChartProps
         {/* Net Revenue */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Fatturato Netto</span>
+            <span className="text-sm font-medium">Net Revenue</span>
             <span className="font-bold text-xl text-primary">€{data.netRevenue.toLocaleString()}</span>
           </div>
           <div className="flex items-center gap-2">
@@ -80,14 +80,14 @@ export const CommissionBreakdownChart = ({ data }: CommissionBreakdownChartProps
         {/* Summary */}
         <div className="bg-muted/50 rounded-lg p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">Margine commissioni: </span>
+            <span className="font-medium text-foreground">Commission margin: </span>
             €{(data.commissionsEarned - data.commissionsPaid).toLocaleString()}
             <span className="text-green-600 ml-1">
               (+{(((data.commissionsEarned - data.commissionsPaid) / data.totalGrossRevenue) * 100).toFixed(1)}%)
             </span>
           </p>
           <p className="text-xs text-muted-foreground">
-            Guadagni extra dalle partnership con le palestre dopo aver dedotto le commissioni verso la rete studio.
+            Extra earnings from gym partnerships after deducting studio network commissions.
           </p>
         </div>
       </CardContent>

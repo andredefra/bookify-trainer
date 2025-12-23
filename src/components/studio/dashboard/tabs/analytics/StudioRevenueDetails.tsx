@@ -3,7 +3,7 @@ import { revenueBySourceData, revenueByProductType, sourceColors, sourceLabels, 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DollarSign, TrendingUp, Building2, Store, Network } from 'lucide-react';
+import { DollarSign, Building2, Network } from 'lucide-react';
 
 export const StudioRevenueDetails = () => {
   // Colors for product types
@@ -34,7 +34,7 @@ export const StudioRevenueDetails = () => {
       case 'direct': return <DollarSign className="h-4 w-4" />;
       case 'gym': return <Building2 className="h-4 w-4" />;
       case 'studio': return <Network className="h-4 w-4" />;
-      default: return <Store className="h-4 w-4" />;
+      default: return <DollarSign className="h-4 w-4" />;
     }
   };
 
@@ -44,7 +44,7 @@ export const StudioRevenueDetails = () => {
         {/* Revenue by Product Type */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Fatturato per Tipo Prodotto</CardTitle>
+            <CardTitle className="text-base">Revenue by Product Type</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -91,7 +91,7 @@ export const StudioRevenueDetails = () => {
         {/* Revenue per Source Summary */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Fatturato per Fonte (Dettaglio)</CardTitle>
+            <CardTitle className="text-base">Revenue by Source (Details)</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {revenueBySourceData.map((source, index) => (
@@ -111,30 +111,30 @@ export const StudioRevenueDetails = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-bold">€{source.netRevenue.toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground">Netto</p>
+                    <p className="text-xs text-muted-foreground">Net</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-4 gap-2 text-xs">
                   <div className="text-center p-2 bg-background rounded">
-                    <p className="text-muted-foreground">Programmi</p>
+                    <p className="text-muted-foreground">Programs</p>
                     <p className="font-medium">€{source.programs.toLocaleString()}</p>
                   </div>
                   <div className="text-center p-2 bg-background rounded">
-                    <p className="text-muted-foreground">Sessioni</p>
+                    <p className="text-muted-foreground">Sessions</p>
                     <p className="font-medium">€{source.sessions.toLocaleString()}</p>
                   </div>
                   <div className="text-center p-2 bg-background rounded">
-                    <p className="text-muted-foreground">Pacchetti</p>
+                    <p className="text-muted-foreground">Packages</p>
                     <p className="font-medium">€{source.packages.toLocaleString()}</p>
                   </div>
                   <div className="text-center p-2 bg-background rounded">
-                    <p className="text-muted-foreground">Servizi</p>
+                    <p className="text-muted-foreground">Services</p>
                     <p className="font-medium">€{source.services.toLocaleString()}</p>
                   </div>
                 </div>
                 {source.commissions > 0 && (
                   <div className="flex justify-between text-xs pt-2 border-t border-border">
-                    <span className="text-muted-foreground">Commissioni pagate:</span>
+                    <span className="text-muted-foreground">Commissions paid:</span>
                     <span className="text-red-500">-€{source.commissions.toLocaleString()}</span>
                   </div>
                 )}
@@ -147,20 +147,20 @@ export const StudioRevenueDetails = () => {
       {/* Full Revenue Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Riepilogo Completo Fatturato</CardTitle>
+          <CardTitle className="text-base">Complete Revenue Summary</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Fonte</TableHead>
-                <TableHead className="text-right">Programmi</TableHead>
-                <TableHead className="text-right">Sessioni</TableHead>
-                <TableHead className="text-right">Pacchetti</TableHead>
-                <TableHead className="text-right">Servizi</TableHead>
-                <TableHead className="text-right">Lordo</TableHead>
-                <TableHead className="text-right">Commissioni</TableHead>
-                <TableHead className="text-right">Netto</TableHead>
+                <TableHead>Source</TableHead>
+                <TableHead className="text-right">Programs</TableHead>
+                <TableHead className="text-right">Sessions</TableHead>
+                <TableHead className="text-right">Packages</TableHead>
+                <TableHead className="text-right">Services</TableHead>
+                <TableHead className="text-right">Gross</TableHead>
+                <TableHead className="text-right">Commissions</TableHead>
+                <TableHead className="text-right">Net</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -187,7 +187,7 @@ export const StudioRevenueDetails = () => {
                 </TableRow>
               ))}
               <TableRow className="bg-muted/50 font-bold">
-                <TableCell>Totale</TableCell>
+                <TableCell>Total</TableCell>
                 <TableCell className="text-right">
                   €{revenueBySourceData.reduce((s, r) => s + r.programs, 0).toLocaleString()}
                 </TableCell>
