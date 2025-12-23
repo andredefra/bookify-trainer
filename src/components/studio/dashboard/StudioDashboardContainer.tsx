@@ -12,6 +12,9 @@ import { SessionsTab } from "./tabs/SessionsTab";
 import { MessagesTab } from "./tabs/MessagesTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
+import { StudioTransactionsTab } from "./tabs/transactions/StudioTransactionsTab";
+import { TrainerPerformanceTab } from "./tabs/trainer-performance/TrainerPerformanceTab";
+import { StudioAvailabilityTab } from "./tabs/availability/StudioAvailabilityTab";
 import { toast } from "sonner";
 
 export function StudioDashboardContainer() {
@@ -79,6 +82,9 @@ export function StudioDashboardContainer() {
           {activeTab === "sessions" && <SessionsTab />}
           {activeTab === "calendar" && <CalendarTab />}
           {activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
+          {activeTab === "transactions" && <StudioTransactionsTab />}
+          {activeTab === "trainer-performance" && <TrainerPerformanceTab />}
+          {activeTab === "availability" && <StudioAvailabilityTab />}
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "settings" && <SettingsTab user={user} />}
         </main>

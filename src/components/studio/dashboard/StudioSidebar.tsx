@@ -9,7 +9,9 @@ import {
   Package,
   Dumbbell,
   Briefcase,
-  Clock
+  Clock,
+  DollarSign,
+  Star
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -120,6 +122,30 @@ export function StudioSidebar({
               {unreadMessagesCount > 0 && (
                 <Badge className="bg-primary ml-2">{unreadMessagesCount}</Badge>
               )}
+            </button>
+            
+            <button 
+              onClick={() => { setActiveTab("transactions"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "transactions" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <DollarSign className="w-5 h-5 mr-3" />
+              <span>Transactions</span>
+            </button>
+
+            <button 
+              onClick={() => { setActiveTab("trainer-performance"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "trainer-performance" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Star className="w-5 h-5 mr-3" />
+              <span>Trainer Performance</span>
+            </button>
+
+            <button 
+              onClick={() => { setActiveTab("availability"); if (isMobile) setShowSidebar(false); }}
+              className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "availability" ? "bg-primary/5 text-primary" : ""}`}
+            >
+              <Clock className="w-5 h-5 mr-3" />
+              <span>Availability & Shifts</span>
             </button>
             
             <button 
