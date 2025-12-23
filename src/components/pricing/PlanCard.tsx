@@ -59,17 +59,6 @@ export const PlanCard = ({
         </div>
       )}
       
-      {isPopular && !isLaunchOffer && (
-        <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs font-medium py-1 px-3 rounded-full">
-          RECOMMENDED
-        </div>
-      )}
-      
-      {isGymPlan && (
-        <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-gray-800 text-white text-xs font-medium py-1 px-3 rounded-full">
-          FOR GYMS
-        </div>
-      )}
       
       <div className="mb-6">
         <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
