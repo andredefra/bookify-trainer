@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgramSalesDataPoint } from '../types';
 import { sourceColors, sourceLabels } from '../data/studioRevenueData';
@@ -47,19 +47,19 @@ export const ProgramSalesChart = ({ data }: ProgramSalesChartProps) => {
           <p className="font-medium text-foreground mb-2">{label}</p>
           <div className="space-y-1 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Diretto:</span>
-              <span>€{programData?.directRevenue.toLocaleString()} ({programData?.directUnits} unità)</span>
+              <span className="text-muted-foreground">Direct:</span>
+              <span>€{programData?.directRevenue.toLocaleString()} ({programData?.directUnits} units)</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Gym:</span>
-              <span>€{programData?.gymRevenue.toLocaleString()} ({programData?.gymUnits} unità)</span>
+              <span>€{programData?.gymRevenue.toLocaleString()} ({programData?.gymUnits} units)</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Studio:</span>
-              <span>€{programData?.studioRevenue.toLocaleString()} ({programData?.studioUnits} unità)</span>
+              <span>€{programData?.studioRevenue.toLocaleString()} ({programData?.studioUnits} units)</span>
             </div>
             <div className="border-t border-border pt-1 mt-1 flex justify-between font-medium">
-              <span>Totale:</span>
+              <span>Total:</span>
               <span>€{programData?.totalRevenue.toLocaleString()}</span>
             </div>
           </div>
@@ -72,7 +72,7 @@ export const ProgramSalesChart = ({ data }: ProgramSalesChartProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Vendite Programmi per Fonte</CardTitle>
+        <CardTitle className="text-base">Program Sales by Source</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[350px]">

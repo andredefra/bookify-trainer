@@ -27,19 +27,11 @@ export const StudioTrainerPerformance = () => {
 
   const avgRetention = (trainerPerformanceData.reduce((s, t) => s + t.retentionRate, 0) / trainerPerformanceData.length).toFixed(0);
 
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return <Minus className="h-4 w-4 text-muted-foreground" />;
-    }
-  };
-
   const getTrendBadge = (trend: string) => {
     switch (trend) {
-      case 'up': return <Badge variant="outline" className="text-green-600 border-green-600">In crescita</Badge>;
-      case 'down': return <Badge variant="outline" className="text-red-600 border-red-600">In calo</Badge>;
-      default: return <Badge variant="outline">Stabile</Badge>;
+      case 'up': return <Badge variant="outline" className="text-green-600 border-green-600">Growing</Badge>;
+      case 'down': return <Badge variant="outline" className="text-red-600 border-red-600">Declining</Badge>;
+      default: return <Badge variant="outline">Stable</Badge>;
     }
   };
 
@@ -75,7 +67,7 @@ export const StudioTrainerPerformance = () => {
                 <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Trainer Attivi</p>
+                <p className="text-sm text-muted-foreground">Active Trainers</p>
                 <p className="text-2xl font-bold">{trainerPerformanceData.length}</p>
               </div>
             </div>
@@ -88,7 +80,7 @@ export const StudioTrainerPerformance = () => {
                 <DollarSign className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Fatturato Totale</p>
+                <p className="text-sm text-muted-foreground">Total Revenue</p>
                 <p className="text-2xl font-bold">€{totals.revenue.toLocaleString()}</p>
               </div>
             </div>
@@ -101,7 +93,7 @@ export const StudioTrainerPerformance = () => {
                 <Calendar className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Sessioni Totali</p>
+                <p className="text-sm text-muted-foreground">Total Sessions</p>
                 <p className="text-2xl font-bold">{totals.sessions}</p>
               </div>
             </div>
@@ -114,7 +106,7 @@ export const StudioTrainerPerformance = () => {
                 <TrendingUp className="h-5 w-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Retention Media</p>
+                <p className="text-sm text-muted-foreground">Avg. Retention</p>
                 <p className="text-2xl font-bold">{avgRetention}%</p>
               </div>
             </div>
@@ -125,7 +117,7 @@ export const StudioTrainerPerformance = () => {
       {/* Revenue Chart per Trainer */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Fatturato per Trainer (per Fonte)</CardTitle>
+          <CardTitle className="text-base">Trainer Revenue by Source</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
@@ -146,7 +138,7 @@ export const StudioTrainerPerformance = () => {
                 <Legend />
                 <Bar 
                   dataKey="directRevenue" 
-                  name="Vendite Dirette"
+                  name="Direct Sales"
                   stackId="a" 
                   fill={sourceColors.direct} 
                 />
@@ -166,18 +158,18 @@ export const StudioTrainerPerformance = () => {
       {/* Trainer Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Dettaglio Performance Trainer</CardTitle>
+          <CardTitle className="text-base">Trainer Performance Details</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Trainer</TableHead>
-                <TableHead className="text-center">Sessioni</TableHead>
-                <TableHead className="text-center">Clienti</TableHead>
-                <TableHead className="text-right">Diretto</TableHead>
+                <TableHead className="text-center">Sessions</TableHead>
+                <TableHead className="text-center">Clients</TableHead>
+                <TableHead className="text-right">Direct</TableHead>
                 <TableHead className="text-right">Gym</TableHead>
-                <TableHead className="text-right">Totale</TableHead>
+                <TableHead className="text-right">Total</TableHead>
                 <TableHead className="text-center">Retention</TableHead>
                 <TableHead className="text-center">Trend</TableHead>
               </TableRow>

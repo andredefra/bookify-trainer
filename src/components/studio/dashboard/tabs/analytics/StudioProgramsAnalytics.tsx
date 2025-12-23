@@ -47,7 +47,7 @@ export const StudioProgramsAnalytics = () => {
                 <Package className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Programmi Venduti</p>
+                <p className="text-sm text-muted-foreground">Programs Sold</p>
                 <p className="text-2xl font-bold">{totals.units}</p>
               </div>
             </div>
@@ -60,7 +60,7 @@ export const StudioProgramsAnalytics = () => {
                 <TrendingUp className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Fatturato Programmi</p>
+                <p className="text-sm text-muted-foreground">Program Revenue</p>
                 <p className="text-2xl font-bold">€{totals.revenue.toLocaleString()}</p>
               </div>
             </div>
@@ -73,7 +73,7 @@ export const StudioProgramsAnalytics = () => {
                 <TrendingUp className="h-5 w-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Fatturato Netto</p>
+                <p className="text-sm text-muted-foreground">Net Revenue</p>
                 <p className="text-2xl font-bold">€{(totals.revenue - totals.commissions).toLocaleString()}</p>
               </div>
             </div>
@@ -87,18 +87,18 @@ export const StudioProgramsAnalytics = () => {
       {/* Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Dettaglio Vendite Programmi</CardTitle>
+          <CardTitle className="text-base">Program Sales Details</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Programma</TableHead>
-                <TableHead className="text-center">Unità Vendute</TableHead>
-                <TableHead className="text-center">Fonte</TableHead>
-                <TableHead className="text-right">Fatturato</TableHead>
-                <TableHead className="text-right">Commissioni</TableHead>
-                <TableHead className="text-right">Netto</TableHead>
+                <TableHead>Program</TableHead>
+                <TableHead className="text-center">Units Sold</TableHead>
+                <TableHead className="text-center">Source</TableHead>
+                <TableHead className="text-right">Revenue</TableHead>
+                <TableHead className="text-right">Commissions</TableHead>
+                <TableHead className="text-right">Net</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -133,7 +133,7 @@ export const StudioProgramsAnalytics = () => {
                 </TableRow>
               ))}
               <TableRow className="bg-muted/50 font-bold">
-                <TableCell>Totale</TableCell>
+                <TableCell>Total</TableCell>
                 <TableCell className="text-center">{totals.units}</TableCell>
                 <TableCell></TableCell>
                 <TableCell className="text-right">€{totals.revenue.toLocaleString()}</TableCell>

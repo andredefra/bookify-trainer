@@ -25,7 +25,7 @@ export const MonthlySourceRevenueChart = ({ data }: MonthlySourceRevenueChartPro
           ))}
           <div className="border-t border-border mt-2 pt-2">
             <span className="text-sm font-medium">
-              Totale: €{payload.reduce((sum: number, p: any) => sum + p.value, 0).toLocaleString()}
+              Total: €{payload.reduce((sum: number, p: any) => sum + p.value, 0).toLocaleString()}
             </span>
           </div>
         </div>
@@ -37,7 +37,7 @@ export const MonthlySourceRevenueChart = ({ data }: MonthlySourceRevenueChartPro
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Trend Fatturato Mensile per Fonte</CardTitle>
+        <CardTitle className="text-base">Monthly Revenue Trend by Source</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">

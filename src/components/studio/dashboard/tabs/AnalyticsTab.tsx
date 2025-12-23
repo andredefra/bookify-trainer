@@ -16,17 +16,17 @@ export function AnalyticsTab() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold">Analytics</h2>
-          <p className="text-muted-foreground">Monitora le performance e la crescita del tuo studio</p>
+          <p className="text-muted-foreground">Track your studio's performance and growth</p>
         </div>
         <Select value={timeFrame} onValueChange={(v) => setTimeFrame(v as TimeFrame)}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Periodo" />
+            <SelectValue placeholder="Period" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="week">Questa Settimana</SelectItem>
-            <SelectItem value="month">Questo Mese</SelectItem>
-            <SelectItem value="quarter">Ultimo Trimestre</SelectItem>
-            <SelectItem value="year">Quest'Anno</SelectItem>
+            <SelectItem value="week">This Week</SelectItem>
+            <SelectItem value="month">This Month</SelectItem>
+            <SelectItem value="quarter">Last Quarter</SelectItem>
+            <SelectItem value="year">This Year</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -39,11 +39,11 @@ export function AnalyticsTab() {
           </TabsTrigger>
           <TabsTrigger value="programs" className="gap-2">
             <Package className="h-4 w-4 hidden sm:inline" />
-            Programmi
+            Programs
           </TabsTrigger>
           <TabsTrigger value="revenue" className="gap-2">
             <DollarSign className="h-4 w-4 hidden sm:inline" />
-            Fatturato
+            Revenue
           </TabsTrigger>
           <TabsTrigger value="trainers" className="gap-2">
             <Users className="h-4 w-4 hidden sm:inline" />
