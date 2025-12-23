@@ -208,7 +208,7 @@ export function ClientsTab() {
       <ClientGoalsDialog
         open={showGoalsDialog}
         onOpenChange={setShowGoalsDialog}
-        clientName={selectedClientName}
+        selectedClient={selectedClientName}
       />
     </div>
   );
