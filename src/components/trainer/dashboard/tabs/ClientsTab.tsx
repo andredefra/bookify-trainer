@@ -14,6 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-progress/ManageGoalTypesDialog";
 import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
 import { GoalManagerModal } from "./clients/GoalManagerModal";
+import { CheckInManagerModal } from "./clients/CheckInManagerModal";
 
 interface ClientItem {
   id: number;
@@ -44,19 +45,28 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [showGoalManagerModal, setShowGoalManagerModal] = useState(false);
   const [goalManagerClient, setGoalManagerClient] = useState<ClientItem | null>(null);
   
+  // Check-in Manager Modal state
+  const [showCheckInManagerModal, setShowCheckInManagerModal] = useState(false);
+  const [checkInManagerClient, setCheckInManagerClient] = useState<ClientItem | null>(null);
+  
   // Opens the standalone Goal Manager modal (bullseye icon)
   const handleViewGoals = (client: ClientItem) => {
     setGoalManagerClient(client);
     setShowGoalManagerModal(true);
   };
   
-  // Closes Goal Manager and opens Profile with Metrics tab
+  // Opens the standalone Check-in Manager modal (flag icon)
+  const handleViewCheckIns = (client: ClientItem) => {
+    setCheckInManagerClient(client);
+    setShowCheckInManagerModal(true);
+  };
+
+  // Closes Goal Manager and navigates to Analytics
   const handleViewProgressFromGoals = () => {
     setShowGoalManagerModal(false);
     if (goalManagerClient) {
-      setActiveClient(goalManagerClient);
-      setInitialProfileTab("metrics");
-      setShowProfileDialog(true);
+      setAnalyticsClientFilter(goalManagerClient.id.toString());
+      setActiveTab("analytics");
     }
   };
   
@@ -121,6 +131,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
                       key={client.id}
                       client={client}
                       onViewGoals={handleViewGoals}
+                      onViewCheckIns={handleViewCheckIns}
                       onViewProfile={handleViewProfile}
                       onViewAnalytics={handleViewAnalytics}
                     />
@@ -211,6 +222,12 @@ export function ClientsTab({ clients }: ClientsTabProps) {
       <ManageGoalTypesDialog
         open={showManageGoalTypesDialog}
         onOpenChange={setShowManageGoalTypesDialog}
+      />
+      
+      <CheckInManagerModal
+        client={checkInManagerClient}
+        open={showCheckInManagerModal}
+        onOpenChange={setShowCheckInManagerModal}
       />
     </div>
   );
