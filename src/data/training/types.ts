@@ -48,6 +48,7 @@ export interface WorkoutSession {
   sessionNumber: number;
   title: string;
   exercises: Exercise[];
+  items?: SessionItem[];  // Mixed exercises and circuits (new)
   completed: boolean;
   completedDate?: string; // ISO date string when completed
   dayOfWeek?: number;
@@ -109,11 +110,26 @@ export interface Routine {
   updatedAt: string;
 }
 
+// Circuit - a group of exercises with rounds and rest settings
+export interface Circuit {
+  id: string;
+  name: string;
+  rounds: number;            // e.g., 3
+  restBetweenRounds: number; // in seconds, e.g., 90
+  exercises: Exercise[];
+}
+
+// Session content can be an Exercise OR a Circuit
+export type SessionItem = 
+  | { type: 'exercise'; data: Exercise }
+  | { type: 'circuit'; data: Circuit };
+
 // Day pattern for Weekly Pattern mode
 export interface DayPattern {
   dayNumber: number; // 1, 2, 3, etc.
   title: string; // e.g., "Leg Day"
   exercises: Exercise[];
+  items?: SessionItem[];  // Mixed exercises and circuits
   routineIds?: string[]; // Track which routines were imported
 }
 

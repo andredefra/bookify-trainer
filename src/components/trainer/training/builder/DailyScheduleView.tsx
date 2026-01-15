@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WorkoutSession, Routine } from "@/data/training/types";
+import { WorkoutSession, Routine, Exercise, Circuit, SessionItem } from "@/data/training/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,26 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp, Plus, Trash2, Layers, AlertCircle, Pencil } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { 
+  ChevronDown, 
+  ChevronUp, 
+  Plus, 
+  Trash2, 
+  Layers, 
+  AlertCircle, 
+  Pencil,
+  Dumbbell,
+  RotateCcw 
+} from "lucide-react";
 import { ImportRoutineDialog } from "./ImportRoutineDialog";
+import { CircuitContainer } from "./CircuitContainer";
 
 interface DailyScheduleViewProps {
   sessions: WorkoutSession[];
@@ -19,7 +37,24 @@ interface DailyScheduleViewProps {
   duration: number;
   sessionsPerWeek: number;
   routines: Routine[];
+  onCreateRoutine?: (routine: Routine) => void;
 }
+
+const createEmptyExercise = (): Exercise => ({
+  id: `ex-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  name: "",
+  sets: 3,
+  reps: "10",
+  repsUnit: "reps",
+});
+
+const createEmptyCircuit = (): Circuit => ({
+  id: `circuit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  name: "",
+  rounds: 3,
+  restBetweenRounds: 60,
+  exercises: [],
+});
 
 export function DailyScheduleView({
   sessions,
@@ -27,6 +62,7 @@ export function DailyScheduleView({
   duration,
   sessionsPerWeek,
   routines,
+  onCreateRoutine,
 }: DailyScheduleViewProps) {
   const [expandedSession, setExpandedSession] = useState<string | null>(null);
   const [showImportDialog, setShowImportDialog] = useState(false);
@@ -56,16 +92,30 @@ export function DailyScheduleView({
     const session = sessions.find((s) => s.id === sessionId);
     if (!session) return;
 
-    const newExercise = {
-      id: `ex-${Date.now()}`,
-      name: "",
-      sets: 3,
-      reps: "10",
-      repsUnit: "reps" as const,
-    };
+    const newExercise = createEmptyExercise();
+
+    if (session.items && session.items.length > 0) {
+      // Use items mode
+      handleSessionChange(sessionId, {
+        items: [...session.items, { type: 'exercise', data: newExercise }],
+      });
+    } else {
+      // Use exercises mode (backward compatibility)
+      handleSessionChange(sessionId, {
+        exercises: [...session.exercises, newExercise],
+      });
+    }
+  };
+
+  const handleAddCircuit = (sessionId: string) => {
+    const session = sessions.find((s) => s.id === sessionId);
+    if (!session) return;
+
+    const newCircuit = createEmptyCircuit();
+    const currentItems = session.items || session.exercises.map((ex) => ({ type: 'exercise' as const, data: ex }));
 
     handleSessionChange(sessionId, {
-      exercises: [...session.exercises, newExercise],
+      items: [...currentItems, { type: 'circuit', data: newCircuit }],
     });
   };
 
@@ -75,6 +125,15 @@ export function DailyScheduleView({
 
     handleSessionChange(sessionId, {
       exercises: session.exercises.filter((e) => e.id !== exerciseId),
+    });
+  };
+
+  const handleRemoveItem = (sessionId: string, itemId: string) => {
+    const session = sessions.find((s) => s.id === sessionId);
+    if (!session || !session.items) return;
+
+    handleSessionChange(sessionId, {
+      items: session.items.filter((item) => item.data.id !== itemId),
     });
   };
 
@@ -94,6 +153,23 @@ export function DailyScheduleView({
     });
   };
 
+  const handleItemChange = (
+    sessionId: string,
+    itemIndex: number,
+    updatedItem: SessionItem
+  ) => {
+    const session = sessions.find((s) => s.id === sessionId);
+    if (!session || !session.items) return;
+
+    const newItems = [...session.items];
+    newItems[itemIndex] = updatedItem;
+    handleSessionChange(sessionId, { items: newItems });
+  };
+
+  const handleCircuitChange = (sessionId: string, itemIndex: number, circuit: Circuit) => {
+    handleItemChange(sessionId, itemIndex, { type: 'circuit', data: circuit });
+  };
+
   const handleOpenImportDialog = (sessionId: string) => {
     setImportingForSession(sessionId);
     setShowImportDialog(true);
@@ -110,10 +186,40 @@ export function DailyScheduleView({
       id: `${ex.id}-import-${Date.now()}`,
     }));
 
-    handleSessionChange(importingForSession, {
-      exercises: [...session.exercises, ...importedExercises],
-    });
+    if (session.items && session.items.length > 0) {
+      const newItems: SessionItem[] = importedExercises.map((ex) => ({
+        type: 'exercise',
+        data: ex,
+      }));
+      handleSessionChange(importingForSession, {
+        items: [...session.items, ...newItems],
+      });
+    } else {
+      handleSessionChange(importingForSession, {
+        exercises: [...session.exercises, ...importedExercises],
+      });
+    }
   };
+
+  const getSessionItemCount = (session: WorkoutSession): number => {
+    if (session.items && session.items.length > 0) {
+      return session.items.length;
+    }
+    return session.exercises.length;
+  };
+
+  const getAllExercisesFromSession = (session: WorkoutSession): Exercise[] => {
+    if (session.items && session.items.length > 0) {
+      return session.items.flatMap((item) =>
+        item.type === 'exercise' ? [item.data] : item.data.exercises
+      );
+    }
+    return session.exercises;
+  };
+
+  const currentSessionForImport = importingForSession
+    ? sessions.find((s) => s.id === importingForSession)
+    : null;
 
   return (
     <div className="space-y-4">
@@ -161,7 +267,7 @@ export function DailyScheduleView({
                                 </Badge>
                               )}
                               <Badge variant="secondary" className="text-xs">
-                                {session.exercises.length} ex
+                                {getSessionItemCount(session)} items
                               </Badge>
                               {expandedSession === session.id ? (
                                 <ChevronUp className="h-4 w-4" />
@@ -184,7 +290,86 @@ export function DailyScheduleView({
                             className="text-sm"
                           />
 
-                          {session.exercises.length > 0 ? (
+                          {/* Render items or exercises */}
+                          {session.items && session.items.length > 0 ? (
+                            <div className="space-y-2">
+                              {session.items.map((item, itemIndex) => (
+                                item.type === 'exercise' ? (
+                                  <div
+                                    key={item.data.id}
+                                    className="flex items-center gap-1 text-xs"
+                                  >
+                                    <span className="text-muted-foreground w-4">
+                                      {itemIndex + 1}.
+                                    </span>
+                                    <Input
+                                      value={item.data.name}
+                                      onChange={(e) =>
+                                        handleItemChange(session.id, itemIndex, {
+                                          type: 'exercise',
+                                          data: { ...item.data, name: e.target.value },
+                                        })
+                                      }
+                                      className="flex-1 h-7 text-xs"
+                                      placeholder="Exercise"
+                                    />
+                                    <Input
+                                      type="number"
+                                      value={item.data.sets}
+                                      onChange={(e) =>
+                                        handleItemChange(session.id, itemIndex, {
+                                          type: 'exercise',
+                                          data: { ...item.data, sets: parseInt(e.target.value) || 1 },
+                                        })
+                                      }
+                                      className="w-10 h-7 text-xs text-center"
+                                    />
+                                    <span>×</span>
+                                    <Input
+                                      value={item.data.reps}
+                                      onChange={(e) =>
+                                        handleItemChange(session.id, itemIndex, {
+                                          type: 'exercise',
+                                          data: { ...item.data, reps: e.target.value },
+                                        })
+                                      }
+                                      className="w-12 h-7 text-xs"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-6 w-6"
+                                      onClick={() => handleRemoveItem(session.id, item.data.id)}
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <div key={item.data.id} className="border border-primary/30 rounded-md p-2 bg-primary/5">
+                                    <div className="flex items-center gap-1 mb-1">
+                                      <RotateCcw className="h-3 w-3 text-primary" />
+                                      <span className="text-xs font-medium text-primary">
+                                        {item.data.name || "Circuit"}
+                                      </span>
+                                      <span className="text-xs text-muted-foreground ml-auto">
+                                        {item.data.rounds}R × {item.data.exercises.length}ex
+                                      </span>
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-5 w-5"
+                                        onClick={() => handleRemoveItem(session.id, item.data.id)}
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )
+                              ))}
+                            </div>
+                          ) : session.exercises.length > 0 ? (
                             <div className="space-y-1">
                               {session.exercises.map((exercise, i) => (
                                 <div
@@ -254,25 +439,35 @@ export function DailyScheduleView({
                           )}
 
                           <div className="flex gap-1 pt-1">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="flex-1 h-7 text-xs"
-                              onClick={() => handleAddExercise(session.id)}
-                            >
-                              <Plus className="h-3 w-3 mr-1" />
-                              Add
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="h-7 text-xs"
-                              onClick={() => handleOpenImportDialog(session.id)}
-                            >
-                              <Layers className="h-3 w-3" />
-                            </Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1 h-7 text-xs"
+                                >
+                                  <Plus className="h-3 w-3 mr-1" />
+                                  Add
+                                  <ChevronDown className="h-3 w-3 ml-1" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="start">
+                                <DropdownMenuItem onClick={() => handleAddExercise(session.id)}>
+                                  <Dumbbell className="h-3 w-3 mr-2" />
+                                  Exercise
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleOpenImportDialog(session.id)}>
+                                  <Layers className="h-3 w-3 mr-2" />
+                                  Routine
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => handleAddCircuit(session.id)}>
+                                  <RotateCcw className="h-3 w-3 mr-2" />
+                                  Circuit
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                         </CardContent>
                       </CollapsibleContent>
@@ -290,6 +485,8 @@ export function DailyScheduleView({
         onOpenChange={setShowImportDialog}
         routines={routines}
         onImport={handleImportRoutine}
+        onCreateRoutine={onCreateRoutine}
+        currentExercises={currentSessionForImport ? getAllExercisesFromSession(currentSessionForImport) : []}
       />
     </div>
   );
