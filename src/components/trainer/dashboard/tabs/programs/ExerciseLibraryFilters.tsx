@@ -1,10 +1,12 @@
-
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, X } from 'lucide-react';
+import { Search, Plus, X, Filter, Zap, Target } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import type { Mechanics, ForceType } from '@/data/exercises/types';
+import { cn } from '@/lib/utils';
 
 interface ExerciseLibraryFiltersProps {
   searchTerm: string;
@@ -86,6 +88,18 @@ export function ExerciseLibraryFilters({
     }
   };
 
+  const handleMechanicsChange = (value: string) => {
+    if (setMechanicsFilter && value) {
+      setMechanicsFilter(value as 'all' | Mechanics);
+    }
+  };
+
+  const handleForceTypeChange = (value: string) => {
+    if (setForceTypeFilter && value) {
+      setForceTypeFilter(value as 'all' | ForceType);
+    }
+  };
+
   // Count active filters
   const activeFiltersCount = [
     categoryFilter,
@@ -105,13 +119,13 @@ export function ExerciseLibraryFilters({
   };
 
   return (
-    <div className="space-y-3 p-4 border-b">
+    <div className="space-y-4 p-4 border-b bg-background">
       {/* Search and Create Button Row */}
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search exercises..."
+            placeholder="Search exercises by name or muscle..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -120,15 +134,15 @@ export function ExerciseLibraryFilters({
         {!hideCreateButton && (
           <Button onClick={onCreateExercise} className="flex items-center gap-2 whitespace-nowrap">
             <Plus className="h-4 w-4" />
-            Add Exercise
+            <span className="hidden sm:inline">Add Exercise</span>
           </Button>
         )}
       </div>
 
-      {/* Filters Row 1: Category, Difficulty, Equipment */}
+      {/* Quick Filters: Dropdowns Row */}
       <div className="flex gap-2 flex-wrap">
         <Select value={categoryFilter || 'all'} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -141,7 +155,7 @@ export function ExerciseLibraryFilters({
         </Select>
 
         <Select value={difficultyFilter || 'all'} onValueChange={handleDifficultyChange}>
-          <SelectTrigger className="w-[130px]">
+          <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Difficulty" />
           </SelectTrigger>
           <SelectContent>
@@ -154,7 +168,7 @@ export function ExerciseLibraryFilters({
         </Select>
 
         <Select value={equipmentFilter || 'all'} onValueChange={handleEquipmentChange}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Equipment" />
           </SelectTrigger>
           <SelectContent>
@@ -167,56 +181,143 @@ export function ExerciseLibraryFilters({
         </Select>
       </div>
 
-      {/* Filters Row 2: Biomechanics Toggle Buttons - Always visible */}
-      <div className="flex flex-wrap gap-4">
-        {/* Mechanics Filter */}
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-muted-foreground mr-1">Mechanics:</span>
-          <div className="flex gap-1">
-            {(['all', 'compound', 'isolation'] as const).map((value) => (
-              <Button
-                key={value}
-                size="sm"
-                variant={mechanicsFilter === value ? 'default' : 'outline'}
-                onClick={() => setMechanicsFilter?.(value)}
-                className="h-7 px-2 text-xs"
-              >
-                {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
-              </Button>
-            ))}
+      {/* Biomechanics Filters - Improved UI */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Mechanics Filter Card */}
+        <Card className="p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <Target className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Mechanics</span>
           </div>
-        </div>
+          <ToggleGroup 
+            type="single" 
+            value={mechanicsFilter} 
+            onValueChange={handleMechanicsChange}
+            className="justify-start gap-1"
+          >
+            <ToggleGroupItem 
+              value="all" 
+              size="sm"
+              className={cn(
+                "text-xs px-3",
+                mechanicsFilter === 'all' && "bg-primary text-primary-foreground"
+              )}
+            >
+              All
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="compound" 
+              size="sm"
+              className={cn(
+                "text-xs px-3",
+                mechanicsFilter === 'compound' && "bg-purple-600 text-white hover:bg-purple-700"
+              )}
+            >
+              Compound
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="isolation" 
+              size="sm"
+              className={cn(
+                "text-xs px-3",
+                mechanicsFilter === 'isolation' && "bg-blue-600 text-white hover:bg-blue-700"
+              )}
+            >
+              Isolation
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </Card>
 
-        {/* Force Type Filter */}
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-muted-foreground mr-1">Force:</span>
-          <div className="flex gap-1 flex-wrap">
-            {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((value) => (
-              <Button
-                key={value}
-                size="sm"
-                variant={forceTypeFilter === value ? 'default' : 'outline'}
-                onClick={() => setForceTypeFilter?.(value)}
-                className="h-7 px-2 text-xs"
-              >
-                {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
-              </Button>
-            ))}
+        {/* Force Type Filter Card */}
+        <Card className="p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <Zap className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Force Vector</span>
           </div>
-        </div>
+          <ToggleGroup 
+            type="single" 
+            value={forceTypeFilter} 
+            onValueChange={handleForceTypeChange}
+            className="justify-start gap-1 flex-wrap"
+          >
+            <ToggleGroupItem 
+              value="all" 
+              size="sm"
+              className={cn(
+                "text-xs px-2",
+                forceTypeFilter === 'all' && "bg-primary text-primary-foreground"
+              )}
+            >
+              All
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="push" 
+              size="sm"
+              className={cn(
+                "text-xs px-2",
+                forceTypeFilter === 'push' && "bg-orange-600 text-white hover:bg-orange-700"
+              )}
+            >
+              Push
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="pull" 
+              size="sm"
+              className={cn(
+                "text-xs px-2",
+                forceTypeFilter === 'pull' && "bg-teal-600 text-white hover:bg-teal-700"
+              )}
+            >
+              Pull
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="squat" 
+              size="sm"
+              className={cn(
+                "text-xs px-2",
+                forceTypeFilter === 'squat' && "bg-green-600 text-white hover:bg-green-700"
+              )}
+            >
+              Squat
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="hinge" 
+              size="sm"
+              className={cn(
+                "text-xs px-2",
+                forceTypeFilter === 'hinge' && "bg-amber-600 text-white hover:bg-amber-700"
+              )}
+            >
+              Hinge
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="static" 
+              size="sm"
+              className={cn(
+                "text-xs px-2",
+                forceTypeFilter === 'static' && "bg-slate-600 text-white hover:bg-slate-700"
+              )}
+            >
+              Static
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </Card>
       </div>
 
       {/* Active Filters Summary */}
       {activeFiltersCount > 0 && (
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="text-xs">
-            {activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''} active
-          </Badge>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            <Badge variant="secondary" className="text-xs">
+              {activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''} active
+            </Badge>
+          </div>
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={clearAllFilters}
-            className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
           >
             <X className="h-3 w-3 mr-1" />
             Clear all
