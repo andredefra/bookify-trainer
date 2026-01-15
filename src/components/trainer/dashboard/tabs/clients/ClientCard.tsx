@@ -12,12 +12,12 @@ interface ClientItem {
 
 interface ClientCardProps {
   client: ClientItem;
-  onSetGoals: (clientName: string) => void;
+  onViewGoals: (client: ClientItem) => void;
   onViewProfile: (client: ClientItem) => void;
   onViewAnalytics: (client: ClientItem) => void;
 }
 
-export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics }: ClientCardProps) {
+export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics }: ClientCardProps) {
   return (
     <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -63,7 +63,7 @@ export function ClientCard({ client, onSetGoals, onViewProfile, onViewAnalytics 
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => onSetGoals(client.name)}
+            onClick={() => onViewGoals(client)}
             className="flex-1 sm:flex-none min-w-[80px]"
           >
             <Target className="h-4 w-4 sm:mr-1" />

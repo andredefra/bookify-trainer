@@ -31,6 +31,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [activeClient, setActiveClient] = useState<ClientItem | null>(null);
+  const [initialProfileTab, setInitialProfileTab] = useState("overview");
   const [activeTab, setActiveTab] = useState("clients");
   const [analyticsClientFilter, setAnalyticsClientFilter] = useState<string>("all");
   const [showMessageDialog, setShowMessageDialog] = useState(false);
@@ -38,13 +39,15 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [messageClientName, setMessageClientName] = useState("");
   const [showManageGoalTypesDialog, setShowManageGoalTypesDialog] = useState(false);
   
-  const handleSetGoals = (clientName: string) => {
-    setSelectedClient(clientName);
-    setShowGoalDialog(true);
+  const handleViewGoals = (client: ClientItem) => {
+    setActiveClient(client);
+    setInitialProfileTab("goals");
+    setShowProfileDialog(true);
   };
   
   const handleViewProfile = (client: ClientItem) => {
     setActiveClient(client);
+    setInitialProfileTab("overview");
     setShowProfileDialog(true);
   };
 
@@ -102,7 +105,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
                     <ClientCard 
                       key={client.id}
                       client={client}
-                      onSetGoals={handleSetGoals}
+                      onViewGoals={handleViewGoals}
                       onViewProfile={handleViewProfile}
                       onViewAnalytics={handleViewAnalytics}
                     />
@@ -164,6 +167,8 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         onOpenChange={setShowProfileDialog}
         onMessage={handleMessage}
         onScheduleSession={handleScheduleSession}
+        initialTab={initialProfileTab}
+        onManageGoalTypes={() => setShowManageGoalTypesDialog(true)}
       />
       
       <MessageClientDialog
