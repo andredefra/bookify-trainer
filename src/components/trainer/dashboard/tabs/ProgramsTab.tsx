@@ -190,7 +190,7 @@ export function ProgramsTab() {
               onClick={() => setShowProgramForm(true)}
             >
               <PlusCircle className="mr-2 h-4 w-4" />
-              Create Program
+              Create Template
             </Button>
           </div>
         </CardHeader>
@@ -215,11 +215,11 @@ export function ProgramsTab() {
             </div>
           )}
 
-          <Tabs defaultValue="programs" className="w-full">
+          <Tabs defaultValue="clients" className="w-full">
             <div className="overflow-x-auto mb-6 max-w-full">
               <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
-                <TabsTrigger value="programs" className="flex-shrink-0 whitespace-nowrap px-3">My Programs</TabsTrigger>
-                <TabsTrigger value="assigned" className="flex-shrink-0 whitespace-nowrap px-3">Assigned Programs</TabsTrigger>
+                <TabsTrigger value="clients" className="flex-shrink-0 whitespace-nowrap px-3">My Clients</TabsTrigger>
+                <TabsTrigger value="templates" className="flex-shrink-0 whitespace-nowrap px-3">My Templates</TabsTrigger>
                 {showSalesAnalytics && (
                   <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
                     Sales

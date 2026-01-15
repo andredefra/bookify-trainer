@@ -409,25 +409,7 @@ export function ProgramsTabContent({
 
   return (
     <>
-      <TabsContent value="programs" className="space-y-4 mt-2">
-        {programs.length > 0 ? (
-          programs.map((program) => (
-            <ProgramListItem 
-              key={program.id} 
-              program={program} 
-              onAssign={handleAssign}
-              onEdit={() => handleEdit(program.id)}
-              onViewClients={() => handleViewClients(program)}
-            />
-          ))
-        ) : (
-          <div className="text-center py-10">
-            <p className="text-muted-foreground">No programs found. Create your first program.</p>
-          </div>
-        )}
-      </TabsContent>
-      
-      <TabsContent value="assigned" className="space-y-4 mt-2">
+      <TabsContent value="clients" className="space-y-4 mt-2">
         {clients.length > 0 ? (
           clients.map((client) => (
             <AssignedProgramItem 
@@ -441,7 +423,25 @@ export function ProgramsTabContent({
           ))
         ) : (
           <div className="text-center py-10">
-            <p className="text-muted-foreground">No clients found. Invite clients to assign programs.</p>
+            <p className="text-muted-foreground">No clients found. Invite clients to assign templates.</p>
+          </div>
+        )}
+      </TabsContent>
+      
+      <TabsContent value="templates" className="space-y-4 mt-2">
+        {programs.length > 0 ? (
+          programs.map((program) => (
+            <ProgramListItem 
+              key={program.id} 
+              program={program} 
+              onAssign={handleAssign}
+              onEdit={() => handleEdit(program.id)}
+              onViewClients={() => handleViewClients(program)}
+            />
+          ))
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-muted-foreground">No templates found. Create your first template.</p>
           </div>
         )}
       </TabsContent>
