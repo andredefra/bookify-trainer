@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Dumbbell, Grid3X3, Filter } from "lucide-react";
+import { Search, Dumbbell, Grid3X3, Filter, X, RotateCcw } from "lucide-react";
 import { useExerciseLibrary } from "@/hooks/useExerciseLibrary";
 import { ExerciseData } from "@/data/exercises/types";
 
@@ -13,6 +13,32 @@ interface ExerciseSelectorProps {
   onSelect: (exercise: ExerciseData) => void;
   placeholder?: string;
 }
+
+// Filter options
+const equipmentOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'barbell', label: 'Barbell' },
+  { value: 'dumbbell', label: 'Dumbbell' },
+  { value: 'machine', label: 'Machine' },
+  { value: 'cable', label: 'Cable' },
+  { value: 'bodyweight', label: 'Bodyweight' },
+  { value: 'kettlebell', label: 'Kettlebell' },
+  { value: 'band', label: 'Bands' },
+];
+
+const difficulties = [
+  { value: 'all', label: 'All' },
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+];
+
+const exerciseTypes = [
+  { value: 'all', label: 'All' },
+  { value: 'compound', label: 'Compound' },
+  { value: 'isolation', label: 'Isolation' },
+  { value: 'cardio', label: 'Cardio' },
+];
 
 export function ExerciseSelector({ value, onSelect, placeholder = "Select an exercise" }: ExerciseSelectorProps) {
   const [open, setOpen] = useState(false);
@@ -25,14 +51,22 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
     searchQuery,
     setSearchQuery,
     selectedCategory,
-    setSelectedCategory 
+    setSelectedCategory,
+    difficultyFilter,
+    setDifficultyFilter,
+    equipmentFilter,
+    setEquipmentFilter,
+    exerciseTypeFilter,
+    setExerciseTypeFilter,
+    hasActiveFilters,
+    resetAllFilters,
   } = useExerciseLibrary();
 
   const searchSuggestions = localSearchQuery.length >= 2 ? getExerciseSuggestions(localSearchQuery, 20) : [];
   
   // Categories for filtering
   const categories = [
-    { value: 'all', label: 'All Categories', count: null },
+    { value: 'all', label: 'All' },
     { value: 'chest', label: 'Chest' },
     { value: 'back', label: 'Back' },
     { value: 'legs', label: 'Legs' },
@@ -52,20 +86,33 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
     setSearchQuery("");
   };
 
+  const handleResetFilters = () => {
+    resetAllFilters();
+  };
+
   const getCategoryColor = (category: string) => {
     const colors = {
-      chest: 'bg-red-100 text-red-800',
-      back: 'bg-green-100 text-green-800',
-      legs: 'bg-blue-100 text-blue-800',
-      shoulders: 'bg-yellow-100 text-yellow-800',
-      arms: 'bg-purple-100 text-purple-800',
-      core: 'bg-orange-100 text-orange-800',
-      cardio: 'bg-pink-100 text-pink-800',
-      functional: 'bg-teal-100 text-teal-800',
-      flexibility: 'bg-cyan-100 text-cyan-800',
-      plyometric: 'bg-amber-100 text-amber-800'
+      chest: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+      back: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      legs: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      shoulders: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+      arms: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+      core: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+      cardio: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400',
+      functional: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400',
+      flexibility: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400',
+      plyometric: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
     };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    return colors[category as keyof typeof colors] || 'bg-muted text-muted-foreground';
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    const colors = {
+      beginner: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
+      intermediate: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+      advanced: 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400',
+    };
+    return colors[difficulty as keyof typeof colors] || 'bg-muted text-muted-foreground';
   };
 
   return (
@@ -140,6 +187,8 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
                       key={exercise.id}
                       exercise={exercise}
                       onClick={() => handleSelectExercise(exercise)}
+                      getCategoryColor={getCategoryColor}
+                      getDifficultyColor={getDifficultyColor}
                     />
                   ))}
                 </div>
@@ -148,32 +197,111 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
           </TabsContent>
 
           <TabsContent value="browse" className="flex-1 overflow-hidden flex flex-col mt-4">
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Filter by category:</span>
+            {/* Advanced Filters Section */}
+            <div className="space-y-4 mb-4 p-4 bg-muted/30 rounded-lg border">
+              {/* Row 1: Muscle Group (Category) */}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Muscle Group</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category) => (
+                    <Button
+                      key={category.value}
+                      variant={selectedCategory === category.value ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category.value)}
+                      className="text-xs"
+                    >
+                      {category.label}
+                    </Button>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <Button
-                    key={category.value}
-                    variant={selectedCategory === category.value ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedCategory(category.value)}
-                    className="text-xs"
-                  >
-                    {category.label}
+
+              {/* Row 2: Equipment Filter */}
+              <div>
+                <span className="text-sm font-medium mb-2 block">Equipment</span>
+                <div className="flex flex-wrap gap-2">
+                  {equipmentOptions.map((eq) => (
+                    <Button
+                      key={eq.value}
+                      variant={equipmentFilter === eq.value ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setEquipmentFilter(eq.value)}
+                      className="text-xs"
+                    >
+                      {eq.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Row 3: Difficulty & Exercise Type */}
+              <div className="flex gap-4 flex-wrap">
+                {/* Difficulty Toggle */}
+                <div className="flex-1 min-w-[200px]">
+                  <span className="text-sm font-medium mb-2 block">Difficulty</span>
+                  <div className="flex gap-1">
+                    {difficulties.map((diff) => (
+                      <Button
+                        key={diff.value}
+                        variant={difficultyFilter === diff.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setDifficultyFilter(diff.value)}
+                        className="flex-1 text-xs"
+                      >
+                        {diff.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Exercise Type Toggle */}
+                <div className="flex-1 min-w-[200px]">
+                  <span className="text-sm font-medium mb-2 block">Type</span>
+                  <div className="flex gap-1">
+                    {exerciseTypes.map((type) => (
+                      <Button
+                        key={type.value}
+                        variant={exerciseTypeFilter === type.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setExerciseTypeFilter(type.value)}
+                        className="flex-1 text-xs"
+                      >
+                        {type.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Active Filters Summary & Reset */}
+              <div className="flex items-center justify-between pt-2 border-t">
+                <span className="text-sm text-muted-foreground">
+                  {filteredExercises.length} exercises found
+                </span>
+                {hasActiveFilters && (
+                  <Button variant="ghost" size="sm" onClick={handleResetFilters} className="text-xs">
+                    <RotateCcw className="h-3 w-3 mr-1" />
+                    Clear all filters
                   </Button>
-                ))}
+                )}
               </div>
             </div>
             
+            {/* Exercise Results */}
             <div className="flex-1 overflow-y-auto">
               {filteredExercises.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <Grid3X3 className="h-16 w-16 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium mb-2">No exercises in this category</p>
-                  <p className="text-sm">Try selecting a different category</p>
+                  <p className="text-lg font-medium mb-2">No exercises match your filters</p>
+                  <p className="text-sm mb-4">Try adjusting your filter criteria</p>
+                  <Button variant="outline" onClick={handleResetFilters}>
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Reset Filters
+                  </Button>
                 </div>
               ) : (
                 <div className="grid gap-3">
@@ -182,6 +310,8 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
                       key={exercise.id}
                       exercise={exercise}
                       onClick={() => handleSelectExercise(exercise)}
+                      getCategoryColor={getCategoryColor}
+                      getDifficultyColor={getDifficultyColor}
                     />
                   ))}
                 </div>
@@ -194,23 +324,21 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
   );
 }
 
-// Separate component for exercise cards to keep things clean
-function ExerciseCard({ exercise, onClick }: { exercise: ExerciseData; onClick: () => void }) {
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      chest: 'bg-red-100 text-red-800',
-      back: 'bg-green-100 text-green-800',
-      legs: 'bg-blue-100 text-blue-800',
-      shoulders: 'bg-yellow-100 text-yellow-800',
-      arms: 'bg-purple-100 text-purple-800',
-      core: 'bg-orange-100 text-orange-800',
-      cardio: 'bg-pink-100 text-pink-800',
-      functional: 'bg-teal-100 text-teal-800',
-      flexibility: 'bg-cyan-100 text-cyan-800',
-      plyometric: 'bg-amber-100 text-amber-800'
-    };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
+// Enhanced Exercise Card component with additional badges
+function ExerciseCard({ 
+  exercise, 
+  onClick,
+  getCategoryColor,
+  getDifficultyColor
+}: { 
+  exercise: ExerciseData; 
+  onClick: () => void;
+  getCategoryColor: (category: string) => string;
+  getDifficultyColor: (difficulty: string) => string;
+}) {
+  const isCompound = exercise.muscleGroup.length > 1;
+  const isCardio = exercise.category === 'cardio';
+  const exerciseType = isCardio ? 'Cardio' : isCompound ? 'Compound' : 'Isolation';
 
   return (
     <div
@@ -219,9 +347,15 @@ function ExerciseCard({ exercise, onClick }: { exercise: ExerciseData; onClick: 
     >
       <div className="flex items-start justify-between mb-2">
         <h3 className="font-medium group-hover:text-primary transition-colors">{exercise.name}</h3>
-        <div className="flex gap-1 flex-shrink-0 ml-2">
+        <div className="flex gap-1 flex-shrink-0 ml-2 flex-wrap justify-end">
           <Badge className={getCategoryColor(exercise.category)} variant="secondary">
             {exercise.category}
+          </Badge>
+          <Badge className={getDifficultyColor(exercise.difficulty)} variant="secondary">
+            {exercise.difficulty}
+          </Badge>
+          <Badge variant="outline" className="text-xs">
+            {exerciseType}
           </Badge>
           {exercise.isCustom && (
             <Badge variant="outline">Custom</Badge>
@@ -232,20 +366,20 @@ function ExerciseCard({ exercise, onClick }: { exercise: ExerciseData; onClick: 
         </div>
       </div>
       
-      <div className="text-sm text-muted-foreground mb-2">
+      <div className="text-sm text-muted-foreground mb-1">
         <strong>Muscles:</strong> {exercise.muscleGroup.slice(0, 3).join(", ")}
         {exercise.muscleGroup.length > 3 && ` +${exercise.muscleGroup.length - 3} more`}
       </div>
       
       {exercise.equipment.length > 0 && (
-        <div className="text-sm text-muted-foreground mb-2">
-          <strong>Equipment:</strong> {exercise.equipment.slice(0, 2).join(", ")}
-          {exercise.equipment.length > 2 && ` +${exercise.equipment.length - 2} more`}
+        <div className="text-sm text-muted-foreground mb-1">
+          <strong>Equipment:</strong> {exercise.equipment.slice(0, 3).join(", ")}
+          {exercise.equipment.length > 3 && ` +${exercise.equipment.length - 3} more`}
         </div>
       )}
       
       {exercise.notes && (
-        <div className="text-xs text-muted-foreground line-clamp-2">
+        <div className="text-xs text-muted-foreground line-clamp-2 mt-2">
           {exercise.notes}
         </div>
       )}

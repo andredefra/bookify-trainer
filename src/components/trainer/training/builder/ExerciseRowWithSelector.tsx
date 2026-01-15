@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Exercise } from "@/data/training/types";
 import { ExerciseData } from "@/data/exercises/types";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
-import { GripVertical, Trash2, Dumbbell, Search, Plus, Check } from "lucide-react";
+import { GripVertical, Trash2, Dumbbell, Search, Plus, Check, Filter, Grid3X3, RotateCcw } from "lucide-react";
 import { QuickCreateExerciseModal } from "./QuickCreateExerciseModal";
 import { cn } from "@/lib/utils";
 
@@ -44,8 +45,14 @@ export function ExerciseRowWithSelector({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+  const [equipmentFilter, setEquipmentFilter] = useState<string>("all");
+  const [exerciseTypeFilter, setExerciseTypeFilter] = useState<string>("all");
 
-  const categories = ["all", "chest", "back", "legs", "shoulders", "arms", "core", "cardio"];
+  const categories = ["all", "chest", "back", "legs", "shoulders", "arms", "core", "cardio", "functional", "flexibility", "plyometric"];
+  const equipmentOptions = ["all", "barbell", "dumbbell", "machine", "cable", "bodyweight", "kettlebell", "band"];
+  const difficulties = ["all", "beginner", "intermediate", "advanced"];
+  const exerciseTypes = ["all", "compound", "isolation", "cardio"];
 
   // Find linked exercise from database
   const linkedExercise = exercise.exerciseDbId
@@ -57,8 +64,33 @@ export function ExerciseRowWithSelector({
       ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ex.muscleGroup.some((m) => m.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = categoryFilter === "all" || ex.category === categoryFilter;
-    return matchesSearch && matchesCategory;
+    const matchesDifficulty = difficultyFilter === "all" || ex.difficulty === difficultyFilter;
+    const matchesEquipment = equipmentFilter === "all" || ex.equipment.some(eq => eq.toLowerCase().includes(equipmentFilter.toLowerCase()));
+    const matchesType = exerciseTypeFilter === "all" || 
+      (exerciseTypeFilter === "compound" && ex.muscleGroup.length > 1) ||
+      (exerciseTypeFilter === "isolation" && ex.muscleGroup.length === 1) ||
+      (exerciseTypeFilter === "cardio" && ex.category === "cardio");
+    return matchesSearch && matchesCategory && matchesDifficulty && matchesEquipment && matchesType;
   });
+
+  const hasActiveFilters = categoryFilter !== "all" || difficultyFilter !== "all" || equipmentFilter !== "all" || exerciseTypeFilter !== "all";
+
+  const resetFilters = () => {
+    setCategoryFilter("all");
+    setDifficultyFilter("all");
+    setEquipmentFilter("all");
+    setExerciseTypeFilter("all");
+    setSearchQuery("");
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    const colors: Record<string, string> = {
+      beginner: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+      intermediate: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+      advanced: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400",
+    };
+    return colors[difficulty] || "bg-muted text-muted-foreground";
+  };
 
   const hasExactMatch = filteredExercises.some(
     (ex) => ex.name.toLowerCase() === searchQuery.toLowerCase()
@@ -312,15 +344,28 @@ export function ExerciseRowWithSelector({
         </Button>
       </div>
 
-      {/* Selector Dialog */}
+      {/* Selector Dialog with Tabs */}
       <Dialog open={showSelector} onOpenChange={setShowSelector}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden">
+        <DialogContent className="max-w-4xl max-h-[85vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle>Select Exercise</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <div className="relative flex-1">
+          
+          <Tabs defaultValue="search" className="flex-1 overflow-hidden flex flex-col">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="search" className="flex items-center gap-2">
+                <Search className="h-4 w-4" />
+                Search
+              </TabsTrigger>
+              <TabsTrigger value="browse" className="flex items-center gap-2">
+                <Grid3X3 className="h-4 w-4" />
+                Browse
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Search Tab */}
+            <TabsContent value="search" className="flex-1 overflow-hidden flex flex-col mt-4">
+              <div className="relative mb-4">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search exercises..."
@@ -330,88 +375,175 @@ export function ExerciseRowWithSelector({
                   autoFocus
                 />
               </div>
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 border rounded-md bg-background"
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat === "all" ? "All Categories" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            <div className="max-h-[50vh] overflow-y-auto space-y-2">
-              {/* Create New Option */}
-              {searchQuery.trim() && !hasExactMatch && (
-                <div
-                  className="p-3 border-2 border-dashed border-primary/50 rounded-lg hover:bg-primary/10 cursor-pointer"
-                  onClick={() => setShowCreateModal(true)}
-                >
-                  <div className="flex items-center gap-2">
-                    <Plus className="h-4 w-4 text-primary" />
-                    <span>
-                      Exercise not found? Create "<strong>{searchQuery}</strong>"
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {filteredExercises.slice(0, 100).map((ex) => (
-                <div
-                  key={ex.id}
-                  className={cn(
-                    "p-3 border rounded-lg hover:bg-muted cursor-pointer",
-                    exercise.exerciseDbId === ex.id && "border-primary bg-primary/5"
-                  )}
-                  onClick={() => handleSelectExercise(ex)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-medium">{ex.name}</h4>
-                        {exercise.exerciseDbId === ex.id && (
-                          <Check className="h-4 w-4 text-primary" />
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge className={cn("text-xs", getCategoryColor(ex.category))}>
-                          {ex.category}
-                        </Badge>
-                        <span className="text-sm text-muted-foreground">
-                          {ex.muscleGroup.join(", ")}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right text-sm text-muted-foreground">
-                      {ex.equipment.join(", ")}
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {filteredExercises.length === 0 && !searchQuery && (
-                <p className="text-center text-muted-foreground py-8">
-                  Start typing to search exercises
-                </p>
-              )}
-
-              {filteredExercises.length === 0 && searchQuery && (
-                <div className="text-center py-8">
-                  <p className="text-muted-foreground mb-2">No exercises found</p>
-                  <Button
-                    variant="outline"
+              <div className="flex-1 overflow-y-auto space-y-2">
+                {/* Create New Option */}
+                {searchQuery.trim() && !hasExactMatch && (
+                  <div
+                    className="p-3 border-2 border-dashed border-primary/50 rounded-lg hover:bg-primary/10 cursor-pointer"
                     onClick={() => setShowCreateModal(true)}
                   >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create "{searchQuery}"
-                  </Button>
+                    <div className="flex items-center gap-2">
+                      <Plus className="h-4 w-4 text-primary" />
+                      <span>
+                        Exercise not found? Create "<strong>{searchQuery}</strong>"
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {filteredExercises.slice(0, 100).map((ex) => (
+                  <ExerciseCardRow
+                    key={ex.id}
+                    ex={ex}
+                    isSelected={exercise.exerciseDbId === ex.id}
+                    onSelect={() => handleSelectExercise(ex)}
+                    getCategoryColor={getCategoryColor}
+                    getDifficultyColor={getDifficultyColor}
+                  />
+                ))}
+
+                {filteredExercises.length === 0 && !searchQuery && (
+                  <p className="text-center text-muted-foreground py-8">
+                    Start typing to search exercises
+                  </p>
+                )}
+
+                {filteredExercises.length === 0 && searchQuery && (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground mb-2">No exercises found</p>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowCreateModal(true)}
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create "{searchQuery}"
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Browse Tab with Advanced Filters */}
+            <TabsContent value="browse" className="flex-1 overflow-hidden flex flex-col mt-4">
+              {/* Advanced Filters Section */}
+              <div className="space-y-3 mb-4 p-4 bg-muted/30 rounded-lg border">
+                {/* Row 1: Muscle Group */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Muscle Group</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {categories.map((cat) => (
+                      <Button
+                        key={cat}
+                        variant={categoryFilter === cat ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCategoryFilter(cat)}
+                        className="text-xs h-7"
+                      >
+                        {cat === "all" ? "All" : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
+
+                {/* Row 2: Equipment Filter */}
+                <div>
+                  <span className="text-sm font-medium mb-2 block">Equipment</span>
+                  <div className="flex flex-wrap gap-1">
+                    {equipmentOptions.map((eq) => (
+                      <Button
+                        key={eq}
+                        variant={equipmentFilter === eq ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setEquipmentFilter(eq)}
+                        className="text-xs h-7"
+                      >
+                        {eq === "all" ? "All" : eq.charAt(0).toUpperCase() + eq.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Row 3: Difficulty & Type */}
+                <div className="flex gap-4 flex-wrap">
+                  <div className="flex-1 min-w-[180px]">
+                    <span className="text-sm font-medium mb-2 block">Difficulty</span>
+                    <div className="flex gap-1">
+                      {difficulties.map((diff) => (
+                        <Button
+                          key={diff}
+                          variant={difficultyFilter === diff ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setDifficultyFilter(diff)}
+                          className="flex-1 text-xs h-7"
+                        >
+                          {diff === "all" ? "All" : diff.charAt(0).toUpperCase() + diff.slice(1)}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex-1 min-w-[180px]">
+                    <span className="text-sm font-medium mb-2 block">Type</span>
+                    <div className="flex gap-1">
+                      {exerciseTypes.map((type) => (
+                        <Button
+                          key={type}
+                          variant={exerciseTypeFilter === type ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setExerciseTypeFilter(type)}
+                          className="flex-1 text-xs h-7"
+                        >
+                          {type === "all" ? "All" : type.charAt(0).toUpperCase() + type.slice(1)}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filter Summary */}
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <span className="text-sm text-muted-foreground">
+                    {filteredExercises.length} exercises found
+                  </span>
+                  {hasActiveFilters && (
+                    <Button variant="ghost" size="sm" onClick={resetFilters} className="text-xs h-7">
+                      <RotateCcw className="h-3 w-3 mr-1" />
+                      Clear filters
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              {/* Results */}
+              <div className="flex-1 overflow-y-auto space-y-2">
+                {filteredExercises.slice(0, 100).map((ex) => (
+                  <ExerciseCardRow
+                    key={ex.id}
+                    ex={ex}
+                    isSelected={exercise.exerciseDbId === ex.id}
+                    onSelect={() => handleSelectExercise(ex)}
+                    getCategoryColor={getCategoryColor}
+                    getDifficultyColor={getDifficultyColor}
+                  />
+                ))}
+
+                {filteredExercises.length === 0 && (
+                  <div className="text-center py-8">
+                    <Grid3X3 className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                    <p className="text-muted-foreground mb-3">No exercises match your filters</p>
+                    <Button variant="outline" size="sm" onClick={resetFilters}>
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Reset Filters
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
 
@@ -422,5 +554,62 @@ export function ExerciseRowWithSelector({
         onExerciseCreated={handleCreateAndSelect}
       />
     </>
+  );
+}
+
+// Reusable Exercise Card Row component for dialog lists
+function ExerciseCardRow({
+  ex,
+  isSelected,
+  onSelect,
+  getCategoryColor,
+  getDifficultyColor,
+}: {
+  ex: ExerciseData;
+  isSelected: boolean;
+  onSelect: () => void;
+  getCategoryColor: (category: string) => string;
+  getDifficultyColor: (difficulty: string) => string;
+}) {
+  const isCompound = ex.muscleGroup.length > 1;
+  const isCardio = ex.category === "cardio";
+  const exerciseType = isCardio ? "Cardio" : isCompound ? "Compound" : "Isolation";
+
+  return (
+    <div
+      className={cn(
+        "p-3 border rounded-lg hover:bg-muted cursor-pointer transition-colors",
+        isSelected && "border-primary bg-primary/5"
+      )}
+      onClick={onSelect}
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h4 className="font-medium">{ex.name}</h4>
+            {isSelected && <Check className="h-4 w-4 text-primary shrink-0" />}
+          </div>
+          <div className="flex items-center gap-1 mt-1 flex-wrap">
+            <Badge className={cn("text-xs", getCategoryColor(ex.category))}>
+              {ex.category}
+            </Badge>
+            <Badge className={cn("text-xs", getDifficultyColor(ex.difficulty))}>
+              {ex.difficulty}
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              {exerciseType}
+            </Badge>
+          </div>
+          <div className="text-sm text-muted-foreground mt-1">
+            {ex.muscleGroup.slice(0, 3).join(", ")}
+            {ex.muscleGroup.length > 3 && ` +${ex.muscleGroup.length - 3}`}
+          </div>
+        </div>
+        <div className="text-right text-xs text-muted-foreground shrink-0 ml-2">
+          {ex.equipment.slice(0, 2).join(", ")}
+          {ex.equipment.length > 2 && ` +${ex.equipment.length - 2}`}
+        </div>
+      </div>
+    </div>
   );
 }

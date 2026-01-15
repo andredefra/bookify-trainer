@@ -12,6 +12,9 @@ export function useExerciseLibrary() {
   const [deletedExercises, setDeletedExercises] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
+  const [equipmentFilter, setEquipmentFilter] = useState<string>('all');
+  const [exerciseTypeFilter, setExerciseTypeFilter] = useState<string>('all');
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -75,7 +78,7 @@ export function useExerciseLibrary() {
     return [...predefinedWithModifications, ...customExercises.filter(ex => !deletedExercises.includes(ex.id))];
   };
 
-  // Get filtered exercises based on search and category
+  // Get filtered exercises based on search, category, and advanced filters
   const getFilteredExercises = () => {
     let exercises = getAllExercises();
 
@@ -94,7 +97,42 @@ export function useExerciseLibrary() {
       exercises = exercises.filter(exercise => exercise.category === selectedCategory);
     }
 
+    // Apply difficulty filter
+    if (difficultyFilter !== 'all') {
+      exercises = exercises.filter(exercise => exercise.difficulty === difficultyFilter);
+    }
+
+    // Apply equipment filter
+    if (equipmentFilter !== 'all') {
+      exercises = exercises.filter(exercise =>
+        exercise.equipment.some(eq => eq.toLowerCase().includes(equipmentFilter.toLowerCase()))
+      );
+    }
+
+    // Apply exercise type filter (compound = multi-muscle, isolation = single-muscle)
+    if (exerciseTypeFilter !== 'all') {
+      if (exerciseTypeFilter === 'compound') {
+        exercises = exercises.filter(exercise => exercise.muscleGroup.length > 1);
+      } else if (exerciseTypeFilter === 'isolation') {
+        exercises = exercises.filter(exercise => exercise.muscleGroup.length === 1);
+      } else if (exerciseTypeFilter === 'cardio') {
+        exercises = exercises.filter(exercise => exercise.category === 'cardio');
+      }
+    }
+
     return exercises;
+  };
+
+  // Check if any advanced filters are active
+  const hasActiveFilters = selectedCategory !== 'all' || difficultyFilter !== 'all' || equipmentFilter !== 'all' || exerciseTypeFilter !== 'all';
+
+  // Reset all filters
+  const resetAllFilters = () => {
+    setSelectedCategory('all');
+    setDifficultyFilter('all');
+    setEquipmentFilter('all');
+    setExerciseTypeFilter('all');
+    setSearchQuery('');
   };
 
   // Find exercises by equipment availability
@@ -237,6 +275,16 @@ export function useExerciseLibrary() {
     setSearchQuery,
     selectedCategory,
     setSelectedCategory,
+    
+    // Advanced filter state
+    difficultyFilter,
+    setDifficultyFilter,
+    equipmentFilter,
+    setEquipmentFilter,
+    exerciseTypeFilter,
+    setExerciseTypeFilter,
+    hasActiveFilters,
+    resetAllFilters,
     
     // Actions
     addCustomExercise,
