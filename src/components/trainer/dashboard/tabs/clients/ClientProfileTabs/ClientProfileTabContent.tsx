@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { OverviewTab } from "./OverviewTab";
-import { MetricsTab } from "./MetricsTab";
 import { ProgramsTab } from "./ProgramsTab";
 import { PackagesTab } from "./PackagesTab";
 import { NotesTab } from "./NotesTab";
@@ -79,19 +78,6 @@ export function ClientProfileTabContent({
         />
       </TabsContent>
       
-      <TabsContent value="metrics">
-        <MetricsTab 
-          searchQuery={searchQuery}
-          clientMetrics={{
-            weight: mockClientDetails.weight,
-            height: mockClientDetails.height,
-            bodyFat: mockClientDetails.bodyFat
-          }}
-          clientId="00000000-0000-0000-0000-000000000002"
-          clientName={mockClientDetails.name}
-        />
-      </TabsContent>
-      
       <TabsContent value="programs">
         <ProgramsTab searchQuery={searchQuery} />
       </TabsContent>
@@ -109,3 +95,4 @@ export function ClientProfileTabContent({
     </Tabs>
   );
 }
+

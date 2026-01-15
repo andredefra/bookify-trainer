@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { 
   performanceData, 
   goalAchievementData, 
@@ -19,6 +20,8 @@ import { ClientAnalyticsInsights } from "./charts/ClientAnalyticsInsights";
 import { AllClientsOverview } from "./charts/AllClientsOverview";
 import { AggregatedGoalStats } from "./charts/AggregatedGoalStats";
 import { ClientFullAnalytics } from "./charts/ClientFullAnalytics";
+import { MetricsChart } from "../clients/ClientProfileTabs/metrics/MetricsChart";
+import { RecentMeasurements } from "../clients/ClientProfileTabs/metrics/RecentMeasurements";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -128,6 +131,24 @@ export function ClientPerformance({ initialClientFilter = "all", onClientChange 
               client={mockClients.find(c => c.id === selectedClient)!}
             />
           )}
+          
+          {/* Body Metrics Section - Migrated from Client Profile */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Body Metrics</CardTitle>
+              <CardDescription>Weight, body fat, and muscle mass tracking</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <MetricsChart />
+              <RecentMeasurements 
+                clientMetrics={{
+                  weight: "65kg",
+                  height: "168cm",
+                  bodyFat: "24%"
+                }}
+              />
+            </CardContent>
+          </Card>
           
           {/* Client Goals Progress - Existing component for goal tracking */}
           <ClientGoalsProgress 
