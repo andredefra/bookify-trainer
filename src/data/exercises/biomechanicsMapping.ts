@@ -114,10 +114,14 @@ export function getForceTypeColor(forceType: ForceType): string {
   }
 }
 
+// Default exercise GIF from Dribbble
+const DEFAULT_EXERCISE_GIF = "https://cdn.dribbble.com/userupload/20700734/file/original-1e545aca6678863e33e7f664c97088bf.gif";
+
 /**
  * Gets exercise display GIF URL with fallback logic
+ * Always returns a valid URL (uses default GIF as fallback)
  */
-export function getExerciseGifUrl(exercise: ExerciseData): string | undefined {
-  // Priority: custom GIF > demonstration GIF > undefined
-  return exercise.customGifUrl || exercise.demonstrationGif || undefined;
+export function getExerciseGifUrl(exercise: ExerciseData): string {
+  // Priority: custom GIF > demonstration GIF > default Dribbble GIF
+  return exercise.customGifUrl || exercise.demonstrationGif || DEFAULT_EXERCISE_GIF;
 }

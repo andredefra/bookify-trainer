@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Play, Plus, Edit, Trash2, Video, Dumbbell, Eye } from 'lucide-react';
 import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor, getExerciseGifUrl } from '@/data/exercises/biomechanicsMapping';
 import { getExerciseVideoUrl } from '@/data/exercises/videoUrls';
-import { ExercisePlaceholderAnimated } from '@/components/trainer/training/ExercisePlaceholderAnimated';
 import { cn } from '@/lib/utils';
 
 interface ExerciseVisualCardProps {
@@ -80,10 +79,9 @@ export const ExerciseVisualCard = memo(({
 }: ExerciseVisualCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   
+  // getExerciseGifUrl always returns a valid URL now (falls back to default GIF)
   const gifUrl = getExerciseGifUrl(exercise);
-  const hasGif = gifUrl && !imageError;
   const videoUrl = getExerciseVideoUrl(exercise.id);
   
   const mechanics = deriveMechanics(exercise);
@@ -125,22 +123,14 @@ export const ExerciseVisualCard = memo(({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Compact thumbnail with animated placeholder */}
-        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-          {hasGif ? (
-            <img 
-              src={gifUrl} 
-              alt={exercise.name}
-              className="w-full h-full object-cover"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <ExercisePlaceholderAnimated 
-              category={exercise.category}
-              exerciseName={exercise.name}
-            />
-          )}
+        {/* Compact thumbnail - always has GIF now */}
+        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
+          <img 
+            src={gifUrl} 
+            alt={exercise.name}
+            className="w-full h-full object-cover"
+            onLoad={() => setImageLoaded(true)}
+          />
         </div>
 
         {/* Info */}
@@ -185,30 +175,18 @@ export const ExerciseVisualCard = memo(({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* GIF/Image Container - Dribbble style 4:3 aspect ratio */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        {/* Animated placeholder or GIF */}
-        {hasGif ? (
-          <img 
-            src={gifUrl}
-            alt={exercise.name}
-            className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-all duration-500",
-              isHovered && "scale-110",
-              !imageLoaded && "opacity-0"
-            )}
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <ExercisePlaceholderAnimated 
-            category={exercise.category}
-            exerciseName={exercise.name}
-            className={cn(
-              "transition-all duration-500",
-              isHovered && "scale-110"
-            )}
-          />
-        )}
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        {/* GIF - always available now with default fallback */}
+        <img 
+          src={gifUrl}
+          alt={exercise.name}
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-all duration-500",
+            isHovered && "scale-110",
+            !imageLoaded && "opacity-0"
+          )}
+          onLoad={() => setImageLoaded(true)}
+        />
 
         {/* Overlay gradient for readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
