@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import { useState } from 'react';
 import { ExerciseData } from '@/data/exercises/types';
 import { ExerciseVisualCard } from './ExerciseVisualCard';
+import { ExerciseDetailModal } from '@/components/trainer/training/ExerciseDetailModal';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExerciseLibraryListProps {
@@ -19,11 +20,25 @@ export function ExerciseLibraryList({
   onSelect,
 }: ExerciseLibraryListProps) {
   const isMobile = useIsMobile();
+  const [selectedExercise, setSelectedExercise] = useState<ExerciseData | null>(null);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
   
   console.log('ExerciseLibraryList - Rendering:', {
     exerciseCount: exercises?.length || 0,
     selectionMode
   });
+
+  const handleViewDetails = (exercise: ExerciseData) => {
+    setSelectedExercise(exercise);
+    setDetailModalOpen(true);
+  };
+
+  const handleSelectFromModal = (exercise: ExerciseData) => {
+    if (onSelect) {
+      onSelect(exercise);
+    }
+    setDetailModalOpen(false);
+  };
 
   if (!exercises || exercises.length === 0) {
     return (
@@ -39,21 +54,33 @@ export function ExerciseLibraryList({
   }
 
   return (
-    <div className="h-full overflow-auto p-2 sm:p-4">
-      {/* Grid layout - responsive columns */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-        {exercises.map((exercise) => (
-          <ExerciseVisualCard
-            key={exercise.id}
-            exercise={exercise}
-            onSelect={onSelect}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            selectionMode={selectionMode}
-            compact={isMobile}
-          />
-        ))}
+    <>
+      <div className="h-full overflow-auto p-2 sm:p-4">
+        {/* Grid layout - responsive columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+          {exercises.map((exercise) => (
+            <ExerciseVisualCard
+              key={exercise.id}
+              exercise={exercise}
+              onSelect={onSelect}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              onViewDetails={handleViewDetails}
+              selectionMode={selectionMode}
+              compact={isMobile}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* Exercise Detail Modal */}
+      <ExerciseDetailModal
+        exercise={selectedExercise}
+        open={detailModalOpen}
+        onOpenChange={setDetailModalOpen}
+        onSelect={selectionMode ? handleSelectFromModal : undefined}
+        showSelectButton={selectionMode}
+      />
+    </>
   );
 }

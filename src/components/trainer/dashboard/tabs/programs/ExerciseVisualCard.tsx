@@ -2,10 +2,10 @@ import { memo, useState } from 'react';
 import { ExerciseData } from '@/data/exercises/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Play, Plus, Edit, Trash2, Video, Dumbbell } from 'lucide-react';
+import { Play, Plus, Edit, Trash2, Video, Dumbbell, Eye } from 'lucide-react';
 import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor, getExerciseGifUrl } from '@/data/exercises/biomechanicsMapping';
-import { getCategoryPlaceholderGif } from '@/data/exercises/exerciseEnrichment';
 import { getExerciseVideoUrl } from '@/data/exercises/videoUrls';
+import { ExercisePlaceholderAnimated } from '@/components/trainer/training/ExercisePlaceholderAnimated';
 import { cn } from '@/lib/utils';
 
 interface ExerciseVisualCardProps {
@@ -13,6 +13,7 @@ interface ExerciseVisualCardProps {
   onSelect?: (exercise: ExerciseData) => void;
   onEdit?: (exercise: ExerciseData) => void;
   onDelete?: (id: string) => void;
+  onViewDetails?: (exercise: ExerciseData) => void;
   selectionMode?: boolean;
   compact?: boolean;
 }
@@ -73,6 +74,7 @@ export const ExerciseVisualCard = memo(({
   onSelect,
   onEdit,
   onDelete,
+  onViewDetails,
   selectionMode = false,
   compact = false,
 }: ExerciseVisualCardProps) => {
@@ -81,8 +83,7 @@ export const ExerciseVisualCard = memo(({
   const [imageError, setImageError] = useState(false);
   
   const gifUrl = getExerciseGifUrl(exercise);
-  const placeholderUrl = getCategoryPlaceholderGif(exercise.category);
-  const displayImage = gifUrl && !imageError ? gifUrl : placeholderUrl;
+  const hasGif = gifUrl && !imageError;
   const videoUrl = getExerciseVideoUrl(exercise.id);
   
   const mechanics = deriveMechanics(exercise);
@@ -93,6 +94,8 @@ export const ExerciseVisualCard = memo(({
   const handleClick = () => {
     if (selectionMode && onSelect) {
       onSelect(exercise);
+    } else if (onViewDetails) {
+      onViewDetails(exercise);
     }
   };
 
@@ -103,35 +106,40 @@ export const ExerciseVisualCard = memo(({
     }
   };
 
+  const handleViewDetails = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onViewDetails) {
+      onViewDetails(exercise);
+    }
+  };
+
   if (compact) {
     return (
       <div 
         className={cn(
           "flex items-center gap-3 p-3 rounded-lg border bg-card transition-all duration-200",
-          selectionMode && "cursor-pointer hover:bg-accent/50 hover:border-primary/50",
+          (selectionMode || onViewDetails) && "cursor-pointer hover:bg-accent/50 hover:border-primary/50",
           isHovered && "shadow-md"
         )}
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Compact thumbnail */}
-        <div className={cn(
-          "w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br",
-          gradient
-        )}>
-          {displayImage ? (
+        {/* Compact thumbnail with animated placeholder */}
+        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+          {hasGif ? (
             <img 
-              src={displayImage} 
+              src={gifUrl} 
               alt={exercise.name}
               className="w-full h-full object-cover"
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl">
-              {categoryIcon}
-            </div>
+            <ExercisePlaceholderAnimated 
+              category={exercise.category}
+              exerciseName={exercise.name}
+            />
           )}
         </div>
 
@@ -149,11 +157,18 @@ export const ExerciseVisualCard = memo(({
         </div>
 
         {/* Actions */}
-        {selectionMode && (
-          <Button size="sm" variant="default" className="h-8 w-8 p-0 shrink-0">
-            <Plus className="h-4 w-4" />
-          </Button>
-        )}
+        <div className="flex items-center gap-1">
+          {onViewDetails && (
+            <Button size="sm" variant="ghost" className="h-8 w-8 p-0 shrink-0" onClick={handleViewDetails}>
+              <Eye className="h-4 w-4" />
+            </Button>
+          )}
+          {selectionMode && (
+            <Button size="sm" variant="default" className="h-8 w-8 p-0 shrink-0">
+              <Plus className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
     );
   }
@@ -162,7 +177,7 @@ export const ExerciseVisualCard = memo(({
     <div 
       className={cn(
         "group relative rounded-xl overflow-hidden bg-card border transition-all duration-300",
-        selectionMode && "cursor-pointer",
+        (selectionMode || onViewDetails) && "cursor-pointer",
         isHovered && "shadow-xl border-primary/30 scale-[1.02]"
       )}
       onClick={handleClick}
@@ -171,16 +186,10 @@ export const ExerciseVisualCard = memo(({
     >
       {/* GIF/Image Container - Dribbble style 4:3 aspect ratio */}
       <div className="relative aspect-[4/3] overflow-hidden">
-        {/* Background gradient fallback */}
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br",
-          gradient
-        )} />
-        
-        {/* Image/GIF */}
-        {displayImage && (
+        {/* Animated placeholder or GIF */}
+        {hasGif ? (
           <img 
-            src={displayImage}
+            src={gifUrl}
             alt={exercise.name}
             className={cn(
               "absolute inset-0 w-full h-full object-cover transition-all duration-500",
@@ -190,13 +199,15 @@ export const ExerciseVisualCard = memo(({
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageError(true)}
           />
-        )}
-
-        {/* Placeholder icon if no image */}
-        {(!displayImage || imageError) && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-6xl opacity-50">{categoryIcon}</div>
-          </div>
+        ) : (
+          <ExercisePlaceholderAnimated 
+            category={exercise.category}
+            exerciseName={exercise.name}
+            className={cn(
+              "transition-all duration-500",
+              isHovered && "scale-110"
+            )}
+          />
         )}
 
         {/* Overlay gradient for readability */}
@@ -232,18 +243,24 @@ export const ExerciseVisualCard = memo(({
           </h3>
         </div>
 
-        {/* Hover overlay with select button */}
-        {selectionMode && (
-          <div className={cn(
-            "absolute inset-0 bg-primary/20 flex items-center justify-center transition-opacity duration-200",
-            isHovered ? "opacity-100" : "opacity-0"
-          )}>
+        {/* Hover overlay with action buttons */}
+        <div className={cn(
+          "absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-200",
+          isHovered ? "opacity-100" : "opacity-0"
+        )}>
+          {onViewDetails && (
+            <Button size="sm" variant="secondary" className="gap-1 shadow-lg" onClick={handleViewDetails}>
+              <Eye className="h-4 w-4" />
+              Details
+            </Button>
+          )}
+          {selectionMode && (
             <Button size="sm" variant="default" className="gap-1 shadow-lg">
               <Plus className="h-4 w-4" />
               Select
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Card content */}
@@ -288,6 +305,17 @@ export const ExerciseVisualCard = memo(({
         {/* Action buttons - only in edit mode */}
         {!selectionMode && (onEdit || onDelete) && (
           <div className="flex gap-1 pt-1 border-t">
+            {onViewDetails && (
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={handleViewDetails}
+                className="h-7 px-2 text-xs flex-1"
+              >
+                <Eye className="h-3 w-3 mr-1" />
+                View
+              </Button>
+            )}
             {videoUrl && (
               <Button 
                 size="sm" 
