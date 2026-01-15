@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { BuilderModeToggle } from "../builder/BuilderModeToggle";
 import { WeeklyPatternView } from "../builder/WeeklyPatternView";
 import { DailyScheduleView } from "../builder/DailyScheduleView";
-import { DayPattern, WorkoutSession, Routine } from "@/data/training/types";
+import { DayPattern, WorkoutSession, Routine, SessionItem } from "@/data/training/types";
 import { useRoutines } from "@/components/trainer/dashboard/tabs/routines/hooks/useRoutines";
 
 type BuilderMode = "weekly" | "daily";
@@ -29,7 +29,10 @@ export function Step2Builder({
   isSaving,
 }: Step2BuilderProps) {
   const [mode, setMode] = useState<BuilderMode>("weekly");
-  const { routines } = useRoutines();
+  const { routines, addRoutine } = useRoutines();
+
+  // Week-specific pattern overrides
+  const [weekPatterns, setWeekPatterns] = useState<Map<number, DayPattern[]>>(new Map());
 
   // Initialize day patterns from sessions or create empty ones
   const [dayPatterns, setDayPatterns] = useState<DayPattern[]>(() => {
@@ -41,6 +44,7 @@ export function Step2Builder({
         dayNumber: i,
         title: firstWeekSession?.title || "",
         exercises: firstWeekSession?.exercises || [],
+        items: firstWeekSession?.items || [],
       });
     }
     return patterns;
@@ -61,7 +65,7 @@ export function Step2Builder({
       for (let i = 1; i <= sessionsPerWeek; i++) {
         const existingPattern = dayPatterns.find((p) => p.dayNumber === i);
         newPatterns.push(
-          existingPattern || { dayNumber: i, title: "", exercises: [] }
+          existingPattern || { dayNumber: i, title: "", exercises: [], items: [] }
         );
       }
       setDayPatterns(newPatterns);
@@ -73,8 +77,12 @@ export function Step2Builder({
     let sessionNumber = 1;
 
     for (let week = 0; week < duration; week++) {
+      const weekNumber = week + 1;
+      // Use week-specific pattern if exists, otherwise use master
+      const patterns = weekPatterns.get(weekNumber) || dayPatterns;
+
       for (let day = 0; day < sessionsPerWeek; day++) {
-        const pattern = dayPatterns[day];
+        const pattern = patterns[day];
         const existingSession = sessions.find(
           (s) => s.sessionNumber === sessionNumber
         );
@@ -84,14 +92,31 @@ export function Step2Builder({
           newSessions.push(existingSession);
         } else {
           // Otherwise, generate from pattern
+          const exercisesFromPattern = (pattern?.exercises || []).map((ex) => ({
+            ...ex,
+            id: `${ex.id}-session-${sessionNumber}`,
+          }));
+
+          const itemsFromPattern = (pattern?.items || []).map((item) => ({
+            ...item,
+            data: {
+              ...item.data,
+              id: `${item.data.id}-session-${sessionNumber}`,
+              ...(item.type === 'circuit' && {
+                exercises: item.data.exercises?.map((ex: any) => ({
+                  ...ex,
+                  id: `${ex.id}-session-${sessionNumber}`,
+                })),
+              }),
+            },
+          })) as SessionItem[];
+
           newSessions.push({
             id: existingSession?.id || `session-${sessionNumber}`,
             sessionNumber,
             title: pattern?.title || `Session ${sessionNumber}`,
-            exercises: (pattern?.exercises || []).map((ex) => ({
-              ...ex,
-              id: `${ex.id}-session-${sessionNumber}`,
-            })),
+            exercises: exercisesFromPattern,
+            items: itemsFromPattern,
             completed: existingSession?.completed || false,
             isOverride: false,
             dayOfWeek: day + 1,
@@ -106,6 +131,14 @@ export function Step2Builder({
 
   const handleDayPatternsChange = (patterns: DayPattern[]) => {
     setDayPatterns(patterns);
+  };
+
+  const handleWeekPatternsChange = (patterns: Map<number, DayPattern[]>) => {
+    setWeekPatterns(patterns);
+  };
+
+  const handleCreateRoutine = (routine: Routine) => {
+    addRoutine(routine);
   };
 
   const handleSave = () => {
@@ -123,9 +156,13 @@ export function Step2Builder({
       {mode === "weekly" ? (
         <WeeklyPatternView
           sessionsPerWeek={sessionsPerWeek}
+          duration={duration}
           dayPatterns={dayPatterns}
           onDayPatternsChange={handleDayPatternsChange}
           routines={routines}
+          onCreateRoutine={handleCreateRoutine}
+          weekPatterns={weekPatterns}
+          onWeekPatternsChange={handleWeekPatternsChange}
         />
       ) : (
         <DailyScheduleView
@@ -134,6 +171,7 @@ export function Step2Builder({
           duration={duration}
           sessionsPerWeek={sessionsPerWeek}
           routines={routines}
+          onCreateRoutine={handleCreateRoutine}
         />
       )}
 
