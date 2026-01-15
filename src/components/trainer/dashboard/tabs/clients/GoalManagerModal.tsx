@@ -55,11 +55,7 @@ export function GoalManagerModal({
         </DialogHeader>
         
         <Card className="border-0 shadow-none">
-          <CardHeader className="px-0 pb-2 pt-0">
-            <CardTitle className="text-base">Fitness Program</CardTitle>
-            <CardDescription className="text-sm">Client's active and completed goals</CardDescription>
-          </CardHeader>
-          <CardContent className="px-0 space-y-4">
+          <CardContent className="px-0 pt-0 space-y-4">
             {/* Action button */}
             <div className="flex flex-col sm:flex-row gap-2">
               <Button 
