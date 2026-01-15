@@ -1,9 +1,8 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus, X, Filter, Zap, Target } from 'lucide-react';
+import { Search, Plus, X, Filter } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import type { Mechanics, ForceType } from '@/data/exercises/types';
 import { cn } from '@/lib/utils';
@@ -181,26 +180,25 @@ export function ExerciseLibraryFilters({
         </Select>
       </div>
 
-      {/* Biomechanics Filters - Improved UI */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {/* Mechanics Filter Card */}
-        <Card className="p-3">
-          <div className="flex items-center gap-2 mb-2">
-            <Target className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium">Mechanics</span>
-          </div>
+      {/* Biomechanics Filters - Inline pills row */}
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+        {/* Mechanics Filter */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">Mechanics:</span>
           <ToggleGroup 
             type="single" 
             value={mechanicsFilter} 
             onValueChange={handleMechanicsChange}
-            className="justify-start gap-1"
+            className="gap-0.5"
           >
             <ToggleGroupItem 
               value="all" 
               size="sm"
               className={cn(
-                "text-xs px-3",
-                mechanicsFilter === 'all' && "bg-primary text-primary-foreground"
+                "text-xs px-3 h-7 rounded-full border",
+                mechanicsFilter === 'all' 
+                  ? "bg-primary text-primary-foreground border-primary" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               All
@@ -209,8 +207,10 @@ export function ExerciseLibraryFilters({
               value="compound" 
               size="sm"
               className={cn(
-                "text-xs px-3",
-                mechanicsFilter === 'compound' && "bg-purple-600 text-white hover:bg-purple-700"
+                "text-xs px-3 h-7 rounded-full border",
+                mechanicsFilter === 'compound' 
+                  ? "bg-purple-600 text-white border-purple-600 hover:bg-purple-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Compound
@@ -219,33 +219,37 @@ export function ExerciseLibraryFilters({
               value="isolation" 
               size="sm"
               className={cn(
-                "text-xs px-3",
-                mechanicsFilter === 'isolation' && "bg-blue-600 text-white hover:bg-blue-700"
+                "text-xs px-3 h-7 rounded-full border",
+                mechanicsFilter === 'isolation' 
+                  ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Isolation
             </ToggleGroupItem>
           </ToggleGroup>
-        </Card>
+        </div>
 
-        {/* Force Type Filter Card */}
-        <Card className="p-3">
-          <div className="flex items-center gap-2 mb-2">
-            <Zap className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium">Force Vector</span>
-          </div>
+        {/* Divider */}
+        <div className="hidden sm:block w-px h-6 bg-border" />
+
+        {/* Force Type Filter */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">Force:</span>
           <ToggleGroup 
             type="single" 
             value={forceTypeFilter} 
             onValueChange={handleForceTypeChange}
-            className="justify-start gap-1 flex-wrap"
+            className="gap-0.5 flex-wrap"
           >
             <ToggleGroupItem 
               value="all" 
               size="sm"
               className={cn(
-                "text-xs px-2",
-                forceTypeFilter === 'all' && "bg-primary text-primary-foreground"
+                "text-xs px-2.5 h-7 rounded-full border",
+                forceTypeFilter === 'all' 
+                  ? "bg-primary text-primary-foreground border-primary" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               All
@@ -254,8 +258,10 @@ export function ExerciseLibraryFilters({
               value="push" 
               size="sm"
               className={cn(
-                "text-xs px-2",
-                forceTypeFilter === 'push' && "bg-orange-600 text-white hover:bg-orange-700"
+                "text-xs px-2.5 h-7 rounded-full border",
+                forceTypeFilter === 'push' 
+                  ? "bg-orange-600 text-white border-orange-600 hover:bg-orange-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Push
@@ -264,8 +270,10 @@ export function ExerciseLibraryFilters({
               value="pull" 
               size="sm"
               className={cn(
-                "text-xs px-2",
-                forceTypeFilter === 'pull' && "bg-teal-600 text-white hover:bg-teal-700"
+                "text-xs px-2.5 h-7 rounded-full border",
+                forceTypeFilter === 'pull' 
+                  ? "bg-teal-600 text-white border-teal-600 hover:bg-teal-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Pull
@@ -274,8 +282,10 @@ export function ExerciseLibraryFilters({
               value="squat" 
               size="sm"
               className={cn(
-                "text-xs px-2",
-                forceTypeFilter === 'squat' && "bg-green-600 text-white hover:bg-green-700"
+                "text-xs px-2.5 h-7 rounded-full border",
+                forceTypeFilter === 'squat' 
+                  ? "bg-green-600 text-white border-green-600 hover:bg-green-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Squat
@@ -284,8 +294,10 @@ export function ExerciseLibraryFilters({
               value="hinge" 
               size="sm"
               className={cn(
-                "text-xs px-2",
-                forceTypeFilter === 'hinge' && "bg-amber-600 text-white hover:bg-amber-700"
+                "text-xs px-2.5 h-7 rounded-full border",
+                forceTypeFilter === 'hinge' 
+                  ? "bg-amber-600 text-white border-amber-600 hover:bg-amber-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Hinge
@@ -294,14 +306,16 @@ export function ExerciseLibraryFilters({
               value="static" 
               size="sm"
               className={cn(
-                "text-xs px-2",
-                forceTypeFilter === 'static' && "bg-slate-600 text-white hover:bg-slate-700"
+                "text-xs px-2.5 h-7 rounded-full border",
+                forceTypeFilter === 'static' 
+                  ? "bg-slate-600 text-white border-slate-600 hover:bg-slate-700" 
+                  : "bg-background border-input hover:bg-accent"
               )}
             >
               Static
             </ToggleGroupItem>
           </ToggleGroup>
-        </Card>
+        </div>
       </div>
 
       {/* Active Filters Summary */}

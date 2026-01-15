@@ -1,5 +1,5 @@
-import { memo, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { memo, useState, useMemo } from 'react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ExerciseData } from '@/data/exercises/types';
 import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor, getExerciseGifUrl } from '@/data/exercises/biomechanicsMapping';
 import { getExerciseVideoUrl } from '@/data/exercises/videoUrls';
-import { ExercisePlaceholderAnimated } from './ExercisePlaceholderAnimated';
+import { completeExerciseDatabase } from '@/data/exercises/exerciseDatabase';
 import { 
   Play, 
   ExternalLink, 
@@ -17,7 +17,8 @@ import {
   Zap, 
   Info,
   Plus,
-  X
+  X,
+  RefreshCw
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +27,7 @@ interface ExerciseDetailModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect?: (exercise: ExerciseData) => void;
+  onExerciseChange?: (exercise: ExerciseData) => void;
   showSelectButton?: boolean;
 }
 
@@ -72,17 +74,40 @@ export const ExerciseDetailModal = memo(({
   open,
   onOpenChange,
   onSelect,
+  onExerciseChange,
   showSelectButton = false,
 }: ExerciseDetailModalProps) => {
-  const [imageError, setImageError] = useState(false);
+  const [currentExercise, setCurrentExercise] = useState<ExerciseData | null>(exercise);
   
-  if (!exercise) return null;
+  // Sync current exercise with prop when modal opens or exercise changes
+  useMemo(() => {
+    if (exercise) {
+      setCurrentExercise(exercise);
+    }
+  }, [exercise]);
+
+  // Get alternative exercises with same primary muscle group
+  const alternativeExercises = useMemo(() => {
+    if (!currentExercise) return [];
+    
+    const primaryMuscle = currentExercise.muscleGroup[0];
+    if (!primaryMuscle) return [];
+    
+    return completeExerciseDatabase
+      .filter(ex => 
+        ex.id !== currentExercise.id && 
+        ex.muscleGroup.includes(primaryMuscle)
+      )
+      .slice(0, 4);
+  }, [currentExercise]);
   
-  const gifUrl = getExerciseGifUrl(exercise);
-  const videoUrl = getExerciseVideoUrl(exercise.id);
-  const mechanics = deriveMechanics(exercise);
-  const forceType = deriveForceType(exercise);
-  const categoryIcon = categoryIcons[exercise.category] || '🏋️';
+  if (!currentExercise) return null;
+  
+  const gifUrl = getExerciseGifUrl(currentExercise);
+  const videoUrl = getExerciseVideoUrl(currentExercise.id);
+  const mechanics = deriveMechanics(currentExercise);
+  const forceType = deriveForceType(currentExercise);
+  const categoryIcon = categoryIcons[currentExercise.category] || '🏋️';
 
   const handleVideoClick = () => {
     if (videoUrl) {
@@ -91,9 +116,16 @@ export const ExerciseDetailModal = memo(({
   };
 
   const handleSelect = () => {
-    if (onSelect && exercise) {
-      onSelect(exercise);
+    if (onSelect && currentExercise) {
+      onSelect(currentExercise);
       onOpenChange(false);
+    }
+  };
+
+  const handleAlternativeClick = (altExercise: ExerciseData) => {
+    setCurrentExercise(altExercise);
+    if (onExerciseChange) {
+      onExerciseChange(altExercise);
     }
   };
 
@@ -102,21 +134,13 @@ export const ExerciseDetailModal = memo(({
       <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden">
         <ScrollArea className="max-h-[90vh]">
           <div className="p-0">
-            {/* Hero Image/GIF Section */}
+            {/* Hero Image/GIF Section - Always shows GIF now */}
             <div className="relative aspect-video w-full overflow-hidden bg-muted">
-              {gifUrl && !imageError ? (
-                <img 
-                  src={gifUrl}
-                  alt={exercise.name}
-                  className="w-full h-full object-cover"
-                  onError={() => setImageError(true)}
-                />
-              ) : (
-                <ExercisePlaceholderAnimated 
-                  category={exercise.category}
-                  exerciseName={exercise.name}
-                />
-              )}
+              <img 
+                src={gifUrl}
+                alt={currentExercise.name}
+                className="w-full h-full object-cover"
+              />
               
               {/* Close button overlay */}
               <button
@@ -145,8 +169,8 @@ export const ExerciseDetailModal = memo(({
                 <Badge className={`${getForceTypeColor(forceType)} backdrop-blur-sm`} variant="secondary">
                   {forceType.charAt(0).toUpperCase() + forceType.slice(1)}
                 </Badge>
-                <Badge className={`${getDifficultyColor(exercise.difficulty)} backdrop-blur-sm`} variant="secondary">
-                  {exercise.difficulty.charAt(0).toUpperCase() + exercise.difficulty.slice(1)}
+                <Badge className={`${getDifficultyColor(currentExercise.difficulty)} backdrop-blur-sm`} variant="secondary">
+                  {currentExercise.difficulty.charAt(0).toUpperCase() + currentExercise.difficulty.slice(1)}
                 </Badge>
               </div>
             </div>
@@ -157,12 +181,12 @@ export const ExerciseDetailModal = memo(({
               <div>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h2 className="text-2xl font-bold leading-tight">{exercise.name}</h2>
+                    <h2 className="text-2xl font-bold leading-tight">{currentExercise.name}</h2>
                     <div className="flex items-center gap-2 mt-2">
-                      <Badge className={`${getCategoryColor(exercise.category)} text-sm`} variant="secondary">
-                        {categoryIcon} {exercise.category.charAt(0).toUpperCase() + exercise.category.slice(1)}
+                      <Badge className={`${getCategoryColor(currentExercise.category)} text-sm`} variant="secondary">
+                        {categoryIcon} {currentExercise.category.charAt(0).toUpperCase() + currentExercise.category.slice(1)}
                       </Badge>
-                      {exercise.isCustom && (
+                      {currentExercise.isCustom && (
                         <Badge variant="outline">Custom Exercise</Badge>
                       )}
                     </div>
@@ -173,14 +197,14 @@ export const ExerciseDetailModal = memo(({
               <Separator />
               
               {/* Target Muscles */}
-              {exercise.muscleGroup && exercise.muscleGroup.length > 0 && (
+              {currentExercise.muscleGroup && currentExercise.muscleGroup.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Target className="h-4 w-4 text-primary" />
                     <h3 className="font-semibold text-sm">Target Muscles</h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {exercise.muscleGroup.map((muscle, idx) => (
+                    {currentExercise.muscleGroup.map((muscle, idx) => (
                       <Badge 
                         key={idx} 
                         variant="outline" 
@@ -198,14 +222,14 @@ export const ExerciseDetailModal = memo(({
               )}
               
               {/* Equipment */}
-              {exercise.equipment && exercise.equipment.length > 0 && (
+              {currentExercise.equipment && currentExercise.equipment.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Dumbbell className="h-4 w-4 text-primary" />
                     <h3 className="font-semibold text-sm">Equipment Required</h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {exercise.equipment.map((eq, idx) => (
+                    {currentExercise.equipment.map((eq, idx) => (
                       <Badge key={idx} variant="secondary" className="text-sm">
                         {eq}
                       </Badge>
@@ -252,14 +276,49 @@ export const ExerciseDetailModal = memo(({
               </div>
               
               {/* Notes/Instructions */}
-              {exercise.notes && (
+              {currentExercise.notes && (
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Info className="h-4 w-4 text-primary" />
                     <h3 className="font-semibold text-sm">Instructions & Notes</h3>
                   </div>
                   <div className="p-4 rounded-lg bg-muted/30 border text-sm leading-relaxed">
-                    {exercise.notes}
+                    {currentExercise.notes}
+                  </div>
+                </div>
+              )}
+
+              {/* Alternative Exercises Section */}
+              {alternativeExercises.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <RefreshCw className="h-4 w-4 text-primary" />
+                    <h3 className="font-semibold text-sm">Alternative Exercises</h3>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {alternativeExercises.map((altExercise) => {
+                      const altGifUrl = getExerciseGifUrl(altExercise);
+                      return (
+                        <button
+                          key={altExercise.id}
+                          onClick={() => handleAlternativeClick(altExercise)}
+                          className="group relative rounded-lg overflow-hidden border bg-card hover:border-primary/50 hover:shadow-md transition-all text-left"
+                        >
+                          <div className="aspect-square overflow-hidden bg-muted">
+                            <img 
+                              src={altGifUrl}
+                              alt={altExercise.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="p-2">
+                            <p className="text-xs font-medium line-clamp-2 leading-tight">
+                              {altExercise.name}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
