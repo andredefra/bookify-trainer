@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { OverviewTab } from "./OverviewTab";
-import { GoalsTab } from "./GoalsTab";
 import { MetricsTab } from "./MetricsTab";
 import { ProgramsTab } from "./ProgramsTab";
 import { PackagesTab } from "./PackagesTab";
@@ -32,15 +31,13 @@ interface ClientProfileTabContentProps {
   };
   searchQuery?: string;
   initialTab?: string;
-  onOpenGoalModal?: () => void;
 }
 
 export function ClientProfileTabContent({ 
   client, 
   mockClientDetails,
   searchQuery = "",
-  initialTab = "overview",
-  onOpenGoalModal
+  initialTab = "overview"
 }: ClientProfileTabContentProps) {
   const [activeTab, setActiveTab] = useState(initialTab);
   
@@ -79,15 +76,6 @@ export function ClientProfileTabContent({
           mockClientDetails={mockClientDetails} 
           clientSessions={client.sessions}
           searchQuery={searchQuery} 
-        />
-      </TabsContent>
-      
-      <TabsContent value="goals">
-        <GoalsTab 
-          mockClientDetails={mockClientDetails} 
-          searchQuery={searchQuery}
-          onAddGoal={onOpenGoalModal}
-          onViewProgress={() => setActiveTab("metrics")}
         />
       </TabsContent>
       

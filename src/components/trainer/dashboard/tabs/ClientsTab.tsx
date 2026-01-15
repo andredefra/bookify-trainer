@@ -13,6 +13,7 @@ import { EnhancedScheduleSessionDialog } from "./clients/dialogs/EnhancedSchedul
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-progress/ManageGoalTypesDialog";
 import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
+import { GoalManagerModal } from "./clients/GoalManagerModal";
 
 interface ClientItem {
   id: number;
@@ -39,10 +40,24 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [messageClientName, setMessageClientName] = useState("");
   const [showManageGoalTypesDialog, setShowManageGoalTypesDialog] = useState(false);
   
+  // Goal Manager Modal state
+  const [showGoalManagerModal, setShowGoalManagerModal] = useState(false);
+  const [goalManagerClient, setGoalManagerClient] = useState<ClientItem | null>(null);
+  
+  // Opens the standalone Goal Manager modal (bullseye icon)
   const handleViewGoals = (client: ClientItem) => {
-    setActiveClient(client);
-    setInitialProfileTab("goals");
-    setShowProfileDialog(true);
+    setGoalManagerClient(client);
+    setShowGoalManagerModal(true);
+  };
+  
+  // Closes Goal Manager and opens Profile with Metrics tab
+  const handleViewProgressFromGoals = () => {
+    setShowGoalManagerModal(false);
+    if (goalManagerClient) {
+      setActiveClient(goalManagerClient);
+      setInitialProfileTab("metrics");
+      setShowProfileDialog(true);
+    }
   };
   
   const handleViewProfile = (client: ClientItem) => {
@@ -168,7 +183,17 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         onMessage={handleMessage}
         onScheduleSession={handleScheduleSession}
         initialTab={initialProfileTab}
-        onManageGoalTypes={() => setShowManageGoalTypesDialog(true)}
+      />
+      
+      <GoalManagerModal
+        client={goalManagerClient}
+        open={showGoalManagerModal}
+        onOpenChange={setShowGoalManagerModal}
+        onAddGoal={() => {
+          setSelectedClient(goalManagerClient?.name || null);
+          setShowGoalDialog(true);
+        }}
+        onViewProgress={handleViewProgressFromGoals}
       />
       
       <MessageClientDialog
