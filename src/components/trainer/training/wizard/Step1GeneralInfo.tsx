@@ -7,14 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Info } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 
-interface Step1GeneralInfoProps {
+export interface Step1GeneralInfoProps {
   form: UseFormReturn<any>;
   isPaid: boolean;
   setIsPaid: (value: boolean) => void;
   onNext: () => void;
+  onCancel?: () => void;
 }
 
-export function Step1GeneralInfo({ form, isPaid, setIsPaid, onNext }: Step1GeneralInfoProps) {
+export function Step1GeneralInfo({ form, isPaid, setIsPaid, onNext, onCancel }: Step1GeneralInfoProps) {
   const duration = form.watch("duration") || 4;
   const targetFrequency = form.watch("targetFrequency") || 3;
   const totalSessions = duration * targetFrequency;
@@ -186,11 +187,18 @@ export function Step1GeneralInfo({ form, isPaid, setIsPaid, onNext }: Step1Gener
         </div>
       )}
 
-      <div className="pt-4 flex justify-end">
-        <Button type="button" onClick={onNext} disabled={!isValid}>
-          Next: Build Workout
-          <ArrowRight className="h-4 w-4 ml-2" />
-        </Button>
+      <div className="pt-4 flex justify-between">
+        {onCancel && (
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+        )}
+        <div className={onCancel ? '' : 'ml-auto'}>
+          <Button type="button" onClick={onNext} disabled={!isValid}>
+            Next: Build Workout
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
       </div>
     </div>
   );
