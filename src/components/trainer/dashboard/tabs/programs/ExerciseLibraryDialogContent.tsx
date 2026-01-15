@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { ExerciseData } from '@/data/exercises/types';
+import { ExerciseData, Mechanics, ForceType } from '@/data/exercises/types';
 import { ExerciseLibraryList } from './ExerciseLibraryList';
 import { AddExerciseDialog } from './AddExerciseDialog';
 import { EditExerciseDialog } from './EditExerciseDialog';
@@ -25,6 +25,12 @@ interface ExerciseLibraryDialogContentProps {
   setCategoryFilter: (category: string) => void;
   difficultyFilter: string;
   setDifficultyFilter: (difficulty: string) => void;
+  equipmentFilter?: string;
+  setEquipmentFilter?: (equipment: string) => void;
+  mechanicsFilter?: 'all' | Mechanics;
+  setMechanicsFilter?: (mechanics: 'all' | Mechanics) => void;
+  forceTypeFilter?: 'all' | ForceType;
+  setForceTypeFilter?: (forceType: 'all' | ForceType) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
   totalPages: number;
@@ -48,6 +54,12 @@ export function ExerciseLibraryDialogContent({
   setCategoryFilter,
   difficultyFilter,
   setDifficultyFilter,
+  equipmentFilter,
+  setEquipmentFilter,
+  mechanicsFilter,
+  setMechanicsFilter,
+  forceTypeFilter,
+  setForceTypeFilter,
   currentPage,
   setCurrentPage,
   totalPages,
@@ -99,6 +111,12 @@ export function ExerciseLibraryDialogContent({
             setCategoryFilter={setCategoryFilter}
             difficultyFilter={difficultyFilter}
             setDifficultyFilter={setDifficultyFilter}
+            equipmentFilter={equipmentFilter}
+            setEquipmentFilter={setEquipmentFilter}
+            mechanicsFilter={mechanicsFilter}
+            setMechanicsFilter={setMechanicsFilter}
+            forceTypeFilter={forceTypeFilter}
+            setForceTypeFilter={setForceTypeFilter}
             onCreateExercise={handleCreateExercise}
             hideCreateButton={selectionMode}
           />

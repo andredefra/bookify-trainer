@@ -28,6 +28,12 @@ export function ExerciseLibraryDialog({
     setCategoryFilter,
     difficultyFilter,
     setDifficultyFilter,
+    equipmentFilter,
+    setEquipmentFilter,
+    mechanicsFilter,
+    setMechanicsFilter,
+    forceTypeFilter,
+    setForceTypeFilter,
     exercises,
     filteredExercises,
     paginatedExercises,
@@ -139,6 +145,12 @@ export function ExerciseLibraryDialog({
             setCategoryFilter={setCategoryFilter}
             difficultyFilter={difficultyFilter}
             setDifficultyFilter={setDifficultyFilter}
+            equipmentFilter={equipmentFilter}
+            setEquipmentFilter={setEquipmentFilter}
+            mechanicsFilter={mechanicsFilter}
+            setMechanicsFilter={setMechanicsFilter}
+            forceTypeFilter={forceTypeFilter}
+            setForceTypeFilter={setForceTypeFilter}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={totalPages}
