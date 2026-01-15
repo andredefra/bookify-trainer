@@ -96,6 +96,24 @@ export interface TrainingProgram {
   clientConfirmedAt?: string;
 }
 
+// Routine - reusable cluster of exercises
+export interface Routine {
+  id: string;
+  title: string;
+  description?: string;
+  exercises: Exercise[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Day pattern for Weekly Pattern mode
+export interface DayPattern {
+  dayNumber: number; // 1, 2, 3, etc.
+  title: string; // e.g., "Leg Day"
+  exercises: Exercise[];
+  routineIds?: string[]; // Track which routines were imported
+}
+
 // Keep backward compatibility
 export interface WorkoutDay {
   id: string;
