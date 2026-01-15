@@ -31,14 +31,18 @@ interface ClientProfileTabContentProps {
     notes: string;
   };
   searchQuery?: string;
+  initialTab?: string;
+  onOpenGoalModal?: () => void;
 }
 
 export function ClientProfileTabContent({ 
   client, 
   mockClientDetails,
-  searchQuery = ""
+  searchQuery = "",
+  initialTab = "overview",
+  onOpenGoalModal
 }: ClientProfileTabContentProps) {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState(initialTab);
   
   // Use our custom hook to handle search functionality
   const { matchCounts, firstMatchTab } = useTabSearchResults({
@@ -53,6 +57,13 @@ export function ClientProfileTabContent({
       setActiveTab(firstMatchTab);
     }
   }, [firstMatchTab]);
+
+  // Respect initialTab changes from parent
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   // Pass the search query to each tab component
   return (
@@ -75,6 +86,8 @@ export function ClientProfileTabContent({
         <GoalsTab 
           mockClientDetails={mockClientDetails} 
           searchQuery={searchQuery}
+          onAddGoal={onOpenGoalModal}
+          onViewProgress={() => setActiveTab("metrics")}
         />
       </TabsContent>
       

@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { ClientProfile } from "@/components/ClientProfile";
 import { ClientProfileTabContent } from "./ClientProfileTabs/ClientProfileTabContent";
 import { ProfileDialogFooter } from "./ClientProfileTabs/ProfileDialogFooter";
+import { ClientGoalsDialog } from "./ClientGoalsDialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -33,10 +34,13 @@ interface ClientProfileDialogProps {
   onOpenChange: (open: boolean) => void;
   onMessage?: (clientName: string) => void;
   onScheduleSession?: (clientName: string) => void;
+  initialTab?: string;
+  onManageGoalTypes?: () => void;
 }
 
-export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onScheduleSession }: ClientProfileDialogProps) {
+export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onScheduleSession, initialTab, onManageGoalTypes }: ClientProfileDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showGoalModal, setShowGoalModal] = useState(false);
   
   if (!client) return null;
   
@@ -65,7 +69,6 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
               email={mockClientDetails.email}
               since={mockClientDetails.since}
               sessions={client.sessions}
-              goals={mockClientDetails.goals}
             />
           </div>
           
@@ -77,7 +80,6 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
                 email={mockClientDetails.email}
                 since={mockClientDetails.since}
                 sessions={client.sessions}
-                goals={mockClientDetails.goals}
               />
             </div>
             
@@ -87,10 +89,20 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
                 client={client}
                 mockClientDetails={mockClientDetails}
                 searchQuery={searchQuery}
+                initialTab={initialTab}
+                onOpenGoalModal={() => setShowGoalModal(true)}
               />
             </div>
           </div>
         </div>
+        
+        {/* Goal creation modal */}
+        <ClientGoalsDialog
+          open={showGoalModal}
+          onOpenChange={setShowGoalModal}
+          selectedClient={client.name}
+          onManageGoalTypes={onManageGoalTypes}
+        />
         
         <ProfileDialogFooter 
           onClose={() => onOpenChange(false)}

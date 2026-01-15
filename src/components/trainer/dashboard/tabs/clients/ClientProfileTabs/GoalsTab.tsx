@@ -11,9 +11,11 @@ interface GoalsTabProps {
     goals: string[];
   };
   searchQuery?: string;
+  onAddGoal?: () => void;
+  onViewProgress?: () => void;
 }
 
-export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps) {
+export function GoalsTab({ mockClientDetails, searchQuery = "", onAddGoal, onViewProgress }: GoalsTabProps) {
   const isMobile = useIsMobile();
 
   return (
@@ -27,6 +29,7 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
         <div className="flex flex-col sm:flex-row gap-2">
           <Button 
             className="w-full sm:w-auto flex items-center justify-center"
+            onClick={onAddGoal}
           >
             <Plus className="h-4 w-4 mr-1.5" />
             Add Goal
@@ -34,6 +37,7 @@ export function GoalsTab({ mockClientDetails, searchQuery = "" }: GoalsTabProps)
           <Button 
             variant="outline"
             className="w-full sm:w-auto flex items-center justify-center"
+            onClick={onViewProgress}
           >
             <Target className="h-4 w-4 mr-1.5" />
             View Progress

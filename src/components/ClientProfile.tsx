@@ -1,15 +1,13 @@
 
-import { User, Calendar, Medal, Target } from "lucide-react";
+import { User, Calendar, Medal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 interface ClientProfileProps {
   name: string;
   email: string;
   since: string;
   sessions: number;
-  goals: string[];
   image?: string;
 }
 
@@ -18,7 +16,6 @@ export function ClientProfile({
   email,
   since,
   sessions,
-  goals,
   image
 }: ClientProfileProps) {
   // Use a general image as default profile image if none is provided
@@ -59,18 +56,6 @@ export function ClientProfile({
           <div className="bg-green-50 px-2 py-1 rounded-md flex items-center gap-1 text-xs">
             <Medal className="h-3 w-3 text-green-500" />
             <span className="truncate">{sessions} sessions</span>
-          </div>
-        </div>
-        
-        <div className="mt-3">
-          <div className="flex items-center gap-1 mb-1.5">
-            <Target className="h-3 w-3 text-primary/70" />
-            <span className="text-xs font-medium">Goals</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {goals.map((goal) => (
-              <Badge key={goal} variant="secondary" className="bg-secondary/50 px-1.5 py-0.5 text-xs">{goal}</Badge>
-            ))}
           </div>
         </div>
       </CardContent>
