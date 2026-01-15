@@ -1,4 +1,8 @@
 
+export type Mechanics = 'isolation' | 'compound';
+export type ForceType = 'push' | 'pull' | 'static' | 'hinge' | 'squat' | 'carry';
+export type ActivityType = 'strength' | 'cardio' | 'mobility' | 'plyometric' | 'stretching';
+
 export interface ExerciseData {
   id: string;
   name: string;
@@ -13,4 +17,13 @@ export interface ExerciseData {
   isCustom?: boolean;
   isModified?: boolean;
   isDeletable?: boolean;
+  
+  // Biomechanical Fields
+  mechanics?: Mechanics;
+  forceType?: ForceType;
+  activityType?: ActivityType;
+  
+  // GIF/Media Fields
+  demonstrationGif?: string;  // System default GIF URL
+  customGifUrl?: string;      // Trainer override GIF URL
 }

@@ -7,9 +7,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Image, Link } from 'lucide-react';
 import { useExerciseLibrary } from '@/hooks/useExerciseLibrary';
 import { toast } from 'sonner';
+import { Mechanics, ForceType, ActivityType } from '@/data/exercises/types';
 
 interface AddExerciseDialogProps {
   open: boolean;
@@ -30,6 +31,11 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
     equipmentImages: {} as { [equipment: string]: string },
     alternativeExercises: [] as string[],
     primaryEquipment: '',
+    // NEW: Biomechanics fields
+    mechanics: '' as Mechanics | '',
+    forceType: '' as ForceType | '',
+    activityType: '' as ActivityType | '',
+    demonstrationGif: '',
   });
   
   const [newMuscleGroup, setNewMuscleGroup] = useState('');
@@ -53,6 +59,28 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
     { value: 'beginner', label: 'Beginner' },
     { value: 'intermediate', label: 'Intermediate' },
     { value: 'advanced', label: 'Advanced' }
+  ];
+
+  const mechanicsOptions = [
+    { value: 'compound', label: '🔗 Compound' },
+    { value: 'isolation', label: '🎯 Isolation' },
+  ];
+
+  const forceTypeOptions = [
+    { value: 'push', label: '⬆️ Push' },
+    { value: 'pull', label: '⬇️ Pull' },
+    { value: 'static', label: '⏸️ Static' },
+    { value: 'hinge', label: '↩️ Hinge' },
+    { value: 'squat', label: '🦵 Squat' },
+    { value: 'carry', label: '🏋️ Carry' },
+  ];
+
+  const activityTypeOptions = [
+    { value: 'strength', label: 'Strength' },
+    { value: 'cardio', label: 'Cardio' },
+    { value: 'mobility', label: 'Mobility' },
+    { value: 'plyometric', label: 'Plyometric' },
+    { value: 'stretching', label: 'Stretching' },
   ];
 
   const commonMuscleGroups = [
@@ -153,7 +181,12 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
       equipment: formData.equipment.length > 0 ? formData.equipment : ['Bodyweight'],
       equipmentImages: Object.keys(formData.equipmentImages).length > 0 ? formData.equipmentImages : undefined,
       alternativeExercises: formData.alternativeExercises.length > 0 ? formData.alternativeExercises : undefined,
-      primaryEquipment: formData.primaryEquipment || formData.equipment[0] || 'Bodyweight'
+      primaryEquipment: formData.primaryEquipment || formData.equipment[0] || 'Bodyweight',
+      // NEW: Biomechanics fields
+      mechanics: formData.mechanics || undefined,
+      forceType: formData.forceType || undefined,
+      activityType: formData.activityType || undefined,
+      demonstrationGif: formData.demonstrationGif || undefined,
     };
 
     addCustomExercise(exerciseData);
@@ -170,6 +203,10 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
       equipmentImages: {},
       alternativeExercises: [],
       primaryEquipment: '',
+      mechanics: '',
+      forceType: '',
+      activityType: '',
+      demonstrationGif: '',
     });
     
     onOpenChange(false);
@@ -246,6 +283,122 @@ export function AddExerciseDialog({ open, onOpenChange }: AddExerciseDialogProps
                 placeholder="https://www.youtube.com/watch?v=..."
                 className="w-full"
               />
+            </div>
+          </div>
+
+          {/* Biomechanics Section */}
+          <div className="p-4 bg-muted/30 rounded-lg border space-y-4">
+            <h3 className="font-medium text-sm flex items-center gap-2">
+              🧬 Biomechanics (Optional)
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Mechanics */}
+              <div className="space-y-2">
+                <Label className="text-sm">Mechanics</Label>
+                <Select
+                  value={formData.mechanics}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, mechanics: value as Mechanics }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Auto-detect" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mechanicsOptions.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Force Type */}
+              <div className="space-y-2">
+                <Label className="text-sm">Force Vector</Label>
+                <Select
+                  value={formData.forceType}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, forceType: value as ForceType }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Auto-detect" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {forceTypeOptions.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Activity Type */}
+              <div className="space-y-2">
+                <Label className="text-sm">Activity Type</Label>
+                <Select
+                  value={formData.activityType}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, activityType: value as ActivityType }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Auto-detect" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {activityTypeOptions.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          {/* GIF Demonstration Section */}
+          <div className="p-4 bg-muted/30 rounded-lg border space-y-3">
+            <h3 className="font-medium text-sm flex items-center gap-2">
+              <Image className="h-4 w-4" />
+              Visual Demonstration (Optional)
+            </h3>
+            
+            <div className="space-y-2">
+              <Label htmlFor="demonstrationGif" className="text-sm">GIF URL</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="demonstrationGif"
+                  type="url"
+                  value={formData.demonstrationGif}
+                  onChange={(e) => setFormData(prev => ({ ...prev, demonstrationGif: e.target.value }))}
+                  placeholder="https://example.com/exercise-demo.gif"
+                  className="flex-1"
+                />
+                {formData.demonstrationGif && (
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => window.open(formData.demonstrationGif, '_blank')}
+                  >
+                    <Link className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              {formData.demonstrationGif && (
+                <div className="mt-2 aspect-[4/3] max-w-[200px] rounded-lg overflow-hidden border bg-muted">
+                  <img 
+                    src={formData.demonstrationGif} 
+                    alt="GIF Preview" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Add a GIF URL to show a visual demonstration of the exercise movement
+              </p>
             </div>
           </div>
 
