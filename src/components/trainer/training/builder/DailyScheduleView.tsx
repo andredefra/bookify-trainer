@@ -29,7 +29,7 @@ import {
   RotateCcw 
 } from "lucide-react";
 import { ImportRoutineDialog } from "./ImportRoutineDialog";
-import { CircuitContainer } from "./CircuitContainer";
+import { ExerciseRowWithSelector } from "./ExerciseRowWithSelector";
 
 interface DailyScheduleViewProps {
   sessions: WorkoutSession[];
@@ -95,12 +95,10 @@ export function DailyScheduleView({
     const newExercise = createEmptyExercise();
 
     if (session.items && session.items.length > 0) {
-      // Use items mode
       handleSessionChange(sessionId, {
         items: [...session.items, { type: 'exercise', data: newExercise }],
       });
     } else {
-      // Use exercises mode (backward compatibility)
       handleSessionChange(sessionId, {
         exercises: [...session.exercises, newExercise],
       });
@@ -137,37 +135,24 @@ export function DailyScheduleView({
     });
   };
 
-  const handleExerciseChange = (
-    sessionId: string,
-    exerciseId: string,
-    field: string,
-    value: any
-  ) => {
+  const handleExerciseUpdate = (sessionId: string, exerciseId: string, updatedExercise: Exercise) => {
     const session = sessions.find((s) => s.id === sessionId);
     if (!session) return;
 
     handleSessionChange(sessionId, {
       exercises: session.exercises.map((e) =>
-        e.id === exerciseId ? { ...e, [field]: value } : e
+        e.id === exerciseId ? updatedExercise : e
       ),
     });
   };
 
-  const handleItemChange = (
-    sessionId: string,
-    itemIndex: number,
-    updatedItem: SessionItem
-  ) => {
+  const handleItemExerciseUpdate = (sessionId: string, itemIndex: number, updatedExercise: Exercise) => {
     const session = sessions.find((s) => s.id === sessionId);
     if (!session || !session.items) return;
 
     const newItems = [...session.items];
-    newItems[itemIndex] = updatedItem;
+    newItems[itemIndex] = { type: 'exercise', data: updatedExercise };
     handleSessionChange(sessionId, { items: newItems });
-  };
-
-  const handleCircuitChange = (sessionId: string, itemIndex: number, circuit: Circuit) => {
-    handleItemChange(sessionId, itemIndex, { type: 'circuit', data: circuit });
   };
 
   const handleOpenImportDialog = (sessionId: string) => {
@@ -295,56 +280,17 @@ export function DailyScheduleView({
                             <div className="space-y-2">
                               {session.items.map((item, itemIndex) => (
                                 item.type === 'exercise' ? (
-                                  <div
+                                  <ExerciseRowWithSelector
                                     key={item.data.id}
-                                    className="flex items-center gap-1 text-xs"
-                                  >
-                                    <span className="text-muted-foreground w-4">
-                                      {itemIndex + 1}.
-                                    </span>
-                                    <Input
-                                      value={item.data.name}
-                                      onChange={(e) =>
-                                        handleItemChange(session.id, itemIndex, {
-                                          type: 'exercise',
-                                          data: { ...item.data, name: e.target.value },
-                                        })
-                                      }
-                                      className="flex-1 h-7 text-xs"
-                                      placeholder="Exercise"
-                                    />
-                                    <Input
-                                      type="number"
-                                      value={item.data.sets}
-                                      onChange={(e) =>
-                                        handleItemChange(session.id, itemIndex, {
-                                          type: 'exercise',
-                                          data: { ...item.data, sets: parseInt(e.target.value) || 1 },
-                                        })
-                                      }
-                                      className="w-10 h-7 text-xs text-center"
-                                    />
-                                    <span>×</span>
-                                    <Input
-                                      value={item.data.reps}
-                                      onChange={(e) =>
-                                        handleItemChange(session.id, itemIndex, {
-                                          type: 'exercise',
-                                          data: { ...item.data, reps: e.target.value },
-                                        })
-                                      }
-                                      className="w-12 h-7 text-xs"
-                                    />
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="icon"
-                                      className="h-6 w-6"
-                                      onClick={() => handleRemoveItem(session.id, item.data.id)}
-                                    >
-                                      <Trash2 className="h-3 w-3" />
-                                    </Button>
-                                  </div>
+                                    exercise={item.data}
+                                    index={itemIndex}
+                                    onExerciseChange={(updatedEx) =>
+                                      handleItemExerciseUpdate(session.id, itemIndex, updatedEx)
+                                    }
+                                    onRemove={() => handleRemoveItem(session.id, item.data.id)}
+                                    compact={true}
+                                    showDragHandle={false}
+                                  />
                                 ) : (
                                   <div key={item.data.id} className="border border-primary/30 rounded-md p-2 bg-primary/5">
                                     <div className="flex items-center gap-1 mb-1">
@@ -370,66 +316,19 @@ export function DailyScheduleView({
                               ))}
                             </div>
                           ) : session.exercises.length > 0 ? (
-                            <div className="space-y-1">
+                            <div className="space-y-2">
                               {session.exercises.map((exercise, i) => (
-                                <div
+                                <ExerciseRowWithSelector
                                   key={exercise.id}
-                                  className="flex items-center gap-1 text-xs"
-                                >
-                                  <span className="text-muted-foreground w-4">
-                                    {i + 1}.
-                                  </span>
-                                  <Input
-                                    value={exercise.name}
-                                    onChange={(e) =>
-                                      handleExerciseChange(
-                                        session.id,
-                                        exercise.id,
-                                        "name",
-                                        e.target.value
-                                      )
-                                    }
-                                    className="flex-1 h-7 text-xs"
-                                    placeholder="Exercise"
-                                  />
-                                  <Input
-                                    type="number"
-                                    value={exercise.sets}
-                                    onChange={(e) =>
-                                      handleExerciseChange(
-                                        session.id,
-                                        exercise.id,
-                                        "sets",
-                                        parseInt(e.target.value) || 1
-                                      )
-                                    }
-                                    className="w-10 h-7 text-xs text-center"
-                                  />
-                                  <span>×</span>
-                                  <Input
-                                    value={exercise.reps}
-                                    onChange={(e) =>
-                                      handleExerciseChange(
-                                        session.id,
-                                        exercise.id,
-                                        "reps",
-                                        e.target.value
-                                      )
-                                    }
-                                    className="w-12 h-7 text-xs"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-6 w-6"
-                                    onClick={() =>
-                                      handleRemoveExercise(session.id, exercise.id)
-                                    }
-                                  >
-                                    <Trash2 className="h-3 w-3" />
-                                  </Button>
-                                </div>
+                                  exercise={exercise}
+                                  index={i}
+                                  onExerciseChange={(updatedEx) =>
+                                    handleExerciseUpdate(session.id, exercise.id, updatedEx)
+                                  }
+                                  onRemove={() => handleRemoveExercise(session.id, exercise.id)}
+                                  compact={true}
+                                  showDragHandle={false}
+                                />
                               ))}
                             </div>
                           ) : (
