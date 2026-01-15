@@ -153,66 +153,58 @@ export function ExerciseLibraryFilters({
           </SelectContent>
         </Select>
 
-        {setEquipmentFilter && (
-          <Select value={equipmentFilter || 'all'} onValueChange={handleEquipmentChange}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Equipment" />
-            </SelectTrigger>
-            <SelectContent>
-              {equipmentOptions.map((eq) => (
-                <SelectItem key={eq.value} value={eq.value}>
-                  {eq.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+        <Select value={equipmentFilter || 'all'} onValueChange={handleEquipmentChange}>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Equipment" />
+          </SelectTrigger>
+          <SelectContent>
+            {equipmentOptions.map((eq) => (
+              <SelectItem key={eq.value} value={eq.value}>
+                {eq.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* Filters Row 2: Biomechanics Toggle Buttons */}
-      {(setMechanicsFilter || setForceTypeFilter) && (
-        <div className="flex flex-wrap gap-4">
-          {/* Mechanics Filter */}
-          {setMechanicsFilter && (
-            <div className="flex items-center gap-1">
-              <span className="text-xs text-muted-foreground mr-1">Mechanics:</span>
-              <div className="flex gap-1">
-                {(['all', 'compound', 'isolation'] as const).map((value) => (
-                  <Button
-                    key={value}
-                    size="sm"
-                    variant={mechanicsFilter === value ? 'default' : 'outline'}
-                    onClick={() => setMechanicsFilter(value)}
-                    className="h-7 px-2 text-xs"
-                  >
-                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Force Type Filter */}
-          {setForceTypeFilter && (
-            <div className="flex items-center gap-1">
-              <span className="text-xs text-muted-foreground mr-1">Force:</span>
-              <div className="flex gap-1 flex-wrap">
-                {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((value) => (
-                  <Button
-                    key={value}
-                    size="sm"
-                    variant={forceTypeFilter === value ? 'default' : 'outline'}
-                    onClick={() => setForceTypeFilter(value)}
-                    className="h-7 px-2 text-xs"
-                  >
-                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
+      {/* Filters Row 2: Biomechanics Toggle Buttons - Always visible */}
+      <div className="flex flex-wrap gap-4">
+        {/* Mechanics Filter */}
+        <div className="flex items-center gap-1">
+          <span className="text-xs text-muted-foreground mr-1">Mechanics:</span>
+          <div className="flex gap-1">
+            {(['all', 'compound', 'isolation'] as const).map((value) => (
+              <Button
+                key={value}
+                size="sm"
+                variant={mechanicsFilter === value ? 'default' : 'outline'}
+                onClick={() => setMechanicsFilter?.(value)}
+                className="h-7 px-2 text-xs"
+              >
+                {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+              </Button>
+            ))}
+          </div>
         </div>
-      )}
+
+        {/* Force Type Filter */}
+        <div className="flex items-center gap-1">
+          <span className="text-xs text-muted-foreground mr-1">Force:</span>
+          <div className="flex gap-1 flex-wrap">
+            {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((value) => (
+              <Button
+                key={value}
+                size="sm"
+                variant={forceTypeFilter === value ? 'default' : 'outline'}
+                onClick={() => setForceTypeFilter?.(value)}
+                className="h-7 px-2 text-xs"
+              >
+                {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Active Filters Summary */}
       {activeFiltersCount > 0 && (
