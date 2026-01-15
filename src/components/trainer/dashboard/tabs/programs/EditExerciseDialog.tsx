@@ -7,11 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { X, Play, RotateCcw, Camera } from 'lucide-react';
-import { ExerciseData } from '@/data/exercises/types';
+import { X, Play, RotateCcw, Camera, Image } from 'lucide-react';
+import { ExerciseData, Mechanics, ForceType, ActivityType } from '@/data/exercises/types';
 import { toast } from 'sonner';
 import { EditEquipmentImagesDialog } from './EditEquipmentImagesDialog';
 import { AlternativeExercisesManager } from './AlternativeExercisesManager';
+import { deriveMechanics, deriveForceType, deriveActivityType, getExerciseGifUrl } from '@/data/exercises/biomechanicsMapping';
 
 interface EditExerciseDialogProps {
   open: boolean;
@@ -37,6 +38,11 @@ export function EditExerciseDialog({
     muscleGroups: [] as string[],
     equipment: [] as string[],
     alternativeExercises: [] as string[],
+    mechanics: '' as Mechanics | '',
+    forceType: '' as ForceType | '',
+    activityType: '' as ActivityType | '',
+    demonstrationGif: '',
+    customGifUrl: '',
   });
   
   const [newMuscleGroup, setNewMuscleGroup] = useState('');
@@ -85,6 +91,11 @@ export function EditExerciseDialog({
         muscleGroups: [...exercise.muscleGroup],
         equipment: [...exercise.equipment],
         alternativeExercises: [...(exercise.alternativeExercises || [])],
+        mechanics: exercise.mechanics || deriveMechanics(exercise),
+        forceType: exercise.forceType || deriveForceType(exercise),
+        activityType: exercise.activityType || deriveActivityType(exercise),
+        demonstrationGif: exercise.demonstrationGif || '',
+        customGifUrl: exercise.customGifUrl || '',
       });
       setEquipmentImages(exercise.equipmentImages || {});
     }
@@ -147,6 +158,11 @@ export function EditExerciseDialog({
       equipment: formData.equipment.length > 0 ? formData.equipment : ['Bodyweight'],
       equipmentImages: equipmentImages,
       alternativeExercises: formData.alternativeExercises,
+      mechanics: formData.mechanics || undefined,
+      forceType: formData.forceType || undefined,
+      activityType: formData.activityType || undefined,
+      demonstrationGif: formData.demonstrationGif || undefined,
+      customGifUrl: formData.customGifUrl || undefined,
     });
 
     toast.success('Exercise updated successfully!');
@@ -255,6 +271,130 @@ export function EditExerciseDialog({
               </Select>
             </div>
 
+            {/* Biomechanical Properties Section */}
+            <div className="border-t pt-4">
+              <h3 className="text-sm font-semibold mb-3">Biomechanical Properties</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label>Mechanics</Label>
+                  <Select
+                    value={formData.mechanics || 'auto'}
+                    onValueChange={(value) => setFormData(prev => ({ 
+                      ...prev, 
+                      mechanics: value === 'auto' ? '' : value as Mechanics 
+                    }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Auto-detect" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="auto">Auto-detect</SelectItem>
+                      <SelectItem value="compound">Compound</SelectItem>
+                      <SelectItem value="isolation">Isolation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Current: {deriveMechanics(exercise!)}
+                  </p>
+                </div>
+
+                <div>
+                  <Label>Force Type</Label>
+                  <Select
+                    value={formData.forceType || 'auto'}
+                    onValueChange={(value) => setFormData(prev => ({ 
+                      ...prev, 
+                      forceType: value === 'auto' ? '' : value as ForceType 
+                    }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Auto-detect" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="auto">Auto-detect</SelectItem>
+                      <SelectItem value="push">Push</SelectItem>
+                      <SelectItem value="pull">Pull</SelectItem>
+                      <SelectItem value="static">Static</SelectItem>
+                      <SelectItem value="hinge">Hinge</SelectItem>
+                      <SelectItem value="squat">Squat</SelectItem>
+                      <SelectItem value="carry">Carry</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Current: {deriveForceType(exercise!)}
+                  </p>
+                </div>
+
+                <div>
+                  <Label>Activity Type</Label>
+                  <Select
+                    value={formData.activityType || 'auto'}
+                    onValueChange={(value) => setFormData(prev => ({ 
+                      ...prev, 
+                      activityType: value === 'auto' ? '' : value as ActivityType 
+                    }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Auto-detect" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="auto">Auto-detect</SelectItem>
+                      <SelectItem value="strength">Strength</SelectItem>
+                      <SelectItem value="cardio">Cardio</SelectItem>
+                      <SelectItem value="mobility">Mobility</SelectItem>
+                      <SelectItem value="plyometric">Plyometric</SelectItem>
+                      <SelectItem value="stretching">Stretching</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Current: {deriveActivityType(exercise!)}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* GIF/Visual Demonstration Section */}
+            <div className="border-t pt-4">
+              <h3 className="text-sm font-semibold mb-3">Visual Demonstration</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="demonstrationGif">Default GIF URL</Label>
+                  <Input
+                    id="demonstrationGif"
+                    type="url"
+                    value={formData.demonstrationGif}
+                    onChange={(e) => setFormData(prev => ({ ...prev, demonstrationGif: e.target.value }))}
+                    placeholder="https://example.com/demo.gif"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="customGifUrl">Custom GIF URL (Override)</Label>
+                  <Input
+                    id="customGifUrl"
+                    type="url"
+                    value={formData.customGifUrl}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customGifUrl: e.target.value }))}
+                    placeholder="https://example.com/custom.gif"
+                  />
+                </div>
+              </div>
+              {/* GIF Preview */}
+              {(formData.customGifUrl || formData.demonstrationGif) && (
+                <div className="mt-3">
+                  <Label className="text-xs text-muted-foreground">Preview</Label>
+                  <div className="mt-1 border rounded-lg overflow-hidden bg-muted/30 max-w-xs">
+                    <img 
+                      src={formData.customGifUrl || formData.demonstrationGif}
+                      alt="Exercise demonstration"
+                      className="w-full aspect-video object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
             <div>
               <Label htmlFor="notes">Instructions/Notes *</Label>
               <Textarea

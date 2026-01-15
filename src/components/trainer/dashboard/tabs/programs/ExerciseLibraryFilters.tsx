@@ -2,7 +2,9 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import type { Mechanics, ForceType } from '@/data/exercises/types';
 
 interface ExerciseLibraryFiltersProps {
   searchTerm: string;
@@ -11,6 +13,12 @@ interface ExerciseLibraryFiltersProps {
   setCategoryFilter: (category: string) => void;
   difficultyFilter: string;
   setDifficultyFilter: (difficulty: string) => void;
+  equipmentFilter?: string;
+  setEquipmentFilter?: (equipment: string) => void;
+  mechanicsFilter?: 'all' | Mechanics;
+  setMechanicsFilter?: (mechanics: 'all' | Mechanics) => void;
+  forceTypeFilter?: 'all' | ForceType;
+  setForceTypeFilter?: (forceType: 'all' | ForceType) => void;
   onCreateExercise: () => void;
   hideCreateButton?: boolean;
 }
@@ -22,6 +30,12 @@ export function ExerciseLibraryFilters({
   setCategoryFilter,
   difficultyFilter,
   setDifficultyFilter,
+  equipmentFilter = '',
+  setEquipmentFilter,
+  mechanicsFilter = 'all',
+  setMechanicsFilter,
+  forceTypeFilter = 'all',
+  setForceTypeFilter,
   onCreateExercise,
   hideCreateButton = false,
 }: ExerciseLibraryFiltersProps) {
@@ -46,12 +60,48 @@ export function ExerciseLibraryFilters({
     { value: 'advanced', label: 'Advanced' },
   ];
 
+  const equipmentOptions = [
+    { value: 'all', label: 'All Equipment' },
+    { value: 'bodyweight', label: 'Bodyweight' },
+    { value: 'barbell', label: 'Barbell' },
+    { value: 'dumbbell', label: 'Dumbbells' },
+    { value: 'cable', label: 'Cable Machine' },
+    { value: 'machine', label: 'Machine' },
+    { value: 'kettlebell', label: 'Kettlebell' },
+    { value: 'resistance', label: 'Resistance Band' },
+    { value: 'bench', label: 'Bench' },
+  ];
+
   const handleCategoryChange = (value: string) => {
     setCategoryFilter(value === 'all' ? '' : value);
   };
 
   const handleDifficultyChange = (value: string) => {
     setDifficultyFilter(value === 'all' ? '' : value);
+  };
+
+  const handleEquipmentChange = (value: string) => {
+    if (setEquipmentFilter) {
+      setEquipmentFilter(value === 'all' ? '' : value);
+    }
+  };
+
+  // Count active filters
+  const activeFiltersCount = [
+    categoryFilter,
+    difficultyFilter,
+    equipmentFilter,
+    mechanicsFilter !== 'all' ? mechanicsFilter : '',
+    forceTypeFilter !== 'all' ? forceTypeFilter : '',
+  ].filter(Boolean).length;
+
+  const clearAllFilters = () => {
+    setCategoryFilter('');
+    setDifficultyFilter('');
+    setEquipmentFilter?.('');
+    setMechanicsFilter?.('all');
+    setForceTypeFilter?.('all');
+    setSearchTerm('');
   };
 
   return (
@@ -75,10 +125,10 @@ export function ExerciseLibraryFilters({
         )}
       </div>
 
-      {/* Filters Row */}
-      <div className="flex gap-2">
+      {/* Filters Row 1: Category, Difficulty, Equipment */}
+      <div className="flex gap-2 flex-wrap">
         <Select value={categoryFilter || 'all'} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="flex-1">
+          <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -91,7 +141,7 @@ export function ExerciseLibraryFilters({
         </Select>
 
         <Select value={difficultyFilter || 'all'} onValueChange={handleDifficultyChange}>
-          <SelectTrigger className="flex-1">
+          <SelectTrigger className="w-[130px]">
             <SelectValue placeholder="Difficulty" />
           </SelectTrigger>
           <SelectContent>
@@ -102,7 +152,85 @@ export function ExerciseLibraryFilters({
             ))}
           </SelectContent>
         </Select>
+
+        {setEquipmentFilter && (
+          <Select value={equipmentFilter || 'all'} onValueChange={handleEquipmentChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Equipment" />
+            </SelectTrigger>
+            <SelectContent>
+              {equipmentOptions.map((eq) => (
+                <SelectItem key={eq.value} value={eq.value}>
+                  {eq.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
+
+      {/* Filters Row 2: Biomechanics Toggle Buttons */}
+      {(setMechanicsFilter || setForceTypeFilter) && (
+        <div className="flex flex-wrap gap-4">
+          {/* Mechanics Filter */}
+          {setMechanicsFilter && (
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-muted-foreground mr-1">Mechanics:</span>
+              <div className="flex gap-1">
+                {(['all', 'compound', 'isolation'] as const).map((value) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={mechanicsFilter === value ? 'default' : 'outline'}
+                    onClick={() => setMechanicsFilter(value)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Force Type Filter */}
+          {setForceTypeFilter && (
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-muted-foreground mr-1">Force:</span>
+              <div className="flex gap-1 flex-wrap">
+                {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((value) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={forceTypeFilter === value ? 'default' : 'outline'}
+                    onClick={() => setForceTypeFilter(value)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Active Filters Summary */}
+      {activeFiltersCount > 0 && (
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="text-xs">
+            {activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''} active
+          </Badge>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={clearAllFilters}
+            className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-3 w-3 mr-1" />
+            Clear all
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,11 +4,16 @@ import { ExerciseData, completeExerciseDatabase as exerciseDatabase, getExercise
 import { toast } from 'sonner';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { deriveMechanics, deriveForceType } from '@/data/exercises/biomechanicsMapping';
+import type { Mechanics, ForceType } from '@/data/exercises/types';
 
 export function useExerciseLibraryManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('');
+  const [equipmentFilter, setEquipmentFilter] = useState('');
+  const [mechanicsFilter, setMechanicsFilter] = useState<'all' | Mechanics>('all');
+  const [forceTypeFilter, setForceTypeFilter] = useState<'all' | ForceType>('all');
   const [exercises, setExercises] = useState<ExerciseData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -161,7 +166,21 @@ export function useExerciseLibraryManager() {
           
         const difficultyMatch = !difficultyFilter || exercise.difficulty === difficultyFilter;
 
-        return searchTermMatch && categoryMatch && difficultyMatch;
+        // Equipment filter
+        const equipmentMatch = !equipmentFilter || 
+          (exercise.equipment && exercise.equipment.some(eq => 
+            eq.toLowerCase().includes(equipmentFilter.toLowerCase())
+          ));
+
+        // Mechanics filter (derived from muscleGroup count)
+        const exerciseMechanics = deriveMechanics(exercise);
+        const mechanicsMatch = mechanicsFilter === 'all' || exerciseMechanics === mechanicsFilter;
+
+        // Force type filter (derived from category)
+        const exerciseForceType = deriveForceType(exercise);
+        const forceTypeMatch = forceTypeFilter === 'all' || exerciseForceType === forceTypeFilter;
+
+        return searchTermMatch && categoryMatch && difficultyMatch && equipmentMatch && mechanicsMatch && forceTypeMatch;
       });
 
       console.log('🔍 Filtering result:', {
@@ -174,12 +193,12 @@ export function useExerciseLibraryManager() {
       console.error('❌ Error filtering exercises:', filterError);
       return [];
     }
-  }, [exercises, debouncedSearchTerm, categoryFilter, difficultyFilter]);
+  }, [exercises, debouncedSearchTerm, categoryFilter, difficultyFilter, equipmentFilter, mechanicsFilter, forceTypeFilter]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearchTerm, categoryFilter, difficultyFilter]);
+  }, [debouncedSearchTerm, categoryFilter, difficultyFilter, equipmentFilter, mechanicsFilter, forceTypeFilter]);
 
   // Calculate pagination safely
   const totalPages = Math.max(1, Math.ceil((filteredExercises?.length || 0) / itemsPerPage));
@@ -206,6 +225,12 @@ export function useExerciseLibraryManager() {
     setCategoryFilter,
     difficultyFilter,
     setDifficultyFilter,
+    equipmentFilter,
+    setEquipmentFilter,
+    mechanicsFilter,
+    setMechanicsFilter,
+    forceTypeFilter,
+    setForceTypeFilter,
     exercises,
     filteredExercises: filteredExercises || [],
     paginatedExercises,

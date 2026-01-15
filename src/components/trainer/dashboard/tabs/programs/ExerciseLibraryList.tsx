@@ -7,6 +7,7 @@ import { Edit, Trash2, Plus, Video, Play } from 'lucide-react';
 import { ExerciseData } from '@/data/exercises/types';
 import { AlternativeExercisesList } from './AlternativeExercisesList';
 import { getExerciseVideoUrl } from '@/data/exercises/videoUrls';
+import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor } from '@/data/exercises/biomechanicsMapping';
 
 interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
@@ -149,6 +150,13 @@ const ExerciseItem = memo(({
                 {exercise.difficulty}
               </Badge>
             )}
+            {/* Biomechanical badges */}
+            <Badge className={`${getMechanicsColor(deriveMechanics(exercise))} text-xs py-1 px-2`} variant="secondary">
+              {deriveMechanics(exercise) === 'compound' ? 'Compound' : 'Isolation'}
+            </Badge>
+            <Badge className={`${getForceTypeColor(deriveForceType(exercise))} text-xs py-1 px-2`} variant="secondary">
+              {deriveForceType(exercise).charAt(0).toUpperCase() + deriveForceType(exercise).slice(1)}
+            </Badge>
             {exercise.isCustom && (
               <Badge variant="outline" className="text-xs py-1 px-2">Custom</Badge>
             )}
