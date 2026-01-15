@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { WizardStepIndicator } from "./WizardStepIndicator";
@@ -8,18 +7,27 @@ import { Step2Builder } from "./Step2Builder";
 import { WorkoutSession } from "@/data/training/types";
 import { toast } from "sonner";
 
-interface CreateProgramWizardProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
-  editingProgram?: any;
+export interface CreateProgramWizardProps {
+  editingProgram?: {
+    id?: string;
+    title?: string;
+    weekStart?: string;
+    duration?: number;
+    targetFrequency?: number;
+    objective?: string;
+    description?: string;
+    isPaid?: boolean;
+    price?: number;
+    sessions?: WorkoutSession[];
+  };
+  onSave?: (programData: any) => void;
+  onCancel?: () => void;
 }
 
 export function CreateProgramWizard({
-  open,
-  onOpenChange,
-  onSuccess,
   editingProgram,
+  onSave,
+  onCancel,
 }: CreateProgramWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isPaid, setIsPaid] = useState(false);
@@ -39,30 +47,28 @@ export function CreateProgramWizard({
     },
   });
 
-  // Reset form when dialog opens/closes
+  // Initialize form with editing program data
   useEffect(() => {
-    if (open) {
-      if (editingProgram) {
-        form.reset({
-          title: editingProgram.title || "",
-          weekStart: editingProgram.weekStart || new Date().toISOString().split("T")[0],
-          duration: editingProgram.duration || 4,
-          targetFrequency: editingProgram.targetFrequency || 3,
-          objective: editingProgram.objective || "",
-          description: editingProgram.description || "",
-          isPaid: editingProgram.isPaid || false,
-          price: editingProgram.price || 0,
-        });
-        setIsPaid(editingProgram.isPaid || false);
-        setSessions(editingProgram.sessions || []);
-      } else {
-        form.reset();
-        setIsPaid(false);
-        setSessions([]);
-      }
-      setCurrentStep(1);
+    if (editingProgram) {
+      form.reset({
+        title: editingProgram.title || "",
+        weekStart: editingProgram.weekStart || new Date().toISOString().split("T")[0],
+        duration: editingProgram.duration || 4,
+        targetFrequency: editingProgram.targetFrequency || 3,
+        objective: editingProgram.objective || "",
+        description: editingProgram.description || "",
+        isPaid: editingProgram.isPaid || false,
+        price: editingProgram.price || 0,
+      });
+      setIsPaid(editingProgram.isPaid || false);
+      setSessions(editingProgram.sessions || []);
+    } else {
+      form.reset();
+      setIsPaid(false);
+      setSessions([]);
     }
-  }, [open, editingProgram, form]);
+    setCurrentStep(1);
+  }, [editingProgram, form]);
 
   // Generate initial sessions when moving to step 2
   const initializeSessions = () => {
@@ -132,8 +138,7 @@ export function CreateProgramWizard({
           : "Template created successfully"
       );
 
-      onOpenChange(false);
-      onSuccess?.();
+      onSave?.(programData);
     } catch (error) {
       console.error("Error saving program:", error);
       toast.error("Failed to save template");
@@ -146,20 +151,19 @@ export function CreateProgramWizard({
   const targetFrequency = form.watch("targetFrequency");
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {editingProgram ? "Edit Training Template" : "Create Training Template"}
-          </DialogTitle>
-        </DialogHeader>
-
+    <div className="flex flex-col h-full">
+      <div className="px-6 py-4 border-b flex-shrink-0">
+        <h2 className="text-lg font-semibold">
+          {editingProgram?.id ? "Edit Training Template" : "Create Training Template"}
+        </h2>
         <WizardStepIndicator
           currentStep={currentStep}
           totalSteps={2}
           stepLabels={["General Info", "Build Workout"]}
         />
+      </div>
 
+      <div className="flex-1 overflow-y-auto p-6">
         <Form {...form}>
           <form onSubmit={(e) => e.preventDefault()}>
             {currentStep === 1 && (
@@ -168,6 +172,7 @@ export function CreateProgramWizard({
                 isPaid={isPaid}
                 setIsPaid={setIsPaid}
                 onNext={handleNext}
+                onCancel={onCancel}
               />
             )}
 
@@ -184,7 +189,7 @@ export function CreateProgramWizard({
             )}
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

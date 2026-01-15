@@ -79,18 +79,24 @@ export function Step2Builder({
           (s) => s.sessionNumber === sessionNumber
         );
 
-        newSessions.push({
-          id: existingSession?.id || `session-${sessionNumber}`,
-          sessionNumber,
-          title: existingSession?.title || pattern?.title || `Session ${sessionNumber}`,
-          exercises: existingSession?.exercises.length
-            ? existingSession.exercises
-            : (pattern?.exercises || []).map((ex) => ({
-                ...ex,
-                id: `${ex.id}-session-${sessionNumber}`,
-              })),
-          completed: existingSession?.completed || false,
-        });
+        // If session is marked as overridden, preserve it completely
+        if (existingSession?.isOverride) {
+          newSessions.push(existingSession);
+        } else {
+          // Otherwise, generate from pattern
+          newSessions.push({
+            id: existingSession?.id || `session-${sessionNumber}`,
+            sessionNumber,
+            title: pattern?.title || `Session ${sessionNumber}`,
+            exercises: (pattern?.exercises || []).map((ex) => ({
+              ...ex,
+              id: `${ex.id}-session-${sessionNumber}`,
+            })),
+            completed: existingSession?.completed || false,
+            isOverride: false,
+            dayOfWeek: day + 1,
+          });
+        }
         sessionNumber++;
       }
     }

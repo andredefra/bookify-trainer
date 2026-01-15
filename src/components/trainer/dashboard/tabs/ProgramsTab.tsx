@@ -8,6 +8,8 @@ import { CreateProgramDialog } from "./programs/CreateProgramDialog";
 import { AssignProgramDialog } from "./programs/AssignProgramDialog";
 import { ExerciseLibraryDialog } from "./programs/ExerciseLibraryDialog";
 import { ProgramsTabContent } from "./programs/ProgramsTabContent";
+import { RoutinesTab } from "./routines/RoutinesTab";
+import { RoutinesProvider } from "./routines/context/RoutinesContext";
 import { currentProgram } from "@/data/training/mockPrograms/currentProgram";
 import { Exercise } from "@/data/training/types";
 import { ProgramProgressCard } from './programs/ProgramProgressCard';
@@ -170,118 +172,124 @@ export function ProgramsTab() {
   
   return (
     <ErrorBoundary>
-      <Card>
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 overflow-visible">
-          <div>
-            <CardTitle>Training Programs</CardTitle>
-            <CardDescription>Create and manage training programs for your clients</CardDescription>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <Button 
-              variant="outline"
-              className="flex items-center w-full sm:w-auto"
-              onClick={() => setShowExerciseLibrary(true)}
-            >
-              <Settings className="mr-2 h-4 w-4" />
-              Manage Exercises
-            </Button>
-            <Button 
-              className="flex items-center w-full sm:w-auto"
-              onClick={() => setShowProgramForm(true)}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Create Template
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Expiration Alert */}
-          <ProgramExpirationAlert expiringPrograms={expiringPrograms} />
-          
-          {/* Program Progress Cards */}
-          {programProgress.length > 0 && (
+      <RoutinesProvider trainerId={currentUserId}>
+        <Card>
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 overflow-visible">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Client Progress Monitoring</h3>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                {programProgress.map((progress) => (
-                  <ProgramProgressCard
-                    key={progress.id}
-                    progress={progress}
-                    onUpdateSessions={updateSessionsCompleted}
-                    onContactClient={handleContactClient}
-                  />
-                ))}
+              <CardTitle>Training Programs</CardTitle>
+              <CardDescription>Create and manage training programs for your clients</CardDescription>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Button 
+                variant="outline"
+                className="flex items-center w-full sm:w-auto"
+                onClick={() => setShowExerciseLibrary(true)}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                Manage Exercises
+              </Button>
+              <Button 
+                className="flex items-center w-full sm:w-auto"
+                onClick={() => setShowProgramForm(true)}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Create Template
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Expiration Alert */}
+            <ProgramExpirationAlert expiringPrograms={expiringPrograms} />
+            
+            {/* Program Progress Cards */}
+            {programProgress.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Client Progress Monitoring</h3>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                  {programProgress.map((progress) => (
+                    <ProgramProgressCard
+                      key={progress.id}
+                      progress={progress}
+                      onUpdateSessions={updateSessionsCompleted}
+                      onContactClient={handleContactClient}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-
-          <Tabs defaultValue="clients" className="w-full">
-            <div className="overflow-x-auto mb-6 max-w-full">
-              <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
-                <TabsTrigger value="clients" className="flex-shrink-0 whitespace-nowrap px-3">My Clients</TabsTrigger>
-                <TabsTrigger value="templates" className="flex-shrink-0 whitespace-nowrap px-3">My Templates</TabsTrigger>
-                <TabsTrigger value="routines" className="flex-shrink-0 whitespace-nowrap px-3">My Routines</TabsTrigger>
-                {showSalesAnalytics && (
-                  <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
-                    Sales
-                    {pendingCount > 0 && (
-                      <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                        {pendingCount}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                )}
-              </TabsList>
-            </div>
-            
-            <ProgramsTabContent
-              programs={programs}
-              clients={clients}
-              setShowAssignDialog={setShowAssignDialog}
-              setActiveClient={setActiveClient}
-              setShowEditProgram={setShowEditProgram}
-              setActiveProgramId={setActiveProgramId}
-            />
-            
-            {showSalesAnalytics && (
-              <TabsContent value="sales">
-                <ProgramSalesContent 
-                  trainerId={currentUserId}
-                  isProTrainer={isProTrainer}
-                />
-              </TabsContent>
             )}
-          </Tabs>
-          
-          {/* Dialogs */}
-          <CreateProgramDialog 
-            open={showProgramForm} 
-            onOpenChange={setShowProgramForm} 
-          />
 
-          <ErrorBoundary>
-            <ExerciseLibraryDialog
-              open={showExerciseLibrary}
-              onOpenChange={setShowExerciseLibrary}
+            <Tabs defaultValue="clients" className="w-full">
+              <div className="overflow-x-auto mb-6 max-w-full">
+                <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
+                  <TabsTrigger value="clients" className="flex-shrink-0 whitespace-nowrap px-3">My Clients</TabsTrigger>
+                  <TabsTrigger value="templates" className="flex-shrink-0 whitespace-nowrap px-3">My Templates</TabsTrigger>
+                  <TabsTrigger value="routines" className="flex-shrink-0 whitespace-nowrap px-3">My Routines</TabsTrigger>
+                  {showSalesAnalytics && (
+                    <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
+                      Sales
+                      {pendingCount > 0 && (
+                        <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                          {pendingCount}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                  )}
+                </TabsList>
+              </div>
+              
+              <ProgramsTabContent
+                programs={programs}
+                clients={clients}
+                setShowAssignDialog={setShowAssignDialog}
+                setActiveClient={setActiveClient}
+                setShowEditProgram={setShowEditProgram}
+                setActiveProgramId={setActiveProgramId}
+              />
+              
+              <TabsContent value="routines">
+                <RoutinesTab />
+              </TabsContent>
+              
+              {showSalesAnalytics && (
+                <TabsContent value="sales">
+                  <ProgramSalesContent 
+                    trainerId={currentUserId}
+                    isProTrainer={isProTrainer}
+                  />
+                </TabsContent>
+              )}
+            </Tabs>
+            
+            {/* Dialogs */}
+            <CreateProgramDialog 
+              open={showProgramForm} 
+              onOpenChange={setShowProgramForm} 
             />
-          </ErrorBoundary>
-          
-          <AssignProgramDialog 
-            open={showAssignDialog} 
-            onOpenChange={setShowAssignDialog}
-            activeClient={activeClient}
-            clients={clients}
-            programs={programs}
-          />
-          
-          <CreateProgramDialog 
-            open={showEditProgram} 
-            onOpenChange={setShowEditProgram}
-            editMode={true}
-            program={activeProgram}
-          />
-        </CardContent>
-      </Card>
+
+            <ErrorBoundary>
+              <ExerciseLibraryDialog
+                open={showExerciseLibrary}
+                onOpenChange={setShowExerciseLibrary}
+              />
+            </ErrorBoundary>
+            
+            <AssignProgramDialog 
+              open={showAssignDialog} 
+              onOpenChange={setShowAssignDialog}
+              activeClient={activeClient}
+              clients={clients}
+              programs={programs}
+            />
+            
+            <CreateProgramDialog 
+              open={showEditProgram} 
+              onOpenChange={setShowEditProgram}
+              editMode={true}
+              program={activeProgram}
+            />
+          </CardContent>
+        </Card>
+      </RoutinesProvider>
     </ErrorBoundary>
   );
 }

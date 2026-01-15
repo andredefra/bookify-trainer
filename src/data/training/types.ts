@@ -50,6 +50,9 @@ export interface WorkoutSession {
   exercises: Exercise[];
   completed: boolean;
   completedDate?: string; // ISO date string when completed
+  dayOfWeek?: number;
+  notes?: string;
+  isOverride?: boolean; // true = user customized this session, won't be overwritten by pattern
 }
 
 export interface TrainingProgram {

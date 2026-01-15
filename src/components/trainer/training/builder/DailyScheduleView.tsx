@@ -10,7 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp, Plus, Trash2, Layers, AlertCircle } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, Trash2, Layers, AlertCircle, Pencil } from "lucide-react";
 import { ImportRoutineDialog } from "./ImportRoutineDialog";
 
 interface DailyScheduleViewProps {
@@ -42,9 +42,13 @@ export function DailyScheduleView({
     sessionsByWeek[weekNum].push(session);
   });
 
-  const handleSessionChange = (sessionId: string, updates: Partial<WorkoutSession>) => {
+  const handleSessionChange = (sessionId: string, updates: Partial<WorkoutSession>, markAsOverride = true) => {
     onSessionsChange(
-      sessions.map((s) => (s.id === sessionId ? { ...s, ...updates } : s))
+      sessions.map((s) => 
+        s.id === sessionId 
+          ? { ...s, ...updates, isOverride: markAsOverride ? true : s.isOverride } 
+          : s
+      )
     );
   };
 
@@ -150,6 +154,12 @@ export function DailyScheduleView({
                               </p>
                             </div>
                             <div className="flex items-center gap-2">
+                              {session.isOverride && (
+                                <Badge variant="outline" className="text-xs bg-amber-500/10 text-amber-600 border-amber-500/30">
+                                  <Pencil className="h-3 w-3 mr-1" />
+                                  Customized
+                                </Badge>
+                              )}
                               <Badge variant="secondary" className="text-xs">
                                 {session.exercises.length} ex
                               </Badge>
