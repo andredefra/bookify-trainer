@@ -11,8 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Routine, Exercise } from "@/data/training/types";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, AlertCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ExerciseRowWithSelector } from "@/components/trainer/training/builder/ExerciseRowWithSelector";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface CreateRoutineDialogProps {
   open: boolean;
@@ -27,6 +29,7 @@ const emptyExercise = (): Exercise => ({
   sets: 3,
   reps: "10",
   repsUnit: "reps",
+  exerciseDbId: undefined,
 });
 
 export function CreateRoutineDialog({
@@ -38,6 +41,7 @@ export function CreateRoutineDialog({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([emptyExercise()]);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     if (editingRoutine) {
@@ -49,26 +53,51 @@ export function CreateRoutineDialog({
       setDescription("");
       setExercises([emptyExercise()]);
     }
+    setValidationError(null);
   }, [editingRoutine, open]);
 
   const handleAddExercise = () => {
     setExercises([...exercises, emptyExercise()]);
+    setValidationError(null);
   };
 
   const handleRemoveExercise = (id: string) => {
     if (exercises.length > 1) {
       setExercises(exercises.filter((ex) => ex.id !== id));
+      setValidationError(null);
     }
   };
 
-  const handleExerciseChange = (id: string, field: keyof Exercise, value: any) => {
+  const handleExerciseUpdate = (id: string, updatedExercise: Exercise) => {
     setExercises(
-      exercises.map((ex) => (ex.id === id ? { ...ex, [field]: value } : ex))
+      exercises.map((ex) => (ex.id === id ? updatedExercise : ex))
     );
+    setValidationError(null);
+  };
+
+  const validateExercises = (): string | null => {
+    const exercisesWithNames = exercises.filter((ex) => ex.name.trim());
+    
+    if (exercisesWithNames.length === 0) {
+      return "Please add at least one exercise.";
+    }
+
+    const unlinkedExercises = exercisesWithNames.filter((ex) => !ex.exerciseDbId);
+    if (unlinkedExercises.length > 0) {
+      return `${unlinkedExercises.length} exercise(s) are not linked to the database. Please select from the list or create new exercises.`;
+    }
+
+    return null;
   };
 
   const handleSave = () => {
-    const validExercises = exercises.filter((ex) => ex.name.trim() !== "");
+    const error = validateExercises();
+    if (error) {
+      setValidationError(error);
+      return;
+    }
+
+    const validExercises = exercises.filter((ex) => ex.name.trim() && ex.exerciseDbId);
     if (title.trim() && validExercises.length > 0) {
       onSave({
         title: title.trim(),
@@ -79,7 +108,8 @@ export function CreateRoutineDialog({
     }
   };
 
-  const isValid = title.trim() && exercises.some((ex) => ex.name.trim());
+  const hasLinkedExercises = exercises.some((ex) => ex.name.trim() && ex.exerciseDbId);
+  const isValid = title.trim() && hasLinkedExercises;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -123,79 +153,29 @@ export function CreateRoutineDialog({
             </div>
 
             <ScrollArea className="h-[280px] pr-4">
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {exercises.map((exercise, index) => (
-                  <div
+                  <ExerciseRowWithSelector
                     key={exercise.id}
-                    className="flex items-start gap-2 p-3 border rounded-lg bg-muted/30"
-                  >
-                    <GripVertical className="h-5 w-5 text-muted-foreground mt-2 cursor-grab" />
-                    
-                    <div className="flex-1 grid grid-cols-12 gap-2">
-                      <div className="col-span-5">
-                        <Input
-                          placeholder="Exercise name"
-                          value={exercise.name}
-                          onChange={(e) =>
-                            handleExerciseChange(exercise.id, "name", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <Input
-                          type="number"
-                          min="1"
-                          placeholder="Sets"
-                          value={exercise.sets}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              exercise.id,
-                              "sets",
-                              parseInt(e.target.value) || 1
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <Input
-                          placeholder="Reps"
-                          value={exercise.reps}
-                          onChange={(e) =>
-                            handleExerciseChange(exercise.id, "reps", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <select
-                          className="flex h-9 w-full rounded-md border border-input bg-background px-2 py-1 text-sm"
-                          value={exercise.repsUnit || "reps"}
-                          onChange={(e) =>
-                            handleExerciseChange(exercise.id, "repsUnit", e.target.value)
-                          }
-                        >
-                          <option value="reps">reps</option>
-                          <option value="sec">sec</option>
-                          <option value="min">min</option>
-                        </select>
-                      </div>
-                      <div className="col-span-1 flex justify-end">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 text-muted-foreground hover:text-destructive"
-                          onClick={() => handleRemoveExercise(exercise.id)}
-                          disabled={exercises.length === 1}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                    exercise={exercise}
+                    index={index}
+                    onExerciseChange={(updatedExercise) => 
+                      handleExerciseUpdate(exercise.id, updatedExercise)
+                    }
+                    onRemove={() => handleRemoveExercise(exercise.id)}
+                    showDragHandle={true}
+                  />
                 ))}
               </div>
             </ScrollArea>
           </div>
+
+          {validationError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{validationError}</AlertDescription>
+            </Alert>
+          )}
         </div>
 
         <DialogFooter className="mt-4">
