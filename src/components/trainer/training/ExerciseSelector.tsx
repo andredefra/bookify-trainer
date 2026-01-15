@@ -4,9 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Dumbbell, Grid3X3, Filter, X, RotateCcw } from "lucide-react";
+import { Search, Dumbbell, Grid3X3, Filter, RotateCcw, LayoutGrid, List } from "lucide-react";
 import { useExerciseLibrary } from "@/hooks/useExerciseLibrary";
 import { ExerciseData } from "@/data/exercises/types";
+import { VisualExerciseCard } from "./VisualExerciseCard";
+import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor } from "@/data/exercises/biomechanicsMapping";
 
 interface ExerciseSelectorProps {
   value: string;
@@ -33,17 +35,26 @@ const difficulties = [
   { value: 'advanced', label: 'Advanced' },
 ];
 
-const exerciseTypes = [
+const mechanicsOptions = [
   { value: 'all', label: 'All' },
-  { value: 'compound', label: 'Compound' },
-  { value: 'isolation', label: 'Isolation' },
-  { value: 'cardio', label: 'Cardio' },
+  { value: 'compound', label: '🔗 Compound' },
+  { value: 'isolation', label: '🎯 Isolation' },
+];
+
+const forceTypeOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'push', label: '⬆️ Push' },
+  { value: 'pull', label: '⬇️ Pull' },
+  { value: 'static', label: '⏸️ Static' },
+  { value: 'hinge', label: '↩️ Hinge' },
+  { value: 'squat', label: '🦵 Squat' },
 ];
 
 export function ExerciseSelector({ value, onSelect, placeholder = "Select an exercise" }: ExerciseSelectorProps) {
   const [open, setOpen] = useState(false);
   const [localSearchQuery, setLocalSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("search");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   const { 
     getExerciseSuggestions, 
@@ -56,8 +67,10 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
     setDifficultyFilter,
     equipmentFilter,
     setEquipmentFilter,
-    exerciseTypeFilter,
-    setExerciseTypeFilter,
+    mechanicsFilter,
+    setMechanicsFilter,
+    forceTypeFilter,
+    setForceTypeFilter,
     hasActiveFilters,
     resetAllFilters,
   } = useExerciseLibrary();
@@ -67,16 +80,16 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
   // Categories for filtering
   const categories = [
     { value: 'all', label: 'All' },
-    { value: 'chest', label: 'Chest' },
-    { value: 'back', label: 'Back' },
-    { value: 'legs', label: 'Legs' },
-    { value: 'shoulders', label: 'Shoulders' },
-    { value: 'arms', label: 'Arms' },
-    { value: 'core', label: 'Core' },
-    { value: 'cardio', label: 'Cardio' },
-    { value: 'functional', label: 'Functional' },
-    { value: 'flexibility', label: 'Flexibility' },
-    { value: 'plyometric', label: 'Plyometric' }
+    { value: 'chest', label: '💪 Chest' },
+    { value: 'back', label: '🔙 Back' },
+    { value: 'legs', label: '🦵 Legs' },
+    { value: 'shoulders', label: '🤸 Shoulders' },
+    { value: 'arms', label: '💪 Arms' },
+    { value: 'core', label: '🎯 Core' },
+    { value: 'cardio', label: '🏃 Cardio' },
+    { value: 'functional', label: '⚡ Functional' },
+    { value: 'flexibility', label: '🧘 Flexibility' },
+    { value: 'plyometric', label: '🔥 Plyometric' }
   ];
 
   const handleSelectExercise = (exercise: ExerciseData) => {
@@ -134,9 +147,12 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-4xl max-h-[85vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Select Exercise</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Dumbbell className="h-5 w-5" />
+            Select Exercise
+          </DialogTitle>
         </DialogHeader>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
@@ -157,7 +173,7 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
               <Input
                 value={localSearchQuery}
                 onChange={(e) => setLocalSearchQuery(e.target.value)}
-                placeholder="Search exercises..."
+                placeholder="Search exercises by name, muscle, or equipment..."
                 className="pl-10"
                 autoFocus
               />
@@ -181,14 +197,13 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
             
             {searchSuggestions.length > 0 && (
               <div className="flex-1 overflow-y-auto">
-                <div className="grid gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {searchSuggestions.map((exercise) => (
-                    <ExerciseCard
+                    <VisualExerciseCard
                       key={exercise.id}
                       exercise={exercise}
                       onClick={() => handleSelectExercise(exercise)}
-                      getCategoryColor={getCategoryColor}
-                      getDifficultyColor={getDifficultyColor}
+                      showSelectButton
                     />
                   ))}
                 </div>
@@ -198,21 +213,21 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
 
           <TabsContent value="browse" className="flex-1 overflow-hidden flex flex-col mt-4">
             {/* Advanced Filters Section */}
-            <div className="space-y-4 mb-4 p-4 bg-muted/30 rounded-lg border">
+            <div className="space-y-3 mb-4 p-4 bg-muted/30 rounded-lg border">
               {/* Row 1: Muscle Group (Category) */}
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Filter className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium">Muscle Group</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {categories.map((category) => (
                     <Button
                       key={category.value}
                       variant={selectedCategory === category.value ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedCategory(category.value)}
-                      className="text-xs"
+                      className="text-xs h-7"
                     >
                       {category.label}
                     </Button>
@@ -220,28 +235,67 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
                 </div>
               </div>
 
-              {/* Row 2: Equipment Filter */}
-              <div>
-                <span className="text-sm font-medium mb-2 block">Equipment</span>
-                <div className="flex flex-wrap gap-2">
-                  {equipmentOptions.map((eq) => (
-                    <Button
-                      key={eq.value}
-                      variant={equipmentFilter === eq.value ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setEquipmentFilter(eq.value)}
-                      className="text-xs"
-                    >
-                      {eq.label}
-                    </Button>
-                  ))}
+              {/* Row 2: Biomechanics & Force Type */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Biomechanics (Compound/Isolation) */}
+                <div>
+                  <span className="text-sm font-medium mb-2 block">Biomechanics</span>
+                  <div className="flex gap-1">
+                    {mechanicsOptions.map((opt) => (
+                      <Button
+                        key={opt.value}
+                        variant={mechanicsFilter === opt.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setMechanicsFilter(opt.value as any)}
+                        className="flex-1 text-xs h-7"
+                      >
+                        {opt.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Force Type (Push/Pull/etc) */}
+                <div>
+                  <span className="text-sm font-medium mb-2 block">Force Vector</span>
+                  <div className="flex flex-wrap gap-1">
+                    {forceTypeOptions.map((opt) => (
+                      <Button
+                        key={opt.value}
+                        variant={forceTypeFilter === opt.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setForceTypeFilter(opt.value as any)}
+                        className="text-xs h-7"
+                      >
+                        {opt.label}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Row 3: Difficulty & Exercise Type */}
-              <div className="flex gap-4 flex-wrap">
+              {/* Row 3: Equipment & Difficulty */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Equipment Filter */}
+                <div>
+                  <span className="text-sm font-medium mb-2 block">Equipment</span>
+                  <div className="flex flex-wrap gap-1">
+                    {equipmentOptions.map((eq) => (
+                      <Button
+                        key={eq.value}
+                        variant={equipmentFilter === eq.value ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setEquipmentFilter(eq.value)}
+                        className="text-xs h-7"
+                      >
+                        {eq.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Difficulty Toggle */}
-                <div className="flex-1 min-w-[200px]">
+                <div>
                   <span className="text-sm font-medium mb-2 block">Difficulty</span>
                   <div className="flex gap-1">
                     {difficulties.map((diff) => (
@@ -250,27 +304,9 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
                         variant={difficultyFilter === diff.value ? "default" : "outline"}
                         size="sm"
                         onClick={() => setDifficultyFilter(diff.value)}
-                        className="flex-1 text-xs"
+                        className="flex-1 text-xs h-7"
                       >
                         {diff.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Exercise Type Toggle */}
-                <div className="flex-1 min-w-[200px]">
-                  <span className="text-sm font-medium mb-2 block">Type</span>
-                  <div className="flex gap-1">
-                    {exerciseTypes.map((type) => (
-                      <Button
-                        key={type.value}
-                        variant={exerciseTypeFilter === type.value ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setExerciseTypeFilter(type.value)}
-                        className="flex-1 text-xs"
-                      >
-                        {type.label}
                       </Button>
                     ))}
                   </div>
@@ -279,13 +315,34 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
 
               {/* Active Filters Summary & Reset */}
               <div className="flex items-center justify-between pt-2 border-t">
-                <span className="text-sm text-muted-foreground">
-                  {filteredExercises.length} exercises found
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">
+                    {filteredExercises.length} exercises found
+                  </span>
+                  {/* View Mode Toggle */}
+                  <div className="flex gap-1 ml-4">
+                    <Button 
+                      variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
+                      size="sm" 
+                      className="h-7 w-7 p-0"
+                      onClick={() => setViewMode('grid')}
+                    >
+                      <LayoutGrid className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button 
+                      variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
+                      size="sm" 
+                      className="h-7 w-7 p-0"
+                      onClick={() => setViewMode('list')}
+                    >
+                      <List className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
                 {hasActiveFilters && (
-                  <Button variant="ghost" size="sm" onClick={handleResetFilters} className="text-xs">
+                  <Button variant="ghost" size="sm" onClick={handleResetFilters} className="text-xs h-7">
                     <RotateCcw className="h-3 w-3 mr-1" />
-                    Clear all filters
+                    Clear filters
                   </Button>
                 )}
               </div>
@@ -303,15 +360,26 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
                     Reset Filters
                   </Button>
                 </div>
-              ) : (
-                <div className="grid gap-3">
+              ) : viewMode === 'grid' ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredExercises.map((exercise) => (
-                    <ExerciseCard
+                    <VisualExerciseCard
                       key={exercise.id}
                       exercise={exercise}
                       onClick={() => handleSelectExercise(exercise)}
-                      getCategoryColor={getCategoryColor}
-                      getDifficultyColor={getDifficultyColor}
+                      showSelectButton
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {filteredExercises.map((exercise) => (
+                    <VisualExerciseCard
+                      key={exercise.id}
+                      exercise={exercise}
+                      onClick={() => handleSelectExercise(exercise)}
+                      showSelectButton
+                      compact
                     />
                   ))}
                 </div>
@@ -321,68 +389,5 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
         </Tabs>
       </DialogContent>
     </Dialog>
-  );
-}
-
-// Enhanced Exercise Card component with additional badges
-function ExerciseCard({ 
-  exercise, 
-  onClick,
-  getCategoryColor,
-  getDifficultyColor
-}: { 
-  exercise: ExerciseData; 
-  onClick: () => void;
-  getCategoryColor: (category: string) => string;
-  getDifficultyColor: (difficulty: string) => string;
-}) {
-  const isCompound = exercise.muscleGroup.length > 1;
-  const isCardio = exercise.category === 'cardio';
-  const exerciseType = isCardio ? 'Cardio' : isCompound ? 'Compound' : 'Isolation';
-
-  return (
-    <div
-      className="p-4 border rounded-lg hover:bg-muted cursor-pointer transition-colors group"
-      onClick={onClick}
-    >
-      <div className="flex items-start justify-between mb-2">
-        <h3 className="font-medium group-hover:text-primary transition-colors">{exercise.name}</h3>
-        <div className="flex gap-1 flex-shrink-0 ml-2 flex-wrap justify-end">
-          <Badge className={getCategoryColor(exercise.category)} variant="secondary">
-            {exercise.category}
-          </Badge>
-          <Badge className={getDifficultyColor(exercise.difficulty)} variant="secondary">
-            {exercise.difficulty}
-          </Badge>
-          <Badge variant="outline" className="text-xs">
-            {exerciseType}
-          </Badge>
-          {exercise.isCustom && (
-            <Badge variant="outline">Custom</Badge>
-          )}
-          {exercise.isModified && (
-            <Badge variant="outline">Modified</Badge>
-          )}
-        </div>
-      </div>
-      
-      <div className="text-sm text-muted-foreground mb-1">
-        <strong>Muscles:</strong> {exercise.muscleGroup.slice(0, 3).join(", ")}
-        {exercise.muscleGroup.length > 3 && ` +${exercise.muscleGroup.length - 3} more`}
-      </div>
-      
-      {exercise.equipment.length > 0 && (
-        <div className="text-sm text-muted-foreground mb-1">
-          <strong>Equipment:</strong> {exercise.equipment.slice(0, 3).join(", ")}
-          {exercise.equipment.length > 3 && ` +${exercise.equipment.length - 3} more`}
-        </div>
-      )}
-      
-      {exercise.notes && (
-        <div className="text-xs text-muted-foreground line-clamp-2 mt-2">
-          {exercise.notes}
-        </div>
-      )}
-    </div>
   );
 }

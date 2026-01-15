@@ -11,9 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ExerciseData } from "@/data/exercises/types";
+import { ExerciseData, Mechanics, ForceType } from "@/data/exercises/types";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Image } from "lucide-react";
 
 interface QuickCreateExerciseModalProps {
   open: boolean;
@@ -22,8 +22,10 @@ interface QuickCreateExerciseModalProps {
   onExerciseCreated: (exercise: ExerciseData) => void;
 }
 
-const categories = ["chest", "back", "legs", "shoulders", "arms", "core", "cardio"] as const;
+const categories = ["chest", "back", "legs", "shoulders", "arms", "core", "cardio", "functional", "flexibility", "plyometric"] as const;
 const difficulties = ["beginner", "intermediate", "advanced"] as const;
+const mechanicsOptions = ["compound", "isolation"] as const;
+const forceOptions = ["push", "pull", "static", "hinge", "squat"] as const;
 const commonEquipment = [
   "Barbell",
   "Dumbbells",
@@ -45,9 +47,12 @@ export function QuickCreateExerciseModal({
   const [name, setName] = useState(initialName);
   const [category, setCategory] = useState<typeof categories[number]>("chest");
   const [difficulty, setDifficulty] = useState<typeof difficulties[number]>("intermediate");
+  const [mechanics, setMechanics] = useState<Mechanics | "">("");
+  const [forceType, setForceType] = useState<ForceType | "">("");
   const [muscleGroups, setMuscleGroups] = useState<string[]>([]);
   const [equipment, setEquipment] = useState<string[]>([]);
   const [muscleInput, setMuscleInput] = useState("");
+  const [gifUrl, setGifUrl] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   // Reset form when modal opens with new name
@@ -56,8 +61,11 @@ export function QuickCreateExerciseModal({
       setName(initialName);
       setCategory("chest");
       setDifficulty("intermediate");
+      setMechanics("");
+      setForceType("");
       setMuscleGroups([]);
       setEquipment([]);
+      setGifUrl("");
     }
   });
 
@@ -96,6 +104,10 @@ export function QuickCreateExerciseModal({
       notes: "Custom exercise created by trainer",
       isCustom: true,
       isDeletable: true,
+      // NEW: Biomechanics fields
+      mechanics: mechanics || undefined,
+      forceType: forceType || undefined,
+      demonstrationGif: gifUrl || undefined,
     };
 
     // Add to the database (runtime addition)
@@ -111,8 +123,11 @@ export function QuickCreateExerciseModal({
     setName("");
     setCategory("chest");
     setDifficulty("intermediate");
+    setMechanics("");
+    setForceType("");
     setMuscleGroups([]);
     setEquipment([]);
+    setGifUrl("");
   };
 
   return (
@@ -169,6 +184,75 @@ export function QuickCreateExerciseModal({
                 </Badge>
               ))}
             </div>
+          </div>
+
+          {/* Biomechanics Row */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Mechanics */}
+            <div className="space-y-2">
+              <Label>Mechanics</Label>
+              <div className="flex flex-wrap gap-1">
+                <Badge
+                  variant={mechanics === "" ? "default" : "outline"}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setMechanics("")}
+                >
+                  Auto
+                </Badge>
+                {mechanicsOptions.map((m) => (
+                  <Badge
+                    key={m}
+                    variant={mechanics === m ? "default" : "outline"}
+                    className="cursor-pointer capitalize text-xs"
+                    onClick={() => setMechanics(m)}
+                  >
+                    {m === "compound" ? "🔗" : "🎯"} {m}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Force Type */}
+            <div className="space-y-2">
+              <Label>Force Vector</Label>
+              <div className="flex flex-wrap gap-1">
+                <Badge
+                  variant={forceType === "" ? "default" : "outline"}
+                  className="cursor-pointer text-xs"
+                  onClick={() => setForceType("")}
+                >
+                  Auto
+                </Badge>
+                {forceOptions.map((f) => (
+                  <Badge
+                    key={f}
+                    variant={forceType === f ? "default" : "outline"}
+                    className="cursor-pointer capitalize text-xs"
+                    onClick={() => setForceType(f as ForceType)}
+                  >
+                    {f}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* GIF URL */}
+          <div className="space-y-2">
+            <Label className="flex items-center gap-1">
+              <Image className="h-3 w-3" />
+              Demo GIF URL (Optional)
+            </Label>
+            <Input
+              value={gifUrl}
+              onChange={(e) => setGifUrl(e.target.value)}
+              placeholder="https://example.com/exercise.gif"
+            />
+            {gifUrl && (
+              <div className="w-20 h-20 rounded border overflow-hidden bg-muted">
+                <img src={gifUrl} alt="Preview" className="w-full h-full object-cover" />
+              </div>
+            )}
           </div>
 
           {/* Muscle Groups */}

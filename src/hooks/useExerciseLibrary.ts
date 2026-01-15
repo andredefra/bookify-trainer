@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ExerciseData, completeExerciseDatabase } from '@/data/exercises/exerciseDatabase';
+import { deriveMechanics, deriveForceType } from '@/data/exercises/biomechanicsMapping';
 import { toast } from 'sonner';
 
 const CUSTOM_EXERCISES_KEY = 'trainer_custom_exercises';
@@ -15,6 +16,10 @@ export function useExerciseLibrary() {
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [equipmentFilter, setEquipmentFilter] = useState<string>('all');
   const [exerciseTypeFilter, setExerciseTypeFilter] = useState<string>('all');
+  
+  // NEW: Biomechanics filters
+  const [mechanicsFilter, setMechanicsFilter] = useState<'all' | 'compound' | 'isolation'>('all');
+  const [forceTypeFilter, setForceTypeFilter] = useState<'all' | 'push' | 'pull' | 'static' | 'hinge' | 'squat'>('all');
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -120,11 +125,33 @@ export function useExerciseLibrary() {
       }
     }
 
+    // NEW: Apply biomechanics filter
+    if (mechanicsFilter !== 'all') {
+      exercises = exercises.filter(exercise => {
+        const mechanics = deriveMechanics(exercise);
+        return mechanics === mechanicsFilter;
+      });
+    }
+
+    // NEW: Apply force type filter
+    if (forceTypeFilter !== 'all') {
+      exercises = exercises.filter(exercise => {
+        const forceType = deriveForceType(exercise);
+        return forceType === forceTypeFilter;
+      });
+    }
+
     return exercises;
   };
 
   // Check if any advanced filters are active
-  const hasActiveFilters = selectedCategory !== 'all' || difficultyFilter !== 'all' || equipmentFilter !== 'all' || exerciseTypeFilter !== 'all';
+  const hasActiveFilters = 
+    selectedCategory !== 'all' || 
+    difficultyFilter !== 'all' || 
+    equipmentFilter !== 'all' || 
+    exerciseTypeFilter !== 'all' ||
+    mechanicsFilter !== 'all' ||
+    forceTypeFilter !== 'all';
 
   // Reset all filters
   const resetAllFilters = () => {
@@ -132,6 +159,8 @@ export function useExerciseLibrary() {
     setDifficultyFilter('all');
     setEquipmentFilter('all');
     setExerciseTypeFilter('all');
+    setMechanicsFilter('all');
+    setForceTypeFilter('all');
     setSearchQuery('');
   };
 
@@ -283,6 +312,13 @@ export function useExerciseLibrary() {
     setEquipmentFilter,
     exerciseTypeFilter,
     setExerciseTypeFilter,
+    
+    // NEW: Biomechanics filter state
+    mechanicsFilter,
+    setMechanicsFilter,
+    forceTypeFilter,
+    setForceTypeFilter,
+    
     hasActiveFilters,
     resetAllFilters,
     
