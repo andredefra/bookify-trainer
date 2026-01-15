@@ -20,13 +20,17 @@ export function CheckInHistorySection({ clientId }: CheckInHistorySectionProps) 
     isLoading,
     addTrainerFeedback,
     markAsReviewed,
+    getPreviousSubmission,
+    getWellnessTrends,
   } = useCheckInSubmissions(clientId);
 
   const [selectedSubmission, setSelectedSubmission] = useState<CheckInSubmission | null>(null);
+  const [previousSubmission, setPreviousSubmission] = useState<CheckInSubmission | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   const handleViewDetails = (submission: CheckInSubmission) => {
     setSelectedSubmission(submission);
+    setPreviousSubmission(getPreviousSubmission(submission.id));
     setDetailDialogOpen(true);
   };
 
@@ -164,6 +168,8 @@ export function CheckInHistorySection({ clientId }: CheckInHistorySectionProps) 
         open={detailDialogOpen}
         onOpenChange={setDetailDialogOpen}
         submission={selectedSubmission}
+        previousSubmission={previousSubmission}
+        wellnessTrends={getWellnessTrends()}
         onSaveFeedback={addTrainerFeedback}
         onMarkReviewed={markAsReviewed}
       />

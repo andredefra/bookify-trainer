@@ -23,11 +23,21 @@ import {
   Send,
   CheckCircle2,
 } from "lucide-react";
+import { DeltaBadge } from "./DeltaBadge";
+import { WellnessSparkline } from "./WellnessSparkline";
+
+interface WellnessTrends {
+  mood: number[];
+  energy: number[];
+  sleep: number[];
+}
 
 interface CheckInDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   submission: CheckInSubmission | null;
+  previousSubmission?: CheckInSubmission | null;
+  wellnessTrends?: WellnessTrends;
   onSaveFeedback: (submissionId: string, feedback: string) => Promise<void>;
   onMarkReviewed: (submissionId: string) => Promise<void>;
 }
@@ -56,6 +66,8 @@ export function CheckInDetailDialog({
   open,
   onOpenChange,
   submission,
+  previousSubmission,
+  wellnessTrends,
   onSaveFeedback,
   onMarkReviewed,
 }: CheckInDetailDialogProps) {
@@ -65,6 +77,7 @@ export function CheckInDetailDialog({
   if (!submission) return null;
 
   const measurements = submission.measurements || {};
+  const previousMeasurements = previousSubmission?.measurements || {};
   const hasMeasurements = Object.keys(measurements).length > 0;
   const isReviewed = !!submission.trainer_reviewed_at;
 
@@ -104,9 +117,17 @@ export function CheckInDetailDialog({
                 <Scale className="h-4 w-4 text-blue-500" />
                 Weight
               </div>
-              <div className="bg-muted/50 rounded-lg p-4">
-                <span className="text-2xl font-bold">{submission.weight}</span>
-                <span className="text-muted-foreground ml-1">kg</span>
+              <div className="bg-muted/50 rounded-lg p-4 flex items-center justify-between">
+                <div>
+                  <span className="text-2xl font-bold">{submission.weight}</span>
+                  <span className="text-muted-foreground ml-1">kg</span>
+                </div>
+                <DeltaBadge 
+                  current={submission.weight} 
+                  previous={previousSubmission?.weight || null}
+                  unit="kg"
+                  invert={true}
+                />
               </div>
             </div>
           )}
@@ -119,12 +140,26 @@ export function CheckInDetailDialog({
                 Body Measurements
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {Object.entries(measurements).map(([key, value]) => (
-                  <div key={key} className="bg-muted/50 rounded-lg p-3">
-                    <p className="text-xs text-muted-foreground capitalize">{key}</p>
-                    <p className="font-semibold">{value} cm</p>
-                  </div>
-                ))}
+                {Object.entries(measurements).map(([key, value]) => {
+                  const prevValue = previousMeasurements[key as keyof typeof previousMeasurements];
+                  return (
+                    <div key={key} className="bg-muted/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground capitalize">{key}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold">{value} cm</p>
+                        {prevValue && (
+                          <DeltaBadge 
+                            current={value as number} 
+                            previous={prevValue as number}
+                            unit="cm"
+                            invert={true}
+                            className="text-[10px] px-1.5 py-0.5"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -161,7 +196,10 @@ export function CheckInDetailDialog({
                 <div className="space-y-1">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Mood</span>
-                    <span className="text-lg">{getMoodEmoji(submission.mood_rating)}</span>
+                    <div className="flex items-center gap-2">
+                      {wellnessTrends && <WellnessSparkline data={wellnessTrends.mood} color="#F59E0B" />}
+                      <span className="text-lg">{getMoodEmoji(submission.mood_rating)}</span>
+                    </div>
                   </div>
                   <RatingBar value={submission.mood_rating} color="bg-amber-500" />
                 </div>
@@ -173,6 +211,7 @@ export function CheckInDetailDialog({
                     <span className="text-muted-foreground flex items-center gap-1">
                       <Zap className="h-3 w-3" /> Energy
                     </span>
+                    {wellnessTrends && <WellnessSparkline data={wellnessTrends.energy} color="#10B981" />}
                   </div>
                   <RatingBar value={submission.energy_level} color="bg-green-500" />
                 </div>
@@ -184,6 +223,7 @@ export function CheckInDetailDialog({
                     <span className="text-muted-foreground flex items-center gap-1">
                       <Moon className="h-3 w-3" /> Sleep Quality
                     </span>
+                    {wellnessTrends && <WellnessSparkline data={wellnessTrends.sleep} color="#6366F1" />}
                   </div>
                   <RatingBar value={submission.sleep_quality} color="bg-indigo-500" />
                 </div>

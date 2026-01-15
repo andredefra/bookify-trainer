@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -22,6 +21,7 @@ import { AggregatedGoalStats } from "./charts/AggregatedGoalStats";
 import { ClientFullAnalytics } from "./charts/ClientFullAnalytics";
 import { MetricsChart } from "../clients/ClientProfileTabs/metrics/MetricsChart";
 import { RecentMeasurements } from "../clients/ClientProfileTabs/metrics/RecentMeasurements";
+import { GeneralStatusDashboard } from "./GeneralStatusDashboard";
 
 // Sample client list for the filter (using real mock data)
 const clients = [
@@ -129,6 +129,14 @@ export function ClientPerformance({ initialClientFilter = "all", onClientChange 
           {selectedClient !== "all" && mockClients.find(c => c.id === selectedClient) && (
             <ClientFullAnalytics 
               client={mockClients.find(c => c.id === selectedClient)!}
+            />
+          )}
+          
+          {/* NEW: General Status Dashboard - Check-in Analytics */}
+          {selectedClient !== "all" && mockClients.find(c => c.id === selectedClient) && (
+            <GeneralStatusDashboard 
+              clientId={`00000000-0000-0000-0000-${String(mockClients.findIndex(c => c.id === selectedClient) + 1).padStart(12, '0')}`}
+              clientName={mockClients.find(c => c.id === selectedClient)?.name || "Client"}
             />
           )}
           
