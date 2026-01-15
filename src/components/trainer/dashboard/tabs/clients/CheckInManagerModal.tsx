@@ -34,8 +34,8 @@ export function CheckInManagerModal({
   const [showConfigureDialog, setShowConfigureDialog] = useState(false);
   const [showManualCheckInDialog, setShowManualCheckInDialog] = useState(false);
   
-  // Use a mock client ID for demo purposes
-  const clientId = client ? `00000000-0000-0000-0000-00000000000${client.id}` : "";
+  // Use a mock client ID for demo purposes - properly padded to 12 digits
+  const clientId = client ? `00000000-0000-0000-0000-${String(client.id).padStart(12, '0')}` : "";
   
   const { settings } = useCheckInSettings(clientId);
   
