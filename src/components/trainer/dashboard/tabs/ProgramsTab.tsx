@@ -220,6 +220,7 @@ export function ProgramsTab() {
               <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
                 <TabsTrigger value="clients" className="flex-shrink-0 whitespace-nowrap px-3">My Clients</TabsTrigger>
                 <TabsTrigger value="templates" className="flex-shrink-0 whitespace-nowrap px-3">My Templates</TabsTrigger>
+                <TabsTrigger value="routines" className="flex-shrink-0 whitespace-nowrap px-3">My Routines</TabsTrigger>
                 {showSalesAnalytics && (
                   <TabsTrigger value="sales" className="flex-shrink-0 whitespace-nowrap px-3">
                     Sales
