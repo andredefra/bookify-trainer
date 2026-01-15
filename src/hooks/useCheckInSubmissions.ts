@@ -132,6 +132,34 @@ export function useCheckInSubmissions(clientId: string) {
   const pending = submissions.filter(s => s.status === 'pending');
   const overdue = submissions.filter(s => s.status === 'overdue');
 
+  // Get the previous completed submission for comparison
+  const getPreviousSubmission = (currentId: string): CheckInSubmission | null => {
+    const currentIndex = submissions.findIndex(s => s.id === currentId);
+    if (currentIndex < 0 || currentIndex >= submissions.length - 1) return null;
+    
+    // Find previous completed submission
+    for (let i = currentIndex + 1; i < submissions.length; i++) {
+      if (submissions[i].status === 'completed') {
+        return submissions[i];
+      }
+    }
+    return null;
+  };
+
+  // Get wellness trend data for sparklines (last 4 completed check-ins)
+  const getWellnessTrends = () => {
+    const completed = submissions
+      .filter(s => s.status === 'completed')
+      .slice(0, 4)
+      .reverse();
+    
+    return {
+      mood: completed.map(s => s.mood_rating || 0),
+      energy: completed.map(s => s.energy_level || 0),
+      sleep: completed.map(s => s.sleep_quality || 0),
+    };
+  };
+
   return {
     submissions,
     pendingReview,
@@ -142,5 +170,7 @@ export function useCheckInSubmissions(clientId: string) {
     addTrainerFeedback,
     markAsReviewed,
     refetch: fetchSubmissions,
+    getPreviousSubmission,
+    getWellnessTrends,
   };
 }
