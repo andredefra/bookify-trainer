@@ -60,7 +60,7 @@ export function GoalManagerModal({
             <CardDescription className="text-sm">Client's active and completed goals</CardDescription>
           </CardHeader>
           <CardContent className="px-0 space-y-4">
-            {/* Action buttons */}
+            {/* Action button */}
             <div className="flex flex-col sm:flex-row gap-2">
               <Button 
                 className="w-full sm:w-auto flex items-center justify-center"
@@ -68,14 +68,6 @@ export function GoalManagerModal({
               >
                 <Plus className="h-4 w-4 mr-1.5" />
                 Add Goal
-              </Button>
-              <Button 
-                variant="outline"
-                className="w-full sm:w-auto flex items-center justify-center"
-                onClick={onViewProgress}
-              >
-                <Target className="h-4 w-4 mr-1.5" />
-                View Progress
               </Button>
             </div>
             
