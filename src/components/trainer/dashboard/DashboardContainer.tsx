@@ -49,10 +49,10 @@ const sampleSessions: TrainerSessionItem[] = [
   }
 ];
 
-// Sample clients data
+// Sample clients data - IDs match database demo data
 const sampleClients = [
-  { id: 1, name: "Emma Thompson", sessions: 12, lastSession: "May 15, 2023" },
-  { id: 2, name: "Michael Chen", sessions: 8, lastSession: "May 17, 2023" },
+  { id: 2, name: "Emma Thompson", sessions: 12, lastSession: "May 15, 2023" },
+  { id: 1, name: "Michael Chen", sessions: 8, lastSession: "May 17, 2023" },
   { id: 3, name: "Sarah Johnson", sessions: 15, lastSession: "May 18, 2023" },
 ];
 
