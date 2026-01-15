@@ -174,8 +174,8 @@ export const ExerciseVisualCard = memo(({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* GIF/Image Container - Dribbble style 4:3 aspect ratio */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      {/* GIF/Image Container - Constrained height for better proportions */}
+      <div className="relative h-[160px] overflow-hidden bg-muted rounded-t-xl">
         {/* GIF - always available now with default fallback */}
         <img 
           src={gifUrl}

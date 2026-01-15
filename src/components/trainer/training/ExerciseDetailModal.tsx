@@ -134,8 +134,8 @@ export const ExerciseDetailModal = memo(({
       <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden">
         <ScrollArea className="max-h-[90vh]">
           <div className="p-0">
-            {/* Hero Image/GIF Section - Always shows GIF now */}
-            <div className="relative aspect-video w-full overflow-hidden bg-muted">
+            {/* Hero Image/GIF Section - Constrained height */}
+            <div className="relative h-[250px] max-h-[300px] w-full overflow-hidden bg-muted rounded-t-xl">
               <img 
                 src={gifUrl}
                 alt={currentExercise.name}

@@ -1,4 +1,5 @@
 import { ExerciseData, Mechanics, ForceType, ActivityType } from './types';
+import { exerciseGifMapping, categoryFallbackGifs } from './exerciseGifMapping';
 
 /**
  * Derives the mechanics type (compound vs isolation) based on the number of muscle groups
@@ -118,10 +119,39 @@ export function getForceTypeColor(forceType: ForceType): string {
 const DEFAULT_EXERCISE_GIF = "https://cdn.dribbble.com/userupload/20700734/file/original-1e545aca6678863e33e7f664c97088bf.gif";
 
 /**
- * Gets exercise display GIF URL with fallback logic
- * Always returns a valid URL (uses default GIF as fallback)
+ * Gets exercise display GIF URL with intelligent fallback logic
+ * Priority: custom > demonstration > keyword match > category fallback > default
  */
 export function getExerciseGifUrl(exercise: ExerciseData): string {
-  // Priority: custom GIF > demonstration GIF > default Dribbble GIF
-  return exercise.customGifUrl || exercise.demonstrationGif || DEFAULT_EXERCISE_GIF;
+  // Priority 1: Custom GIF from exercise data
+  if (exercise.customGifUrl) return exercise.customGifUrl;
+  if (exercise.demonstrationGif) return exercise.demonstrationGif;
+  
+  // Priority 2: Direct ID match in mapping
+  if (exerciseGifMapping[exercise.id]) {
+    return exerciseGifMapping[exercise.id];
+  }
+  
+  // Priority 3: Keyword matching in exercise name
+  const nameLower = exercise.name.toLowerCase();
+  for (const [keyword, gifUrl] of Object.entries(exerciseGifMapping)) {
+    // Convert keyword like 'push-up' to 'push up' and 'pushup' for matching
+    const keywordVariants = [
+      keyword,
+      keyword.replace(/-/g, ' '),
+      keyword.replace(/-/g, ''),
+    ];
+    
+    if (keywordVariants.some(variant => nameLower.includes(variant))) {
+      return gifUrl;
+    }
+  }
+  
+  // Priority 4: Category fallback
+  if (categoryFallbackGifs[exercise.category]) {
+    return categoryFallbackGifs[exercise.category];
+  }
+  
+  // Priority 5: Default GIF
+  return DEFAULT_EXERCISE_GIF;
 }
