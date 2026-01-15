@@ -107,7 +107,35 @@ export function CreateProgramWizard({
     }
   };
 
+  const validateExercises = (): boolean => {
+    const allExercises = sessions.flatMap((session) => {
+      if (session.items && session.items.length > 0) {
+        return session.items.flatMap((item) =>
+          item.type === 'exercise' ? [item.data] : item.data.exercises
+        );
+      }
+      return session.exercises;
+    });
+
+    const unlinkedExercises = allExercises.filter(
+      (ex) => ex.name && !ex.exerciseDbId
+    );
+
+    if (unlinkedExercises.length > 0) {
+      toast.error(
+        `${unlinkedExercises.length} exercise(s) are not linked to the database. Please select them from the library.`
+      );
+      return false;
+    }
+    return true;
+  };
+
   const handleSave = async () => {
+    // Validate exercises before saving
+    if (!validateExercises()) {
+      return;
+    }
+
     setIsSaving(true);
 
     try {
@@ -129,7 +157,6 @@ export function CreateProgramWizard({
         trainerName: "Trainer",
       };
 
-      // For now, just log the data - in real app, this would save to database
       console.log("Saving program:", programData);
 
       toast.success(

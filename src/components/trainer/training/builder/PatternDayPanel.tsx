@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Exercise, Routine, Circuit, SessionItem } from "@/data/training/types";
-import { Plus, Trash2, GripVertical, Layers, ChevronDown, Dumbbell, RotateCcw } from "lucide-react";
+import { Plus, Layers, ChevronDown, Dumbbell, RotateCcw } from "lucide-react";
 import { ImportRoutineDialog } from "./ImportRoutineDialog";
 import { CircuitContainer } from "./CircuitContainer";
+import { ExerciseRowWithSelector } from "./ExerciseRowWithSelector";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   DropdownMenu,
@@ -139,70 +140,35 @@ export function PatternDayPanel({
       )
     : exercises;
 
+  const handleExerciseUpdate = (exerciseId: string, updatedExercise: Exercise) => {
+    onExercisesChange(
+      exercises.map((ex) => (ex.id === exerciseId ? updatedExercise : ex))
+    );
+  };
+
+  const handleItemExerciseUpdate = (itemIndex: number, updatedExercise: Exercise) => {
+    if (!useItemsMode) return;
+    const newItems = [...items];
+    newItems[itemIndex] = { type: 'exercise', data: updatedExercise };
+    onItemsChange?.(newItems);
+  };
+
   const renderExerciseRow = (exercise: Exercise, index: number, isItemMode: boolean, itemIndex?: number) => (
-    <div
+    <ExerciseRowWithSelector
       key={exercise.id}
-      className="flex items-center gap-2 p-2 border rounded-md bg-background"
-    >
-      <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
-      <span className="text-xs text-muted-foreground w-5">{index + 1}.</span>
-      <Input
-        placeholder="Exercise name"
-        value={exercise.name}
-        onChange={(e) =>
-          isItemMode && itemIndex !== undefined
-            ? handleItemExerciseChange(itemIndex, "name", e.target.value)
-            : handleExerciseChange(exercise.id, "name", e.target.value)
+      exercise={exercise}
+      index={index}
+      onExerciseChange={(updatedEx) => {
+        if (isItemMode && itemIndex !== undefined) {
+          handleItemExerciseUpdate(itemIndex, updatedEx);
+        } else {
+          handleExerciseUpdate(exercise.id, updatedEx);
         }
-        className="flex-1"
-      />
-      <Input
-        type="number"
-        min="1"
-        value={exercise.sets}
-        onChange={(e) =>
-          isItemMode && itemIndex !== undefined
-            ? handleItemExerciseChange(itemIndex, "sets", parseInt(e.target.value) || 1)
-            : handleExerciseChange(exercise.id, "sets", parseInt(e.target.value) || 1)
-        }
-        className="w-16 text-center"
-      />
-      <span className="text-muted-foreground">×</span>
-      <Input
-        placeholder="Reps"
-        value={exercise.reps}
-        onChange={(e) =>
-          isItemMode && itemIndex !== undefined
-            ? handleItemExerciseChange(itemIndex, "reps", e.target.value)
-            : handleExerciseChange(exercise.id, "reps", e.target.value)
-        }
-        className="w-20"
-      />
-      <select
-        className="h-9 px-2 rounded-md border text-sm bg-background"
-        value={exercise.repsUnit || "reps"}
-        onChange={(e) =>
-          isItemMode && itemIndex !== undefined
-            ? handleItemExerciseChange(itemIndex, "repsUnit", e.target.value)
-            : handleExerciseChange(exercise.id, "repsUnit", e.target.value)
-        }
-      >
-        <option value="reps">reps</option>
-        <option value="sec">sec</option>
-        <option value="min">min</option>
-      </select>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-        onClick={() =>
-          isItemMode ? handleRemoveItem(exercise.id) : handleRemoveExercise(exercise.id)
-        }
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
-    </div>
+      }}
+      onRemove={() =>
+        isItemMode ? handleRemoveItem(exercise.id) : handleRemoveExercise(exercise.id)
+      }
+    />
   );
 
   return (
