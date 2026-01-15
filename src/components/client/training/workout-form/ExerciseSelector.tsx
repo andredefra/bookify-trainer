@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Dumbbell, Filter } from "lucide-react";
-import { ExerciseData } from "@/data/exercises/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, Dumbbell, X } from "lucide-react";
+import { ExerciseData, Mechanics, ForceType } from "@/data/exercises/types";
 import { completeExerciseDatabase } from "@/data/exercises/exerciseDatabase";
+import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor } from "@/data/exercises/biomechanicsMapping";
+import { ExerciseVisualCard } from "@/components/trainer/dashboard/tabs/programs/ExerciseVisualCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ExerciseSelectorProps {
   value: string;
@@ -20,17 +23,56 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+  const [equipmentFilter, setEquipmentFilter] = useState<string>("all");
+  const [mechanicsFilter, setMechanicsFilter] = useState<'all' | Mechanics>('all');
+  const [forceTypeFilter, setForceTypeFilter] = useState<'all' | ForceType>('all');
+  const isMobile = useIsMobile();
 
-  const categories = ["all", "chest", "back", "legs", "shoulders", "arms", "core", "cardio"];
-  const difficulties = ["all", "beginner", "intermediate", "advanced"];
+  const categories = [
+    { value: 'all', label: 'All Categories' },
+    { value: 'chest', label: 'Chest' },
+    { value: 'back', label: 'Back' },
+    { value: 'legs', label: 'Legs' },
+    { value: 'shoulders', label: 'Shoulders' },
+    { value: 'arms', label: 'Arms' },
+    { value: 'core', label: 'Core' },
+    { value: 'cardio', label: 'Cardio' },
+    { value: 'functional', label: 'Functional' },
+    { value: 'flexibility', label: 'Flexibility' },
+    { value: 'plyometric', label: 'Plyometric' },
+  ];
+
+  const difficulties = [
+    { value: 'all', label: 'All Levels' },
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' },
+  ];
+
+  const equipmentOptions = [
+    { value: 'all', label: 'All Equipment' },
+    { value: 'bodyweight', label: 'Bodyweight' },
+    { value: 'barbell', label: 'Barbell' },
+    { value: 'dumbbell', label: 'Dumbbells' },
+    { value: 'cable', label: 'Cable Machine' },
+    { value: 'machine', label: 'Machine' },
+    { value: 'kettlebell', label: 'Kettlebell' },
+    { value: 'resistance', label: 'Resistance Band' },
+    { value: 'bench', label: 'Bench' },
+  ];
 
   const filteredExercises = completeExerciseDatabase.filter(exercise => {
-    const matchesSearch = exercise.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         exercise.muscleGroup.some(muscle => muscle.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch = !searchQuery || 
+      exercise.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      exercise.muscleGroup.some(muscle => muscle.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = categoryFilter === "all" || exercise.category === categoryFilter;
     const matchesDifficulty = difficultyFilter === "all" || exercise.difficulty === difficultyFilter;
+    const matchesEquipment = equipmentFilter === "all" || 
+      exercise.equipment.some(eq => eq.toLowerCase().includes(equipmentFilter.toLowerCase()));
+    const matchesMechanics = mechanicsFilter === "all" || deriveMechanics(exercise) === mechanicsFilter;
+    const matchesForceType = forceTypeFilter === "all" || deriveForceType(exercise) === forceTypeFilter;
     
-    return matchesSearch && matchesCategory && matchesDifficulty;
+    return matchesSearch && matchesCategory && matchesDifficulty && matchesEquipment && matchesMechanics && matchesForceType;
   });
 
   const handleExerciseSelect = (exercise: ExerciseData) => {
@@ -39,26 +81,21 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
     setSearchQuery("");
   };
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      chest: "bg-red-100 text-red-800",
-      back: "bg-blue-100 text-blue-800", 
-      legs: "bg-green-100 text-green-800",
-      shoulders: "bg-yellow-100 text-yellow-800",
-      arms: "bg-purple-100 text-purple-800",
-      core: "bg-orange-100 text-orange-800",
-      cardio: "bg-pink-100 text-pink-800"
-    };
-    return colors[category] || "bg-gray-100 text-gray-800";
-  };
+  const activeFiltersCount = [
+    categoryFilter !== 'all',
+    difficultyFilter !== 'all',
+    equipmentFilter !== 'all',
+    mechanicsFilter !== 'all',
+    forceTypeFilter !== 'all',
+  ].filter(Boolean).length;
 
-  const getDifficultyColor = (difficulty: string) => {
-    const colors = {
-      beginner: "bg-green-100 text-green-800",
-      intermediate: "bg-yellow-100 text-yellow-800", 
-      advanced: "bg-red-100 text-red-800"
-    };
-    return colors[difficulty] || "bg-gray-100 text-gray-800";
+  const clearAllFilters = () => {
+    setCategoryFilter('all');
+    setDifficultyFilter('all');
+    setEquipmentFilter('all');
+    setMechanicsFilter('all');
+    setForceTypeFilter('all');
+    setSearchQuery('');
   };
 
   return (
@@ -73,78 +110,140 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
           {value || placeholder}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Select Exercise</DialogTitle>
+          <DialogTitle>Select Exercise ({filteredExercises.length} available)</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4">
-          {/* Search and Filters */}
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search exercises..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-2 border rounded-md"
-            >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat === "all" ? "All Categories" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-                </option>
-              ))}
-            </select>
-            <select
-              value={difficultyFilter}
-              onChange={(e) => setDifficultyFilter(e.target.value)}
-              className="px-3 py-2 border rounded-md"
-            >
-              {difficulties.map(diff => (
-                <option key={diff} value={diff}>
-                  {diff === "all" ? "All Levels" : diff.charAt(0).toUpperCase() + diff.slice(1)}
-                </option>
-              ))}
-            </select>
+        <div className="flex-1 overflow-hidden flex flex-col space-y-4">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search exercises..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
           </div>
 
-          {/* Exercise List */}
-          <div className="max-h-[50vh] overflow-y-auto">
-            <div className="grid gap-2">
-              {filteredExercises.map((exercise) => (
-                <div
+          {/* Filter Row 1: Dropdowns */}
+          <div className="flex gap-2 flex-wrap">
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+              <SelectTrigger className="w-[130px]">
+                <SelectValue placeholder="Difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                {difficulties.map((diff) => (
+                  <SelectItem key={diff.value} value={diff.value}>
+                    {diff.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={equipmentFilter} onValueChange={setEquipmentFilter}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Equipment" />
+              </SelectTrigger>
+              <SelectContent>
+                {equipmentOptions.map((eq) => (
+                  <SelectItem key={eq.value} value={eq.value}>
+                    {eq.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Filter Row 2: Biomechanics Toggle Buttons */}
+          <div className="flex flex-wrap gap-4">
+            {/* Mechanics Filter */}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-muted-foreground mr-1">Mechanics:</span>
+              <div className="flex gap-1">
+                {(['all', 'compound', 'isolation'] as const).map((value) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={mechanicsFilter === value ? 'default' : 'outline'}
+                    onClick={() => setMechanicsFilter(value)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Force Type Filter */}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-muted-foreground mr-1">Force:</span>
+              <div className="flex gap-1 flex-wrap">
+                {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((value) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={forceTypeFilter === value ? 'default' : 'outline'}
+                    onClick={() => setForceTypeFilter(value)}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Active Filters Summary */}
+          {activeFiltersCount > 0 && (
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="text-xs">
+                {activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''} active
+              </Badge>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={clearAllFilters}
+                className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3 mr-1" />
+                Clear all
+              </Button>
+            </div>
+          )}
+
+          {/* Exercise Grid */}
+          <div className="flex-1 overflow-y-auto min-h-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
+              {filteredExercises.slice(0, 50).map((exercise) => (
+                <ExerciseVisualCard
                   key={exercise.id}
-                  className="p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
-                  onClick={() => handleExerciseSelect(exercise)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <h4 className="font-medium">{exercise.name}</h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge className={`text-xs ${getCategoryColor(exercise.category)}`}>
-                          {exercise.category}
-                        </Badge>
-                        <Badge className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
-                          {exercise.difficulty}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {exercise.muscleGroup.join(", ")}
-                      </p>
-                    </div>
-                    <div className="text-right text-sm text-muted-foreground">
-                      <div>{exercise.equipment.join(", ")}</div>
-                    </div>
-                  </div>
-                </div>
+                  exercise={exercise}
+                  onSelect={handleExerciseSelect}
+                  selectionMode={true}
+                  compact={isMobile}
+                />
               ))}
             </div>
+            {filteredExercises.length > 50 && (
+              <p className="text-center text-sm text-muted-foreground py-4">
+                Showing first 50 of {filteredExercises.length} exercises. Use filters to narrow down.
+              </p>
+            )}
           </div>
         </div>
       </DialogContent>
