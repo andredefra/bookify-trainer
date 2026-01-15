@@ -27,15 +27,6 @@ export function ClientProfileTabList({
         </TabsTrigger>
         
         <TabsTrigger 
-          value="goals" 
-          className="relative"
-          onClick={() => onTabChange("goals")}
-        >
-          Goals
-          <TabBadge count={matchCounts.goals} />
-        </TabsTrigger>
-        
-        <TabsTrigger 
           value="metrics" 
           className="relative"
           onClick={() => onTabChange("metrics")}
