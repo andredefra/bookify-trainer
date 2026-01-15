@@ -175,7 +175,7 @@ export const ExerciseVisualCard = memo(({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* GIF/Image Container - Constrained height for better proportions */}
-      <div className="relative h-[160px] overflow-hidden bg-muted rounded-t-xl">
+      <div className="relative h-[180px] max-h-[180px] overflow-hidden bg-muted rounded-t-xl">
         {/* GIF - always available now with default fallback */}
         <img 
           src={gifUrl}
