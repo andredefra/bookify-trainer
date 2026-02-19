@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { usePackagePayments } from '@/hooks/usePackagePayments';
 import { CheckCircle2, Clock, Calendar, CreditCard, DollarSign } from 'lucide-react';
-import { format } from 'date-fns';
+import { safeFormatDate } from '@/utils/safeFormatDate';
 import { useState } from 'react';
 import { RecordPaymentDialog } from '@/components/trainer/dialogs/RecordPaymentDialog';
 
@@ -115,13 +115,13 @@ export const PackagePaymentsTab = ({ packageAssignmentId, clientName }: PackageP
                         {payment.paymentDate && (
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <CheckCircle2 className="w-4 h-4 text-green-600" />
-                            Paid on {format(new Date(payment.paymentDate), 'PPP')}
+                            Paid on {safeFormatDate(payment.paymentDate, 'PPP')}
                           </div>
                         )}
                         {payment.dueDate && payment.paymentStatus === 'pending' && (
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Calendar className="w-4 h-4" />
-                            Due: {format(new Date(payment.dueDate), 'PPP')}
+                            Due: {safeFormatDate(payment.dueDate, 'PPP')}
                           </div>
                         )}
                         <div className="flex items-center gap-2 text-muted-foreground">

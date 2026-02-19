@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { usePackageSessionBookings } from '@/hooks/usePackageSessionBookings';
 import { SessionStatusBadge } from './SessionStatusBadge';
 import { BookSessionDialog } from './BookSessionDialog';
-import { format } from 'date-fns';
+import { safeFormatDate } from '@/utils/safeFormatDate';
 import { Calendar, CheckCircle2, XCircle, Clock, UserX, CreditCard } from 'lucide-react';
 import { PackageSessionBooking } from '@/types/packageSessions';
 import { PackagePaymentsTab } from './PackagePaymentsTab';
@@ -111,13 +111,13 @@ export const ActivePackageManagementDialog = ({
 
   const getSessionDateTime = (session: PackageSessionBooking) => {
     if (session.completedDatetime) {
-      return format(new Date(session.completedDatetime), 'PPp');
+      return safeFormatDate(session.completedDatetime, 'PPp', null as any);
     }
     if (session.confirmedDatetime && session.proposedDatetime) {
-      return format(new Date(session.proposedDatetime), 'PPp');
+      return safeFormatDate(session.proposedDatetime, 'PPp', null as any);
     }
     if (session.proposedDatetime) {
-      return format(new Date(session.proposedDatetime), 'PPp');
+      return safeFormatDate(session.proposedDatetime, 'PPp', null as any);
     }
     return null;
   };
@@ -186,14 +186,14 @@ export const ActivePackageManagementDialog = ({
                     <div>
                       <span className="text-muted-foreground">Purchase Date:</span>
                       <p className="font-medium">
-                        {format(new Date(packageAssignment.purchaseDate), 'PP')}
+                        {safeFormatDate(packageAssignment.purchaseDate, 'PP')}
                       </p>
                     </div>
                     {packageAssignment.expiryDate && (
                       <div>
                         <span className="text-muted-foreground">Expiry Date:</span>
                         <p className="font-medium">
-                          {format(new Date(packageAssignment.expiryDate), 'PP')}
+                          {safeFormatDate(packageAssignment.expiryDate, 'PP')}
                         </p>
                       </div>
                     )}
