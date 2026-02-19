@@ -20,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PackageSale } from "@/hooks/usePackageSales";
-import { format } from "date-fns";
+import { safeFormatDate } from "@/utils/safeFormatDate";
 import { 
   Banknote, 
   CreditCard, 
@@ -319,7 +319,7 @@ export function PackageSalesHistoryTable({
                 className={sale.paymentMethod === 'cash' && sale.paymentStatus === 'pending' ? 'bg-yellow-50/50 dark:bg-yellow-900/10' : ''}
               >
                 <TableCell className="font-medium">
-                  {format(new Date(sale.purchaseDate), 'MMM dd')}
+                  {safeFormatDate(sale.purchaseDate, 'MMM dd')}
                 </TableCell>
                 <TableCell>
                   <div>
@@ -454,7 +454,7 @@ export function PackageSalesHistoryTable({
                   <p className="text-muted-foreground">Sent At</p>
                   <p className="font-medium">
                     {invoiceDetailsDialog.sale.invoiceSentAt 
-                      ? format(new Date(invoiceDetailsDialog.sale.invoiceSentAt), 'MMM dd, yyyy HH:mm')
+                      ? safeFormatDate(invoiceDetailsDialog.sale.invoiceSentAt, 'MMM dd, yyyy HH:mm')
                       : 'N/A'
                     }
                   </p>
