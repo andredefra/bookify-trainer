@@ -244,6 +244,7 @@ const PricingSection = () => {
               isGymPlan={true}
               isDelayed={false}
               Icon={plans[3]?.icon}
+              comingSoon={true}
             />
           </div>
         </div>
