@@ -84,8 +84,6 @@ export function ReviewsTab() {
                 key={review.id}
                 review={review}
                 onRequestModification={handleRequestModification}
-                onHideReview={hideReview}
-                onUnhideReview={unhideReview}
               />
             ))}
           </div>
