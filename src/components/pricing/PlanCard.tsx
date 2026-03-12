@@ -23,6 +23,7 @@ interface PlanCardProps {
   onContactClick?: () => void;
   isLaunchOffer?: boolean;
   planType?: 'basic' | 'essential' | 'pro';
+  comingSoon?: boolean;
 }
 
 export const PlanCard = ({
@@ -42,7 +43,8 @@ export const PlanCard = ({
   showContactForm = false,
   onContactClick,
   isLaunchOffer = false,
-  planType
+  planType,
+  comingSoon = false
 }: PlanCardProps) => {
   const { t } = useLanguage();
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
@@ -53,6 +55,11 @@ export const PlanCard = ({
       isGymPlan ? 'border-2 border-gray-800 shadow-lg' : 
       'border-border shadow-sm'
     } ${isGymPlan ? 'bg-gray-50' : 'bg-white'} relative`}>
+      {comingSoon && (
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-amber-500 text-white text-xs font-bold py-1.5 px-4 rounded-full z-10 uppercase tracking-wide">
+          Coming Soon
+        </div>
+      )}
       {isLaunchOffer && (
         <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold py-1 px-3 rounded-full animate-pulse">
           🚀 LAUNCH OFFER
@@ -60,6 +67,7 @@ export const PlanCard = ({
       )}
       
       
+      <div className={comingSoon ? 'opacity-40 pointer-events-none' : ''}>
       <div className="mb-6">
         <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
         <div className="flex items-baseline mb-1">
@@ -165,6 +173,7 @@ export const PlanCard = ({
             </PlanDetailsDialog>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

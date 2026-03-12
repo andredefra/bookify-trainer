@@ -229,6 +229,7 @@ const PricingSection = () => {
               isGymPlan={true}
               isDelayed={false}
               Icon={plans[3]?.icon}
+              comingSoon={true}
             />
             {/* Gym Plan - €119 */}
             <PlanCard
@@ -243,6 +244,7 @@ const PricingSection = () => {
               isGymPlan={true}
               isDelayed={false}
               Icon={plans[3]?.icon}
+              comingSoon={true}
             />
           </div>
         </div>
