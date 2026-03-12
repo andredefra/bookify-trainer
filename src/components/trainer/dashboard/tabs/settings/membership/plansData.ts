@@ -13,7 +13,8 @@ export const plans: Plan[] = [
       "Personal Trainer Page",
       "Client Messaging",
       "Client Management",
-      "Basic Scheduling"
+      "Basic Scheduling",
+      "Google Calendar Integration"
     ],
     limitations: [],
     isPopular: false,
@@ -44,7 +45,6 @@ export const plans: Plan[] = [
     description: "Complete professional toolkit for serious trainers.",
     features: [
       "Everything in Essential",
-      "Google Calendar Integration",
       "Digital & Cash Payments",
       "Priority Support",
       "Advanced Analytics",

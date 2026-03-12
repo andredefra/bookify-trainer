@@ -32,6 +32,10 @@ export const getFeatureDetails = (plan: string, t: (key: string) => string): Fea
       {
         name: t('pricing.detailedFeatures.basic.analytics.name'),
         description: t('pricing.detailedFeatures.basic.analytics.description')
+      },
+      {
+        name: t('pricing.detailedFeatures.basic.googleCalendar.name'),
+        description: t('pricing.detailedFeatures.basic.googleCalendar.description')
       }
     );
   } else if (plan === 'essential') {
@@ -47,10 +51,6 @@ export const getFeatureDetails = (plan: string, t: (key: string) => string): Fea
       {
         name: t('pricing.detailedFeatures.essential.sessions.name'),
         description: t('pricing.detailedFeatures.essential.sessions.description')
-      },
-      {
-        name: t('pricing.detailedFeatures.essential.googleCalendar.name'),
-        description: t('pricing.detailedFeatures.essential.googleCalendar.description')
       },
       {
         name: t('pricing.detailedFeatures.essential.waitlist.name'),

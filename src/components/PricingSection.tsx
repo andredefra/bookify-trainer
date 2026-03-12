@@ -43,11 +43,11 @@ const PricingSection = () => {
     t('pricing.features.messaging'),
     t('pricing.features.salesManagement'),
     t('pricing.features.reviewsManagement'),
+    t('pricing.features.googleCalendar'),
   ];
   
   const freemiumFeatures = [
     t('pricing.features.sessions'),
-    t('pricing.features.googleCalendar'),
     t('pricing.features.customPrograms'),
     t('pricing.features.waitlistManagement'),
     t('pricing.features.sessionAnalytics'),
