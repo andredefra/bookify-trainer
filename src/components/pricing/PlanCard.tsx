@@ -67,113 +67,113 @@ export const PlanCard = ({
       )}
       
       
-      <div className={comingSoon ? 'opacity-40 pointer-events-none' : ''}>
-      <div className="mb-6">
-        <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
-        <div className="flex items-baseline mb-1">
-          {originalPrice && isLaunchOffer ? (
-            <div className="flex flex-col">
-              <span className="text-lg text-muted-foreground line-through">{originalPrice}</span>
-              <div className="flex items-baseline">
-                <span className="text-4xl font-display font-bold text-green-600">{price}</span>
-                <span className="text-muted-foreground ml-2">{period}</span>
+      <div className={`flex flex-col flex-grow ${comingSoon ? 'opacity-40 pointer-events-none' : ''}`}>
+        <div className="mb-6">
+          <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
+          <div className="flex items-baseline mb-1">
+            {originalPrice && isLaunchOffer ? (
+              <div className="flex flex-col">
+                <span className="text-lg text-muted-foreground line-through">{originalPrice}</span>
+                <div className="flex items-baseline">
+                  <span className="text-4xl font-display font-bold text-green-600">{price}</span>
+                  <span className="text-muted-foreground ml-2">{period}</span>
+                </div>
               </div>
-            </div>
-          ) : (
-            <>
-              <span className="text-4xl font-display font-bold">{price}</span>
-              <span className="text-muted-foreground ml-2">{period}</span>
-            </>
+            ) : (
+              <>
+                <span className="text-4xl font-display font-bold">{price}</span>
+                <span className="text-muted-foreground ml-2">{period}</span>
+              </>
+            )}
+          </div>
+          {fee && (
+            <p className="text-muted-foreground text-sm">
+              {fee}
+            </p>
           )}
+          {/* Completely removing the transactionFeeNote paragraph */}
         </div>
-        {fee && (
-          <p className="text-muted-foreground text-sm">
-            {fee}
-          </p>
-        )}
-        {/* Completely removing the transactionFeeNote paragraph */}
-      </div>
 
-      <ul className="space-y-3 mb-8 flex-grow">
-        {/* Show inherited features for Essential and Pro plans */}
-        {planType === 'essential' && (
-          <li className="flex items-start">
-            <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-            <span className="text-primary font-medium">{t('pricing.detailedFeatures.everythingInBasic.name')}</span>
-          </li>
-        )}
-        {planType === 'pro' && (
-          <li className="flex items-start">
-            <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-            <span className="text-primary font-medium">{t('pricing.detailedFeatures.everythingInEssential.name')}</span>
-          </li>
-        )}
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <CheckCircle2 className={`h-5 w-5 ${isGymPlan ? 'text-gray-700' : 'text-emerald-500'} mr-2 flex-shrink-0 mt-0.5`} />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
+        <ul className="space-y-3 mb-8 flex-grow">
+          {/* Show inherited features for Essential and Pro plans */}
+          {planType === 'essential' && (
+            <li className="flex items-start">
+              <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+              <span className="text-primary font-medium">{t('pricing.detailedFeatures.everythingInBasic.name')}</span>
+            </li>
+          )}
+          {planType === 'pro' && (
+            <li className="flex items-start">
+              <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+              <span className="text-primary font-medium">{t('pricing.detailedFeatures.everythingInEssential.name')}</span>
+            </li>
+          )}
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start">
+              <CheckCircle2 className={`h-5 w-5 ${isGymPlan ? 'text-gray-700' : 'text-emerald-500'} mr-2 flex-shrink-0 mt-0.5`} />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
 
-      <div className="space-y-4 pt-2">
-        {/* Primary CTA Button */}
-        <div>
-          {showContactForm ? (
-            <Button
-              onClick={onContactClick}
-              className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
-                isPopular 
-                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                  : isGymPlan
-                    ? 'bg-gray-800 hover:bg-gray-900 text-white'
-                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
-              }`}
-              size="lg"
-            >
-              {ctaText}
-            </Button>
-          ) : (
-            <Button
-              asChild
-              className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
-                isPopular 
-                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                  : isGymPlan
-                    ? 'bg-gray-800 hover:bg-gray-900 text-white'
-                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
-              }`}
-              size="lg"
-            >
-              <Link 
-                to={ctaLink}
-                target={isGymPlan ? "_blank" : undefined}
-                rel={isGymPlan ? "noopener noreferrer" : undefined}
+        <div className="mt-auto pt-4 space-y-4">
+          {/* Primary CTA Button */}
+          <div>
+            {showContactForm ? (
+              <Button
+                onClick={onContactClick}
+                className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
+                  isPopular 
+                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                    : isGymPlan
+                      ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                      : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                }`}
+                size="lg"
               >
                 {ctaText}
-              </Link>
-            </Button>
+              </Button>
+            ) : (
+              <Button
+                asChild
+                className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
+                  isPopular 
+                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                    : isGymPlan
+                      ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                      : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                }`}
+                size="lg"
+              >
+                <Link 
+                  to={ctaLink}
+                  target={isGymPlan ? "_blank" : undefined}
+                  rel={isGymPlan ? "noopener noreferrer" : undefined}
+                >
+                  {ctaText}
+                </Link>
+              </Button>
+            )}
+          </div>
+          
+          {/* Discover Details Button */}
+          {planType && !isGymPlan && (
+            <div className="flex justify-center">
+              <PlanDetailsDialog 
+                planType={planType}
+                triggerText={t('pricing.discoverDetails')}
+              >
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-muted-foreground hover:text-foreground border border-muted hover:border-border px-4 py-2"
+                >
+                  {t('pricing.discoverDetails')}
+                </Button>
+              </PlanDetailsDialog>
+            </div>
           )}
         </div>
-        
-        {/* Discover Details Button */}
-        {planType && !isGymPlan && (
-          <div className="flex justify-center">
-            <PlanDetailsDialog 
-              planType={planType}
-              triggerText={t('pricing.discoverDetails')}
-            >
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-muted-foreground hover:text-foreground border border-muted hover:border-border px-4 py-2"
-              >
-                {t('pricing.discoverDetails')}
-              </Button>
-            </PlanDetailsDialog>
-          </div>
-        )}
-      </div>
       </div>
     </div>
   );
