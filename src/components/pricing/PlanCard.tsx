@@ -23,6 +23,7 @@ interface PlanCardProps {
   onContactClick?: () => void;
   isLaunchOffer?: boolean;
   planType?: 'basic' | 'essential' | 'pro';
+  comingSoon?: boolean;
 }
 
 export const PlanCard = ({
