@@ -5,16 +5,17 @@ import { Plan } from "./types";
 export const plans: Plan[] = [
   {
     id: "standard",
-    name: "Free",
-    price: "€0",
+    name: "Basic",
+    price: "€1.99",
     period: "per month",
-    description: "Start your trainer journey at no cost. Perfect for beginners.",
+    description: "FREE for first 100 users. Start your trainer journey.",
     features: [
       "Personal Trainer Page",
-      "Client Messaging",
-      "Client Management",
-      "Basic Scheduling",
-      "Google Calendar Integration"
+      "Unlimited Clients",
+      "Basic Calendar Management",
+      "Unlimited Messaging",
+      "Basic CRM & Lead Management",
+      "Reviews Management"
     ],
     limitations: [],
     isPopular: false,
