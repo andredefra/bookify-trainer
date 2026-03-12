@@ -116,7 +116,7 @@ export const it = {
   'pricing.standard.price': '€0',
   'pricing.standard.originalPrice': '€1,99',
   'pricing.standard.period': '/mese',
-  'pricing.standard.fee': 'Offerta lancio: GRATIS per i primi 100 clienti (0/100)',
+  'pricing.standard.fee': 'GRATIS per 6 mesi, poi €1,99/mese',
   'pricing.standard.cta': 'Inizia Gratis Ora',
   'pricing.freemium.title': 'Essenziale',
   'pricing.freemium.price': '€9',
