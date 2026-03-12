@@ -67,6 +67,7 @@ export const PlanCard = ({
       )}
       
       
+      <div className={comingSoon ? 'opacity-40 pointer-events-none' : ''}>
       <div className="mb-6">
         <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
         <div className="flex items-baseline mb-1">
