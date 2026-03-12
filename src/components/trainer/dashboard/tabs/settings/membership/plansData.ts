@@ -45,7 +45,6 @@ export const plans: Plan[] = [
     description: "Complete professional toolkit for serious trainers.",
     features: [
       "Everything in Essential",
-      "Google Calendar Integration",
       "Digital & Cash Payments",
       "Priority Support",
       "Advanced Analytics",
