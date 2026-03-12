@@ -174,6 +174,7 @@ export const PlanCard = ({
           </div>
         )}
       </div>
+      </div>
     </div>
   );
 };
