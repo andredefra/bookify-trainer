@@ -13,7 +13,8 @@ export const plans: Plan[] = [
       "Personal Trainer Page",
       "Client Messaging",
       "Client Management",
-      "Basic Scheduling"
+      "Basic Scheduling",
+      "Google Calendar Integration"
     ],
     limitations: [],
     isPopular: false,
