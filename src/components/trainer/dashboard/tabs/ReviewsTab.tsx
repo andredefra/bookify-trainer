@@ -14,9 +14,7 @@ export function ReviewsTab() {
     stats, 
     filter, 
     setFilter, 
-    requestModification, 
-    hideReview, 
-    unhideReview 
+    requestModification
   } = useReviews();
 
   const [modificationDialog, setModificationDialog] = useState<{
