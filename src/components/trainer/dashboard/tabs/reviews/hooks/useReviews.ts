@@ -143,29 +143,11 @@ export function useReviews() {
     ));
   }, []);
 
-  const hideReview = useCallback((reviewId: string) => {
-    setReviews(prev => prev.map(review => 
-      review.id === reviewId
-        ? { ...review, status: 'hidden' as const, updatedAt: new Date() }
-        : review
-    ));
-  }, []);
-
-  const unhideReview = useCallback((reviewId: string) => {
-    setReviews(prev => prev.map(review => 
-      review.id === reviewId
-        ? { ...review, status: 'active' as const, updatedAt: new Date() }
-        : review
-    ));
-  }, []);
-
   return {
     reviews: filteredReviews,
     stats,
     filter,
     setFilter,
-    requestModification,
-    hideReview,
-    unhideReview
+    requestModification
   };
 }

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Star, MoreHorizontal, AlertCircle, Eye, EyeOff, MessageSquare } from "lucide-react";
+import { Star, MoreHorizontal, AlertCircle, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { TrainerReview } from "../types";
@@ -12,15 +12,11 @@ import { TrainerReview } from "../types";
 interface ReviewCardProps {
   review: TrainerReview;
   onRequestModification: (reviewId: string) => void;
-  onHideReview: (reviewId: string) => void;
-  onUnhideReview: (reviewId: string) => void;
 }
 
 export function ReviewCard({ 
   review, 
-  onRequestModification, 
-  onHideReview, 
-  onUnhideReview 
+  onRequestModification
 }: ReviewCardProps) {
   const getStatusBadge = (status: TrainerReview['status']) => {
     switch (status) {
@@ -75,21 +71,9 @@ export function ReviewCard({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {review.status === 'active' && (
-                  <>
-                    <DropdownMenuItem onClick={() => onRequestModification(review.id)}>
-                      <AlertCircle className="h-4 w-4 mr-2" />
-                      Request Modification
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onHideReview(review.id)}>
-                      <EyeOff className="h-4 w-4 mr-2" />
-                      Hide
-                    </DropdownMenuItem>
-                  </>
-                )}
-                {review.status === 'hidden' && (
-                  <DropdownMenuItem onClick={() => onUnhideReview(review.id)}>
-                    <Eye className="h-4 w-4 mr-2" />
-                    Show
+                  <DropdownMenuItem onClick={() => onRequestModification(review.id)}>
+                    <AlertCircle className="h-4 w-4 mr-2" />
+                    Request Modification
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem>

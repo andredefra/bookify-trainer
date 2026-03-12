@@ -14,9 +14,7 @@ export function ReviewsTab() {
     stats, 
     filter, 
     setFilter, 
-    requestModification, 
-    hideReview, 
-    unhideReview 
+    requestModification
   } = useReviews();
 
   const [modificationDialog, setModificationDialog] = useState<{
@@ -86,8 +84,6 @@ export function ReviewsTab() {
                 key={review.id}
                 review={review}
                 onRequestModification={handleRequestModification}
-                onHideReview={hideReview}
-                onUnhideReview={unhideReview}
               />
             ))}
           </div>
