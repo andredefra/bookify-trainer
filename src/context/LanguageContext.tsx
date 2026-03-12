@@ -1,3 +1,4 @@
+// Language context provider
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Language, translations } from '@/translations';
