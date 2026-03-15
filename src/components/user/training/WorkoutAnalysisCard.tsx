@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, TrendingUp, Zap, Target, Heart, Utensils, RefreshCw } from "lucide-react";
+import { Brain, TrendingUp, Zap, Target, Heart, Utensils, RefreshCw, AlertTriangle, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAIAccess } from "@/hooks/useAIAccess";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface WorkoutAnalysis {
   caloriesBurned: number;
@@ -47,8 +49,26 @@ export function WorkoutAnalysisCard({
   const [analysis, setAnalysis] = useState<WorkoutAnalysis | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { monthlyUsage, isPro, checkAIAccess, trackAIUsage, loading: aiLoading } = useAIAccess();
+
+  const FREE_LIMIT = 5;
+  const maxRequests = isPro ? 100 : FREE_LIMIT;
+  const remaining = Math.max(0, maxRequests - monthlyUsage);
+  const isAtLimit = remaining === 0 && !isPro;
 
   const analyzeWorkout = async () => {
+    const access = await checkAIAccess('chat');
+    if (!access.hasAccess) {
+      toast({
+        title: "AI limit reached",
+        description: access.reason === 'rate_limit_exceeded' 
+          ? `You've used all ${maxRequests} AI requests this month. Upgrade to Pro for unlimited access.`
+          : "Subscribe to access AI features.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('analyze-workout', {
@@ -62,6 +82,7 @@ export function WorkoutAnalysisCard({
       if (error) throw error;
 
       if (data.success) {
+        await trackAIUsage('workout_analysis');
         setAnalysis(data.analysis);
         onAnalysisComplete?.(data.analysis);
         toast({
