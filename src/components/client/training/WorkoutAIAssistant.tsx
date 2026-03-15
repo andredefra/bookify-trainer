@@ -43,7 +43,7 @@ export function WorkoutAIAssistant({ open, onOpenChange, workoutContext }: Worko
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { checkAIAccess, trackAIUsage, isPro, dailyUsage } = useAIAccess();
+  const { checkAIAccess, trackAIUsage, isPro, monthlyUsage } = useAIAccess();
   const { upgradeToProViaMock } = useClientSubscription();
 
   useEffect(() => {
