@@ -4,7 +4,8 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Package, Calendar, Clock, CreditCard, AlertCircle, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Package, Calendar, Clock, CreditCard, AlertCircle, Plus, Eye, User, FileText } from "lucide-react";
 import { useClientPackages } from "@/hooks/useClientPackages";
 import { BrowsePackagesDialog } from "./BrowsePackagesDialog";
 import { ClientPackageManagementDialog } from "./ClientPackageManagementDialog";
@@ -15,6 +16,7 @@ export function MyPackagesTab() {
   const [showBrowsePackages, setShowBrowsePackages] = useState(false);
   const [showManageDialog, setShowManageDialog] = useState(false);
   const [managePackage, setManagePackage] = useState(null);
+  const [selectedHistoryPkg, setSelectedHistoryPkg] = useState<any>(null);
 
   const handlePaymentComplete = () => {
     refetch(); // Refresh package list after purchase
@@ -186,7 +188,7 @@ export function MyPackagesTab() {
           {completedPackages.length > 0 ? (
             <div className="grid gap-4">
               {completedPackages.map((pkg) => (
-                <Card key={pkg.id} className="opacity-75">
+                <Card key={pkg.id} className="opacity-75 hover:opacity-100 transition-opacity">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -196,9 +198,19 @@ export function MyPackagesTab() {
                           <p className="text-sm text-muted-foreground">with {pkg.trainer_name}</p>
                         </div>
                       </div>
-                      <Badge variant="outline" className={getStatusColor(pkg.status)}>
-                        {pkg.status}
-                      </Badge>
+                      <div className="flex items-center gap-3">
+                        <Badge variant="outline" className={getStatusColor(pkg.status)}>
+                          {pkg.status}
+                        </Badge>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setSelectedHistoryPkg(pkg)}
+                        >
+                          <Eye className="h-3.5 w-3.5 mr-1" />
+                          View Details
+                        </Button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -221,6 +233,95 @@ export function MyPackagesTab() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* History Detail Dialog */}
+      <Dialog open={!!selectedHistoryPkg} onOpenChange={(open) => !open && setSelectedHistoryPkg(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5" />
+              {selectedHistoryPkg?.package.title}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedHistoryPkg && (
+            <div className="space-y-5">
+              {/* Status */}
+              <div className="flex items-center justify-between">
+                <Badge variant="outline" className={getStatusColor(selectedHistoryPkg.status)}>
+                  {selectedHistoryPkg.status}
+                </Badge>
+                <span className="text-sm text-muted-foreground">
+                  {selectedHistoryPkg.package.package_type?.replace('_', ' ')}
+                </span>
+              </div>
+
+              {/* Description */}
+              {selectedHistoryPkg.package.description && (
+                <div className="space-y-1">
+                  <h4 className="text-sm font-medium flex items-center gap-1.5">
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                    Description
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {selectedHistoryPkg.package.description}
+                  </p>
+                </div>
+              )}
+
+              {/* Trainer */}
+              <div className="space-y-1">
+                <h4 className="text-sm font-medium flex items-center gap-1.5">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  Trainer
+                </h4>
+                <p className="text-sm text-muted-foreground">{selectedHistoryPkg.trainer_name}</p>
+              </div>
+
+              {/* Sessions Progress */}
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Sessions</h4>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Completed</span>
+                  <span className="font-medium">{selectedHistoryPkg.sessions_used} / {selectedHistoryPkg.sessions_total}</span>
+                </div>
+                <Progress value={(selectedHistoryPkg.sessions_used / selectedHistoryPkg.sessions_total) * 100} className="h-2" />
+              </div>
+
+              {/* Dates & Payment */}
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Purchased
+                  </div>
+                  <p className="font-medium">{new Date(selectedHistoryPkg.purchase_date).toLocaleDateString()}</p>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <Clock className="h-3.5 w-3.5" />
+                    Expired
+                  </div>
+                  <p className="font-medium">{new Date(selectedHistoryPkg.expiry_date).toLocaleDateString()}</p>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <CreditCard className="h-3.5 w-3.5" />
+                    Total Paid
+                  </div>
+                  <p className="font-medium">€{selectedHistoryPkg.total_paid}</p>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <CreditCard className="h-3.5 w-3.5" />
+                    Package Price
+                  </div>
+                  <p className="font-medium">€{selectedHistoryPkg.package.price}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Dialogs */}
       <BrowsePackagesDialog
