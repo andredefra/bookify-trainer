@@ -329,6 +329,7 @@ export function UserFitnessProgress() {
 
       {/* All Dialogs */}
       <FitnessDialogs 
+        progressData={progressData}
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         openUpdateDialog={openUpdateDialog}

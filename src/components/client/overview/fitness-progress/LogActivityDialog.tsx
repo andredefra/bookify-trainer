@@ -13,8 +13,9 @@ import { format } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { getAllActivityTypes, getActivityTypeById } from "./data/activityTemplates";
 import { estimateCaloriesPreview } from "./utils/calorieCalculator";
-import { ActivityType } from "./types";
+import { ActivityType, ProgressItem } from "./types";
 import { ExerciseSelectorField } from "./fields/ExerciseSelectorField";
+import { Target } from "lucide-react";
 import { ExerciseData } from "@/data/exercises/types";
 
 interface LogActivityDialogProps {
@@ -22,12 +23,14 @@ interface LogActivityDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => void;
   onManageActivityTypes?: () => void;
+  goals?: ProgressItem[];
 }
 
-export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivityTypes }: LogActivityDialogProps) {
+export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivityTypes, goals = [] }: LogActivityDialogProps) {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date>(new Date());
   const [activityTypeId, setActivityTypeId] = useState<string>("general");
+  const [selectedGoalId, setSelectedGoalId] = useState<string>("none");
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [selectedExercises, setSelectedExercises] = useState<Record<string, ExerciseData>>({});
   const [activityTypes, setActivityTypes] = useState<ActivityType[]>([]);
@@ -67,12 +70,14 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivi
     onSubmit({
       date: date.toISOString(),
       activityTypeId,
+      goalId: selectedGoalId !== "none" ? selectedGoalId : undefined,
       ...enhancedFormData
     });
     
     setFormData({ note: "" });
     setSelectedExercises({});
     setActivityTypeId("general");
+    setSelectedGoalId("none");
     setDate(new Date());
     onOpenChange(false);
   };
@@ -189,6 +194,33 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivi
               </SelectContent>
             </Select>
           </div>
+
+          {goals.length > 0 && (
+            <div>
+              <Label className="flex items-center gap-1.5">
+                <Target className="h-3.5 w-3.5" />
+                Link to Goal
+              </Label>
+              <Select value={selectedGoalId} onValueChange={setSelectedGoalId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a goal (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No goal linked</SelectItem>
+                  {goals.map((goal) => (
+                    <SelectItem key={goal.id || goal.goal} value={goal.id || goal.goal}>
+                      <div className="flex items-center gap-2">
+                        <span>{goal.goal}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {goal.current}/{goal.target} {goal.unit}
+                        </Badge>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {renderActivityFields()}
 
