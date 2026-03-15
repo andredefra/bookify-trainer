@@ -36,9 +36,8 @@ export const ClientPackageSessionsTab = ({
   useEffect(() => {
     const getClientId = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setClientId(user.id);
-      }
+      // Use actual user ID, or fall back to demo client ID for demo mode
+      setClientId(user?.id || '00000000-0000-0000-0000-000000000002');
     };
     getClientId();
   }, []);
