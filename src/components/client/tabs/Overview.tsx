@@ -1,7 +1,6 @@
 import { FitnessProgressCard } from "@/components/client/overview/FitnessProgressCard";
 import { UpcomingSessionsCard } from "@/components/client/overview/UpcomingSessionsCard";
-import { TrainerCard } from "@/components/client/overview/TrainerCard";
-import { MessagesCard } from "@/components/client/overview/MessagesCard";
+import { QuickAnalyticsCard } from "@/components/client/overview/QuickAnalyticsCard";
 import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
 import { ClientCheckInCard } from "@/components/client/overview/checkin/ClientCheckInCard";
 import { useEffect, useState } from "react";
@@ -9,21 +8,12 @@ import { SessionItem } from "@/types/sessions";
 import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
 import { supabase } from "@/integrations/supabase/client";
 
-interface MessageItem {
-  id: number;
-  from: string;
-  preview: string;
-  time: string;
-  read: boolean;
-}
-
 interface OverviewProps {
   progressData: ProgressItem[];
   upcomingSessions: SessionItem[];
-  trainerMessages: MessageItem[];
 }
 
-export function Overview({ progressData, upcomingSessions, trainerMessages }: OverviewProps) {
+export function Overview({ progressData, upcomingSessions }: OverviewProps) {
   const [clientId, setClientId] = useState<string>('00000000-0000-0000-0000-000000000002');
   const [connectedApps, setConnectedApps] = useState({
     googleFit: false,
@@ -62,9 +52,8 @@ export function Overview({ progressData, upcomingSessions, trainerMessages }: Ov
       <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ExpirationAlertsCard />
-        <TrainerCard />
+        <QuickAnalyticsCard />
       </div>
-      <MessagesCard messages={trainerMessages} />
     </div>
   );
 }

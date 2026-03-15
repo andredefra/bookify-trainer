@@ -178,7 +178,6 @@ const ClientDashboard = () => {
                 <Overview 
                   progressData={progressData}
                   upcomingSessions={upcomingSessions}
-                  trainerMessages={trainerMessages}
                 />
               </TabsContent>
 
