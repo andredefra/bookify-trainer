@@ -155,6 +155,7 @@ export function FitnessProgressCard({
       </Card>
 
       <FitnessDialogs 
+        progressData={progressData}
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         openUpdateDialog={openUpdateDialog}
