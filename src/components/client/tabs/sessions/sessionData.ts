@@ -112,7 +112,10 @@ export const pastSessions: SessionItem[] = [
     date: "Last week",
     status: "completed" as SessionStatus,
     mode: "in-person",
-    address: "321 Strong Street, Iron Gym, Queens, NY 11375"
+    address: "321 Strong Street, Iron Gym, Queens, NY 11375",
+    attendees: 6,
+    maxAttendees: 10,
+    description: "Full body strength training session focusing on compound movements including squats, deadlifts, and bench press. Great energy from the group!",
   },
   {
     id: 202,
@@ -121,6 +124,9 @@ export const pastSessions: SessionItem[] = [
     time: "10:00 - 11:00",
     date: "2 weeks ago",
     status: "completed" as SessionStatus,
-    mode: "video"
+    mode: "video",
+    attendees: 8,
+    maxAttendees: 12,
+    description: "High-intensity kickboxing cardio workout with combinations and core work. 45 minutes of active training plus cooldown stretches.",
   }
 ];
