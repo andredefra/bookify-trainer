@@ -122,6 +122,51 @@ export function WorkoutAnalysisCard({
     }
   };
 
+  const UsageBadge = () => {
+    if (aiLoading) return null;
+    const used = monthlyUsage;
+    const isLow = !isPro && remaining <= 2 && remaining > 0;
+    const isOut = !isPro && remaining === 0;
+    
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs text-muted-foreground">
+              AI Requests: <span className="font-semibold text-foreground">{used}/{maxRequests}</span> used this month
+            </span>
+          </div>
+          {!isPro && (
+            <Badge variant={isOut ? "destructive" : isLow ? "outline" : "secondary"} className="text-xs">
+              {isOut ? "Limit reached" : `${remaining} left`}
+            </Badge>
+          )}
+        </div>
+        {/* Progress bar */}
+        <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+          <div 
+            className={`h-full rounded-full transition-all ${isOut ? 'bg-destructive' : isLow ? 'bg-amber-500' : 'bg-primary'}`}
+            style={{ width: `${Math.min(100, (used / maxRequests) * 100)}%` }}
+          />
+        </div>
+        {isOut && !isPro && (
+          <Alert variant="destructive" className="py-2">
+            <AlertTriangle className="h-3.5 w-3.5" />
+            <AlertDescription className="text-xs">
+              You've used all free AI requests this month. Upgrade to Pro for unlimited analyses.
+            </AlertDescription>
+          </Alert>
+        )}
+        {isLow && !isPro && (
+          <p className="text-xs text-amber-600">
+            ⚠️ Only {remaining} AI {remaining === 1 ? 'request' : 'requests'} remaining this month
+          </p>
+        )}
+      </div>
+    );
+  };
+
   if (!analysis) {
     return (
       <Card className="border-primary/20">
@@ -135,10 +180,11 @@ export function WorkoutAnalysisCard({
             Get personalized insights on your training with AI analysis
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          <UsageBadge />
           <Button 
             onClick={analyzeWorkout} 
-            disabled={isLoading}
+            disabled={isLoading || isAtLimit}
             className="w-full"
           >
             {isLoading ? (
