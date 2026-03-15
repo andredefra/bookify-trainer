@@ -30,6 +30,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
+import { HealthDocumentsUpload } from "@/components/common/HealthDocumentsUpload";
 import { useUserProfile, UserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
 
@@ -348,6 +349,8 @@ export function UserSettings({ user, activeSection }: UserSettingsProps) {
                       rows={3}
                     />
                   </div>
+
+                  <HealthDocumentsUpload />
                   
                   <div className="flex justify-end">
                     <Button onClick={handleSaveProfile} disabled={profileSaving}>

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Camera, Info, Crown, Heart, AlertTriangle, Eye, EyeOff, RefreshCw } from "lucide-react";
+import { HealthDocumentsUpload } from "@/components/common/HealthDocumentsUpload";
 import { toast } from "sonner";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
@@ -385,6 +386,8 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
               rows={3}
             />
           </div>
+
+          <HealthDocumentsUpload />
           
           <div className="flex justify-end">
             <Button onClick={handleSaveHealthInfo} disabled={savingHealth}>
