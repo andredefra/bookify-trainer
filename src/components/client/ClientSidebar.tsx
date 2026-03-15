@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap, Building2 } from "lucide-react";
+import { X, User, Calendar, CalendarDays, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useClientNotifications } from "@/hooks/useClientNotifications";
 
@@ -32,6 +32,7 @@ const sidebarItems = [
   { id: "training-log", label: "Workout Log", icon: BookOpen },
   { id: "trainers", label: "Trainers", icon: Users },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "my-calendar", label: "My Calendar", icon: CalendarDays },
   { id: "messages", label: "Messages", icon: MessageSquare, badge: true },
   { id: "settings", label: "Settings", icon: Settings },
 ];
