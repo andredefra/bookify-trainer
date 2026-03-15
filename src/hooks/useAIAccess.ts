@@ -15,8 +15,9 @@ const PRO_DAILY_LIMIT = 100;
 
 export function useAIAccess() {
   const { subscription, loading: subscriptionLoading } = useClientSubscription();
-  const [monthlyUsage, setMonthlyUsage] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const isDemoUser = !!localStorage.getItem('demo-user');
+  const [monthlyUsage, setMonthlyUsage] = useState(isDemoUser ? 4 : 0);
+  const [loading, setLoading] = useState(!isDemoUser);
 
   const fetchMonthlyUsage = async () => {
     try {
