@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useClientSubscription } from './useClientSubscription';
-import { getCurrentDemoUserId } from '@/utils/demoUserUtils';
 
 interface AIAccessResult {
   hasAccess: boolean;
@@ -12,63 +11,67 @@ interface AIAccessResult {
 
 const FREE_MONTHLY_LIMIT = 5;
 const PRO_DAILY_LIMIT = 100;
+const DEMO_INITIAL_USAGE = 4;
+
+function isDemoMode(): boolean {
+  return !!localStorage.getItem('demo-user');
+}
 
 export function useAIAccess() {
   const { subscription, loading: subscriptionLoading } = useClientSubscription();
-  const isDemoUser = !!localStorage.getItem('demo-user');
-  const [monthlyUsage, setMonthlyUsage] = useState(isDemoUser ? 4 : 0);
-  const [loading, setLoading] = useState(!isDemoUser);
+  const demoMode = isDemoMode();
+  const demoRef = useRef(demoMode);
+  
+  const [monthlyUsage, setMonthlyUsage] = useState(demoMode ? DEMO_INITIAL_USAGE : 0);
+  const [loading, setLoading] = useState(!demoMode);
 
-  const fetchMonthlyUsage = async () => {
-    // Never run for demo users
-    if (isDemoUser) return;
-    
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      const userId = user?.id;
-      
-      if (!userId) {
-        setMonthlyUsage(0);
-        setLoading(false);
-        return;
-      }
-      
-      const startOfMonth = new Date();
-      startOfMonth.setDate(1);
-      startOfMonth.setHours(0, 0, 0, 0);
-      
-      const { count, error } = await supabase
-        .from('ai_usage_tracking')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .gte('created_at', startOfMonth.toISOString());
-      
-      if (error) {
-        console.error('Error fetching AI usage:', error);
-        setMonthlyUsage(0);
-      } else {
-        setMonthlyUsage(count || 0);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setMonthlyUsage(0);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Demo users: set usage immediately, no async needed
   useEffect(() => {
-    if (isDemoUser) {
-      setMonthlyUsage(4);
+    // Demo users: always force usage to DEMO_INITIAL_USAGE, never fetch
+    if (demoRef.current || isDemoMode()) {
+      demoRef.current = true;
+      setMonthlyUsage(prev => prev < DEMO_INITIAL_USAGE ? DEMO_INITIAL_USAGE : prev);
       setLoading(false);
       return;
     }
+    
     // Real users: wait for subscription to load first
-    if (!subscriptionLoading) {
-      fetchMonthlyUsage();
-    }
-  }, [subscriptionLoading, isDemoUser]);
+    if (subscriptionLoading) return;
+
+    const fetchUsage = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user?.id) {
+          setMonthlyUsage(0);
+          setLoading(false);
+          return;
+        }
+        
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        
+        const { count, error } = await supabase
+          .from('ai_usage_tracking')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .gte('created_at', startOfMonth.toISOString());
+        
+        if (error) {
+          console.error('Error fetching AI usage:', error);
+          setMonthlyUsage(0);
+        } else {
+          setMonthlyUsage(count || 0);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        setMonthlyUsage(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsage();
+  }, [subscriptionLoading]);
 
   const checkAIAccess = async (feature: 'chat' | 'vision' | 'image_gen'): Promise<AIAccessResult> => {
     if (!subscription) {
@@ -112,10 +115,7 @@ export function useAIAccess() {
   };
 
   const trackAIUsage = async (feature: string, tokensUsed?: number, costEstimate?: number) => {
-    const demoUser = localStorage.getItem('demo-user');
-    
-    if (demoUser) {
-      // Demo mode: just increment in-memory counter
+    if (isDemoMode()) {
       setMonthlyUsage(prev => prev + 1);
       return;
     }
@@ -130,7 +130,16 @@ export function useAIAccess() {
       cost_estimate: costEstimate
     });
     
-    await fetchMonthlyUsage();
+    // Re-fetch for real users
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const { count } = await supabase
+      .from('ai_usage_tracking')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .gte('created_at', startOfMonth.toISOString());
+    setMonthlyUsage(count || 0);
   };
 
   return {
@@ -140,6 +149,6 @@ export function useAIAccess() {
     loading: loading || subscriptionLoading,
     checkAIAccess,
     trackAIUsage,
-    refetchUsage: fetchMonthlyUsage
+    refetchUsage: () => {} // no-op for demo, real users can call if needed
   };
 }
