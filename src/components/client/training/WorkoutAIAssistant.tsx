@@ -43,7 +43,7 @@ export function WorkoutAIAssistant({ open, onOpenChange, workoutContext }: Worko
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { checkAIAccess, trackAIUsage, isPro, dailyUsage } = useAIAccess();
+  const { checkAIAccess, trackAIUsage, isPro, monthlyUsage } = useAIAccess();
   const { upgradeToProViaMock } = useClientSubscription();
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export function WorkoutAIAssistant({ open, onOpenChange, workoutContext }: Worko
   };
 
   const maxRequests = isPro ? 100 : 5;
-  const remainingRequests = maxRequests - dailyUsage;
+  const remainingRequests = maxRequests - monthlyUsage;
 
   return (
     <>
@@ -170,7 +170,7 @@ export function WorkoutAIAssistant({ open, onOpenChange, workoutContext }: Worko
             </SheetDescription>
             {!isPro && (
               <Badge variant="secondary" className="w-fit mt-2">
-                {remainingRequests}/{maxRequests} requests today
+                {remainingRequests}/{maxRequests} requests this month
               </Badge>
             )}
           </SheetHeader>

@@ -10,15 +10,15 @@ interface AIAccessResult {
   maxRequests?: number;
 }
 
-const FREE_DAILY_LIMIT = 5;
+const FREE_MONTHLY_LIMIT = 5;
 const PRO_DAILY_LIMIT = 100;
 
 export function useAIAccess() {
   const { subscription, loading: subscriptionLoading } = useClientSubscription();
-  const [dailyUsage, setDailyUsage] = useState(0);
+  const [monthlyUsage, setMonthlyUsage] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const fetchDailyUsage = async () => {
+  const fetchMonthlyUsage = async () => {
     try {
       const demoUser = localStorage.getItem('demo-user');
       let userId: string | undefined;
@@ -26,7 +26,7 @@ export function useAIAccess() {
       if (demoUser) {
         userId = getCurrentDemoUserId();
         // Demo user: simulate some usage
-        setDailyUsage(2);
+        setMonthlyUsage(2);
         setLoading(false);
         return;
       }
@@ -35,29 +35,31 @@ export function useAIAccess() {
       userId = user?.id;
       
       if (!userId) {
-        setDailyUsage(0);
+        setMonthlyUsage(0);
         setLoading(false);
         return;
       }
       
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      // Get start of current month
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0, 0, 0, 0);
       
       const { count, error } = await supabase
         .from('ai_usage_tracking')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .gte('created_at', today.toISOString());
+        .gte('created_at', startOfMonth.toISOString());
       
       if (error) {
         console.error('Error fetching AI usage:', error);
-        setDailyUsage(0);
+        setMonthlyUsage(0);
       } else {
-        setDailyUsage(count || 0);
+        setMonthlyUsage(count || 0);
       }
     } catch (error) {
       console.error('Error:', error);
-      setDailyUsage(0);
+      setMonthlyUsage(0);
     } finally {
       setLoading(false);
     }
@@ -65,7 +67,7 @@ export function useAIAccess() {
 
   useEffect(() => {
     if (!subscriptionLoading) {
-      fetchDailyUsage();
+      fetchMonthlyUsage();
     }
   }, [subscriptionLoading]);
 
@@ -78,7 +80,7 @@ export function useAIAccess() {
     }
     
     if (subscription.isPro) {
-      if (dailyUsage >= PRO_DAILY_LIMIT) {
+      if (monthlyUsage >= PRO_DAILY_LIMIT) {
         return {
           hasAccess: false,
           reason: 'rate_limit_exceeded',
@@ -89,24 +91,24 @@ export function useAIAccess() {
       
       return {
         hasAccess: true,
-        remainingRequests: PRO_DAILY_LIMIT - dailyUsage,
+        remainingRequests: PRO_DAILY_LIMIT - monthlyUsage,
         maxRequests: PRO_DAILY_LIMIT
       };
     }
     
-    if (dailyUsage >= FREE_DAILY_LIMIT) {
+    if (monthlyUsage >= FREE_MONTHLY_LIMIT) {
       return {
         hasAccess: false,
         reason: 'rate_limit_exceeded',
         remainingRequests: 0,
-        maxRequests: FREE_DAILY_LIMIT
+        maxRequests: FREE_MONTHLY_LIMIT
       };
     }
     
     return {
       hasAccess: true,
-      remainingRequests: FREE_DAILY_LIMIT - dailyUsage,
-      maxRequests: FREE_DAILY_LIMIT
+      remainingRequests: FREE_MONTHLY_LIMIT - monthlyUsage,
+      maxRequests: FREE_MONTHLY_LIMIT
     };
   };
 
@@ -115,7 +117,7 @@ export function useAIAccess() {
     
     if (demoUser) {
       // Demo mode: just increment in-memory counter
-      setDailyUsage(prev => prev + 1);
+      setMonthlyUsage(prev => prev + 1);
       return;
     }
     
@@ -129,16 +131,16 @@ export function useAIAccess() {
       cost_estimate: costEstimate
     });
     
-    await fetchDailyUsage();
+    await fetchMonthlyUsage();
   };
 
   return {
-    hasAccess: subscription?.isPro || (dailyUsage < FREE_DAILY_LIMIT),
+    hasAccess: subscription?.isPro || (monthlyUsage < FREE_MONTHLY_LIMIT),
     isPro: subscription?.isPro || false,
-    dailyUsage,
+    monthlyUsage,
     loading: loading || subscriptionLoading,
     checkAIAccess,
     trackAIUsage,
-    refetchUsage: fetchDailyUsage
+    refetchUsage: fetchMonthlyUsage
   };
 }

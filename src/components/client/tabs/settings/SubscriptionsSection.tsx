@@ -11,7 +11,7 @@ import { ClientUpgradeDialog } from "./ClientUpgradeDialog";
 
 export function SubscriptionsSection() {
   const { subscription, loading: subLoading, upgradeToProViaMock, downgradeToFreeViaMock } = useClientSubscription();
-  const { dailyUsage, loading: usageLoading } = useAIAccess();
+  const { monthlyUsage, loading: usageLoading } = useAIAccess();
   const [showUpgrade, setShowUpgrade] = useState(false);
   
   if (subLoading || usageLoading) {
@@ -20,7 +20,7 @@ export function SubscriptionsSection() {
   
   const isPro = subscription?.isPro || false;
   const maxRequests = isPro ? 100 : 5;
-  const usagePercent = (dailyUsage / maxRequests) * 100;
+  const usagePercent = (monthlyUsage / maxRequests) * 100;
   
   return (
     <div className="space-y-6">
@@ -60,15 +60,15 @@ export function SubscriptionsSection() {
         <CardContent className="space-y-4">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Daily AI Usage</span>
+              <span className="text-sm font-medium">Monthly AI Usage</span>
               <span className="text-sm text-muted-foreground">
-                {dailyUsage}/{maxRequests} requests
+                {monthlyUsage}/{maxRequests} requests
               </span>
             </div>
             <Progress value={usagePercent} className="h-2" />
-            {!isPro && dailyUsage >= 3 && (
+            {!isPro && monthlyUsage >= 3 && (
               <p className="text-xs text-muted-foreground mt-2">
-                You're approaching your daily limit. Upgrade for unlimited access!
+                You're approaching your monthly limit. Upgrade for unlimited access!
               </p>
             )}
           </div>
@@ -87,7 +87,7 @@ export function SubscriptionsSection() {
                   <p className="text-xs text-muted-foreground">
                     {isPro 
                       ? 'Unlimited AI chat during workouts'
-                      : `${Math.max(0, 5 - dailyUsage)} free requests/day remaining`}
+                      : `${Math.max(0, 5 - monthlyUsage)} free requests/month remaining`}
                   </p>
                 </div>
               </div>
