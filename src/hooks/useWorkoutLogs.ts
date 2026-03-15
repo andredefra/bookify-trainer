@@ -12,7 +12,7 @@ export function useWorkoutLogs() {
 
   const loadWorkoutLogs = () => {
     // Clear all existing data completely
-    localStorage.clear();
+    localStorage.removeItem('workoutLogs');
     
     const logs: WorkoutLog[] = [
       {
