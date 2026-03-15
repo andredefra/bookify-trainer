@@ -52,9 +52,8 @@ export function Overview({ progressData, upcomingSessions }: OverviewProps) {
       <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ExpirationAlertsCard />
-        <TrainerCard />
+        <QuickAnalyticsCard />
       </div>
-      <MessagesCard messages={trainerMessages} />
     </div>
   );
 }
