@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { X, User, Calendar, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap, Building2 } from "lucide-react";
+import { X, User, Calendar, CalendarDays, Package, Dumbbell, BookOpen, Users, BarChart3, MessageSquare, Settings, Bell, Clock, Trophy, Zap, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useClientNotifications } from "@/hooks/useClientNotifications";
 
