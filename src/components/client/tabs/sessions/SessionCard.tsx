@@ -126,7 +126,10 @@ export function SessionCard({
         {session.attendees !== undefined && session.maxAttendees && (
           <div className="flex items-center mt-1 text-sm text-muted-foreground">
             <Users className="h-3.5 w-3.5 mr-1" />
-            <span>{session.attendees}/{session.maxAttendees} attending</span>
+            <span className={isFull ? "text-orange-600 font-medium" : ""}>
+              {session.attendees}/{session.maxAttendees} attending
+              {isFull && " · Full"}
+            </span>
           </div>
         )}
       </div>
