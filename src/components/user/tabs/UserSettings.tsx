@@ -349,6 +349,8 @@ export function UserSettings({ user, activeSection }: UserSettingsProps) {
                       rows={3}
                     />
                   </div>
+
+                  <HealthDocumentsUpload />
                   
                   <div className="flex justify-end">
                     <Button onClick={handleSaveProfile} disabled={profileSaving}>
