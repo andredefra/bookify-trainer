@@ -13,8 +13,9 @@ import { format } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { getAllActivityTypes, getActivityTypeById } from "./data/activityTemplates";
 import { estimateCaloriesPreview } from "./utils/calorieCalculator";
-import { ActivityType } from "./types";
+import { ActivityType, ProgressItem } from "./types";
 import { ExerciseSelectorField } from "./fields/ExerciseSelectorField";
+import { Target } from "lucide-react";
 import { ExerciseData } from "@/data/exercises/types";
 
 interface LogActivityDialogProps {
