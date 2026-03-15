@@ -16,6 +16,7 @@ export function MyPackagesTab() {
   const [showBrowsePackages, setShowBrowsePackages] = useState(false);
   const [showManageDialog, setShowManageDialog] = useState(false);
   const [managePackage, setManagePackage] = useState(null);
+  const [selectedHistoryPkg, setSelectedHistoryPkg] = useState<any>(null);
 
   const handlePaymentComplete = () => {
     refetch(); // Refresh package list after purchase
