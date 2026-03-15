@@ -32,6 +32,7 @@ const sidebarItems = [
   { id: "training-log", label: "Workout Log", icon: BookOpen },
   { id: "trainers", label: "Trainers", icon: Users },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "my-calendar", label: "My Calendar", icon: CalendarDays },
   { id: "messages", label: "Messages", icon: MessageSquare, badge: true },
   { id: "settings", label: "Settings", icon: Settings },
 ];

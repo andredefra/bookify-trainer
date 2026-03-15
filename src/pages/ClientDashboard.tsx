@@ -210,6 +210,10 @@ const ClientDashboard = () => {
                 <MyGymTab user={user} />
               </TabsContent>
 
+              <TabsContent value="my-calendar" className="mt-0">
+                <MyCalendarTab upcomingSessions={upcomingSessions} />
+              </TabsContent>
+
               <TabsContent value="messages" className="mt-0">
                 <MessagesTab />
               </TabsContent>
