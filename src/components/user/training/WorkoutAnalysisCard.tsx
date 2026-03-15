@@ -219,7 +219,7 @@ export function WorkoutAnalysisCard({
               variant="outline" 
               size="sm" 
               onClick={analyzeWorkout}
-              disabled={isLoading}
+              disabled={isLoading || isAtLimit}
             >
               <RefreshCw className={`h-3 w-3 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
               Regenerate
@@ -227,6 +227,7 @@ export function WorkoutAnalysisCard({
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
+          <UsageBadge />
           {/* Key Metrics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
