@@ -195,6 +195,33 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivi
             </Select>
           </div>
 
+          {goals.length > 0 && (
+            <div>
+              <Label className="flex items-center gap-1.5">
+                <Target className="h-3.5 w-3.5" />
+                Link to Goal
+              </Label>
+              <Select value={selectedGoalId} onValueChange={setSelectedGoalId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a goal (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No goal linked</SelectItem>
+                  {goals.map((goal) => (
+                    <SelectItem key={goal.id || goal.goal} value={goal.id || goal.goal}>
+                      <div className="flex items-center gap-2">
+                        <span>{goal.goal}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {goal.current}/{goal.target} {goal.unit}
+                        </Badge>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           {renderActivityFields()}
 
           {caloriePreview && (
