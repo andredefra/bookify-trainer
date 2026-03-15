@@ -144,7 +144,6 @@ export function ClientDashboard({ customName }: ClientDashboardProps) {
               <Overview 
                 progressData={progressData}
                 upcomingSessions={upcomingSessions}
-                trainerMessages={trainerMessages}
               />
             )}
             {activeTab === "sessions" && <SessionsTab upcomingSessions={upcomingSessions} />}
