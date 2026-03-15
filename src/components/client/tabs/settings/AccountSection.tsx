@@ -386,6 +386,8 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
               rows={3}
             />
           </div>
+
+          <HealthDocumentsUpload />
           
           <div className="flex justify-end">
             <Button onClick={handleSaveHealthInfo} disabled={savingHealth}>
