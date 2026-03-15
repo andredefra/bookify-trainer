@@ -87,6 +87,8 @@ export function SessionCard({
     }
   }, [isLive, isVideoSession, session, onJoinSession]);
   
+  const isFull = session.attendees !== undefined && session.maxAttendees !== undefined && session.attendees >= session.maxAttendees;
+
   return (
     <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
       <div>
