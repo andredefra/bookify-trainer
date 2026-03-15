@@ -20,20 +20,12 @@ export function useAIAccess() {
   const [loading, setLoading] = useState(!isDemoUser);
 
   const fetchMonthlyUsage = async () => {
+    // Never run for demo users
+    if (isDemoUser) return;
+    
     try {
-      const demoUser = localStorage.getItem('demo-user');
-      let userId: string | undefined;
-      
-      if (demoUser) {
-        userId = getCurrentDemoUserId();
-        // Demo user: simulate some usage
-        setMonthlyUsage(4);
-        setLoading(false);
-        return;
-      }
-      
       const { data: { user } } = await supabase.auth.getUser();
-      userId = user?.id;
+      const userId = user?.id;
       
       if (!userId) {
         setMonthlyUsage(0);
@@ -41,7 +33,6 @@ export function useAIAccess() {
         return;
       }
       
-      // Get start of current month
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
       startOfMonth.setHours(0, 0, 0, 0);
@@ -66,11 +57,18 @@ export function useAIAccess() {
     }
   };
 
+  // Demo users: set usage immediately, no async needed
   useEffect(() => {
+    if (isDemoUser) {
+      setMonthlyUsage(4);
+      setLoading(false);
+      return;
+    }
+    // Real users: wait for subscription to load first
     if (!subscriptionLoading) {
       fetchMonthlyUsage();
     }
-  }, [subscriptionLoading]);
+  }, [subscriptionLoading, isDemoUser]);
 
   const checkAIAccess = async (feature: 'chat' | 'vision' | 'image_gen'): Promise<AIAccessResult> => {
     if (!subscription) {
