@@ -70,12 +70,14 @@ export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivi
     onSubmit({
       date: date.toISOString(),
       activityTypeId,
+      goalId: selectedGoalId !== "none" ? selectedGoalId : undefined,
       ...enhancedFormData
     });
     
     setFormData({ note: "" });
     setSelectedExercises({});
     setActivityTypeId("general");
+    setSelectedGoalId("none");
     setDate(new Date());
     onOpenChange(false);
   };
