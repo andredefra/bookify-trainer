@@ -6,7 +6,7 @@ export function useWorkoutLogs() {
 
   useEffect(() => {
     // Force clear everything and reload with fresh data
-    localStorage.clear();
+    localStorage.removeItem('workoutLogs');
     loadWorkoutLogs();
   }, []);
 
