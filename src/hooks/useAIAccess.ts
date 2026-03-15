@@ -25,10 +25,14 @@ export function useAIAccess() {
   const [monthlyUsage, setMonthlyUsage] = useState(demoMode ? DEMO_INITIAL_USAGE : 0);
   const [loading, setLoading] = useState(!demoMode);
 
+  console.log('[useAIAccess] render:', { demoMode, monthlyUsage, loading, subscriptionLoading, subscription: subscription ? { isPro: subscription.isPro, plan: subscription.plan } : null });
+
   useEffect(() => {
+    console.log('[useAIAccess] effect running:', { demoRef: demoRef.current, isDemoMode: isDemoMode(), subscriptionLoading });
     // Demo users: always force usage to DEMO_INITIAL_USAGE, never fetch
     if (demoRef.current || isDemoMode()) {
       demoRef.current = true;
+      console.log('[useAIAccess] setting demo usage to', DEMO_INITIAL_USAGE);
       setMonthlyUsage(prev => prev < DEMO_INITIAL_USAGE ? DEMO_INITIAL_USAGE : prev);
       setLoading(false);
       return;
