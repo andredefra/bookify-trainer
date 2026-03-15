@@ -87,6 +87,8 @@ export function SessionCard({
     }
   }, [isLive, isVideoSession, session, onJoinSession]);
   
+  const isFull = session.attendees !== undefined && session.maxAttendees !== undefined && session.attendees >= session.maxAttendees;
+
   return (
     <div className={`flex items-center justify-between p-4 ${bgColor} rounded-lg`}>
       <div>
@@ -126,7 +128,10 @@ export function SessionCard({
         {session.attendees !== undefined && session.maxAttendees && (
           <div className="flex items-center mt-1 text-sm text-muted-foreground">
             <Users className="h-3.5 w-3.5 mr-1" />
-            <span>{session.attendees}/{session.maxAttendees} attending</span>
+            <span className={isFull ? "text-orange-600 font-medium" : ""}>
+              {session.attendees}/{session.maxAttendees} attending
+              {isFull && " · Full"}
+            </span>
           </div>
         )}
       </div>
@@ -157,10 +162,21 @@ export function SessionCard({
           </>
         ) : (
           <>
-            {onViewDetails && (
+            {onViewDetails && !isFull && (
               <Button variant="outline" size="sm" onClick={() => onViewDetails(session)}>
                 Register to this session
               </Button>
+            )}
+            {isFull && onViewDetails && (
+              <div className="flex flex-col items-end gap-1">
+                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                  Fully Booked
+                </Badge>
+                <Button variant="outline" size="sm" className="text-orange-700 border-orange-200 hover:bg-orange-50" onClick={() => onViewDetails(session)}>
+                  <Users className="h-3.5 w-3.5 mr-1" />
+                  Join Waitlist
+                </Button>
+              </div>
             )}
           </>
         )}

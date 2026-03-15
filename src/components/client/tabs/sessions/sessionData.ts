@@ -30,7 +30,7 @@ export const availableSessions: SessionItem[] = [
     date: "Tuesday, July 4", 
     status: "available" as SessionStatus, 
     price: 20,
-    attendees: 12,
+    attendees: 20,
     maxAttendees: 20,
     mode: "in-person",
     address: "123 Wellness Street, Downtown Fitness Center, New York, NY 10001",
