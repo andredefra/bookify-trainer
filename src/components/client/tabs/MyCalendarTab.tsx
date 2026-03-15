@@ -8,17 +8,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Bed, Video, MapPin, User } from "lucide-react";
+import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Bed, Video, MapPin, User, Send, Info } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
 import { format, isSameDay, parseISO, isToday, isTomorrow, addDays } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface PlannedActivity {
   id: string;
   date: Date;
   time: string;
+  category: "training" | "session";
   type: "workout" | "cardio" | "stretching" | "rest";
   notes: string;
+  trainer?: string;
+  sessionMode?: "video" | "in-person";
+  requestStatus?: "pending" | "confirmed" | "declined";
+  trainerPlan?: "free" | "essential" | "pro";
 }
 
 interface MyCalendarTabProps {
@@ -32,12 +38,17 @@ const activityTypes = [
   { value: "rest", label: "Rest Day", icon: Bed, color: "bg-green-500" },
 ];
 
+const mockTrainers = [
+  { id: "1", name: "Marco Rossi", plan: "pro" as const },
+  { id: "2", name: "Laura Bianchi", plan: "essential" as const },
+  { id: "3", name: "Giovanni Verdi", plan: "free" as const },
+];
+
 function resolveSessionDate(dateStr: string | Date): Date {
   if (dateStr instanceof Date) return dateStr;
   const lower = dateStr.toLowerCase();
   if (lower === "today") return new Date();
   if (lower === "tomorrow") return addDays(new Date(), 1);
-  // Try day names
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
   const dayIndex = days.indexOf(lower);
   if (dayIndex !== -1) {
@@ -52,38 +63,86 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [newActivity, setNewActivity] = useState({ time: "09:00", type: "workout", notes: "" });
+  const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
+  const [newActivity, setNewActivity] = useState({
+    time: "09:00",
+    type: "workout",
+    notes: "",
+    trainerId: "",
+    sessionMode: "in-person" as "video" | "in-person",
+  });
+  const { toast } = useToast();
 
-  // Resolve session dates
   const sessionsWithDates = useMemo(() =>
     upcomingSessions.map(s => ({ ...s, resolvedDate: resolveSessionDate(s.date) })),
     [upcomingSessions]
   );
 
-  // Days that have activities
   const daysWithSessions = useMemo(() =>
     sessionsWithDates.map(s => s.resolvedDate),
     [sessionsWithDates]
   );
   const daysWithPlanned = useMemo(() =>
-    plannedActivities.map(a => a.date),
+    plannedActivities.filter(a => a.category === "training").map(a => a.date),
+    [plannedActivities]
+  );
+  const daysWithSessionRequests = useMemo(() =>
+    plannedActivities.filter(a => a.category === "session").map(a => a.date),
     [plannedActivities]
   );
 
-  // Activities for selected date
   const selectedDaySessions = sessionsWithDates.filter(s => isSameDay(s.resolvedDate, selectedDate));
   const selectedDayPlanned = plannedActivities.filter(a => isSameDay(a.date, selectedDate));
 
   const handleAddActivity = () => {
-    const activity: PlannedActivity = {
-      id: crypto.randomUUID(),
-      date: selectedDate,
-      time: newActivity.time,
-      type: newActivity.type as PlannedActivity["type"],
-      notes: newActivity.notes,
-    };
-    setPlannedActivities(prev => [...prev, activity]);
-    setNewActivity({ time: "09:00", type: "workout", notes: "" });
+    if (eventCategory === "session") {
+      const trainer = mockTrainers.find(t => t.id === newActivity.trainerId);
+      if (!trainer) {
+        toast({ title: "Please select a trainer", variant: "destructive" });
+        return;
+      }
+
+      const isBasicPlan = trainer.plan === "free";
+
+      const activity: PlannedActivity = {
+        id: crypto.randomUUID(),
+        date: selectedDate,
+        time: newActivity.time,
+        category: "session",
+        type: "workout",
+        notes: newActivity.notes,
+        trainer: trainer.name,
+        sessionMode: newActivity.sessionMode,
+        trainerPlan: trainer.plan,
+        requestStatus: isBasicPlan ? undefined : "pending",
+      };
+      setPlannedActivities(prev => [...prev, activity]);
+
+      if (isBasicPlan) {
+        toast({
+          title: "Event added",
+          description: "This trainer is on a basic plan — session added as a calendar event.",
+        });
+      } else {
+        toast({
+          title: "Request sent",
+          description: `Session request sent to ${trainer.name}.`,
+        });
+      }
+    } else {
+      const activity: PlannedActivity = {
+        id: crypto.randomUUID(),
+        date: selectedDate,
+        time: newActivity.time,
+        category: "training",
+        type: newActivity.type as PlannedActivity["type"],
+        notes: newActivity.notes,
+      };
+      setPlannedActivities(prev => [...prev, activity]);
+    }
+
+    setNewActivity({ time: "09:00", type: "workout", notes: "", trainerId: "", sessionMode: "in-person" });
+    setEventCategory("training");
     setDialogOpen(false);
   };
 
@@ -110,26 +169,62 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
             <CalendarDays className="h-6 w-6 text-primary" />
             My Calendar
           </h1>
-          <p className="text-muted-foreground mt-1">View upcoming activities and plan your training days</p>
+          <p className="text-muted-foreground mt-1">View upcoming activities and plan your events</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Plan Training Day
+              Plan an Event
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Plan Training Day</DialogTitle>
+              <DialogTitle>Plan an Event</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-2">
+              {/* Event category selector */}
+              <div>
+                <Label className="text-sm font-medium">Event Type</Label>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setEventCategory("training")}
+                    className={cn(
+                      "flex items-center gap-2 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      eventCategory === "training"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/50"
+                    )}
+                  >
+                    <Dumbbell className="h-4 w-4" />
+                    Training Day
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEventCategory("session")}
+                    className={cn(
+                      "flex items-center gap-2 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      eventCategory === "session"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/50"
+                    )}
+                  >
+                    <User className="h-4 w-4" />
+                    Session with Trainer
+                  </button>
+                </div>
+              </div>
+
+              {/* Date */}
               <div>
                 <Label className="text-sm font-medium">Date</Label>
                 <p className="text-sm text-muted-foreground mt-1">
                   {format(selectedDate, "EEEE, MMMM d, yyyy")}
                 </p>
               </div>
+
+              {/* Time */}
               <div>
                 <Label htmlFor="time">Time</Label>
                 <Input
@@ -139,34 +234,112 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                   onChange={e => setNewActivity(prev => ({ ...prev, time: e.target.value }))}
                 />
               </div>
-              <div>
-                <Label>Activity Type</Label>
-                <Select value={newActivity.type} onValueChange={v => setNewActivity(prev => ({ ...prev, type: v }))}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {activityTypes.map(t => (
-                      <SelectItem key={t.value} value={t.value}>
-                        <span className="flex items-center gap-2">
-                          <t.icon className="h-4 w-4" />
-                          {t.label}
-                        </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+
+              {/* Category-specific fields */}
+              {eventCategory === "training" ? (
+                <div>
+                  <Label>Activity Type</Label>
+                  <Select value={newActivity.type} onValueChange={v => setNewActivity(prev => ({ ...prev, type: v }))}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activityTypes.map(t => (
+                        <SelectItem key={t.value} value={t.value}>
+                          <span className="flex items-center gap-2">
+                            <t.icon className="h-4 w-4" />
+                            {t.label}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <Label>Trainer</Label>
+                    <Select value={newActivity.trainerId} onValueChange={v => setNewActivity(prev => ({ ...prev, trainerId: v }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a trainer" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockTrainers.map(t => (
+                          <SelectItem key={t.id} value={t.id}>
+                            <span className="flex items-center gap-2">
+                              <User className="h-4 w-4" />
+                              {t.name}
+                              {t.plan === "free" && (
+                                <span className="text-xs text-muted-foreground">(Basic)</span>
+                              )}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Session Mode</Label>
+                    <Select value={newActivity.sessionMode} onValueChange={v => setNewActivity(prev => ({ ...prev, sessionMode: v as "video" | "in-person" }))}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="in-person">
+                          <span className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4" />
+                            In Person
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="video">
+                          <span className="flex items-center gap-2">
+                            <Video className="h-4 w-4" />
+                            Video Call
+                          </span>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {/* Info about basic plan trainers */}
+                  {newActivity.trainerId && mockTrainers.find(t => t.id === newActivity.trainerId)?.plan === "free" && (
+                    <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-sm text-amber-700 dark:text-amber-400">
+                      <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                      <span>This trainer is on a basic plan. The session will be added as a calendar event only — no request will be sent.</span>
+                    </div>
+                  )}
+                  {newActivity.trainerId && mockTrainers.find(t => t.id === newActivity.trainerId)?.plan !== "free" && newActivity.trainerId !== "" && (
+                    <div className="flex items-start gap-2 p-3 rounded-lg bg-primary/10 border border-primary/20 text-sm text-primary">
+                      <Send className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                      <span>A session request will be sent to the trainer for confirmation.</span>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Notes */}
               <div>
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"
-                  placeholder="e.g. Focus on upper body, 45 min..."
+                  placeholder={eventCategory === "training" ? "e.g. Focus on upper body, 45 min..." : "e.g. Want to work on technique..."}
                   value={newActivity.notes}
                   onChange={e => setNewActivity(prev => ({ ...prev, notes: e.target.value }))}
                 />
               </div>
-              <Button onClick={handleAddActivity} className="w-full">Add to Calendar</Button>
+
+              <Button onClick={handleAddActivity} className="w-full gap-2">
+                {eventCategory === "session" && newActivity.trainerId && mockTrainers.find(t => t.id === newActivity.trainerId)?.plan !== "free" ? (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Send Request
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-4 w-4" />
+                    Add to Calendar
+                  </>
+                )}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -184,10 +357,12 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               modifiers={{
                 hasSession: daysWithSessions,
                 hasPlanned: daysWithPlanned,
+                hasRequest: daysWithSessionRequests,
               }}
               modifiersClassNames={{
                 hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
                 hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
+                hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
               }}
             />
             {/* Legend */}
@@ -199,6 +374,10 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               <span className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-green-500" />
                 Planned
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
+                Requests
               </span>
             </div>
           </CardContent>
@@ -216,11 +395,11 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               <div className="text-center py-10 text-muted-foreground">
                 <CalendarDays className="h-10 w-10 mx-auto mb-3 opacity-30" />
                 <p className="font-medium">No activities scheduled</p>
-                <p className="text-sm mt-1">Click "Plan Training Day" to add one</p>
+                <p className="text-sm mt-1">Click &quot;Plan an Event&quot; to add one</p>
               </div>
             ) : (
               <>
-                {/* Sessions */}
+                {/* Trainer sessions */}
                 {selectedDaySessions.map(session => (
                   <div key={session.id} className="flex items-start gap-3 p-3 rounded-lg border bg-primary/5 border-primary/20">
                     <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -241,8 +420,59 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                   </div>
                 ))}
 
-                {/* Planned activities */}
+                {/* Planned activities & session requests */}
                 {selectedDayPlanned.map(activity => {
+                  if (activity.category === "session") {
+                    const isBasic = activity.trainerPlan === "free";
+                    return (
+                      <div key={activity.id} className={cn(
+                        "flex items-start gap-3 p-3 rounded-lg border",
+                        isBasic ? "bg-muted/30" : "bg-amber-500/5 border-amber-500/20"
+                      )}>
+                        <div className={cn(
+                          "h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5",
+                          isBasic ? "bg-muted" : "bg-amber-500/10"
+                        )}>
+                          {activity.sessionMode === "video"
+                            ? <Video className={cn("h-4 w-4", isBasic ? "text-muted-foreground" : "text-amber-600")} />
+                            : <MapPin className={cn("h-4 w-4", isBasic ? "text-muted-foreground" : "text-amber-600")} />
+                          }
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-foreground">Session with {activity.trainer}</p>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5">
+                            <Clock className="h-3.5 w-3.5" />
+                            <span>{activity.time}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5">
+                            {activity.sessionMode === "video" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
+                            <span className="capitalize">{activity.sessionMode === "in-person" ? "In Person" : "Video Call"}</span>
+                          </div>
+                          {activity.notes && (
+                            <p className="text-sm text-muted-foreground mt-1">{activity.notes}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                          {activity.requestStatus === "pending" && (
+                            <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/30 text-xs">Request Sent</Badge>
+                          )}
+                          {activity.requestStatus === "confirmed" && (
+                            <Badge className="bg-green-500/10 text-green-600 border-green-500/30 text-xs">Confirmed</Badge>
+                          )}
+                          {activity.requestStatus === "declined" && (
+                            <Badge variant="destructive" className="text-xs">Declined</Badge>
+                          )}
+                          {isBasic && !activity.requestStatus && (
+                            <Badge variant="outline" className="text-xs">Calendar Event</Badge>
+                          )}
+                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive text-xs h-7" onClick={() => handleRemovePlanned(activity.id)}>
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   const Icon = getActivityIcon(activity.type);
                   const colorClass = getActivityColor(activity.type);
                   return (
