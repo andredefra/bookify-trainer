@@ -26,10 +26,11 @@ interface LogActivityDialogProps {
   goals?: ProgressItem[];
 }
 
-export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivityTypes }: LogActivityDialogProps) {
+export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivityTypes, goals = [] }: LogActivityDialogProps) {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date>(new Date());
   const [activityTypeId, setActivityTypeId] = useState<string>("general");
+  const [selectedGoalId, setSelectedGoalId] = useState<string>("none");
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [selectedExercises, setSelectedExercises] = useState<Record<string, ExerciseData>>({});
   const [activityTypes, setActivityTypes] = useState<ActivityType[]>([]);
