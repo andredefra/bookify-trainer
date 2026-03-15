@@ -41,10 +41,10 @@ export function useClientSubscription() {
       // For demo mode OR demo UUID, create Pro subscription in memory
       if (demoUser || userId === '00000000-0000-0000-0000-000000000002') {
         setSubscription({
-          plan: 'pro',
+          plan: 'free',
           status: 'active',
           isActive: true,
-          isPro: true,
+          isPro: false,
           startDate: new Date().toISOString()
         });
         setLoading(false);
