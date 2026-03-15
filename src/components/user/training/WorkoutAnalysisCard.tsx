@@ -105,10 +105,11 @@ export function WorkoutAnalysisCard({
     return (
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
-            AI Workout Analysis
-          </CardTitle>
+           <CardTitle className="flex items-center gap-2">
+             <Brain className="h-5 w-5 text-primary" />
+             AI Workout Analysis
+             {workoutLog?.name && <span className="text-muted-foreground font-normal text-base">— {workoutLog.name}</span>}
+           </CardTitle>
           <CardDescription>
             Get personalized insights on your training with AI analysis
           </CardDescription>
