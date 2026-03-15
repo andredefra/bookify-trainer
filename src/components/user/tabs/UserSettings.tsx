@@ -30,6 +30,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
+import { HealthDocumentsUpload } from "@/components/common/HealthDocumentsUpload";
 import { useUserProfile, UserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
 
