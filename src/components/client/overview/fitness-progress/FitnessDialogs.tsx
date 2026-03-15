@@ -10,6 +10,7 @@ import { ManageActivityTypesDialog } from "./ManageActivityTypesDialog";
 
 interface FitnessDialogsProps {
   progressData?: ProgressItem[];
+  openDialog: boolean;
   setOpenDialog: (open: boolean) => void;
   openUpdateDialog: boolean;
   setOpenUpdateDialog: (open: boolean) => void;
