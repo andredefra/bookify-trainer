@@ -34,6 +34,7 @@ interface FitnessDialogsProps {
 }
 
 export function FitnessDialogs({
+  progressData,
   openDialog, setOpenDialog, openUpdateDialog, setOpenUpdateDialog, openLogDialog, setOpenLogDialog,
   openWeightDialog, setOpenWeightDialog, openDeleteDialog, setOpenDeleteDialog, openMeasurementsDialog,
   setOpenMeasurementsDialog, openManageActivityTypesDialog, setOpenManageActivityTypesDialog,
