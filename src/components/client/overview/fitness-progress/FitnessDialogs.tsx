@@ -45,7 +45,7 @@ export function FitnessDialogs({
     <>
       <AddGoalDialog open={openDialog} onOpenChange={setOpenDialog} onSubmit={onSubmit} onManageGoalTypes={onManageGoalTypes} />
       <UpdateGoalDialog open={openUpdateDialog} onOpenChange={setOpenUpdateDialog} onSubmit={onUpdateSubmit} selectedGoal={selectedGoal} />
-      <LogActivityDialog open={openLogDialog} onOpenChange={setOpenLogDialog} onSubmit={onLogSubmit} onManageActivityTypes={() => { setOpenLogDialog(false); setOpenManageActivityTypesDialog(true); }} />
+      <LogActivityDialog open={openLogDialog} onOpenChange={setOpenLogDialog} onSubmit={onLogSubmit} onManageActivityTypes={() => { setOpenLogDialog(false); setOpenManageActivityTypesDialog(true); }} goals={progressData} />
       <LogWeightDialog open={openWeightDialog} onOpenChange={setOpenWeightDialog} onSubmit={onWeightSubmit} />
       <BodyMeasurementsDialog open={openMeasurementsDialog} onOpenChange={setOpenMeasurementsDialog} onSubmit={onMeasurementsSubmit} />
       <DeleteGoalDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog} onDelete={onDeleteGoal} selectedGoal={selectedGoal} />
