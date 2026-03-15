@@ -139,18 +139,6 @@ export function UserTrainingLog() {
         </Card>
       )}
 
-      {/* AI Analysis Card */}
-      {selectedWorkoutForAnalysis && (
-        <WorkoutAnalysisCard
-          workoutLog={selectedWorkoutForAnalysis}
-          fitnessData={mockFitnessData}
-          userProfile={userProfile}
-          onAnalysisComplete={(analysis) => {
-            console.log('Analysis completed:', analysis);
-          }}
-        />
-      )}
-
       {/* Recent Workouts */}
       <Card>
         <CardHeader>
@@ -174,53 +162,68 @@ export function UserTrainingLog() {
           ) : (
             <div className="space-y-4">
               {workoutLogs.slice(0, 5).map((workout) => (
-                <div key={workout.id} className="border rounded-lg p-4 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="text-center">
-                        <div className="text-sm font-medium">
-                          {new Date(workout.date).toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}
+                <div key={workout.id}>
+                  <div className={`border rounded-lg p-4 hover:bg-muted/30 transition-colors ${selectedWorkoutForAnalysis?.id === workout.id ? 'border-primary/50 bg-primary/5' : ''}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="text-center">
+                          <div className="text-sm font-medium">
+                            {new Date(workout.date).toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}
+                          </div>
+                          <div className="text-lg font-bold text-primary">
+                            {new Date(workout.date).getDate()}
+                          </div>
                         </div>
-                        <div className="text-lg font-bold text-primary">
-                          {new Date(workout.date).getDate()}
+                        <div className="flex-1">
+                          <h3 className="font-medium">{workout.name}</h3>
+                          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                            <Clock className="h-4 w-4" />
+                            <span>{workout.duration || 'Duration not specified'}</span>
+                            <span>•</span>
+                            <span>{workout.exercises.length} exercises</span>
+                          </div>
+                          {workout.notes && (
+                            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                              {workout.notes}
+                            </p>
+                          )}
                         </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium">{workout.name}</h3>
-                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                          <Clock className="h-4 w-4" />
-                          <span>{workout.duration || 'Duration not specified'}</span>
-                          <span>•</span>
-                          <span>{workout.exercises.length} exercises</span>
-                        </div>
-                        {workout.notes && (
-                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                            {workout.notes}
-                          </p>
-                        )}
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="secondary">Completed</Badge>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => setSelectedWorkoutForAnalysis(
+                            selectedWorkoutForAnalysis?.id === workout.id ? null : workout
+                          )}
+                          className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
+                        >
+                          <Brain className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => handleEditWorkout(workout)}
+                        >
+                          <Edit3 className="h-4 w-4" />
+                        </Button>
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary">Completed</Badge>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => setSelectedWorkoutForAnalysis(
-                          selectedWorkoutForAnalysis?.id === workout.id ? null : workout
-                        )}
-                        className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
-                      >
-                        <Brain className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => handleEditWorkout(workout)}
-                      >
-                        <Edit3 className="h-4 w-4" />
-                      </Button>
                     </div>
                   </div>
+                  {/* Inline AI Analysis - appears below the selected workout */}
+                  {selectedWorkoutForAnalysis?.id === workout.id && (
+                    <div className="mt-2 ml-4 border-l-2 border-primary/30 pl-4">
+                      <WorkoutAnalysisCard
+                        workoutLog={workout}
+                        fitnessData={mockFitnessData}
+                        userProfile={userProfile}
+                        onAnalysisComplete={(analysis) => {
+                          console.log('Analysis completed:', analysis);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
