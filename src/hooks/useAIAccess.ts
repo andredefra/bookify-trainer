@@ -26,7 +26,7 @@ export function useAIAccess() {
       if (demoUser) {
         userId = getCurrentDemoUserId();
         // Demo user: simulate some usage
-        setMonthlyUsage(2);
+        setMonthlyUsage(4);
         setLoading(false);
         return;
       }
