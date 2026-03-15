@@ -22,6 +22,7 @@ interface LogActivityDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => void;
   onManageActivityTypes?: () => void;
+  goals?: ProgressItem[];
 }
 
 export function LogActivityDialog({ open, onOpenChange, onSubmit, onManageActivityTypes }: LogActivityDialogProps) {
