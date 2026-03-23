@@ -39,6 +39,7 @@ interface ExerciseLibraryDialogContentProps {
   onEditExercise: (id: string, updates: Partial<ExerciseData>) => void;
   onResetExercise: (id: string) => void;
   onDeleteExercise: (id: string) => void;
+  onCopyExercise?: (exercise: ExerciseData) => void;
   onClose: () => void;
   selectionMode?: boolean;
   onExerciseSelect?: (exercise: ExerciseData) => void;
@@ -68,6 +69,7 @@ export function ExerciseLibraryDialogContent({
   onEditExercise,
   onResetExercise,
   onDeleteExercise,
+  onCopyExercise,
   selectionMode = false,
   onExerciseSelect,
 }: ExerciseLibraryDialogContentProps) {
@@ -128,6 +130,7 @@ export function ExerciseLibraryDialogContent({
             exercises={paginatedExercises}
             onEdit={handleEditExercise}
             onDelete={onDeleteExercise}
+            onCopy={onCopyExercise}
             selectionMode={selectionMode}
             onSelect={handleExerciseSelection}
           />

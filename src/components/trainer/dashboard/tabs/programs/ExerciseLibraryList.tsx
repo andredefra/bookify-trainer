@@ -8,6 +8,7 @@ interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
   onEdit: (exercise: ExerciseData) => void;
   onDelete: (id: string) => void;
+  onCopy?: (exercise: ExerciseData) => void;
   selectionMode?: boolean;
   onSelect?: (exercise: ExerciseData) => void;
 }
@@ -16,6 +17,7 @@ export function ExerciseLibraryList({
   exercises,
   onEdit,
   onDelete,
+  onCopy,
   selectionMode = false,
   onSelect,
 }: ExerciseLibraryListProps) {
@@ -65,6 +67,7 @@ export function ExerciseLibraryList({
               onSelect={onSelect}
               onEdit={onEdit}
               onDelete={onDelete}
+              onCopy={onCopy}
               onViewDetails={handleViewDetails}
               selectionMode={selectionMode}
               compact={isMobile}

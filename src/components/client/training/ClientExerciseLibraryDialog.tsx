@@ -34,6 +34,7 @@ export function ClientExerciseLibraryDialog({ open, onOpenChange }: ClientExerci
     handleSaveExercise,
     handleResetExercise,
     handleDeleteExercise,
+    handleCopyExercise,
     retry,
   } = useClientExerciseLibrary();
 
@@ -171,6 +172,7 @@ export function ClientExerciseLibraryDialog({ open, onOpenChange }: ClientExerci
             onEditExercise={safeEditExercise}
             onResetExercise={handleResetExercise}
             onDeleteExercise={safeDeleteExercise}
+            onCopyExercise={handleCopyExercise}
             onClose={() => onOpenChange(false)}
             selectionMode={false}
           />

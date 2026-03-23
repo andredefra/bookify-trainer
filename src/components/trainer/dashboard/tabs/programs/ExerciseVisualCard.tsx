@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { ExerciseData } from '@/data/exercises/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Play, Plus, Edit, Trash2, Video, Dumbbell, Eye } from 'lucide-react';
+import { Play, Plus, Edit, Trash2, Video, Dumbbell, Eye, Copy } from 'lucide-react';
 import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor, getExerciseGifUrl } from '@/data/exercises/biomechanicsMapping';
 import { getExerciseVideoUrl } from '@/data/exercises/videoUrls';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ interface ExerciseVisualCardProps {
   onEdit?: (exercise: ExerciseData) => void;
   onDelete?: (id: string) => void;
   onViewDetails?: (exercise: ExerciseData) => void;
+  onCopy?: (exercise: ExerciseData) => void;
   selectionMode?: boolean;
   compact?: boolean;
 }
@@ -74,6 +75,7 @@ export const ExerciseVisualCard = memo(({
   onEdit,
   onDelete,
   onViewDetails,
+  onCopy,
   selectionMode = false,
   compact = false,
 }: ExerciseVisualCardProps) => {
@@ -281,7 +283,7 @@ export const ExerciseVisualCard = memo(({
         )}
 
         {/* Action buttons - only in edit mode */}
-        {!selectionMode && (onEdit || onDelete) && (
+        {!selectionMode && (onEdit || onDelete || onCopy) && (
           <div className="flex gap-1 pt-1 border-t">
             {onViewDetails && (
               <Button 
@@ -305,7 +307,21 @@ export const ExerciseVisualCard = memo(({
                 Video
               </Button>
             )}
-            {onEdit && (
+            {onCopy && exercise.readOnly && (
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCopy(exercise);
+                }}
+                className="h-7 px-2 text-xs"
+                title="Copy to My Exercises"
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
+            )}
+            {onEdit && !exercise.readOnly && (
               <Button 
                 size="sm" 
                 variant="ghost" 
@@ -318,7 +334,7 @@ export const ExerciseVisualCard = memo(({
                 <Edit className="h-3 w-3" />
               </Button>
             )}
-            {onDelete && (
+            {onDelete && !exercise.readOnly && (
               <Button 
                 size="sm" 
                 variant="ghost" 
