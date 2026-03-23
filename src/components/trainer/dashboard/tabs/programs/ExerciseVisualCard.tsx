@@ -283,7 +283,7 @@ export const ExerciseVisualCard = memo(({
         )}
 
         {/* Action buttons - only in edit mode */}
-        {!selectionMode && (onEdit || onDelete) && (
+        {!selectionMode && (onEdit || onDelete || onCopy) && (
           <div className="flex gap-1 pt-1 border-t">
             {onViewDetails && (
               <Button 
@@ -307,7 +307,21 @@ export const ExerciseVisualCard = memo(({
                 Video
               </Button>
             )}
-            {onEdit && (
+            {onCopy && exercise.readOnly && (
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCopy(exercise);
+                }}
+                className="h-7 px-2 text-xs"
+                title="Copy to My Exercises"
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
+            )}
+            {onEdit && !exercise.readOnly && (
               <Button 
                 size="sm" 
                 variant="ghost" 
@@ -320,7 +334,7 @@ export const ExerciseVisualCard = memo(({
                 <Edit className="h-3 w-3" />
               </Button>
             )}
-            {onDelete && (
+            {onDelete && !exercise.readOnly && (
               <Button 
                 size="sm" 
                 variant="ghost" 
