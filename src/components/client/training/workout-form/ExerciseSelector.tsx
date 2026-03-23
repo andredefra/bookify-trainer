@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Search, Dumbbell, X, User, GraduationCap } from "lucide-react";
 import { ExerciseData, Mechanics, ForceType } from "@/data/exercises/types";
 import { deriveMechanics, deriveForceType } from "@/data/exercises/biomechanicsMapping";
