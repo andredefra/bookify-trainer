@@ -34,6 +34,7 @@ export function ClientExerciseLibraryDialog({ open, onOpenChange }: ClientExerci
     handleSaveExercise,
     handleResetExercise,
     handleDeleteExercise,
+    handleCopyExercise,
     retry,
   } = useClientExerciseLibrary();
 
