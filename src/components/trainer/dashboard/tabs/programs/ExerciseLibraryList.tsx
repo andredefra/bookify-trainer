@@ -8,6 +8,7 @@ interface ExerciseLibraryListProps {
   exercises: ExerciseData[];
   onEdit: (exercise: ExerciseData) => void;
   onDelete: (id: string) => void;
+  onCopy?: (exercise: ExerciseData) => void;
   selectionMode?: boolean;
   onSelect?: (exercise: ExerciseData) => void;
 }
