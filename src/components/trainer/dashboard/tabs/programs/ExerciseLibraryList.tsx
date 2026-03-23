@@ -17,6 +17,7 @@ export function ExerciseLibraryList({
   exercises,
   onEdit,
   onDelete,
+  onCopy,
   selectionMode = false,
   onSelect,
 }: ExerciseLibraryListProps) {
