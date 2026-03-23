@@ -39,6 +39,7 @@ interface ExerciseLibraryDialogContentProps {
   onEditExercise: (id: string, updates: Partial<ExerciseData>) => void;
   onResetExercise: (id: string) => void;
   onDeleteExercise: (id: string) => void;
+  onCopyExercise?: (exercise: ExerciseData) => void;
   onClose: () => void;
   selectionMode?: boolean;
   onExerciseSelect?: (exercise: ExerciseData) => void;
