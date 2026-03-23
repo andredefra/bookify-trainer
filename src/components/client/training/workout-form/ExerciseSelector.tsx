@@ -233,36 +233,43 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
             </div>
           )}
 
-          {/* Exercise Grid - Grouped by Source */}
-          <div className="flex-1 overflow-y-auto min-h-0 space-y-6">
-            {/* My Exercises Section */}
-            {myExercises.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-3 px-1">
-                  <User className="h-4 w-4 text-primary" />
-                  <h3 className="text-sm font-semibold text-foreground">My Exercises</h3>
-                  <Badge variant="secondary" className="text-xs">{myExercises.length}</Badge>
-                </div>
-                {renderExerciseGrid(myExercises)}
-              </div>
-            )}
+          {/* Tabs for source filtering + Exercise Grid */}
+          <Tabs defaultValue="all" className="flex-1 flex flex-col overflow-hidden">
+            <TabsList className="w-full justify-start shrink-0">
+              <TabsTrigger value="all" className="gap-1.5">
+                All
+                <Badge variant="secondary" className="text-xs h-5 px-1.5">{filteredExercises.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="mine" className="gap-1.5">
+                <User className="h-3.5 w-3.5" />
+                My Exercises
+                <Badge variant="secondary" className="text-xs h-5 px-1.5">{myExercises.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="trainer" className="gap-1.5">
+                <GraduationCap className="h-3.5 w-3.5" />
+                Trainer's
+                <Badge variant="secondary" className="text-xs h-5 px-1.5">{trainerExercises.length}</Badge>
+              </TabsTrigger>
+            </TabsList>
 
-            {/* Trainer's Exercises Section */}
-            {trainerExercises.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-3 px-1">
-                  <GraduationCap className="h-4 w-4 text-accent-foreground" />
-                  <h3 className="text-sm font-semibold text-foreground">Trainer's Exercises</h3>
-                  <Badge variant="outline" className="text-xs">{trainerExercises.length}</Badge>
-                </div>
-                {renderExerciseGrid(trainerExercises)}
-              </div>
-            )}
+            <TabsContent value="all" className="flex-1 overflow-y-auto min-h-0 mt-3">
+              {filteredExercises.length > 0 ? renderExerciseGrid(filteredExercises, 60) : (
+                <p className="text-center text-sm text-muted-foreground py-8">No exercises match your filters.</p>
+              )}
+            </TabsContent>
 
-            {filteredExercises.length === 0 && (
-              <p className="text-center text-sm text-muted-foreground py-8">No exercises match your filters.</p>
-            )}
-          </div>
+            <TabsContent value="mine" className="flex-1 overflow-y-auto min-h-0 mt-3">
+              {myExercises.length > 0 ? renderExerciseGrid(myExercises) : (
+                <p className="text-center text-sm text-muted-foreground py-8">No personal exercises match your filters.</p>
+              )}
+            </TabsContent>
+
+            <TabsContent value="trainer" className="flex-1 overflow-y-auto min-h-0 mt-3">
+              {trainerExercises.length > 0 ? renderExerciseGrid(trainerExercises) : (
+                <p className="text-center text-sm text-muted-foreground py-8">No trainer exercises available.</p>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </DialogContent>
     </Dialog>
