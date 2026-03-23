@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Dumbbell, X } from "lucide-react";
+import { Search, Dumbbell, X, User, GraduationCap } from "lucide-react";
 import { ExerciseData, Mechanics, ForceType } from "@/data/exercises/types";
 import { deriveMechanics, deriveForceType } from "@/data/exercises/biomechanicsMapping";
 import { ExerciseVisualCard } from "@/components/trainer/dashboard/tabs/programs/ExerciseVisualCard";
@@ -28,7 +28,6 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
   const [forceTypeFilter, setForceTypeFilter] = useState<'all' | ForceType>('all');
   const isMobile = useIsMobile();
 
-  // Use the merged client + trainer exercise database
   const { exercises: mergedExercises } = useClientExerciseLibrary();
 
   const categories = [
@@ -78,6 +77,9 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
     return matchesSearch && matchesCategory && matchesDifficulty && matchesEquipment && matchesMechanics && matchesForceType;
   }), [mergedExercises, searchQuery, categoryFilter, difficultyFilter, equipmentFilter, mechanicsFilter, forceTypeFilter]);
 
+  const myExercises = useMemo(() => filteredExercises.filter(e => e.source === 'client' || !e.source), [filteredExercises]);
+  const trainerExercises = useMemo(() => filteredExercises.filter(e => e.source === 'trainer'), [filteredExercises]);
+
   const handleExerciseSelect = (exercise: ExerciseData) => {
     onSelect(exercise);
     setOpen(false);
@@ -100,6 +102,20 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
     setForceTypeFilter('all');
     setSearchQuery('');
   };
+
+  const renderExerciseGrid = (exercises: ExerciseData[], maxItems = 30) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
+      {exercises.slice(0, maxItems).map((exercise) => (
+        <ExerciseVisualCard
+          key={exercise.id}
+          exercise={exercise}
+          onSelect={handleExerciseSelect}
+          selectionMode={true}
+          compact={isMobile}
+        />
+      ))}
+    </div>
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -130,7 +146,7 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
             />
           </div>
 
-          {/* Filter Row 1: Dropdowns */}
+          {/* Filters */}
           <div className="flex gap-2 flex-wrap">
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-[140px]">
@@ -138,9 +154,7 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </SelectItem>
+                  <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -151,9 +165,7 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
               </SelectTrigger>
               <SelectContent>
                 {difficulties.map((diff) => (
-                  <SelectItem key={diff.value} value={diff.value}>
-                    {diff.label}
-                  </SelectItem>
+                  <SelectItem key={diff.value} value={diff.value}>{diff.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -164,88 +176,90 @@ export function ExerciseSelector({ value, onSelect, placeholder = "Select an exe
               </SelectTrigger>
               <SelectContent>
                 {equipmentOptions.map((eq) => (
-                  <SelectItem key={eq.value} value={eq.value}>
-                    {eq.label}
-                  </SelectItem>
+                  <SelectItem key={eq.value} value={eq.value}>{eq.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
-          {/* Filter Row 2: Biomechanics Toggle Buttons */}
+          {/* Biomechanics Filters */}
           <div className="flex flex-wrap gap-4">
-            {/* Mechanics Filter */}
             <div className="flex items-center gap-1">
               <span className="text-xs text-muted-foreground mr-1">Mechanics:</span>
               <div className="flex gap-1">
-                {(['all', 'compound', 'isolation'] as const).map((value) => (
+                {(['all', 'compound', 'isolation'] as const).map((val) => (
                   <Button
-                    key={value}
+                    key={val}
                     size="sm"
-                    variant={mechanicsFilter === value ? 'default' : 'outline'}
-                    onClick={() => setMechanicsFilter(value)}
+                    variant={mechanicsFilter === val ? 'default' : 'outline'}
+                    onClick={() => setMechanicsFilter(val)}
                     className="h-7 px-2 text-xs"
                   >
-                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+                    {val === 'all' ? 'All' : val.charAt(0).toUpperCase() + val.slice(1)}
                   </Button>
                 ))}
               </div>
             </div>
 
-            {/* Force Type Filter */}
             <div className="flex items-center gap-1">
               <span className="text-xs text-muted-foreground mr-1">Force:</span>
               <div className="flex gap-1 flex-wrap">
-                {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((value) => (
+                {(['all', 'push', 'pull', 'static', 'hinge', 'squat'] as const).map((val) => (
                   <Button
-                    key={value}
+                    key={val}
                     size="sm"
-                    variant={forceTypeFilter === value ? 'default' : 'outline'}
-                    onClick={() => setForceTypeFilter(value)}
+                    variant={forceTypeFilter === val ? 'default' : 'outline'}
+                    onClick={() => setForceTypeFilter(val)}
                     className="h-7 px-2 text-xs"
                   >
-                    {value === 'all' ? 'All' : value.charAt(0).toUpperCase() + value.slice(1)}
+                    {val === 'all' ? 'All' : val.charAt(0).toUpperCase() + val.slice(1)}
                   </Button>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Active Filters Summary */}
+          {/* Active Filters */}
           {activeFiltersCount > 0 && (
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="text-xs">
                 {activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''} active
               </Badge>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={clearAllFilters}
-                className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
-              >
+              <Button variant="ghost" size="sm" onClick={clearAllFilters} className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground">
                 <X className="h-3 w-3 mr-1" />
                 Clear all
               </Button>
             </div>
           )}
 
-          {/* Exercise Grid */}
-          <div className="flex-1 overflow-y-auto min-h-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
-              {filteredExercises.slice(0, 50).map((exercise) => (
-                <ExerciseVisualCard
-                  key={exercise.id}
-                  exercise={exercise}
-                  onSelect={handleExerciseSelect}
-                  selectionMode={true}
-                  compact={isMobile}
-                />
-              ))}
-            </div>
-            {filteredExercises.length > 50 && (
-              <p className="text-center text-sm text-muted-foreground py-4">
-                Showing first 50 of {filteredExercises.length} exercises. Use filters to narrow down.
-              </p>
+          {/* Exercise Grid - Grouped by Source */}
+          <div className="flex-1 overflow-y-auto min-h-0 space-y-6">
+            {/* My Exercises Section */}
+            {myExercises.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3 px-1">
+                  <User className="h-4 w-4 text-primary" />
+                  <h3 className="text-sm font-semibold text-foreground">My Exercises</h3>
+                  <Badge variant="secondary" className="text-xs">{myExercises.length}</Badge>
+                </div>
+                {renderExerciseGrid(myExercises)}
+              </div>
+            )}
+
+            {/* Trainer's Exercises Section */}
+            {trainerExercises.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3 px-1">
+                  <GraduationCap className="h-4 w-4 text-accent-foreground" />
+                  <h3 className="text-sm font-semibold text-foreground">Trainer's Exercises</h3>
+                  <Badge variant="outline" className="text-xs">{trainerExercises.length}</Badge>
+                </div>
+                {renderExerciseGrid(trainerExercises)}
+              </div>
+            )}
+
+            {filteredExercises.length === 0 && (
+              <p className="text-center text-sm text-muted-foreground py-8">No exercises match your filters.</p>
             )}
           </div>
         </div>
