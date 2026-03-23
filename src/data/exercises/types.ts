@@ -24,6 +24,10 @@ export interface ExerciseData {
   activityType?: ActivityType;
   
   // GIF/Media Fields
-  demonstrationGif?: string;  // System default GIF URL
-  customGifUrl?: string;      // Trainer override GIF URL
+  demonstrationGif?: string;
+  customGifUrl?: string;
+  
+  // Source tracking (for client library)
+  source?: 'client' | 'trainer';
+  readOnly?: boolean;
 }

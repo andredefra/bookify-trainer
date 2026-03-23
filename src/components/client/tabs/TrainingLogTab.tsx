@@ -2,14 +2,16 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Plus, Edit3, Clock, Brain, TrendingUp, Target } from "lucide-react";
+import { Calendar, Plus, Edit3, Clock, Brain, TrendingUp, Target, Dumbbell } from "lucide-react";
 import { useWorkoutLogs } from "@/hooks/useWorkoutLogs";
 import { NewWorkoutLogForm } from "@/components/client/training/workout-form/NewWorkoutLogForm";
 import { WorkoutAnalysisCard } from "@/components/user/training/WorkoutAnalysisCard";
+import { ClientExerciseLibraryDialog } from "@/components/client/training/ClientExerciseLibraryDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function TrainingLogTab() {
   const [showAddWorkout, setShowAddWorkout] = useState(false);
+  const [showExerciseLibrary, setShowExerciseLibrary] = useState(false);
   const [selectedWorkoutForAnalysis, setSelectedWorkoutForAnalysis] = useState<any>(null);
   const [editingWorkout, setEditingWorkout] = useState<any>(null);
   const { workoutLogs } = useWorkoutLogs();
@@ -41,7 +43,7 @@ export function TrainingLogTab() {
     totalExercises: workoutLogs.reduce((total, workout) => total + workout.exercises.length, 0),
     estimatedCalories: workoutLogs.reduce((total, workout) => {
       const duration = parseInt(workout.duration) || 0;
-      return total + (duration * 8); // ~8 calories per minute
+      return total + (duration * 8);
     }, 0)
   };
 
@@ -53,14 +55,25 @@ export function TrainingLogTab() {
           <h1 className={`font-bold ${isMobile ? 'text-xl' : 'text-2xl'}`}>Training Log</h1>
           <p className="text-muted-foreground text-sm">Track your workouts and monitor progress</p>
         </div>
-        <Button 
-          onClick={() => setShowAddWorkout(!showAddWorkout)} 
-          className="flex items-center space-x-2"
-          size={isMobile ? "sm" : "default"}
-        >
-          <Plus className="h-4 w-4" />
-          <span>Log Workout</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            onClick={() => setShowExerciseLibrary(true)}
+            variant="outline"
+            size={isMobile ? "sm" : "default"}
+            className="flex items-center space-x-2"
+          >
+            <Dumbbell className="h-4 w-4" />
+            <span>My Exercises</span>
+          </Button>
+          <Button 
+            onClick={() => setShowAddWorkout(!showAddWorkout)} 
+            className="flex items-center space-x-2"
+            size={isMobile ? "sm" : "default"}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Log Workout</span>
+          </Button>
+        </div>
       </div>
 
       {/* Quick Stats Cards */}
@@ -190,7 +203,6 @@ export function TrainingLogTab() {
                       </div>
                     </div>
                   </div>
-                  {/* Inline AI Analysis - appears below the selected workout */}
                   {selectedWorkoutForAnalysis?.id === workout.id && (
                     <div className="mt-2 ml-4 border-l-2 border-primary/30 pl-4">
                       <WorkoutAnalysisCard
@@ -244,6 +256,12 @@ export function TrainingLogTab() {
           </CardContent>
         </Card>
       )}
+
+      {/* Client Exercise Library Dialog */}
+      <ClientExerciseLibraryDialog
+        open={showExerciseLibrary}
+        onOpenChange={setShowExerciseLibrary}
+      />
     </div>
   );
 }
