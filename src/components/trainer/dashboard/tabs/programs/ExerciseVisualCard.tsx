@@ -75,6 +75,7 @@ export const ExerciseVisualCard = memo(({
   onEdit,
   onDelete,
   onViewDetails,
+  onCopy,
   selectionMode = false,
   compact = false,
 }: ExerciseVisualCardProps) => {
