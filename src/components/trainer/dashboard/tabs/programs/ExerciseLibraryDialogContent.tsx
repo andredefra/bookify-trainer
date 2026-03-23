@@ -130,6 +130,7 @@ export function ExerciseLibraryDialogContent({
             exercises={paginatedExercises}
             onEdit={handleEditExercise}
             onDelete={onDeleteExercise}
+            onCopy={onCopyExercise}
             selectionMode={selectionMode}
             onSelect={handleExerciseSelection}
           />

@@ -67,6 +67,7 @@ export function ExerciseLibraryList({
               onSelect={onSelect}
               onEdit={onEdit}
               onDelete={onDelete}
+              onCopy={onCopy}
               onViewDetails={handleViewDetails}
               selectionMode={selectionMode}
               compact={isMobile}
