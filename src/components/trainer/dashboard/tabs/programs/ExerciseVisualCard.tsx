@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { ExerciseData } from '@/data/exercises/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Play, Plus, Edit, Trash2, Video, Dumbbell, Eye } from 'lucide-react';
+import { Play, Plus, Edit, Trash2, Video, Dumbbell, Eye, Copy } from 'lucide-react';
 import { deriveMechanics, deriveForceType, getMechanicsColor, getForceTypeColor, getExerciseGifUrl } from '@/data/exercises/biomechanicsMapping';
 import { getExerciseVideoUrl } from '@/data/exercises/videoUrls';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ interface ExerciseVisualCardProps {
   onEdit?: (exercise: ExerciseData) => void;
   onDelete?: (id: string) => void;
   onViewDetails?: (exercise: ExerciseData) => void;
+  onCopy?: (exercise: ExerciseData) => void;
   selectionMode?: boolean;
   compact?: boolean;
 }
