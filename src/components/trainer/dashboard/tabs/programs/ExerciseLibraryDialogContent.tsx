@@ -69,6 +69,7 @@ export function ExerciseLibraryDialogContent({
   onEditExercise,
   onResetExercise,
   onDeleteExercise,
+  onCopyExercise,
   selectionMode = false,
   onExerciseSelect,
 }: ExerciseLibraryDialogContentProps) {
