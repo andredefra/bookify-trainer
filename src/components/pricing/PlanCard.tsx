@@ -70,7 +70,7 @@ export const PlanCard = ({
       <div className={`flex flex-col flex-grow ${comingSoon ? 'opacity-40 pointer-events-none' : ''}`}>
         <div className="mb-6">
           <h3 className={`text-xl font-semibold ${isGymPlan ? 'text-gray-800' : 'text-primary'} mb-2`}>{name}</h3>
-          <div className="flex items-baseline mb-1">
+          <div className={`flex items-baseline mb-1 ${comingSoon ? 'blur-md select-none' : ''}`}>
             {originalPrice && isLaunchOffer ? (
               <div className="flex flex-col">
                 <span className="text-lg text-muted-foreground line-through">{originalPrice}</span>
