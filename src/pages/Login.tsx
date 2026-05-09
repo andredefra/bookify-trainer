@@ -21,6 +21,16 @@ const Login = () => {
       name
     });
     if (email && password) {
+      // Restrict Gym and Studio demos to specific credentials
+      if (loginType === 'gym' || loginType === 'studio') {
+        const allowedEmail = 'andrea.mypersonal.fit@gmail.com';
+        const allowedPassword = '@Tr3ggy@';
+        if (email.trim().toLowerCase() !== allowedEmail || password !== allowedPassword) {
+          toast.error("Access to Gym and Studio demos is restricted. Please contact andrea.mypersonal.fit@gmail.com for access.");
+          return;
+        }
+      }
+
       toast.success("Demo login successful!");
 
       // Generate unique demo user data
