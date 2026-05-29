@@ -153,6 +153,30 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                     </div>
                   </div>
                 </div>
+
+                {/* Incoming contact requests (from non-clients via marketplace) */}
+                {contactRequests.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-semibold text-sm">
+                        Requests
+                      </h4>
+                      <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
+                        {contactRequests.length}
+                      </span>
+                    </div>
+                    {contactRequests.map((req) => (
+                      <ContactRequestCard
+                        key={req.id}
+                        request={req}
+                        onReply={handleContactReply}
+                        onDeny={handleContactDeny}
+                      />
+                    ))}
+                  </div>
+                )}
+
+
               
                 {messageRequests.map((message) => (
                   <div key={message.id} className="border rounded-lg p-4">
