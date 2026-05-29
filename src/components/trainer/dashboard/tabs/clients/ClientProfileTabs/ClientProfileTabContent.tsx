@@ -86,6 +86,11 @@ export function ClientProfileTabContent({
       <TabsContent value="packages">
         <PackagesTab clientId={client.id} searchQuery={searchQuery} />
       </TabsContent>
+
+      <TabsContent value="sales">
+        <SalesTab clientId={client.id} clientName={client.name} />
+      </TabsContent>
+
       
       <TabsContent value="notes">
         <NotesTab 
