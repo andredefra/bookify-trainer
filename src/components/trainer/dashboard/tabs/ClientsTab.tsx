@@ -202,6 +202,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         onOpenChange={setShowProfileDialog}
         onMessage={handleMessage}
         onScheduleSession={handleScheduleSession}
+        onScheduleEvent={handleScheduleEvent}
         initialTab={initialProfileTab}
       />
       
