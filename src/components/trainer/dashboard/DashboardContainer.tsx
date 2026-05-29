@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
@@ -93,6 +93,17 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
     () => (allowed.includes(activeTab) ? activeTab : "overview"),
     [activeTab, allowed]
   );
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ tab?: string }>).detail;
+      if (detail?.tab && allowed.includes(detail.tab)) {
+        setActiveTab(detail.tab);
+      }
+    };
+    window.addEventListener("dashboard-navigate", handler);
+    return () => window.removeEventListener("dashboard-navigate", handler);
+  }, [allowed]);
 
   return (
     <TrainerPlanProvider plan={plan}>

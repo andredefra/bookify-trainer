@@ -32,7 +32,32 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
-  const [activeMessagesTab, setActiveMessagesTab] = useState<string>("messages");
+  const [activeMessagesTab, setActiveMessagesTab] = useState<string>(() => {
+    try {
+      const raw = sessionStorage.getItem("dashboard-pending-nav");
+      if (raw) {
+        const parsed = JSON.parse(raw) as { tab?: string; subTab?: string };
+        if (parsed?.tab === "messages" && parsed.subTab) {
+          sessionStorage.removeItem("dashboard-pending-nav");
+          return parsed.subTab;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return "messages";
+  });
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ tab?: string; subTab?: string }>).detail;
+      if (detail?.tab === "messages" && detail.subTab) {
+        setActiveMessagesTab(detail.subTab);
+      }
+    };
+    window.addEventListener("dashboard-navigate", handler);
+    return () => window.removeEventListener("dashboard-navigate", handler);
+  }, []);
 
   const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
   const [activeContacts, setActiveContacts] = useState<ContactRequest[]>([]);
