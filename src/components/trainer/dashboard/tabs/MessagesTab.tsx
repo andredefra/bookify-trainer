@@ -32,6 +32,8 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
+  const [activeMessagesTab, setActiveMessagesTab] = useState<string>("messages");
+
   const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
   const [activeContacts, setActiveContacts] = useState<ContactRequest[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -81,6 +83,30 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
     return () =>
       window.removeEventListener("trainer-contact-requests-changed", load);
   }, []);
+
+  // Fire a one-time toast per newly-seen pending request
+  useEffect(() => {
+    if (contactRequests.length === 0) return;
+    try {
+      const shown: string[] = JSON.parse(
+        sessionStorage.getItem("trainer-contact-toasts-shown") ?? "[]",
+      );
+      const fresh = contactRequests.filter((r) => !shown.includes(r.id));
+      if (fresh.length === 0) return;
+      fresh.forEach((r) =>
+        toast.message(`New message request from ${r.fromName}`, {
+          description: r.subject ?? "View it in the Unread tab",
+        }),
+      );
+      sessionStorage.setItem(
+        "trainer-contact-toasts-shown",
+        JSON.stringify([...shown, ...fresh.map((r) => r.id)]),
+      );
+    } catch {
+      // ignore
+    }
+  }, [contactRequests]);
+
 
   const updateContact = (
     id: string,
@@ -153,13 +179,25 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="messages" className="w-full">
+      <Tabs
+        value={activeMessagesTab}
+        onValueChange={setActiveMessagesTab}
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="messages">Messages</TabsTrigger>
-          <TabsTrigger value="unread">Unread</TabsTrigger>
+          <TabsTrigger value="unread" className="relative gap-2">
+            <span>Unread</span>
+            {contactRequests.length > 0 && (
+              <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold">
+                {contactRequests.length}
+              </span>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="automation">Automation</TabsTrigger>
           <TabsTrigger value="archived">Archived</TabsTrigger>
         </TabsList>
+
 
         <TabsContent value="messages" className="space-y-4">
           <Card>
@@ -200,27 +238,29 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                   </div>
                 </div>
 
-                {/* Incoming contact requests (from non-clients via marketplace) */}
+                {/* Compact summary banner — full requests live in the Unread tab */}
                 {contactRequests.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-sm">
-                        Requests
-                      </h4>
-                      <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
-                        {contactRequests.length}
+                  <button
+                    type="button"
+                    onClick={() => setActiveMessagesTab("unread")}
+                    className="w-full flex items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-left hover:bg-primary/10 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="relative inline-flex">
+                        <MessageSquare className="h-5 w-5 text-primary" />
+                        <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-destructive" />
+                      </span>
+                      <span className="text-sm font-medium">
+                        You have {contactRequests.length} new{" "}
+                        {contactRequests.length === 1 ? "request" : "requests"}
                       </span>
                     </div>
-                    {contactRequests.map((req) => (
-                      <ContactRequestCard
-                        key={req.id}
-                        request={req}
-                        onReply={handleContactReply}
-                        onDeny={handleContactDeny}
-                      />
-                    ))}
-                  </div>
+                    <span className="text-xs text-primary font-medium">
+                      View in Unread →
+                    </span>
+                  </button>
                 )}
+
 
                 {/* Active conversations promoted from marketplace contacts */}
                 {activeContacts.map((c) => (
@@ -321,12 +361,32 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
               <CardDescription>Messages requiring your attention</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8">
-                <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No unread messages</h3>
-                <p className="text-muted-foreground">All messages have been read</p>
-              </div>
+              {contactRequests.length > 0 ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-semibold text-sm">Requests</h4>
+                    <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
+                      {contactRequests.length}
+                    </span>
+                  </div>
+                  {contactRequests.map((req) => (
+                    <ContactRequestCard
+                      key={req.id}
+                      request={req}
+                      onReply={handleContactReply}
+                      onDeny={handleContactDeny}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">No unread messages</h3>
+                  <p className="text-muted-foreground">All messages have been read</p>
+                </div>
+              )}
             </CardContent>
+
           </Card>
         </TabsContent>
 
