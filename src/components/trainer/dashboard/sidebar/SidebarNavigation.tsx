@@ -48,7 +48,7 @@ export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigati
 
   const planExcludes: Record<string, string[]> = {
     basic: ["programs", "sessions", "services", "packages", "transactions", "analytics"],
-    essential: [],
+    essential: ["services", "packages"],
     pro: [],
   };
   const excluded = planExcludes[plan] || [];
