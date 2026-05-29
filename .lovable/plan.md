@@ -1,50 +1,57 @@
+# Alternative Trainer Dashboards: Basic & Essential
 
+Add two new dashboard variants that simulate the Basic and Essential trainer plans without touching the existing `/dashboard` (Pro).
 
-## Plan: Client Exercise Library with Trainer + Personal Databases
+## Routes
 
-### Overview
-Add an "Exercise Library" button next to "Log Workout" in the client's Training Log tab. The client sees a merged view of two exercise sources:
-1. **Trainer's exercises** — read-only, visible only while the client-trainer relationship is active
-2. **Client's own exercises** — fully editable (create, edit, delete)
+- `/dashboard-basic` → `src/pages/DashboardBasic.tsx`
+- `/dashboard-essential` → `src/pages/DashboardEssential.tsx`
 
-### Architecture
+Register both in `src/App.tsx`.
 
-**Data sources (localStorage for now, mirrors trainer pattern):**
-- `client_custom_exercises` — client's own custom exercises
-- `client_exercise_modifications` — client's modifications to their own exercises
-- `client_deleted_exercises` — client's soft-deleted exercises
-- Trainer exercises come from the existing `trainer_custom_exercises` + the base exercise database, displayed as read-only
+## Login gating (`src/pages/Login.tsx`)
 
-**Key distinction from trainer library:**
-- Trainer exercises show a "Trainer" badge and cannot be edited/deleted by the client
-- Client exercises show a "My Exercise" badge and are fully manageable
-- When client-trainer relationship ends, trainer exercises simply aren't shown
+Add a plan selector that only appears when `loginType === 'trainer'`: three buttons — Pro (default), Essential, Basic.
 
-### Changes
+- Pro → `/dashboard` (unchanged, any creds, as today)
+- Essential / Basic → require email `andrea.mypersonal.fit@gmail.com` + password `@Tr3ggy@` (same rule already in place for Gym/Studio). On match, navigate to `/dashboard-essential` or `/dashboard-basic`; on mismatch, show the same restricted toast.
 
-#### 1. New hook: `src/hooks/useClientExerciseLibrary.ts`
-- Similar to `useExerciseLibraryManager` but loads from two sources:
-  - Client's own custom exercises (`client_custom_exercises` localStorage)
-  - Trainer's exercise database (base DB + `trainer_custom_exercises`) — marked as read-only
-- CRUD operations only affect client-prefixed localStorage keys
-- Each exercise gets a `source: 'client' | 'trainer'` tag for UI differentiation
+Persist the chosen plan in the `demo-user` localStorage object as `plan: 'basic' | 'essential' | 'pro'`.
 
-#### 2. New component: `src/components/client/training/ClientExerciseLibraryDialog.tsx`
-- Wraps the existing `ExerciseLibraryDialogContent` component (reuse filters, pagination, cards)
-- Adds a source filter toggle: "All" | "My Exercises" | "Trainer's Exercises"
-- Passes `selectionMode={false}` for management, disables edit/delete for trainer-sourced exercises
-- Dialog title: "My Exercise Library"
+## Dashboard variant architecture
 
-#### 3. Update: `src/components/client/tabs/TrainingLogTab.tsx`
-- Add a "My Exercises" button (Dumbbell icon) to the left of "Log Workout"
-- Opens `ClientExerciseLibraryDialog`
+Reuse all existing tab components. Introduce a `plan` prop on the container so we can filter without duplicating logic.
 
-#### 4. Update exercise selector in workout log form
-- When client logs a workout, the `ExerciseSelector` should pull from the merged client+trainer exercise pool (using the new hook) so the client can pick from both databases
+1. Extend `DashboardContainer` (`src/components/trainer/dashboard/DashboardContainer.tsx`) to accept `plan?: 'basic' | 'essential' | 'pro'` (default `'pro'`) and pass it to:
+   - `DashboardSidebar` → `DesktopSidebar` / `MobileSidebar` → `SidebarNavigation`
+   - `OverviewTab` (to hide Expiration Alerts on Basic)
+   - `ClientsTab` (to hide Programs/Packages sub-sections in client details on Basic)
+   - `SettingsTab` (to hide Installment Plans + Payment Reminders on Basic, and Invoices integration on both Basic and Essential)
 
-### Technical Details
+2. `SidebarNavigation` filters `navigationItems` by plan:
+   - **Basic** keeps: Overview, CRM (sales), Clients, Services, Calendar, Messages, Reviews, Settings, Personal Trainer Page link
+   - **Essential** keeps everything Basic has plus: Programs, Sessions, Packages, Transactions, Business Data (analytics)
+   - **Pro** keeps all (current behavior)
 
-- The `ExerciseData` type gets an optional `source?: 'client' | 'trainer'` and `readOnly?: boolean` field
-- Reuse `ExerciseLibraryDialogContent`, `ExerciseLibraryList`, `ExerciseVisualCard` — these already support selectionMode and edit/delete callbacks; we just conditionally disable edit/delete based on `readOnly`
-- The "trainer relationship active" check can initially be a simple boolean (e.g., `localStorage.getItem('client-trainer-id')` or presence of trainer exercises); later wired to Supabase
+3. `DashboardContainer` guards tab rendering: if the active tab isn't allowed for the current plan, fall back to `overview`. This prevents direct-state access to hidden tabs.
 
+4. New pages `DashboardBasic.tsx` / `DashboardEssential.tsx` mirror `Dashboard.tsx` (auth redirect for client type) and render `<DashboardContainer customName="Trainer" plan="basic" />` / `plan="essential"`. Each sets its own `<title>` ("Trainer Dashboard — Basic" / "Essential").
+
+## Per-tab content filtering
+
+- **OverviewTab**: accept `plan` prop; conditionally render `<ExpirationAlertsCard>` only when `plan !== 'basic'`.
+- **ClientsTab** (client detail view): accept `plan`; in the detail panel hide the Programs and Packages sections when `plan === 'basic'` (show a small "Not available on Basic plan" placeholder or simply omit the tabs/sections).
+- **SettingsTab** / `SettingsTabContent`: accept `plan`; hide Installment Plans + Payment Reminders sections for Basic, and hide Invoices integration for Basic and Essential. Pro keeps everything.
+
+(All other tabs render unchanged; they're simply unreachable via the sidebar on Basic.)
+
+## Verification
+
+- Login as Pro with any creds → `/dashboard` works exactly as before.
+- Login as Essential/Basic with the restricted creds → reaches the new routes; wrong creds → toast and stays on login.
+- Sidebar on each route shows only the allowed items; deep-linking to a hidden tab via state falls back to Overview.
+- Overview, Clients detail, and Settings hide the right pieces per plan.
+
+## Out of scope
+
+No backend, no pricing logic changes, no edits to Pro `/dashboard` behavior, no changes to client/gym/studio dashboards.
