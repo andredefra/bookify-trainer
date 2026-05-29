@@ -133,8 +133,8 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
               </div>
             ))}
 
-          <div className="space-y-1">
             {notifications.map((notification) => (
+
               <div
                 key={notification.id}
                 className={`p-4 hover:bg-gray-50 cursor-pointer border-l-4 ${
