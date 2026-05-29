@@ -238,27 +238,29 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                   </div>
                 </div>
 
-                {/* Incoming contact requests (from non-clients via marketplace) */}
+                {/* Compact summary banner — full requests live in the Unread tab */}
                 {contactRequests.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-sm">
-                        Requests
-                      </h4>
-                      <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
-                        {contactRequests.length}
+                  <button
+                    type="button"
+                    onClick={() => setActiveMessagesTab("unread")}
+                    className="w-full flex items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-left hover:bg-primary/10 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="relative inline-flex">
+                        <MessageSquare className="h-5 w-5 text-primary" />
+                        <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-destructive" />
+                      </span>
+                      <span className="text-sm font-medium">
+                        You have {contactRequests.length} new{" "}
+                        {contactRequests.length === 1 ? "request" : "requests"}
                       </span>
                     </div>
-                    {contactRequests.map((req) => (
-                      <ContactRequestCard
-                        key={req.id}
-                        request={req}
-                        onReply={handleContactReply}
-                        onDeny={handleContactDeny}
-                      />
-                    ))}
-                  </div>
+                    <span className="text-xs text-primary font-medium">
+                      View in Unread →
+                    </span>
+                  </button>
                 )}
+
 
                 {/* Active conversations promoted from marketplace contacts */}
                 {activeContacts.map((c) => (
