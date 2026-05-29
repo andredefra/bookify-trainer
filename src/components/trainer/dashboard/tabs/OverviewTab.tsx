@@ -42,8 +42,9 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavi
   };
 
   const { layout, enabledWidgets: rawEnabledWidgets, saveLayout, toggleWidget, resetToDefault } = useWidgetLayout();
+  const BASIC_HIDDEN_WIDGETS = ["expiration-alerts", "revenue-chart", "package-sales", "goals"];
   const enabledWidgets = plan === "basic"
-    ? rawEnabledWidgets.filter((w) => w !== "expiration-alerts")
+    ? rawEnabledWidgets.filter((w) => !BASIC_HIDDEN_WIDGETS.includes(w))
     : rawEnabledWidgets;
   const [showSettings, setShowSettings] = useState(false);
   const [showAddClient, setShowAddClient] = useState(false);
