@@ -61,6 +61,9 @@ export function MySessionsTab({
     window.dispatchEvent(new Event("client-session-requests-changed"));
     toast.success("Request cancelled");
   };
+
+  // Handler for joining a video session
+  const handleJoinSession = (session: SessionItem) => {
     toast.success(`Joining ${session.name} session with ${session.trainer}`);
     window.open(`/video-session/${session.id}`, '_blank');
     console.log("Joining session:", session);
