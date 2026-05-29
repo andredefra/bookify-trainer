@@ -96,6 +96,8 @@ const AppContent = () => {
         <Route path="/find-trainer" element={<FindTrainer />} />
         <Route path="/trainer/:idOrSlug" element={<TrainerProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard-basic" element={<DashboardBasic />} />
+        <Route path="/dashboard-essential" element={<DashboardEssential />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route path="/studio-dashboard" element={<StudioDashboard />} />
         <Route path="/gym-dashboard" element={<GymDashboard />} />
