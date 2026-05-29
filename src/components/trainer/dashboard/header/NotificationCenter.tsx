@@ -1,9 +1,10 @@
 
+import { useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Clock, CheckCircle, AlertTriangle, Users } from 'lucide-react';
+import { Clock, CheckCircle, AlertTriangle, Users, Mail } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -12,8 +13,42 @@ interface NotificationCenterProps {
   onClose: () => void;
 }
 
+interface PendingContact {
+  id: string;
+  fromName: string;
+  subject?: string;
+  createdAt: string;
+}
+
 export function NotificationCenter({ onClose }: NotificationCenterProps) {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const [pendingContacts, setPendingContacts] = useState<PendingContact[]>([]);
+
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem('trainer-contact-requests');
+        const all = raw ? JSON.parse(raw) : [];
+        setPendingContacts(
+          (Array.isArray(all) ? all : [])
+            .filter((r: { status?: string }) => r.status === 'pending')
+            .map((r: PendingContact) => ({
+              id: r.id,
+              fromName: r.fromName,
+              subject: r.subject,
+              createdAt: r.createdAt,
+            })),
+        );
+      } catch {
+        setPendingContacts([]);
+      }
+    };
+    load();
+    window.addEventListener('trainer-contact-requests-changed', load);
+    return () =>
+      window.removeEventListener('trainer-contact-requests-changed', load);
+  }, []);
+
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
