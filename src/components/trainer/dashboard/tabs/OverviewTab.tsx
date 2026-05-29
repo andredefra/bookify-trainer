@@ -22,6 +22,7 @@ import { SetGoalDialog } from "../../dialogs/SetGoalDialog";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import "./overview/widget-grid.css";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
