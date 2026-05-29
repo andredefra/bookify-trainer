@@ -179,13 +179,25 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="messages" className="w-full">
+      <Tabs
+        value={activeMessagesTab}
+        onValueChange={setActiveMessagesTab}
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="messages">Messages</TabsTrigger>
-          <TabsTrigger value="unread">Unread</TabsTrigger>
+          <TabsTrigger value="unread" className="relative gap-2">
+            <span>Unread</span>
+            {contactRequests.length > 0 && (
+              <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-semibold">
+                {contactRequests.length}
+              </span>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="automation">Automation</TabsTrigger>
           <TabsTrigger value="archived">Archived</TabsTrigger>
         </TabsList>
+
 
         <TabsContent value="messages" className="space-y-4">
           <Card>
