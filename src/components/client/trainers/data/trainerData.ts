@@ -1,4 +1,6 @@
 
+export type TrainerPlanTier = "basic" | "essential" | "pro";
+
 export interface TrainerData {
   name: string;
   title: string;
@@ -29,6 +31,8 @@ export interface TrainerData {
   availability: {
     [key: string]: string[];
   };
+  /** Subscription tier. Determines whether the trainer can receive session bookings from the marketplace. */
+  plan?: TrainerPlanTier;
 }
 
 export const trainerData: Record<number, TrainerData> = {
