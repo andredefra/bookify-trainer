@@ -111,6 +111,30 @@ export function MySessionsTab({
   
   return (
     <div className="space-y-6">
+      {/* Pending Requests Section (client-initiated, awaiting trainer) */}
+      {pendingRequests.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-lg">Pending Requests</h3>
+            <Badge
+              variant="secondary"
+              className="bg-amber-100 text-amber-800 border-amber-200"
+            >
+              {pendingRequests.length}
+            </Badge>
+          </div>
+          <div className="space-y-3">
+            {pendingRequests.map((request) => (
+              <PendingRequestCard
+                key={request.id}
+                request={request}
+                onCancel={handleCancelRequest}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Invited Sessions Section */}
       {pendingInvites.length > 0 && (
         <div className="space-y-3">
