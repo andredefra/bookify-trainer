@@ -114,6 +114,33 @@ const Login = () => {
                   Studio
                 </button>
               </div>
+
+              {/* Trainer plan selector */}
+              {loginType === 'trainer' && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Trainer plan
+                  </label>
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    {(['basic', 'essential', 'pro'] as const).map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        className={`py-2 text-xs font-medium rounded-lg border transition-colors capitalize ${trainerPlan === p ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`}
+                        onClick={() => setTrainerPlan(p)}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                  {trainerPlan !== 'pro' && (
+                    <p className="text-xs text-muted-foreground">
+                      Basic and Essential demos are restricted. Use andrea.mypersonal.fit@gmail.com.
+                    </p>
+                  )}
+                </div>
+              )}
+              
               
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-1">
