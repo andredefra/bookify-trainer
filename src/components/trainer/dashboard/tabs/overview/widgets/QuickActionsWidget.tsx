@@ -1,6 +1,7 @@
 import { BaseWidget } from "./BaseWidget";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Calendar, Package, MessageSquare, CreditCard, Target } from "lucide-react";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface QuickActionsWidgetProps {
   onAddClient?: () => void;
@@ -19,6 +20,8 @@ export function QuickActionsWidget({
   onRecordPayment,
   onSetGoal
 }: QuickActionsWidgetProps) {
+  const plan = useTrainerPlan();
+  const isBasic = plan === "basic";
   const actions = [
     {
       id: "add-client",
