@@ -10,6 +10,7 @@ import { ClientProfileDialog } from "./clients/ClientProfileDialog";
 import { ClientPerformance } from "./analytics/ClientPerformance";
 import { MessageClientDialog } from "./clients/dialogs/MessageClientDialog";
 import { EnhancedScheduleSessionDialog } from "./clients/dialogs/EnhancedScheduleSessionDialog";
+import { CreateEventDialog } from "../dialogs/CreateEventDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-progress/ManageGoalTypesDialog";
 import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
