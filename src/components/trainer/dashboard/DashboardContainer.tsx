@@ -80,57 +80,66 @@ const sampleUser = {
 
 interface DashboardContainerProps {
   customName?: string;
+  plan?: TrainerPlan;
 }
 
-export function DashboardContainer({ customName }: DashboardContainerProps) {
+export function DashboardContainer({ customName, plan = "pro" }: DashboardContainerProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const isMobile = useIsMobile();
 
+  const allowed = PLAN_ALLOWED_TABS[plan];
+  const safeActiveTab = useMemo(
+    () => (allowed.includes(activeTab) ? activeTab : "overview"),
+    [activeTab, allowed]
+  );
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <DashboardHeader
-        name={customName || "Dashboard"} 
-        onLogout={() => console.log("Logout clicked")}
-        onMobileMenuClick={() => setShowSidebar(!showSidebar)}
-        showMobileMenuButton={isMobile}
-      />
-      <div className="flex flex-1 overflow-hidden">
-        <DashboardSidebar
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          showSidebar={showSidebar}
-          setShowSidebar={setShowSidebar}
-          userName={sampleUser.name}
-          userEmail={sampleUser.email}
-          upcomingSessions={sampleSessions}
+    <TrainerPlanProvider plan={plan}>
+      <div className="min-h-screen flex flex-col">
+        <DashboardHeader
+          name={customName || "Dashboard"}
+          onLogout={() => console.log("Logout clicked")}
+          onMobileMenuClick={() => setShowSidebar(!showSidebar)}
+          showMobileMenuButton={isMobile}
         />
-        
-        <main className="flex-1 overflow-y-auto bg-muted/20 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
-          <div className="mx-auto max-w-full xl:max-w-7xl space-y-3 sm:space-y-4 md:space-y-6">
-            {activeTab === "overview" && (
-              <OverviewTab
-                upcomingSessions={sampleSessions}
-                clients={sampleClients}
-                messageRequests={sampleMessageRequests}
-                onNavigateToTab={setActiveTab}
-              />
-            )}
-            {activeTab === "clients" && <ClientsTab clients={sampleClients} />}
-            {activeTab === "sessions" && <SessionsTab upcomingSessions={sampleSessions} />}
-            {activeTab === "programs" && <ProgramsTab />}
-            {activeTab === "services" && <ServicesTab />}
-            {activeTab === "packages" && <PackagesTab />}
-            {activeTab === "calendar" && <CalendarTab />}
-            {activeTab === "analytics" && <AnalyticsTab />}
-            {activeTab === "messages" && <MessagesTab messageRequests={sampleMessageRequests} />}
-            {activeTab === "transactions" && <TransactionsTab />}
-            {activeTab === "sales" && <SalesTab />}
-            {activeTab === "reviews" && <ReviewsTab />}
-            {activeTab === "settings" && <SettingsTab user={sampleUser} />}
-          </div>
-        </main>
+        <div className="flex flex-1 overflow-hidden">
+          <DashboardSidebar
+            activeTab={safeActiveTab}
+            setActiveTab={setActiveTab}
+            showSidebar={showSidebar}
+            setShowSidebar={setShowSidebar}
+            userName={sampleUser.name}
+            userEmail={sampleUser.email}
+            upcomingSessions={sampleSessions}
+          />
+
+          <main className="flex-1 overflow-y-auto bg-muted/20 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
+            <div className="mx-auto max-w-full xl:max-w-7xl space-y-3 sm:space-y-4 md:space-y-6">
+              {safeActiveTab === "overview" && (
+                <OverviewTab
+                  upcomingSessions={sampleSessions}
+                  clients={sampleClients}
+                  messageRequests={sampleMessageRequests}
+                  onNavigateToTab={setActiveTab}
+                />
+              )}
+              {safeActiveTab === "clients" && <ClientsTab clients={sampleClients} />}
+              {safeActiveTab === "sessions" && <SessionsTab upcomingSessions={sampleSessions} />}
+              {safeActiveTab === "programs" && <ProgramsTab />}
+              {safeActiveTab === "services" && <ServicesTab />}
+              {safeActiveTab === "packages" && <PackagesTab />}
+              {safeActiveTab === "calendar" && <CalendarTab />}
+              {safeActiveTab === "analytics" && <AnalyticsTab />}
+              {safeActiveTab === "messages" && <MessagesTab messageRequests={sampleMessageRequests} />}
+              {safeActiveTab === "transactions" && <TransactionsTab />}
+              {safeActiveTab === "sales" && <SalesTab />}
+              {safeActiveTab === "reviews" && <ReviewsTab />}
+              {safeActiveTab === "settings" && <SettingsTab user={sampleUser} />}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </TrainerPlanProvider>
   );
 }
