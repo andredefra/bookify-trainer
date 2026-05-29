@@ -32,9 +32,35 @@ export function MySessionsTab({
   const [showAcceptDialog, setShowAcceptDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [sessionToPay, setSessionToPay] = useState<SessionItem | null>(null);
+  const [pendingRequests, setPendingRequests] = useState<
+    PendingSessionRequest[]
+  >([]);
 
-  // Handler for joining a video session
-  const handleJoinSession = (session: SessionItem) => {
+  // Load + watch session requests from localStorage
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("client-session-requests");
+        const all: PendingSessionRequest[] = raw ? JSON.parse(raw) : [];
+        setPendingRequests(all.filter((r) => r.status === "awaiting_trainer"));
+      } catch {
+        setPendingRequests([]);
+      }
+    };
+    load();
+    window.addEventListener("client-session-requests-changed", load);
+    return () =>
+      window.removeEventListener("client-session-requests-changed", load);
+  }, []);
+
+  const handleCancelRequest = (id: string) => {
+    const raw = localStorage.getItem("client-session-requests");
+    const all: PendingSessionRequest[] = raw ? JSON.parse(raw) : [];
+    const updated = all.filter((r) => r.id !== id);
+    localStorage.setItem("client-session-requests", JSON.stringify(updated));
+    window.dispatchEvent(new Event("client-session-requests-changed"));
+    toast.success("Request cancelled");
+  };
     toast.success(`Joining ${session.name} session with ${session.trainer}`);
     window.open(`/video-session/${session.id}`, '_blank');
     console.log("Joining session:", session);
