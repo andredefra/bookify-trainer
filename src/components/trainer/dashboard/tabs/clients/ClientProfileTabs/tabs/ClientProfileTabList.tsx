@@ -53,6 +53,15 @@ export function ClientProfileTabList({
         )}
 
         <TabsTrigger
+          value="sales"
+          className="relative"
+          onClick={() => onTabChange("sales")}
+        >
+          Sales
+          <TabBadge count={matchCounts.sales} />
+        </TabsTrigger>
+
+        <TabsTrigger
           value="notes"
           className="relative"
           onClick={() => onTabChange("notes")}

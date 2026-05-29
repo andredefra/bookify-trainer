@@ -1,6 +1,7 @@
 import { BaseWidget } from "./BaseWidget";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Calendar, Package, MessageSquare, CreditCard, Target } from "lucide-react";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface QuickActionsWidgetProps {
   onAddClient?: () => void;
@@ -19,6 +20,8 @@ export function QuickActionsWidget({
   onRecordPayment,
   onSetGoal
 }: QuickActionsWidgetProps) {
+  const plan = useTrainerPlan();
+  const isBasic = plan === "basic";
   const actions = [
     {
       id: "add-client",
@@ -63,11 +66,14 @@ export function QuickActionsWidget({
       variant: "outline" as const
     }
   ];
+  const visibleActions = isBasic
+    ? actions.filter((a) => !["create-package", "record-payment"].includes(a.id))
+    : actions;
 
   return (
     <BaseWidget title="Quick Actions">
       <div className="grid grid-cols-2 gap-3">
-        {actions.map((action) => {
+        {visibleActions.map((action) => {
           const Icon = action.icon;
           return (
             <Button

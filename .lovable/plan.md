@@ -1,57 +1,80 @@
-# Alternative Trainer Dashboards: Basic & Essential
+## Goal
+Tighten the Basic trainer dashboard so it only exposes what the Basic plan should support, and introduce a manual "Sales > Entries" tracker on the client profile that works for all three plans.
 
-Add two new dashboard variants that simulate the Basic and Essential trainer plans without touching the existing `/dashboard` (Pro).
+## 1. Overview tab — widget filtering (Basic only)
+File: `src/components/trainer/dashboard/tabs/OverviewTab.tsx`
 
-## Routes
+Extend the existing `enabledWidgets` filter so on `plan === "basic"` we strip:
+- `revenue-chart` (depends on program/package sales)
+- `package-sales` (Pro-only feature)
+- `goals` (My Goals — not applicable; replaced with clients' goals concept later)
+- already stripped: `expiration-alerts`
 
-- `/dashboard-basic` → `src/pages/DashboardBasic.tsx`
-- `/dashboard-essential` → `src/pages/DashboardEssential.tsx`
+Keep: `quick-actions`, `todays-agenda`, `messages`, `client-activity`, `performance-metrics`, `recent-activities`.
 
-Register both in `src/App.tsx`.
+Also filter the same list inside `WidgetSettingsDialog` (pass plan and hide those entries) so a Basic user cannot re-enable them from settings. File: `src/components/trainer/dashboard/tabs/overview/WidgetSettingsDialog.tsx`.
 
-## Login gating (`src/pages/Login.tsx`)
+Quick Actions widget on Basic: hide "Create Package" and "Record Payment" buttons (no packages, no payments on Basic). File: `src/components/trainer/dashboard/tabs/overview/widgets/QuickActionsWidget.tsx` — read `useTrainerPlan()` and conditionally render.
 
-Add a plan selector that only appears when `loginType === 'trainer'`: three buttons — Pro (default), Essential, Basic.
+## 2. Services tab — remove for Basic
+The `services` entry is currently in `PLAN_ALLOWED_TABS.basic`. Remove it.
 
-- Pro → `/dashboard` (unchanged, any creds, as today)
-- Essential / Basic → require email `andrea.mypersonal.fit@gmail.com` + password `@Tr3ggy@` (same rule already in place for Gym/Studio). On match, navigate to `/dashboard-essential` or `/dashboard-basic`; on mismatch, show the same restricted toast.
+Files:
+- `src/components/trainer/dashboard/DashboardContainer.tsx` — drop `"services"` from the `basic` array.
+- `src/components/trainer/dashboard/sidebar/SidebarNavigation.tsx` and `MobileSidebar.tsx` — confirm they read the same allow-list (already plan-aware per earlier change) and that Services is hidden on Basic.
 
-Persist the chosen plan in the `demo-user` localStorage object as `plan: 'basic' | 'essential' | 'pro'`.
+## 3. Settings — show current plan as "Basic"
+File: `src/components/trainer/dashboard/tabs/settings/MembershipSection.tsx`
 
-## Dashboard variant architecture
+Currently `useState(user.plan || "freemium")`. Use `useTrainerPlan()` to seed the initial current plan when plan is `basic` or `essential` (map `pro` keeps existing behavior). This ensures the "Your Current Plan" card and the highlighted card in the list reflect the dashboard variant.
 
-Reuse all existing tab components. Introduce a `plan` prop on the container so we can filter without duplicating logic.
+Also ensure `plansData` has a `basic` plan entry (verify file `src/components/trainer/dashboard/tabs/settings/membership/plansData.ts`); if not, add one with id `basic`, name `Basic`, price `Free`, and the appropriate feature list. Same for `essential` if missing.
 
-1. Extend `DashboardContainer` (`src/components/trainer/dashboard/DashboardContainer.tsx`) to accept `plan?: 'basic' | 'essential' | 'pro'` (default `'pro'`) and pass it to:
-   - `DashboardSidebar` → `DesktopSidebar` / `MobileSidebar` → `SidebarNavigation`
-   - `OverviewTab` (to hide Expiration Alerts on Basic)
-   - `ClientsTab` (to hide Programs/Packages sub-sections in client details on Basic)
-   - `SettingsTab` (to hide Installment Plans + Payment Reminders on Basic, and Invoices integration on both Basic and Essential)
+## 4. Client profile — new "Sales" tab (all plans)
+Add a new tab between `overview` and `notes` in the client profile dialog, visible to all three plans.
 
-2. `SidebarNavigation` filters `navigationItems` by plan:
-   - **Basic** keeps: Overview, CRM (sales), Clients, Services, Calendar, Messages, Reviews, Settings, Personal Trainer Page link
-   - **Essential** keeps everything Basic has plus: Programs, Sessions, Packages, Transactions, Business Data (analytics)
-   - **Pro** keeps all (current behavior)
+Files:
+- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/tabs/ClientProfileTabList.tsx` — add `<TabsTrigger value="sales">Sales</TabsTrigger>` between overview and notes (or before notes if programs/packages tabs are present).
+- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/ClientProfileTabContent.tsx` — add a `<TabsContent value="sales">` rendering a new `SalesTab`.
+- Create `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/SalesTab.tsx`.
 
-3. `DashboardContainer` guards tab rendering: if the active tab isn't allowed for the current plan, fall back to `overview`. This prevents direct-state access to hidden tabs.
+### SalesTab content
+- Header with total amount (sum of entries, in €).
+- "Add Entry" button → opens `AddSalesEntryDialog`.
+- Table/list of entries: date, type (Session / Package / Program / Other), name/description, amount, source badge (Manual / Auto from sale).
+- Empty state when no entries.
 
-4. New pages `DashboardBasic.tsx` / `DashboardEssential.tsx` mirror `Dashboard.tsx` (auth redirect for client type) and render `<DashboardContainer customName="Trainer" plan="basic" />` / `plan="essential"`. Each sets its own `<title>` ("Trainer Dashboard — Basic" / "Essential").
+State: local React state seeded with an empty array per client id, scoped via `useState` keyed by `client.id`. No backend in this change (mock only, consistent with the rest of the demo dashboard data).
 
-## Per-tab content filtering
+### AddSalesEntryDialog
+Create `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/sales/AddSalesEntryDialog.tsx`.
 
-- **OverviewTab**: accept `plan` prop; conditionally render `<ExpirationAlertsCard>` only when `plan !== 'basic'`.
-- **ClientsTab** (client detail view): accept `plan`; in the detail panel hide the Programs and Packages sections when `plan === 'basic'` (show a small "Not available on Basic plan" placeholder or simply omit the tabs/sections).
-- **SettingsTab** / `SettingsTabContent`: accept `plan`; hide Installment Plans + Payment Reminders sections for Basic, and hide Invoices integration for Basic and Essential. Pro keeps everything.
+Fields (mirror `AddTransactionDialog` minus payment status/method):
+- Type: Session | Package | Program | Other (Select)
+- Name/description (Input)
+- Amount € (Input, number)
+- Date (Input, date, default today)
+- Notes (Textarea, optional)
 
-(All other tabs render unchanged; they're simply unreachable via the sidebar on Basic.)
+No `paymentStatus`, no `paymentMethod`, no installment block.
 
-## Verification
+On submit: append an entry `{ id, type, name, amount, date, notes, source: 'manual' }` to the parent state and close the dialog.
 
-- Login as Pro with any creds → `/dashboard` works exactly as before.
-- Login as Essential/Basic with the restricted creds → reaches the new routes; wrong creds → toast and stays on login.
-- Sidebar on each route shows only the allowed items; deep-linking to a hidden tab via state falls back to Overview.
-- Overview, Clients detail, and Settings hide the right pieces per plan.
+### Plan-aware copy
+- On `basic`: section title "Sales — Entries", explanation: "Manually track sales to this client. When you upgrade, sold items flow here automatically and can be converted into invoices."
+- On `essential` / `pro`: same UI, but explanation: "Entries created by the system from your sales appear here. Manual entries you add will also appear in Transactions/Business Data so you can invoice them."
+
+The two non-basic plans still allow adding manual entries; the actual wiring of pushed auto-entries from real sales / mirroring into Transactions is out of scope here (we only add the UI surface and the manual-add capability now, per the user's "we will do another thing later").
 
 ## Out of scope
+- Real persistence (DB schema, RLS).
+- Auto-mirroring manual entries into the Transactions tab / Business Data.
+- Replacing the "My Goals" widget with a "Clients' Goals" widget — for now, just remove it on Basic.
+- Any changes to Pro `/dashboard` behavior beyond the new client Sales tab.
 
-No backend, no pricing logic changes, no edits to Pro `/dashboard` behavior, no changes to client/gym/studio dashboards.
+## Verification
+- `/dashboard-basic` Overview: no Revenue Trend, no My Goals, no Package Sales, no Expiration Alerts; Performance Metrics still visible.
+- `/dashboard-basic` left nav: no Services entry; deep-linking `services` falls back to Overview.
+- `/dashboard-basic` Settings → Membership: highlighted card and "Your Current Plan" show "Basic".
+- Open any client → new "Sales" tab between Overview and Notes; Add Entry dialog opens, submits, list and total update.
+- `/dashboard` (Pro) and `/dashboard-essential` still show all their tabs; the new client Sales tab also appears there.

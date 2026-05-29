@@ -5,6 +5,7 @@ import { OverviewTab } from "./OverviewTab";
 import { ProgramsTab } from "./ProgramsTab";
 import { PackagesTab } from "./PackagesTab";
 import { NotesTab } from "./NotesTab";
+import { SalesTab } from "./SalesTab";
 import { ClientProfileTabList } from "./tabs/ClientProfileTabList";
 import { useTabSearchResults } from "./hooks/useTabSearchResults";
 
@@ -85,6 +86,11 @@ export function ClientProfileTabContent({
       <TabsContent value="packages">
         <PackagesTab clientId={client.id} searchQuery={searchQuery} />
       </TabsContent>
+
+      <TabsContent value="sales">
+        <SalesTab clientId={client.id} clientName={client.name} />
+      </TabsContent>
+
       
       <TabsContent value="notes">
         <NotesTab 
