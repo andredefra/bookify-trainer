@@ -228,6 +228,12 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         onOpenChange={setShowScheduleDialog}
         clientName={messageClientName}
       />
+
+      <CreateEventDialog
+        open={showCreateEventDialog}
+        onOpenChange={setShowCreateEventDialog}
+        defaultClient={eventPrefillClient}
+      />
       
       <ManageGoalTypesDialog
         open={showManageGoalTypesDialog}
