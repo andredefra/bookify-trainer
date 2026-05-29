@@ -32,6 +32,8 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
+  const [activeMessagesTab, setActiveMessagesTab] = useState<string>("messages");
+
   const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
   const [activeContacts, setActiveContacts] = useState<ContactRequest[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
