@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, AlertCircle, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { plans } from "./membership/plansData";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface MembershipSectionProps {
   user: {
@@ -15,8 +16,17 @@ interface MembershipSectionProps {
   };
 }
 
+// Map the dashboard plan tier to the id used in plansData.
+const PLAN_TIER_TO_ID: Record<string, string> = {
+  basic: "standard",
+  essential: "freemium",
+  pro: "pro",
+};
+
 export function MembershipSection({ user }: MembershipSectionProps) {
-  const [currentPlan, setCurrentPlan] = useState<string>(user.plan || "freemium");
+  const planTier = useTrainerPlan();
+  const initialPlanId = PLAN_TIER_TO_ID[planTier] || user.plan || "freemium";
+  const [currentPlan, setCurrentPlan] = useState<string>(initialPlanId);
 
   const handlePlanChange = (planId: string) => {
     if (planId === currentPlan) return;
