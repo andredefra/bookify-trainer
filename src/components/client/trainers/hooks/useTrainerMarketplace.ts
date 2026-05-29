@@ -16,6 +16,7 @@ export interface MarketplaceTrainer {
   price: string;
   availability: string;
   image: string;
+  plan?: "basic" | "essential" | "pro";
 }
 
 // Mock trainer data with real images

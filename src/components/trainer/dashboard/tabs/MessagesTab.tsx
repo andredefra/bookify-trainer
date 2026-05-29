@@ -8,6 +8,11 @@ import { SendMessageDialog } from "./messages/SendMessageDialog";
 import { ClientChatDialog } from "./messages/ClientChatDialog";
 import { MessageAutomationTab } from "@/components/common/MessageAutomationTab";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import {
+  ContactRequestCard,
+  type ContactRequest,
+} from "./messages/ContactRequestCard";
+import { toast } from "sonner";
 
 interface MessageItem {
   id: number;
@@ -25,8 +30,51 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
+  const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  
+
+  // Load + watch incoming contact requests (from clients in the marketplace)
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("trainer-contact-requests");
+        const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
+        setContactRequests(all.filter((r) => r.status === "pending"));
+      } catch {
+        setContactRequests([]);
+      }
+    };
+    load();
+    window.addEventListener("trainer-contact-requests-changed", load);
+    return () =>
+      window.removeEventListener("trainer-contact-requests-changed", load);
+  }, []);
+
+  const updateContactStatus = (
+    id: string,
+    status: ContactRequest["status"],
+  ) => {
+    const raw = localStorage.getItem("trainer-contact-requests");
+    const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
+    const updated = all.map((r) => (r.id === id ? { ...r, status } : r));
+    localStorage.setItem("trainer-contact-requests", JSON.stringify(updated));
+    window.dispatchEvent(new Event("trainer-contact-requests-changed"));
+  };
+
+  const handleContactReply = (request: ContactRequest) => {
+    updateContactStatus(request.id, "replied");
+    setSelectedClient({
+      id: Math.floor(Math.random() * 1_000_000),
+      name: request.fromName,
+    });
+    setShowChatDialog(true);
+  };
+
+  const handleContactDeny = (request: ContactRequest) => {
+    updateContactStatus(request.id, "denied");
+    toast.success(`Denied message from ${request.fromName}`);
+  };
+
   // Listen for status changes
   useEffect(() => {
     const savedStatus = localStorage.getItem('trainer-status');
@@ -105,6 +153,30 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                     </div>
                   </div>
                 </div>
+
+                {/* Incoming contact requests (from non-clients via marketplace) */}
+                {contactRequests.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-semibold text-sm">
+                        Requests
+                      </h4>
+                      <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
+                        {contactRequests.length}
+                      </span>
+                    </div>
+                    {contactRequests.map((req) => (
+                      <ContactRequestCard
+                        key={req.id}
+                        request={req}
+                        onReply={handleContactReply}
+                        onDeny={handleContactDeny}
+                      />
+                    ))}
+                  </div>
+                )}
+
+
               
                 {messageRequests.map((message) => (
                   <div key={message.id} className="border rounded-lg p-4">

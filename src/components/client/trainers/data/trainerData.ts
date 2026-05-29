@@ -1,4 +1,6 @@
 
+export type TrainerPlanTier = "basic" | "essential" | "pro";
+
 export interface TrainerData {
   name: string;
   title: string;
@@ -29,6 +31,8 @@ export interface TrainerData {
   availability: {
     [key: string]: string[];
   };
+  /** Subscription tier. Determines whether the trainer can receive session bookings from the marketplace. */
+  plan?: TrainerPlanTier;
 }
 
 export const trainerData: Record<number, TrainerData> = {
@@ -75,7 +79,8 @@ export const trainerData: Record<number, TrainerData> = {
       friday: ["9:00 AM - 12:00 PM", "2:00 PM - 6:00 PM"],
       saturday: ["10:00 AM - 2:00 PM"],
       sunday: ["Closed"]
-    }
+    },
+    plan: "essential"
   },
   2: {
     name: "Alex Thompson",
@@ -120,6 +125,7 @@ export const trainerData: Record<number, TrainerData> = {
       friday: ["5:00 AM - 6:00 PM"],
       saturday: ["8:00 AM - 4:00 PM"],
       sunday: ["9:00 AM - 3:00 PM"]
-    }
+    },
+    plan: "basic"
   }
 };

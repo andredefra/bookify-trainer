@@ -1,46 +1,82 @@
-## Changes
+## Goal
 
-### 1. Basic plan: "Schedule Session" → "Schedule Event" in Client Profile dialog
+Replace the current marketplace "Book Session" and "Send Message" actions on a trainer's profile with two new flows that match the rest of the product, and gate Book Session by trainer plan.
 
-**`ProfileDialogFooter.tsx`** — accept a `plan` prop (or a `scheduleLabel`/`onScheduleEvent` handler). When `plan === "basic"`, render the button as "Schedule Event" and trigger an event-creation flow instead of session scheduling.
+---
 
-**`ClientProfileDialog.tsx`** — read `useTrainerPlan()` and pass it (or the appropriate handler) down to `ProfileDialogFooter`. Add an `onScheduleEvent?: (clientName: string) => void` prop alongside the existing `onScheduleSession`.
+## 1. Book Session flow (client-initiated session request)
 
-**`ClientsTab.tsx`** —
-- Add `showCreateEventDialog` state and an `eventPrefillClient` string.
-- Implement `handleScheduleEvent(clientName)` which sets the prefill client and opens the existing `CreateEventDialog` (from `../dialogs/CreateEventDialog`).
-- Pass `onScheduleEvent={handleScheduleEvent}` to `ClientProfileDialog`.
-- Render `<CreateEventDialog open={showCreateEventDialog} onOpenChange={...} />` with the client name prefilled into the `client` field.
+Trigger: client clicks **Book Session** on a marketplace trainer profile (`TrainerHeaderInfo` / `TrainerProfileDialog`).
 
-**`CreateEventDialog.tsx`** — add an optional `defaultClient?: string` prop and seed `formData.client` from it when the dialog opens, so the event is directly related to the selected user.
+New modal **`RequestSessionDialog`** with:
+- Trainer header (name, avatar, hourly rate shown as "€X / hour")
+- **Proposed timeslots**: client picks 1–3 date+time options from the trainer's published availability (reuse `AvailabilityTab` data). Add/remove slot rows.
+- **Session type / duration** (60 / 90 min, default 60)
+- **Estimated price** auto-calculated from rate × duration, shown read-only with note "Trainer may adjust or waive"
+- **Message to trainer** (textarea, required)
+- Buttons: Cancel / Send Request
 
-Pro/Essential behavior is unchanged (still "Schedule Session" → `EnhancedScheduleSessionDialog`).
+On send → creates a "pending session request" entry. Client gets a toast: *"Request sent. Sarah will review your proposed times and reply."* The request shows up in client's `MySessionsTab` under a new **"Pending Requests"** section (above Session Invitations) with status `awaiting trainer`, listing proposed slots and the message.
 
-### 2. Sales tab layout — Total moved below Add Entry
+Trainer side: the request lands in the trainer's session inbox. Trainer can:
+- Reply via message (existing chat) to negotiate, OR
+- **Confirm** one of the proposed slots → optionally edit price or toggle **Make this session free** → this generates the actual **Session Invitation** that already exists in the client's sessions area (the screenshot shown — "Invited by Trainer / Accept & Pay / Decline").
 
-**`SalesTab.tsx`** — restructure the header row:
-- Left side: only the title ("Sales — Entries") + description paragraph.
-- Right side: a vertical stack containing the `Add Entry` button on top and the `Total €X.XX` label aligned to the right directly underneath the button.
+So the client-side request is the predecessor to the existing Invited-by-Trainer card; once the trainer confirms, the existing invitation UI/flow takes over unchanged.
 
-Concretely:
+---
 
-```tsx
-<div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-  <div> {/* title + description */} </div>
-  <div className="flex flex-col items-end gap-2">
-    <Button size="sm" onClick={() => setDialogOpen(true)}>
-      <Plus className="h-4 w-4 mr-1" /> Add Entry
-    </Button>
-    <div className="text-right">
-      <p className="text-xs text-muted-foreground">Total</p>
-      <p className="text-lg font-bold">€{total.toFixed(2)}</p>
-    </div>
-  </div>
-</div>
-```
+## 2. Plan gating on marketplace
 
-No data, hooks, or other plans are affected.
+- Trainers on **Basic** plan: hide the **Book Session** button on their marketplace profile (`TrainerHeaderInfo`) and on the marketplace card (`MarketplaceTrainerCard`). Only **Send Message** is shown.
+- Trainers on **Essential / Pro**: both buttons shown as today.
 
-### Verification
-- Login as `andrea.mypersonal.fit@gmail.com` (Basic) → open any client profile → footer shows "Schedule Event"; clicking it opens `CreateEventDialog` with that client pre-selected. Sales tab shows Add Entry button with Total stacked right-aligned beneath it.
-- Login as Essential / Pro → footer still shows "Schedule Session" with the existing session-scheduling flow.
+Source: each marketplace trainer record needs a `plan` field; default Essential where missing. Read it from `trainerData` / `gymTrainersMockData` and pass into `TrainerHeaderInfo` + card.
+
+---
+
+## 3. Send Message flow (open to all plans)
+
+Trigger: client clicks **Send Message** on any trainer profile.
+
+New modal **`ContactTrainerDialog`** with:
+- Trainer header
+- Subject (optional) + Message body (required)
+- Send button → creates an "incoming contact request" message thread.
+
+Trainer side: the message appears in the trainer's **Messages tab** under a new **"Requests"** filter at the top of unread, badged with `New contact`. The thread shows the message and two action buttons:
+- **Reply** → opens normal chat; thread becomes a regular conversation. The client–trainer connection is implicit (chat-only, no training program / package access).
+- **Deny** → archives the thread; client is notified *"Trainer is not available right now."*
+
+Once replied, both sides chat normally via the existing `ClientChatDialog` / messaging components — no client-of-trainer relationship is required.
+
+---
+
+## Files to add / change
+
+**New**
+- `src/components/client/trainers/dialogs/RequestSessionDialog.tsx`
+- `src/components/client/trainers/dialogs/ContactTrainerDialog.tsx`
+- `src/components/client/tabs/sessions/PendingRequestCard.tsx` (client-side "awaiting trainer" card)
+- `src/components/trainer/dashboard/tabs/messages/ContactRequestCard.tsx` (Reply / Deny)
+
+**Edit**
+- `src/components/client/trainers/profile/TrainerHeaderInfo.tsx` — accept `trainerPlan`, hide Book Session on basic, wire new dialogs.
+- `src/components/client/trainers/TrainerProfileDialog.tsx` — own both dialogs' state, drop the old `onBookSession`/`onSendMessage` BookingDialog path.
+- `src/components/client/trainers/MarketplaceTrainerCard.tsx` — same plan gating on the card CTA.
+- `src/components/client/trainers/hooks/useTrainerMarketplace.ts` — remove old BookingDialog, replace with session-request handler that stores a pending request.
+- `src/components/client/trainers/TrainerMarketplace.tsx` — drop legacy `BookingDialog`.
+- `src/components/client/tabs/sessions/MySessionsTab.tsx` — add "Pending Requests" section above Session Invitations.
+- `src/components/trainer/dashboard/tabs/MessagesTab.tsx` (+ thread list) — show "Requests" group with Reply / Deny.
+- `src/data/trainerMockData.ts` / `gymTrainersMockData.ts` — add `plan: "basic" | "essential" | "pro"` field.
+
+State: store pending session requests and contact requests in `localStorage` (`client-session-requests`, `trainer-contact-requests`), consistent with existing client mock data patterns. No DB changes.
+
+---
+
+## Verification
+
+- Visit marketplace, open an Essential/Pro trainer → both Book Session and Send Message visible. Book Session opens new `RequestSessionDialog` with proposed slots + price + message. Submit → entry appears under "Pending Requests" in Sessions tab.
+- Open a Basic-plan trainer → only Send Message is visible.
+- Send a message → trainer Messages tab shows the contact request with Reply / Deny.
+- After trainer confirms a proposed slot (existing trainer flow, optionally free), the client sees the existing **Session Invitations** card with Accept & Pay / Decline (or Accept if free).

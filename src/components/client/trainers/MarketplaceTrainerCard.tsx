@@ -76,15 +76,27 @@ export function MarketplaceTrainerCard({
           </div>
           
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="w-full"
-              onClick={() => onBookSession(trainer.name)}
-            >
-              Book Session
-            </Button>
-            
+            {trainer.plan !== "basic" ? (
+              <Button
+                variant="default"
+                size="sm"
+                className="w-full"
+                onClick={() => onBookSession(trainer.name)}
+              >
+                Book Session
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                disabled
+                title="This trainer isn't accepting bookings"
+              >
+                Message only
+              </Button>
+            )}
+
             <Button
               variant="outline"
               size="sm"

@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SessionCard } from "./SessionCard";
 import { InvitedSessionCard } from "./InvitedSessionCard";
 import { AcceptInvitePaymentDialog } from "./AcceptInvitePaymentDialog";
 import { PaymentDialog } from "./dialogs/PaymentDialog";
+import {
+  PendingRequestCard,
+  type PendingSessionRequest,
+} from "./PendingRequestCard";
 import { SessionItem } from "@/types/sessions";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -28,6 +32,35 @@ export function MySessionsTab({
   const [showAcceptDialog, setShowAcceptDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [sessionToPay, setSessionToPay] = useState<SessionItem | null>(null);
+  const [pendingRequests, setPendingRequests] = useState<
+    PendingSessionRequest[]
+  >([]);
+
+  // Load + watch session requests from localStorage
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("client-session-requests");
+        const all: PendingSessionRequest[] = raw ? JSON.parse(raw) : [];
+        setPendingRequests(all.filter((r) => r.status === "awaiting_trainer"));
+      } catch {
+        setPendingRequests([]);
+      }
+    };
+    load();
+    window.addEventListener("client-session-requests-changed", load);
+    return () =>
+      window.removeEventListener("client-session-requests-changed", load);
+  }, []);
+
+  const handleCancelRequest = (id: string) => {
+    const raw = localStorage.getItem("client-session-requests");
+    const all: PendingSessionRequest[] = raw ? JSON.parse(raw) : [];
+    const updated = all.filter((r) => r.id !== id);
+    localStorage.setItem("client-session-requests", JSON.stringify(updated));
+    window.dispatchEvent(new Event("client-session-requests-changed"));
+    toast.success("Request cancelled");
+  };
 
   // Handler for joining a video session
   const handleJoinSession = (session: SessionItem) => {
@@ -78,6 +111,30 @@ export function MySessionsTab({
   
   return (
     <div className="space-y-6">
+      {/* Pending Requests Section (client-initiated, awaiting trainer) */}
+      {pendingRequests.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-lg">Pending Requests</h3>
+            <Badge
+              variant="secondary"
+              className="bg-amber-100 text-amber-800 border-amber-200"
+            >
+              {pendingRequests.length}
+            </Badge>
+          </div>
+          <div className="space-y-3">
+            {pendingRequests.map((request) => (
+              <PendingRequestCard
+                key={request.id}
+                request={request}
+                onCancel={handleCancelRequest}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Invited Sessions Section */}
       {pendingInvites.length > 0 && (
         <div className="space-y-3">

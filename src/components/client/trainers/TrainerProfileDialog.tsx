@@ -23,8 +23,10 @@ interface TrainerProfileDialogProps {
   onOpenChange: (open: boolean) => void;
   trainerId: number;
   trainerName: string;
-  onBookSession: (trainerName: string) => void;
-  onSendMessage: (trainerName: string) => void;
+  /** @deprecated kept for legacy callers; booking is now handled inside the dialog */
+  onBookSession?: (trainerName: string) => void;
+  /** @deprecated kept for legacy callers; messaging is now handled inside the dialog */
+  onSendMessage?: (trainerName: string) => void;
 }
 
 interface Review {
@@ -35,13 +37,11 @@ interface Review {
   clientName: string;
 }
 
-export function TrainerProfileDialog({ 
-  open, 
-  onOpenChange, 
-  trainerId, 
+export function TrainerProfileDialog({
+  open,
+  onOpenChange,
+  trainerId,
   trainerName,
-  onBookSession,
-  onSendMessage
 }: TrainerProfileDialogProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
   
@@ -71,9 +71,8 @@ export function TrainerProfileDialog({
         <div className="px-8 pt-20 pb-8">
           <TrainerHeaderInfo 
             trainer={trainer}
+            trainerId={trainerId}
             averageRating={averageRating}
-            onBookSession={onBookSession}
-            onSendMessage={onSendMessage}
           />
 
           <TrainerStatsCards trainer={trainer} />
