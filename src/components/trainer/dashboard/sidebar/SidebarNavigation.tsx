@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface SidebarNavigationProps {
   activeTab: string;
@@ -27,76 +28,31 @@ interface SidebarNavigationProps {
 export function SidebarNavigation({ activeTab, handleTabClick }: SidebarNavigationProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+  const plan = useTrainerPlan();
 
-  const navigationItems = [
-    {
-      title: "Overview",
-      icon: LayoutDashboard,
-      href: "overview",
-    },
-    {
-      title: "CRM",
-      icon: FolderKanban,
-      href: "sales",
-    },
-    {
-      title: "Clients",
-      icon: Users,
-      href: "clients",
-    },
-    {
-      title: "Programs",
-      icon: Dumbbell,
-      href: "programs",
-    },
-    {
-      title: "Sessions",
-      icon: Calendar,
-      href: "sessions",
-    },
-    {
-      title: "Services",
-      icon: Wrench,
-      href: "services",
-    },
-    {
-      title: "Packages",
-      icon: Package,
-      href: "packages",
-    },
-    {
-      title: "Calendar",
-      icon: CalendarDays,
-      href: "calendar",
-    },
-    {
-      title: "Messages",
-      icon: MessageSquare,
-      href: "messages",
-      badge: 3,
-    },
-    {
-      title: "Transactions",
-      icon: CreditCard,
-      href: "transactions",
-    },
-    {
-      title: "Business Data",
-      icon: LineChart,
-      href: "analytics",
-    },
-    {
-      title: "Reviews",
-      icon: Star,
-      href: "reviews",
-      badge: 1, // Pending modification requests
-    },
-    {
-      title: "Settings",
-      icon: Settings,
-      href: "settings",
-    },
+  const allItems = [
+    { title: "Overview", icon: LayoutDashboard, href: "overview" },
+    { title: "CRM", icon: FolderKanban, href: "sales" },
+    { title: "Clients", icon: Users, href: "clients" },
+    { title: "Programs", icon: Dumbbell, href: "programs" },
+    { title: "Sessions", icon: Calendar, href: "sessions" },
+    { title: "Services", icon: Wrench, href: "services" },
+    { title: "Packages", icon: Package, href: "packages" },
+    { title: "Calendar", icon: CalendarDays, href: "calendar" },
+    { title: "Messages", icon: MessageSquare, href: "messages", badge: 3 },
+    { title: "Transactions", icon: CreditCard, href: "transactions" },
+    { title: "Business Data", icon: LineChart, href: "analytics" },
+    { title: "Reviews", icon: Star, href: "reviews", badge: 1 },
+    { title: "Settings", icon: Settings, href: "settings" },
   ];
+
+  const planExcludes: Record<string, string[]> = {
+    basic: ["programs", "sessions", "packages", "transactions", "analytics"],
+    essential: [],
+    pro: [],
+  };
+  const excluded = planExcludes[plan] || [];
+  const navigationItems = allItems.filter((i) => !excluded.includes(i.href));
 
   return (
     <div className="flex flex-col space-y-1 p-2">
