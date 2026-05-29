@@ -73,7 +73,7 @@ export function QuickActionsWidget({
   return (
     <BaseWidget title="Quick Actions">
       <div className="grid grid-cols-2 gap-3">
-        {actions.map((action) => {
+        {visibleActions.map((action) => {
           const Icon = action.icon;
           return (
             <Button
