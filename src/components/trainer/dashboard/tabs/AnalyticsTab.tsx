@@ -7,10 +7,13 @@ import { RevenueAnalytics } from "./analytics/RevenueAnalytics";
 import { EnhancedRevenueAnalytics } from "./analytics/EnhancedRevenueAnalytics";
 import { PackageAnalyticsChart } from "./analytics/charts/PackageAnalyticsChart";
 import { AISummary } from "./analytics/AISummary";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 export function AnalyticsTab() {
   const { t } = useLanguage();
-  
+  const plan = useTrainerPlan();
+  const showPackages = plan === "pro";
+
   return (
     <Card>
       <CardHeader>
@@ -18,9 +21,11 @@ export function AnalyticsTab() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="revenue" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className={`grid w-full ${showPackages ? "grid-cols-4" : "grid-cols-3"}`}>
             <TabsTrigger value="revenue">{t('analytics.tabs.revenue')}</TabsTrigger>
-            <TabsTrigger value="packages">{t('analytics.tabs.packages')}</TabsTrigger>
+            {showPackages && (
+              <TabsTrigger value="packages">{t('analytics.tabs.packages')}</TabsTrigger>
+            )}
             <TabsTrigger value="clients">{t('analytics.tabs.clients')}</TabsTrigger>
             <TabsTrigger value="ai-summary">{t('analytics.tabs.aiSummary')}</TabsTrigger>
           </TabsList>
@@ -29,9 +34,11 @@ export function AnalyticsTab() {
             <RevenueAnalytics />
           </TabsContent>
           
-          <TabsContent value="packages" className="space-y-6 mt-6">
-            <PackageAnalyticsChart />
-          </TabsContent>
+          {showPackages && (
+            <TabsContent value="packages" className="space-y-6 mt-6">
+              <PackageAnalyticsChart />
+            </TabsContent>
+          )}
           
           <TabsContent value="clients" className="space-y-6 mt-6">
             <EnhancedRevenueAnalytics />
