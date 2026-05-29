@@ -125,6 +125,7 @@ export const trainerData: Record<number, TrainerData> = {
       friday: ["5:00 AM - 6:00 PM"],
       saturday: ["8:00 AM - 4:00 PM"],
       sunday: ["9:00 AM - 3:00 PM"]
-    }
+    },
+    plan: "basic"
   }
 };
