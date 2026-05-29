@@ -30,8 +30,51 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
+  const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  
+
+  // Load + watch incoming contact requests (from clients in the marketplace)
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("trainer-contact-requests");
+        const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
+        setContactRequests(all.filter((r) => r.status === "pending"));
+      } catch {
+        setContactRequests([]);
+      }
+    };
+    load();
+    window.addEventListener("trainer-contact-requests-changed", load);
+    return () =>
+      window.removeEventListener("trainer-contact-requests-changed", load);
+  }, []);
+
+  const updateContactStatus = (
+    id: string,
+    status: ContactRequest["status"],
+  ) => {
+    const raw = localStorage.getItem("trainer-contact-requests");
+    const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
+    const updated = all.map((r) => (r.id === id ? { ...r, status } : r));
+    localStorage.setItem("trainer-contact-requests", JSON.stringify(updated));
+    window.dispatchEvent(new Event("trainer-contact-requests-changed"));
+  };
+
+  const handleContactReply = (request: ContactRequest) => {
+    updateContactStatus(request.id, "replied");
+    setSelectedClient({
+      id: Math.floor(Math.random() * 1_000_000),
+      name: request.fromName,
+    });
+    setShowChatDialog(true);
+  };
+
+  const handleContactDeny = (request: ContactRequest) => {
+    updateContactStatus(request.id, "denied");
+    toast.success(`Denied message from ${request.fromName}`);
+  };
+
   // Listen for status changes
   useEffect(() => {
     const savedStatus = localStorage.getItem('trainer-status');
