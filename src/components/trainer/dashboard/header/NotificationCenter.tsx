@@ -103,9 +103,26 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
         ) : (
           <div className="space-y-1">
             {pendingContacts.map((c) => (
-              <div
+              <button
                 key={c.id}
-                className="p-4 hover:bg-gray-50 border-l-4 border-l-primary bg-primary/5"
+                type="button"
+                onClick={() => {
+                  try {
+                    sessionStorage.setItem(
+                      'dashboard-pending-nav',
+                      JSON.stringify({ tab: 'messages', subTab: 'unread' }),
+                    );
+                  } catch {
+                    // ignore
+                  }
+                  window.dispatchEvent(
+                    new CustomEvent('dashboard-navigate', {
+                      detail: { tab: 'messages', subTab: 'unread' },
+                    }),
+                  );
+                  onClose();
+                }}
+                className="w-full text-left p-4 hover:bg-gray-50 border-l-4 border-l-primary bg-primary/5 cursor-pointer focus:outline-none focus:bg-primary/10 transition-colors"
               >
                 <div className="flex items-start gap-3">
                   <Mail className="h-4 w-4 text-primary mt-0.5" />
@@ -130,8 +147,9 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
                     </p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
+
 
             {notifications.map((notification) => (
 

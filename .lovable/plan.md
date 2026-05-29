@@ -1,13 +1,18 @@
-# Show prospect contact requests inside the Notification Center
+Implement notification-to-message navigation.
 
-The bell counts pending prospect requests but `NotificationCenter` only renders entries from `useNotifications`, so the panel shows "No notifications".
+1. Update `NotificationCenter.tsx`
+   - Make each pending message request row a real clickable button/interactive row.
+   - On click, close the notification popover and dispatch a `dashboard-navigate` custom event with `{ tab: "messages", subTab: "unread" }`.
+   - Keep the existing visual style, but add pointer/hover/focus states so it’s clearly clickable.
 
-## Change
+2. Update `DashboardContainer.tsx`
+   - Listen for the `dashboard-navigate` event.
+   - If the requested tab is available for the current trainer plan, call `setActiveTab("messages")`.
+   - Clean up the event listener on unmount.
 
-Edit `src/components/trainer/dashboard/header/NotificationCenter.tsx`:
+3. Update `MessagesTab.tsx`
+   - Listen for the same `dashboard-navigate` event.
+   - When `subTab` is provided, switch the internal messages tab to `unread`.
+   - Also handle the timing case where the Messages tab mounts after the dashboard tab changes by reading a short-lived pending navigation value from `sessionStorage`.
 
-1. Read `trainer-contact-requests` from localStorage (subscribe to `trainer-contact-requests-changed`) and filter for `status === "pending"`.
-2. Render a "Message Requests" section at the top of the panel — one row per pending prospect with the Mail icon, "New message request from {fromName}", subject as subtitle, and time-ago.
-3. Combined empty state ("No notifications") only when both the prospect list and `notifications` are empty.
-
-No other files change.
+Expected result: clicking “New message request” in the notification panel closes the panel and opens Dashboard → Messages → Unread, where the request card is visible.
