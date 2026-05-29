@@ -2,14 +2,18 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Calendar, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface ProfileDialogFooterProps {
   onClose: () => void;
   onMessage: () => void;
   onScheduleSession: () => void;
+  onScheduleEvent?: () => void;
 }
 
-export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession }: ProfileDialogFooterProps) {
+export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onScheduleEvent }: ProfileDialogFooterProps) {
+  const plan = useTrainerPlan();
+  const isBasic = plan === "basic";
   return (
     <div className="flex justify-between mt-4">
       <div className="flex space-x-2">
@@ -17,9 +21,13 @@ export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession }: P
           <MessageSquare className="h-4 w-4 mr-2" />
           Message
         </Button>
-        <Button variant="outline" size="sm" onClick={onScheduleSession}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={isBasic ? (onScheduleEvent ?? onScheduleSession) : onScheduleSession}
+        >
           <Calendar className="h-4 w-4 mr-2" />
-          Schedule Session
+          {isBasic ? "Schedule Event" : "Schedule Session"}
         </Button>
         <TooltipProvider>
           <Tooltip>
