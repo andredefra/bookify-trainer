@@ -7,7 +7,12 @@ import { WIDGET_CATALOG, getCoreWidgetIds } from "./widgetConfig";
 import { RotateCcw } from "lucide-react";
 import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
-const BASIC_HIDDEN_WIDGETS = ["expiration-alerts", "revenue-chart", "package-sales", "goals"];
+const ALWAYS_HIDDEN_WIDGETS = ["goals"];
+const PLAN_HIDDEN_WIDGETS: Record<string, string[]> = {
+  basic: ["expiration-alerts", "revenue-chart", "package-sales"],
+  essential: ["package-sales"],
+  pro: [],
+};
 
 interface WidgetSettingsDialogProps {
   open: boolean;
@@ -25,9 +30,8 @@ export function WidgetSettingsDialog({
   onReset
 }: WidgetSettingsDialogProps) {
   const plan = useTrainerPlan();
-  const filtered = plan === "basic"
-    ? WIDGET_CATALOG.filter((w) => !BASIC_HIDDEN_WIDGETS.includes(w.id))
-    : WIDGET_CATALOG;
+  const hidden = [...ALWAYS_HIDDEN_WIDGETS, ...(PLAN_HIDDEN_WIDGETS[plan] || [])];
+  const filtered = WIDGET_CATALOG.filter((w) => !hidden.includes(w.id));
   const coreWidgets = filtered.filter(w => w.isCore);
   const optionalWidgets = filtered.filter(w => !w.isCore);
 

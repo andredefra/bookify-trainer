@@ -42,10 +42,14 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavi
   };
 
   const { layout, enabledWidgets: rawEnabledWidgets, saveLayout, toggleWidget, resetToDefault } = useWidgetLayout();
-  const BASIC_HIDDEN_WIDGETS = ["expiration-alerts", "revenue-chart", "package-sales", "goals"];
-  const enabledWidgets = plan === "basic"
-    ? rawEnabledWidgets.filter((w) => !BASIC_HIDDEN_WIDGETS.includes(w))
-    : rawEnabledWidgets;
+  const ALWAYS_HIDDEN_WIDGETS = ["goals"];
+  const PLAN_HIDDEN_WIDGETS: Record<string, string[]> = {
+    basic: ["expiration-alerts", "revenue-chart", "package-sales"],
+    essential: ["package-sales"],
+    pro: [],
+  };
+  const hiddenWidgets = [...ALWAYS_HIDDEN_WIDGETS, ...(PLAN_HIDDEN_WIDGETS[plan] || [])];
+  const enabledWidgets = rawEnabledWidgets.filter((w) => !hiddenWidgets.includes(w));
   const [showSettings, setShowSettings] = useState(false);
   const [showAddClient, setShowAddClient] = useState(false);
   const [showRecordPayment, setShowRecordPayment] = useState(false);
