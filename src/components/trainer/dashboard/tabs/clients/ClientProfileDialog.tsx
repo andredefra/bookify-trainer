@@ -97,6 +97,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
           onClose={() => onOpenChange(false)}
           onMessage={() => onMessage?.(client.name)}
           onScheduleSession={() => onScheduleSession?.(client.name)}
+          onScheduleEvent={() => onScheduleEvent?.(client.name)}
         />
       </DialogContent>
     </Dialog>
