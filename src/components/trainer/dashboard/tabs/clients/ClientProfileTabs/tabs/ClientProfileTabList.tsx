@@ -31,7 +31,7 @@ export function ClientProfileTabList({
           <TabBadge count={matchCounts.overview} />
         </TabsTrigger>
 
-        {showProgramsPackages && (
+        {showPrograms && (
           <TabsTrigger
             value="programs"
             className="relative"
@@ -42,7 +42,7 @@ export function ClientProfileTabList({
           </TabsTrigger>
         )}
 
-        {showProgramsPackages && (
+        {showPackages && (
           <TabsTrigger
             value="packages"
             className="relative"
