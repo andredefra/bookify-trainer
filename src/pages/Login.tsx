@@ -69,10 +69,7 @@ const Login = () => {
       case 'client': return 'Access Client Demo';
       case 'gym': return 'Access Gym Demo';
       case 'studio': return 'Access Studio Demo';
-      default:
-        if (trainerPlan === 'basic') return 'Access Trainer Demo (Basic)';
-        if (trainerPlan === 'essential') return 'Access Trainer Demo (Essential)';
-        return 'Access Trainer Demo (Pro)';
+      default: return 'Access Trainer Demo';
     }
   };
 
