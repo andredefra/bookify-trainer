@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SessionCard } from "./SessionCard";
 import { InvitedSessionCard } from "./InvitedSessionCard";
 import { AcceptInvitePaymentDialog } from "./AcceptInvitePaymentDialog";
 import { PaymentDialog } from "./dialogs/PaymentDialog";
+import {
+  PendingRequestCard,
+  type PendingSessionRequest,
+} from "./PendingRequestCard";
 import { SessionItem } from "@/types/sessions";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
