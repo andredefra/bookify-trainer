@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { StatusSelector } from "../header/StatusSelector";
 import { TrainerSessionItem } from "@/types/sessions";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface MobileSidebarProps {
   showSidebar: boolean;
@@ -40,10 +41,11 @@ export function MobileSidebar({
   userEmail = "trainer@personal.ai",
   upcomingSessions = []
 }: MobileSidebarProps) {
+  const plan = useTrainerPlan();
   // Default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
 
-  const navigationItems = [
+  const allItems = [
     { title: "Overview", icon: LayoutDashboard, href: "overview" },
     { title: "Sales", icon: FolderKanban, href: "sales" },
     { title: "Clients", icon: Users, href: "clients" },
@@ -56,6 +58,15 @@ export function MobileSidebar({
     { title: "Business Data", icon: LineChart, href: "analytics" },
     { title: "Settings", icon: Settings, href: "settings" }
   ];
+  const planExcludes: Record<string, string[]> = {
+    basic: ["programs", "sessions", "packages", "transactions", "analytics"],
+    essential: [],
+    pro: [],
+  };
+  const excluded = planExcludes[plan] || [];
+  const navigationItems = allItems.filter((i) => !excluded.includes(i.href));
+
+  const planLabel = plan === "basic" ? "Basic" : plan === "essential" ? "Essential" : "Pro";
 
   // Get the first two upcoming sessions
   const nextSessions = upcomingSessions.slice(0, 2);
