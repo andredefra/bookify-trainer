@@ -84,6 +84,30 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
       window.removeEventListener("trainer-contact-requests-changed", load);
   }, []);
 
+  // Fire a one-time toast per newly-seen pending request
+  useEffect(() => {
+    if (contactRequests.length === 0) return;
+    try {
+      const shown: string[] = JSON.parse(
+        sessionStorage.getItem("trainer-contact-toasts-shown") ?? "[]",
+      );
+      const fresh = contactRequests.filter((r) => !shown.includes(r.id));
+      if (fresh.length === 0) return;
+      fresh.forEach((r) =>
+        toast.message(`New message request from ${r.fromName}`, {
+          description: r.subject ?? "View it in the Unread tab",
+        }),
+      );
+      sessionStorage.setItem(
+        "trainer-contact-toasts-shown",
+        JSON.stringify([...shown, ...fresh.map((r) => r.id)]),
+      );
+    } catch {
+      // ignore
+    }
+  }, [contactRequests]);
+
+
   const updateContact = (
     id: string,
     patch: Partial<ContactRequest>,
