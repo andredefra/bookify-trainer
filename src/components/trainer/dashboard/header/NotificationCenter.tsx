@@ -95,12 +95,44 @@ export function NotificationCenter({ onClose }: NotificationCenterProps) {
       </div>
 
       <ScrollArea className="h-96">
-        {notifications.length === 0 ? (
+        {pendingContacts.length === 0 && notifications.length === 0 ? (
           <div className="p-4 text-center text-muted-foreground">
             <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
             <p>No notifications</p>
           </div>
         ) : (
+          <div className="space-y-1">
+            {pendingContacts.map((c) => (
+              <div
+                key={c.id}
+                className="p-4 hover:bg-gray-50 border-l-4 border-l-primary bg-primary/5"
+              >
+                <div className="flex items-start gap-3">
+                  <Mail className="h-4 w-4 text-primary mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm font-medium text-gray-900">
+                        New message request
+                      </p>
+                      <Badge variant="secondary" className="text-xs">
+                        New
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-1">
+                      From {c.fromName}
+                      {c.subject ? ` — ${c.subject}` : ''}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {formatDistanceToNow(new Date(c.createdAt), {
+                        addSuffix: true,
+                        locale: enUS,
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+
           <div className="space-y-1">
             {notifications.map((notification) => (
               <div
