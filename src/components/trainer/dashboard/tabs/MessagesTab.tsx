@@ -1,7 +1,8 @@
 
-import { MessageSquare, Send, Reply, Settings } from "lucide-react";
+import { MessageSquare, Send, Reply, Settings, UserPlus, UserCheck } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { SendMessageDialog } from "./messages/SendMessageDialog";
@@ -13,6 +14,7 @@ import {
   type ContactRequest,
 } from "./messages/ContactRequestCard";
 import { toast } from "sonner";
+
 
 interface MessageItem {
   id: number;
