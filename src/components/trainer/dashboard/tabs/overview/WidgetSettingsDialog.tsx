@@ -24,8 +24,12 @@ export function WidgetSettingsDialog({
   onToggleWidget,
   onReset
 }: WidgetSettingsDialogProps) {
-  const coreWidgets = WIDGET_CATALOG.filter(w => w.isCore);
-  const optionalWidgets = WIDGET_CATALOG.filter(w => !w.isCore);
+  const plan = useTrainerPlan();
+  const filtered = plan === "basic"
+    ? WIDGET_CATALOG.filter((w) => !BASIC_HIDDEN_WIDGETS.includes(w.id))
+    : WIDGET_CATALOG;
+  const coreWidgets = filtered.filter(w => w.isCore);
+  const optionalWidgets = filtered.filter(w => !w.isCore);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
