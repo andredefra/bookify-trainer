@@ -87,7 +87,7 @@ export function MobileSidebar({
                   <p className="font-medium text-black">{userName}</p>
                   <p className="text-xs text-muted-foreground">{userEmail}</p>
                   <Badge variant="secondary" className="bg-primary/10 text-primary text-xs h-5 mt-1">
-                    Pro
+                    {planLabel}
                   </Badge>
                 </div>
               </div>
