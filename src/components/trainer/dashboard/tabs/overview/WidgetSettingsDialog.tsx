@@ -34,7 +34,6 @@ export function WidgetSettingsDialog({
   const filtered = WIDGET_CATALOG.filter((w) => !hidden.includes(w.id));
   const coreWidgets = filtered.filter(w => w.isCore);
   const optionalWidgets = filtered.filter(w => !w.isCore);
-  const optionalWidgets = filtered.filter(w => !w.isCore);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
