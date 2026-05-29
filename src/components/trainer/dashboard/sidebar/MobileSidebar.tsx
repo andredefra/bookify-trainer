@@ -60,7 +60,7 @@ export function MobileSidebar({
   ];
   const planExcludes: Record<string, string[]> = {
     basic: ["programs", "sessions", "packages", "transactions", "analytics"],
-    essential: [],
+    essential: ["packages"],
     pro: [],
   };
   const excluded = planExcludes[plan] || [];
