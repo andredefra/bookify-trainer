@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { OverviewTab } from "./tabs/OverviewTab";
@@ -15,6 +15,13 @@ import { SalesTab } from "./tabs/SalesTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { ReviewsTab } from "./tabs/ReviewsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { TrainerPlanProvider, TrainerPlan } from "@/context/TrainerPlanContext";
+
+const PLAN_ALLOWED_TABS: Record<TrainerPlan, string[]> = {
+  basic: ["overview", "sales", "clients", "services", "calendar", "messages", "reviews", "settings"],
+  essential: ["overview", "sales", "clients", "programs", "services", "packages", "sessions", "calendar", "messages", "transactions", "analytics", "reviews", "settings"],
+  pro: ["overview", "sales", "clients", "programs", "services", "packages", "sessions", "calendar", "messages", "transactions", "analytics", "reviews", "settings"],
+};
 import { TrainerSessionItem } from "@/types/sessions";
 
 // Sample sessions - these are the same ones used in the client dashboard
