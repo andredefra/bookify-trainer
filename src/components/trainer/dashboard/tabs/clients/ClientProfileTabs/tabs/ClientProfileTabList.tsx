@@ -2,6 +2,7 @@
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabBadge } from "../shared/TabBadge";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface ClientProfileTabListProps {
   activeTab: string;
@@ -9,44 +10,50 @@ interface ClientProfileTabListProps {
   onTabChange: (value: string) => void;
 }
 
-export function ClientProfileTabList({ 
-  activeTab, 
-  matchCounts, 
-  onTabChange 
+export function ClientProfileTabList({
+  activeTab,
+  matchCounts,
+  onTabChange
 }: ClientProfileTabListProps) {
+  const plan = useTrainerPlan();
+  const showProgramsPackages = plan !== "basic";
+
   return (
     <ScrollArea className="w-full pb-1">
       <TabsList className="mb-4 w-max">
-        <TabsTrigger 
-          value="overview" 
+        <TabsTrigger
+          value="overview"
           className="relative"
           onClick={() => onTabChange("overview")}
         >
           Overview
           <TabBadge count={matchCounts.overview} />
         </TabsTrigger>
-        
-        
-        <TabsTrigger 
-          value="programs" 
-          className="relative"
-          onClick={() => onTabChange("programs")}
-        >
-          Programs
-          <TabBadge count={matchCounts.programs} />
-        </TabsTrigger>
-        
-        <TabsTrigger 
-          value="packages" 
-          className="relative"
-          onClick={() => onTabChange("packages")}
-        >
-          Packages
-          <TabBadge count={matchCounts.packages} />
-        </TabsTrigger>
-        
-        <TabsTrigger 
-          value="notes" 
+
+        {showProgramsPackages && (
+          <TabsTrigger
+            value="programs"
+            className="relative"
+            onClick={() => onTabChange("programs")}
+          >
+            Programs
+            <TabBadge count={matchCounts.programs} />
+          </TabsTrigger>
+        )}
+
+        {showProgramsPackages && (
+          <TabsTrigger
+            value="packages"
+            className="relative"
+            onClick={() => onTabChange("packages")}
+          >
+            Packages
+            <TabBadge count={matchCounts.packages} />
+          </TabsTrigger>
+        )}
+
+        <TabsTrigger
+          value="notes"
           className="relative"
           onClick={() => onTabChange("notes")}
         >
