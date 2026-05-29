@@ -30,10 +30,10 @@ export function WidgetSettingsDialog({
   onReset
 }: WidgetSettingsDialogProps) {
   const plan = useTrainerPlan();
-  const filtered = plan === "basic"
-    ? WIDGET_CATALOG.filter((w) => !BASIC_HIDDEN_WIDGETS.includes(w.id))
-    : WIDGET_CATALOG;
+  const hidden = [...ALWAYS_HIDDEN_WIDGETS, ...(PLAN_HIDDEN_WIDGETS[plan] || [])];
+  const filtered = WIDGET_CATALOG.filter((w) => !hidden.includes(w.id));
   const coreWidgets = filtered.filter(w => w.isCore);
+  const optionalWidgets = filtered.filter(w => !w.isCore);
   const optionalWidgets = filtered.filter(w => !w.isCore);
 
   return (
