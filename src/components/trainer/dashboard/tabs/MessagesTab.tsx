@@ -33,7 +33,29 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [showChatDialog, setShowChatDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(null);
   const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
+  const [activeContacts, setActiveContacts] = useState<ContactRequest[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // Seed a demo marketplace prospect on first load
+  useEffect(() => {
+    const raw = localStorage.getItem("trainer-contact-requests");
+    const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
+    if (all.length === 0) {
+      const seed: ContactRequest = {
+        id: `seed-prospect-${Date.now()}`,
+        trainerId: 0,
+        trainerName: "",
+        fromName: "Marco Bianchi",
+        subject: "Interested in personal training",
+        body: "Hi! I found your profile on the marketplace and I'd love to know more about your training approach and availability. Thanks!",
+        status: "pending",
+        relationship: "prospect",
+        createdAt: new Date().toISOString(),
+      };
+      localStorage.setItem("trainer-contact-requests", JSON.stringify([seed]));
+      window.dispatchEvent(new Event("trainer-contact-requests-changed"));
+    }
+  }, []);
 
   // Load + watch incoming contact requests (from clients in the marketplace)
   useEffect(() => {
@@ -42,8 +64,16 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
         const raw = localStorage.getItem("trainer-contact-requests");
         const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
         setContactRequests(all.filter((r) => r.status === "pending"));
+        setActiveContacts(
+          all.filter(
+            (r) =>
+              r.status === "replied" &&
+              (r.relationship === "prospect" || r.relationship === "crm"),
+          ),
+        );
       } catch {
         setContactRequests([]);
+        setActiveContacts([]);
       }
     };
     load();
@@ -52,19 +82,22 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
       window.removeEventListener("trainer-contact-requests-changed", load);
   }, []);
 
-  const updateContactStatus = (
+  const updateContact = (
     id: string,
-    status: ContactRequest["status"],
+    patch: Partial<ContactRequest>,
   ) => {
     const raw = localStorage.getItem("trainer-contact-requests");
     const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
-    const updated = all.map((r) => (r.id === id ? { ...r, status } : r));
+    const updated = all.map((r) => (r.id === id ? { ...r, ...patch } : r));
     localStorage.setItem("trainer-contact-requests", JSON.stringify(updated));
     window.dispatchEvent(new Event("trainer-contact-requests-changed"));
   };
 
   const handleContactReply = (request: ContactRequest) => {
-    updateContactStatus(request.id, "replied");
+    updateContact(request.id, {
+      status: "replied",
+      relationship: request.relationship ?? "prospect",
+    });
     setSelectedClient({
       id: Math.floor(Math.random() * 1_000_000),
       name: request.fromName,
@@ -73,9 +106,20 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   };
 
   const handleContactDeny = (request: ContactRequest) => {
-    updateContactStatus(request.id, "denied");
+    updateContact(request.id, { status: "denied" });
     toast.success(`Denied message from ${request.fromName}`);
   };
+
+  const handleAddToCrm = (request: ContactRequest) => {
+    updateContact(request.id, { relationship: "crm" });
+    toast.success(`${request.fromName} added to CRM`);
+  };
+
+  const handleAddAsClient = (request: ContactRequest) => {
+    updateContact(request.id, { relationship: "client" });
+    toast.success(`${request.fromName} added as client`);
+  };
+
 
   // Listen for status changes
   useEffect(() => {
