@@ -8,6 +8,11 @@ import { SendMessageDialog } from "./messages/SendMessageDialog";
 import { ClientChatDialog } from "./messages/ClientChatDialog";
 import { MessageAutomationTab } from "@/components/common/MessageAutomationTab";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import {
+  ContactRequestCard,
+  type ContactRequest,
+} from "./messages/ContactRequestCard";
+import { toast } from "sonner";
 
 interface MessageItem {
   id: number;
