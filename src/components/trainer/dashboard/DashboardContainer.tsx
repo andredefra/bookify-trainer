@@ -94,6 +94,17 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
     [activeTab, allowed]
   );
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ tab?: string }>).detail;
+      if (detail?.tab && allowed.includes(detail.tab)) {
+        setActiveTab(detail.tab);
+      }
+    };
+    window.addEventListener("dashboard-navigate", handler);
+    return () => window.removeEventListener("dashboard-navigate", handler);
+  }, [allowed]);
+
   return (
     <TrainerPlanProvider plan={plan}>
       <div className="min-h-screen flex flex-col">
