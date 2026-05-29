@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface SettingsSidebarProps {
   selectedSection: string;
@@ -9,7 +10,9 @@ interface SettingsSidebarProps {
 }
 
 export function SettingsSidebar({ selectedSection, setSelectedSection }: SettingsSidebarProps) {
-  const sections = [
+  const plan = useTrainerPlan();
+
+  const allSections = [
     { id: "profile", label: "Profile", icon: "👤" },
     { id: "public-profile", label: "My Public Profile", icon: "🌟" },
     { id: "availability", label: "Availability", icon: "📅" },
@@ -20,6 +23,23 @@ export function SettingsSidebar({ selectedSection, setSelectedSection }: Setting
     { id: "membership", label: "Membership", icon: "⭐" },
     { id: "billing", label: "Billing", icon: "💳" }
   ];
+
+  // Basic: no Installment Plans, no Payment Reminders (part of Payment Settings),
+  //        no Invoicing. Essential: no Invoicing.
+  const planExcludes: Record<string, string[]> = {
+    basic: ["payment-settings", "invoicing"],
+    essential: ["invoicing"],
+    pro: [],
+  };
+  const excluded = planExcludes[plan] || [];
+  const sections = allSections.filter((s) => !excluded.includes(s.id));
+
+  // If the currently selected section was filtered out, fall back to profile.
+  useEffect(() => {
+    if (!sections.find((s) => s.id === selectedSection)) {
+      setSelectedSection("profile");
+    }
+  }, [plan, selectedSection, sections, setSelectedSection]);
 
   return (
     <div className="w-full md:w-64 border-r bg-muted/20">
