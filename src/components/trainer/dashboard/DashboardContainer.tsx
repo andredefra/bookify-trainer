@@ -19,7 +19,7 @@ import { TrainerPlanProvider, TrainerPlan } from "@/context/TrainerPlanContext";
 
 const PLAN_ALLOWED_TABS: Record<TrainerPlan, string[]> = {
   basic: ["overview", "sales", "clients", "calendar", "messages", "reviews", "settings"],
-  essential: ["overview", "sales", "clients", "programs", "services", "packages", "sessions", "calendar", "messages", "transactions", "analytics", "reviews", "settings"],
+  essential: ["overview", "sales", "clients", "programs", "sessions", "calendar", "messages", "transactions", "analytics", "reviews", "settings"],
   pro: ["overview", "sales", "clients", "programs", "services", "packages", "sessions", "calendar", "messages", "transactions", "analytics", "reviews", "settings"],
 };
 import { TrainerSessionItem } from "@/types/sessions";
