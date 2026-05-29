@@ -16,7 +16,8 @@ export function ClientProfileTabList({
   onTabChange
 }: ClientProfileTabListProps) {
   const plan = useTrainerPlan();
-  const showProgramsPackages = plan !== "basic";
+  const showPrograms = plan !== "basic";
+  const showPackages = plan === "pro";
 
   return (
     <ScrollArea className="w-full pb-1">
