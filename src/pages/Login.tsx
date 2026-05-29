@@ -9,52 +9,58 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginType, setLoginType] = useState('trainer');
-  const [trainerPlan, setTrainerPlan] = useState<'pro' | 'essential' | 'basic'>('pro');
   const [name, setName] = useState('Andrea');
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && password) {
-      const allowedEmail = 'andrea.mypersonal.fit@gmail.com';
-      const allowedPassword = '@Tr3ggy@';
-      const isRestricted =
-        loginType === 'gym' ||
-        loginType === 'studio' ||
-        (loginType === 'trainer' && trainerPlan !== 'pro');
-
-      if (isRestricted) {
-        if (email.trim().toLowerCase() !== allowedEmail || password !== allowedPassword) {
-          toast.error("Access to this demo is restricted. Please contact andrea.mypersonal.fit@gmail.com for access.");
-          return;
-        }
-      }
-
-      toast.success("Demo login successful!");
-
-      // Generate unique demo user data
-      const demoUserData = getDemoUserData(email, name, loginType);
-      if (loginType === 'trainer') {
-        (demoUserData as any).plan = trainerPlan;
-      }
-      localStorage.setItem('demo-user', JSON.stringify(demoUserData));
-
-      // Route based on user type / trainer plan
-      if (loginType === 'client') {
-        navigate('/client-dashboard');
-      } else if (loginType === 'gym') {
-        navigate('/gym-dashboard');
-      } else if (loginType === 'studio') {
-        navigate('/studio-dashboard');
-      } else if (loginType === 'trainer' && trainerPlan === 'basic') {
-        navigate('/dashboard-basic');
-      } else if (loginType === 'trainer' && trainerPlan === 'essential') {
-        navigate('/dashboard-essential');
-      } else {
-        navigate('/dashboard');
-      }
-    } else {
+    if (!email || !password) {
       toast.error("Please enter both email and password");
+      return;
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const allowedEmail = 'andrea.mypersonal.fit@gmail.com';
+    const allowedPassword = '@Tr3ggy@';
+
+    // Gym/Studio remain restricted to the andrea credentials.
+    if (loginType === 'gym' || loginType === 'studio') {
+      if (normalizedEmail !== allowedEmail || password !== allowedPassword) {
+        toast.error("Access to this demo is restricted. Please contact andrea.mypersonal.fit@gmail.com for access.");
+        return;
+      }
+    }
+
+    // Infer trainer plan from credentials.
+    let resolvedPlan: 'basic' | 'essential' | 'pro' = 'pro';
+    if (loginType === 'trainer') {
+      if (normalizedEmail === 'andrea.mypersonal.fit@gmail.com' && password === allowedPassword) {
+        resolvedPlan = 'basic';
+      } else if (normalizedEmail === 'andredefra64@gmail.com' && password === allowedPassword) {
+        resolvedPlan = 'essential';
+      }
+    }
+
+    toast.success("Demo login successful!");
+
+    const demoUserData = getDemoUserData(email, name, loginType);
+    if (loginType === 'trainer') {
+      (demoUserData as any).plan = resolvedPlan;
+    }
+    localStorage.setItem('demo-user', JSON.stringify(demoUserData));
+
+    if (loginType === 'client') {
+      navigate('/client-dashboard');
+    } else if (loginType === 'gym') {
+      navigate('/gym-dashboard');
+    } else if (loginType === 'studio') {
+      navigate('/studio-dashboard');
+    } else if (loginType === 'trainer' && resolvedPlan === 'basic') {
+      navigate('/dashboard-basic');
+    } else if (loginType === 'trainer' && resolvedPlan === 'essential') {
+      navigate('/dashboard-essential');
+    } else {
+      navigate('/dashboard');
     }
   };
 
