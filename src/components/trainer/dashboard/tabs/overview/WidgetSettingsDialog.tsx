@@ -5,6 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { WIDGET_CATALOG, getCoreWidgetIds } from "./widgetConfig";
 import { RotateCcw } from "lucide-react";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
+
+const BASIC_HIDDEN_WIDGETS = ["expiration-alerts", "revenue-chart", "package-sales", "goals"];
 
 interface WidgetSettingsDialogProps {
   open: boolean;
