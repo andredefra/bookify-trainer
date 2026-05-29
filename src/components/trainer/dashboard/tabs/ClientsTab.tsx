@@ -93,6 +93,12 @@ export function ClientsTab({ clients }: ClientsTabProps) {
     setMessageClientName(clientName);
     setShowScheduleDialog(true);
   };
+
+  const handleScheduleEvent = (clientName: string) => {
+    setEventPrefillClient(clientName);
+    setShowCreateEventDialog(true);
+  };
+  
   
   return (
     <div className="space-y-6">
