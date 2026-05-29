@@ -54,8 +54,8 @@ export function SalesTab({ clientId, clientName }: SalesTabProps) {
   return (
     <Card>
       <CardContent className="pt-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div className="flex-1">
             <h3 className="text-base font-semibold flex items-center gap-2">
               <Receipt className="h-4 w-4" />
               Sales — Entries
@@ -64,15 +64,15 @@ export function SalesTab({ clientId, clientName }: SalesTabProps) {
               {description}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground">Total</p>
-              <p className="text-lg font-bold">€{total.toFixed(2)}</p>
-            </div>
+          <div className="flex flex-col items-end gap-2">
             <Button size="sm" onClick={() => setDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-1" />
               Add Entry
             </Button>
+            <div className="text-right">
+              <p className="text-xs text-muted-foreground">Total</p>
+              <p className="text-lg font-bold">€{total.toFixed(2)}</p>
+            </div>
           </div>
         </div>
 

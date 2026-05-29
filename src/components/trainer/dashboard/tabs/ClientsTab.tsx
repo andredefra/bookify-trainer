@@ -10,6 +10,7 @@ import { ClientProfileDialog } from "./clients/ClientProfileDialog";
 import { ClientPerformance } from "./analytics/ClientPerformance";
 import { MessageClientDialog } from "./clients/dialogs/MessageClientDialog";
 import { EnhancedScheduleSessionDialog } from "./clients/dialogs/EnhancedScheduleSessionDialog";
+import { CreateEventDialog } from "../dialogs/CreateEventDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-progress/ManageGoalTypesDialog";
 import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
@@ -38,6 +39,8 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [analyticsClientFilter, setAnalyticsClientFilter] = useState<string>("all");
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
+  const [eventPrefillClient, setEventPrefillClient] = useState("");
   const [messageClientName, setMessageClientName] = useState("");
   const [showManageGoalTypesDialog, setShowManageGoalTypesDialog] = useState(false);
   
@@ -90,6 +93,12 @@ export function ClientsTab({ clients }: ClientsTabProps) {
     setMessageClientName(clientName);
     setShowScheduleDialog(true);
   };
+
+  const handleScheduleEvent = (clientName: string) => {
+    setEventPrefillClient(clientName);
+    setShowCreateEventDialog(true);
+  };
+  
   
   return (
     <div className="space-y-6">
@@ -193,6 +202,7 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         onOpenChange={setShowProfileDialog}
         onMessage={handleMessage}
         onScheduleSession={handleScheduleSession}
+        onScheduleEvent={handleScheduleEvent}
         initialTab={initialProfileTab}
       />
       
@@ -217,6 +227,12 @@ export function ClientsTab({ clients }: ClientsTabProps) {
         open={showScheduleDialog}
         onOpenChange={setShowScheduleDialog}
         clientName={messageClientName}
+      />
+
+      <CreateEventDialog
+        open={showCreateEventDialog}
+        onOpenChange={setShowCreateEventDialog}
+        defaultClient={eventPrefillClient}
       />
       
       <ManageGoalTypesDialog

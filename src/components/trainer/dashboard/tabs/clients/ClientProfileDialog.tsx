@@ -33,10 +33,11 @@ interface ClientProfileDialogProps {
   onOpenChange: (open: boolean) => void;
   onMessage?: (clientName: string) => void;
   onScheduleSession?: (clientName: string) => void;
+  onScheduleEvent?: (clientName: string) => void;
   initialTab?: string;
 }
 
-export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onScheduleSession, initialTab }: ClientProfileDialogProps) {
+export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onScheduleSession, onScheduleEvent, initialTab }: ClientProfileDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
   
   if (!client) return null;
@@ -96,6 +97,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
           onClose={() => onOpenChange(false)}
           onMessage={() => onMessage?.(client.name)}
           onScheduleSession={() => onScheduleSession?.(client.name)}
+          onScheduleEvent={() => onScheduleEvent?.(client.name)}
         />
       </DialogContent>
     </Dialog>

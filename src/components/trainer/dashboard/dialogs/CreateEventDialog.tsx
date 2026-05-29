@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,10 @@ interface CreateEventDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit?: (eventData: any) => void;
+  defaultClient?: string;
 }
 
-export function CreateEventDialog({ open, onOpenChange, onSubmit }: CreateEventDialogProps) {
+export function CreateEventDialog({ open, onOpenChange, onSubmit, defaultClient }: CreateEventDialogProps) {
   const [formData, setFormData] = useState({
     title: "",
     type: "personal_task",
@@ -23,9 +24,16 @@ export function CreateEventDialog({ open, onOpenChange, onSubmit }: CreateEventD
     endDate: "",
     endTime: "",
     location: "",
-    client: "",
+    client: defaultClient ?? "",
     description: ""
   });
+
+  useEffect(() => {
+    if (open && defaultClient) {
+      setFormData((prev) => ({ ...prev, client: defaultClient }));
+    }
+  }, [open, defaultClient]);
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
