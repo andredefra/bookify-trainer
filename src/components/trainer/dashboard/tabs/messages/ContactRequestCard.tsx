@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Mail, Reply, X } from "lucide-react";
 import { safeFormatDate } from "@/utils/safeFormatDate";
 
+export type ContactRelationship = "prospect" | "crm" | "client";
+
 export interface ContactRequest {
   id: string;
   trainerId: number;
@@ -12,6 +14,7 @@ export interface ContactRequest {
   subject?: string;
   body: string;
   status: "pending" | "replied" | "denied";
+  relationship?: ContactRelationship;
   createdAt: string;
 }
 
@@ -41,7 +44,12 @@ export function ContactRequestCard({ request, onReply, onDeny }: Props) {
         </div>
 
         <div>
-          <p className="font-medium">{request.fromName}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="font-medium">{request.fromName}</p>
+            <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">
+              Prospect
+            </Badge>
+          </div>
           {request.subject && (
             <p className="text-sm font-semibold mt-1">{request.subject}</p>
           )}
