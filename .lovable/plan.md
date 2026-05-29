@@ -1,14 +1,13 @@
-# Fix: prospect request not visible
+# Show prospect contact requests inside the Notification Center
 
-The seed effect in `MessagesTab` only runs when `trainer-contact-requests` is empty. After earlier testing (reply/deny), the array already contains entries with non-pending status, so no new pending prospect is ever seeded — and the banner/Unread badge stay hidden.
+The bell counts pending prospect requests but `NotificationCenter` only renders entries from `useNotifications`, so the panel shows "No notifications".
 
 ## Change
 
-In `src/components/trainer/dashboard/tabs/MessagesTab.tsx`, replace the seed condition:
+Edit `src/components/trainer/dashboard/header/NotificationCenter.tsx`:
 
-- **Before**: seed only when `all.length === 0`.
-- **After**: seed when there is no entry with `status === "pending"` AND `relationship === "prospect"`. Append a fresh "Marco Bianchi" prospect request with a new id to the existing array (don't wipe denied/replied history), then dispatch `trainer-contact-requests-changed`.
-
-This guarantees every trainer profile always has at least one visible prospect request in the Unread tab + the summary banner on Messages + the Unread tab count badge + the header bell badge, even across reloads or after the test message was previously replied/denied.
+1. Read `trainer-contact-requests` from localStorage (subscribe to `trainer-contact-requests-changed`) and filter for `status === "pending"`.
+2. Render a "Message Requests" section at the top of the panel — one row per pending prospect with the Mail icon, "New message request from {fromName}", subject as subtitle, and time-ago.
+3. Combined empty state ("No notifications") only when both the prospect list and `notifications` are empty.
 
 No other files change.
