@@ -222,6 +222,71 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
                   </div>
                 )}
 
+                {/* Active conversations promoted from marketplace contacts */}
+                {activeContacts.map((c) => (
+                  <div key={c.id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-medium">{c.fromName}</h3>
+                        {c.relationship === "prospect" && (
+                          <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">
+                            Prospect
+                          </Badge>
+                        )}
+                        {c.relationship === "crm" && (
+                          <Badge className="text-[10px] uppercase tracking-wide">
+                            CRM user
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {c.subject ?? "Conversation"}
+                      </span>
+                    </div>
+                    <p className="text-sm mb-3 text-muted-foreground line-clamp-2">
+                      {c.body}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setSelectedClient({ id: Math.floor(Math.random() * 1_000_000), name: c.fromName });
+                          setShowChatDialog(true);
+                        }}
+                        className="gap-1"
+                      >
+                        <Reply className="h-4 w-4" />
+                        {!isMobile && <span>Message</span>}
+                      </Button>
+                      {c.relationship === "prospect" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleAddToCrm(c)}
+                          className="gap-1"
+                        >
+                          <UserPlus className="h-4 w-4" />
+                          {!isMobile && <span>Add to CRM</span>}
+                        </Button>
+                      )}
+                      {c.relationship === "crm" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleAddAsClient(c)}
+                          className="gap-1"
+                        >
+                          <UserCheck className="h-4 w-4" />
+                          {!isMobile && <span>Add as Client</span>}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+              
+
+
 
               
                 {messageRequests.map((message) => (
