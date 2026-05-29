@@ -39,6 +39,8 @@ export function ClientsTab({ clients }: ClientsTabProps) {
   const [analyticsClientFilter, setAnalyticsClientFilter] = useState<string>("all");
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [showCreateEventDialog, setShowCreateEventDialog] = useState(false);
+  const [eventPrefillClient, setEventPrefillClient] = useState("");
   const [messageClientName, setMessageClientName] = useState("");
   const [showManageGoalTypesDialog, setShowManageGoalTypesDialog] = useState(false);
   
