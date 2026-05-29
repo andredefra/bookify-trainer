@@ -1,20 +1,14 @@
-# Move incoming requests to "Unread" + add notification signal
+# Fix: prospect request not visible
 
-## Behavior
+The seed effect in `MessagesTab` only runs when `trainer-contact-requests` is empty. After earlier testing (reply/deny), the array already contains entries with non-pending status, so no new pending prospect is ever seeded — and the banner/Unread badge stay hidden.
 
-1. **Messages tab (All Messages)**: replace the full `Requests` block with a compact, single-row summary banner:
-   - "You have **1 new request** — View in Unread" (count is dynamic; clicking jumps to the Unread tab).
-   - The full prospect card is no longer rendered here.
+## Change
 
-2. **Unread tab**: render the actual `ContactRequestCard`(s) here, grouped under a "Requests" heading, with the existing Reply / Deny actions. The empty-state ("No unread messages") only shows when there are zero pending requests AND zero unread client messages.
+In `src/components/trainer/dashboard/tabs/MessagesTab.tsx`, replace the seed condition:
 
-3. **Tab indicator**: the `TabsTrigger` for "Unread" gets a small count badge (e.g. `Unread · 1`) using a primary-tinted pill when `contactRequests.length > 0`. Removed when count is 0.
+- **Before**: seed only when `all.length === 0`.
+- **After**: seed when there is no entry with `status === "pending"` AND `relationship === "prospect"`. Append a fresh "Marco Bianchi" prospect request with a new id to the existing array (don't wipe denied/replied history), then dispatch `trainer-contact-requests-changed`.
 
-4. **Header notification**: dispatch a UI-level notification when a pending contact request exists. Add a lightweight `useEffect` in `MessagesTab` that, on first detection of a new pending request id, calls a small helper to push a toast `New message request from {name}` once per id (track shown ids in `sessionStorage` to avoid spamming on every tab switch). Also add a red dot indicator on the `NotificationBell` when there are pending contact requests — extend `NotificationBell` to read `trainer-contact-requests` from localStorage and OR its existing unreadCount with the pending-request count for the dot visibility (no entries added to the persisted notifications list, just the visual dot + count).
+This guarantees every trainer profile always has at least one visible prospect request in the Unread tab + the summary banner on Messages + the Unread tab count badge + the header bell badge, even across reloads or after the test message was previously replied/denied.
 
-## Files
-
-- edit `src/components/trainer/dashboard/tabs/MessagesTab.tsx` — move requests from Messages to Unread tab, replace with summary banner, add count to Unread tab trigger, fire one-time toast per new request id.
-- edit `src/components/trainer/dashboard/header/NotificationBell.tsx` — include pending contact requests in the badge/dot count.
-
-No backend changes — all driven by the existing `trainer-contact-requests` localStorage entry and its `trainer-contact-requests-changed` event.
+No other files change.

@@ -38,11 +38,14 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
   const [activeContacts, setActiveContacts] = useState<ContactRequest[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Seed a demo marketplace prospect on first load
+  // Ensure there is always a pending marketplace prospect to demo the flow
   useEffect(() => {
     const raw = localStorage.getItem("trainer-contact-requests");
     const all: ContactRequest[] = raw ? JSON.parse(raw) : [];
-    if (all.length === 0) {
+    const hasPendingProspect = all.some(
+      (r) => r.status === "pending" && r.relationship === "prospect",
+    );
+    if (!hasPendingProspect) {
       const seed: ContactRequest = {
         id: `seed-prospect-${Date.now()}`,
         trainerId: 0,
@@ -54,10 +57,14 @@ export function MessagesTab({ messageRequests }: MessagesTabProps) {
         relationship: "prospect",
         createdAt: new Date().toISOString(),
       };
-      localStorage.setItem("trainer-contact-requests", JSON.stringify([seed]));
+      localStorage.setItem(
+        "trainer-contact-requests",
+        JSON.stringify([...all, seed]),
+      );
       window.dispatchEvent(new Event("trainer-contact-requests-changed"));
     }
   }, []);
+
 
   // Load + watch incoming contact requests (from clients in the marketplace)
   useEffect(() => {
