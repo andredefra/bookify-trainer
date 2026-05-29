@@ -14,6 +14,8 @@ import FindTrainer from "./pages/FindTrainer";
 import TrainerProfile from "./pages/TrainerProfile";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import DashboardBasic from "./pages/DashboardBasic";
+import DashboardEssential from "./pages/DashboardEssential";
 import ClientDashboard from "./pages/ClientDashboard";
 import GymDashboard from "./pages/GymDashboard";
 import StudioDashboard from "./pages/StudioDashboard";
