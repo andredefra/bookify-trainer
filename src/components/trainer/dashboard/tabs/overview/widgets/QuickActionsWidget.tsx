@@ -66,6 +66,9 @@ export function QuickActionsWidget({
       variant: "outline" as const
     }
   ];
+  const visibleActions = isBasic
+    ? actions.filter((a) => !["create-package", "record-payment"].includes(a.id))
+    : actions;
 
   return (
     <BaseWidget title="Quick Actions">
