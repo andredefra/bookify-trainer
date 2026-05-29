@@ -34,13 +34,17 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavigateToTab }: OverviewTabProps) {
+  const plan = useTrainerPlan();
   const stats = {
     totalClients: clients.length,
     monthlyRevenue: 3200,
     upcomingToday: upcomingSessions.length,
   };
 
-  const { layout, enabledWidgets, saveLayout, toggleWidget, resetToDefault } = useWidgetLayout();
+  const { layout, enabledWidgets: rawEnabledWidgets, saveLayout, toggleWidget, resetToDefault } = useWidgetLayout();
+  const enabledWidgets = plan === "basic"
+    ? rawEnabledWidgets.filter((w) => w !== "expiration-alerts")
+    : rawEnabledWidgets;
   const [showSettings, setShowSettings] = useState(false);
   const [showAddClient, setShowAddClient] = useState(false);
   const [showRecordPayment, setShowRecordPayment] = useState(false);
