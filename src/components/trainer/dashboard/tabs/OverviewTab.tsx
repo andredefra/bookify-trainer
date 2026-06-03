@@ -23,6 +23,7 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import "./overview/widget-grid.css";
 import { useTrainerPlan } from "@/context/TrainerPlanContext";
+import { useClientRoster } from "@/context/ClientRosterContext";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -34,7 +35,7 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({ upcomingSessions, clients: rawClients, messageRequests, onNavigateToTab }: OverviewTabProps) {
-  const { removedIds } = (require("@/context/ClientRosterContext") as typeof import("@/context/ClientRosterContext")).useClientRoster();
+  const { removedIds } = useClientRoster();
   const clients = rawClients.filter((c) => !removedIds.has(c.id));
   const plan = useTrainerPlan();
   const stats = {
