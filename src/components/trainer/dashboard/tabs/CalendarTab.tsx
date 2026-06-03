@@ -261,10 +261,6 @@ export function CalendarTab() {
                     className={cn(view === 'day' && 'bg-primary text-primary-foreground')}>
               Day
             </Button>
-            <Button variant="outline" size="sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Google Calendar
-            </Button>
             <Button size="sm" onClick={() => setShowCreateEventDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add Event
@@ -470,26 +466,6 @@ export function CalendarTab() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Google Calendar Integration */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Google Calendar</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <span className="text-sm">Not Connected</span>
-                </div>
-                <Button size="sm" variant="outline">
-                  Connect
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Sync your calendar events with Google Calendar for seamless scheduling
-              </p>
-            </CardContent>
-          </Card>
 
           {/* Today's Events */}
           <Card>
