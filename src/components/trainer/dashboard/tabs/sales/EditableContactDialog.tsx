@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { SalesContact } from "./types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
+import { useSalesEntries } from "@/context/SalesEntriesContext";
+import { Lock } from "lucide-react";
 
 interface EditableContactDialogProps {
   contact: SalesContact;
@@ -23,7 +25,10 @@ export function EditableContactDialog({
   onSave 
 }: EditableContactDialogProps) {
   const [formData, setFormData] = useState<SalesContact>({...contact});
-  
+  const { getTotal } = useSalesEntries();
+  const lockedValue = getTotal(formData.email);
+  const isClient = formData.status === "client";
+
   const handleChange = (field: keyof SalesContact, value: any) => {
     setFormData(prev => ({
       ...prev,
@@ -33,7 +38,8 @@ export function EditableContactDialog({
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    const payload = isClient ? { ...formData, value: lockedValue } : formData;
+    onSave(payload);
     onOpenChange(false);
   };
   
@@ -130,15 +136,25 @@ export function EditableContactDialog({
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="value">Value ($)</Label>
-              <Input 
-                id="value" 
-                type="number" 
+              <Label htmlFor="value" className="flex items-center gap-1">
+                Value ($){isClient && <Lock className="h-3 w-3 text-muted-foreground" />}
+              </Label>
+              <Input
+                id="value"
+                type="number"
                 min="0"
                 step="0.01"
-                value={formData.value || ''} 
-                onChange={(e) => handleChange('value', parseFloat(e.target.value) || undefined)} 
+                value={isClient ? lockedValue.toFixed(2) : (formData.value ?? '')}
+                onChange={(e) => handleChange('value', parseFloat(e.target.value) || undefined)}
+                readOnly={isClient}
+                tabIndex={isClient ? -1 : undefined}
+                className={isClient ? "bg-muted cursor-not-allowed" : undefined}
               />
+              {isClient && (
+                <p className="text-[11px] text-muted-foreground">
+                  Auto-calculated from this client's Sales — Entries.
+                </p>
+              )}
             </div>
             
             <div className="space-y-2">
