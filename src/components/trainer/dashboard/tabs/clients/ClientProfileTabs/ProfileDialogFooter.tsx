@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Calendar, HelpCircle } from "lucide-react";
+import { MessageSquare, Calendar, HelpCircle, Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
@@ -9,14 +9,15 @@ interface ProfileDialogFooterProps {
   onMessage: () => void;
   onScheduleSession: () => void;
   onScheduleEvent?: () => void;
+  onRemove?: () => void;
 }
 
-export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onScheduleEvent }: ProfileDialogFooterProps) {
+export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onScheduleEvent, onRemove }: ProfileDialogFooterProps) {
   const plan = useTrainerPlan();
   const isBasic = plan === "basic";
   return (
-    <div className="flex justify-between mt-4">
-      <div className="flex space-x-2">
+    <div className="flex justify-between mt-4 flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         <Button variant="outline" size="sm" onClick={onMessage}>
           <MessageSquare className="h-4 w-4 mr-2" />
           Message
@@ -42,9 +43,17 @@ export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onS
           </Tooltip>
         </TooltipProvider>
       </div>
-      <Button variant="ghost" size="sm" onClick={onClose}>
-        Close
-      </Button>
+      <div className="flex items-center gap-2">
+        {onRemove && (
+          <Button variant="destructive" size="sm" onClick={onRemove}>
+            <Trash2 className="h-4 w-4 mr-2" />
+            Remove Client
+          </Button>
+        )}
+        <Button variant="ghost" size="sm" onClick={onClose}>
+          Close
+        </Button>
+      </div>
     </div>
   );
 }
