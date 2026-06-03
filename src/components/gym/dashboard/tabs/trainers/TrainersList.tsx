@@ -23,10 +23,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTrainerContracts } from "@/hooks/gym/useTrainerContracts";
 
-export function TrainersList() {
+interface TrainersListProps {
+  isInvited?: boolean;
+  search?: string;
+}
+
+export function TrainersList({ isInvited = false, search = "" }: TrainersListProps) {
   const [filter, setFilter] = useState("all");
   const { trainersWithContracts, loading } = useTrainerContracts();
-  
+
   const getStatusColor = (status: string) => {
     switch(status) {
       case "online": return "bg-green-500";
@@ -34,10 +39,25 @@ export function TrainersList() {
       default: return "bg-slate-400";
     }
   };
-  
-  const filteredTrainers = filter === "all" 
-    ? trainersWithContracts 
-    : trainersWithContracts.filter(trainer => trainer.status === filter);
+
+  const statusLabel = (status: string) => {
+    switch(status) {
+      case "online": return "Online";
+      case "away": return "Away";
+      default: return "Offline";
+    }
+  };
+
+  const q = search.trim().toLowerCase();
+  const filteredTrainers = trainersWithContracts
+    .filter((t) => (filter === "all" ? true : t.status === filter))
+    .filter((t) =>
+      !q
+        ? true
+        : t.name.toLowerCase().includes(q) ||
+          t.email.toLowerCase().includes(q) ||
+          t.specialties.some((s) => s.toLowerCase().includes(q))
+    );
 
   if (loading) {
     return <div className="flex justify-center p-8">Loading trainers...</div>;
