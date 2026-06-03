@@ -1,35 +1,151 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTrainerGymAffiliations, type GymInfo } from "@/hooks/useTrainerGymAffiliations";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Building2, Search, Star, Clock, CheckCircle, XCircle, Plus } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Building2,
+  Search,
+  Star,
+  CheckCircle,
+  ShieldCheck,
+  ShieldAlert,
+  Plus,
+  Copy,
+  Link2,
+  ArrowLeft,
+} from "lucide-react";
+import { toast } from "sonner";
+import {
+  createInvite,
+  buildOnboardingUrl,
+  getInvitesForTrainer,
+  type MockGymInvite,
+} from "@/utils/mockGymInvites";
+
 interface MyGymsSectionProps {
   trainerId?: string;
 }
-export function MyGymsSection({
-  trainerId
-}: MyGymsSectionProps) {
-  const {
-    affiliations,
-    loading,
-    saving,
-    requestAffiliation,
-    setPrimaryGym,
-    cancelRequest,
-    searchGyms
-  } = useTrainerGymAffiliations(trainerId);
+
+type DialogStep = "search" | "confirm-existing" | "manual-form" | "manual-confirm" | "invite-link";
+
+interface LocalManualAffiliation {
+  id: string;
+  token: string;
+  name: string;
+  kind: "gym" | "studio";
+  street: string;
+  city?: string;
+  status: "pending" | "verified";
+  isPrimary?: boolean;
+  createdAt: string;
+}
+
+const LOCAL_AFFILIATIONS_KEY = "mock-trainer-manual-affiliations";
+
+function loadLocalAffiliations(trainerId?: string): LocalManualAffiliation[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_AFFILIATIONS_KEY);
+    const all = raw ? (JSON.parse(raw) as Record<string, LocalManualAffiliation[]>) : {};
+    return all[trainerId || "_anon"] || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalAffiliations(trainerId: string | undefined, list: LocalManualAffiliation[]) {
+  try {
+    const raw = localStorage.getItem(LOCAL_AFFILIATIONS_KEY);
+    const all = raw ? (JSON.parse(raw) as Record<string, LocalManualAffiliation[]>) : {};
+    all[trainerId || "_anon"] = list;
+    localStorage.setItem(LOCAL_AFFILIATIONS_KEY, JSON.stringify(all));
+  } catch {
+    // ignore
+  }
+}
+
+export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
+  const { searchGyms } = useTrainerGymAffiliations(trainerId);
+
+  const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<DialogStep>("search");
+
+  // Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GymInfo[]>([]);
-  const [selectedGym, setSelectedGym] = useState<GymInfo | null>(null);
-  const [requestMessage, setRequestMessage] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [showRequestDialog, setShowRequestDialog] = useState(false);
+  const [selectedGym, setSelectedGym] = useState<GymInfo | null>(null);
+
+  // Manual form state
+  const [manualName, setManualName] = useState("");
+  const [manualKind, setManualKind] = useState<"gym" | "studio">("gym");
+  const [manualStreet, setManualStreet] = useState("");
+  const [manualCity, setManualCity] = useState("");
+  const [manualNotes, setManualNotes] = useState("");
+
+  // Invite link state
+  const [generatedInvite, setGeneratedInvite] = useState<MockGymInvite | null>(null);
+
+  // Affiliations
+  const [manualAffiliations, setManualAffiliations] = useState<LocalManualAffiliation[]>([]);
+  const [verifiedAffiliations, setVerifiedAffiliations] = useState<
+    { id: string; gym: GymInfo; isPrimary: boolean }[]
+  >([]);
+
+  const refreshManualAffiliations = () => {
+    const localList = loadLocalAffiliations(trainerId);
+    // Sync status from invites
+    const invites = getInvitesForTrainer(trainerId);
+    const updated = localList.map((a) => {
+      const invite = invites.find((i) => i.token === a.token);
+      return invite ? { ...a, status: invite.status } : a;
+    });
+    if (JSON.stringify(updated) !== JSON.stringify(localList)) {
+      saveLocalAffiliations(trainerId, updated);
+    }
+    setManualAffiliations(updated);
+  };
+
+  useEffect(() => {
+    refreshManualAffiliations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainerId]);
+
+  const resetDialog = () => {
+    setStep("search");
+    setSearchQuery("");
+    setSearchResults([]);
+    setSelectedGym(null);
+    setManualName("");
+    setManualKind("gym");
+    setManualStreet("");
+    setManualCity("");
+    setManualNotes("");
+    setGeneratedInvite(null);
+  };
+
+  const openDialog = () => {
+    resetDialog();
+    setOpen(true);
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+    setTimeout(resetDialog, 200);
+  };
+
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
     setIsSearching(true);
@@ -40,219 +156,508 @@ export function MyGymsSection({
       setIsSearching(false);
     }
   };
-  const handleRequestAffiliation = async () => {
+
+  const handleConfirmExisting = () => {
     if (!selectedGym) return;
-    const success = await requestAffiliation(selectedGym.id, requestMessage);
-    if (success) {
-      setShowRequestDialog(false);
-      setSelectedGym(null);
-      setRequestMessage("");
-      setSearchQuery("");
-      setSearchResults([]);
-    }
+    setVerifiedAffiliations((prev) => {
+      if (prev.some((a) => a.gym.id === selectedGym.id)) return prev;
+      return [
+        ...prev,
+        {
+          id: selectedGym.id,
+          gym: selectedGym,
+          isPrimary: prev.length === 0,
+        },
+      ];
+    });
+    toast.success(`${selectedGym.name} added to your affiliations`);
+    closeDialog();
   };
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <Badge className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Approved</Badge>;
-      case 'pending':
-        return <Badge className="bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
-      case 'rejected':
-        return <Badge className="bg-red-100 text-red-800"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+
+  const handleGenerateInvite = () => {
+    if (!manualName.trim() || !manualStreet.trim()) {
+      toast.error("Please fill name and address");
+      return;
     }
+    const invite = createInvite({
+      name: manualName.trim(),
+      kind: manualKind,
+      street: manualStreet.trim(),
+      city: manualCity.trim() || undefined,
+      notes: manualNotes.trim() || undefined,
+      trainerId,
+    });
+    setGeneratedInvite(invite);
+
+    const newAffiliation: LocalManualAffiliation = {
+      id: invite.token,
+      token: invite.token,
+      name: invite.name,
+      kind: invite.kind,
+      street: invite.street,
+      city: invite.city,
+      status: "pending",
+      createdAt: invite.createdAt,
+      isPrimary:
+        manualAffiliations.length === 0 && verifiedAffiliations.length === 0,
+    };
+    const next = [newAffiliation, ...manualAffiliations];
+    saveLocalAffiliations(trainerId, next);
+    setManualAffiliations(next);
+    setStep("invite-link");
   };
-  if (loading) {
-    return <div className="flex items-center justify-center h-32">Loading...</div>;
-  }
-  return <div className="space-y-6">
+
+  const copyInviteLink = (token: string) => {
+    const url = buildOnboardingUrl(token);
+    navigator.clipboard?.writeText(url);
+    toast.success("Invite link copied to clipboard");
+  };
+
+  const setPrimaryManual = (id: string) => {
+    const next = manualAffiliations.map((a) => ({ ...a, isPrimary: a.id === id }));
+    saveLocalAffiliations(trainerId, next);
+    setManualAffiliations(next);
+    setVerifiedAffiliations((prev) => prev.map((a) => ({ ...a, isPrimary: false })));
+    toast.success("Primary affiliation updated");
+  };
+
+  const setPrimaryVerified = (id: string) => {
+    setVerifiedAffiliations((prev) => prev.map((a) => ({ ...a, isPrimary: a.id === id })));
+    const next = manualAffiliations.map((a) => ({ ...a, isPrimary: false }));
+    saveLocalAffiliations(trainerId, next);
+    setManualAffiliations(next);
+    toast.success("Primary affiliation updated");
+  };
+
+  const hasAffiliations = manualAffiliations.length + verifiedAffiliations.length > 0;
+
+  // --- Dialog body renderer ---
+  const renderDialogBody = () => {
+    if (step === "search") {
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="gym-search">Search by name or address</Label>
+            <div className="flex gap-2 mt-1">
+              <Input
+                id="gym-search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="e.g. FitLife Gym or 123 Main St"
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              />
+              <Button onClick={handleSearch} disabled={isSearching}>
+                <Search className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {searchResults.length > 0 && (
+            <div className="space-y-2">
+              <Label>Results</Label>
+              <div className="max-h-60 overflow-y-auto space-y-2">
+                {searchResults.map((gym) => (
+                  <Card
+                    key={gym.id}
+                    className={`cursor-pointer transition-colors ${
+                      selectedGym?.id === gym.id ? "ring-2 ring-primary" : ""
+                    }`}
+                    onClick={() => setSelectedGym(gym)}
+                  >
+                    <CardContent className="p-3">
+                      <div className="flex items-center gap-3">
+                        {gym.logo_url ? (
+                          <img
+                            src={gym.logo_url}
+                            alt={gym.name}
+                            className="w-10 h-10 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <Building2 className="w-10 h-10 p-2 bg-muted rounded-lg text-muted-foreground" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <div className="font-medium truncate">{gym.name}</div>
+                            <Badge variant="outline" className="text-[10px] gap-1 border-green-200 text-green-700">
+                              <ShieldCheck className="w-3 h-3" /> Verified
+                            </Badge>
+                          </div>
+                          {gym.location && (
+                            <div className="text-sm text-muted-foreground truncate">
+                              {gym.location}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              {selectedGym && (
+                <Button className="w-full" onClick={() => setStep("confirm-existing")}>
+                  Continue with {selectedGym.name}
+                </Button>
+              )}
+            </div>
+          )}
+
+          {searchResults.length === 0 && searchQuery && !isSearching && (
+            <p className="text-sm text-muted-foreground">
+              No results yet. Search above or add it manually below.
+            </p>
+          )}
+
+          <div className="border-t pt-4">
+            <p className="text-sm text-muted-foreground mb-2">
+              Can't find your gym or studio?
+            </p>
+            <Button variant="outline" className="w-full" onClick={() => setStep("manual-form")}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add it manually
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    if (step === "confirm-existing" && selectedGym) {
+      return (
+        <div className="space-y-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                {selectedGym.logo_url ? (
+                  <img
+                    src={selectedGym.logo_url}
+                    alt={selectedGym.name}
+                    className="w-12 h-12 rounded-lg object-cover"
+                  />
+                ) : (
+                  <Building2 className="w-12 h-12 p-2 bg-muted rounded-lg text-muted-foreground" />
+                )}
+                <div>
+                  <div className="font-semibold">{selectedGym.name}</div>
+                  {selectedGym.location && (
+                    <div className="text-sm text-muted-foreground">{selectedGym.location}</div>
+                  )}
+                  <Badge variant="outline" className="mt-1 text-[10px] gap-1 border-green-200 text-green-700">
+                    <ShieldCheck className="w-3 h-3" /> Verified entity
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <p className="text-sm text-muted-foreground">
+            This is a verified gym already on the platform. Confirm to add it to your affiliations.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setStep("search")}>
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back
+            </Button>
+            <Button onClick={handleConfirmExisting}>
+              <CheckCircle className="w-4 h-4 mr-2" /> Confirm affiliation
+            </Button>
+          </DialogFooter>
+        </div>
+      );
+    }
+
+    if (step === "manual-form") {
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label>Type</Label>
+            <RadioGroup
+              value={manualKind}
+              onValueChange={(v) => setManualKind(v as "gym" | "studio")}
+              className="flex gap-4 mt-2"
+            >
+              <div className="flex items-center gap-2">
+                <RadioGroupItem id="kind-gym" value="gym" />
+                <Label htmlFor="kind-gym" className="font-normal">Gym</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <RadioGroupItem id="kind-studio" value="studio" />
+                <Label htmlFor="kind-studio" className="font-normal">Studio</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          <div>
+            <Label htmlFor="m-name">Name *</Label>
+            <Input
+              id="m-name"
+              value={manualName}
+              onChange={(e) => setManualName(e.target.value)}
+              placeholder="e.g. FitLife Gym"
+            />
+          </div>
+          <div>
+            <Label htmlFor="m-street">Street / Address *</Label>
+            <Input
+              id="m-street"
+              value={manualStreet}
+              onChange={(e) => setManualStreet(e.target.value)}
+              placeholder="e.g. 123 Main Street"
+            />
+          </div>
+          <div>
+            <Label htmlFor="m-city">City (optional)</Label>
+            <Input
+              id="m-city"
+              value={manualCity}
+              onChange={(e) => setManualCity(e.target.value)}
+              placeholder="e.g. Milan"
+            />
+          </div>
+          <div>
+            <Label htmlFor="m-notes">Notes (optional)</Label>
+            <Textarea
+              id="m-notes"
+              value={manualNotes}
+              onChange={(e) => setManualNotes(e.target.value)}
+              rows={2}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setStep("search")}>
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back
+            </Button>
+            <Button
+              onClick={() => {
+                if (!manualName.trim() || !manualStreet.trim()) {
+                  toast.error("Please fill name and address");
+                  return;
+                }
+                setStep("manual-confirm");
+              }}
+            >
+              Continue
+            </Button>
+          </DialogFooter>
+        </div>
+      );
+    }
+
+    if (step === "manual-confirm") {
+      return (
+        <div className="space-y-4">
+          <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <div className="flex items-start gap-2">
+              <ShieldAlert className="w-5 h-5 mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="font-semibold mb-1">
+                  You are adding an unverified {manualKind}.
+                </div>
+                <p>
+                  This {manualKind} will appear as <strong>Unverified</strong> until they
+                  claim and verify their entity. Invite the {manualKind} to the platform so
+                  they can verify and gain credibility and trust with clients.
+                </p>
+              </div>
+            </div>
+          </div>
+          <Card>
+            <CardContent className="p-4 space-y-1 text-sm">
+              <div><strong>Name:</strong> {manualName}</div>
+              <div><strong>Type:</strong> {manualKind === "gym" ? "Gym" : "Studio"}</div>
+              <div><strong>Address:</strong> {manualStreet}{manualCity ? `, ${manualCity}` : ""}</div>
+            </CardContent>
+          </Card>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setStep("manual-form")}>
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back
+            </Button>
+            <Button onClick={handleGenerateInvite}>
+              Confirm & generate invite link
+            </Button>
+          </DialogFooter>
+        </div>
+      );
+    }
+
+    if (step === "invite-link" && generatedInvite) {
+      const url = buildOnboardingUrl(generatedInvite.token);
+      return (
+        <div className="space-y-4">
+          <div className="rounded-md border bg-muted/40 p-4 text-sm">
+            <div className="flex items-start gap-2">
+              <Link2 className="w-5 h-5 mt-0.5 text-primary flex-shrink-0" />
+              <div>
+                <div className="font-semibold mb-1">Invite link ready</div>
+                <p className="text-muted-foreground">
+                  Share this unique link with <strong>{generatedInvite.name}</strong>. When they
+                  open it they can confirm the entity details, upload verification documents,
+                  and create their account on the platform.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Input readOnly value={url} className="font-mono text-xs" />
+            <Button onClick={() => copyInviteLink(generatedInvite.token)}>
+              <Copy className="w-4 h-4 mr-2" /> Copy
+            </Button>
+          </div>
+          <DialogFooter>
+            <Button onClick={closeDialog}>Done</Button>
+          </DialogFooter>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const dialogTitleByStep: Record<DialogStep, string> = {
+    search: "Add your gym or studio",
+    "confirm-existing": "Confirm affiliation",
+    "manual-form": "Add gym or studio manually",
+    "manual-confirm": "Review & confirm",
+    "invite-link": "Share invite link",
+  };
+
+  return (
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">My Studio or Gym</h2>
-          <p className="text-muted-foreground">Manage your affiliations and partnerships</p>
+          <p className="text-muted-foreground">
+            Manage the gyms and studios where you train or work
+          </p>
         </div>
-        
-        {affiliations.length > 0 && <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Request Affiliation
-              </Button>
-            </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Request Gym Affiliation</DialogTitle>
-            </DialogHeader>
-            
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="gym-search">Search for a gym</Label>
-                <div className="flex gap-2">
-                  <Input id="gym-search" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Enter gym name or location..." onKeyPress={e => e.key === 'Enter' && handleSearch()} />
-                  <Button onClick={handleSearch} disabled={isSearching}>
-                    <Search className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {searchResults.length > 0 && <div className="space-y-2">
-                  <Label>Search Results</Label>
-                  <div className="max-h-48 overflow-y-auto space-y-2">
-                    {searchResults.map(gym => <Card key={gym.id} className={`cursor-pointer transition-colors ${selectedGym?.id === gym.id ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedGym(gym)}>
-                        <CardContent className="p-3">
-                          <div className="flex items-center gap-3">
-                            {gym.logo_url ? <img src={gym.logo_url} alt={`${gym.name} logo`} className="w-10 h-10 rounded-lg object-cover" /> : <Building2 className="w-10 h-10 p-2 bg-muted rounded-lg text-muted-foreground" />}
-                            <div className="flex-1 min-w-0">
-                              <div className="font-medium truncate">{gym.name}</div>
-                              {gym.gym_type && <div className="text-xs text-primary font-medium">{gym.gym_type}</div>}
-                              {gym.location && <div className="text-sm text-muted-foreground truncate">{gym.location}</div>}
-                              {gym.description && <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{gym.description}</div>}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>)}
-                  </div>
-                </div>}
-
-              {selectedGym && <div className="space-y-3">
-                  <Separator />
-                  <div>
-                    <Label htmlFor="request-message">Message (optional)</Label>
-                    <Textarea id="request-message" value={requestMessage} onChange={e => setRequestMessage(e.target.value)} placeholder="Introduce yourself and explain why you'd like to work with this gym..." rows={3} />
-                  </div>
-                  
-                  <Button onClick={handleRequestAffiliation} disabled={saving} className="w-full">
-                    {saving ? "Sending Request..." : "Send Affiliation Request"}
-                  </Button>
-                </div>}
-            </div>
-          </DialogContent>
-        </Dialog>}
+        {hasAffiliations && (
+          <Button onClick={openDialog}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add your gym or studio
+          </Button>
+        )}
       </div>
 
       <div className="grid gap-4">
-        {affiliations.length === 0 ? <Card>
+        {!hasAffiliations && (
+          <Card>
             <CardContent className="p-6 text-center">
               <Building2 className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="font-medium mb-2">No Affiliations Yet</h3>
+              <h3 className="font-medium mb-2">No gym or studio yet</h3>
               <p className="text-muted-foreground mb-4">
-                Connect with a Gym or Studio to expand your reach, get more clients, and grow your business. Partnerships provide credibility and access to their member base.
+                Add the gym or studio where you train or work. If it isn't on the platform yet,
+                you can add it manually and invite them to verify the entity.
               </p>
-              <div className="bg-muted/50 rounded-md p-3 mb-4 text-sm text-muted-foreground">
-                <div className="font-medium mb-1">Benefits of gym affiliations:</div>
-                <ul className="text-xs space-y-1">
-                  <li>• Access to gym facilities and equipment</li>
-                  <li>• Exposure to potential new clients</li>
-                  <li>• Professional credibility and trust</li>
-                  <li>• Commission-based income opportunities</li>
-                </ul>
-              </div>
-              <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
-                <DialogTrigger asChild>
-                  <Button className="w-full">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Request Your First Affiliation
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Request Gym Affiliation</DialogTitle>
-                  </DialogHeader>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="gym-search">Search for a gym</Label>
-                      <div className="flex gap-2">
-                        <Input id="gym-search" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Enter gym name, location, or type..." onKeyPress={e => e.key === 'Enter' && handleSearch()} />
-                        <Button onClick={handleSearch} disabled={isSearching}>
-                          <Search className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-
-                    {searchResults.length > 0 && <div className="space-y-2">
-                        <Label>Search Results</Label>
-                        <div className="max-h-48 overflow-y-auto space-y-2">
-                          {searchResults.map(gym => <Card key={gym.id} className={`cursor-pointer transition-colors ${selectedGym?.id === gym.id ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedGym(gym)}>
-                              <CardContent className="p-3">
-                                <div className="flex items-center gap-3">
-                                  {gym.logo_url ? <img src={gym.logo_url} alt={`${gym.name} logo`} className="w-10 h-10 rounded-lg object-cover" /> : <Building2 className="w-10 h-10 p-2 bg-muted rounded-lg text-muted-foreground" />}
-                                  <div className="flex-1 min-w-0">
-                                    <div className="font-medium truncate">{gym.name}</div>
-                                    {gym.gym_type && <div className="text-xs text-primary font-medium">{gym.gym_type}</div>}
-                                    {gym.location && <div className="text-sm text-muted-foreground truncate">{gym.location}</div>}
-                                    {gym.description && <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{gym.description}</div>}
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>)}
-                        </div>
-                      </div>}
-
-                    {selectedGym && <div className="space-y-3">
-                        <Separator />
-                        <div>
-                          <Label htmlFor="request-message">Message (optional)</Label>
-                          <Textarea id="request-message" value={requestMessage} onChange={e => setRequestMessage(e.target.value)} placeholder="Introduce yourself and explain why you'd like to work with this gym..." rows={3} />
-                        </div>
-                        
-                        <Button onClick={handleRequestAffiliation} disabled={saving} className="w-full">
-                          {saving ? "Sending Request..." : "Send Affiliation Request"}
-                        </Button>
-                      </div>}
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <Button className="w-full" onClick={openDialog}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add your gym or studio
+              </Button>
             </CardContent>
-          </Card> : affiliations.map(affiliation => <Card key={affiliation.id}>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+          </Card>
+        )}
+
+        {verifiedAffiliations.map((a) => (
+          <Card key={a.id}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  {a.gym.logo_url ? (
+                    <img
+                      src={a.gym.logo_url}
+                      alt={a.gym.name}
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                  ) : (
                     <Building2 className="w-12 h-12 p-3 bg-muted rounded-lg text-muted-foreground" />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-medium">Gym ID: {affiliation.gym_id}</h3>
-                        {affiliation.is_primary && <Badge className="text-xs bg-primary/10 text-primary border-primary/20">
-                            <Star className="w-3 h-3 mr-1 fill-primary" />
-                            Primary Gym
-                          </Badge>}
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Commission: {affiliation.commission_rate}% • Requested {new Date(affiliation.requested_at).toLocaleDateString()}
-                      </p>
-                      {affiliation.is_primary && <p className="text-xs text-primary font-medium">This gym appears on your public profile</p>}
+                  )}
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-medium">{a.gym.name}</h3>
+                      <Badge className="text-[10px] gap-1 bg-green-100 text-green-800 border-green-200">
+                        <ShieldCheck className="w-3 h-3" /> Verified
+                      </Badge>
+                      {a.isPrimary && (
+                        <Badge className="text-[10px] gap-1 bg-primary/10 text-primary border-primary/20">
+                          <Star className="w-3 h-3 fill-primary" /> Primary
+                        </Badge>
+                      )}
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    {getStatusBadge(affiliation.status)}
-                    
-                    <div className="flex gap-2">
-                      {affiliation.status === 'approved' && !affiliation.is_primary && <Button size="sm" variant="outline" onClick={() => setPrimaryGym(affiliation.gym_id)} disabled={saving}>
-                          Set as Primary
-                        </Button>}
-                      
-                      {affiliation.status === 'pending' && <Button size="sm" variant="destructive" onClick={() => cancelRequest(affiliation.id)} disabled={saving}>
-                          Cancel
-                        </Button>}
-                    </div>
+                    {a.gym.location && (
+                      <p className="text-sm text-muted-foreground">{a.gym.location}</p>
+                    )}
                   </div>
                 </div>
-                
-                {affiliation.request_message && <div className="mt-3 p-3 bg-muted rounded-md">
-                    <p className="text-sm">
-                      <strong>Your message:</strong> {affiliation.request_message}
+                {!a.isPrimary && (
+                  <Button size="sm" variant="outline" onClick={() => setPrimaryVerified(a.id)}>
+                    Set as Primary
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+        {manualAffiliations.map((a) => (
+          <Card key={a.id}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <Building2 className="w-12 h-12 p-3 bg-muted rounded-lg text-muted-foreground" />
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-medium">{a.name}</h3>
+                      <Badge variant="outline" className="text-[10px] capitalize">
+                        {a.kind}
+                      </Badge>
+                      {a.status === "verified" ? (
+                        <Badge className="text-[10px] gap-1 bg-green-100 text-green-800 border-green-200">
+                          <ShieldCheck className="w-3 h-3" /> Verified
+                        </Badge>
+                      ) : (
+                        <Badge className="text-[10px] gap-1 bg-amber-100 text-amber-800 border-amber-200">
+                          <ShieldAlert className="w-3 h-3" /> Unverified
+                        </Badge>
+                      )}
+                      {a.isPrimary && (
+                        <Badge className="text-[10px] gap-1 bg-primary/10 text-primary border-primary/20">
+                          <Star className="w-3 h-3 fill-primary" /> Primary
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {a.street}{a.city ? `, ${a.city}` : ""}
                     </p>
-                  </div>}
-                
-                {affiliation.response_message && <div className="mt-3 p-3 bg-muted rounded-md">
-                    <p className="text-sm">
-                      <strong>Gym response:</strong> {affiliation.response_message}
-                    </p>
-                  </div>}
-              </CardContent>
-            </Card>)}
+                    {a.status === "pending" && (
+                      <p className="text-xs text-amber-700 mt-1">
+                        Waiting for {a.kind} to verify the entity via your invite link.
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {a.status === "pending" && (
+                    <Button size="sm" variant="outline" onClick={() => copyInviteLink(a.token)}>
+                      <Copy className="w-4 h-4 mr-2" /> Copy invite link
+                    </Button>
+                  )}
+                  {!a.isPrimary && (
+                    <Button size="sm" variant="outline" onClick={() => setPrimaryManual(a.id)}>
+                      Set as Primary
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-    </div>;
+
+      <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : closeDialog())}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{dialogTitleByStep[step]}</DialogTitle>
+            <DialogDescription className="sr-only">
+              Add or invite a gym or studio.
+            </DialogDescription>
+          </DialogHeader>
+          {renderDialogBody()}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 }

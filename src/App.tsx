@@ -27,6 +27,7 @@ import UserLandingEn from "./pages/UserLandingEn";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import UserDashboard from "./pages/UserDashboard";
+import GymOnboarding from "./pages/GymOnboarding";
 
 const DomainRedirect = () => {
   useEffect(() => {
@@ -101,6 +102,7 @@ const AppContent = () => {
         <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route path="/studio-dashboard" element={<StudioDashboard />} />
         <Route path="/gym-dashboard" element={<GymDashboard />} />
+        <Route path="/gym-onboarding/:token" element={<GymOnboarding />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/cookies" element={<Cookies />} />
