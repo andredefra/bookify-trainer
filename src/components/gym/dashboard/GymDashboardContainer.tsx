@@ -18,9 +18,6 @@ import { SettingsTab } from "./tabs/SettingsTab";
 import { toast } from "sonner";
 
 export function GymDashboardContainer() {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [user, setUser] = useState<{
     name?: string;
     email: string;
@@ -28,7 +25,12 @@ export function GymDashboardContainer() {
     plan?: string;
     profileImage?: string;
     gymName?: string;
+    source?: string;
   } | null>(null);
+  const isInvited = user?.source === "invited";
+  const [activeTab, setActiveTab] = useState(isInvited ? "trainers-management" : "overview");
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
   useEffect(() => {
     const userData = localStorage.getItem('demo-user');
@@ -36,14 +38,24 @@ export function GymDashboardContainer() {
       const parsedUser = JSON.parse(userData);
       // For demo purpose, add a gym name if not present
       if (!parsedUser.gymName) {
-        parsedUser.gymName = "FitLife Gym";
+        parsedUser.gymName = parsedUser.name || "FitLife Gym";
       }
       setUser(parsedUser);
+      if (parsedUser.source === "invited") {
+        setActiveTab("trainers-management");
+      }
     }
     
     // Initialize unread messages count (mock data)
     setUnreadMessagesCount(3);
   }, []);
+
+  // Restrict invited gyms to allowed tabs only
+  useEffect(() => {
+    if (isInvited && activeTab !== "trainers-management" && activeTab !== "settings") {
+      setActiveTab("trainers-management");
+    }
+  }, [isInvited, activeTab]);
 
   // Function to mark messages as read when the messages tab is opened
   useEffect(() => {
@@ -76,21 +88,22 @@ export function GymDashboardContainer() {
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
           unreadMessagesCount={unreadMessagesCount}
+          isInvited={isInvited}
         />
         
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-2 md:p-6 bg-gray-50">
-          {activeTab === "overview" && <OverviewTab user={user} />}
+          {!isInvited && activeTab === "overview" && <OverviewTab user={user} />}
           {activeTab === "trainers-management" && <TrainersManagementTab />}
-          {activeTab === "group-sessions" && <GroupSessionsTab />}
-          {activeTab === "availability" && <AvailabilityTab />}
-          {activeTab === "performance" && <PerformanceTab />}
-          {activeTab === "calendar" && <CalendarTab />}
-          {activeTab === "members" && <MembersTab />}
-          {activeTab === "packages" && <PackagesTab />}
-          {activeTab === "service-requests" && <ServiceRequestsTab />}
-          {activeTab === "transactions" && <TransactionsTab />}
-          {activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
-          {activeTab === "analytics" && <AnalyticsTab />}
+          {!isInvited && activeTab === "group-sessions" && <GroupSessionsTab />}
+          {!isInvited && activeTab === "availability" && <AvailabilityTab />}
+          {!isInvited && activeTab === "performance" && <PerformanceTab />}
+          {!isInvited && activeTab === "calendar" && <CalendarTab />}
+          {!isInvited && activeTab === "members" && <MembersTab />}
+          {!isInvited && activeTab === "packages" && <PackagesTab />}
+          {!isInvited && activeTab === "service-requests" && <ServiceRequestsTab />}
+          {!isInvited && activeTab === "transactions" && <TransactionsTab />}
+          {!isInvited && activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
+          {!isInvited && activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "settings" && <SettingsTab user={user} />}
         </main>
       </div>
