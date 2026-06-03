@@ -33,7 +33,9 @@ interface OverviewTabProps {
   onNavigateToTab?: (tab: string) => void;
 }
 
-export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavigateToTab }: OverviewTabProps) {
+export function OverviewTab({ upcomingSessions, clients: rawClients, messageRequests, onNavigateToTab }: OverviewTabProps) {
+  const { removedIds } = (require("@/context/ClientRosterContext") as typeof import("@/context/ClientRosterContext")).useClientRoster();
+  const clients = rawClients.filter((c) => !removedIds.has(c.id));
   const plan = useTrainerPlan();
   const stats = {
     totalClients: clients.length,

@@ -17,6 +17,8 @@ import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
 import { GoalManagerModal } from "./clients/GoalManagerModal";
 import { CheckInManagerModal } from "./clients/CheckInManagerModal";
 
+import { useClientRoster } from "@/context/ClientRosterContext";
+
 interface ClientItem {
   id: number;
   name: string;
@@ -28,7 +30,9 @@ interface ClientsTabProps {
   clients: ClientItem[];
 }
 
-export function ClientsTab({ clients }: ClientsTabProps) {
+export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
+  const { removedIds } = useClientRoster();
+  const clients = rawClients.filter((c) => !removedIds.has(c.id));
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showClientDialog, setShowClientDialog] = useState(false);
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
