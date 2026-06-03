@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useMessageAutomation, MessageTemplate, MessageAutomationRule, CreateMessageRuleData } from '@/hooks/useMessageAutomation';
+import { useTrainerPlan } from '@/context/TrainerPlanContext';
 
 interface MessageRuleDialogProps {
   open: boolean;
@@ -34,13 +35,18 @@ export function MessageRuleDialog({
   onClose,
 }: MessageRuleDialogProps) {
   const { createRule } = useMessageAutomation();
+  const trainerPlan = useTrainerPlan();
+  const isBasic = trainerPlan === 'basic';
   const [loading, setLoading] = useState(false);
+
+  const defaultTrigger: CreateMessageRuleData['trigger_type'] = isBasic ? 'calendar_invitation' : 'package_expiry';
+  const defaultTarget: CreateMessageRuleData['target_type'] = isBasic ? 'sessions' : 'packages';
 
   const [formData, setFormData] = useState<CreateMessageRuleData>({
     template_id: '',
-    trigger_type: 'package_expiry',
+    trigger_type: defaultTrigger,
     days_before_trigger: 7,
-    target_type: 'packages',
+    target_type: defaultTarget,
   });
 
   useEffect(() => {
@@ -54,12 +60,13 @@ export function MessageRuleDialog({
     } else {
       setFormData({
         template_id: '',
-        trigger_type: 'package_expiry',
+        trigger_type: defaultTrigger,
         days_before_trigger: 7,
-        target_type: 'packages',
+        target_type: defaultTarget,
       });
     }
-  }, [rule]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rule, isBasic]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,9 +128,10 @@ export function MessageRuleDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="package_expiry">Package Expiry</SelectItem>
-                <SelectItem value="session_upcoming">Upcoming Session</SelectItem>
-                <SelectItem value="program_ending">Program Ending</SelectItem>
+                {!isBasic && <SelectItem value="package_expiry">Package Expiry</SelectItem>}
+                {!isBasic && <SelectItem value="session_upcoming">Upcoming Session</SelectItem>}
+                {!isBasic && <SelectItem value="program_ending">Program Ending</SelectItem>}
+                <SelectItem value="calendar_invitation">Calendar Invitation Reminder</SelectItem>
                 <SelectItem value="welcome">New Client Welcome</SelectItem>
                 <SelectItem value="custom">Custom</SelectItem>
               </SelectContent>
@@ -142,9 +150,9 @@ export function MessageRuleDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="packages">Packages</SelectItem>
+                {!isBasic && <SelectItem value="packages">Packages</SelectItem>}
                 <SelectItem value="sessions">Sessions</SelectItem>
-                <SelectItem value="programs">Programs</SelectItem>
+                {!isBasic && <SelectItem value="programs">Programs</SelectItem>}
                 <SelectItem value="all">All</SelectItem>
               </SelectContent>
             </Select>

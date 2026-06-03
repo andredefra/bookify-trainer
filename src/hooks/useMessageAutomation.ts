@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useTrainerPlan } from '@/context/TrainerPlanContext';
 
 export interface MessageTemplate {
   id: string;
   user_id: string;
-  template_type: 'package_expiring' | 'package_expired' | 'session_reminder' | 'program_ending' | 'welcome' | 'custom';
+  template_type: 'package_expiring' | 'package_expired' | 'session_reminder' | 'program_ending' | 'calendar_invitation_reminder' | 'welcome' | 'custom';
   name: string;
   subject: string;
   message: string;
@@ -18,7 +19,7 @@ export interface MessageAutomationRule {
   id: string;
   user_id: string;
   template_id: string;
-  trigger_type: 'package_expiry' | 'session_upcoming' | 'program_ending' | 'welcome' | 'custom';
+  trigger_type: 'package_expiry' | 'session_upcoming' | 'program_ending' | 'calendar_invitation' | 'welcome' | 'custom';
   days_before_trigger: number;
   target_type: 'packages' | 'sessions' | 'programs' | 'all';
   is_active: boolean;
@@ -134,6 +135,23 @@ Best regards,
 {{trainerName}}`
   },
   {
+    template_type: 'calendar_invitation_reminder',
+    name: 'Calendar Invitation Reminder',
+    subject: 'Reminder: {{sessionDate}} at {{sessionTime}}',
+    message: `Hi {{clientName}},
+
+Just a quick reminder of the calendar invitation:
+
+📅 Date: {{sessionDate}}
+🕒 Time: {{sessionTime}}
+📍 Location: {{sessionLocation}}
+
+If anything changes on your side, let me know in advance so we can reschedule.
+
+See you soon!
+{{trainerName}}`
+  },
+  {
     template_type: 'welcome',
     name: 'Welcome New Client',
     subject: 'Welcome to your fitness journey, {{clientName}}!',
@@ -165,11 +183,22 @@ export function useMessageAutomation() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const trainerPlan = useTrainerPlan();
+  const isBasic = trainerPlan === 'basic';
+  const basicHiddenTypes: MessageTemplate['template_type'][] = [
+    'package_expiring',
+    'package_expired',
+    'session_reminder',
+    'program_ending',
+  ];
 
   const initializeDefaultTemplates = async () => {
     try {
       // Create default templates with mock data for demo
-      const templatesWithVariables = DEFAULT_MESSAGE_TEMPLATES.map((template, index) => ({
+      const baseTemplates = isBasic
+        ? DEFAULT_MESSAGE_TEMPLATES.filter(t => !basicHiddenTypes.includes(t.template_type))
+        : DEFAULT_MESSAGE_TEMPLATES;
+      const templatesWithVariables = baseTemplates.map((template, index) => ({
         ...template,
         id: `template-${index}`,
         user_id: 'mock-user',

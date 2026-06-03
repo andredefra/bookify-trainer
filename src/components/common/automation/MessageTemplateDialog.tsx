@@ -20,6 +20,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { useMessageAutomation, MessageTemplate, CreateMessageTemplateData } from '@/hooks/useMessageAutomation';
+import { useTrainerPlan } from '@/context/TrainerPlanContext';
 
 interface MessageTemplateDialogProps {
   open: boolean;
@@ -35,6 +36,8 @@ export function MessageTemplateDialog({
   onClose,
 }: MessageTemplateDialogProps) {
   const { createTemplate, updateTemplate, sendTestMessage } = useMessageAutomation();
+  const trainerPlan = useTrainerPlan();
+  const isBasic = trainerPlan === 'basic';
   const [loading, setLoading] = useState(false);
   const [testRecipient, setTestRecipient] = useState({ name: '', email: '' });
   const [showTestSection, setShowTestSection] = useState(false);
@@ -163,10 +166,11 @@ export function MessageTemplateDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="package_expiring">Package Expiring</SelectItem>
-                  <SelectItem value="package_expired">Package Expired</SelectItem>
-                  <SelectItem value="session_reminder">Session Reminder</SelectItem>
-                  <SelectItem value="program_ending">Program Ending</SelectItem>
+                  {!isBasic && <SelectItem value="package_expiring">Package Expiring</SelectItem>}
+                  {!isBasic && <SelectItem value="package_expired">Package Expired</SelectItem>}
+                  {!isBasic && <SelectItem value="session_reminder">Session Reminder</SelectItem>}
+                  {!isBasic && <SelectItem value="program_ending">Program Ending</SelectItem>}
+                  <SelectItem value="calendar_invitation_reminder">Calendar Invitation Reminder</SelectItem>
                   <SelectItem value="welcome">Welcome</SelectItem>
                   <SelectItem value="custom">Custom</SelectItem>
                 </SelectContent>
