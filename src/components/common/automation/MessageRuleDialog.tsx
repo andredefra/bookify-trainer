@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useMessageAutomation, MessageTemplate, MessageAutomationRule, CreateMessageRuleData } from '@/hooks/useMessageAutomation';
+import { useTrainerPlan } from '@/context/TrainerPlanContext';
 
 interface MessageRuleDialogProps {
   open: boolean;
@@ -34,6 +35,8 @@ export function MessageRuleDialog({
   onClose,
 }: MessageRuleDialogProps) {
   const { createRule } = useMessageAutomation();
+  const trainerPlan = useTrainerPlan();
+  const isBasic = trainerPlan === 'basic';
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState<CreateMessageRuleData>({
@@ -121,9 +124,10 @@ export function MessageRuleDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="package_expiry">Package Expiry</SelectItem>
-                <SelectItem value="session_upcoming">Upcoming Session</SelectItem>
-                <SelectItem value="program_ending">Program Ending</SelectItem>
+                {!isBasic && <SelectItem value="package_expiry">Package Expiry</SelectItem>}
+                {!isBasic && <SelectItem value="session_upcoming">Upcoming Session</SelectItem>}
+                {!isBasic && <SelectItem value="program_ending">Program Ending</SelectItem>}
+                <SelectItem value="calendar_invitation">Calendar Invitation Reminder</SelectItem>
                 <SelectItem value="welcome">New Client Welcome</SelectItem>
                 <SelectItem value="custom">Custom</SelectItem>
               </SelectContent>
