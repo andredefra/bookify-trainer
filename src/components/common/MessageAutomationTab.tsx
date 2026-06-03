@@ -194,10 +194,11 @@ export function MessageAutomationTab() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="package_expiring">{t('messageAutomation.types.packageExpiring')}</SelectItem>
-                        <SelectItem value="package_expired">{t('messageAutomation.types.packageExpired')}</SelectItem>
-                        <SelectItem value="session_reminder">{t('messageAutomation.types.sessionReminder')}</SelectItem>
-                        <SelectItem value="program_ending">{t('messageAutomation.types.programEnding')}</SelectItem>
+                        {!isBasic && <SelectItem value="package_expiring">{t('messageAutomation.types.packageExpiring')}</SelectItem>}
+                        {!isBasic && <SelectItem value="package_expired">{t('messageAutomation.types.packageExpired')}</SelectItem>}
+                        {!isBasic && <SelectItem value="session_reminder">{t('messageAutomation.types.sessionReminder')}</SelectItem>}
+                        {!isBasic && <SelectItem value="program_ending">{t('messageAutomation.types.programEnding')}</SelectItem>}
+                        <SelectItem value="calendar_invitation_reminder">Calendar Invitation Reminder</SelectItem>
                         <SelectItem value="welcome">{t('messageAutomation.types.welcome')}</SelectItem>
                         <SelectItem value="custom">{t('messageAutomation.types.custom')}</SelectItem>
                       </SelectContent>
