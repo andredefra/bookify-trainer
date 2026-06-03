@@ -183,6 +183,14 @@ export function useMessageAutomation() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const trainerPlan = useTrainerPlan();
+  const isBasic = trainerPlan === 'basic';
+  const basicHiddenTypes: MessageTemplate['template_type'][] = [
+    'package_expiring',
+    'package_expired',
+    'session_reminder',
+    'program_ending',
+  ];
 
   const initializeDefaultTemplates = async () => {
     try {
