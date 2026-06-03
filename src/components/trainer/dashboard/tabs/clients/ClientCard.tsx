@@ -1,14 +1,16 @@
 
-import { Target, Dumbbell, Eye, TrendingUp, Package, Flag } from "lucide-react";
+import { Target, Dumbbell, Eye, TrendingUp, Package, Flag, Euro } from "lucide-react";
 import { useTrainerPlan } from "@/context/TrainerPlanContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useSalesEntries } from "@/context/SalesEntriesContext";
 
 interface ClientItem {
   id: number;
   name: string;
   sessions: number;
   lastSession: string;
+  email?: string;
 }
 
 interface ClientCardProps {
@@ -22,13 +24,16 @@ interface ClientCardProps {
 export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics, onViewCheckIns }: ClientCardProps) {
   const plan = useTrainerPlan();
   const showPackagesAndPrograms = plan !== "basic";
+  const { getTotal } = useSalesEntries();
+  const totalSales = client.email ? getTotal(client.email) : 0;
   return (
     <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-medium truncate">{client.name}</h3>
-          <div className="text-sm text-muted-foreground">
-            {client.sessions} sessions • Last: {client.lastSession}
+          <div className="text-sm text-muted-foreground flex items-center gap-1">
+            <Euro className="h-3 w-3" />
+            Total sales: €{totalSales.toLocaleString()}
           </div>
           
           {/* Sample goals, programs and packages for demo */}
