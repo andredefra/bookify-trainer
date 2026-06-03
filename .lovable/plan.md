@@ -1,17 +1,16 @@
-## Goal
-Calendar integration should live only in **Settings → Availability**, not in the Calendar tab sidebar.
+I’ll update `src/components/trainer/dashboard/tabs/settings/AvailabilitySection.tsx` so the Calendar Integration area is no longer a “full version” placeholder.
 
-## Current state
-- `src/components/trainer/dashboard/tabs/settings/AvailabilitySection.tsx` already has a "Calendar Integration" block (the one in the screenshot).
-- `src/components/trainer/dashboard/tabs/CalendarTab.tsx` (lines ~473–492) also shows a "Google Calendar" card in the sidebar with a Connect button. This duplicate needs to go.
-- The "Google Calendar" button in the CalendarTab header (line ~266) is also a connect-style action that belongs in settings.
-
-## Changes
-1. **`src/components/trainer/dashboard/tabs/CalendarTab.tsx`**
-   - Remove the entire "Google Calendar Integration" `<Card>` block in the sidebar (lines ~473–492).
-   - Remove the "Google Calendar" button in the header toolbar (around line 266) so the only entry point is Settings → Availability.
-
-2. **`src/components/trainer/dashboard/tabs/settings/AvailabilitySection.tsx`**
-   - Keep the existing "Calendar Integration" section as the single source. No content change required (the green "available in the full version" notice stays).
-
-No other tabs reference Google Calendar integration UI, so no further edits needed.
+Plan:
+1. Replace the green placeholder notice with a real setup area directly inside Availability Settings.
+2. Add a connected calendars list with mock frontend state, including:
+   - provider name/icon label
+   - account email
+   - primary badge
+   - two-way sync switch
+   - “Set primary” and “Disconnect” actions
+3. Add an “Add calendar” dropdown with options for:
+   - Google Calendar
+   - Outlook / Microsoft 365
+   - Apple iCloud
+4. Allow adding more than one calendar in the UI using local React state, so the setup area is clearly visible immediately.
+5. Keep this frontend-only for now; no real OAuth/backend calendar connection will be wired unless requested separately.
