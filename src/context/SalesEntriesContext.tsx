@@ -22,14 +22,48 @@ const SalesEntriesContext = createContext<SalesEntriesContextValue | null>(null)
 
 const normalize = (email: string) => (email || "").trim().toLowerCase();
 
+const SEED_ENTRIES: Record<string, SalesEntry[]> = {
+  "g.verdi@example.com": [
+    {
+      id: "seed-gverdi-1",
+      type: "Program",
+      name: "Corporate group program (annual)",
+      amount: 5000,
+      date: "2023-01-05T09:00:00Z",
+      source: "auto",
+    },
+  ],
+  "s.esposito@example.com": [
+    {
+      id: "seed-sesposito-1",
+      type: "Package",
+      name: "Weekly PT package",
+      amount: 2400,
+      date: "2022-12-15T09:00:00Z",
+      source: "auto",
+    },
+  ],
+  "a.russo@example.com": [
+    {
+      id: "seed-arusso-1",
+      type: "Package",
+      name: "Personal training package",
+      amount: 3600,
+      date: "2022-09-01T09:00:00Z",
+      source: "auto",
+    },
+  ],
+};
+
 export function SalesEntriesProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<Record<string, SalesEntry[]>>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
+      if (raw) return JSON.parse(raw);
     } catch {
-      return {};
+      // ignore
     }
+    return SEED_ENTRIES;
   });
 
   useEffect(() => {

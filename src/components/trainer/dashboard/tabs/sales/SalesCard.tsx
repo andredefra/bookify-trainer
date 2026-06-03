@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EditableContactDialog } from "./EditableContactDialog";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { useSalesEntries } from "@/context/SalesEntriesContext";
 
 interface SalesCardProps {
   contact: SalesContact;
@@ -19,6 +20,9 @@ interface SalesCardProps {
 export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { getTotal } = useSalesEntries();
+  const displayValue =
+    contact.status === "client" ? getTotal(contact.email) : contact.value;
   
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'contact',
@@ -121,10 +125,10 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
               </div>
             )}
             
-            {contact.value && (
+            {!!displayValue && (
               <div className={`flex items-center ${isMobile ? 'text-[0.65rem]' : 'text-xs'} text-muted-foreground`}>
                 <Euro className={`${isMobile ? 'h-2.5 w-2.5 mr-1' : 'h-3 w-3 mr-1.5'} flex-shrink-0`} />
-                <span>{contact.value}€</span>
+                <span>{displayValue}€</span>
               </div>
             )}
 
