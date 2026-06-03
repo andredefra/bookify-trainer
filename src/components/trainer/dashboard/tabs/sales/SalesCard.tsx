@@ -20,6 +20,9 @@ interface SalesCardProps {
 export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { getTotal } = useSalesEntries();
+  const displayValue =
+    contact.status === "client" ? getTotal(contact.email) : contact.value;
   
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'contact',
