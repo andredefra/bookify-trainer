@@ -72,15 +72,27 @@ const INITIAL_CONTACTS: SalesContact[] = [
   },
   {
     id: "6",
-    name: "Sofia Esposito",
-    email: "s.esposito@example.com",
+    name: "Michael Chen",
+    email: "michael.chen@example.com",
     status: "client",
-    notes: "Weekly personal training sessions",
-    source: "Website",
-    createdAt: "2022-10-10T15:30:00Z",
-    lastUpdated: "2023-01-05T14:00:00Z",
-    clientSince: "2022-10-17T08:00:00Z",
-    value: 2400
+    notes: "Single PT sessions, weight-loss focus",
+    source: "Referral",
+    createdAt: "2023-03-01T10:00:00Z",
+    lastUpdated: "2023-04-10T09:00:00Z",
+    clientSince: "2023-03-05T08:00:00Z",
+    value: 1200
+  },
+  {
+    id: "7",
+    name: "Sarah Johnson",
+    email: "sarah.johnson@example.com",
+    status: "client",
+    notes: "12-week training program",
+    source: "Instagram",
+    createdAt: "2023-01-10T10:00:00Z",
+    lastUpdated: "2023-03-20T09:00:00Z",
+    clientSince: "2023-01-15T08:00:00Z",
+    value: 2700
   }
 ];
 
