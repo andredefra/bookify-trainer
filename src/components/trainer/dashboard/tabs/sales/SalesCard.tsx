@@ -125,10 +125,10 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
               </div>
             )}
             
-            {contact.value && (
+            {!!displayValue && (
               <div className={`flex items-center ${isMobile ? 'text-[0.65rem]' : 'text-xs'} text-muted-foreground`}>
                 <Euro className={`${isMobile ? 'h-2.5 w-2.5 mr-1' : 'h-3 w-3 mr-1.5'} flex-shrink-0`} />
-                <span>{contact.value}€</span>
+                <span>{displayValue}€</span>
               </div>
             )}
 
