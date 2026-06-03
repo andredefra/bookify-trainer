@@ -7,6 +7,7 @@ interface ClientItem {
   name: string;
   sessions: number;
   lastSession: string;
+  email?: string;
 }
 
 interface RecentClientsCardProps {
