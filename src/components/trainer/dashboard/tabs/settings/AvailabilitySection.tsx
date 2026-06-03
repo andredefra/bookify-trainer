@@ -31,6 +31,38 @@ const PROVIDER_LABEL: Record<CalProvider, string> = {
 };
 
 export function AvailabilitySection() {
+  const [calendars, setCalendars] = useState<ConnectedCalendar[]>([
+    { id: "cal-1", provider: "google", email: "trainer@gmail.com", primary: true, twoWaySync: true },
+  ]);
+
+  const addCalendar = (provider: CalProvider) => {
+    const id = `cal-${Date.now()}`;
+    const placeholderEmail =
+      provider === "google" ? "new-account@gmail.com"
+      : provider === "outlook" ? "new-account@outlook.com"
+      : "new-account@icloud.com";
+    setCalendars((prev) => [
+      ...prev,
+      { id, provider, email: placeholderEmail, primary: prev.length === 0, twoWaySync: true },
+    ]);
+    toast.success(`${PROVIDER_LABEL[provider]} connected`);
+  };
+
+  const disconnect = (id: string) => {
+    setCalendars((prev) => {
+      const next = prev.filter((c) => c.id !== id);
+      if (next.length && !next.some((c) => c.primary)) next[0].primary = true;
+      return next;
+    });
+    toast.success("Calendar disconnected");
+  };
+
+  const setPrimary = (id: string) =>
+    setCalendars((prev) => prev.map((c) => ({ ...c, primary: c.id === id })));
+
+  const toggleSync = (id: string, value: boolean) =>
+    setCalendars((prev) => prev.map((c) => (c.id === id ? { ...c, twoWaySync: value } : c)));
+
   // Week days
   const weekdays = [
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
