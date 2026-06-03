@@ -56,6 +56,28 @@ const sampleSessions: TrainerSessionItem[] = [
   }
 ];
 
+// Basic plan: calendar activities (personal tasks/reminders), not sessions
+const basicSampleActivities: TrainerSessionItem[] = [
+  {
+    id: 101,
+    name: "Morning Workout",
+    time: "07:30 - 08:30",
+    date: "06/21/2025",
+    participants: 1,
+    maxParticipants: 1,
+    paymentStatus: { paid: 0, pending: 0, total: 0 },
+  },
+  {
+    id: 102,
+    name: "Weekly Plan Review",
+    time: "10:00 - 10:30",
+    date: "06/22/2025",
+    participants: 1,
+    maxParticipants: 1,
+    paymentStatus: { paid: 0, pending: 0, total: 0 },
+  },
+];
+
 // Sample clients data - IDs match database demo data
 const sampleClients = [
   { id: 2, name: "Emma Thompson", sessions: 12, lastSession: "May 15, 2023" },
