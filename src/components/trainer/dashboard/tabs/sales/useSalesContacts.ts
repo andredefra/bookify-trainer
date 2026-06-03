@@ -37,16 +37,15 @@ const INITIAL_CONTACTS: SalesContact[] = [
   },
   {
     id: "3",
-    name: "Giovanni Verdi",
-    email: "g.verdi@example.com",
+    name: "Emma Thompson",
+    email: "emma.thompson@example.com",
     status: "client",
-    company: "Verdi Fitness",
-    notes: "Corporate client - group sessions twice a week",
-    source: "LinkedIn",
-    createdAt: "2022-11-20T11:15:00Z",
-    lastUpdated: "2023-01-07T09:30:00Z",
-    clientSince: "2022-12-01T08:00:00Z",
-    value: 5000
+    notes: "Personal training — 10-session package",
+    source: "Website",
+    createdAt: "2023-02-01T08:00:00Z",
+    lastUpdated: "2023-04-01T09:00:00Z",
+    clientSince: "2023-02-05T08:00:00Z",
+    value: 1800
   },
   {
     id: "4",
