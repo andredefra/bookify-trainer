@@ -150,9 +150,9 @@ export function MessageRuleDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="packages">Packages</SelectItem>
+                {!isBasic && <SelectItem value="packages">Packages</SelectItem>}
                 <SelectItem value="sessions">Sessions</SelectItem>
-                <SelectItem value="programs">Programs</SelectItem>
+                {!isBasic && <SelectItem value="programs">Programs</SelectItem>}
                 <SelectItem value="all">All</SelectItem>
               </SelectContent>
             </Select>
