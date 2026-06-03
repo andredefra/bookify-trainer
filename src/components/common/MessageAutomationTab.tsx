@@ -32,6 +32,7 @@ import { toast } from "sonner";
 
 export function MessageAutomationTab() {
   const { t } = useLanguage();
+  const isBasic = useTrainerPlan() === 'basic';
   const {
     templates,
     rules,
@@ -45,16 +46,16 @@ export function MessageAutomationTab() {
 
   const [newTemplate, setNewTemplate] = useState({
     name: "",
-    template_type: "package_expiring" as const,
+    template_type: (isBasic ? "calendar_invitation_reminder" : "package_expiring") as any,
     subject: "",
     message: ""
   });
 
   const [newRule, setNewRule] = useState({
     template_id: "",
-    trigger_type: "package_expiry" as const,
+    trigger_type: (isBasic ? "calendar_invitation" : "package_expiry") as any,
     days_before_trigger: 7,
-    target_type: "packages" as const
+    target_type: (isBasic ? "sessions" : "packages") as any
   });
 
   const analytics = getMessageAnalytics();
