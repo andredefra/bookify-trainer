@@ -135,6 +135,7 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
   return (
     <TrainerPlanProvider plan={plan}>
       <SalesEntriesProvider>
+      <ClientRosterProvider>
       <div className="min-h-screen flex flex-col">
         <DashboardHeader
           name={customName || "Dashboard"}
@@ -179,6 +180,7 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
           </main>
         </div>
       </div>
+      </ClientRosterProvider>
       </SalesEntriesProvider>
     </TrainerPlanProvider>
   );
