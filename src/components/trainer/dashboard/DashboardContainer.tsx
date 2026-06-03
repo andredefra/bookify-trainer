@@ -17,6 +17,7 @@ import { ReviewsTab } from "./tabs/ReviewsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { TrainerPlanProvider, TrainerPlan } from "@/context/TrainerPlanContext";
 import { SalesEntriesProvider } from "@/context/SalesEntriesContext";
+import { ClientRosterProvider } from "@/context/ClientRosterContext";
 
 const PLAN_ALLOWED_TABS: Record<TrainerPlan, string[]> = {
   basic: ["overview", "sales", "clients", "calendar", "messages", "reviews", "settings"],
@@ -134,6 +135,7 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
   return (
     <TrainerPlanProvider plan={plan}>
       <SalesEntriesProvider>
+      <ClientRosterProvider>
       <div className="min-h-screen flex flex-col">
         <DashboardHeader
           name={customName || "Dashboard"}
@@ -178,6 +180,7 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
           </main>
         </div>
       </div>
+      </ClientRosterProvider>
       </SalesEntriesProvider>
     </TrainerPlanProvider>
   );

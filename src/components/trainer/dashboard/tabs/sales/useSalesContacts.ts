@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { SalesContact } from "./types";
 import { toast } from "sonner";
 import { differenceInDays } from "date-fns";
+import { useClientRoster } from "@/context/ClientRosterContext";
 
 // Sample data
 const INITIAL_CONTACTS: SalesContact[] = [
@@ -85,7 +86,20 @@ const INITIAL_CONTACTS: SalesContact[] = [
 ];
 
 export const useSalesContacts = () => {
-  const [contacts, setContacts] = useState<SalesContact[]>(INITIAL_CONTACTS);
+  const [baseContacts, setContacts] = useState<SalesContact[]>(INITIAL_CONTACTS);
+  const { terminatedContacts } = useClientRoster();
+
+  // Merge terminated contacts from roster (clients removed via profile modal),
+  // overriding any existing contact with the same email.
+  const contacts = useMemo(() => {
+    const terminatedEmails = new Set(
+      terminatedContacts.map((c) => (c.email || "").trim().toLowerCase())
+    );
+    const filtered = baseContacts.filter(
+      (c) => !terminatedEmails.has((c.email || "").trim().toLowerCase())
+    );
+    return [...terminatedContacts, ...filtered];
+  }, [baseContacts, terminatedContacts]);
 
   const handleMoveContact = (id: string, newStatus: SalesContact['status']) => {
     // Check if moving to client status - this will be handled by ProspectToClientDialog

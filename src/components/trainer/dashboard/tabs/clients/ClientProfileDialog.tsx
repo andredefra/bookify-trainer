@@ -1,11 +1,23 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ClientProfile } from "@/components/ClientProfile";
 import { ClientProfileTabContent } from "./ClientProfileTabs/ClientProfileTabContent";
 import { ProfileDialogFooter } from "./ClientProfileTabs/ProfileDialogFooter";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { useClientRoster } from "@/context/ClientRosterContext";
+import { toast } from "sonner";
 
 // Mock client details for demonstration
 const mockClientDetails = {
@@ -39,10 +51,25 @@ interface ClientProfileDialogProps {
 
 export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onScheduleSession, onScheduleEvent, initialTab }: ClientProfileDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const { removeClient } = useClientRoster();
+
   if (!client) return null;
-  
+
+  const handleConfirmRemove = () => {
+    removeClient({
+      id: client.id,
+      name: client.name,
+      email: mockClientDetails.email,
+      clientSince: mockClientDetails.since,
+    });
+    setConfirmOpen(false);
+    onOpenChange(false);
+    toast.success(`${client.name} moved to CRM as Terminated`);
+  };
+
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-5xl p-4 md:p-6 overflow-y-auto max-h-[90vh]">
         <DialogHeader className="mb-2 md:mb-4">
@@ -98,8 +125,28 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
           onMessage={() => onMessage?.(client.name)}
           onScheduleSession={() => onScheduleSession?.(client.name)}
           onScheduleEvent={() => onScheduleEvent?.(client.name)}
+          onRemove={() => setConfirmOpen(true)}
         />
       </DialogContent>
     </Dialog>
+
+    <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Remove {client.name}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            They will be removed from your Clients list and moved to your CRM pipeline as <strong>Terminated</strong>.
+            Their sales history stays intact and you can always reactivate them from the CRM.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirmRemove} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            Remove Client
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
