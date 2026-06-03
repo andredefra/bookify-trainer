@@ -1,5 +1,6 @@
 
 import { Target, Dumbbell, Eye, TrendingUp, Package, Flag } from "lucide-react";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
