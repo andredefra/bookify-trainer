@@ -88,7 +88,7 @@ export function ClientProfileTabContent({
       </TabsContent>
 
       <TabsContent value="sales">
-        <SalesTab clientId={client.id} clientName={client.name} />
+        <SalesTab clientId={client.id} clientName={client.name} clientEmail={client.email} />
       </TabsContent>
 
       

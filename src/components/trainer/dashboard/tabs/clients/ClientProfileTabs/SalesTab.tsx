@@ -12,38 +12,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTrainerPlan } from "@/context/TrainerPlanContext";
+import { useSalesEntries } from "@/context/SalesEntriesContext";
 import {
   AddSalesEntryDialog,
   SalesEntryInput,
-  SalesEntryType,
 } from "./sales/AddSalesEntryDialog";
-
-interface SalesEntry extends SalesEntryInput {
-  id: string;
-  source: "manual" | "auto";
-}
 
 interface SalesTabProps {
   clientId: number;
   clientName: string;
+  clientEmail: string;
 }
 
-export function SalesTab({ clientId, clientName }: SalesTabProps) {
+export function SalesTab({ clientId, clientName, clientEmail }: SalesTabProps) {
   const plan = useTrainerPlan();
-  const [entries, setEntries] = useState<SalesEntry[]>([]);
+  const { getEntries, getTotal, addEntry } = useSalesEntries();
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const total = entries.reduce((sum, e) => sum + e.amount, 0);
+  const entries = getEntries(clientEmail);
+  const total = getTotal(clientEmail);
 
   const handleAdd = (entry: SalesEntryInput) => {
-    setEntries((prev) => [
-      {
-        ...entry,
-        id: `${clientId}-${Date.now()}`,
-        source: "manual",
-      },
-      ...prev,
-    ]);
+    addEntry(clientEmail, { ...entry, source: "manual" });
   };
 
   const description =
@@ -65,7 +55,7 @@ export function SalesTab({ clientId, clientName }: SalesTabProps) {
             </p>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <Button size="sm" onClick={() => setDialogOpen(true)}>
+            <Button size="sm" onClick={() => setDialogOpen(true)} disabled={!clientEmail}>
               <Plus className="h-4 w-4 mr-1" />
               Add Entry
             </Button>
