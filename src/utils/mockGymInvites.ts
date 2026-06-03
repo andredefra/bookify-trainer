@@ -34,8 +34,60 @@ export function saveAllInvites(list: MockGymInvite[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
 
+const TOKEN_PREFIX = "inv_";
+
+function b64urlEncode(s: string): string {
+  // Unicode-safe base64url
+  const b64 = btoa(unescape(encodeURIComponent(s)));
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function b64urlDecode(s: string): string | null {
+  try {
+    const b64 = s.replace(/-/g, "+").replace(/_/g, "/");
+    const pad = b64.length % 4 === 0 ? "" : "=".repeat(4 - (b64.length % 4));
+    return decodeURIComponent(escape(atob(b64 + pad)));
+  } catch {
+    return null;
+  }
+}
+
+function decodeInviteFromToken(token: string): MockGymInvite | undefined {
+  if (!token.startsWith(TOKEN_PREFIX)) return undefined;
+  const json = b64urlDecode(token.slice(TOKEN_PREFIX.length));
+  if (!json) return undefined;
+  try {
+    const data = JSON.parse(json) as Partial<MockGymInvite>;
+    if (!data.name || !data.kind || !data.street) return undefined;
+    return {
+      token,
+      name: data.name,
+      kind: data.kind,
+      street: data.street,
+      city: data.city,
+      notes: data.notes,
+      trainerId: data.trainerId,
+      trainerEmail: data.trainerEmail,
+      status: "pending",
+      createdAt: data.createdAt || new Date().toISOString(),
+    };
+  } catch {
+    return undefined;
+  }
+}
+
 export function getInviteByToken(token: string): MockGymInvite | undefined {
-  return getAllInvites().find((i) => i.token === token);
+  const stored = getAllInvites().find((i) => i.token === token);
+  if (stored) return stored;
+  // Fallback: reconstruct from self-encoded token so links work across browsers.
+  const decoded = decodeInviteFromToken(token);
+  if (decoded) {
+    const list = getAllInvites();
+    list.unshift(decoded);
+    saveAllInvites(list);
+    return decoded;
+  }
+  return undefined;
 }
 
 export function getInviteByEmail(email: string): MockGymInvite | undefined {
@@ -48,15 +100,23 @@ export function getInviteByEmail(email: string): MockGymInvite | undefined {
 export function createInvite(
   data: Omit<MockGymInvite, "token" | "status" | "createdAt">
 ): MockGymInvite {
-  const token =
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const createdAt = new Date().toISOString();
+  const payload = JSON.stringify({
+    name: data.name,
+    kind: data.kind,
+    street: data.street,
+    city: data.city,
+    notes: data.notes,
+    trainerId: data.trainerId,
+    trainerEmail: data.trainerEmail,
+    createdAt,
+  });
+  const token = TOKEN_PREFIX + b64urlEncode(payload);
   const invite: MockGymInvite = {
     ...data,
     token,
     status: "pending",
-    createdAt: new Date().toISOString(),
+    createdAt,
   };
   const list = getAllInvites();
   list.unshift(invite);
