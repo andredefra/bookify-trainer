@@ -52,6 +52,7 @@ export function GymSidebar({
       <ScrollArea className="flex-1">
         <div className="flex flex-col h-full">
           <nav className="flex flex-col divide-y divide-border">
+            {renderFullNav && (
             <button 
               onClick={() => { setActiveTab("overview"); if (isMobile) setShowSidebar(false); }}
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "overview" ? "bg-primary/5 text-primary" : ""}`}
@@ -59,6 +60,8 @@ export function GymSidebar({
               <LayoutDashboard className="w-5 h-5 mr-3" />
               <span>Overview</span>
             </button>
+            )}
+            
             
             {/* Trainers Management Section */}
             <button 
@@ -69,6 +72,7 @@ export function GymSidebar({
               <span>Trainers Management</span>
             </button>
             
+            {renderFullNav && (<>
             {/* Group Sessions */}
             <button 
               onClick={() => { setActiveTab("group-sessions"); if (isMobile) setShowSidebar(false); }}
@@ -161,6 +165,8 @@ export function GymSidebar({
               <BarChart2 className="w-5 h-5 mr-3" />
               <span>Analytics</span>
             </button>
+            </>)}
+            
             
             <button 
               onClick={() => { setActiveTab("settings"); if (isMobile) setShowSidebar(false); }}
