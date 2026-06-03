@@ -732,6 +732,29 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
           {renderDialogBody()}
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!removeTarget} onOpenChange={(o) => !o && setRemoveTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove affiliation?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {removeTarget
+                ? `Remove ${removeTarget.name} from your affiliations? This cannot be undone.`
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmRemove}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </div>
   );
 }
