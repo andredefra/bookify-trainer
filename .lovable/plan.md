@@ -1,23 +1,17 @@
-## Fix gym affiliations error & add remove action
+## Goal
+Calendar integration should live only in **Settings → Availability**, not in the Calendar tab sidebar.
 
-### 1. Silence the "Failed to load gym affiliations" error toast
-`src/hooks/useTrainerGymAffiliations.ts` → `fetchAffiliations()` always shows a destructive toast when the Supabase query fails. In demo mode (no authenticated user) this fires every time `MyGymsSection` mounts. Update the hook to:
-- Skip the fetch (and toast) when there's no authenticated Supabase user — just set `affiliations` to `[]` and return.
-- Keep the `console.error` for real debugging but remove the user-facing toast on failure (the section already manages its own local/demo state).
+## Current state
+- `src/components/trainer/dashboard/tabs/settings/AvailabilitySection.tsx` already has a "Calendar Integration" block (the one in the screenshot).
+- `src/components/trainer/dashboard/tabs/CalendarTab.tsx` (lines ~473–492) also shows a "Google Calendar" card in the sidebar with a Connect button. This duplicate needs to go.
+- The "Google Calendar" button in the CalendarTab header (line ~266) is also a connect-style action that belongs in settings.
 
-### 2. Add "Remove" action for affiliations
-`src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx`:
-- Add a `Trash2` icon button on each affiliation card (both `verifiedAffiliations` and `manualAffiliations`) next to the existing "Set as Primary" button.
-- Clicking opens an `AlertDialog` confirm ("Remove [name] from your affiliations?").
-- On confirm:
-  - **Verified**: remove from `verifiedAffiliations` state.
-  - **Manual**: remove from `manualAffiliations`, persist via `saveLocalAffiliations`, and also remove the matching invite from `mockGymInvites` (add a `deleteInvite(token)` helper to `src/utils/mockGymInvites.ts`).
-  - If the removed item was `isPrimary` and other affiliations remain, promote the first remaining one to primary.
-  - Show success toast.
+## Changes
+1. **`src/components/trainer/dashboard/tabs/CalendarTab.tsx`**
+   - Remove the entire "Google Calendar Integration" `<Card>` block in the sidebar (lines ~473–492).
+   - Remove the "Google Calendar" button in the header toolbar (around line 266) so the only entry point is Settings → Availability.
 
-### Files touched
-- `src/hooks/useTrainerGymAffiliations.ts` — guard fetch + drop error toast
-- `src/utils/mockGymInvites.ts` — add `deleteInvite(token)`
-- `src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx` — Remove button + confirm dialog + handlers
+2. **`src/components/trainer/dashboard/tabs/settings/AvailabilitySection.tsx`**
+   - Keep the existing "Calendar Integration" section as the single source. No content change required (the green "available in the full version" notice stays).
 
-No DB or backend changes.
+No other tabs reference Google Calendar integration UI, so no further edits needed.
