@@ -702,6 +702,18 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
                       Set as Primary
                     </Button>
                   )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() =>
+                      setRemoveTarget({ kind: "manual", id: a.id, name: a.name })
+                    }
+                    aria-label={`Remove ${a.name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+
                 </div>
               </div>
             </CardContent>
