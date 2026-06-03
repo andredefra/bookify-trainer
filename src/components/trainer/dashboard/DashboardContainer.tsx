@@ -127,6 +127,9 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
     return () => window.removeEventListener("dashboard-navigate", handler);
   }, [allowed]);
 
+  const sidebarUpcoming = plan === "basic" ? basicSampleActivities : sampleSessions;
+  const overviewUpcoming = plan === "basic" ? basicSampleActivities : sampleSessions;
+
   return (
     <TrainerPlanProvider plan={plan}>
       <div className="min-h-screen flex flex-col">
@@ -144,14 +147,14 @@ export function DashboardContainer({ customName, plan = "pro" }: DashboardContai
             setShowSidebar={setShowSidebar}
             userName={sampleUser.name}
             userEmail={sampleUser.email}
-            upcomingSessions={sampleSessions}
+            upcomingSessions={sidebarUpcoming}
           />
 
           <main className="flex-1 overflow-y-auto bg-muted/20 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
             <div className="mx-auto max-w-full xl:max-w-7xl space-y-3 sm:space-y-4 md:space-y-6">
               {safeActiveTab === "overview" && (
                 <OverviewTab
-                  upcomingSessions={sampleSessions}
+                  upcomingSessions={overviewUpcoming}
                   clients={sampleClients}
                   messageRequests={sampleMessageRequests}
                   onNavigateToTab={setActiveTab}
