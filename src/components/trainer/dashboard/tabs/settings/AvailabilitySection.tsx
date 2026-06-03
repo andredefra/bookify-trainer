@@ -1,8 +1,34 @@
 
+import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Calendar, Plus, Star, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+type CalProvider = "google" | "outlook" | "apple";
+interface ConnectedCalendar {
+  id: string;
+  provider: CalProvider;
+  email: string;
+  primary: boolean;
+  twoWaySync: boolean;
+}
+
+const PROVIDER_LABEL: Record<CalProvider, string> = {
+  google: "Google Calendar",
+  outlook: "Outlook / Microsoft 365",
+  apple: "Apple iCloud",
+};
 
 export function AvailabilitySection() {
   // Week days
