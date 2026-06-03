@@ -89,7 +89,15 @@ export function SalesEntriesProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<Record<string, SalesEntry[]>>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const stored = JSON.parse(raw) as Record<string, SalesEntry[]>;
+        // Merge: add seed entries for any client not yet present in storage
+        const merged = { ...stored };
+        for (const [key, seedList] of Object.entries(SEED_ENTRIES)) {
+          if (!merged[key] || merged[key].length === 0) merged[key] = seedList;
+        }
+        return merged;
+      }
     } catch {
       // ignore
     }
