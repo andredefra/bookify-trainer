@@ -242,7 +242,42 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
     toast.success("Primary affiliation updated");
   };
 
+  // Remove confirmation state
+  const [removeTarget, setRemoveTarget] = useState<
+    | { kind: "manual"; id: string; name: string }
+    | { kind: "verified"; id: string; name: string }
+    | null
+  >(null);
+
+  const confirmRemove = () => {
+    if (!removeTarget) return;
+    if (removeTarget.kind === "manual") {
+      const target = manualAffiliations.find((a) => a.id === removeTarget.id);
+      const next = manualAffiliations.filter((a) => a.id !== removeTarget.id);
+      if (target?.isPrimary && next.length > 0 && !verifiedAffiliations.some((v) => v.isPrimary)) {
+        next[0] = { ...next[0], isPrimary: true };
+      }
+      saveLocalAffiliations(trainerId, next);
+      setManualAffiliations(next);
+      if (target?.token) deleteInvite(target.token);
+    } else {
+      const target = verifiedAffiliations.find((a) => a.id === removeTarget.id);
+      const next = verifiedAffiliations.filter((a) => a.id !== removeTarget.id);
+      if (target?.isPrimary && next.length > 0) {
+        next[0] = { ...next[0], isPrimary: true };
+      } else if (target?.isPrimary && next.length === 0 && manualAffiliations.length > 0) {
+        const m = manualAffiliations.map((a, i) => ({ ...a, isPrimary: i === 0 }));
+        saveLocalAffiliations(trainerId, m);
+        setManualAffiliations(m);
+      }
+      setVerifiedAffiliations(next);
+    }
+    toast.success(`${removeTarget.name} removed`);
+    setRemoveTarget(null);
+  };
+
   const hasAffiliations = manualAffiliations.length + verifiedAffiliations.length > 0;
+
 
   // --- Dialog body renderer ---
   const renderDialogBody = () => {
