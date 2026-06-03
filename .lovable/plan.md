@@ -1,30 +1,28 @@
 ## Goal
 
-On the **Client Management → Client List** cards (Basic and other dashboards), remove the "X sessions • Last: …" line and replace it with the client's **total sales value** pulled from `SalesEntriesContext`, so trainers can quickly compare it to the CRM card value.
+The CRM "Client" column should show the trainer's actual clients (Emma Thompson, Michael Chen, Sarah Johnson) — the same people listed in Client Management — instead of the unrelated mock contacts Giovanni Verdi and Sofia Esposito.
 
 ## Changes
 
-### 1. `src/components/trainer/dashboard/tabs/clients/ClientCard.tsx`
-- Extend `ClientItem` with an optional `email: string`.
-- Remove the line `{client.sessions} sessions • Last: {client.lastSession}`.
-- Replace with a small row showing `Total sales: €{total}` using `useSalesEntries().getTotal(client.email)`.
-  - If `total === 0`, show muted `Total sales: €0` (keeps layout consistent and matches the CRM card which also shows 0 when empty).
-- Goal/program/package badges below stay unchanged.
+### 1. `src/components/trainer/dashboard/tabs/sales/useSalesContacts.ts`
+Replace the two mock `client` entries (Giovanni Verdi, Sofia Esposito) with three new entries matching the Client Management roster:
 
-### 2. `src/components/trainer/dashboard/tabs/ClientsTab.tsx` and other places typing `ClientItem`
-- Add the optional `email` to the local `ClientItem` interface(s) in `ClientsTab.tsx`, `GoalManagerModal.tsx`, `CheckInManagerModal.tsx`, `RecentClientsCard.tsx` so the new field flows through (purely additive, no behavior change elsewhere).
+- **Emma Thompson** — `emma.thompson@example.com`, status `client`, clientSince ~Feb 2023, source "Website", notes "Personal training — 10-session package"
+- **Michael Chen** — `michael.chen@example.com`, status `client`, clientSince ~Mar 2023, source "Referral", notes "Single PT sessions, weight-loss focus"
+- **Sarah Johnson** — `sarah.johnson@example.com`, status `client`, clientSince ~Jan 2023, source "Instagram", notes "12-week training program"
 
-### 3. `src/components/trainer/dashboard/DashboardContainer.tsx`
-- Add an `email` to each `sampleClients` entry so totals can be looked up:
-  - Emma Thompson → `emma.thompson@example.com`
-  - Michael Chen → `michael.chen@example.com`
-  - Sarah Johnson → `sarah.johnson@example.com`
+Keep the non-client mock contacts (Marco Rossi lead, Laura Bianchi prospect, Francesca Neri lost, Antonio Russo terminated) as-is so the other pipeline columns are still populated.
 
-### 4. `src/context/SalesEntriesContext.tsx`
-- Add seed entries for the three demo clients above so the Client List shows non-zero, comparable values out of the box (e.g. Emma 1 800€, Michael 1 200€, Sarah 2 700€). These flow into the Sales tab inside the client profile as `auto` entries — exactly like the existing g.verdi / s.esposito seeds.
+The `value` field on each new client is irrelevant for display (the card already pulls `getTotal(email)` from `SalesEntriesContext` for clients), but set it to match the seeded total for consistency: Emma 1800, Michael 1200, Sarah 2700.
+
+### 2. `src/context/SalesEntriesContext.tsx`
+Remove the now-unused seeds for `g.verdi@example.com` and `s.esposito@example.com` so the CRM/Sales-Entries data is consistent with the new roster. Keep the Antonio Russo seed (he's the Terminated card).
 
 ## Out of scope
 
-- No changes to the CRM `SalesCard` (already shows the same `getTotal` for clients).
-- No backend/schema work; mock-data and UI only.
-- Sessions/lastSession data stays in the model in case other components rely on it; it just stops being rendered on the card.
+- No change to Client Management cards — they already use the same emails.
+- No DB / backend work.
+
+## Note
+
+Users who already opened the app once have a cached `trainer-sales-entries` in localStorage with the old seeds. The existing merge logic only **adds** missing entries; it won't remove g.verdi / s.esposito entries from cache. That's fine — those emails no longer appear in any CRM contact, so the orphaned entries are invisible. No cache reset needed.
