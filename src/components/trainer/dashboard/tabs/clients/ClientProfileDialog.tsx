@@ -44,7 +44,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-3xl p-4 md:p-6 overflow-y-auto max-h-[90vh]">
+      <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-5xl p-4 md:p-6 overflow-y-auto max-h-[90vh]">
         <DialogHeader className="mb-2 md:mb-4">
           <DialogTitle className="text-lg md:text-xl">Client Profile</DialogTitle>
           <div className="relative mt-2">
