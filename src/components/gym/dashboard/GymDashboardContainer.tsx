@@ -93,7 +93,7 @@ export function GymDashboardContainer() {
         
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-2 md:p-6 bg-gray-50">
           {!isInvited && activeTab === "overview" && <OverviewTab user={user} />}
-          {activeTab === "trainers-management" && <TrainersManagementTab />}
+          {activeTab === "trainers-management" && <TrainersManagementTab isInvited={isInvited} />}
           {!isInvited && activeTab === "group-sessions" && <GroupSessionsTab />}
           {!isInvited && activeTab === "availability" && <AvailabilityTab />}
           {!isInvited && activeTab === "performance" && <PerformanceTab />}
@@ -104,7 +104,7 @@ export function GymDashboardContainer() {
           {!isInvited && activeTab === "transactions" && <TransactionsTab />}
           {!isInvited && activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
           {!isInvited && activeTab === "analytics" && <AnalyticsTab />}
-          {activeTab === "settings" && <SettingsTab user={user} />}
+          {activeTab === "settings" && <SettingsTab user={user} isInvited={isInvited} />}
         </main>
       </div>
     </div>

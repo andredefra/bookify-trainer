@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfileTab } from "./settings/ProfileTab";
 import { NotificationsTab } from "./settings/NotificationsTab";
@@ -17,9 +16,10 @@ interface SettingsTabProps {
     profileImage?: string;
     gymName?: string;
   } | null;
+  isInvited?: boolean;
 }
 
-export function SettingsTab({ user }: SettingsTabProps) {
+export function SettingsTab({ user, isInvited = false }: SettingsTabProps) {
   return (
     <div className="space-y-8">
       <div>
@@ -32,37 +32,41 @@ export function SettingsTab({ user }: SettingsTabProps) {
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="branding">Branding</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="integrations">Integrations</TabsTrigger>
-          <TabsTrigger value="invoicing">Invoicing</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
+          {!isInvited && <TabsTrigger value="integrations">Integrations</TabsTrigger>}
+          {!isInvited && <TabsTrigger value="invoicing">Invoicing</TabsTrigger>}
+          {!isInvited && <TabsTrigger value="billing">Billing</TabsTrigger>}
         </TabsList>
-        
+
         <TabsContent value="profile">
           <ProfileTab user={user} />
         </TabsContent>
 
         <TabsContent value="branding">
-          <BrandingSettingsTab 
-            entityType="gym" 
+          <BrandingSettingsTab
+            entityType="gym"
             onSave={(data) => console.log('Saving gym branding:', data)}
           />
         </TabsContent>
-        
+
         <TabsContent value="notifications">
           <NotificationsTab />
         </TabsContent>
-        
-        <TabsContent value="integrations">
-          <IntegrationsTab />
-        </TabsContent>
-        
-        <TabsContent value="invoicing">
-          <InvoicingSection />
-        </TabsContent>
-        
-        <TabsContent value="billing">
-          <BillingTab user={user} />
-        </TabsContent>
+
+        {!isInvited && (
+          <>
+            <TabsContent value="integrations">
+              <IntegrationsTab />
+            </TabsContent>
+
+            <TabsContent value="invoicing">
+              <InvoicingSection />
+            </TabsContent>
+
+            <TabsContent value="billing">
+              <BillingTab user={user} />
+            </TabsContent>
+          </>
+        )}
       </Tabs>
     </div>
   );
