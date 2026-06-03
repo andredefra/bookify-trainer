@@ -90,9 +90,9 @@ export function MessageAutomationTab() {
       await createRule(newRule);
       setNewRule({
         template_id: "",
-        trigger_type: "package_expiry",
+        trigger_type: isBasic ? "calendar_invitation" : "package_expiry",
         days_before_trigger: 7,
-        target_type: "packages"
+        target_type: isBasic ? "sessions" : "packages"
       });
       toast.success(t('messageAutomation.toast.ruleCreated'));
     } catch (error) {
