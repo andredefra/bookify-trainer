@@ -39,11 +39,14 @@ export function MessageRuleDialog({
   const isBasic = trainerPlan === 'basic';
   const [loading, setLoading] = useState(false);
 
+  const defaultTrigger: CreateMessageRuleData['trigger_type'] = isBasic ? 'calendar_invitation' : 'package_expiry';
+  const defaultTarget: CreateMessageRuleData['target_type'] = isBasic ? 'sessions' : 'packages';
+
   const [formData, setFormData] = useState<CreateMessageRuleData>({
     template_id: '',
-    trigger_type: 'package_expiry',
+    trigger_type: defaultTrigger,
     days_before_trigger: 7,
-    target_type: 'packages',
+    target_type: defaultTarget,
   });
 
   useEffect(() => {
@@ -57,12 +60,13 @@ export function MessageRuleDialog({
     } else {
       setFormData({
         template_id: '',
-        trigger_type: 'package_expiry',
+        trigger_type: defaultTrigger,
         days_before_trigger: 7,
-        target_type: 'packages',
+        target_type: defaultTarget,
       });
     }
-  }, [rule]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rule, isBasic]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
