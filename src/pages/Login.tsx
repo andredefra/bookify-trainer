@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { toast } from "sonner";
 import { getDemoUserData } from "@/utils/demoUserUtils";
+import { getInviteByEmail } from "@/utils/mockGymInvites";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -22,6 +23,25 @@ const Login = () => {
     const normalizedEmail = email.trim().toLowerCase();
     const allowedEmail = 'andrea.mypersonal.fit@gmail.com';
     const allowedPassword = '@Tr3ggy@';
+
+    // Invited gym onboarded via trainer link: mock login bypass
+    if (loginType === 'gym') {
+      const invite = getInviteByEmail(normalizedEmail);
+      if (invite) {
+        const demoUser = {
+          type: 'gym',
+          source: 'invited',
+          email: normalizedEmail,
+          name: invite.name,
+          gymName: invite.name,
+          id: invite.token,
+        };
+        localStorage.setItem('demo-user', JSON.stringify(demoUser));
+        toast.success("Demo login successful!");
+        navigate('/gym-dashboard');
+        return;
+      }
+    }
 
     // Gym/Studio remain restricted to the andrea credentials.
     if (loginType === 'gym' || loginType === 'studio') {
