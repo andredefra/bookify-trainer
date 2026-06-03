@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useTrainerPlan } from '@/context/TrainerPlanContext';
 
 export interface MessageTemplate {
   id: string;
   user_id: string;
-  template_type: 'package_expiring' | 'package_expired' | 'session_reminder' | 'program_ending' | 'welcome' | 'custom';
+  template_type: 'package_expiring' | 'package_expired' | 'session_reminder' | 'program_ending' | 'calendar_invitation_reminder' | 'welcome' | 'custom';
   name: string;
   subject: string;
   message: string;
@@ -18,7 +19,7 @@ export interface MessageAutomationRule {
   id: string;
   user_id: string;
   template_id: string;
-  trigger_type: 'package_expiry' | 'session_upcoming' | 'program_ending' | 'welcome' | 'custom';
+  trigger_type: 'package_expiry' | 'session_upcoming' | 'program_ending' | 'calendar_invitation' | 'welcome' | 'custom';
   days_before_trigger: number;
   target_type: 'packages' | 'sessions' | 'programs' | 'all';
   is_active: boolean;
@@ -131,6 +132,23 @@ Program Progress:
 Congratulations on your dedication! Let's discuss your next steps and how we can continue supporting your fitness goals.
 
 Best regards,
+{{trainerName}}`
+  },
+  {
+    template_type: 'calendar_invitation_reminder',
+    name: 'Calendar Invitation Reminder',
+    subject: 'Reminder: {{sessionDate}} at {{sessionTime}}',
+    message: `Hi {{clientName}},
+
+Just a quick reminder of the calendar invitation:
+
+📅 Date: {{sessionDate}}
+🕒 Time: {{sessionTime}}
+📍 Location: {{sessionLocation}}
+
+If anything changes on your side, let me know in advance so we can reschedule.
+
+See you soon!
 {{trainerName}}`
   },
   {
