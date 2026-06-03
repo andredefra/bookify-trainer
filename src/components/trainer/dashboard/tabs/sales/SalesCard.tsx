@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EditableContactDialog } from "./EditableContactDialog";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { useSalesEntries } from "@/context/SalesEntriesContext";
 
 interface SalesCardProps {
   contact: SalesContact;
