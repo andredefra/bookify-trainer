@@ -27,10 +27,12 @@ import {
 } from "lucide-react";
 import { useMessageAutomation } from "@/hooks/useMessageAutomation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 import { toast } from "sonner";
 
 export function MessageAutomationTab() {
   const { t } = useLanguage();
+  const isBasic = useTrainerPlan() === 'basic';
   const {
     templates,
     rules,
@@ -44,16 +46,16 @@ export function MessageAutomationTab() {
 
   const [newTemplate, setNewTemplate] = useState({
     name: "",
-    template_type: "package_expiring" as const,
+    template_type: (isBasic ? "calendar_invitation_reminder" : "package_expiring") as any,
     subject: "",
     message: ""
   });
 
   const [newRule, setNewRule] = useState({
     template_id: "",
-    trigger_type: "package_expiry" as const,
+    trigger_type: (isBasic ? "calendar_invitation" : "package_expiry") as any,
     days_before_trigger: 7,
-    target_type: "packages" as const
+    target_type: (isBasic ? "sessions" : "packages") as any
   });
 
   const analytics = getMessageAnalytics();
@@ -68,7 +70,7 @@ export function MessageAutomationTab() {
       await createTemplate(newTemplate);
       setNewTemplate({
         name: "",
-        template_type: "package_expiring",
+        template_type: isBasic ? "calendar_invitation_reminder" : "package_expiring",
         subject: "",
         message: ""
       });
@@ -88,9 +90,9 @@ export function MessageAutomationTab() {
       await createRule(newRule);
       setNewRule({
         template_id: "",
-        trigger_type: "package_expiry",
+        trigger_type: isBasic ? "calendar_invitation" : "package_expiry",
         days_before_trigger: 7,
-        target_type: "packages"
+        target_type: isBasic ? "sessions" : "packages"
       });
       toast.success(t('messageAutomation.toast.ruleCreated'));
     } catch (error) {
@@ -192,10 +194,11 @@ export function MessageAutomationTab() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="package_expiring">{t('messageAutomation.types.packageExpiring')}</SelectItem>
-                        <SelectItem value="package_expired">{t('messageAutomation.types.packageExpired')}</SelectItem>
-                        <SelectItem value="session_reminder">{t('messageAutomation.types.sessionReminder')}</SelectItem>
-                        <SelectItem value="program_ending">{t('messageAutomation.types.programEnding')}</SelectItem>
+                        {!isBasic && <SelectItem value="package_expiring">{t('messageAutomation.types.packageExpiring')}</SelectItem>}
+                        {!isBasic && <SelectItem value="package_expired">{t('messageAutomation.types.packageExpired')}</SelectItem>}
+                        {!isBasic && <SelectItem value="session_reminder">{t('messageAutomation.types.sessionReminder')}</SelectItem>}
+                        {!isBasic && <SelectItem value="program_ending">{t('messageAutomation.types.programEnding')}</SelectItem>}
+                        <SelectItem value="calendar_invitation_reminder">Calendar Invitation Reminder</SelectItem>
                         <SelectItem value="welcome">{t('messageAutomation.types.welcome')}</SelectItem>
                         <SelectItem value="custom">{t('messageAutomation.types.custom')}</SelectItem>
                       </SelectContent>
@@ -312,9 +315,10 @@ export function MessageAutomationTab() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="package_expiry">{t('messageAutomation.triggers.packageExpiry')}</SelectItem>
-                      <SelectItem value="session_upcoming">{t('messageAutomation.triggers.sessionUpcoming')}</SelectItem>
-                      <SelectItem value="program_ending">{t('messageAutomation.triggers.programEnding')}</SelectItem>
+                      {!isBasic && <SelectItem value="package_expiry">{t('messageAutomation.triggers.packageExpiry')}</SelectItem>}
+                      {!isBasic && <SelectItem value="session_upcoming">{t('messageAutomation.triggers.sessionUpcoming')}</SelectItem>}
+                      {!isBasic && <SelectItem value="program_ending">{t('messageAutomation.triggers.programEnding')}</SelectItem>}
+                      <SelectItem value="calendar_invitation">Calendar Invitation Reminder</SelectItem>
                       <SelectItem value="welcome">{t('messageAutomation.triggers.welcome')}</SelectItem>
                     </SelectContent>
                   </Select>
