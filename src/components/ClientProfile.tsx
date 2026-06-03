@@ -1,5 +1,5 @@
 
-import { User, Calendar, Medal } from "lucide-react";
+import { User, Calendar } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -47,15 +47,10 @@ export function ClientProfile({
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2 mt-4">
+        <div className="grid grid-cols-1 gap-2 mt-4">
           <div className="bg-primary/5 px-2 py-1 rounded-md flex items-center gap-1 text-xs">
             <Calendar className="h-3 w-3 text-primary/70" />
             <span className="truncate">{since}</span>
-          </div>
-          
-          <div className="bg-green-50 px-2 py-1 rounded-md flex items-center gap-1 text-xs">
-            <Medal className="h-3 w-3 text-green-500" />
-            <span className="truncate">{sessions} sessions</span>
           </div>
         </div>
       </CardContent>
