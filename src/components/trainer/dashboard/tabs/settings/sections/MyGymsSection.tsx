@@ -26,14 +26,27 @@ import {
   Copy,
   Link2,
   ArrowLeft,
+  Trash2,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import {
   createInvite,
   buildOnboardingUrl,
   getInvitesForTrainer,
+  deleteInvite,
   type MockGymInvite,
 } from "@/utils/mockGymInvites";
+
 
 interface MyGymsSectionProps {
   trainerId?: string;
@@ -229,7 +242,42 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
     toast.success("Primary affiliation updated");
   };
 
+  // Remove confirmation state
+  const [removeTarget, setRemoveTarget] = useState<
+    | { kind: "manual"; id: string; name: string }
+    | { kind: "verified"; id: string; name: string }
+    | null
+  >(null);
+
+  const confirmRemove = () => {
+    if (!removeTarget) return;
+    if (removeTarget.kind === "manual") {
+      const target = manualAffiliations.find((a) => a.id === removeTarget.id);
+      const next = manualAffiliations.filter((a) => a.id !== removeTarget.id);
+      if (target?.isPrimary && next.length > 0 && !verifiedAffiliations.some((v) => v.isPrimary)) {
+        next[0] = { ...next[0], isPrimary: true };
+      }
+      saveLocalAffiliations(trainerId, next);
+      setManualAffiliations(next);
+      if (target?.token) deleteInvite(target.token);
+    } else {
+      const target = verifiedAffiliations.find((a) => a.id === removeTarget.id);
+      const next = verifiedAffiliations.filter((a) => a.id !== removeTarget.id);
+      if (target?.isPrimary && next.length > 0) {
+        next[0] = { ...next[0], isPrimary: true };
+      } else if (target?.isPrimary && next.length === 0 && manualAffiliations.length > 0) {
+        const m = manualAffiliations.map((a, i) => ({ ...a, isPrimary: i === 0 }));
+        saveLocalAffiliations(trainerId, m);
+        setManualAffiliations(m);
+      }
+      setVerifiedAffiliations(next);
+    }
+    toast.success(`${removeTarget.name} removed`);
+    setRemoveTarget(null);
+  };
+
   const hasAffiliations = manualAffiliations.length + verifiedAffiliations.length > 0;
+
 
   // --- Dialog body renderer ---
   const renderDialogBody = () => {
@@ -582,11 +630,25 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
                     )}
                   </div>
                 </div>
-                {!a.isPrimary && (
-                  <Button size="sm" variant="outline" onClick={() => setPrimaryVerified(a.id)}>
-                    Set as Primary
+                <div className="flex items-center gap-2">
+                  {!a.isPrimary && (
+                    <Button size="sm" variant="outline" onClick={() => setPrimaryVerified(a.id)}>
+                      Set as Primary
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() =>
+                      setRemoveTarget({ kind: "verified", id: a.id, name: a.gym.name })
+                    }
+                    aria-label={`Remove ${a.gym.name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
                   </Button>
-                )}
+                </div>
+
               </div>
             </CardContent>
           </Card>
@@ -640,6 +702,18 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
                       Set as Primary
                     </Button>
                   )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() =>
+                      setRemoveTarget({ kind: "manual", id: a.id, name: a.name })
+                    }
+                    aria-label={`Remove ${a.name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+
                 </div>
               </div>
             </CardContent>
@@ -658,6 +732,29 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
           {renderDialogBody()}
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!removeTarget} onOpenChange={(o) => !o && setRemoveTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove affiliation?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {removeTarget
+                ? `Remove ${removeTarget.name} from your affiliations? This cannot be undone.`
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmRemove}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </div>
   );
 }

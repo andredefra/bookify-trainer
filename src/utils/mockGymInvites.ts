@@ -136,6 +136,12 @@ export function updateInvite(
   return list[idx];
 }
 
+export function deleteInvite(token: string): void {
+  const list = getAllInvites().filter((i) => i.token !== token);
+  saveAllInvites(list);
+}
+
+
 export function getInvitesForTrainer(trainerId?: string): MockGymInvite[] {
   if (!trainerId) return getAllInvites();
   return getAllInvites().filter((i) => i.trainerId === trainerId);

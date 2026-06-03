@@ -1,28 +1,23 @@
-## Goal
+## Fix gym affiliations error & add remove action
 
-The CRM "Client" column should show the trainer's actual clients (Emma Thompson, Michael Chen, Sarah Johnson) — the same people listed in Client Management — instead of the unrelated mock contacts Giovanni Verdi and Sofia Esposito.
+### 1. Silence the "Failed to load gym affiliations" error toast
+`src/hooks/useTrainerGymAffiliations.ts` → `fetchAffiliations()` always shows a destructive toast when the Supabase query fails. In demo mode (no authenticated user) this fires every time `MyGymsSection` mounts. Update the hook to:
+- Skip the fetch (and toast) when there's no authenticated Supabase user — just set `affiliations` to `[]` and return.
+- Keep the `console.error` for real debugging but remove the user-facing toast on failure (the section already manages its own local/demo state).
 
-## Changes
+### 2. Add "Remove" action for affiliations
+`src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx`:
+- Add a `Trash2` icon button on each affiliation card (both `verifiedAffiliations` and `manualAffiliations`) next to the existing "Set as Primary" button.
+- Clicking opens an `AlertDialog` confirm ("Remove [name] from your affiliations?").
+- On confirm:
+  - **Verified**: remove from `verifiedAffiliations` state.
+  - **Manual**: remove from `manualAffiliations`, persist via `saveLocalAffiliations`, and also remove the matching invite from `mockGymInvites` (add a `deleteInvite(token)` helper to `src/utils/mockGymInvites.ts`).
+  - If the removed item was `isPrimary` and other affiliations remain, promote the first remaining one to primary.
+  - Show success toast.
 
-### 1. `src/components/trainer/dashboard/tabs/sales/useSalesContacts.ts`
-Replace the two mock `client` entries (Giovanni Verdi, Sofia Esposito) with three new entries matching the Client Management roster:
+### Files touched
+- `src/hooks/useTrainerGymAffiliations.ts` — guard fetch + drop error toast
+- `src/utils/mockGymInvites.ts` — add `deleteInvite(token)`
+- `src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx` — Remove button + confirm dialog + handlers
 
-- **Emma Thompson** — `emma.thompson@example.com`, status `client`, clientSince ~Feb 2023, source "Website", notes "Personal training — 10-session package"
-- **Michael Chen** — `michael.chen@example.com`, status `client`, clientSince ~Mar 2023, source "Referral", notes "Single PT sessions, weight-loss focus"
-- **Sarah Johnson** — `sarah.johnson@example.com`, status `client`, clientSince ~Jan 2023, source "Instagram", notes "12-week training program"
-
-Keep the non-client mock contacts (Marco Rossi lead, Laura Bianchi prospect, Francesca Neri lost, Antonio Russo terminated) as-is so the other pipeline columns are still populated.
-
-The `value` field on each new client is irrelevant for display (the card already pulls `getTotal(email)` from `SalesEntriesContext` for clients), but set it to match the seeded total for consistency: Emma 1800, Michael 1200, Sarah 2700.
-
-### 2. `src/context/SalesEntriesContext.tsx`
-Remove the now-unused seeds for `g.verdi@example.com` and `s.esposito@example.com` so the CRM/Sales-Entries data is consistent with the new roster. Keep the Antonio Russo seed (he's the Terminated card).
-
-## Out of scope
-
-- No change to Client Management cards — they already use the same emails.
-- No DB / backend work.
-
-## Note
-
-Users who already opened the app once have a cached `trainer-sales-entries` in localStorage with the old seeds. The existing merge logic only **adds** missing entries; it won't remove g.verdi / s.esposito entries from cache. That's fine — those emails no longer appear in any CRM contact, so the orphaned entries are invisible. No cache reset needed.
+No DB or backend changes.
