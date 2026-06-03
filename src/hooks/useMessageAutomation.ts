@@ -195,7 +195,10 @@ export function useMessageAutomation() {
   const initializeDefaultTemplates = async () => {
     try {
       // Create default templates with mock data for demo
-      const templatesWithVariables = DEFAULT_MESSAGE_TEMPLATES.map((template, index) => ({
+      const baseTemplates = isBasic
+        ? DEFAULT_MESSAGE_TEMPLATES.filter(t => !basicHiddenTypes.includes(t.template_type))
+        : DEFAULT_MESSAGE_TEMPLATES;
+      const templatesWithVariables = baseTemplates.map((template, index) => ({
         ...template,
         id: `template-${index}`,
         user_id: 'mock-user',
