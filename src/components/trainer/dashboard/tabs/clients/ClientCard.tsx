@@ -20,6 +20,8 @@ interface ClientCardProps {
 }
 
 export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics, onViewCheckIns }: ClientCardProps) {
+  const plan = useTrainerPlan();
+  const showPackagesAndPrograms = plan !== "basic";
   return (
     <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -37,14 +39,18 @@ export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics
                   <Target className="h-3 w-3 mr-1" />
                   Lose 5kg
                 </Badge>
-                <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
-                  <Dumbbell className="h-3 w-3 mr-1" />
-                  Strength Program
-                </Badge>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  <Package className="h-3 w-3 mr-1" />
-                  1 Active Package
-                </Badge>
+                {showPackagesAndPrograms && (
+                  <>
+                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                      <Dumbbell className="h-3 w-3 mr-1" />
+                      Strength Program
+                    </Badge>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      <Package className="h-3 w-3 mr-1" />
+                      1 Active Package
+                    </Badge>
+                  </>
+                )}
               </>
             )}
             {client.id === 2 && (
@@ -53,10 +59,12 @@ export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics
                   <Target className="h-3 w-3 mr-1" />
                   Run 10K
                 </Badge>
-                <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-                  <Package className="h-3 w-3 mr-1" />
-                  1 Package
-                </Badge>
+                {showPackagesAndPrograms && (
+                  <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                    <Package className="h-3 w-3 mr-1" />
+                    1 Package
+                  </Badge>
+                )}
               </>
             )}
           </div>
