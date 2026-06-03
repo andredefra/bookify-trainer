@@ -53,13 +53,51 @@ const SEED_ENTRIES: Record<string, SalesEntry[]> = {
       source: "auto",
     },
   ],
+  "emma.thompson@example.com": [
+    {
+      id: "seed-emma-1",
+      type: "Package",
+      name: "10-session PT package",
+      amount: 1800,
+      date: "2023-04-01T09:00:00Z",
+      source: "auto",
+    },
+  ],
+  "michael.chen@example.com": [
+    {
+      id: "seed-michael-1",
+      type: "Session",
+      name: "Single PT sessions",
+      amount: 1200,
+      date: "2023-04-10T09:00:00Z",
+      source: "auto",
+    },
+  ],
+  "sarah.johnson@example.com": [
+    {
+      id: "seed-sarah-1",
+      type: "Program",
+      name: "12-week training program",
+      amount: 2700,
+      date: "2023-03-20T09:00:00Z",
+      source: "auto",
+    },
+  ],
 };
 
 export function SalesEntriesProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<Record<string, SalesEntry[]>>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const stored = JSON.parse(raw) as Record<string, SalesEntry[]>;
+        // Merge: add seed entries for any client not yet present in storage
+        const merged = { ...stored };
+        for (const [key, seedList] of Object.entries(SEED_ENTRIES)) {
+          if (!merged[key] || merged[key].length === 0) merged[key] = seedList;
+        }
+        return merged;
+      }
     } catch {
       // ignore
     }

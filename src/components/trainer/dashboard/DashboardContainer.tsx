@@ -82,9 +82,9 @@ const basicSampleActivities: TrainerSessionItem[] = [
 
 // Sample clients data - IDs match database demo data
 const sampleClients = [
-  { id: 2, name: "Emma Thompson", sessions: 12, lastSession: "May 15, 2023" },
-  { id: 1, name: "Michael Chen", sessions: 8, lastSession: "May 17, 2023" },
-  { id: 3, name: "Sarah Johnson", sessions: 15, lastSession: "May 18, 2023" },
+  { id: 2, name: "Emma Thompson", sessions: 12, lastSession: "May 15, 2023", email: "emma.thompson@example.com" },
+  { id: 1, name: "Michael Chen", sessions: 8, lastSession: "May 17, 2023", email: "michael.chen@example.com" },
+  { id: 3, name: "Sarah Johnson", sessions: 15, lastSession: "May 18, 2023", email: "sarah.johnson@example.com" },
 ];
 
 // Sample message requests data
