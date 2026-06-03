@@ -44,9 +44,16 @@ export const useTrainerGymAffiliations = (trainerId?: string) => {
 
   const fetchAffiliations = async () => {
     if (!trainerId) return;
-    
+
     setLoading(true);
     try {
+      // Skip Supabase fetch entirely in demo mode (no authenticated user)
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setAffiliations([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('trainer_gym_affiliations')
         .select('*')
@@ -57,15 +64,12 @@ export const useTrainerGymAffiliations = (trainerId?: string) => {
       setAffiliations(data || []);
     } catch (error) {
       console.error('Error fetching affiliations:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load gym affiliations",
-        variant: "destructive",
-      });
+      // No user-facing toast — section manages its own demo/local state.
     } finally {
       setLoading(false);
     }
   };
+
 
   const requestAffiliation = async (gymId: string, message?: string) => {
     if (!trainerId) return false;
