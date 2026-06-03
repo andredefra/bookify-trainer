@@ -94,6 +94,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
               email={mockClientDetails.email}
               since={mockClientDetails.since}
               sessions={client.sessions}
+              onRemove={() => setConfirmOpen(true)}
             />
           </div>
           
@@ -105,6 +106,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
                 email={mockClientDetails.email}
                 since={mockClientDetails.since}
                 sessions={client.sessions}
+                onRemove={() => setConfirmOpen(true)}
               />
             </div>
             
@@ -125,7 +127,6 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
           onMessage={() => onMessage?.(client.name)}
           onScheduleSession={() => onScheduleSession?.(client.name)}
           onScheduleEvent={() => onScheduleEvent?.(client.name)}
-          onRemove={() => setConfirmOpen(true)}
         />
       </DialogContent>
     </Dialog>

@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Calendar, HelpCircle, Trash2 } from "lucide-react";
+import { MessageSquare, Calendar, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
@@ -9,10 +9,9 @@ interface ProfileDialogFooterProps {
   onMessage: () => void;
   onScheduleSession: () => void;
   onScheduleEvent?: () => void;
-  onRemove?: () => void;
 }
 
-export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onScheduleEvent, onRemove }: ProfileDialogFooterProps) {
+export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onScheduleEvent }: ProfileDialogFooterProps) {
   const plan = useTrainerPlan();
   const isBasic = plan === "basic";
   return (
@@ -44,12 +43,6 @@ export function ProfileDialogFooter({ onClose, onMessage, onScheduleSession, onS
         </TooltipProvider>
       </div>
       <div className="flex items-center gap-2">
-        {onRemove && (
-          <Button variant="destructive" size="sm" onClick={onRemove}>
-            <Trash2 className="h-4 w-4 mr-2" />
-            Remove Client
-          </Button>
-        )}
         <Button variant="ghost" size="sm" onClick={onClose}>
           Close
         </Button>
