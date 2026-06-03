@@ -1,71 +1,26 @@
+## Problem
 
-## Goal
+The earlier change updated the wrong files (`MessageTemplateDialog.tsx` and `MessageRuleDialog.tsx`) — those are unused. The actual Templates/Rules UI lives in `src/components/common/MessageAutomationTab.tsx`, so the basic-plan user still sees Package Expiring / Expired / Session Reminder / Program Ending in both the Template Type and Rule Trigger dropdowns.
 
-Change the "My Studio or Gym" settings flow so trainers can add the gym/studio they work at (searching existing ones or creating an unverified one), then generate a unique invite link that lets that gym/studio onboard onto the platform — fully mocked, no real backend.
+## Fix
 
-## 1. Settings → My Studio or Gym (`MyGymsSection.tsx`)
+Apply the same basic-plan gating directly in `MessageAutomationTab.tsx`.
 
-- Rename primary CTA from "Request Your First Affiliation" / "Request Affiliation" to **"Add your gym or studio"**.
-- Replace the current request dialog with a multi-step modal:
+### `src/components/common/MessageAutomationTab.tsx`
+1. Import `useTrainerPlan` from `@/context/TrainerPlanContext` and compute `const isBasic = useTrainerPlan() === 'basic'`.
+2. Adjust initial state when `isBasic`:
+   - `newTemplate.template_type` default → `'calendar_invitation_reminder'`
+   - `newRule.trigger_type` default → `'calendar_invitation'`
+   - `newRule.target_type` default → `'sessions'`
+   (and the same in the post-create reset blocks)
+3. Template Type `<SelectContent>` (lines 194–201): wrap `package_expiring`, `package_expired`, `session_reminder`, `program_ending` in `{!isBasic && ...}`, and add `<SelectItem value="calendar_invitation_reminder">Calendar Invitation Reminder</SelectItem>` (use existing `t('messageAutomation.types.calendarInvitationReminder')` with a string fallback).
+4. Rule Trigger `<SelectContent>` (lines 314–319): wrap `package_expiry`, `session_upcoming`, `program_ending` in `{!isBasic && ...}`, and add `<SelectItem value="calendar_invitation">Calendar Invitation Reminder</SelectItem>`.
 
-  **Step 1 — Search**
-  - Single input: search by name OR address (reuse `searchGyms`).
-  - Show results as today; each result has a "Select" action.
-  - Below results: a "Can't find it? Add it manually" link/button.
+### Translations
+Add `calendarInvitationReminder` keys under `messageAutomation.types` and `messageAutomation.triggers` in `src/translations/en.ts` (and any other locale files that mirror it) so the new labels render via `t()`. If a locale file isn't present, fall back to inline strings.
 
-  **Step 2a — Selected existing gym**
-  - Shows summary; trainer confirms → affiliation added as `approved` + `verified` (existing mock list is verified).
+### Cleanup
+Revert (or leave inert) the earlier basic-plan logic added to `MessageTemplateDialog.tsx` and `MessageRuleDialog.tsx` is not necessary since those components aren't mounted, but for tidiness keep them in sync (no code path renders them, so no user impact).
 
-  **Step 2b — Add new (manual)**
-  - Fields: Name, Type (radio: Gym / Studio), Street/Address, City (optional), Notes (optional).
-  - On Confirm → show confirmation screen:
-    > "You are adding an unverified {gym|studio}. Invite the {gym|studio} to the platform so they can verify the entity and gain credibility and trust."
-  - Two buttons: **Cancel** / **Confirm & generate invite link**.
-
-  **Step 3 — Invite link**
-  - Generate a unique slug (e.g. `crypto.randomUUID()`) and build URL: `${window.location.origin}/gym-onboarding/{token}`.
-  - Show link in read-only input with Copy button + share hint.
-  - Persist the pending entity + token in `localStorage` under `mock-gym-invites` (array of `{ token, name, type, address, status: 'pending'|'verified', trainerId, createdAt }`).
-  - Also add affiliation entry locally marked `unverified` so it appears in the affiliation list.
-
-- Affiliation card: show an **Unverified** badge (amber) for manually added entries, plus a "Copy invite link" action to re-share. Verified ones show a **Verified** badge (green).
-
-## 2. Gym/Studio onboarding page (mock auth)
-
-- New route: `/gym-onboarding/:token` → new page `src/pages/GymOnboarding.tsx`.
-- Page reads the token from `localStorage.mock-gym-invites`. If unknown token → friendly "Invalid or expired link" state.
-- Layout: branded card with 3 sections:
-  1. **Confirm trainer's entries** — pre-filled name, type, address; editable inputs; "Looks correct" confirmation.
-  2. **Verification documents (mock)** — drag/drop or file input accepting PDFs/images; files kept in component state only, listed by name (no upload). Helper text explains they help build trust.
-  3. **Create your account** — email + password + confirm password fields.
-- Submit button "Complete onboarding":
-  - Validates fields (zod).
-  - Updates the invite entry in localStorage to `status: 'verified'`, attaches submitted data, stores a mock gym user: `localStorage.setItem('demo-user', JSON.stringify({ type:'gym', email, id: token, name }))`.
-  - Also flip the matching trainer affiliation entry to `verified`.
-  - Redirect to `/gym-dashboard`.
-
-## 3. Gym dashboard restriction for invited gyms
-
-- In `GymSidebar.tsx`, when the logged-in gym user originated from a mock invite (detect via a flag on `demo-user`, e.g. `source: 'invited'`), render **only** two items: `Trainers Management` and `Settings`. Default tab = `trainers-management`.
-- `GymDashboardContainer.tsx`: when `source === 'invited'`, force `activeTab` into the allowed set and skip rendering hidden tab content. Header/branding unchanged.
-
-## 4. Login support (mock)
-
-- `Login.tsx` already reads `demo-user` from localStorage. Add a small mock check: if the entered email matches a `mock-gym-invites` entry with `status: 'verified'`, log them in as that gym (`type: 'gym'`, `source: 'invited'`) and route to `/gym-dashboard`. Password is accepted as long as non-empty (mock).
-
-## 5. Files touched
-
-- `src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx` — full rewrite of dialog flow.
-- `src/components/trainer/dashboard/tabs/settings/sections/GymInfoCard.tsx` — add Verified/Unverified badge + "Copy invite link" action (if affiliation has token).
-- `src/hooks/useTrainerGymAffiliations.ts` — add `addManualGym(data) → { token, link }` and `verified`/`token` fields on the local affiliation shape (kept local — no DB writes).
-- `src/pages/GymOnboarding.tsx` — new page.
-- `src/App.tsx` — register `/gym-onboarding/:token` route.
-- `src/components/gym/dashboard/GymSidebar.tsx` — filter nav for invited gyms.
-- `src/components/gym/dashboard/GymDashboardContainer.tsx` — restrict default + active tab for invited gyms.
-- `src/pages/Login.tsx` — mock login for invited gyms.
-
-## Notes
-
-- Everything is mocked via `localStorage` keys `mock-gym-invites` and `demo-user`; no Supabase tables, RLS, or migrations.
-- Existing verified mock gyms in `searchGyms` remain unchanged and treated as `verified`.
-- Copy is in English to match the rest of the settings UI; can be localized later.
+## Out of scope
+No changes to data model, `useMessageAutomation` hook types (already include the new types), or backend.

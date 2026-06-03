@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useMessageAutomation } from "@/hooks/useMessageAutomation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 import { toast } from "sonner";
 
 export function MessageAutomationTab() {
