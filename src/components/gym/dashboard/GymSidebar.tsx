@@ -26,6 +26,7 @@ interface GymSidebarProps {
   showSidebar: boolean;
   setShowSidebar: (show: boolean) => void;
   unreadMessagesCount?: number;
+  isInvited?: boolean;
 }
 
 export function GymSidebar({ 
@@ -33,10 +34,13 @@ export function GymSidebar({
   setActiveTab, 
   showSidebar, 
   setShowSidebar,
-  unreadMessagesCount = 0
+  unreadMessagesCount = 0,
+  isInvited = false
 }: GymSidebarProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
+  const renderFullNav = !isInvited;
+
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {isMobile && (
