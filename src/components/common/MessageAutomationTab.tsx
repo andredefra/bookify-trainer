@@ -315,9 +315,10 @@ export function MessageAutomationTab() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="package_expiry">{t('messageAutomation.triggers.packageExpiry')}</SelectItem>
-                      <SelectItem value="session_upcoming">{t('messageAutomation.triggers.sessionUpcoming')}</SelectItem>
-                      <SelectItem value="program_ending">{t('messageAutomation.triggers.programEnding')}</SelectItem>
+                      {!isBasic && <SelectItem value="package_expiry">{t('messageAutomation.triggers.packageExpiry')}</SelectItem>}
+                      {!isBasic && <SelectItem value="session_upcoming">{t('messageAutomation.triggers.sessionUpcoming')}</SelectItem>}
+                      {!isBasic && <SelectItem value="program_ending">{t('messageAutomation.triggers.programEnding')}</SelectItem>}
+                      <SelectItem value="calendar_invitation">Calendar Invitation Reminder</SelectItem>
                       <SelectItem value="welcome">{t('messageAutomation.triggers.welcome')}</SelectItem>
                     </SelectContent>
                   </Select>
