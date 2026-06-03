@@ -70,7 +70,7 @@ export function MessageAutomationTab() {
       await createTemplate(newTemplate);
       setNewTemplate({
         name: "",
-        template_type: "package_expiring",
+        template_type: isBasic ? "calendar_invitation_reminder" : "package_expiring",
         subject: "",
         message: ""
       });
