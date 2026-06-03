@@ -630,11 +630,25 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
                     )}
                   </div>
                 </div>
-                {!a.isPrimary && (
-                  <Button size="sm" variant="outline" onClick={() => setPrimaryVerified(a.id)}>
-                    Set as Primary
+                <div className="flex items-center gap-2">
+                  {!a.isPrimary && (
+                    <Button size="sm" variant="outline" onClick={() => setPrimaryVerified(a.id)}>
+                      Set as Primary
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() =>
+                      setRemoveTarget({ kind: "verified", id: a.id, name: a.gym.name })
+                    }
+                    aria-label={`Remove ${a.gym.name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
                   </Button>
-                )}
+                </div>
+
               </div>
             </CardContent>
           </Card>
