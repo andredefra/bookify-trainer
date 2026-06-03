@@ -44,7 +44,7 @@ export function OverviewTab({ upcomingSessions, clients, messageRequests, onNavi
   const { layout, enabledWidgets: rawEnabledWidgets, saveLayout, toggleWidget, resetToDefault } = useWidgetLayout();
   const ALWAYS_HIDDEN_WIDGETS = ["goals"];
   const PLAN_HIDDEN_WIDGETS: Record<string, string[]> = {
-    basic: ["expiration-alerts", "revenue-chart", "package-sales"],
+    basic: ["expiration-alerts", "revenue-chart", "package-sales", "recent-activities"],
     essential: ["package-sales"],
     pro: [],
   };
