@@ -1,7 +1,9 @@
 
+import { useState } from 'react';
 import { CheckCircle2, LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { PlanDetailsDialog } from './PlanDetailsDialog';
 import { useLanguage } from '@/context/LanguageContext';
 
