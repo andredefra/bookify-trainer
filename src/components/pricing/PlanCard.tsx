@@ -138,6 +138,18 @@ export const PlanCard = ({
               >
                 {ctaText}
               </Button>
+            ) : isComingSoonPlan ? (
+              <Button
+                onClick={() => setComingSoonOpen(true)}
+                className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
+                  isPopular 
+                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                }`}
+                size="lg"
+              >
+                {ctaText}
+              </Button>
             ) : (
               <Button
                 asChild
