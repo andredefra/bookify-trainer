@@ -12,9 +12,10 @@ import { useGymTrainerAssignments } from "@/hooks/gym/useGymTrainerAssignments";
 
 interface TrainersManagementTabProps {
   isInvited?: boolean;
+  onMessageTrainer?: (trainerId: string) => void;
 }
 
-export function TrainersManagementTab({ isInvited = false }: TrainersManagementTabProps) {
+export function TrainersManagementTab({ isInvited = false, onMessageTrainer }: TrainersManagementTabProps) {
   const [activeTab, setActiveTab] = useState("trainers");
   const [copied, setCopied] = useState(false);
   const [search, setSearch] = useState("");
@@ -85,7 +86,7 @@ export function TrainersManagementTab({ isInvited = false }: TrainersManagementT
           />
         </div>
 
-        <TrainersList isInvited search={search} />
+        <TrainersList isInvited search={search} onMessage={onMessageTrainer} />
       </div>
     );
   }
