@@ -1,38 +1,24 @@
-## Goals
-1. Let invited gyms message their trainers directly from the dashboard.
-2. Fix header/sidebar alignment and clean up the page UI/UX.
+## Goal
+On the homepage pricing section (both EN and IT), clicking "Upgrade to Essential" or "Go Pro" should open a popup announcing the plan is coming soon, inviting users to start with Basic via a button styled like "Start Free Now" (no navigation for now).
 
 ## Changes
 
-### 1. Add Messages to invited-gym sidebar + container
-- `GymDashboardContainer.tsx`: for `isInvited`, include `MessagesTab` in the rendered tabs (alongside `TrainersManagementTab` and `SettingsTab`).
-- `GymSidebar.tsx`: when `isInvited`, show nav items: Trainers, Messages, Settings (with proper icons: Users, MessageCircle, Settings).
-- "Message" buttons on each trainer card switch `activeTab` to `messages` and preselect that trainer's conversation (pass an `onMessageTrainer` callback through `TrainersManagementTab` → `TrainersList`).
+### `src/components/pricing/PlanCard.tsx`
+- Add local state `comingSoonOpen`.
+- For plans with `planType === 'essential'` or `planType === 'pro'`, replace the `<Link>` CTA with a `<Button>` that opens a `<Dialog>` instead of navigating.
+- Other plans (Basic, Studio, Gym) keep current behavior.
+- Render a shadcn `Dialog` with:
+  - Title: translated "Coming Soon"
+  - Description: translated message — "This plan is coming soon. In the meantime, you can start using MyPersonal with the Basic account."
+  - Primary action button styled identically to the Basic "Start Free Now" CTA, label from translations, `onClick` just closes the dialog (no navigation per request).
+- Use translation keys so EN and IT pages share the same component and both get the popup automatically.
 
-### 2. Reuse existing chat UI
-- Reuse `src/components/gym/dashboard/tabs/messages/MessagesTab.tsx` with the existing trainers list + chat panel. No new chat infrastructure.
-- Accept optional `initialTrainerId` prop so clicking Message on a card jumps straight into that conversation.
+### `src/translations/en.ts` and `src/translations/it.ts`
+- Add keys under `pricing.comingSoon`:
+  - `title` — "Coming Soon" / "Prossimamente"
+  - `description` — English & Italian version of the message
+  - `cta` — reuse existing `pricing.standard.cta` ("Start Free Now" / equivalent), no new key needed if it already exists.
 
-### 3. Header / sidebar alignment fix
-- `GymHeader.tsx` + `GymSidebar.tsx`: ensure both use the same fixed height (e.g. `h-16`) and the sidebar starts flush under the header with no extra top padding. Currently the sidebar's first item ("Trainers Management") sits noticeably below the logo row.
-- Constrain header content to the same horizontal padding as the main area so the logo aligns with the sidebar edge.
-
-### 4. UI/UX polish for invited-gym Trainers page
-- Tighten the page header: smaller title, single-line subtitle, remove extra vertical gaps.
-- "Invite a trainer" card: more compact, truncate the long link with `font-mono text-xs` and ellipsis, keep Copy button right-aligned; add a small success toast on copy (already toasted — keep).
-- Trainer card refinements:
-  - Use a 2-column action row (`Message` outline + `View Profile` solid) with consistent height; today the Message button stretches full width on one card and not the other.
-  - Move status dot to the avatar bottom-right (already there) and remove the duplicate status badge next to the name — keep just the colored dot + label inline.
-  - Add subtle hover state and consistent card padding.
-- Search + filter chips: keep "All / Online / Away / Offline" but make them a single row with `flex-wrap` and reduced spacing.
-- Use semantic tokens (`bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`) — no hard-coded colors.
-
-### 5. Files to edit
-- `src/components/gym/dashboard/GymDashboardContainer.tsx`
-- `src/components/gym/dashboard/GymSidebar.tsx`
-- `src/components/gym/dashboard/GymHeader.tsx`
-- `src/components/gym/dashboard/tabs/TrainersManagementTab.tsx`
-- `src/components/gym/dashboard/tabs/trainers/TrainersList.tsx`
-- `src/components/gym/dashboard/tabs/messages/MessagesTab.tsx` (add optional `initialTrainerId` prop)
-
-No backend or DB changes.
+## Notes
+- Single shared component covers both `/` (EN) and `/ita` (IT) pricing sections — no per-page duplication needed.
+- Button does not navigate anywhere yet (just closes the dialog), as requested.

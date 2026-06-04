@@ -118,6 +118,8 @@ export const en = {
   'pricing.standard.period': '/month',
   'pricing.standard.fee': 'FREE for 6 months, then €1.99/month',
   'pricing.standard.cta': 'Start Free Now',
+  'pricing.comingSoon.title': 'Coming Soon',
+  'pricing.comingSoon.description': "This plan is coming soon. In the meantime, you can start using MyPersonal with the Basic account — it's free.",
   'pricing.freemium.title': 'Essential',
   'pricing.freemium.price': '€9',
   'pricing.freemium.priceAnnual': '€5',

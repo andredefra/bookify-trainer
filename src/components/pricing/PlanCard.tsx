@@ -1,7 +1,9 @@
 
+import { useState } from 'react';
 import { CheckCircle2, LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { PlanDetailsDialog } from './PlanDetailsDialog';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -47,7 +49,10 @@ export const PlanCard = ({
   comingSoon = false
 }: PlanCardProps) => {
   const { t } = useLanguage();
+  const [comingSoonOpen, setComingSoonOpen] = useState(false);
+  const isComingSoonPlan = planType === 'essential' || planType === 'pro';
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
+
   
   return (
     <div className={`${revealClass} flex flex-col p-8 rounded-2xl border ${
@@ -133,6 +138,18 @@ export const PlanCard = ({
               >
                 {ctaText}
               </Button>
+            ) : isComingSoonPlan ? (
+              <Button
+                onClick={() => setComingSoonOpen(true)}
+                className={`w-full font-semibold shadow-md hover:shadow-lg transition-all duration-200 ${
+                  isPopular 
+                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                    : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                }`}
+                size="lg"
+              >
+                {ctaText}
+              </Button>
             ) : (
               <Button
                 asChild
@@ -175,6 +192,26 @@ export const PlanCard = ({
           )}
         </div>
       </div>
+
+      <Dialog open={comingSoonOpen} onOpenChange={setComingSoonOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('pricing.comingSoon.title')}</DialogTitle>
+            <DialogDescription className="pt-2">
+              {t('pricing.comingSoon.description')}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button
+              onClick={() => setComingSoonOpen(false)}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+              size="lg"
+            >
+              {t('pricing.standard.cta')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
