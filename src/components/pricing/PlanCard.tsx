@@ -49,7 +49,10 @@ export const PlanCard = ({
   comingSoon = false
 }: PlanCardProps) => {
   const { t } = useLanguage();
+  const [comingSoonOpen, setComingSoonOpen] = useState(false);
+  const isComingSoonPlan = planType === 'essential' || planType === 'pro';
   const revealClass = `reveal ${isDelayed ? 'reveal-delay-' + (isPopular ? '1' : '2') : ''}`;
+
   
   return (
     <div className={`${revealClass} flex flex-col p-8 rounded-2xl border ${
