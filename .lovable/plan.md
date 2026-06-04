@@ -1,30 +1,27 @@
-## Goal
-For invited gyms only, simplify the Trainers Management screen and the Settings tabs, and improve the UI/UX of the trainers area.
+## Plan
 
-## Changes
+1. **Make invited-gym detection robust**
+   - Update the gym dashboard to treat a gym as “invited” not only when `source === "invited"`, but also when its stored `id` is an invite token (`inv_...`) or when it matches a verified trainer-created gym invite.
+   - This covers the exact flow shown in your screenshot where the new gym is still being treated like a full studio/gym admin.
 
-### 1. `src/components/gym/dashboard/tabs/SettingsTab.tsx`
-Accept an `isInvited` prop. When invited, render only the **Profile**, **Branding**, and **Notifications** tabs (remove Integrations, Invoicing, Billing triggers + content). Non-invited gyms keep the full set.
+2. **Force the invited-gym dashboard into the simplified view**
+   - Keep only **Trainers Management** and **Settings** in the sidebar.
+   - Ensure Trainers Management renders the simplified invited version: invite link, search, trainer cards only.
+   - Remove assignment buttons, Assignment tab, Performance tab, contract/earnings/client-count details for invited gyms.
 
-### 2. `src/components/gym/dashboard/GymDashboardContainer.tsx`
-Pass `isInvited` to `<SettingsTab />`.
+3. **Fix settings for invited gyms**
+   - Keep only **Profile**, **Branding**, and **Notifications**.
+   - Hide **Integrations**, **Invoicing**, and **Billing** for all invited-gym detection cases.
 
-### 3. `src/components/gym/dashboard/tabs/TrainersManagementTab.tsx`
-Replace current layout with a streamlined invited-gym version (since invited gyms are the only consumers reaching this with that role, but to be safe accept an `isInvited` prop from the container; when true):
-- Header: "Trainers" + subtitle "Your personal trainers at this gym".
-- Top action card: **"Invite a trainer"** — shows the gym's unique registration link (`{origin}/register?gym={gymId}&role=trainer`) in a read-only input with a **Copy link** button (uses `navigator.clipboard`, toast on success). Short helper text: "Share this link so trainers can register under your gym."
-- Remove the "Assign Trainer", "Invite Trainer" buttons and the inner `Tabs` (Trainers / Assignments / Performance). Render `<TrainersList />` directly under a status filter row that already exists in the list.
-- Keep the search input above the list.
+4. **Polish the copy for invited gyms**
+   - Rename the page from “Trainer Management” to “Trainers”.
+   - Use copy aligned with the limited invited-gym role: invite trainers via link, message trainers, view profile, and see availability status.
 
-### 4. `src/components/gym/dashboard/tabs/trainers/TrainersList.tsx`
-UI/UX polish for each trainer card:
-- Clear availability pill (Online/Away/Offline) next to the name with the existing colored dot.
-- Show specialties as subtle badges, email row.
-- Action row reduced to two buttons: **Message** (primary outline) and **View Profile** (solid). Remove the "Assign" button and the €/mo + clients meta (assignment-related) for invited gyms — pass an `isInvited` prop from the parent and conditionally hide assignment/contract info.
-- Tighten spacing, consistent card padding, hover ring.
+## Technical details
 
-### 5. Container wiring
-`GymDashboardContainer.tsx` passes `isInvited` to `TrainersManagementTab` and `SettingsTab`. `TrainersManagementTab` passes it to `TrainersList`.
+Files to update:
+- `src/components/gym/dashboard/GymDashboardContainer.tsx`
+- `src/pages/GymDashboard.tsx` if needed to avoid overwriting invited-gym IDs
+- possibly a small helper in `src/utils/mockGymInvites.ts` or a local helper in the dashboard to recognize verified invited gym users
 
-## Out of scope
-No backend/data changes. Non-invited gym dashboard behavior is unchanged.
+No backend/database changes.
