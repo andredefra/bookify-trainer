@@ -192,6 +192,26 @@ export const PlanCard = ({
           )}
         </div>
       </div>
+
+      <Dialog open={comingSoonOpen} onOpenChange={setComingSoonOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('pricing.comingSoon.title')}</DialogTitle>
+            <DialogDescription className="pt-2">
+              {t('pricing.comingSoon.description')}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button
+              onClick={() => setComingSoonOpen(false)}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+              size="lg"
+            >
+              {t('pricing.standard.cta')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
