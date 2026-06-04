@@ -118,6 +118,8 @@ export const it = {
   'pricing.standard.period': '/mese',
   'pricing.standard.fee': 'GRATIS per 6 mesi, poi €1,99/mese',
   'pricing.standard.cta': 'Inizia Gratis Ora',
+  'pricing.comingSoon.title': 'Prossimamente',
+  'pricing.comingSoon.description': 'Questo piano sarà disponibile presto. Nel frattempo puoi iniziare a usare MyPersonal con l\'account Basic — è gratis.',
   'pricing.freemium.title': 'Essenziale',
   'pricing.freemium.price': '€9',
   'pricing.freemium.priceAnnual': '€5',
