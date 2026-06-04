@@ -22,8 +22,11 @@ const GymDashboard = () => {
         }
       } else {
         // Ensure demo gym user has the correct ID to match existing data
-        // (skip for invited gyms which keep their own invite token as ID)
-        if (userData.source !== 'invited') {
+        // (skip for invited gyms — they keep their invite token as ID)
+        const isInvited =
+          userData.source === 'invited' ||
+          (typeof userData.id === 'string' && userData.id.startsWith('inv_'));
+        if (!isInvited) {
           const updatedUserData = {
             ...userData,
             id: '11111111-1111-1111-1111-111111111111'
