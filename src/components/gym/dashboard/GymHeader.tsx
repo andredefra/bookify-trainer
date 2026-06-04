@@ -40,21 +40,21 @@ export function GymHeader({
   
   return (
     <header className="bg-white border-b border-border shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6">
         <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center">
+          <div className="flex items-center gap-3 md:w-64 md:pr-4">
             {isMobile && (
-              <Button variant="ghost" size="icon" onClick={onMobileMenuClick} className="mr-2">
+              <Button variant="ghost" size="icon" onClick={onMobileMenuClick}>
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle sidebar</span>
               </Button>
             )}
-            <span className="font-display text-xl font-bold text-primary -ml-4">MyPersonal.fit</span>
-            
-            <div className="hidden lg:flex ml-6 items-center space-x-2">
-              <Building className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">Fitactive - Via Tolstoj 79, San Giuliano Milanese (MI) - 20098</span>
-            </div>
+            <span className="font-display text-xl font-bold text-primary">MyPersonal.fit</span>
+          </div>
+
+          <div className="hidden lg:flex flex-1 items-center gap-2 px-4">
+            <Building className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium truncate">Fitactive - Via Tolstoj 79, San Giuliano Milanese (MI) - 20098</span>
           </div>
           
           <div className="flex items-center space-x-4">

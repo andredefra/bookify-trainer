@@ -12,6 +12,7 @@ import { MembersTab } from "./tabs/MembersTab";
 import { PackagesTab } from "./tabs/PackagesTab";
 import { TransactionsTab } from "./tabs/TransactionsTab";
 import { MessagesTab } from "./tabs/messages";
+import { InvitedMessagesTab } from "./tabs/InvitedMessagesTab";
 import { ServiceRequestsTab } from "./tabs/ServiceRequestsTab";
 import { AnalyticsTab } from "./tabs/AnalyticsTab";
 import { SettingsTab } from "./tabs/SettingsTab";
@@ -34,6 +35,12 @@ export function GymDashboardContainer() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+  const [messageTrainerId, setMessageTrainerId] = useState<string | null>(null);
+
+  const openTrainerChat = (trainerId: string) => {
+    setMessageTrainerId(trainerId);
+    setActiveTab("messages");
+  };
 
   useEffect(() => {
     const userData = localStorage.getItem('demo-user');
@@ -58,7 +65,7 @@ export function GymDashboardContainer() {
 
   // Restrict invited gyms to allowed tabs only
   useEffect(() => {
-    if (isInvited && activeTab !== "trainers-management" && activeTab !== "settings") {
+    if (isInvited && !["trainers-management", "messages", "settings"].includes(activeTab)) {
       setActiveTab("trainers-management");
     }
   }, [isInvited, activeTab]);
@@ -99,7 +106,9 @@ export function GymDashboardContainer() {
         
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-2 md:p-6 bg-gray-50">
           {!isInvited && activeTab === "overview" && <OverviewTab user={user} />}
-          {activeTab === "trainers-management" && <TrainersManagementTab isInvited={isInvited} />}
+          {activeTab === "trainers-management" && (
+            <TrainersManagementTab isInvited={isInvited} onMessageTrainer={openTrainerChat} />
+          )}
           {!isInvited && activeTab === "group-sessions" && <GroupSessionsTab />}
           {!isInvited && activeTab === "availability" && <AvailabilityTab />}
           {!isInvited && activeTab === "performance" && <PerformanceTab />}
@@ -109,6 +118,12 @@ export function GymDashboardContainer() {
           {!isInvited && activeTab === "service-requests" && <ServiceRequestsTab />}
           {!isInvited && activeTab === "transactions" && <TransactionsTab />}
           {!isInvited && activeTab === "messages" && <MessagesTab onMessagesRead={() => setUnreadMessagesCount(0)} />}
+          {isInvited && activeTab === "messages" && (
+            <InvitedMessagesTab
+              initialTrainerId={messageTrainerId}
+              onConsumeInitial={() => setMessageTrainerId(null)}
+            />
+          )}
           {!isInvited && activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "settings" && <SettingsTab user={user} isInvited={isInvited} />}
         </main>

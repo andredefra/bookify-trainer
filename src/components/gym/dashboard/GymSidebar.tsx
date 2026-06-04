@@ -69,8 +69,23 @@ export function GymSidebar({
               className={`flex items-center p-4 hover:bg-gray-50 transition-colors ${activeTab === "trainers-management" ? "bg-primary/5 text-primary" : ""}`}
             >
               <UserCheck className="w-5 h-5 mr-3" />
-              <span>Trainers Management</span>
+              <span>{isInvited ? "Trainers" : "Trainers Management"}</span>
             </button>
+
+            {isInvited && (
+              <button
+                onClick={() => { setActiveTab("messages"); if (isMobile) setShowSidebar(false); }}
+                className={`flex items-center justify-between p-4 hover:bg-gray-50 transition-colors ${activeTab === "messages" ? "bg-primary/5 text-primary" : ""}`}
+              >
+                <div className="flex items-center">
+                  <MessageSquare className="w-5 h-5 mr-3" />
+                  <span>Messages</span>
+                </div>
+                {unreadMessagesCount > 0 && (
+                  <Badge className="bg-primary ml-2">{unreadMessagesCount}</Badge>
+                )}
+              </button>
+            )}
             
             {renderFullNav && (<>
             {/* Group Sessions */}

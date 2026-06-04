@@ -26,9 +26,10 @@ import { useTrainerContracts } from "@/hooks/gym/useTrainerContracts";
 interface TrainersListProps {
   isInvited?: boolean;
   search?: string;
+  onMessage?: (trainerId: string) => void;
 }
 
-export function TrainersList({ isInvited = false, search = "" }: TrainersListProps) {
+export function TrainersList({ isInvited = false, search = "", onMessage }: TrainersListProps) {
   const [filter, setFilter] = useState("all");
   const { trainersWithContracts, loading } = useTrainerContracts();
 
@@ -200,7 +201,7 @@ export function TrainersList({ isInvited = false, search = "" }: TrainersListPro
                 <div className="flex flex-col gap-2 pt-2 border-t">
                   {isInvited ? (
                     <div className="grid grid-cols-2 gap-2">
-                      <Button size="sm" variant="outline" className="h-10">
+                      <Button size="sm" variant="outline" className="h-10" onClick={() => onMessage?.(trainer.id)}>
                         <MessageSquare className="h-4 w-4 mr-2" />
                         Message
                       </Button>
