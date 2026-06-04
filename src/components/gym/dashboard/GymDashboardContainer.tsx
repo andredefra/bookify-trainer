@@ -26,9 +26,12 @@ export function GymDashboardContainer() {
     profileImage?: string;
     gymName?: string;
     source?: string;
+    id?: string;
   } | null>(null);
-  const isInvited = user?.source === "invited";
-  const [activeTab, setActiveTab] = useState(isInvited ? "trainers-management" : "overview");
+  const isInvited =
+    user?.source === "invited" ||
+    (typeof user?.id === "string" && user.id.startsWith("inv_"));
+  const [activeTab, setActiveTab] = useState("overview");
   const [showSidebar, setShowSidebar] = useState(false);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
@@ -36,17 +39,20 @@ export function GymDashboardContainer() {
     const userData = localStorage.getItem('demo-user');
     if (userData) {
       const parsedUser = JSON.parse(userData);
-      // For demo purpose, add a gym name if not present
       if (!parsedUser.gymName) {
         parsedUser.gymName = parsedUser.name || "FitLife Gym";
       }
+      const inviteByToken =
+        typeof parsedUser.id === "string" && parsedUser.id.startsWith("inv_");
+      if (inviteByToken && parsedUser.source !== "invited") {
+        parsedUser.source = "invited";
+        localStorage.setItem('demo-user', JSON.stringify(parsedUser));
+      }
       setUser(parsedUser);
-      if (parsedUser.source === "invited") {
+      if (parsedUser.source === "invited" || inviteByToken) {
         setActiveTab("trainers-management");
       }
     }
-    
-    // Initialize unread messages count (mock data)
     setUnreadMessagesCount(3);
   }, []);
 
