@@ -9,9 +9,10 @@ import { toast } from "sonner";
 interface Props {
   open: boolean;
   onClose: () => void;
+  planMonthId?: string | null;
 }
 
-export default function CsvImportDialog({ open, onClose }: Props) {
+export default function CsvImportDialog({ open, onClose, planMonthId }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [rows, setRows] = useState<ParsedRow[]>([]);
   const { data: personas = [] } = usePersonas();
@@ -33,16 +34,25 @@ export default function CsvImportDialog({ open, onClose }: Props) {
 
   const confirmImport = () => {
     if (rows.length === 0) return;
-    const payload = rows.map((r) => ({
-      scheduled_date: r.scheduled_date || null,
-      scheduled_time: r.scheduled_time || null,
+    if (!planMonthId) {
+      toast.error("Seleziona o crea un mese prima di importare.");
+      return;
+    }
+    const payload = rows.map((r, i) => ({
+      plan_month_id: planMonthId,
+      sequence_number: r.sequence_number ?? i + 1,
+      social_channel: r.social_channel,
       persona_id: r.persona_id,
-      funnel_stage: r.funnel_stage || null,
-      content_format: r.content_format || null,
-      hook: r.hook || null,
-      post_copy: r.post_copy || null,
-      cta: r.cta || null,
-      media_prompt: r.media_prompt || null,
+      funnel_stage: r.funnel_stage,
+      content_format: r.content_format,
+      content_type: r.content_type,
+      objective: r.objective,
+      situation: r.situation,
+      post_copy: r.post_copy,
+      cta: r.cta,
+      media_prompt: r.media_prompt,
+      media_url: r.media_url,
+      published_link: r.published_link,
     }));
     bulk.mutate(payload, {
       onSuccess: () => {
@@ -56,10 +66,15 @@ export default function CsvImportDialog({ open, onClose }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Importa CSV</DialogTitle></DialogHeader>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader><DialogTitle>Importa template (CSV)</DialogTitle></DialogHeader>
 
         <div className="space-y-3">
+          <p className="text-xs text-muted-foreground">
+            Header allineati al tracker Excel: #, Day, Social Media Channel, Tipo Format, Tipo Persona, Obiettivo,
+            Fase del Funnel, Situazione, Post Copy / Text, Content type, CTA, Media Prompt, Media Links, Status, Post Link.
+            La sequenza dei post (#) sarà rispettata dall'AI in fase di calendarizzazione.
+          </p>
           <div className="flex gap-2 flex-wrap">
             <Button variant="outline" size="sm" onClick={downloadTemplate}>Scarica template</Button>
             <Button size="sm" onClick={() => fileRef.current?.click()}>Seleziona file CSV</Button>
@@ -77,24 +92,26 @@ export default function CsvImportDialog({ open, onClose }: Props) {
               <table className="w-full text-xs">
                 <thead className="bg-muted">
                   <tr>
-                    <th className="text-left p-2">Data</th>
-                    <th className="text-left p-2">Ora</th>
+                    <th className="text-left p-2">#</th>
                     <th className="text-left p-2">Persona</th>
                     <th className="text-left p-2">Formato</th>
-                    <th className="text-left p-2">Hook</th>
+                    <th className="text-left p-2">Funnel</th>
+                    <th className="text-left p-2">Obiettivo</th>
+                    <th className="text-left p-2">Copy</th>
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((r, i) => (
                     <tr key={i} className="border-t">
-                      <td className="p-2">{r.scheduled_date || "—"}</td>
-                      <td className="p-2">{r.scheduled_time || "—"}</td>
+                      <td className="p-2 font-mono">#{r.sequence_number ?? i + 1}</td>
                       <td className="p-2">
-                        {r.persona ?? "—"}
+                        {r.persona_name ?? "—"}
                         {!r._personaMatched && <span className="text-destructive ml-1">(non trovata)</span>}
                       </td>
-                      <td className="p-2">{r.content_format || "—"}</td>
-                      <td className="p-2 truncate max-w-xs">{r.hook || "—"}</td>
+                      <td className="p-2">{r.content_format ?? "—"}</td>
+                      <td className="p-2">{r.funnel_stage ?? "—"}</td>
+                      <td className="p-2 truncate max-w-[160px]">{r.objective ?? "—"}</td>
+                      <td className="p-2 truncate max-w-xs">{r.post_copy ?? "—"}</td>
                     </tr>
                   ))}
                 </tbody>
