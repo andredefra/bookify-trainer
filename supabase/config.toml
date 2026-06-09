@@ -43,3 +43,6 @@ verify_jwt = false
 
 [functions.analyze-program-document]
 verify_jwt = true
+
+[functions.mkt-generate-copy]
+verify_jwt = true
