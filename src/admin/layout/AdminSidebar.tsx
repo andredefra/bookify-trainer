@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 
 const items = [
   { to: "/admin", label: it.nav.dashboard, icon: LayoutDashboard, end: true },
+  { to: "/admin/branding", label: it.nav.branding, icon: Palette },
   { to: "/admin/content-plan", label: it.nav.contentPlan, icon: Workflow },
   { to: "/admin/calendar", label: it.nav.calendar, icon: Calendar },
-  { to: "/admin/branding", label: it.nav.branding, icon: Palette },
   { to: "/admin/settings", label: it.nav.settings, icon: Settings },
 ];
 
