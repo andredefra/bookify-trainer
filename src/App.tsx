@@ -28,6 +28,7 @@ import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import UserDashboard from "./pages/UserDashboard";
 import GymOnboarding from "./pages/GymOnboarding";
+import AdminRoutes from "./admin/routes/AdminRoutes";
 
 const DomainRedirect = () => {
   useEffect(() => {
