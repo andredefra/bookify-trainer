@@ -1,0 +1,52 @@
+// Italian UI strings for the internal marketing admin module.
+export const it = {
+  appName: "MyPersonal Admin",
+  subtitle: "Marketing Instagram",
+  nav: {
+    dashboard: "Dashboard",
+    contentPlan: "Piano Contenuti",
+    calendar: "Calendario",
+    branding: "Branding",
+    settings: "Impostazioni",
+    logout: "Esci",
+  },
+  status: {
+    Draft: "Bozza",
+    Approval: "In Approvazione",
+    Validated: "Validato",
+    Posted: "Pubblicato",
+  },
+  funnel: {
+    Awareness: "Awareness",
+    Consideration: "Consideration",
+    Conversion: "Conversion",
+  },
+  format: {
+    Reel: "Reel",
+    Carosello: "Carosello",
+    Post: "Post",
+    Video: "Video",
+    Sondaggio: "Sondaggio",
+  },
+  ai: {
+    generate: "Genera copy",
+    rewrite: "Riscrivi",
+    shorten: "Accorcia",
+    retone: "Cambia tono",
+    history: "Generazioni",
+    use: "Usa questa",
+    generating: "Generazione in corso...",
+  },
+  common: {
+    save: "Salva",
+    cancel: "Annulla",
+    delete: "Elimina",
+    confirm: "Conferma",
+    upload: "Carica",
+    download: "Scarica",
+    edit: "Modifica",
+    create: "Crea",
+    loading: "Caricamento...",
+    empty: "Nessun elemento da mostrare.",
+  },
+};

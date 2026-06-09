@@ -28,6 +28,7 @@ import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import UserDashboard from "./pages/UserDashboard";
 import GymOnboarding from "./pages/GymOnboarding";
+import AdminRoutes from "./admin/routes/AdminRoutes";
 
 const DomainRedirect = () => {
   useEffect(() => {
@@ -111,6 +112,7 @@ const AppContent = () => {
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/user-register" element={<UserRegister />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
