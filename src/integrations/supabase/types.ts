@@ -1705,6 +1705,250 @@ export type Database = {
         }
         Relationships: []
       }
+      mkt_admins: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      mkt_brand_assets: {
+        Row: {
+          asset_type: string | null
+          created_at: string
+          file_url: string | null
+          hex: string | null
+          id: string
+          name: string
+          notes: string | null
+        }
+        Insert: {
+          asset_type?: string | null
+          created_at?: string
+          file_url?: string | null
+          hex?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+        }
+        Update: {
+          asset_type?: string | null
+          created_at?: string
+          file_url?: string | null
+          hex?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+        }
+        Relationships: []
+      }
+      mkt_brand_docs: {
+        Row: {
+          content: string | null
+          created_at: string
+          doc_type: string | null
+          file_url: string | null
+          id: string
+          is_active: boolean
+          title: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          doc_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          title: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          doc_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          title?: string
+        }
+        Relationships: []
+      }
+      mkt_connectors: {
+        Row: {
+          config: Json | null
+          connector_name: string
+          created_at: string
+          id: string
+          notes: string | null
+          status: string
+        }
+        Insert: {
+          config?: Json | null
+          connector_name: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          status?: string
+        }
+        Update: {
+          config?: Json | null
+          connector_name?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      mkt_content: {
+        Row: {
+          content_format: string | null
+          created_at: string
+          cta: string | null
+          dms_received: number | null
+          funnel_stage: string | null
+          hook: string | null
+          id: string
+          media_prompt: string | null
+          media_url: string | null
+          notes: string | null
+          persona_id: string | null
+          post_copy: string | null
+          published_link: string | null
+          scheduled_date: string | null
+          scheduled_time: string | null
+          status: string
+          updated_at: string
+          views: number | null
+        }
+        Insert: {
+          content_format?: string | null
+          created_at?: string
+          cta?: string | null
+          dms_received?: number | null
+          funnel_stage?: string | null
+          hook?: string | null
+          id?: string
+          media_prompt?: string | null
+          media_url?: string | null
+          notes?: string | null
+          persona_id?: string | null
+          post_copy?: string | null
+          published_link?: string | null
+          scheduled_date?: string | null
+          scheduled_time?: string | null
+          status?: string
+          updated_at?: string
+          views?: number | null
+        }
+        Update: {
+          content_format?: string | null
+          created_at?: string
+          cta?: string | null
+          dms_received?: number | null
+          funnel_stage?: string | null
+          hook?: string | null
+          id?: string
+          media_prompt?: string | null
+          media_url?: string | null
+          notes?: string | null
+          persona_id?: string | null
+          post_copy?: string | null
+          published_link?: string | null
+          scheduled_date?: string | null
+          scheduled_time?: string | null
+          status?: string
+          updated_at?: string
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_content_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_personas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_generations: {
+        Row: {
+          content_id: string
+          created_at: string
+          gen_type: string
+          id: string
+          is_selected: boolean
+          output: string
+        }
+        Insert: {
+          content_id: string
+          created_at?: string
+          gen_type: string
+          id?: string
+          is_selected?: boolean
+          output: string
+        }
+        Update: {
+          content_id?: string
+          created_at?: string
+          gen_type?: string
+          id?: string
+          is_selected?: boolean
+          output?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_generations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_content"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_personas: {
+        Row: {
+          age_range: string | null
+          copy_focus: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          pain: string | null
+          solution: string | null
+        }
+        Insert: {
+          age_range?: string | null
+          copy_focus?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          pain?: string | null
+          solution?: string | null
+        }
+        Update: {
+          age_range?: string | null
+          copy_focus?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          pain?: string | null
+          solution?: string | null
+        }
+        Relationships: []
+      }
       nutrition_plans: {
         Row: {
           completed_at: string | null
@@ -3175,6 +3419,7 @@ export type Database = {
         Args: { gym_user_id: string }
         Returns: undefined
       }
+      is_mkt_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       app_role: "client" | "trainer" | "gym" | "studio" | "admin"
