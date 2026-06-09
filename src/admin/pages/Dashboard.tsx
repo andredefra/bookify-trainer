@@ -14,14 +14,14 @@ function formatDateTime(d?: string | null, t?: string | null) {
   return `${d}${time ? " · " + time : ""}`;
 }
 
-const STATUSES: MktStatus[] = ["Draft", "Approval", "Validated", "Posted"];
+const STATUSES: MktStatus[] = ["Draft", "Approval", "Validated", "Scheduled", "Posted"];
 
 export default function Dashboard() {
   const { data: posts = [] } = useContent();
   const { data: personas = [] } = usePersonas();
 
   const counts = useMemo(() => {
-    const m: Record<MktStatus, number> = { Draft: 0, Approval: 0, Validated: 0, Posted: 0 };
+    const m: Record<MktStatus, number> = { Draft: 0, Approval: 0, Validated: 0, Scheduled: 0, Posted: 0 };
     posts.forEach((p) => {
       m[p.status as MktStatus] = (m[p.status as MktStatus] ?? 0) + 1;
     });

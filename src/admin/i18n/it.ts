@@ -14,6 +14,7 @@ export const it = {
     Draft: "Bozza",
     Approval: "In Approvazione",
     Validated: "Validato",
+    Scheduled: "Calendarizzato",
     Posted: "Pubblicato",
   },
   funnel: {
@@ -27,6 +28,18 @@ export const it = {
     Post: "Post",
     Video: "Video",
     Sondaggio: "Sondaggio",
+  },
+  month: {
+    new: "Nuovo mese",
+    close: "Chiudi mese",
+    closed: "Mese chiuso",
+    schedule: "Calendarizza con AI",
+    scheduling: "Calendarizzazione in corso...",
+    none: "Nessun mese. Crea il primo per iniziare.",
+    label: "Mese",
+    startDate: "Data inizio",
+    endDate: "Data fine",
+    unassigned: "Non assegnati",
   },
   ai: {
     generate: "Genera copy",
@@ -48,5 +61,6 @@ export const it = {
     create: "Crea",
     loading: "Caricamento...",
     empty: "Nessun elemento da mostrare.",
+    readOnly: "Read-only",
   },
 };

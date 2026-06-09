@@ -11,6 +11,7 @@ export function useContent() {
       const { data, error } = await sb
         .from("mkt_content")
         .select("*")
+        .order("sequence_number", { ascending: true, nullsFirst: false })
         .order("scheduled_date", { ascending: true, nullsFirst: false })
         .order("scheduled_time", { ascending: true, nullsFirst: true });
       if (error) throw error;

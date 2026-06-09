@@ -1813,6 +1813,7 @@ export type Database = {
       mkt_content: {
         Row: {
           content_format: string | null
+          content_type: string | null
           created_at: string
           cta: string | null
           dms_received: number | null
@@ -1822,17 +1823,23 @@ export type Database = {
           media_prompt: string | null
           media_url: string | null
           notes: string | null
+          objective: string | null
           persona_id: string | null
+          plan_month_id: string | null
           post_copy: string | null
           published_link: string | null
           scheduled_date: string | null
           scheduled_time: string | null
+          sequence_number: number | null
+          situation: string | null
+          social_channel: string | null
           status: string
           updated_at: string
           views: number | null
         }
         Insert: {
           content_format?: string | null
+          content_type?: string | null
           created_at?: string
           cta?: string | null
           dms_received?: number | null
@@ -1842,17 +1849,23 @@ export type Database = {
           media_prompt?: string | null
           media_url?: string | null
           notes?: string | null
+          objective?: string | null
           persona_id?: string | null
+          plan_month_id?: string | null
           post_copy?: string | null
           published_link?: string | null
           scheduled_date?: string | null
           scheduled_time?: string | null
+          sequence_number?: number | null
+          situation?: string | null
+          social_channel?: string | null
           status?: string
           updated_at?: string
           views?: number | null
         }
         Update: {
           content_format?: string | null
+          content_type?: string | null
           created_at?: string
           cta?: string | null
           dms_received?: number | null
@@ -1862,11 +1875,16 @@ export type Database = {
           media_prompt?: string | null
           media_url?: string | null
           notes?: string | null
+          objective?: string | null
           persona_id?: string | null
+          plan_month_id?: string | null
           post_copy?: string | null
           published_link?: string | null
           scheduled_date?: string | null
           scheduled_time?: string | null
+          sequence_number?: number | null
+          situation?: string | null
+          social_channel?: string | null
           status?: string
           updated_at?: string
           views?: number | null
@@ -1877,6 +1895,13 @@ export type Database = {
             columns: ["persona_id"]
             isOneToOne: false
             referencedRelation: "mkt_personas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_content_plan_month_id_fkey"
+            columns: ["plan_month_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_plan_months"
             referencedColumns: ["id"]
           },
         ]
@@ -1946,6 +1971,42 @@ export type Database = {
           name?: string
           pain?: string | null
           solution?: string | null
+        }
+        Relationships: []
+      }
+      mkt_plan_months: {
+        Row: {
+          closed_at: string | null
+          created_at: string
+          end_date: string
+          id: string
+          label: string | null
+          month_index: number
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          closed_at?: string | null
+          created_at?: string
+          end_date: string
+          id?: string
+          label?: string | null
+          month_index: number
+          start_date: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          closed_at?: string | null
+          created_at?: string
+          end_date?: string
+          id?: string
+          label?: string | null
+          month_index?: number
+          start_date?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
