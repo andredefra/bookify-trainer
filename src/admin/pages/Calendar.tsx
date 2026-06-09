@@ -55,7 +55,7 @@ export default function CalendarPage() {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const visible = useMemo(
-    () => posts.filter((p) => p.status === "Validated" || p.status === "Posted"),
+    () => posts.filter((p) => p.status === "Validated" || p.status === "Scheduled" || p.status === "Posted"),
     [posts]
   );
 
