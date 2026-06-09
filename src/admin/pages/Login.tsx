@@ -13,6 +13,17 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Auto-bootstrap the admin auth user on first visit per session.
+  useEffect(() => {
+    if (sessionStorage.getItem("mkt-admin-bootstrapped") === "1") return;
+    supabase.functions
+      .invoke("mkt-bootstrap-admin", { body: {} })
+      .then(({ error }) => {
+        if (!error) sessionStorage.setItem("mkt-admin-bootstrapped", "1");
+      })
+      .catch(() => {});
+  }, []);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
