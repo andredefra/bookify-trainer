@@ -1761,6 +1761,10 @@ export type Database = {
           file_url: string | null
           id: string
           is_active: boolean
+          processed_at: string | null
+          processing_error: string | null
+          processing_status: string
+          recap: string | null
           title: string
         }
         Insert: {
@@ -1770,6 +1774,10 @@ export type Database = {
           file_url?: string | null
           id?: string
           is_active?: boolean
+          processed_at?: string | null
+          processing_error?: string | null
+          processing_status?: string
+          recap?: string | null
           title: string
         }
         Update: {
@@ -1779,6 +1787,10 @@ export type Database = {
           file_url?: string | null
           id?: string
           is_active?: boolean
+          processed_at?: string | null
+          processing_error?: string | null
+          processing_status?: string
+          recap?: string | null
           title?: string
         }
         Relationships: []
@@ -1827,6 +1839,7 @@ export type Database = {
           persona_id: string | null
           plan_month_id: string | null
           post_copy: string | null
+          published_at: string | null
           published_link: string | null
           scheduled_date: string | null
           scheduled_time: string | null
@@ -1853,6 +1866,7 @@ export type Database = {
           persona_id?: string | null
           plan_month_id?: string | null
           post_copy?: string | null
+          published_at?: string | null
           published_link?: string | null
           scheduled_date?: string | null
           scheduled_time?: string | null
@@ -1879,6 +1893,7 @@ export type Database = {
           persona_id?: string | null
           plan_month_id?: string | null
           post_copy?: string | null
+          published_at?: string | null
           published_link?: string | null
           scheduled_date?: string | null
           scheduled_time?: string | null
@@ -1948,9 +1963,11 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          is_ai_generated: boolean
           name: string
           pain: string | null
           solution: string | null
+          source_doc_id: string | null
         }
         Insert: {
           age_range?: string | null
@@ -1958,9 +1975,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_ai_generated?: boolean
           name: string
           pain?: string | null
           solution?: string | null
+          source_doc_id?: string | null
         }
         Update: {
           age_range?: string | null
@@ -1968,11 +1987,21 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_ai_generated?: boolean
           name?: string
           pain?: string | null
           solution?: string | null
+          source_doc_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mkt_personas_source_doc_id_fkey"
+            columns: ["source_doc_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_brand_docs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mkt_plan_months: {
         Row: {
