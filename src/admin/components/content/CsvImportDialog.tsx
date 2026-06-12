@@ -72,8 +72,9 @@ export default function CsvImportDialog({ open, onClose, planMonthId }: Props) {
         <div className="space-y-3">
           <p className="text-xs text-muted-foreground">
             Header allineati al tracker Excel: #, Day, Social Media Channel, Tipo Format, Tipo Persona, Obiettivo,
-            Fase del Funnel, Situazione, Post Copy / Text, Content type, CTA, Media Prompt, Media Links, Status, Post Link.
-            La sequenza dei post (#) sarà rispettata dall'AI in fase di calendarizzazione.
+            Fase del Funnel, Situazione, Post Copy / Text, Content type, CTA, Media Prompt, Media Links, Status.
+            La sequenza dei post (#) sarà rispettata dall'AI in fase di calendarizzazione. L'URL del post pubblicato
+            si compila in fase di "Segna come pubblicato".
           </p>
           <div className="flex gap-2 flex-wrap">
             <Button variant="outline" size="sm" onClick={downloadTemplate}>Scarica template</Button>
