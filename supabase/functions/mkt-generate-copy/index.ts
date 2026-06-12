@@ -53,11 +53,12 @@ Deno.serve(async (req) => {
     const postId = body?.postId ?? null;
     const userPrompt = body?.prompt ?? "";
 
-    // Brand context (active docs)
-    const { data: docs } = await admin.from("mkt_brand_docs").select("title, content").eq("is_active", true);
+    // Brand context (active docs, prefer AI recap when available)
+    const { data: docs } = await admin.from("mkt_brand_docs")
+      .select("title, recap, content").eq("is_active", true);
     const brandCtx = (docs ?? [])
-      .filter((d: { content: string | null }) => d.content)
-      .map((d: { title: string; content: string | null }) => `### ${d.title}\n${d.content}`)
+      .map((d: { title: string; recap: string | null; content: string | null }) =>
+        `### ${d.title}\n${d.recap ?? d.content ?? ""}`)
       .join("\n\n");
 
     let postCtx = "";
