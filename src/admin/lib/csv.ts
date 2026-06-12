@@ -91,6 +91,7 @@ export function matchPersonas(rows: CsvRow[], personas: MktPersona[]): ParsedRow
 }
 
 export const CSV_TEMPLATE =
-  "#,Day,Social Media Channel,Tipo Format,Tipo Persona,Obiettivo,Fase del Funnel,Situazione,Post Copy / Text,Content type,CTA,Media Prompt,Media Links (Images/Videos),Status,Post Link\n" +
-  "1,1,Instagram,Reel,Giulia,Brand awareness,Awareness,Lezione di gruppo,\"Testo del post\",Video step-by-step,\"Scrivimi in DM\",\"PT in palestra mostra app\",,Draft,\n" +
-  "2,2,Instagram,Carosello,Matteo,Lead gen,Consideration,Coach analitico,\"Testo\",Carosello dati,\"Prova gratis\",\"Schermata analytics\",,Draft,\n";
+  "#,Day,Social Media Channel,Tipo Format,Tipo Persona,Obiettivo,Fase del Funnel,Situazione,Post Copy / Text,Content type,CTA,Media Prompt,Media Links (Images/Videos),Status\n" +
+  "1,1,Instagram,Reel,Giulia,Brand awareness,Awareness,Lezione di gruppo,\"Testo del post\",Video step-by-step,\"Scrivimi in DM\",\"PT in palestra mostra app\",,Draft\n" +
+  "2,2,Instagram,Carosello,Matteo,Lead gen,Consideration,Coach analitico,\"Testo\",Carosello dati,\"Prova gratis\",\"Schermata analytics\",,Draft\n";
+
