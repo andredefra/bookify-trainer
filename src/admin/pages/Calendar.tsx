@@ -133,7 +133,7 @@ export default function CalendarPage() {
       </Card>
 
       <div className="flex gap-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1"><Badge variant="secondary" className="bg-primary/15 text-primary">Validato</Badge></span>
+        <span className="flex items-center gap-1"><Badge variant="secondary" className="bg-primary/15 text-primary">Calendarizzato</Badge></span>
         <span className="flex items-center gap-1"><Badge variant="secondary" className="bg-emerald-100 text-emerald-900">Pubblicato</Badge></span>
         <span>· bordo rosso = in ritardo</span>
       </div>
