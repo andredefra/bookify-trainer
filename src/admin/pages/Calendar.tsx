@@ -84,6 +84,8 @@ export default function CalendarPage() {
     const postId = String(e.active.id);
     const date = e.over?.id ? String(e.over.id) : null;
     if (!date) return;
+    const post = visible.find((p) => p.id === postId);
+    if (post?.status === "Posted") return toast.error("Post pubblicato: read-only.");
     update.mutate(
       { id: postId, patch: { scheduled_date: date } },
       { onSuccess: () => toast.success(`Spostato al ${date}`) }
