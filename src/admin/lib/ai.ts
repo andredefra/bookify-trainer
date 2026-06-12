@@ -1,4 +1,5 @@
 import { sb } from "./sb";
+import type { PostDiffProposal } from "../types";
 
 export type AiMode = "generate" | "rewrite" | "shorten" | "retone";
 
@@ -27,7 +28,6 @@ export interface ScheduleMonthResult {
   assignments: Array<{ id: string; scheduled_date: string; scheduled_time: string }>;
 }
 
-/** Distribute Validated posts of a month across [start_date, end_date] using AI. */
 export async function scheduleMonth(monthId: string): Promise<ScheduleMonthResult> {
   const { data, error } = await sb.functions.invoke("mkt-schedule-month", {
     body: { monthId },
@@ -35,4 +35,33 @@ export async function scheduleMonth(monthId: string): Promise<ScheduleMonthResul
   if (error) throw new Error(error.message || "AI scheduling failed");
   if (data?.error) throw new Error(data.error);
   return data as ScheduleMonthResult;
+}
+
+export interface ChatPostResult {
+  reply: string;
+  proposals: PostDiffProposal[];
+}
+
+/** Contextual chat for a single post draft. Returns AI reply + field-level diff proposals. */
+export async function chatPost(
+  postId: string,
+  history: Array<{ role: "user" | "assistant"; content: string }>,
+  userMessage: string
+): Promise<ChatPostResult> {
+  const { data, error } = await sb.functions.invoke("mkt-chat-post", {
+    body: { postId, history, message: userMessage },
+  });
+  if (error) throw new Error(error.message || "AI chat failed");
+  if (data?.error) throw new Error(data.error);
+  return data as ChatPostResult;
+}
+
+/** Triggers async AI processing for a brand doc (classify + recap + persona extraction). */
+export async function processBrandDoc(docId: string): Promise<{ ok: true }> {
+  const { data, error } = await sb.functions.invoke("mkt-process-brand-doc", {
+    body: { docId },
+  });
+  if (error) throw new Error(error.message || "Doc processing failed to start");
+  if (data?.error) throw new Error(data.error);
+  return data as { ok: true };
 }

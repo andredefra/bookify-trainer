@@ -1,54 +1,16 @@
 project_id = "cxclisripwxqathhnjfx"
 
-[api]
-enabled = true
-port = 54321
-schemas = ["public", "graphql_public"]
-extra_search_path = ["public", "extensions"]
-max_rows = 1000
-
-[db]
-port = 54322
-
-[studio]
-enabled = true
-port = 54323
-
-[inbucket]
-enabled = true
-port = 54324
-smtp_port = 54325
-pop3_port = 54326
-
-[realtime]
-enabled = true
-ip_version = "ipv4"
-
-[storage]
-enabled = true
-file_size_limit = "50MiB"
-s3_max_part_size = "5MiB"
-
-[functions.openai-chat]
+[functions.mkt-bootstrap-admin]
 verify_jwt = false
-
-[functions.openai-trainer-chat]
-verify_jwt = true
-
-[functions.openai-realtime]
-verify_jwt = false
-
-[functions.detect-installment]
-verify_jwt = false
-
-[functions.analyze-program-document]
-verify_jwt = true
 
 [functions.mkt-generate-copy]
-verify_jwt = true
+verify_jwt = false
 
 [functions.mkt-schedule-month]
-verify_jwt = true
+verify_jwt = false
 
-[functions.mkt-bootstrap-admin]
+[functions.mkt-process-brand-doc]
+verify_jwt = false
+
+[functions.mkt-chat-post]
 verify_jwt = false
