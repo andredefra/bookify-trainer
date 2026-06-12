@@ -55,7 +55,7 @@ export default function CalendarPage() {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const visible = useMemo(
-    () => posts.filter((p) => p.status === "Validated" || p.status === "Scheduled" || p.status === "Posted"),
+    () => posts.filter((p) => p.status === "Scheduled" || p.status === "Posted"),
     [posts]
   );
 
@@ -84,6 +84,8 @@ export default function CalendarPage() {
     const postId = String(e.active.id);
     const date = e.over?.id ? String(e.over.id) : null;
     if (!date) return;
+    const post = visible.find((p) => p.id === postId);
+    if (post?.status === "Posted") return toast.error("Post pubblicato: read-only.");
     update.mutate(
       { id: postId, patch: { scheduled_date: date } },
       { onSuccess: () => toast.success(`Spostato al ${date}`) }
@@ -133,7 +135,7 @@ export default function CalendarPage() {
       </Card>
 
       <div className="flex gap-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1"><Badge variant="secondary" className="bg-primary/15 text-primary">Validato</Badge></span>
+        <span className="flex items-center gap-1"><Badge variant="secondary" className="bg-primary/15 text-primary">Calendarizzato</Badge></span>
         <span className="flex items-center gap-1"><Badge variant="secondary" className="bg-emerald-100 text-emerald-900">Pubblicato</Badge></span>
         <span>· bordo rosso = in ritardo</span>
       </div>

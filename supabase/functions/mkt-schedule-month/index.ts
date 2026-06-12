@@ -57,10 +57,10 @@ Deno.serve(async (req) => {
     const { data: personas } = await admin.from("mkt_personas").select("id, name, age_range, description, copy_focus");
     const personaMap = new Map((personas ?? []).map((p) => [p.id, p]));
     const { data: docs } = await admin.from("mkt_brand_docs")
-      .select("title, content").eq("is_active", true);
+      .select("title, recap, content").eq("is_active", true);
     const brandCtx = (docs ?? [])
-      .filter((d: { content: string | null }) => d.content)
-      .map((d: { title: string; content: string | null }) => `### ${d.title}\n${d.content}`)
+      .map((d: { title: string; recap: string | null; content: string | null }) =>
+        `### ${d.title}\n${d.recap ?? d.content?.slice(0, 800) ?? ""}`)
       .join("\n\n");
 
     const enriched = posts.map((p, i) => ({

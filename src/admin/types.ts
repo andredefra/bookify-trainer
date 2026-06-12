@@ -1,6 +1,7 @@
 export type MktStatus = "Draft" | "Approval" | "Validated" | "Scheduled" | "Posted";
-export type MktGenType = "copy" | "media_prompt";
+export type MktGenType = "copy" | "media_prompt" | "chat_diff";
 export type MktMonthStatus = "open" | "closed";
+export type MktDocProcessingStatus = "pending" | "processing" | "done" | "failed";
 
 export interface MktPlanMonth {
   id: string;
@@ -22,6 +23,8 @@ export interface MktPersona {
   pain: string | null;
   solution: string | null;
   copy_focus: string | null;
+  is_ai_generated: boolean;
+  source_doc_id: string | null;
   created_at: string;
 }
 
@@ -45,6 +48,7 @@ export interface MktContent {
   media_url: string | null;
   status: MktStatus;
   published_link: string | null;
+  published_at: string | null;
   views: number | null;
   dms_received: number | null;
   notes: string | null;
@@ -66,6 +70,10 @@ export interface MktBrandDoc {
   title: string;
   doc_type: string | null;
   content: string | null;
+  recap: string | null;
+  processing_status: MktDocProcessingStatus;
+  processing_error: string | null;
+  processed_at: string | null;
   file_url: string | null;
   is_active: boolean;
   created_at: string;
@@ -95,4 +103,11 @@ export function isPostReadOnly(post: MktContent, month?: MktPlanMonth | null): b
   if (post.status === "Posted") return true;
   if (month?.status === "closed") return true;
   return false;
+}
+
+export interface PostDiffProposal {
+  field: "hook" | "post_copy" | "cta" | "media_prompt" | "notes";
+  current_value: string;
+  proposed_value: string;
+  rationale: string;
 }
