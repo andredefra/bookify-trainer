@@ -1837,7 +1837,7 @@ export type Database = {
           notes: string | null
           objective: string | null
           persona_id: string | null
-          plan_month_id: string | null
+          plan_phase_id: string | null
           post_copy: string | null
           published_at: string | null
           published_link: string | null
@@ -1864,7 +1864,7 @@ export type Database = {
           notes?: string | null
           objective?: string | null
           persona_id?: string | null
-          plan_month_id?: string | null
+          plan_phase_id?: string | null
           post_copy?: string | null
           published_at?: string | null
           published_link?: string | null
@@ -1891,7 +1891,7 @@ export type Database = {
           notes?: string | null
           objective?: string | null
           persona_id?: string | null
-          plan_month_id?: string | null
+          plan_phase_id?: string | null
           post_copy?: string | null
           published_at?: string | null
           published_link?: string | null
@@ -1914,9 +1914,9 @@ export type Database = {
           },
           {
             foreignKeyName: "mkt_content_plan_month_id_fkey"
-            columns: ["plan_month_id"]
+            columns: ["plan_phase_id"]
             isOneToOne: false
-            referencedRelation: "mkt_plan_months"
+            referencedRelation: "mkt_plan_phases"
             referencedColumns: ["id"]
           },
         ]
@@ -2003,38 +2003,44 @@ export type Database = {
           },
         ]
       }
-      mkt_plan_months: {
+      mkt_plan_phases: {
         Row: {
           closed_at: string | null
           created_at: string
-          end_date: string
+          description: string | null
+          end_date: string | null
           id: string
           label: string | null
-          month_index: number
-          start_date: string
+          phase_index: number
+          start_date: string | null
           status: string
+          target_post_count: number | null
           updated_at: string
         }
         Insert: {
           closed_at?: string | null
           created_at?: string
-          end_date: string
+          description?: string | null
+          end_date?: string | null
           id?: string
           label?: string | null
-          month_index: number
-          start_date: string
+          phase_index: number
+          start_date?: string | null
           status?: string
+          target_post_count?: number | null
           updated_at?: string
         }
         Update: {
           closed_at?: string | null
           created_at?: string
-          end_date?: string
+          description?: string | null
+          end_date?: string | null
           id?: string
           label?: string | null
-          month_index?: number
-          start_date?: string
+          phase_index?: number
+          start_date?: string | null
           status?: string
+          target_post_count?: number | null
           updated_at?: string
         }
         Relationships: []
