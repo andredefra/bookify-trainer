@@ -6,7 +6,7 @@ verify_jwt = false
 [functions.mkt-generate-copy]
 verify_jwt = false
 
-[functions.mkt-schedule-month]
+[functions.mkt-schedule-phase]
 verify_jwt = false
 
 [functions.mkt-process-brand-doc]

@@ -12,7 +12,7 @@ import { useUpdateContent, useDeleteContent } from "../../hooks/useContent";
 import { usePersonas } from "../../hooks/useLookups";
 import { generateCopy, type AiMode } from "../../lib/ai";
 import { toast } from "sonner";
-import type { MktContent, MktPlanMonth, PostDiffProposal } from "../../types";
+import type { MktContent, MktPlanPhase, PostDiffProposal } from "../../types";
 import { isPostReadOnly } from "../../types";
 import { it } from "../../i18n/it";
 import MediaUploader from "./MediaUploader";
@@ -24,14 +24,14 @@ import { Trash2, Lock, CheckCircle2 } from "lucide-react";
 interface Props {
   post: MktContent | null;
   onClose: () => void;
-  planMonth?: MktPlanMonth | null;
+  planPhase?: MktPlanPhase | null;
 }
 
 const FORMATS = ["Reel", "Carosello", "Post", "Video", "Sondaggio", "Story"];
 const FUNNELS = ["Awareness", "Consideration", "Conversion"];
 const CHANNELS = ["Instagram", "TikTok", "LinkedIn", "Facebook"];
 
-export default function PostEditorDialog({ post, onClose, planMonth }: Props) {
+export default function PostEditorDialog({ post, onClose, planPhase }: Props) {
   const [draft, setDraft] = useState<MktContent | null>(post);
   const [publishOpen, setPublishOpen] = useState(false);
   const { data: personas = [] } = usePersonas();
@@ -41,7 +41,7 @@ export default function PostEditorDialog({ post, onClose, planMonth }: Props) {
 
   useEffect(() => setDraft(post), [post]);
 
-  const readOnly = !!(draft && isPostReadOnly(draft, planMonth));
+  const readOnly = !!(draft && isPostReadOnly(draft, planPhase));
 
   const ai = useMutation({
     mutationFn: async (mode: AiMode) => {
@@ -58,7 +58,7 @@ export default function PostEditorDialog({ post, onClose, planMonth }: Props) {
   if (!draft) return null;
 
   const save = () => {
-    if (readOnly) return toast.error("Post bloccato (Pubblicato o mese chiuso).");
+    if (readOnly) return toast.error("Post bloccato (Pubblicato o fase chiusa).");
     update.mutate(
       {
         id: draft.id,

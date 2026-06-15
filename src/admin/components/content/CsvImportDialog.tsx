@@ -9,10 +9,10 @@ import { toast } from "sonner";
 interface Props {
   open: boolean;
   onClose: () => void;
-  planMonthId?: string | null;
+  planPhaseId?: string | null;
 }
 
-export default function CsvImportDialog({ open, onClose, planMonthId }: Props) {
+export default function CsvImportDialog({ open, onClose, planPhaseId }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [rows, setRows] = useState<ParsedRow[]>([]);
   const { data: personas = [] } = usePersonas();
@@ -34,12 +34,12 @@ export default function CsvImportDialog({ open, onClose, planMonthId }: Props) {
 
   const confirmImport = () => {
     if (rows.length === 0) return;
-    if (!planMonthId) {
-      toast.error("Seleziona o crea un mese prima di importare.");
+    if (!planPhaseId) {
+      toast.error("Seleziona o crea una fase prima di importare.");
       return;
     }
     const payload = rows.map((r, i) => ({
-      plan_month_id: planMonthId,
+      plan_phase_id: planPhaseId,
       sequence_number: r.sequence_number ?? i + 1,
       social_channel: r.social_channel,
       persona_id: r.persona_id,
