@@ -1,124 +1,60 @@
+# Piano v2.1 — Storage admin-only + Fasi al posto dei Mesi
 
-# Piano Contenuti v3 — flusso completo
+## 1. Storage Buckets (Admin > Marketing only)
 
-## 1. Tabella & Flusso Kanban
+Creazione di 2 bucket **privati**, dedicati esclusivamente all'area Admin Marketing:
 
-**Template / vista lista**
-- Rimuovere colonna "Post Link" dalla vista template standard del piano (resta in DB ma nascosta finché il post non è Pubblicato).
-- Mantenere `sequence_number` come ID di riconoscimento.
+- `mkt-brand-docs` — per PDF/DOCX/MD/TXT della knowledge base
+- `mkt-assets` — per logo/font/immagini di brand
 
-**Stati e colonne (4):** Bozza → In approvazione → Validato → Calendarizzato.
-- **Bozza / Approvazione / Validato:** data/ora editabili manualmente.
-- **"Calendarizza con AI"**: prende solo i post `Validated` del mese attivo, ordina per `sequence_number`, l'AI assegna data+ora ottimale nel range del mese → status diventa `Scheduled` → spariscono dalla colonna Validato, appaiono in Calendarizzato e nel Calendario.
-- **Calendarizzato:** data/ora liberamente modificabili (drag&drop nel calendario o input nel dialog). Sequenza non più forzata.
-- **Posted:** read-only tranne metriche.
+**RLS** su `storage.objects` per entrambi: solo chi soddisfa `public.is_mkt_admin()` può `SELECT/INSERT/UPDATE/DELETE`. Nessuna esposizione su `anon` o `authenticated` generici → impossibile che si confondano con `chat-media`, `user-media`, `images`, `media` (che restano invariati e public).
 
-**Calendario**: mostra solo `Scheduled` + `Posted` (rimuove `Validated` dalla vista calendario; ora il calendario riflette solo ciò che è stato deliberatamente calendarizzato).
+Il bucket esistente `mkt-media` (già nei riferimenti del codice) viene mantenuto se presente; se non esiste verrà creato anch'esso privato con stesse policy admin.
 
-## 2. Ciclo Pubblicazione
+## 2. "Mesi" → "Fasi" sequenziali
 
-Sul post `Scheduled` (sia in colonna Calendarizzato che in Publishing Card del calendario) compare bottone **"Segna come pubblicato"** che apre dialog con:
-- Data effettiva (default = `scheduled_date`)
-- Ora effettiva (default = `scheduled_time`)
-- URL Instagram (obbligatorio)
+Il piano contenuti non è più diviso per mese di calendario ma per **Fasi di produzione**, lavorate in sequenza giorno dopo giorno. L'AI calendarizzerà rispettando rigorosamente:
+1. ordine di `phase_index` (Fase 1 prima di Fase 2),
+2. all'interno della fase, ordine di `sequence_number`.
 
-Submit → aggiorna `scheduled_date/time` con valori effettivi, salva `published_link`, `published_at` (nuovo campo), status → `Posted`. Post diventa read-only (sblocco solo `views`, `dms_received`, `published_link` per analytics futuri).
+### Database (1 migration)
 
-## 3. Knowledge Base (Brand Docs & Assets)
+- Rinomina tabella `mkt_plan_months` → `mkt_plan_phases`
+- Rinomina colonna `month_index` → `phase_index`
+- Rinomina FK su `mkt_content`: `plan_month_id` → `plan_phase_id`
+- `start_date` / `end_date` → diventano **opzionali** (NULL) — la fase non ha più un range vincolato
+- Aggiunge `description text` e `target_post_count int` (opzionali) alla fase
+- Label di default: `"Fase N"` invece di `"Mese N"`
 
-**UI**: nuova pagina/sezione `Branding` rivista con due aree drag&drop:
-- **Brand Documents** (PDF/DOCX/MD/TXT): strategia, tone of voice, brief.
-- **Brand Assets** (immagini/loghi/font): usati come riferimento visivo per generazione media.
+### Edge function
 
-CRUD completo (upload, rename, delete, replace).
+- Rinomina `mkt-schedule-month` → `mkt-schedule-phase`
+- Accetta `phaseId` invece di `monthId`
+- Prende tutti i post **Validati** della fase (in ordine `sequence_number`)
+- L'AI assegna date/orari **futuri** (a partire da domani) rispettando la sequenza globale: post della Fase 1 prima di quelli della Fase 2, e dentro la fase per `sequence_number` crescente
+- Non c'è più vincolo `within(start_date, end_date)` — l'AI distribuisce nel periodo che ritiene ottimale
 
-**Elaborazione AI asincrona**:
-1. Upload → riga in `mkt_brand_docs` con `processing_status='processing'`.
-2. Edge function `mkt-process-brand-doc` invocata in background:
-   - Estrae testo (PDF.js/mammoth lato server, o text-as-is).
-   - LLM classifica tipologia (`doc_type`: strategy / tone_of_voice / persona_profile / product_brief / other).
-   - Genera `recap` (3-5 righe).
-   - Estrae eventuali **Personas** (nome, fascia età, pain, soluzione, copy focus).
-3. `processing_status` → `done` / `failed` con `error_message`.
-4. UI mostra badge stato per doc (Processing… / Done / Failed con retry).
+### Frontend
 
-**Persona auto-aggiunte**: se l'AI trova una persona non presente in `mkt_personas` (match fuzzy sul nome), la inserisce con flag `is_ai_generated=true` + badge "AI-generated" in dashboard. L'utente la modifica/rinomina/cancella liberamente.
+- `usePlanMonths.ts` → `usePlanPhases.ts` (stessa shape API, naming aggiornato)
+- `ContentPlan.tsx`: tab "Fase 1, Fase 2, …" + dialog "Nuova fase" (label opzionale + descrizione, **niente date obbligatorie**)
+- `PostEditorDialog.tsx` e `CsvImportDialog.tsx`: prop `planMonth` → `planPhase`, campo DB `plan_month_id` → `plan_phase_id`
+- `it.ts`: blocco `month.*` → `phase.*` (`Nuova fase`, `Chiudi fase`, `Calendarizza con AI`, `Nessuna fase. Crea la prima per iniziare.`, ecc.)
+- `Calendar.tsx`: nessun cambio logico (continua a mostrare Scheduled/Posted), solo label aggiornate dove menziona "mese"
 
-**Contesto globale**: tutti i recap dei doc `is_active=true` vengono concatenati nel system prompt di tutte le funzioni AI (`mkt-generate-copy`, `mkt-schedule-month`, chat post).
+## 3. Fuori scope (rimane com'è)
 
-## 4. Generazione Contenuti
+- Calendar view (Scheduled/Posted, read-only su Posted) — invariato
+- Flusso di conferma pubblicazione — invariato
+- Chat AI sui post (`mkt-chat-post`) — invariato
+- Branding / processing brand docs — invariato (continua a usare gli stessi bucket, ora creati lato server)
+- Dashboard KPI — invariato in v2.1
 
-**Copy / testo / tone of voice / varianti**: Lovable AI Gateway (`google/gemini-3-flash-preview`) — già esistente, nessuna API key esterna.
+## File toccati
 
-**Media statici (immagini, caroselli)**: Lovable AI Gateway image generation (`google/gemini-3-flash-image-preview` / Nano Banana). Brand assets caricati nella KB diventano riferimento visivo (passati come image input quando supportato).
+- **Migration**: 1 file (rename + nuove colonne)
+- **Bucket creation**: via tool storage (2 bucket privati) + RLS policy
+- **Edge functions**: 1 nuova (`mkt-schedule-phase`), 1 da rimuovere (`mkt-schedule-month`), aggiorno `config.toml`
+- **Frontend**: `ContentPlan.tsx`, `usePlanPhases.ts` (nuovo), `PostEditorDialog.tsx`, `CsvImportDialog.tsx`, `Calendar.tsx`, `i18n/it.ts`, `types.ts`
 
-**Reels/video**: out of scope in questa iterazione. Placeholder UI con messaggio "Generazione video disponibile prossimamente" — nessuna chiamata, nessun secret richiesto.
-
-**Template/CSV con copy esistente**: il copy importato è la traccia. Pulsanti "Espandi" / "Genera variante" già usano la chat AI esistente — restano invariati e usano il copy come base.
-
-## 5. Chat AI contestuale per Bozza (modalità "diff & approve")
-
-Nel `PostEditorDialog`, pannello laterale (o tab) **"AI Assistant"**:
-- Conversazione isolata al post corrente (memoria solo in sessione, non persistita in v1).
-- L'utente chiede modifiche ("rendi più aggressivo", "accorcia hook", "cambia angolo carosello").
-- L'AI risponde con un **diff strutturato** (JSON `{ field, current_value, proposed_value, rationale }`) per uno o più campi tra: `hook`, `post_copy`, `cta`, `media_prompt`, `notes`.
-- UI renderizza ogni proposta come card con bottoni **Applica** / **Scarta** / **Applica tutto**.
-- "Applica" aggiorna il campo nel form (non salva finché l'utente non salva il post); storico delle proposte salvato in `mkt_generations`.
-
-Edge function: nuova `mkt-chat-post` (separata da `mkt-generate-copy` per usare `response_format: json_object` con schema diff).
-
-## 6. Database — migration unica
-
-**Nuovi campi `mkt_content`**:
-- `published_at timestamptz`
-
-**Nuovi campi `mkt_brand_docs`**:
-- `doc_type text` (strategy/tone_of_voice/persona_profile/product_brief/other)
-- `recap text`
-- `processing_status text default 'pending'` (pending/processing/done/failed)
-- `processing_error text`
-- `processed_at timestamptz`
-
-**Nuovi campi `mkt_personas`**:
-- `is_ai_generated boolean default false`
-- `source_doc_id uuid references mkt_brand_docs`
-
-**Nuovo bucket storage**: `mkt-brand-assets` (privato), reso accessibile via signed URL agli admin.
-
-Nessuna nuova tabella.
-
-## 7. File touched
-
-- **Migration**: 1 file.
-- **Nuove edge functions**: `mkt-process-brand-doc/index.ts`, `mkt-chat-post/index.ts`.
-- **Edit edge functions**: `mkt-generate-copy` (concatena `recap` dei doc), `mkt-schedule-month` (idem).
-- **Frontend**:
-  - `src/admin/pages/Branding.tsx` — rework con drag&drop + status badges + asset area.
-  - `src/admin/pages/ContentPlan.tsx` — nasconde colonna Post Link; nessun cambio kanban (4 col già OK); il bottone "Calendarizza con AI" già esiste.
-  - `src/admin/pages/Calendar.tsx` — filtra fuori `Validated` (solo `Scheduled` + `Posted`); aggiunge bottone "Pubblicato" sulla card.
-  - `src/admin/components/calendar/PublishingCard.tsx` — sostituisce input URL singolo con dialog "Conferma pubblicazione" (data+ora+url).
-  - `src/admin/components/content/PostEditorDialog.tsx` — nuovo pannello "AI Assistant" con diff cards; nasconde "Post Link" finché non Posted.
-  - `src/admin/components/content/PostAiChatPanel.tsx` — nuovo componente.
-  - `src/admin/hooks/useBrandDocs.ts`, `useBrandAssets.ts` — nuovi.
-  - `src/admin/lib/ai.ts` — `chatPostDiff()`, `processBrandDoc()`.
-  - `src/admin/types.ts`, `src/admin/i18n/it.ts` — update.
-- **Storage**: creazione bucket via tool.
-
-## 8. Fuori scope v1
-
-- Generazione video/reels (placeholder).
-- Persistenza chat-per-post tra sessioni.
-- Drag&drop di asset come riferimento visivo dentro la chat post (in v1 i brand assets influenzano solo il system prompt testuale).
-- Dashboard Analytics: i campi (`published_at`, `views`, `dms_received`, `published_link`) sono già preparati ma la vista analytics arriva dopo.
-
-## Diagramma flusso
-
-```text
-[Upload doc]──async──▶[AI classifica+recap+persona]──▶[Brand context globale]
-                                                         │
-                                                         ▼
-[Bozza]→[Approvazione]→[Validato]──"Calendarizza AI"──▶[Calendarizzato]──"Pubblicato"──▶[Posted/RO]
-   ▲                                                       │                                │
-   └──────────── chat AI per post (diff/approve) ──────────┘                                ▼
-                                                                                       Analytics
-```
+Confermi per procedere?
