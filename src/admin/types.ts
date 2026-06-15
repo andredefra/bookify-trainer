@@ -1,15 +1,17 @@
 export type MktStatus = "Draft" | "Approval" | "Validated" | "Scheduled" | "Posted";
 export type MktGenType = "copy" | "media_prompt" | "chat_diff";
-export type MktMonthStatus = "open" | "closed";
+export type MktPhaseStatus = "open" | "closed";
 export type MktDocProcessingStatus = "pending" | "processing" | "done" | "failed";
 
-export interface MktPlanMonth {
+export interface MktPlanPhase {
   id: string;
-  month_index: number;
+  phase_index: number;
   label: string | null;
-  start_date: string;
-  end_date: string;
-  status: MktMonthStatus;
+  description: string | null;
+  target_post_count: number | null;
+  start_date: string | null;
+  end_date: string | null;
+  status: MktPhaseStatus;
   closed_at: string | null;
   created_at: string;
   updated_at: string;
@@ -30,7 +32,7 @@ export interface MktPersona {
 
 export interface MktContent {
   id: string;
-  plan_month_id: string | null;
+  plan_phase_id: string | null;
   sequence_number: number | null;
   scheduled_date: string | null;
   scheduled_time: string | null;
@@ -98,10 +100,10 @@ export interface MktConnector {
   created_at: string;
 }
 
-/** A post is fully locked when Posted or its month is closed. */
-export function isPostReadOnly(post: MktContent, month?: MktPlanMonth | null): boolean {
+/** A post is fully locked when Posted or its phase is closed. */
+export function isPostReadOnly(post: MktContent, phase?: MktPlanPhase | null): boolean {
   if (post.status === "Posted") return true;
-  if (month?.status === "closed") return true;
+  if (phase?.status === "closed") return true;
   return false;
 }
 

@@ -23,18 +23,20 @@ export async function generateCopy(postId: string, mode: AiMode): Promise<Genera
   return data as GenerateCopyResult;
 }
 
-export interface ScheduleMonthResult {
+export interface SchedulePhaseResult {
   scheduled: number;
   assignments: Array<{ id: string; scheduled_date: string; scheduled_time: string }>;
 }
 
-export async function scheduleMonth(monthId: string): Promise<ScheduleMonthResult> {
-  const { data, error } = await sb.functions.invoke("mkt-schedule-month", {
-    body: { monthId },
+/** AI assigns optimal future dates/times to Validated posts in a phase,
+ *  respecting global sequence (phase_index ASC, then sequence_number ASC). */
+export async function schedulePhase(phaseId: string): Promise<SchedulePhaseResult> {
+  const { data, error } = await sb.functions.invoke("mkt-schedule-phase", {
+    body: { phaseId },
   });
   if (error) throw new Error(error.message || "AI scheduling failed");
   if (data?.error) throw new Error(data.error);
-  return data as ScheduleMonthResult;
+  return data as SchedulePhaseResult;
 }
 
 export interface ChatPostResult {
