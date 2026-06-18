@@ -1,60 +1,79 @@
-# Piano v2.1 — Storage admin-only + Fasi al posto dei Mesi
+# Piano — Area "Outreach" Instagram con Composio MCP
 
-## 1. Storage Buckets (Admin > Marketing only)
+Nuova sezione **Admin > Marketing > Outreach** per gestire campagne di contatto manuale-style su Instagram tramite Composio MCP (account `andredefra64@gmail.com`, server `https://connect.composio.dev/mcp`).
 
-Creazione di 2 bucket **privati**, dedicati esclusivamente all'area Admin Marketing:
+## 1. Connessione MCP Composio
 
-- `mkt-brand-docs` — per PDF/DOCX/MD/TXT della knowledge base
-- `mkt-assets` — per logo/font/immagini di brand
+- Aggiungo un **client MCP runtime** (AI SDK `@ai-sdk/mcp`) che si collega a `https://connect.composio.dev/mcp` via OAuth.
+- Tabella `mkt_mcp_connections` (scoped a admin marketing): `id, provider='composio', email, mcp_url, oauth_tokens (encrypted), status, last_check_at`.
+- UI in **Outreach > Impostazioni**: bottone "Collega Composio" → OAuth flow → mostra stato `ready` + email connessa + lista tool Instagram esposti (follow, sendDM, comment, getProfile, getPostComments, getDMs).
+- Edge function `mkt-mcp-composio` (con `verify_jwt=false` + check admin in-code) per: connect/list-tools/call-tool.
 
-**RLS** su `storage.objects` per entrambi: solo chi soddisfa `public.is_mkt_admin()` può `SELECT/INSERT/UPDATE/DELETE`. Nessuna esposizione su `anon` o `authenticated` generici → impossibile che si confondano con `chat-media`, `user-media`, `images`, `media` (che restano invariati e public).
+## 2. Liste contatti (lead list)
 
-Il bucket esistente `mkt-media` (già nei riferimenti del codice) viene mantenuto se presente; se non esiste verrà creato anch'esso privato con stesse policy admin.
+- Tabella `mkt_outreach_lists`: `id, name, instagram_target_page, created_at`.
+- Tabella `mkt_outreach_contacts`: `id, list_id, creator, username, followers, engagement, er, audience_city, audience_age, avg_reel_plays, avg_views, email, gender (m/f/unknown auto-detected), age_bucket (auto), is_milan (bool auto da audience_city)`.
+- **Import CSV bulk** con colonne esatte fornite (`creator; username; followers; Engagement; ER; Audience city; Audience age; Avg. reel plays; Avg. views; Email`).
+- Al momento dell'import:
+  - **gender** dedotto dal nome `creator` via heuristic + fallback AI (Lovable AI Gateway, batch),
+  - **is_milan** = `audience_city` contiene "Milan/Milano",
+  - **age_bucket** = parsing su `Audience age` (es. "25-34" dominante).
 
-## 2. "Mesi" → "Fasi" sequenziali
+## 3. Preset messaggi DM segmentati
 
-Il piano contenuti non è più diviso per mese di calendario ma per **Fasi di produzione**, lavorate in sequenza giorno dopo giorno. L'AI calendarizzerà rispettando rigorosamente:
-1. ordine di `phase_index` (Fase 1 prima di Fase 2),
-2. all'interno della fase, ordine di `sequence_number`.
+- Tabella `mkt_dm_presets`: `id, name, gender (m/f/any), city_filter (milan/non_milan/any), age_bucket (18-24/25-34/35-44/any), body_template (con `{{username}}`, `{{creator}}`), is_active`.
+- UI **Outreach > Preset DM**: CRUD con anteprima. Seed iniziale: 4 preset base (uomo MI, donna MI, uomo non-MI, donna non-MI).
+- Al momento dell'azione il sistema sceglie automaticamente il preset migliore in base a `gender + is_milan + age_bucket` (fallback: any).
 
-### Database (1 migration)
+## 4. Sequenza di automazione "human-like"
 
-- Rinomina tabella `mkt_plan_months` → `mkt_plan_phases`
-- Rinomina colonna `month_index` → `phase_index`
-- Rinomina FK su `mkt_content`: `plan_month_id` → `plan_phase_id`
-- `start_date` / `end_date` → diventano **opzionali** (NULL) — la fase non ha più un range vincolato
-- Aggiunge `description text` e `target_post_count int` (opzionali) alla fase
-- Label di default: `"Fase N"` invece di `"Mese N"`
+Per ogni contatto, sequenza in 3 step con **delay randomizzati** (es. 30-120s tra step, 2-10min tra contatti) per sembrare manuale:
 
-### Edge function
+1. **Follow** del `username`
+2. **DM** col preset matchato (con micro-variazioni: saluto, emoji)
+3. **Commento** su ultimo post pubblico (testo soft tipo "ti ho scritto in DM ✨" — anch'esso da preset commenti)
 
-- Rinomina `mkt-schedule-month` → `mkt-schedule-phase`
-- Accetta `phaseId` invece di `monthId`
-- Prende tutti i post **Validati** della fase (in ordine `sequence_number`)
-- L'AI assegna date/orari **futuri** (a partire da domani) rispettando la sequenza globale: post della Fase 1 prima di quelli della Fase 2, e dentro la fase per `sequence_number` crescente
-- Non c'è più vincolo `within(start_date, end_date)` — l'AI distribuisce nel periodo che ritiene ottimale
+- Tabella `mkt_outreach_runs`: `id, list_id, status (draft/running/paused/done), started_at, finished_at, config (jsonb: delays, daily_cap, dry_run)`.
+- Tabella `mkt_outreach_actions`: `id, run_id, contact_id, step (follow/dm/comment), preset_id, status (pending/done/failed/skipped), payload, response, executed_at, error`.
+- Edge function `mkt-outreach-execute` invocata da **pg_cron** ogni minuto: prende N azioni `pending` dovute, le esegue via MCP Composio, rispetta `daily_cap` (default 30 DM/giorno per evitare ban IG).
+- **Dry-run mode** per testare senza chiamare davvero IG.
 
-### Frontend
+## 5. Tracking risposte
 
-- `usePlanMonths.ts` → `usePlanPhases.ts` (stessa shape API, naming aggiornato)
-- `ContentPlan.tsx`: tab "Fase 1, Fase 2, …" + dialog "Nuova fase" (label opzionale + descrizione, **niente date obbligatorie**)
-- `PostEditorDialog.tsx` e `CsvImportDialog.tsx`: prop `planMonth` → `planPhase`, campo DB `plan_month_id` → `plan_phase_id`
-- `it.ts`: blocco `month.*` → `phase.*` (`Nuova fase`, `Chiudi fase`, `Calendarizza con AI`, `Nessuna fase. Crea la prima per iniziare.`, ecc.)
-- `Calendar.tsx`: nessun cambio logico (continua a mostrare Scheduled/Posted), solo label aggiornate dove menziona "mese"
+- Edge function `mkt-outreach-poll-replies` schedulata ogni 15min: per ogni contatto con DM inviato, chiama `getDMs`/`getPostComments` via Composio e aggiorna:
+- Tabella `mkt_outreach_replies`: `id, action_id, contact_id, channel (dm/comment), text, sentiment (positive/neutral/negative — via Lovable AI), received_at, raw`.
+- Dashboard Outreach mostra KPI: contatti totali, follow fatti, DM inviati, commenti, **% risposte**, breakdown sentiment, lista risposte cliccabili.
 
-## 3. Fuori scope (rimane com'è)
+## 6. UI / Routing
 
-- Calendar view (Scheduled/Posted, read-only su Posted) — invariato
-- Flusso di conferma pubblicazione — invariato
-- Chat AI sui post (`mkt-chat-post`) — invariato
-- Branding / processing brand docs — invariato (continua a usare gli stessi bucket, ora creati lato server)
-- Dashboard KPI — invariato in v2.1
+Nuova voce sidebar **Outreach** (icona `Send`) → 4 sub-tab:
+
+- **Liste** — import CSV, gestione liste/contatti, filtri (gender/città/età), assegna a run
+- **Preset DM** — CRUD preset segmentati
+- **Campagne (Runs)** — crea run da lista + preset set + config delay/cap, start/pause, progresso live
+- **Risposte & Analytics** — KPI + tabella risposte con sentiment
+- **Impostazioni** (in alto) — connessione Composio MCP
+
+## 7. Sicurezza & isolamento
+
+- Tutte le nuove tabelle: RLS con `is_mkt_admin()` only, grant solo a `authenticated` + `service_role`.
+- OAuth token Composio cifrati a riposo (pgsodium se disponibile, altrimenti scope ristretto + service_role-only).
+- Validazione CSV server-side con Zod, max 5000 righe per import.
+- Rate limit hard: max 30 DM/giorno, max 50 follow/giorno (configurabile, default conservativo).
 
 ## File toccati
 
-- **Migration**: 1 file (rename + nuove colonne)
-- **Bucket creation**: via tool storage (2 bucket privati) + RLS policy
-- **Edge functions**: 1 nuova (`mkt-schedule-phase`), 1 da rimuovere (`mkt-schedule-month`), aggiorno `config.toml`
-- **Frontend**: `ContentPlan.tsx`, `usePlanPhases.ts` (nuovo), `PostEditorDialog.tsx`, `CsvImportDialog.tsx`, `Calendar.tsx`, `i18n/it.ts`, `types.ts`
+- **Migration**: 1 file (6 nuove tabelle + RLS + grants + cron jobs)
+- **Edge functions**: 3 nuove (`mkt-mcp-composio`, `mkt-outreach-execute`, `mkt-outreach-poll-replies`)
+- **Frontend nuovo**: `src/admin/pages/Outreach.tsx` + 5 componenti tab + 3 hook (`useOutreachLists`, `useOutreachRuns`, `useDmPresets`) + tipi
+- **Frontend edit**: `AdminSidebar.tsx` (voce Outreach), `AdminRoutes.tsx` (route), `i18n/it.ts`, `config.toml`
+- **Lib**: `src/admin/lib/composio.ts` (wrapper client per chiamare le edge MCP)
 
-Confermi per procedere?
+## Domande operative
+
+1. **Account Instagram da cui partono le azioni**: quale username IG verrà collegato in Composio? (lo specificherai dopo)
+2. **Daily cap**: confermi 30 DM + 50 follow al giorno come default? (più alti = rischio ban IG)
+3. **Commento post**: vuoi che il commento sia sempre sull'**ultimo** post, o su un post **random** tra gli ultimi 3-5 (più naturale)?
+4. **Dry-run**: vuoi che la prima campagna parta automaticamente in dry-run finché non confermi 5-10 esiti reali?
+
+Confermi per procedere o aggiusto qualcosa?
