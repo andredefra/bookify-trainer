@@ -302,7 +302,7 @@ function PresetsTab() {
                 </div>
                 <div>
                   <Label>Età</Label>
-                  <Select value={edit.age_bucket} onValueChange={(v) => setEdit({ ...edit, age_bucket: v })}>
+                  <Select value={edit.age_bucket} onValueChange={(v) => setEdit({ ...edit, age_bucket: v as MktDmPreset["age_bucket"] })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="any">Qualsiasi</SelectItem>
