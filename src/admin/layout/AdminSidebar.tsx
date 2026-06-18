@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Calendar, Workflow, Palette, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Calendar, Workflow, Palette, Settings, LogOut, Send } from "lucide-react";
 import { it } from "../i18n/it";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ const items = [
   { to: "/admin/branding", label: it.nav.branding, icon: Palette },
   { to: "/admin/content-plan", label: it.nav.contentPlan, icon: Workflow },
   { to: "/admin/calendar", label: it.nav.calendar, icon: Calendar },
+  { to: "/admin/outreach", label: "Outreach", icon: Send },
   { to: "/admin/settings", label: it.nav.settings, icon: Settings },
 ];
 

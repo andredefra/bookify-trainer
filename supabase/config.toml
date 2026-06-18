@@ -14,3 +14,12 @@ verify_jwt = false
 
 [functions.mkt-chat-post]
 verify_jwt = false
+
+[functions.mkt-mcp-composio]
+verify_jwt = false
+
+[functions.mkt-outreach-execute]
+verify_jwt = false
+
+[functions.mkt-outreach-poll-replies]
+verify_jwt = false

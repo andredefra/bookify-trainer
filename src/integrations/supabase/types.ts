@@ -1921,6 +1921,45 @@ export type Database = {
           },
         ]
       }
+      mkt_dm_presets: {
+        Row: {
+          age_bucket: string
+          body_template: string
+          channel: string
+          city_filter: string
+          created_at: string
+          gender: string
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          age_bucket?: string
+          body_template: string
+          channel?: string
+          city_filter?: string
+          created_at?: string
+          gender?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          age_bucket?: string
+          body_template?: string
+          channel?: string
+          city_filter?: string
+          created_at?: string
+          gender?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mkt_generations: {
         Row: {
           content_id: string
@@ -1952,6 +1991,333 @@ export type Database = {
             columns: ["content_id"]
             isOneToOne: false
             referencedRelation: "mkt_content"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_mcp_connections: {
+        Row: {
+          auth_url: string | null
+          client_registration: Json | null
+          created_at: string
+          email: string | null
+          id: string
+          last_check_at: string | null
+          last_error: string | null
+          mcp_url: string
+          oauth_tokens: Json | null
+          provider: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          auth_url?: string | null
+          client_registration?: Json | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          last_check_at?: string | null
+          last_error?: string | null
+          mcp_url: string
+          oauth_tokens?: Json | null
+          provider: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          auth_url?: string | null
+          client_registration?: Json | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          last_check_at?: string | null
+          last_error?: string | null
+          mcp_url?: string
+          oauth_tokens?: Json | null
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_outreach_actions: {
+        Row: {
+          contact_id: string
+          created_at: string
+          error: string | null
+          executed_at: string | null
+          id: string
+          payload: Json | null
+          preset_id: string | null
+          response: Json | null
+          run_id: string
+          scheduled_for: string
+          status: string
+          step: string
+          step_order: number
+          updated_at: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          error?: string | null
+          executed_at?: string | null
+          id?: string
+          payload?: Json | null
+          preset_id?: string | null
+          response?: Json | null
+          run_id: string
+          scheduled_for?: string
+          status?: string
+          step: string
+          step_order?: number
+          updated_at?: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          error?: string | null
+          executed_at?: string | null
+          id?: string
+          payload?: Json | null
+          preset_id?: string | null
+          response?: Json | null
+          run_id?: string
+          scheduled_for?: string
+          status?: string
+          step?: string
+          step_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_outreach_actions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_outreach_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_outreach_actions_preset_id_fkey"
+            columns: ["preset_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_dm_presets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_outreach_actions_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_outreach_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_outreach_contacts: {
+        Row: {
+          age_bucket: string | null
+          audience_age: string | null
+          audience_city: string | null
+          avg_reel_plays: number | null
+          avg_views: number | null
+          created_at: string
+          creator: string | null
+          email: string | null
+          engagement: number | null
+          er: number | null
+          followers: number | null
+          gender: string | null
+          id: string
+          is_milan: boolean | null
+          list_id: string
+          status: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          age_bucket?: string | null
+          audience_age?: string | null
+          audience_city?: string | null
+          avg_reel_plays?: number | null
+          avg_views?: number | null
+          created_at?: string
+          creator?: string | null
+          email?: string | null
+          engagement?: number | null
+          er?: number | null
+          followers?: number | null
+          gender?: string | null
+          id?: string
+          is_milan?: boolean | null
+          list_id: string
+          status?: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          age_bucket?: string | null
+          audience_age?: string | null
+          audience_city?: string | null
+          avg_reel_plays?: number | null
+          avg_views?: number | null
+          created_at?: string
+          creator?: string | null
+          email?: string | null
+          engagement?: number | null
+          er?: number | null
+          followers?: number | null
+          gender?: string | null
+          id?: string
+          is_milan?: boolean | null
+          list_id?: string
+          status?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_outreach_contacts_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_outreach_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_outreach_lists: {
+        Row: {
+          created_at: string
+          id: string
+          instagram_target_page: string | null
+          name: string
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          instagram_target_page?: string | null
+          name: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          instagram_target_page?: string | null
+          name?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mkt_outreach_replies: {
+        Row: {
+          action_id: string | null
+          channel: string
+          contact_id: string
+          created_at: string
+          id: string
+          raw: Json | null
+          received_at: string
+          sentiment: string | null
+          text: string | null
+        }
+        Insert: {
+          action_id?: string | null
+          channel: string
+          contact_id: string
+          created_at?: string
+          id?: string
+          raw?: Json | null
+          received_at?: string
+          sentiment?: string | null
+          text?: string | null
+        }
+        Update: {
+          action_id?: string | null
+          channel?: string
+          contact_id?: string
+          created_at?: string
+          id?: string
+          raw?: Json | null
+          received_at?: string
+          sentiment?: string | null
+          text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_outreach_replies_action_id_fkey"
+            columns: ["action_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_outreach_actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_outreach_replies_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_outreach_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_outreach_runs: {
+        Row: {
+          config: Json
+          created_at: string
+          finished_at: string | null
+          id: string
+          last_tick_at: string | null
+          list_id: string
+          mcp_connection_id: string | null
+          name: string
+          started_at: string | null
+          stats: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          last_tick_at?: string | null
+          list_id: string
+          mcp_connection_id?: string | null
+          name: string
+          started_at?: string | null
+          stats?: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          last_tick_at?: string | null
+          list_id?: string
+          mcp_connection_id?: string | null
+          name?: string
+          started_at?: string | null
+          stats?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_outreach_runs_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_outreach_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mkt_outreach_runs_mcp_connection_id_fkey"
+            columns: ["mcp_connection_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_mcp_connections"
             referencedColumns: ["id"]
           },
         ]
