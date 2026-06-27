@@ -264,5 +264,3 @@ export const demoWorkoutLogs: WorkoutLog[] = [
     ]
   }
 ];
-
-];
