@@ -37,7 +37,7 @@ interface ClientWorkoutsDialogProps {
 
 type Trend = "up" | "down" | "same" | "none";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 30;
 
 function exerciseKey(ex: WorkoutExercise) {
   return ex.exerciseDbId?.toLowerCase() || ex.name.toLowerCase().trim();
