@@ -261,6 +261,12 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
         open={showCheckInManagerModal}
         onOpenChange={setShowCheckInManagerModal}
       />
+
+      <ClientWorkoutsDialog
+        client={workoutsClient}
+        open={showWorkoutsDialog}
+        onOpenChange={setShowWorkoutsDialog}
+      />
     </div>
   );
 }
