@@ -486,5 +486,6 @@ export const en = {
   'aiPricing.trainer.features.chatAssistant': 'AI Chat Assistant (Business)',
   'aiPricing.trainer.features.clientAnalytics': 'AI Client Analytics',
   'aiPricing.trainer.features.smartRecommendations': 'Smart Recommendations',
-  'aiPricing.trainer.cta': 'Learn More'
+  'aiPricing.trainer.cta': 'Learn More',
+  'aiPricing.comingSoon': 'Coming Soon'
 };
