@@ -19,9 +19,10 @@ interface ClientCardProps {
   onViewProfile: (client: ClientItem) => void;
   onViewAnalytics: (client: ClientItem) => void;
   onViewCheckIns: (client: ClientItem) => void;
+  onViewWorkouts: (client: ClientItem) => void;
 }
 
-export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics, onViewCheckIns }: ClientCardProps) {
+export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics, onViewCheckIns, onViewWorkouts }: ClientCardProps) {
   const plan = useTrainerPlan();
   const showPackagesAndPrograms = plan !== "basic";
   const { getTotal } = useSalesEntries();
@@ -101,6 +102,16 @@ export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics
           >
             <TrendingUp className="h-4 w-4 sm:mr-1" />
             <span className="hidden xs:inline ml-1">Stats</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onViewWorkouts(client)}
+            className="flex-1 sm:flex-none min-w-[80px]"
+            title="View workouts & progression"
+          >
+            <Dumbbell className="h-4 w-4 sm:mr-1" />
+            <span className="hidden xs:inline ml-1">Workouts</span>
           </Button>
           <Button 
             variant="ghost" 

@@ -16,6 +16,7 @@ import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-prog
 import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
 import { GoalManagerModal } from "./clients/GoalManagerModal";
 import { CheckInManagerModal } from "./clients/CheckInManagerModal";
+import { ClientWorkoutsDialog } from "./clients/ClientWorkoutsDialog";
 
 import { useClientRoster } from "@/context/ClientRosterContext";
 
@@ -56,6 +57,15 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
   // Check-in Manager Modal state
   const [showCheckInManagerModal, setShowCheckInManagerModal] = useState(false);
   const [checkInManagerClient, setCheckInManagerClient] = useState<ClientItem | null>(null);
+
+  // Workouts dialog state
+  const [showWorkoutsDialog, setShowWorkoutsDialog] = useState(false);
+  const [workoutsClient, setWorkoutsClient] = useState<ClientItem | null>(null);
+
+  const handleViewWorkouts = (client: ClientItem) => {
+    setWorkoutsClient(client);
+    setShowWorkoutsDialog(true);
+  };
   
   // Opens the standalone Goal Manager modal (bullseye icon)
   const handleViewGoals = (client: ClientItem) => {
@@ -148,6 +158,7 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
                       onViewCheckIns={handleViewCheckIns}
                       onViewProfile={handleViewProfile}
                       onViewAnalytics={handleViewAnalytics}
+                      onViewWorkouts={handleViewWorkouts}
                     />
                   ))}
                 </div>
@@ -249,6 +260,12 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
         client={checkInManagerClient}
         open={showCheckInManagerModal}
         onOpenChange={setShowCheckInManagerModal}
+      />
+
+      <ClientWorkoutsDialog
+        client={workoutsClient}
+        open={showWorkoutsDialog}
+        onOpenChange={setShowWorkoutsDialog}
       />
     </div>
   );
