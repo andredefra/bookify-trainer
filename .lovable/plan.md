@@ -1,22 +1,17 @@
-Add a "Workouts" button to each client card in the trainer Client Management list so a Basic-plan trainer can review all daily workouts a client has logged — whether following an assigned program or doing a free workout — with progression comparison vs the previous time the same exercise was performed.
+## Issues
 
-## Files
+1. The Workouts modal doesn't scroll — only the first day is visible and the user can't reach the other days.
+2. Every exercise shows "First time logged" because `demoWorkoutLogs` contains only one occurrence of each exercise, so there's no prior session to compare against.
 
-1. **`src/components/trainer/dashboard/tabs/clients/ClientWorkoutsDialog.tsx` (new)**
-   - Modal dialog (`Dialog` / `DialogContent`, max-w-3xl, scroll area).
-   - Header: "Workouts of {client.name}" with a short description.
-   - Body: list of `WorkoutLog`s sourced from `demoWorkoutLogs` (this is the demo dataset already used elsewhere) sorted desc by date, grouped by day. Each session shows: date, name, duration, then for each exercise a small block with sets (set #, target/actual reps, weight, ✓).
-   - For every set, compute a delta vs the same exercise's most recent prior occurrence in earlier logs (matched by `exerciseDbId` first, fallback `name`, set index aligned). Show a colored badge per set: green up-arrow when weight or reps improved, red down-arrow when worse, gray dash when equal, and "—" when no prior reference. Also show a per-exercise summary line (e.g. "+5 kg vs last time, same reps").
-   - Empty state when the client has no logs.
+## Fixes
 
-2. **`src/components/trainer/dashboard/tabs/clients/ClientCard.tsx`**
-   - Add a new `onViewWorkouts: (client: ClientItem) => void` prop.
-   - Add a new outline button between the "Stats" and "View" buttons using a `Dumbbell` icon (Lucide — closest to a "muscular arm" in the set; already imported in this file) labeled "Workouts" (hidden on xs).
+### 1. Make the dialog scrollable (`ClientWorkoutsDialog.tsx`)
+The `ScrollArea` is nested inside a flex column whose parent doesn't constrain height correctly, so the inner viewport never gets a bounded size and the page just clips.
+- Add `min-h-0` to the flex container and to the `ScrollArea` so the viewport can shrink and scroll.
+- Give the `ScrollArea` an explicit max-height fallback (e.g. `h-[calc(85vh-8rem)]`) to guarantee scrollability across browsers.
+- Ensure `DialogContent` keeps `flex flex-col` with `overflow-hidden` and that the header is `shrink-0`.
 
-3. **`src/components/trainer/dashboard/tabs/ClientsTab.tsx`**
-   - Add state `showWorkoutsDialog` and `workoutsClient`.
-   - Add handler `handleViewWorkouts(client)` that opens the dialog.
-   - Pass it to `<ClientCard onViewWorkouts={...} />`.
-   - Render `<ClientWorkoutsDialog client={workoutsClient} open={showWorkoutsDialog} onOpenChange={...} />`.
+### 2. Expand demo workout history (`src/data/training/demoWorkoutLogs.ts`)
+Add 2 additional past sessions (e.g. ~7 and ~14 days ago) that repeat the same exercises (Bench Press, Lat Pulldown, Shoulder Press, Squats, Romanian Deadlift) with slightly lower weights/reps. This makes the "vs prior" column light up with green ▲ trends and the per-exercise "+X kg avg, +Y reps avg vs last time" summary actually appear, demonstrating progression as requested.
 
-No database/backend work — uses existing local demo workout data, consistent with how other Basic-plan dashboard sections already operate. No changes to other plans' UIs (the same button will appear there too because `ClientCard` is shared; this is consistent — only the Basic plan requirement is the trigger but the feature is generally useful and matches existing icon-button pattern).
+No other files change. Trainer-side logic and UI behavior stay the same; only presentation (scroll) and demo data are touched.

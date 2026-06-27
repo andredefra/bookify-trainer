@@ -130,5 +130,137 @@ export const demoWorkoutLogs: WorkoutLog[] = [
         ]
       }
     ]
+  },
+  // ===== Historical sessions (for progression comparison) =====
+  {
+    id: "demo-4",
+    date: new Date(Date.now() - 7 * 86400000).toISOString(), // 7 days ago
+    name: "Upper Body Strength",
+    duration: "42 min",
+    exercises: [
+      {
+        id: "ex-1b",
+        name: "Bench Press",
+        exerciseDbId: "dumbbell-flat-press",
+        difficulty: "intermediate",
+        muscleGroups: ["Pectorals", "Triceps", "Anterior Deltoids"],
+        equipment: ["Dumbbells", "Bench"],
+        setsData: [
+          { setNumber: 1, targetReps: "8-10", actualReps: 8, weight: 57.5, completed: true },
+          { setNumber: 2, targetReps: "8-10", actualReps: 8, weight: 57.5, completed: true },
+          { setNumber: 3, targetReps: "8-10", actualReps: 7, weight: 62.5, completed: true },
+          { setNumber: 4, targetReps: "8-10", actualReps: 6, weight: 62.5, completed: true }
+        ]
+      },
+      {
+        id: "ex-2b",
+        name: "Lat Pulldown",
+        exerciseDbId: "lat-pulldown",
+        difficulty: "beginner",
+        muscleGroups: ["Latissimus Dorsi", "Rhomboids", "Middle Trapezius"],
+        equipment: ["Cable Machine", "Lat Pulldown"],
+        setsData: [
+          { setNumber: 1, targetReps: "10-12", actualReps: 11, weight: 47.5, completed: true },
+          { setNumber: 2, targetReps: "10-12", actualReps: 10, weight: 52.5, completed: true },
+          { setNumber: 3, targetReps: "10-12", actualReps: 9, weight: 52.5, completed: true }
+        ]
+      },
+      {
+        id: "ex-3b",
+        name: "Shoulder Press",
+        exerciseDbId: "dumbbell-shoulder-press",
+        difficulty: "intermediate",
+        muscleGroups: ["Anterior Deltoids", "Medial Deltoids", "Triceps"],
+        equipment: ["Dumbbells"],
+        setsData: [
+          { setNumber: 1, targetReps: "8-12", actualReps: 9, weight: 14, completed: true },
+          { setNumber: 2, targetReps: "8-12", actualReps: 8, weight: 14, completed: true },
+          { setNumber: 3, targetReps: "8-12", actualReps: 7, weight: 16, completed: true }
+        ]
+      }
+    ]
+  },
+  {
+    id: "demo-5",
+    date: new Date(Date.now() - 8 * 86400000).toISOString(), // 8 days ago
+    name: "Leg Day",
+    duration: "48 min",
+    exercises: [
+      {
+        id: "ex-4b",
+        name: "Squats",
+        exerciseDbId: "barbell-squat",
+        difficulty: "intermediate",
+        muscleGroups: ["Quadriceps", "Glutes", "Hamstrings"],
+        equipment: ["Barbell"],
+        setsData: [
+          { setNumber: 1, targetReps: "8-10", actualReps: 9, weight: 67.5, completed: true },
+          { setNumber: 2, targetReps: "8-10", actualReps: 8, weight: 72.5, completed: true },
+          { setNumber: 3, targetReps: "8-10", actualReps: 8, weight: 77.5, completed: true },
+          { setNumber: 4, targetReps: "8-10", actualReps: 7, weight: 77.5, completed: true }
+        ]
+      },
+      {
+        id: "ex-5b",
+        name: "Romanian Deadlift",
+        exerciseDbId: "romanian-deadlift-dumbbell",
+        difficulty: "advanced",
+        muscleGroups: ["Hamstrings", "Glutes"],
+        equipment: ["Dumbbells"],
+        setsData: [
+          { setNumber: 1, targetReps: "6-8", actualReps: 7, weight: 22.5, completed: true },
+          { setNumber: 2, targetReps: "6-8", actualReps: 6, weight: 25, completed: true },
+          { setNumber: 3, targetReps: "6-8", actualReps: 6, weight: 27.5, completed: true }
+        ]
+      },
+      {
+        id: "ex-6b",
+        name: "Leg Press",
+        exerciseDbId: "45-degree-leg-press",
+        difficulty: "beginner",
+        muscleGroups: ["Quadriceps", "Glutes", "Hamstrings"],
+        equipment: ["45 Degree Leg Press Machine"],
+        setsData: [
+          { setNumber: 1, targetReps: "12-15", actualReps: 14, weight: 95, completed: true },
+          { setNumber: 2, targetReps: "12-15", actualReps: 13, weight: 105, completed: true },
+          { setNumber: 3, targetReps: "12-15", actualReps: 12, weight: 115, completed: true }
+        ]
+      }
+    ]
+  },
+  {
+    id: "demo-6",
+    date: new Date(Date.now() - 14 * 86400000).toISOString(), // 14 days ago
+    name: "Upper Body Strength",
+    duration: "40 min",
+    exercises: [
+      {
+        id: "ex-1c",
+        name: "Bench Press",
+        exerciseDbId: "dumbbell-flat-press",
+        difficulty: "intermediate",
+        muscleGroups: ["Pectorals", "Triceps", "Anterior Deltoids"],
+        equipment: ["Dumbbells", "Bench"],
+        setsData: [
+          { setNumber: 1, targetReps: "8-10", actualReps: 7, weight: 55, completed: true },
+          { setNumber: 2, targetReps: "8-10", actualReps: 7, weight: 55, completed: true },
+          { setNumber: 3, targetReps: "8-10", actualReps: 6, weight: 60, completed: true },
+          { setNumber: 4, targetReps: "8-10", actualReps: 6, weight: 60, completed: true }
+        ]
+      },
+      {
+        id: "ex-2c",
+        name: "Lat Pulldown",
+        exerciseDbId: "lat-pulldown",
+        difficulty: "beginner",
+        muscleGroups: ["Latissimus Dorsi", "Rhomboids", "Middle Trapezius"],
+        equipment: ["Cable Machine", "Lat Pulldown"],
+        setsData: [
+          { setNumber: 1, targetReps: "10-12", actualReps: 10, weight: 45, completed: true },
+          { setNumber: 2, targetReps: "10-12", actualReps: 10, weight: 50, completed: true },
+          { setNumber: 3, targetReps: "10-12", actualReps: 8, weight: 50, completed: true }
+        ]
+      }
+    ]
   }
 ];

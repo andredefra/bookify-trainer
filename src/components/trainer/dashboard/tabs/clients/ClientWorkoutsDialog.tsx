@@ -115,8 +115,8 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[85vh] overflow-hidden flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-3xl h-[85vh] overflow-hidden flex flex-col p-0">
+        <DialogHeader className="shrink-0 p-6 pb-3 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Dumbbell className="h-5 w-5 text-primary" />
             Workouts {client ? `— ${client.name}` : ""}
@@ -126,7 +126,7 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 pr-4 -mr-2">
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4">
           {logs.length === 0 ? (
             <div className="text-center py-10 text-muted-foreground">
               No workouts logged yet.
@@ -227,7 +227,7 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
               ))}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
