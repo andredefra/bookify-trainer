@@ -1,17 +1,36 @@
-## Issues
+## Goal
+Make the Workouts dialog usable across long histories: paginate, group, and allow date filtering — while keeping progression ("vs prior") comparisons accurate.
 
-1. The Workouts modal doesn't scroll — only the first day is visible and the user can't reach the other days.
-2. Every exercise shows "First time logged" because `demoWorkoutLogs` contains only one occurrence of each exercise, so there's no prior session to compare against.
+## UX
 
-## Fixes
+Top toolbar inside the dialog (sticky under the header):
+- **Date range filter**: two shadcn date pickers (From / To) + quick presets ("Last 7 days", "Last 30 days", "Last 3 months", "All time"). Default = Last 30 days.
+- **Exercise filter** (optional, dropdown): "All exercises" or pick one — useful to track a single exercise's progression over time.
+- **Results counter**: "Showing X of Y sessions".
 
-### 1. Make the dialog scrollable (`ClientWorkoutsDialog.tsx`)
-The `ScrollArea` is nested inside a flex column whose parent doesn't constrain height correctly, so the inner viewport never gets a bounded size and the page just clips.
-- Add `min-h-0` to the flex container and to the `ScrollArea` so the viewport can shrink and scroll.
-- Give the `ScrollArea` an explicit max-height fallback (e.g. `h-[calc(85vh-8rem)]`) to guarantee scrollability across browsers.
-- Ensure `DialogContent` keeps `flex flex-col` with `overflow-hidden` and that the header is `shrink-0`.
+Body:
+- Sessions grouped by **month header** (e.g. "June 2026") with a small count badge. Each group is collapsible (expanded by default for the most recent month, collapsed for older ones).
+- Within a group, sessions render as today (date, duration, exercises with set table + vs prior).
 
-### 2. Expand demo workout history (`src/data/training/demoWorkoutLogs.ts`)
-Add 2 additional past sessions (e.g. ~7 and ~14 days ago) that repeat the same exercises (Bench Press, Lat Pulldown, Shoulder Press, Squats, Romanian Deadlift) with slightly lower weights/reps. This makes the "vs prior" column light up with green ▲ trends and the per-exercise "+X kg avg, +Y reps avg vs last time" summary actually appear, demonstrating progression as requested.
+Footer (sticky):
+- **Pagination**: 10 sessions per page. Prev / Next + "Page N of M". Resets to page 1 when filters change.
 
-No other files change. Trainer-side logic and UI behavior stay the same; only presentation (scroll) and demo data are touched.
+## Progression integrity
+"vs prior" must still compare against the truly previous occurrence of that exercise, even when filters hide older sessions.
+- Keep the **full sorted log list** (newest → oldest) as the source for prior lookups.
+- Compute `priorExercise` against the full list, not the filtered subset, so a filtered view still shows correct deltas.
+- Filtering and pagination only affect which sessions are *rendered*.
+
+## Empty / edge states
+- "No workouts in this range" message with a "Reset filters" button when filtered result is empty.
+- If only one session of an exercise exists in history → keep current "First time logged".
+
+## Files to touch
+- `src/components/trainer/dashboard/tabs/clients/ClientWorkoutsDialog.tsx` — add toolbar, grouping, pagination, filter state. Use existing shadcn `Popover` + `Calendar` for date range, `Select` for exercise filter, `Button` for pagination, `Collapsible` for month groups.
+- No data/schema changes. Demo data stays as is.
+
+## Technical notes
+- State: `{ from, to, exerciseKey, page, openMonths: Set<string> }`.
+- Derive `fullSorted` once (memo), then `filtered = fullSorted.filter(...)` by date range + exercise presence, then `paged = filtered.slice((page-1)*10, page*10)`, then `grouped = groupBy(paged, 'YYYY-MM')`.
+- Page size constant `PAGE_SIZE = 10`.
+- Use `date-fns` (already in project) for range checks and month keys; format via existing `safeFormatDate`.
