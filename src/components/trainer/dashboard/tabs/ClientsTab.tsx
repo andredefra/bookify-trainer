@@ -57,6 +57,15 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
   // Check-in Manager Modal state
   const [showCheckInManagerModal, setShowCheckInManagerModal] = useState(false);
   const [checkInManagerClient, setCheckInManagerClient] = useState<ClientItem | null>(null);
+
+  // Workouts dialog state
+  const [showWorkoutsDialog, setShowWorkoutsDialog] = useState(false);
+  const [workoutsClient, setWorkoutsClient] = useState<ClientItem | null>(null);
+
+  const handleViewWorkouts = (client: ClientItem) => {
+    setWorkoutsClient(client);
+    setShowWorkoutsDialog(true);
+  };
   
   // Opens the standalone Goal Manager modal (bullseye icon)
   const handleViewGoals = (client: ClientItem) => {
