@@ -37,7 +37,7 @@ interface ClientWorkoutsDialogProps {
 
 type Trend = "up" | "down" | "same" | "none";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 30;
 
 function exerciseKey(ex: WorkoutExercise) {
   return ex.exerciseDbId?.toLowerCase() || ex.name.toLowerCase().trim();
@@ -136,22 +136,24 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
     []
   );
 
-  const [preset, setPreset] = useState<PresetKey>("30d");
-  const [from, setFrom] = useState<Date | undefined>(subDays(new Date(), 30));
-  const [to, setTo] = useState<Date | undefined>(new Date());
+  const [preset, setPreset] = useState<PresetKey>("all");
+  const [from, setFrom] = useState<Date | undefined>(undefined);
+  const [to, setTo] = useState<Date | undefined>(undefined);
   const [exerciseFilter, setExerciseFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [openMonths, setOpenMonths] = useState<Record<string, boolean>>({});
+  const [openDays, setOpenDays] = useState<Record<string, boolean>>({});
 
   // Reset when dialog opens for a new client
   useEffect(() => {
     if (open) {
-      setPreset("30d");
-      setFrom(subDays(new Date(), 30));
-      setTo(new Date());
+      setPreset("all");
+      setFrom(undefined);
+      setTo(undefined);
       setExerciseFilter("all");
       setPage(1);
       setOpenMonths({});
+      setOpenDays({});
     }
   }, [open, client?.id]);
 
@@ -224,7 +226,7 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
     return Object.entries(g).sort(([a], [b]) => (a < b ? 1 : -1));
   }, [paged]);
 
-  // Default first group expanded
+  // Default first month expanded; first day of first month expanded
   useEffect(() => {
     if (grouped.length > 0) {
       setOpenMonths((prev) => {
@@ -234,8 +236,40 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
         });
         return next;
       });
+      setOpenDays((prev) => {
+        const next = { ...prev };
+        grouped.forEach(([, { logs }], gi) => {
+          logs.forEach((log, li) => {
+            const id = String(log.id);
+            if (next[id] === undefined) next[id] = gi === 0 && li === 0;
+          });
+        });
+        return next;
+      });
     }
   }, [grouped]);
+
+  const expandAll = () => {
+    const m: Record<string, boolean> = {};
+    const d: Record<string, boolean> = {};
+    grouped.forEach(([k, { logs }]) => {
+      m[k] = true;
+      logs.forEach((l) => (d[String(l.id)] = true));
+    });
+    setOpenMonths(m);
+    setOpenDays(d);
+  };
+
+  const collapseAll = () => {
+    const m: Record<string, boolean> = {};
+    const d: Record<string, boolean> = {};
+    grouped.forEach(([k, { logs }]) => {
+      m[k] = false;
+      logs.forEach((l) => (d[String(l.id)] = false));
+    });
+    setOpenMonths(m);
+    setOpenDays(d);
+  };
 
   const resetFilters = () => {
     applyPreset("all");
@@ -364,9 +398,21 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
             )}
           </div>
 
-          <div className="text-xs text-muted-foreground">
-            Showing {paged.length} of {filtered.length} session{filtered.length === 1 ? "" : "s"}
-            {filtered.length !== fullSorted.length && ` (${fullSorted.length} total)`}
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="text-xs text-muted-foreground">
+              Showing {paged.length} of {filtered.length} session{filtered.length === 1 ? "" : "s"}
+              {filtered.length !== fullSorted.length && ` (${fullSorted.length} total)`}
+            </div>
+            {filtered.length > 0 && (
+              <div className="flex gap-1">
+                <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={expandAll}>
+                  Expand all
+                </Button>
+                <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={collapseAll}>
+                  Collapse all
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -402,107 +448,136 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
                         </Badge>
                       </div>
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="space-y-4 pt-3">
-                      {logs.map((log) => (
-                        <div key={log.id} className="border rounded-lg p-4 bg-card">
-                          <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
-                            <div>
-                              <h3 className="font-semibold text-base">{log.name}</h3>
-                              <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
-                                <span className="flex items-center gap-1">
-                                  <CalendarIcon className="h-3 w-3" />
-                                  {safeFormatDate(log.date, "EEE, MMM d, yyyy")}
-                                </span>
-                                {log.duration && (
-                                  <span className="flex items-center gap-1">
-                                    <Clock className="h-3 w-3" />
-                                    {log.duration}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <Badge variant="secondary">
-                              {log.exercises.length} exercise{log.exercises.length === 1 ? "" : "s"}
-                            </Badge>
-                          </div>
-
-                          <div className="space-y-3">
-                            {log.exercises
-                              .filter((ex) =>
-                                exerciseFilter === "all" ? true : exerciseKey(ex) === exerciseFilter
-                              )
-                              .map((ex) => {
-                                const prior = findPriorExerciseInFull(fullSorted, log.id, ex);
-                                return (
-                                  <div key={ex.id} className="border rounded-md p-3 bg-muted/20">
-                                    <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
-                                      <div>
-                                        <div className="font-medium text-sm">{ex.name}</div>
-                                        {ex.muscleGroups && ex.muscleGroups.length > 0 && (
-                                          <div className="text-xs text-muted-foreground">
-                                            {ex.muscleGroups.join(" · ")}
-                                          </div>
-                                        )}
-                                      </div>
-                                      <div className="text-xs font-medium">
-                                        {prior ? (
-                                          <span
-                                            className={
-                                              exerciseSummary(ex, prior).startsWith("+")
-                                                ? "text-green-700"
-                                                : exerciseSummary(ex, prior).startsWith("-")
-                                                ? "text-red-700"
-                                                : "text-muted-foreground"
-                                            }
-                                          >
-                                            {exerciseSummary(ex, prior)}
-                                          </span>
-                                        ) : (
-                                          <span className="text-muted-foreground">First time logged</span>
-                                        )}
-                                      </div>
-                                    </div>
-
-                                    <div className="overflow-x-auto">
-                                      <table className="w-full text-xs">
-                                        <thead>
-                                          <tr className="text-muted-foreground text-left border-b">
-                                            <th className="py-1.5 pr-2 font-normal">Set</th>
-                                            <th className="py-1.5 pr-2 font-normal">Target</th>
-                                            <th className="py-1.5 pr-2 font-normal">Reps</th>
-                                            <th className="py-1.5 pr-2 font-normal">Weight</th>
-                                            <th className="py-1.5 pr-2 font-normal">vs prior</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {ex.setsData.map((s, i) => {
-                                            const priorSet = prior?.setsData[i];
-                                            const cmp = compareSets(s, priorSet);
-                                            return (
-                                              <tr key={i} className="border-b last:border-0">
-                                                <td className="py-1.5 pr-2 font-medium">{s.setNumber}</td>
-                                                <td className="py-1.5 pr-2 text-muted-foreground">
-                                                  {s.targetReps}
-                                                </td>
-                                                <td className="py-1.5 pr-2">{s.actualReps ?? "—"}</td>
-                                                <td className="py-1.5 pr-2">
-                                                  {s.weight != null ? `${s.weight} kg` : "—"}
-                                                </td>
-                                                <td className="py-1.5 pr-2">
-                                                  <TrendBadge trend={cmp.trend} label={cmp.label} />
-                                                </td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                    </div>
+                    <CollapsibleContent className="space-y-2 pt-2 pl-2">
+                      {logs.map((log) => {
+                        const dayId = String(log.id);
+                        const dayOpen = openDays[dayId] ?? false;
+                        return (
+                          <Collapsible
+                            key={log.id}
+                            open={dayOpen}
+                            onOpenChange={(o) => setOpenDays((prev) => ({ ...prev, [dayId]: o }))}
+                          >
+                            <CollapsibleTrigger className="w-full flex items-center justify-between p-3 rounded-md border bg-card hover:bg-muted/40 transition-colors text-left">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <ChevronDown
+                                  className={cn(
+                                    "h-4 w-4 shrink-0 transition-transform",
+                                    !dayOpen && "-rotate-90"
+                                  )}
+                                />
+                                <div className="min-w-0">
+                                  <div className="font-medium text-sm truncate">
+                                    {safeFormatDate(log.date, "EEE, MMM d")} · {log.name}
                                   </div>
-                                );
-                              })}
-                          </div>
-                        </div>
-                      ))}
+                                  <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
+                                    {log.duration && (
+                                      <span className="flex items-center gap-1">
+                                        <Clock className="h-3 w-3" />
+                                        {log.duration}
+                                      </span>
+                                    )}
+                                    <span>
+                                      {log.exercises.length} exercise
+                                      {log.exercises.length === 1 ? "" : "s"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                              <div className="border border-t-0 rounded-b-md p-3 bg-card -mt-px">
+                                <div className="space-y-3">
+                                  {log.exercises
+                                    .filter((ex) =>
+                                      exerciseFilter === "all"
+                                        ? true
+                                        : exerciseKey(ex) === exerciseFilter
+                                    )
+                                    .map((ex) => {
+                                      const prior = findPriorExerciseInFull(fullSorted, log.id, ex);
+                                      return (
+                                        <div
+                                          key={ex.id}
+                                          className="border rounded-md p-3 bg-muted/20"
+                                        >
+                                          <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                                            <div>
+                                              <div className="font-medium text-sm">{ex.name}</div>
+                                              {ex.muscleGroups && ex.muscleGroups.length > 0 && (
+                                                <div className="text-xs text-muted-foreground">
+                                                  {ex.muscleGroups.join(" · ")}
+                                                </div>
+                                              )}
+                                            </div>
+                                            <div className="text-xs font-medium">
+                                              {prior ? (
+                                                <span
+                                                  className={
+                                                    exerciseSummary(ex, prior).startsWith("+")
+                                                      ? "text-green-700"
+                                                      : exerciseSummary(ex, prior).startsWith("-")
+                                                      ? "text-red-700"
+                                                      : "text-muted-foreground"
+                                                  }
+                                                >
+                                                  {exerciseSummary(ex, prior)}
+                                                </span>
+                                              ) : (
+                                                <span className="text-muted-foreground">
+                                                  First time logged
+                                                </span>
+                                              )}
+                                            </div>
+                                          </div>
+
+                                          <div className="overflow-x-auto">
+                                            <table className="w-full text-xs">
+                                              <thead>
+                                                <tr className="text-muted-foreground text-left border-b">
+                                                  <th className="py-1.5 pr-2 font-normal">Set</th>
+                                                  <th className="py-1.5 pr-2 font-normal">Target</th>
+                                                  <th className="py-1.5 pr-2 font-normal">Reps</th>
+                                                  <th className="py-1.5 pr-2 font-normal">Weight</th>
+                                                  <th className="py-1.5 pr-2 font-normal">vs prior</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {ex.setsData.map((s, i) => {
+                                                  const priorSet = prior?.setsData[i];
+                                                  const cmp = compareSets(s, priorSet);
+                                                  return (
+                                                    <tr key={i} className="border-b last:border-0">
+                                                      <td className="py-1.5 pr-2 font-medium">
+                                                        {s.setNumber}
+                                                      </td>
+                                                      <td className="py-1.5 pr-2 text-muted-foreground">
+                                                        {s.targetReps}
+                                                      </td>
+                                                      <td className="py-1.5 pr-2">
+                                                        {s.actualReps ?? "—"}
+                                                      </td>
+                                                      <td className="py-1.5 pr-2">
+                                                        {s.weight != null ? `${s.weight} kg` : "—"}
+                                                      </td>
+                                                      <td className="py-1.5 pr-2">
+                                                        <TrendBadge trend={cmp.trend} label={cmp.label} />
+                                                      </td>
+                                                    </tr>
+                                                  );
+                                                })}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              </div>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        );
+                      })}
                     </CollapsibleContent>
                   </Collapsible>
                 );
