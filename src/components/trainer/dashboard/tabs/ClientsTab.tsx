@@ -16,6 +16,7 @@ import { ManageGoalTypesDialog } from "@/components/client/overview/fitness-prog
 import { TrainerClientAIChat } from "./clients/TrainerClientAIChat";
 import { GoalManagerModal } from "./clients/GoalManagerModal";
 import { CheckInManagerModal } from "./clients/CheckInManagerModal";
+import { ClientWorkoutsDialog } from "./clients/ClientWorkoutsDialog";
 
 import { useClientRoster } from "@/context/ClientRosterContext";
 
