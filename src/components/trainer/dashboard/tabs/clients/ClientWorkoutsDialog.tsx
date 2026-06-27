@@ -136,22 +136,24 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
     []
   );
 
-  const [preset, setPreset] = useState<PresetKey>("30d");
-  const [from, setFrom] = useState<Date | undefined>(subDays(new Date(), 30));
-  const [to, setTo] = useState<Date | undefined>(new Date());
+  const [preset, setPreset] = useState<PresetKey>("all");
+  const [from, setFrom] = useState<Date | undefined>(undefined);
+  const [to, setTo] = useState<Date | undefined>(undefined);
   const [exerciseFilter, setExerciseFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [openMonths, setOpenMonths] = useState<Record<string, boolean>>({});
+  const [openDays, setOpenDays] = useState<Record<string, boolean>>({});
 
   // Reset when dialog opens for a new client
   useEffect(() => {
     if (open) {
-      setPreset("30d");
-      setFrom(subDays(new Date(), 30));
-      setTo(new Date());
+      setPreset("all");
+      setFrom(undefined);
+      setTo(undefined);
       setExerciseFilter("all");
       setPage(1);
       setOpenMonths({});
+      setOpenDays({});
     }
   }, [open, client?.id]);
 
