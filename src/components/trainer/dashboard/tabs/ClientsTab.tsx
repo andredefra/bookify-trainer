@@ -158,6 +158,7 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
                       onViewCheckIns={handleViewCheckIns}
                       onViewProfile={handleViewProfile}
                       onViewAnalytics={handleViewAnalytics}
+                      onViewWorkouts={handleViewWorkouts}
                     />
                   ))}
                 </div>
