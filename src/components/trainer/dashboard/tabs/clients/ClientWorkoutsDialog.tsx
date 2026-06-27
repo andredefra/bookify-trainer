@@ -226,7 +226,7 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
     return Object.entries(g).sort(([a], [b]) => (a < b ? 1 : -1));
   }, [paged]);
 
-  // Default first group expanded
+  // Default first month expanded; first day of first month expanded
   useEffect(() => {
     if (grouped.length > 0) {
       setOpenMonths((prev) => {
@@ -236,8 +236,40 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
         });
         return next;
       });
+      setOpenDays((prev) => {
+        const next = { ...prev };
+        grouped.forEach(([, { logs }], gi) => {
+          logs.forEach((log, li) => {
+            const id = String(log.id);
+            if (next[id] === undefined) next[id] = gi === 0 && li === 0;
+          });
+        });
+        return next;
+      });
     }
   }, [grouped]);
+
+  const expandAll = () => {
+    const m: Record<string, boolean> = {};
+    const d: Record<string, boolean> = {};
+    grouped.forEach(([k, { logs }]) => {
+      m[k] = true;
+      logs.forEach((l) => (d[String(l.id)] = true));
+    });
+    setOpenMonths(m);
+    setOpenDays(d);
+  };
+
+  const collapseAll = () => {
+    const m: Record<string, boolean> = {};
+    const d: Record<string, boolean> = {};
+    grouped.forEach(([k, { logs }]) => {
+      m[k] = false;
+      logs.forEach((l) => (d[String(l.id)] = false));
+    });
+    setOpenMonths(m);
+    setOpenDays(d);
+  };
 
   const resetFilters = () => {
     applyPreset("all");
