@@ -158,10 +158,10 @@ const AIFeatureDialog = ({ type, open, onOpenChange }: AIFeatureDialogProps) => 
             </div>
           </div>
           <Button 
-            className={`w-full ${isClient ? 'bg-amber-500 hover:bg-amber-600' : 'bg-violet-500 hover:bg-violet-600'}`}
-            onClick={() => onOpenChange(false)}
+            disabled
+            className={`w-full cursor-not-allowed opacity-70 ${isClient ? 'bg-amber-500 hover:bg-amber-500' : 'bg-violet-500 hover:bg-violet-500'}`}
           >
-            {isClient ? t('aiPricing.client.cta') : t('aiPricing.trainer.cta')}
+            {t('aiPricing.comingSoon')}
           </Button>
         </div>
       </DialogContent>
