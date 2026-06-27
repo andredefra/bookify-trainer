@@ -19,9 +19,10 @@ interface ClientCardProps {
   onViewProfile: (client: ClientItem) => void;
   onViewAnalytics: (client: ClientItem) => void;
   onViewCheckIns: (client: ClientItem) => void;
+  onViewWorkouts: (client: ClientItem) => void;
 }
 
-export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics, onViewCheckIns }: ClientCardProps) {
+export function ClientCard({ client, onViewGoals, onViewProfile, onViewAnalytics, onViewCheckIns, onViewWorkouts }: ClientCardProps) {
   const plan = useTrainerPlan();
   const showPackagesAndPrograms = plan !== "basic";
   const { getTotal } = useSalesEntries();
