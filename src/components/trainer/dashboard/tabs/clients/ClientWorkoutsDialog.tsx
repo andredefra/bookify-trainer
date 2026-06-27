@@ -227,7 +227,7 @@ export function ClientWorkoutsDialog({ client, open, onOpenChange }: ClientWorko
               ))}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
