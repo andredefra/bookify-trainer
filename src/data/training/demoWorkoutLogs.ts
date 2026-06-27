@@ -262,5 +262,79 @@ export const demoWorkoutLogs: WorkoutLog[] = [
         ]
       }
     ]
-  }
+  },
+  // ===== Extended history spanning several months (auto-generated patterns) =====
+  ...([21, 24, 28, 31, 35, 42, 49, 56, 63, 70, 80, 95, 110, 130, 150, 175, 200].flatMap((daysAgo, idx) => {
+    const base = Date.now() - daysAgo * 86400000;
+    const variant = idx % 2;
+    if (variant === 0) {
+      return [{
+        id: `demo-hist-u-${daysAgo}`,
+        date: new Date(base).toISOString(),
+        name: "Upper Body Strength",
+        duration: `${38 + (idx % 6)} min`,
+        exercises: [
+          {
+            id: `ex-h1-${daysAgo}`,
+            name: "Bench Press",
+            exerciseDbId: "dumbbell-flat-press",
+            difficulty: "intermediate",
+            muscleGroups: ["Pectorals", "Triceps", "Anterior Deltoids"],
+            equipment: ["Dumbbells", "Bench"],
+            setsData: [
+              { setNumber: 1, targetReps: "8-10", actualReps: 7, weight: Math.max(40, 55 - Math.floor(daysAgo / 14)), completed: true },
+              { setNumber: 2, targetReps: "8-10", actualReps: 7, weight: Math.max(40, 55 - Math.floor(daysAgo / 14)), completed: true },
+              { setNumber: 3, targetReps: "8-10", actualReps: 6, weight: Math.max(45, 60 - Math.floor(daysAgo / 14)), completed: true },
+            ],
+          },
+          {
+            id: `ex-h2-${daysAgo}`,
+            name: "Lat Pulldown",
+            exerciseDbId: "lat-pulldown",
+            difficulty: "beginner",
+            muscleGroups: ["Latissimus Dorsi", "Rhomboids", "Middle Trapezius"],
+            equipment: ["Cable Machine", "Lat Pulldown"],
+            setsData: [
+              { setNumber: 1, targetReps: "10-12", actualReps: 10, weight: Math.max(35, 45 - Math.floor(daysAgo / 18)), completed: true },
+              { setNumber: 2, targetReps: "10-12", actualReps: 9, weight: Math.max(40, 50 - Math.floor(daysAgo / 18)), completed: true },
+              { setNumber: 3, targetReps: "10-12", actualReps: 8, weight: Math.max(40, 50 - Math.floor(daysAgo / 18)), completed: true },
+            ],
+          },
+        ],
+      }];
+    }
+    return [{
+      id: `demo-hist-l-${daysAgo}`,
+      date: new Date(base).toISOString(),
+      name: "Leg Day",
+      duration: `${44 + (idx % 5)} min`,
+      exercises: [
+        {
+          id: `ex-h3-${daysAgo}`,
+          name: "Squats",
+          exerciseDbId: "barbell-squat",
+          difficulty: "intermediate",
+          muscleGroups: ["Quadriceps", "Glutes", "Hamstrings"],
+          equipment: ["Barbell"],
+          setsData: [
+            { setNumber: 1, targetReps: "8-10", actualReps: 9, weight: Math.max(50, 65 - Math.floor(daysAgo / 14)), completed: true },
+            { setNumber: 2, targetReps: "8-10", actualReps: 8, weight: Math.max(55, 70 - Math.floor(daysAgo / 14)), completed: true },
+            { setNumber: 3, targetReps: "8-10", actualReps: 8, weight: Math.max(60, 75 - Math.floor(daysAgo / 14)), completed: true },
+          ],
+        },
+        {
+          id: `ex-h4-${daysAgo}`,
+          name: "Leg Press",
+          exerciseDbId: "45-degree-leg-press",
+          difficulty: "beginner",
+          muscleGroups: ["Quadriceps", "Glutes", "Hamstrings"],
+          equipment: ["45 Degree Leg Press Machine"],
+          setsData: [
+            { setNumber: 1, targetReps: "12-15", actualReps: 14, weight: Math.max(70, 90 - Math.floor(daysAgo / 12)), completed: true },
+            { setNumber: 2, targetReps: "12-15", actualReps: 12, weight: Math.max(80, 100 - Math.floor(daysAgo / 12)), completed: true },
+          ],
+        },
+      ],
+    }];
+  }) as WorkoutLog[])
 ];
