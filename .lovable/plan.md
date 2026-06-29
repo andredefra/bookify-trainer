@@ -1,69 +1,67 @@
+## Obiettivo
+Sostituire `docs/trainer-dashboard/basic-vs-pro-features.md` con un documento riorganizzato in due macro-sezioni nette — **Trainer** e **Client** — ciascuna con i propri piani e le proprie funzionalità AI. Niente Gym, niente Studio.
 
-## Goal
-Create a single, detailed Markdown reference covering every feature available to:
-1. The **Basic trainer plan** (the one Andrea's demo account `andrea.mypersonal.fit@gmail.com` is on).
-2. The **Pro trainer plan** (full feature set, inheriting Essential + Basic).
+## File
+- Riscrivere: `docs/trainer-dashboard/basic-vs-pro-features.md`
+  (manteniamo lo stesso percorso così i link esistenti continuano a funzionare; in cima aggiungiamo una nota che il doc copre sia Trainer che Client)
 
-The doc will live in `docs/trainer-dashboard/` alongside the other feature docs.
+## Struttura del nuovo documento
 
-## File to create
-`docs/trainer-dashboard/basic-vs-pro-features.md`
+### 1. Overview
+- Scopo del doc, scope (solo Trainer + Client; Gym e Studio esclusi).
+- Riferimento demo: `andrea.mypersonal.fit@gmail.com` = Trainer Basic.
+- Modello a piani impilati (Pro ⊃ Essential ⊃ Basic; Client Pro ⊃ Client Free).
 
-## Source material I'll consolidate
-- `src/components/pricing/utils/planFeatures.ts` (canonical Basic / Essential / Pro list).
-- `src/translations/en.ts` → `pricing.detailedFeatures.*` (official descriptions).
-- Trainer dashboard tabs in `src/components/trainer/dashboard/tabs/` (Overview, Clients, Messages, Calendar, Reviews, Analytics, Sessions, Programs, Packages, Services, Sales, Transactions, Settings) to describe structure/flow per feature.
-- Existing docs in `docs/trainer-dashboard/` and `docs/pricing-plans/` for cross-references.
-- Memory notes on Essential vs Pro payments, program sales, analytics, packages, invoicing, AI Plus addon, Studio addon, etc.
+### 2. TRAINER — Funzionalità per piano
 
-## Document structure
+#### 2.1 Basic (piano gratuito — account Andrea)
+Per ogni feature: cos'è / dove vive (tab + file) / struttura / flow / limiti.
+Features: Sales Management (base, no fatturazione), Personal Page, Client Management + **Client Workouts View** (cross-ref a `client-workouts-view.md`), Messaging, Calendar, Reviews (read-only), Analytics base, Google Calendar sync.
 
-1. **Overview**
-   - Plan positioning (Basic = free starter, Essential = paid mid, Pro = full business).
-   - Note: Andrea's demo account is on Basic; Essential/Pro are stacked (Pro = Essential + Basic + Pro-only).
-   - Add-ons that apply on top (AI Plus €1.99, Studio €89).
+#### 2.2 Essential (include tutto Basic)
+Tabella riassuntiva "Everything in Basic" + dettaglio Essential-only:
+Sessions booking, Waitlist, Programs (wizard, routines, circuits, periodizzazione), Session analytics, Program analytics, Exercise list (DB read-only), Exercise management (DB privato), Cash payments + dialog conferma, Payment installments, Transactions, Business analytics base.
 
-2. **Basic plan — full feature catalog** (Andrea's account)
-   For each of the 8 Basic features, a subsection with:
-   - **What it is** (1–2 lines).
-   - **Where it lives** (dashboard tab / route / component file).
-   - **Structure** (key UI blocks, modals, side panels).
-   - **Flow** (typical user steps end-to-end).
-   - **Limits / notes** (what is NOT included vs higher plans).
-   
-   Features covered:
-   - Sales Management (basic, no invoicing)
-   - Personal Page (public trainer profile)
-   - Client Management + **Client Workouts View** (new Dumbbell button → cross-reference `client-workouts-view.md`)
-   - Messaging (text/video chat)
-   - Calendar (personal availability)
-   - Reviews (read-only, cannot hide/delete — per project rule)
-   - Analytics (basic KPIs)
-   - Google Calendar sync
+#### 2.3 Pro (include tutto Essential)
+Tabella "Everything in Essential" + dettaglio Pro-only:
+Packages (session-based + duration), Services, Full payments (Stripe e-commerce), Pro installments, Invoicing (draft → sent + receipts), Transactions estese, Business dashboard, Advanced analytics (filtri tempo + vista aggregata clienti + AI contestuale), Priority support.
 
-3. **Pro plan — full feature catalog**
-   Start with **"Everything in Essential"** summary (table) then **"Everything in Basic"** summary.
-   Then detail each Essential and Pro feature with the same What/Where/Structure/Flow/Notes template:
-   - Essential: Sessions booking, Waitlist, Programs (wizard, routines, circuits, periodization), Session analytics, Program analytics, Exercise list (read-only DB), Exercise management (private DB), Cash payments + confirmation dialog, Payment installments.
-   - Pro: Packages (session-based + duration), Services, Full payments (Stripe e-commerce), Pro installments, Invoicing (draft → sent workflow + receipts), Transactions tab, Business dashboard, Advanced analytics (time filters + aggregated clients view + context-aware AI), Priority support.
+#### 2.4 Trainer AI — Add-on AI Plus (€1.99/mese)
+Sezione dedicata: AI Business Insights, AI Chat Assistant, AI Client Analytics, Smart Recommendations, AI Installment Detection, Context-aware analytics, Program Assistant (chatbot + upload Word/PDF).
 
-4. **Cross-plan reference table**
-   Matrix: Feature × Basic / Essential / Pro (✓ / — / Add-on).
+#### 2.5 Matrice riassuntiva Trainer
+Tabella: Feature × Basic / Essential / Pro / AI Plus.
 
-5. **Add-ons (apply to any plan)**
-   - AI Plus (€1.99/mo) — advanced AI features.
-   - Studio (€89/mo) — turns trainer into studio operator with multi-trainer mgmt.
+### 3. CLIENT — Funzionalità per piano
 
-6. **Demo account quick reference**
-   - Email: `andrea.mypersonal.fit@gmail.com`
-   - Plan: Basic
-   - Demo user UUID rule (`00000000-0000-0000-0000-000000000002`) — note that LocalStorage `demo-user` flag must be preserved.
-   - Where to upgrade simulation lives (`PlanCard` "Coming Soon" popup).
+#### 3.1 Client Free
+Per ogni feature: cos'è / dove vive / struttura / flow / limiti.
+Features: Overview & progress, Training program & log workout, Sessions (incluso accept/decline postponement), Packages (view + acquisto/rinnovo), Trainers view, Messaging col trainer, Check-ins, Settings & health documents.
 
-7. **Related docs**
-   - Links to: `client-workouts-view.md`, `docs/pricing-plans/REQUIREMENTS.md`, `docs/trainer-dashboard/REQUIREMENTS.md`, `docs/admin-marketing/*`.
+#### 3.2 Client Pro
+Differenze rispetto a Free (capability gating).
 
-## Out of scope
-- No code changes.
-- No translation edits.
-- Italian version not generated unless asked.
+#### 3.3 Client AI
+- **Free tier**: 5 richieste/mese, accesso limitato.
+- **Pro tier**: 100/giorno, insights avanzati.
+Feature AI dettagliate: AI Workout Coach (chat contestuale durante workout), Multi-modal (text/foto/video → text/image/YouTube), AI Visual Demos (Gemini flash image gen), AI Form Analysis (OpenAI Vision, Pro), Personalized Advice, AI Workout Analysis inline, Realtime Voice Assistant.
+
+#### 3.4 Matrice riassuntiva Client
+Tabella: Feature × Free / Pro, con colonna AI.
+
+### 4. Demo account quick reference
+- Trainer demo: `andrea.mypersonal.fit@gmail.com` (Basic), UUID `00000000-0000-0000-0000-000000000002`, flag `demo-user` in localStorage.
+- Dove vive il popup "Coming Soon" per upgrade (`PlanCard`).
+
+### 5. Related docs
+Link a: `client-workouts-view.md`, `docs/client-area/REQUIREMENTS.md`, `docs/trainer-dashboard/REQUIREMENTS.md`, `docs/pricing-plans/REQUIREMENTS.md`, `docs/ai/TECHNICAL.md`, `docs/billing/TECHNICAL.md`.
+
+## Fonti che consolido
+- `src/components/pricing/utils/planFeatures.ts` + `src/translations/en.ts` (`pricing.detailedFeatures.*`).
+- `docs/trainer-dashboard/REQUIREMENTS.md`, `docs/client-area/REQUIREMENTS.md`, `docs/pricing-plans/REQUIREMENTS.md`.
+- Memorie progetto su AI (Workout Assistant, Form Analysis, Program Assistant, Client AI Plan limits), pagamenti Essential vs Pro, packages, invoicing.
+
+## Fuori scope
+- Nessuna modifica al codice o alle traduzioni.
+- Niente sezioni Gym o Studio.
+- Versione italiana non generata salvo richiesta.
