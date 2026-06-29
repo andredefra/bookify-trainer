@@ -47,6 +47,22 @@ import {
   type MockGymInvite,
 } from "@/utils/mockGymInvites";
 
+// Italian Partita IVA checksum (11 digits)
+function isValidPartitaIVA(value: string): boolean {
+  if (!/^\d{11}$/.test(value)) return false;
+  let sum = 0;
+  for (let i = 0; i < 10; i++) {
+    let n = parseInt(value[i], 10);
+    if (i % 2 === 1) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+  }
+  const check = (10 - (sum % 10)) % 10;
+  return check === parseInt(value[10], 10);
+}
+
 
 interface MyGymsSectionProps {
   trainerId?: string;
@@ -61,6 +77,7 @@ interface LocalManualAffiliation {
   kind: "gym" | "studio";
   street: string;
   city?: string;
+  vat?: string;
   status: "pending" | "verified";
   isPrimary?: boolean;
   createdAt: string;
@@ -106,6 +123,7 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
   const [manualKind, setManualKind] = useState<"gym" | "studio">("gym");
   const [manualStreet, setManualStreet] = useState("");
   const [manualCity, setManualCity] = useState("");
+  const [manualVat, setManualVat] = useState("");
   const [manualNotes, setManualNotes] = useState("");
 
   // Invite link state
@@ -145,6 +163,7 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
     setManualKind("gym");
     setManualStreet("");
     setManualCity("");
+    setManualVat("");
     setManualNotes("");
     setGeneratedInvite(null);
   };
@@ -188,15 +207,20 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
   };
 
   const handleGenerateInvite = () => {
-    if (!manualName.trim() || !manualStreet.trim()) {
-      toast.error("Please fill name and address");
+    if (!manualName.trim() || !manualStreet.trim() || !manualCity.trim()) {
+      toast.error("Compila nome, indirizzo e città");
+      return;
+    }
+    if (!isValidPartitaIVA(manualVat.trim())) {
+      toast.error("Partita IVA non valida");
       return;
     }
     const invite = createInvite({
       name: manualName.trim(),
       kind: manualKind,
       street: manualStreet.trim(),
-      city: manualCity.trim() || undefined,
+      city: manualCity.trim(),
+      vat: manualVat.trim(),
       notes: manualNotes.trim() || undefined,
       trainerId,
     });
@@ -209,6 +233,7 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
       kind: invite.kind,
       street: invite.street,
       city: invite.city,
+      vat: invite.vat,
       status: "pending",
       createdAt: invite.createdAt,
       isPrimary:
@@ -449,13 +474,27 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
             />
           </div>
           <div>
-            <Label htmlFor="m-city">City (optional)</Label>
+            <Label htmlFor="m-city">City *</Label>
             <Input
               id="m-city"
               value={manualCity}
               onChange={(e) => setManualCity(e.target.value)}
               placeholder="e.g. Milan"
             />
+          </div>
+          <div>
+            <Label htmlFor="m-vat">Partita IVA *</Label>
+            <Input
+              id="m-vat"
+              value={manualVat}
+              onChange={(e) => setManualVat(e.target.value.replace(/\D/g, "").slice(0, 11))}
+              placeholder="11 cifre numeriche"
+              inputMode="numeric"
+              maxLength={11}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              11 cifre numeriche (codice fiscale aziendale italiano)
+            </p>
           </div>
           <div>
             <Label htmlFor="m-notes">Notes (optional)</Label>
@@ -472,8 +511,12 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
             </Button>
             <Button
               onClick={() => {
-                if (!manualName.trim() || !manualStreet.trim()) {
-                  toast.error("Please fill name and address");
+                if (!manualName.trim() || !manualStreet.trim() || !manualCity.trim()) {
+                  toast.error("Compila nome, indirizzo e città");
+                  return;
+                }
+                if (!isValidPartitaIVA(manualVat.trim())) {
+                  toast.error("Partita IVA non valida");
                   return;
                 }
                 setStep("manual-confirm");

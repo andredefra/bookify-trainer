@@ -9,6 +9,7 @@ export interface MockGymInvite {
   kind: MockGymKind;
   street: string;
   city?: string;
+  vat?: string;
   notes?: string;
   status: MockGymInviteStatus;
   trainerId?: string;
@@ -65,6 +66,7 @@ function decodeInviteFromToken(token: string): MockGymInvite | undefined {
       kind: data.kind,
       street: data.street,
       city: data.city,
+      vat: data.vat,
       notes: data.notes,
       trainerId: data.trainerId,
       trainerEmail: data.trainerEmail,
@@ -106,6 +108,7 @@ export function createInvite(
     kind: data.kind,
     street: data.street,
     city: data.city,
+    vat: data.vat,
     notes: data.notes,
     trainerId: data.trainerId,
     trainerEmail: data.trainerEmail,
