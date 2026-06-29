@@ -45,9 +45,14 @@ export function ClientSidebar({
   setShowSidebar,
   unreadMessageCount = 0,
   user,
-  onLogout
+  onLogout,
+  variant = 'full'
 }: ClientSidebarProps) {
   const { unreadCount } = useClientNotifications();
+  const hiddenInBasic = new Set(['sessions', 'packages', 'training-program']);
+  const items = variant === 'basic'
+    ? sidebarItems.filter(i => !hiddenInBasic.has(i.id))
+    : sidebarItems;
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
