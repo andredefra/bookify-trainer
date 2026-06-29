@@ -147,6 +147,7 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
     setManualKind("gym");
     setManualStreet("");
     setManualCity("");
+    setManualVat("");
     setManualNotes("");
     setGeneratedInvite(null);
   };
