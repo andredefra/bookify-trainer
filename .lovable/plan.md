@@ -1,17 +1,20 @@
 ## Goal
-Show AI Plus in Settings → AI Features as **"Coming Soon"** instead of an active/purchasable subscription. Keep the section visible as a teaser.
+In the "Add gym or studio manually" dialog: make **City required** and add a new **Partita IVA** required field (11-digit Italian VAT with checksum validation).
 
-## Change
-Edit `src/components/trainer/dashboard/tabs/settings/sections/AIFeaturesSection.tsx`:
+## Changes — `src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx`
 
-- Force the view into a single "coming soon" state regardless of `hasAIAccess` (skip Active and Upgrade branches).
-- Replace top-right badge with an amber/purple **"Coming Soon"** badge (Sparkles icon).
-- Replace the price/active card with a promotional card:
-  - Title: **"AI Plus — Coming Soon"**
-  - Subtitle: "Stiamo preparando funzionalità AI potenti per i trainer. Resta sintonizzato."
-  - Keep the €1.99/month hint as "Soon from €1.99/month".
-- Render the features list as a preview (muted, no green checks, "Coming soon" tag on each).
-- Replace the CTA button with a disabled **"Coming Soon"** button (no dialog).
-- Remove the `Manage Subscription` and Upgrade dialog usage.
+1. Add state `manualVat` (string) alongside other manual form fields; reset it in `resetDialog`.
+2. UI:
+   - Change City label `City (optional)` → `City *` (required).
+   - Add a new required `Partita IVA *` input below City. Max length 11, numeric only via `inputMode="numeric"` and `onChange` strip non-digits. Helper text: "11 cifre numeriche".
+3. Validation (used in both Continue button + `handleGenerateInvite`):
+   - Name, Street, City, VAT all required.
+   - VAT must be 11 digits and pass Luhn-style Italian P.IVA checksum (standard algorithm: sum digits at odd positions + double digits at even positions adding digit-sum, then `(10 - sum % 10) % 10` must equal the 11th digit).
+   - On failure show specific toast: "Partita IVA non valida".
+4. Pass `vat` along in the `createInvite` payload and into `LocalManualAffiliation` so it persists (extend the local type with optional `vat?: string`).
 
-No other files affected. Trainer plan logic untouched — only this settings panel is changed.
+## Supporting type change — `src/utils/mockGymInvites.ts`
+- Extend `MockGymInvite` and `createInvite` params to accept optional `vat?: string`.
+- Extend `LocalManualAffiliation` similarly.
+
+No backend/migrations — this dialog stores via localStorage utilities.
