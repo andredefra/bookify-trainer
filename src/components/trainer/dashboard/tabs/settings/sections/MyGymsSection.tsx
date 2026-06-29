@@ -207,15 +207,20 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
   };
 
   const handleGenerateInvite = () => {
-    if (!manualName.trim() || !manualStreet.trim()) {
-      toast.error("Please fill name and address");
+    if (!manualName.trim() || !manualStreet.trim() || !manualCity.trim()) {
+      toast.error("Compila nome, indirizzo e città");
+      return;
+    }
+    if (!isValidPartitaIVA(manualVat.trim())) {
+      toast.error("Partita IVA non valida");
       return;
     }
     const invite = createInvite({
       name: manualName.trim(),
       kind: manualKind,
       street: manualStreet.trim(),
-      city: manualCity.trim() || undefined,
+      city: manualCity.trim(),
+      vat: manualVat.trim(),
       notes: manualNotes.trim() || undefined,
       trainerId,
     });
@@ -228,6 +233,7 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
       kind: invite.kind,
       street: invite.street,
       city: invite.city,
+      vat: invite.vat,
       status: "pending",
       createdAt: invite.createdAt,
       isPrimary:
