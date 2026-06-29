@@ -194,13 +194,15 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
               </div>
             </TabsContent>
             
-            <TabsContent value="ai-assistant" className="mt-0">
-              <TrainerClientAIChat 
-                selectedClient={analyticsClientFilter}
-                clientsData={clients}
-                onClientChange={setAnalyticsClientFilter}
-              />
-            </TabsContent>
+            {!isBasic && (
+              <TabsContent value="ai-assistant" className="mt-0">
+                <TrainerClientAIChat 
+                  selectedClient={analyticsClientFilter}
+                  clientsData={clients}
+                  onClientChange={setAnalyticsClientFilter}
+                />
+              </TabsContent>
+            )}
           </Tabs>
         </CardContent>
       </Card>
