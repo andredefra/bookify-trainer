@@ -176,7 +176,7 @@ export function ClientSidebar({
           
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {sidebarItems.map((item) => {
+            {items.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               const showBadge = item.badge && unreadMessageCount > 0;
