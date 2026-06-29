@@ -108,6 +108,7 @@ export function createInvite(
     kind: data.kind,
     street: data.street,
     city: data.city,
+    vat: data.vat,
     notes: data.notes,
     trainerId: data.trainerId,
     trainerEmail: data.trainerEmail,
