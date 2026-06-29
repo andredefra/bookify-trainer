@@ -157,11 +157,14 @@ export function SubscriptionsSection() {
             </div>
             
             <Button 
-              onClick={() => setShowUpgrade(true)}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+              disabled
+              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 opacity-70 cursor-not-allowed"
             >
-              Upgrade Now - €1.99/month
+              Coming Soon
             </Button>
+            <p className="text-xs text-center text-muted-foreground">
+              L'AI Plan sarà disponibile prossimamente. Continua a usare il piano Basic gratuitamente.
+            </p>
           </CardContent>
         </Card>
       )}
