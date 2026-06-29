@@ -19,6 +19,7 @@ import { CheckInManagerModal } from "./clients/CheckInManagerModal";
 import { ClientWorkoutsDialog } from "./clients/ClientWorkoutsDialog";
 
 import { useClientRoster } from "@/context/ClientRosterContext";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface ClientItem {
   id: number;
@@ -34,6 +35,8 @@ interface ClientsTabProps {
 
 export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
   const { removedIds } = useClientRoster();
+  const plan = useTrainerPlan();
+  const isBasic = plan === "basic";
   const clients = rawClients.filter((c) => !removedIds.has(c.id));
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showClientDialog, setShowClientDialog] = useState(false);
@@ -41,7 +44,8 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [activeClient, setActiveClient] = useState<ClientItem | null>(null);
   const [initialProfileTab, setInitialProfileTab] = useState("overview");
-  const [activeTab, setActiveTab] = useState("clients");
+  const [activeTab, setActiveTabState] = useState("clients");
+  const setActiveTab = (v: string) => setActiveTabState(v === "ai-assistant" && isBasic ? "clients" : v);
   const [analyticsClientFilter, setAnalyticsClientFilter] = useState<string>("all");
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
@@ -140,10 +144,12 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
               <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
                 <TabsTrigger value="clients" className="flex-1 sm:flex-none whitespace-nowrap">Client List</TabsTrigger>
                 <TabsTrigger value="analytics" className="flex-1 sm:flex-none whitespace-nowrap">Performance Analytics</TabsTrigger>
-                <TabsTrigger value="ai-assistant" className="flex-1 sm:flex-none whitespace-nowrap flex items-center gap-1.5">
-                  <Bot className="h-4 w-4" />
-                  AI Assistant
-                </TabsTrigger>
+                {!isBasic && (
+                  <TabsTrigger value="ai-assistant" className="flex-1 sm:flex-none whitespace-nowrap flex items-center gap-1.5">
+                    <Bot className="h-4 w-4" />
+                    AI Assistant
+                  </TabsTrigger>
+                )}
               </TabsList>
             </div>
             
@@ -188,13 +194,15 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
               </div>
             </TabsContent>
             
-            <TabsContent value="ai-assistant" className="mt-0">
-              <TrainerClientAIChat 
-                selectedClient={analyticsClientFilter}
-                clientsData={clients}
-                onClientChange={setAnalyticsClientFilter}
-              />
-            </TabsContent>
+            {!isBasic && (
+              <TabsContent value="ai-assistant" className="mt-0">
+                <TrainerClientAIChat 
+                  selectedClient={analyticsClientFilter}
+                  clientsData={clients}
+                  onClientChange={setAnalyticsClientFilter}
+                />
+              </TabsContent>
+            )}
           </Tabs>
         </CardContent>
       </Card>
