@@ -198,7 +198,7 @@ export default function GymOnboarding() {
                 </div>
                 <div className="grid md:grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="o-street">Street / Address</Label>
+                    <Label htmlFor="o-street">Street / Address *</Label>
                     <Input
                       id="o-street"
                       value={street}
@@ -206,8 +206,41 @@ export default function GymOnboarding() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="o-city">City</Label>
+                    <Label htmlFor="o-city">City *</Label>
                     <Input id="o-city" value={city} onChange={(e) => setCity(e.target.value)} />
+                  </div>
+                </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-3 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <Label htmlFor="o-vat" className="text-sm">
+                      Partita IVA * <span className="text-xs text-muted-foreground font-normal">(inserita dal trainer — conferma o correggi)</span>
+                    </Label>
+                    {invite.vat && (
+                      <Badge variant="outline" className="text-[10px]">
+                        Pre-compilata dal trainer
+                      </Badge>
+                    )}
+                  </div>
+                  <Input
+                    id="o-vat"
+                    value={vat}
+                    onChange={(e) => {
+                      setVat(e.target.value.replace(/\D/g, "").slice(0, 11));
+                      setVatConfirmed(false);
+                    }}
+                    placeholder="11 cifre numeriche"
+                    inputMode="numeric"
+                    maxLength={11}
+                  />
+                  <div className="flex items-start gap-2 pt-1">
+                    <Checkbox
+                      id="o-vat-confirm"
+                      checked={vatConfirmed}
+                      onCheckedChange={(c) => setVatConfirmed(c === true)}
+                    />
+                    <Label htmlFor="o-vat-confirm" className="text-xs font-normal leading-tight cursor-pointer">
+                      Confermo che la Partita IVA è corretta e appartiene a {name || "questa entità"}.
+                    </Label>
                   </div>
                 </div>
               </CardContent>
