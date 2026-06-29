@@ -1,11 +1,17 @@
 ## Goal
-Remove the "AI Assistant" tab inside Client Management for the Basic plan (Andrea's mockup), since AI is not part of the launch. Keep it visible for Essential/Pro.
+Show AI Plus in Settings → AI Features as **"Coming Soon"** instead of an active/purchasable subscription. Keep the section visible as a teaser.
 
 ## Change
-In `src/components/trainer/dashboard/tabs/ClientsTab.tsx`:
-- Import `useTrainerPlan` from `@/context/TrainerPlanContext`.
-- Compute `const plan = useTrainerPlan(); const isBasic = plan === "basic";`.
-- Conditionally render the `TabsTrigger` for `ai-assistant` and its corresponding `TabsContent` only when `!isBasic`.
-- Safety: if `activeTab === "ai-assistant"` and `isBasic`, fall back to `"clients"`.
+Edit `src/components/trainer/dashboard/tabs/settings/sections/AIFeaturesSection.tsx`:
 
-No other files affected — Essential/Pro behavior unchanged.
+- Force the view into a single "coming soon" state regardless of `hasAIAccess` (skip Active and Upgrade branches).
+- Replace top-right badge with an amber/purple **"Coming Soon"** badge (Sparkles icon).
+- Replace the price/active card with a promotional card:
+  - Title: **"AI Plus — Coming Soon"**
+  - Subtitle: "Stiamo preparando funzionalità AI potenti per i trainer. Resta sintonizzato."
+  - Keep the €1.99/month hint as "Soon from €1.99/month".
+- Render the features list as a preview (muted, no green checks, "Coming soon" tag on each).
+- Replace the CTA button with a disabled **"Coming Soon"** button (no dialog).
+- Remove the `Manage Subscription` and Upgrade dialog usage.
+
+No other files affected. Trainer plan logic untouched — only this settings panel is changed.
