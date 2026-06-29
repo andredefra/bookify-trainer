@@ -35,6 +35,8 @@ interface ClientsTabProps {
 
 export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
   const { removedIds } = useClientRoster();
+  const plan = useTrainerPlan();
+  const isBasic = plan === "basic";
   const clients = rawClients.filter((c) => !removedIds.has(c.id));
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showClientDialog, setShowClientDialog] = useState(false);
@@ -42,7 +44,8 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [activeClient, setActiveClient] = useState<ClientItem | null>(null);
   const [initialProfileTab, setInitialProfileTab] = useState("overview");
-  const [activeTab, setActiveTab] = useState("clients");
+  const [activeTab, setActiveTabState] = useState("clients");
+  const setActiveTab = (v: string) => setActiveTabState(v === "ai-assistant" && isBasic ? "clients" : v);
   const [analyticsClientFilter, setAnalyticsClientFilter] = useState<string>("all");
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
