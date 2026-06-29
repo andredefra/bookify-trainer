@@ -52,7 +52,11 @@ export default function GymOnboarding() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (token) setInvite(getInviteByToken(token));
+    if (token) {
+      const fresh = getInviteByToken(token);
+      setInvite(fresh);
+      if (fresh?.vat) setVat(fresh.vat);
+    }
   }, [token]);
 
   if (!invite) {
