@@ -1,450 +1,341 @@
-# Trainer Plans — Basic vs Pro Feature Reference
+# MyPersonal — Feature Catalog: Trainer & Client
 
-This document is the canonical, detailed reference of every feature exposed by
-the trainer side of MyPersonal, broken down per plan tier. It covers:
-
-1. The **Basic plan** — the plan the demo account
-   `andrea.mypersonal.fit@gmail.com` is on.
-2. The **Pro plan** — the full business tier (inherits Essential + Basic).
-
-Essential is documented as part of Pro (since Pro = Basic + Essential + Pro‑only).
-Source of truth for the feature list: `src/components/pricing/utils/planFeatures.ts`
-and the strings under `pricing.detailedFeatures.*` in `src/translations/en.ts`
-and `src/translations/it.ts`.
-
-> Related docs:
-> - `docs/trainer-dashboard/REQUIREMENTS.md` — functional requirements
-> - `docs/trainer-dashboard/TECHNICAL.md` — technical reference
-> - `docs/trainer-dashboard/client-workouts-view.md` — Workouts modal (Basic feature)
-> - `docs/pricing-plans/REQUIREMENTS.md` — pricing and plans
+> Scope: this document covers **Trainer** plans (Basic / Essential / Pro + AI Plus add‑on) and **Client** plans (Free / Pro + AI). **Gym** and **Studio** features are intentionally excluded.
+>
+> Demo reference: `andrea.mypersonal.fit@gmail.com` runs the **Trainer Basic** experience.
 
 ---
 
 ## 1. Overview
 
-| Plan       | Positioning                                   | Stacks on top of |
-| ---------- | --------------------------------------------- | ---------------- |
-| Basic      | Free starter — trainer presence + CRM         | —                |
-| Essential  | Paid mid — operations & client delivery       | Basic            |
-| Pro        | Full business — payments, invoicing, growth   | Essential        |
+MyPersonal ships two product surfaces relevant here:
 
-**Add‑ons (apply to any plan):**
+- **Trainer dashboard** — `/dashboard-basic`, `/dashboard-essential`, `/dashboard` (Pro).
+- **Client area** — `/client-dashboard` (full client) and `/user-dashboard` (leaner "MyPersonal AI app").
 
-| Add‑on   | Price       | What it unlocks                                                   |
-| -------- | ----------- | ----------------------------------------------------------------- |
-| AI Plus  | €1.99 / mo  | Advanced AI features (form analysis, advanced insights, etc.)     |
-| Studio   | €89 / mo    | Multi‑trainer Studio operator dashboard (service / PT entity)     |
+Plans are **stacked**:
 
-**Plan‑switching UX.** On the public landing page, the *Upgrade to Essential*
-and *Go Pro* buttons currently open a "Coming Soon" popup that funnels the user
-back into the Basic flow (`src/components/pricing/PlanCard.tsx`).
+```
+Trainer Pro  ⊃  Trainer Essential  ⊃  Trainer Basic
+Client Pro   ⊃  Client Free
+AI Plus (€1.99/mo) is an add-on on top of any Trainer plan.
+```
+
+Source of truth for the public plan list: `src/components/pricing/utils/planFeatures.ts` and `src/translations/en.ts` → `pricing.detailedFeatures.*`. Entitlements are not enforced server‑side yet — the active plan is read from the route and the `demo-user` localStorage flag.
 
 ---
 
-## 2. Basic plan — full feature catalog
+# PART A — TRAINER
 
-Everything documented in this section is available to the demo account
-`andrea.mypersonal.fit@gmail.com`. All features live in the trainer dashboard
-under `src/components/trainer/dashboard/` and are mounted on `/dashboard`.
+## 2.1 Trainer Basic (free starter — Andrea's account)
 
-### 2.1 Sales Management (CRM)
+Routed to `/dashboard-basic`. Tabs in `src/components/trainer/dashboard/tabs/`.
 
-- **What it is.** Integrated CRM with a visual sales pipeline. Tracks leads from
-  first contact to conversion, supports follow‑up reminders, surfaces
-  conversion reporting, and keeps an activity timeline per potential client.
-- **Where it lives.** `Sales` tab → `tabs/SalesTab.tsx` (+ `tabs/sales/`).
-- **Structure.**
-  - Pipeline columns (lead → contacted → qualified → won/lost).
-  - Lead detail drawer with timeline, notes, contact info.
-  - KPI strip on top (new leads, conversion rate, expected revenue).
-- **Flow.**
-  1. Lead enters from public profile / manual add.
-  2. Trainer drags through pipeline stages.
-  3. Activities, notes, reminders are logged on the lead card.
-  4. Conversion marks lead as client (creates client record).
-- **Notes / limits.** Basic has the pipeline and reporting; the **Business
-  Dashboard** (Kanban scoring, automated sales sequences, advanced analytics)
-  is Pro‑only.
+### Sales Management (basic, no invoicing)
+- **What** — Lead → client pipeline with sales entries per contact.
+- **Where** — Sales / CRM tab. Backed by `SalesEntriesContext`, `ClientRosterContext` (localStorage in demo).
+- **Structure** — Pipeline columns, contact drawer, sales entry rows (sessions / packages / programs).
+- **Flow** — Capture lead → log sales entry → convert to client → mark terminated when churned.
+- **Limits** — No invoice/receipt issuance, no Stripe checkout, no installment management.
 
-### 2.2 Personal Trainer Page
+### Personal Page
+- **What** — Public trainer profile page consumed by prospects.
+- **Where** — `/trainer/:id` (`src/pages/TrainerProfile.tsx`); content edited in Settings → Profile.
+- **Structure** — Hero, About, Experience, Availability, Reviews tabs (`components/trainer/*Tab.tsx`).
+- **Flow** — Trainer edits profile in Settings → public page renders → leads contact via `BookingForm`.
+- **Limits** — No e‑commerce module exposed (sessions/packages booking gated by higher plans).
 
-- **What it is.** A public trainer profile at a custom URL
-  (`personal.ai/<yourname>`), with bio, photos, certifications, before/after
-  results, integrated reviews, social links and local SEO.
-- **Where it lives.** Public route + `Settings` → Public profile section.
-- **Structure.** Hero, About, Certifications, Results gallery, Reviews carousel,
-  Contact / Book CTA, Social proof footer.
-- **Flow.**
-  1. Trainer fills profile fields in Settings.
-  2. Public URL is generated.
-  3. Visitors land, browse, and use the contact CTA which feeds the CRM.
-- **Notes / limits.** Booking via this page (real session sales) requires
-  Essential (sessions) or Pro (packages).
+### Client Management + Client Workouts View
+- **What** — 360° roster of clients with profile, metrics, history.
+- **Where** — Clients tab; profile in `ClientProfile.tsx`; cards in `ClientCard.tsx`.
+- **Structure** — Roster grid → client card → profile drawer (metrics, goals, sessions). The card now exposes a **Dumbbell button** next to the eye icon that opens `ClientWorkoutsDialog`.
+- **Flow** — Invite client (`clientInvitationService`) → client appears in roster → trainer opens profile or Workouts dialog to inspect progress.
+- **Workouts dialog** — Date presets (7d/30d/3m/All) + custom range, exercise filter, **Month → Day** nested accordions, expand/collapse all, 30 sessions/page, progression deltas (▲/▼) vs the previous occurrence of each exercise. Full spec: [`client-workouts-view.md`](./client-workouts-view.md).
+- **Limits** — No program assignment from this view (Essential+).
 
-### 2.3 Client Management
+### Messaging
+- **What** — In‑app chat with clients (text + video).
+- **Where** — Messages tab; `useMessages`, `useMessageNotifications`; media to `chat-media` bucket (≤10 PDFs / 20 MB).
+- **Structure** — Conversation list, message thread, attachment uploader, video thumbnail generator.
+- **Flow** — Open thread → type / attach → send → real‑time updates via Supabase channels.
 
-- **What it is.** Complete client database with rich profiles (goals, medical
-  limitations, preferences), unlimited clients, private trainer‑only notes,
-  emergency contact info, plus a quick view of every workout the client has
-  logged.
-- **Where it lives.** `Clients` tab → `tabs/ClientsTab.tsx` and
-  `tabs/clients/*`.
-- **Structure.**
-  - Client list with search / segment chips.
-  - Each `ClientCard` exposes three actions:
-    - **View** (eye icon) — full profile drawer.
-    - **Workouts** (dumbbell icon) — opens
-      `ClientWorkoutsDialog.tsx` (see §2.3.1).
-    - **Message** — opens the chat (uses Messaging system).
-  - Profile drawer tabs: Info, Goals, Medical, Notes, History.
-- **Flow.**
-  1. Trainer adds client (manual or via lead conversion).
-  2. Fills goals + medical profile (height/gender etc. — DB fields documented
-     in memory `user-profiles-height-gender`).
-  3. Opens Workouts dialog to monitor adherence to the plan they sent.
-- **Notes / limits.** Reviews **cannot be hidden or deleted** by the trainer
-  (transparency rule). Workout view is read‑only.
+### Calendar
+- **What** — Personal availability + appointments overview.
+- **Where** — Calendar tab.
+- **Structure** — Month/week views, availability blocks, appointment chips.
+- **Flow** — Set availability → manual events → see overlap with sessions.
+- **Limits** — No Sessions booking engine (that's Essential), no Packages/Services (Pro).
 
-#### 2.3.1 Client Workouts View (Dumbbell button)
+### Reviews (read‑only)
+- **What** — Reviews left by clients; surfaced on the public profile.
+- **Where** — Reviews tab; `useTrainerReviews`.
+- **Structure** — List + aggregate rating.
+- **Flow** — Client submits review → appears immediately.
+- **Rule** — **Trainers cannot hide or delete reviews** (transparency).
 
-Detailed in `docs/trainer-dashboard/client-workouts-view.md`. Summary:
+### Analytics (basic)
+- **What** — KPI snapshot (active clients, recent activity, revenue summary).
+- **Where** — Overview tab.
+- **Limits** — No time filters, no aggregated client deep‑dive, no AI assistant (Essential+ / AI Plus).
 
-- Two‑level collapsible accordion: **Month → Day**.
-- Per‑set delta vs the previous time the same exercise was performed
-  (▲ green / ▼ red / = grey).
-- Per‑exercise summary line: "+X kg avg, +Y reps avg vs last time".
-- Toolbar: date presets (7 d / 30 d / 3 m / All), custom From–To range,
-  exercise filter, Expand all / Collapse all, pagination (30 sessions / page).
-- Default state: latest month expanded, most recent session expanded.
-- Data source: `src/data/training/demoWorkoutLogs.ts` (demo) or live
-  `workout_logs` table.
-
-### 2.4 Client Messaging System
-
-- **What it is.** Real‑time trainer ↔ client chat with photo & video sharing
-  (for form checking), automatic session‑reminder messages, push notifications.
-  **Unlimited** messaging for all clients.
-- **Where it lives.** `Messages` tab → `tabs/MessagesTab.tsx`
-  (+ `tabs/messages/`). Backed by the messaging system documented in
-  memory `features/messaging/full-system-with-video`.
-- **Structure.** Conversation list (left), thread view (right), media uploader,
-  video thumbnail generator, attachment preview.
-- **Flow.**
-  1. Trainer or client opens a thread.
-  2. Messages, photos, videos, voice notes are exchanged in real time.
-  3. Media is stored in the `chat-media` bucket (≤10 MB each, see project
-     memory).
-- **Notes / limits.** AI form analysis on uploaded videos is a Pro / AI Plus
-  feature (OpenAI Vision).
-
-### 2.5 Basic Calendar
-
-- **What it is.** Integrated calendar with event management, availability
-  management and basic scheduling.
-- **Where it lives.** `Calendar` tab → `tabs/CalendarTab.tsx`.
-- **Structure.** Month / week / day views, availability blocks, event detail
-  popovers.
-- **Flow.**
-  1. Trainer defines weekly availability.
-  2. Manual events can be created (consult, meetings).
-  3. Conflicts are surfaced visually.
-- **Notes / limits.** Full session booking flows (waitlist, postpone, group
-  sessions) are Essential.
-
-### 2.6 Reviews Management
-
-- **What it is.** Collect reviews, display them on the trainer page, respond,
-  monitor reputation, analyze feedback.
-- **Where it lives.** `Reviews` tab → `tabs/ReviewsTab.tsx`
-  (+ `tabs/reviews/`).
-- **Structure.** Review list with rating filters, response composer, KPI
-  strip (avg rating, response rate, sentiment).
-- **Flow.**
-  1. Client leaves review post‑session / post‑package.
-  2. Trainer replies publicly.
-  3. Reputation metrics roll up to Analytics.
-- **Notes / limits.** **Reviews cannot be hidden or deleted** (project‑wide
-  transparency rule).
-
-### 2.7 Basic Analytics
-
-- **What it is.** Essential performance metrics, client progress tracking,
-  basic session statistics, simple reporting dashboard.
-- **Where it lives.** `Analytics` tab → `tabs/AnalyticsTab.tsx`
-  (+ `tabs/analytics/`).
-- **Structure.** KPI cards (active clients, new clients this period, retention,
-  reviews avg), simple time‑series charts.
-- **Flow.** Trainer selects period filter → cards/charts refresh.
-- **Notes / limits.** Advanced segmentation, LTV, seasonality, benchmarking,
-  context‑aware AI assistant on analytics are **Pro‑only** (see §3.10).
-
-### 2.8 Google Calendar Integration
-
-- **What it is.** Bidirectional sync with Google Calendar — schedule conflicts
-  surfaced, busy slots auto‑blocked, Google reminders mirrored, unified agenda
-  view.
-- **Where it lives.** `Settings` → Integrations.
-- **Flow.** Trainer authenticates with Google → calendars are linked → events
-  flow both ways.
+### Google Calendar sync
+- **What** — Two‑way sync of MyPersonal events with Google Calendar.
+- **Where** — Settings → Integrations.
+- **Flow** — Connect Google account → events mirror both ways.
 
 ---
 
-## 3. Pro plan — full feature catalog
+## 2.2 Trainer Essential (everything in Basic + the below)
 
-Pro inherits everything from Basic (§2) and Essential (§3.1–3.5). Pro‑specific
-features start at §3.6.
+Routed to `/dashboard-essential`.
 
-### Quick recap of inherited tiers
+| Inherited from Basic |
+|---|
+| Sales, Personal Page, Clients (+ Workouts View), Messaging, Calendar, Reviews, Basic Analytics, Google Sync |
 
-**Everything in Basic.** CRM, Personal Page, Client Management (+ Workouts
-view), Messaging, Calendar, Reviews, Basic Analytics, Google Calendar.
+### Essential‑only features
 
-**Everything in Essential.** Sessions, Waitlist, Programs, Session & Program
-Analytics, Exercise List + Management, Cash Payments, Payment Installments.
+#### Sessions booking
+- 1:1 and group sessions, public or private, with capacity and pricing.
+- Tab: Sessions; dialogs in `components/trainer/SessionDialogs.tsx`, `useGymSessions`/postponement hooks.
+- Postponement flow with tokenized email links and accept/decline (`handle-session-postponement`, `respond-to-postponement` edge fns).
 
----
+#### Waitlist
+- Fully booked sessions expose a waitlist; promotion when a seat frees up.
 
-### 3.1 Sessions Management (Essential)
+#### Programs (build & assign)
+- Wizard: general info + Weekly/Daily builder; routines & circuits (snapshot copy into sessions); flexible periodization (master pattern → week overrides → daily overrides with `isOverride` flag).
+- Tab: Programs; `useTrainingPrograms`, `useExerciseLibraryManager`.
 
-- **What it is.** Create individual and group sessions, dynamic calendar with
-  real‑time availability, direct client booking, flexible cancellation,
-  postponement with automatic notifications.
-- **Where it lives.** `Sessions` tab → `tabs/SessionsTab.tsx`
-  (+ `tabs/sessions/`).
-- **Structure.** Session creator (1:1 / group), availability matrix, booking
-  log, cancellation policy editor, postponement queue.
-- **Flow.**
-  1. Trainer defines session templates and slots.
-  2. Clients book from the public page or app.
-  3. Cancellations / postponements trigger automated notifications.
-  4. Past sessions show a recap (per memory `past-sessions-recap`) and disable
-     rating after the window.
-- **Related features.** Client‑side session proposal (bidirectional date
-  negotiation), invited sessions payment flow for Pro trainers.
+#### Session analytics & Program analytics
+- Adherence, completion, drop‑off, AI program analysis (gated by AI Plus where applicable).
 
-### 3.2 Waitlist Management (Essential)
+#### Exercise list (read‑only DB) + Exercise management (private DB)
+- Central exercise DB with strict linking (no free text), Enum biomechanics/forceType, GIF‑first UI.
+- Trainers maintain their **private** library for custom/modified/deleted exercises.
 
-- **What it is.** Auto‑fill released slots, prioritize by client history,
-  notify immediately, manage confirmation deadlines, analyze released/occupied
-  spots.
-- **Where it lives.** `Sessions` tab → Waitlist drawer per fully‑booked
-  session.
-- **Flow.** Slot frees → next in line is notified → confirmation window →
-  promote or skip → re‑open if expired.
+#### Cash payments + confirmation dialog
+- Mark a sale as paid in cash; **Cash Confirmation Dialog** (confirm / reject / no‑show).
 
-### 3.3 Custom Training Programs (Essential)
+#### Payment installments
+- Split a sale across installments (manual). AI installment detection available via AI Plus.
 
-- **What it is.** Drag‑and‑drop workout builder, exercise library with
-  demonstration GIFs, periodized + progressive programming, per‑client
-  assignment, adherence & completion tracking.
-- **Where it lives.** `Programs` tab → `tabs/ProgramsTab.tsx`
-  (+ `tabs/programs/`, `tabs/routines/`).
-- **Structure.**
-  - **2‑step wizard**: general info → Weekly/Daily builder.
-  - **Routines & Circuits** — exercise clusters and rounds/rest groups.
-  - **Flexible periodization** — master pattern + week overrides + daily
-    overrides (`isOverride` flag).
-  - **Routine snapshot logic** — routines are copied as snapshots into
-    sessions so later edits don't mutate history.
-  - **Sequential packages** — programs unlock sequentially in packages.
-  - **Manual session editing** — trainers can edit sessions in Manage Program.
-- **Flow.**
-  1. Trainer creates / picks a template.
-  2. Builds weeks → days → routines → exercises (strict link to central
-     exercise DB).
-  3. Assigns to client(s) — snapshot is copied per client.
-  4. Adherence is tracked from client workout logs and surfaced in Programs
-     Analytics + Client Workouts view.
+#### Transactions tab
+- History of cash + (later) digital sales for the trainer.
 
-### 3.4 Exercise List & Exercise Management (Essential)
-
-- **What it is.** Extensive exercise database (with biomechanics, force type,
-  mechanics enums, GIF‑first UI) plus the ability to create/modify private
-  exercises, organize categories, add notes/videos, manage variations.
-- **Where it lives.** Exercise library shared inside Programs and Client
-  personal library (read‑only trainer DB + editable private DB).
-- **Notes.** Exercises **strictly link to the central DB** — no free text.
-
-### 3.5 Cash Payments & Payment Installments (Essential)
-
-- **Cash Payments.** Accept and track cash with a manual confirmation dialog
-  (Received / Rejected / No‑show), receipt management, payment history,
-  offline flexibility for in‑person sessions.
-- **Payment Installments.** Split large payments, due‑date tracking,
-  reminders, installment progress monitoring, **AI‑powered installment
-  detection** that suggests installment structure from a transaction.
-- **Where they live.** `Sales` and `Programs` checkout flows; cash
-  confirmation dialog is shared. Essential plans get **cash + installments
-  only**; Stripe e‑commerce checkout is Pro.
-
-### 3.6 Package Management (Pro)
-
-- **What it is.** Build packages of sessions or durations, set flexible
-  pricing and validity, assign to clients, track usage.
-- **Where it lives.** `Packages` tab → `tabs/PackagesTab.tsx`
-  (+ `tabs/packages/`).
-- **Structure.**
-  - Package builder (sessions count or duration, price, validity, visibility).
-  - **`is_public` toggle** controls whether clients can browse the package.
-  - Integrated payments inside Manage Package.
-  - History detail view for past memberships on client side.
-- **Flow.**
-  1. Trainer creates package and toggles `is_public`.
-  2. Client browses public packages and purchases (e‑commerce checkout, see
-     §3.8).
-  3. Usage decremented per booked session; analytics rolled up.
-
-### 3.7 Additional Services (Pro)
-
-- **What it is.** Custom services beyond training (nutrition consult, fitness
-  assessment, specialty offerings), with pricing and booking.
-- **Where it lives.** `Services` tab → `tabs/ServicesTab.tsx`
-  (+ `tabs/services/`).
-
-### 3.8 Digital & Cash Payments (Pro)
-
-- **What it is.** Full Stripe integration: pre‑authorization before sessions,
-  automatic post‑session billing, cash tracking, no‑show protection with
-  customizable policies. Direct e‑commerce checkout replaces the pending
-  request flow used by Essential.
-- **Essential vs Pro distinction.** Essential = cash + manual confirmation.
-  Pro = full Stripe + invoice + receipts.
-- **Where it lives.** Checkout flows across Sales / Packages / Programs;
-  Stripe edge functions (`create-checkout`, `customer-portal`,
-  `check-subscription`).
-
-### 3.9 Pay in 3 Installments / Electronic Invoicing / Transactions (Pro)
-
-- **Pay in 3.** Automatic installment scheduling, reminders, partial payment
-  tracking, debt recovery hooks, collection reports.
-- **Electronic Invoicing.** Full invoice workflow (draft → sent), tax
-  compliance, customizable templates, digital receipts. Receipts column for
-  invoice/refund requests in Payment History.
-- **Transactions Tab.** `Transactions` tab → `tabs/TransactionsTab.tsx`
-  (+ `tabs/transactions/`). Complete financial tracking, reconciliation,
-  revenue reporting, expense management, P&L view, AI‑suggested installment
-  detection per transaction.
-
-### 3.10 Business Dashboard & Advanced Analytics (Pro)
-
-- **Business Dashboard.** Kanban sales pipeline (richer than Basic CRM), lead
-  scoring & qualification, automated sales sequences, conversion analytics,
-  sales performance, growth metrics.
-- **Advanced Analytics.** Detailed performance dashboard, growth metrics
-  (new clients, retention, **LTV**), seasonality / trend analysis, automatic
-  financial reports, **industry benchmarking**, data export.
-- **Extras.**
-  - **Time filters** for revenue analytics (dynamic comparison vs previous
-    period).
-  - **Sales last‑month KPI** with dynamic % change.
-  - **All‑clients aggregated view** that hides per‑individual data.
-  - **Context‑aware AI Assistant** on analytics — consults a system prompt
-    seeded with the current client/trainer context (memory
-    `context-aware-ai-assistant`).
-  - **Program Sales Analytics** is available on Essential **and** Pro.
-- **Where it lives.** `Analytics` tab → `tabs/AnalyticsTab.tsx`
-  (+ `tabs/analytics/`), plus dashboards inside `tabs/sales/` and
-  `tabs/transactions/`.
-
-### 3.11 Priority Support (Pro)
-
-- 24‑hour response SLA, dedicated channel, specialized technical assistance,
-  exclusive training webinars, monthly business‑strategy consultation.
+#### Business analytics (mid)
+- Revenue and sales summary; richer KPIs than Basic but without Pro's time filters and aggregated client view.
 
 ---
 
-## 4. Cross‑plan feature matrix
+## 2.3 Trainer Pro (everything in Essential + the below)
 
-Legend: ✓ included · — not included · ➕ add‑on · ◐ partial
+Routed to `/dashboard` (force‑set to English by `LanguageContext`).
 
-| Feature                                  | Basic | Essential | Pro |
-| ---------------------------------------- | :---: | :-------: | :-: |
-| Sales Management (CRM)                   |   ✓   |     ✓     |  ✓  |
-| Personal Trainer Page                    |   ✓   |     ✓     |  ✓  |
-| Client Management                        |   ✓   |     ✓     |  ✓  |
-| Client Workouts View (Dumbbell button)   |   ✓   |     ✓     |  ✓  |
-| Messaging (text + media)                 |   ✓   |     ✓     |  ✓  |
-| Basic Calendar                           |   ✓   |     ✓     |  ✓  |
-| Reviews Management                       |   ✓   |     ✓     |  ✓  |
-| Basic Analytics                          |   ✓   |     ✓     |  ✓  |
-| Google Calendar Integration              |   ✓   |     ✓     |  ✓  |
-| Sessions Management                      |   —   |     ✓     |  ✓  |
-| Waitlist                                 |   —   |     ✓     |  ✓  |
-| Custom Training Programs                 |   —   |     ✓     |  ✓  |
-| Session Analytics                        |   —   |     ✓     |  ✓  |
-| Program Analytics                        |   —   |     ✓     |  ✓  |
-| Exercise List / Management               |   —   |     ✓     |  ✓  |
-| Cash Payments + Confirmation             |   —   |     ✓     |  ✓  |
-| Payment Installments                     |   —   |     ✓     |  ✓  |
-| Program Sales Analytics                  |   —   |     ✓     |  ✓  |
-| Package Management                       |   —   |     —     |  ✓  |
-| Additional Services                      |   —   |     —     |  ✓  |
-| Stripe Digital Payments (e‑commerce)     |   —   |     —     |  ✓  |
-| Pay in 3 Installments (Pro automation)   |   —   |     —     |  ✓  |
-| Electronic Invoicing (draft → sent)      |   —   |     —     |  ✓  |
-| Transactions Tab                         |   —   |     —     |  ✓  |
-| Business Dashboard                       |   —   |     —     |  ✓  |
-| Advanced Analytics (LTV, benchmarks)     |   —   |     —     |  ✓  |
-| Context‑aware AI on Analytics            |   —   |     —     |  ✓  |
-| Priority Support                         |   —   |     —     |  ✓  |
-| AI Plus features (form analysis, etc.)   |   ➕   |     ➕     |  ➕  |
-| Studio operator (multi‑trainer)          |   ➕   |     ➕     |  ➕  |
+| Inherited from Essential (which inherits Basic) |
+|---|
+| All Essential features above + all Basic features |
 
----
+### Pro‑only features
 
-## 5. Add‑ons
+#### Packages
+- Session‑based **and** duration‑based packages; visibility toggle (`is_public`); sequential program unlock; full package builder + assignment.
+- Booking system fully operational (propose / confirm / complete).
 
-### 5.1 AI Plus — €1.99 / month
+#### Services
+- Sell ancillary services beyond sessions/packages.
 
-Unlocks advanced AI features on top of any plan:
+#### Full payments (Stripe e‑commerce)
+- Direct e‑commerce checkout via `create-checkout` / `customer-portal` edge functions. Replaces "pending request" flow used in Essential.
 
-- **Contextual AI Chat** during workouts (FAB).
-- **Multi‑modal** input (text / photo / video) and output (text / image / YT).
-- **AI‑generated visual demos** (Gemini flash image generation).
-- **AI Form Analysis** (OpenAI Vision) on uploaded technique videos.
-- **Personalized advice** seeded with workout context.
-- **AI Program Assistant** — chatbot + Word/PDF doc upload & automation.
-- **Inline Workout Analysis** rendered beneath the workout log.
-- **Context‑aware AI Assistant** on analytics (also unlocked at Pro tier).
-- **Client AI Plan** integration — Workout Coach, Exercise Demos, Advanced
-  Insights (Pro tier unlimited; Free tier 5 requests/month).
+#### Pro installments
+- Installment plans tied to invoices and Stripe schedules.
 
-### 5.2 Studio — €89 / month
+#### Invoicing
+- Full **draft → sent** invoice workflow, receipts column on payment history, sync between trainer and client invoice views.
 
-Transforms the account into a **Studio operator** (a distinct business entity
-from Gym infra — see memory `gym-studio-separation-entities`). Adds:
+#### Transactions (extended)
+- Stripe + cash + installments unified; refunds and receipt management.
 
-- Studio dashboard with trainer performance leaderboard and reviews.
-- **Multi‑trainer packages & programs** — primary + assigned trainers, swap
-  sessions across trainers.
-- Source tracking (Direct / Gym / Studio) on revenue.
-- Transactions tab filtered per trainer.
-- Availability & shift management with overlap finder.
-- Comprehensive clients system with aggregated stats and AI context.
-- **White‑label branding** via `custom_css` (logos + colors).
-- Facility type selector (PT Studio vs Fitness Center).
+#### Business dashboard
+- Pro‑level Overview with deeper KPIs and quick links.
+
+#### Advanced analytics
+- Dynamic **time filters** on revenue.
+- **All Clients aggregated view** (aggregated stats only, no individual leak).
+- **Context‑aware AI assistant** for client and trainer analytics (chat anchored to current view).
+- Last‑month KPI with dynamic % comparison; revenue comparison vs previous period.
+
+#### Priority support
+- Faster human support SLA.
 
 ---
 
-## 6. Demo account quick reference
+## 2.4 Trainer AI — AI Plus add‑on (€1.99/mo)
 
-| Field            | Value                                                |
-| ---------------- | ---------------------------------------------------- |
-| Email            | `andrea.mypersonal.fit@gmail.com`                    |
-| Plan             | Basic                                                |
-| Demo user UUID   | `00000000-0000-0000-0000-000000000002` (DB / RLS)    |
-| LocalStorage     | Must preserve `demo-user` flag                       |
-| Upgrade buttons  | Open "Coming Soon" dialog (`PlanCard.tsx`)           |
-| Workouts modal   | `src/components/trainer/dashboard/tabs/clients/ClientWorkoutsDialog.tsx` |
-| Workout mock data| `src/data/training/demoWorkoutLogs.ts`               |
+Add‑on on top of any Trainer plan. Activated via `TrainerAIUpgradeDialog` (mock activation in demo). Hook: `useTrainerAISubscription`.
+
+| Capability | Notes |
+|---|---|
+| AI Business Insights | Performance, retention, goal metrics on the analytics surface. |
+| AI Chat Assistant | Ask questions about the trainer's business; context‑aware on Pro analytics. |
+| AI Client Analytics | Deep dive on a single client's progress and trends. |
+| Smart Recommendations | Personalized training/engagement suggestions. |
+| AI Installment Detection | Suggests installment splits on transactions (`detect-installment` edge fn). |
+| AI Program Assistant | Chatbot + Word/PDF upload for program creation (`analyze-program-document`, `analyze-training-program`). |
+| AI Workout Analysis | Inline contextual results beneath a workout log (`analyze-workout`). |
+
+All AI calls route through Lovable AI Gateway / OpenAI edge functions (`openai-chat`, `openai-realtime`, `openai-trainer-chat`).
 
 ---
 
-## 7. Related docs
+## 2.5 Trainer feature matrix
 
-- `docs/trainer-dashboard/client-workouts-view.md`
-- `docs/trainer-dashboard/REQUIREMENTS.md`
-- `docs/trainer-dashboard/TECHNICAL.md`
-- `docs/pricing-plans/REQUIREMENTS.md`
-- `docs/pricing-plans/TECHNICAL.md`
-- `docs/admin-marketing/` (internal staff tooling — separate module)
+| Feature | Basic | Essential | Pro | AI Plus |
+|---|:-:|:-:|:-:|:-:|
+| Sales (basic) | ✓ | ✓ | ✓ | — |
+| Personal Page | ✓ | ✓ | ✓ | — |
+| Clients + Workouts View | ✓ | ✓ | ✓ | — |
+| Messaging (text + video) | ✓ | ✓ | ✓ | — |
+| Calendar | ✓ | ✓ | ✓ | — |
+| Reviews (read‑only) | ✓ | ✓ | ✓ | — |
+| Basic Analytics | ✓ | ✓ | ✓ | — |
+| Google Calendar Sync | ✓ | ✓ | ✓ | — |
+| Sessions + Waitlist | — | ✓ | ✓ | — |
+| Programs + Exercise DB | — | ✓ | ✓ | — |
+| Session/Program Analytics | — | ✓ | ✓ | — |
+| Cash payments + installments | — | ✓ | ✓ | — |
+| Transactions | — | ✓ | ✓ | — |
+| Packages | — | — | ✓ | — |
+| Services | — | — | ✓ | — |
+| Full payments (Stripe) | — | — | ✓ | — |
+| Invoicing (draft → sent) | — | — | ✓ | — |
+| Advanced analytics + time filters | — | — | ✓ | — |
+| Aggregated clients view | — | — | ✓ | — |
+| Context‑aware AI on analytics | — | — | ✓ | Required |
+| AI Business Insights / Chat / Recs | — | — | — | ✓ |
+| AI Program Assistant + doc upload | — | — | — | ✓ |
+| AI Installment Detection | — | — | — | ✓ |
+| Priority support | — | — | ✓ | — |
+
+---
+
+# PART B — CLIENT
+
+Two consumer surfaces:
+- `/client-dashboard` — full client experience.
+- `/user-dashboard` — leaner "MyPersonal AI app" promoted by `/user` landing.
+
+In demo, both flows share a `DEMO_CLIENT_ID` row, so per‑user isolation is not yet enforced.
+
+## 3.1 Client Free
+
+### Overview / Progress
+- Fitness progress, body measurements (WHtR / WHR with status badges), recent activity.
+- `useUserProfile`, `useCheckInAnalytics`, body measurements components.
+
+### Training Program & Workout Log
+- Read program assigned by trainer (exercises, schedule, periodization, routines, circuits).
+- Log workouts (sets / reps / notes), mark complete; `useWorkoutLogs`, `useExerciseTracking`.
+- Activity logging supports cardio (indoor/outdoor), MET‑based calorie calc, goal linkage.
+
+### Sessions
+- Upcoming + past sessions; postponement accept/decline (in‑app or tokenized email link via `respond-to-postponement`).
+- Client‑side **session proposal** (bidirectional date negotiation).
+- Past sessions show recap and disable ratings.
+
+### Packages
+- View owned packages, sessions remaining, validity.
+- Purchase / renew (cash, digital, installments). Browse only `is_public` packages. View full history of past memberships.
+
+### Trainers
+- View connected trainer(s) and their public profile (trainer marketing block stripped).
+
+### Messaging
+- Chat with trainer (text + video + attachments to `chat-media`).
+
+### Check‑ins
+- HubFit‑inspired weight / mood / photos / notes.
+- Distinguishes Personal goals vs Trainer goals.
+- Standalone modal entry (flag icon) with Micro/Macro analytics.
+
+### Settings & Health Documents
+- Profile (height, gender, DOB).
+- Upload up to **10 PDFs / 20 MB** to `health-documents` bucket.
+- Subscription management (`useUserSubscription`).
+
+### Calendar
+- `My Calendar` tab with react‑day‑picker; side‑by‑side daily view.
+- Distinguishes **Training Day** (local entry) vs **Trainer Session** (requires request).
+
+## 3.2 Client Pro
+
+Same surface as Free, with elevated capability gates:
+
+| Capability | Free | Pro |
+|---|:-:|:-:|
+| View program & log workouts | ✓ | ✓ |
+| Sessions / Postponement | ✓ | ✓ |
+| Packages purchase + history | ✓ | ✓ |
+| Messaging with trainer | ✓ | ✓ |
+| Check‑ins + analytics | ✓ | ✓ |
+| AI assistant requests | **5 / month** | **100 / day** |
+| Advanced AI insights | limited | ✓ |
+| AI Form Analysis (OpenAI Vision) | — | ✓ |
+
+Hook: `useAIAccess`, `useClientSubscription`. Demo mode is hardwired to 4/5 to showcase the near‑limit state.
+
+## 3.3 Client AI features
+
+All AI is gated by tier above. Surfaced where the client already works (program, log, chat).
+
+| Feature | What it does | Where | Notes |
+|---|---|---|---|
+| AI Workout Coach (contextual chat) | FAB during a workout; chat anchored to the current session. | Workout log | Personalized advice via system prompt with workout context. |
+| Multi‑modal I/O | Inputs: text / photo / video. Outputs: text / image / YouTube embed. | Chat | `openai-chat` edge fn. |
+| AI Visual Demos | Generates exercise setup images on demand. | Exercise detail | Gemini flash image generation. |
+| AI Form Analysis | Upload a video/photo of a rep → technique feedback. | Workout log | OpenAI Vision. **Pro only**. |
+| AI Workout Analysis (inline) | Post‑workout analysis rendered inline beneath the log. | Workout log | `analyze-workout` edge fn. |
+| Realtime Voice Assistant | Voice chat with the AI coach. | Chat | `openai-realtime` + `useRealtimeVoice`. |
+| Program Progress Analysis | AI analyses overall program adherence/progression. | Program view | Limited on Free, full on Pro. |
+
+## 3.4 Client matrix
+
+| Area | Free | Pro |
+|---|:-:|:-:|
+| Overview / progress | ✓ | ✓ |
+| Program view + workout log | ✓ | ✓ |
+| Sessions + postponement | ✓ | ✓ |
+| Packages (browse, buy, history) | ✓ | ✓ |
+| Trainers view | ✓ | ✓ |
+| Messaging (text + video) | ✓ | ✓ |
+| Check‑ins + analytics | ✓ | ✓ |
+| Health documents (10 × 20 MB) | ✓ | ✓ |
+| Calendar (Training Day + Trainer Session) | ✓ | ✓ |
+| AI requests | 5/mo | 100/day |
+| AI Workout Coach contextual chat | limited | ✓ |
+| AI Visual Demos | limited | ✓ |
+| AI Workout Analysis inline | limited | ✓ |
+| AI Form Analysis (OpenAI Vision) | — | ✓ |
+| Realtime Voice Assistant | limited | ✓ |
+| Advanced AI insights | limited | ✓ |
+
+---
+
+## 4. Demo account quick reference
+
+- **Trainer demo**: `andrea.mypersonal.fit@gmail.com` — Trainer **Basic**.
+- Hardcoded demo UUID: `00000000-0000-0000-0000-000000000002`.
+- Preserve `demo-user` flag in `localStorage` — RLS and demo logic depend on it.
+- "Upgrade to Essential" / "Go Pro" buttons on the public pricing page open a **Coming Soon** popup (`src/components/pricing/PlanCard.tsx`) that redirects users back to start with Basic.
+
+## 5. Related docs
+
+- [`client-workouts-view.md`](./client-workouts-view.md) — Workouts dialog detailed spec.
+- [`REQUIREMENTS.md`](./REQUIREMENTS.md) — Trainer dashboard requirements.
+- [`TECHNICAL.md`](./TECHNICAL.md) — Trainer dashboard technical notes.
+- [`../client-area/REQUIREMENTS.md`](../client-area/REQUIREMENTS.md) — Client area requirements.
+- [`../client-area/TECHNICAL.md`](../client-area/TECHNICAL.md) — Client area technical notes.
+- [`../pricing-plans/REQUIREMENTS.md`](../pricing-plans/REQUIREMENTS.md) — Plan pricing & positioning.
+- [`../ai/TECHNICAL.md`](../ai/TECHNICAL.md) — AI gateway, models, edge functions.
+- [`../billing/TECHNICAL.md`](../billing/TECHNICAL.md) — Subscriptions, Stripe, AI usage limits.
