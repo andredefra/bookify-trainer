@@ -102,6 +102,7 @@ const AppContent = () => {
         <Route path="/dashboard-basic" element={<DashboardBasic />} />
         <Route path="/dashboard-essential" element={<DashboardEssential />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route path="/client-dashboard-basic" element={<ClientDashboardBasic />} />
         <Route path="/studio-dashboard" element={<StudioDashboard />} />
         <Route path="/gym-dashboard" element={<GymDashboard />} />
         <Route path="/gym-onboarding/:token" element={<GymOnboarding />} />
