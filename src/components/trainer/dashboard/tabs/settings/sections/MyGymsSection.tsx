@@ -574,6 +574,9 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
               <Copy className="w-4 h-4 mr-2" /> Copy
             </Button>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Il link è pubblico e funziona sul sito pubblicato. Non aprirlo dall'anteprima Lovable: richiederebbe il login all'editor.
+          </p>
           <DialogFooter>
             <Button onClick={closeDialog}>Done</Button>
           </DialogFooter>
