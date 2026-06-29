@@ -32,7 +32,7 @@ export function ProspectToClientDialog({
 
     setIsLoading(true);
     try {
-      const isDemo = typeof window !== 'undefined' && localStorage.getItem('demo-user') === 'true';
+      const isDemo = typeof window !== 'undefined' && !!localStorage.getItem('demo-user');
       const finalMessage = message || `Ciao ${contact.name}, ti invito a diventare mio cliente per iniziare il nostro percorso di allenamento personalizzato!`;
 
       if (isDemo) {
