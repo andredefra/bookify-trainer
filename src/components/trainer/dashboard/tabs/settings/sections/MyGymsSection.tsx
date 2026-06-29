@@ -107,6 +107,7 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
   const [manualKind, setManualKind] = useState<"gym" | "studio">("gym");
   const [manualStreet, setManualStreet] = useState("");
   const [manualCity, setManualCity] = useState("");
+  const [manualVat, setManualVat] = useState("");
   const [manualNotes, setManualNotes] = useState("");
 
   // Invite link state
