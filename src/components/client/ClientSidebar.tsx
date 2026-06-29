@@ -21,6 +21,7 @@ interface ClientSidebarProps {
     profileImage?: string;
   };
   onLogout?: () => void;
+  variant?: 'full' | 'basic';
 }
 
 const sidebarItems = [
