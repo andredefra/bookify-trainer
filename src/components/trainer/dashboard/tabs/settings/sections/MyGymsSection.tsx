@@ -61,6 +61,7 @@ interface LocalManualAffiliation {
   kind: "gym" | "studio";
   street: string;
   city?: string;
+  vat?: string;
   status: "pending" | "verified";
   isPrimary?: boolean;
   createdAt: string;
