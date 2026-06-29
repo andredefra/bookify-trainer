@@ -105,8 +105,16 @@ export default function GymOnboarding() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !street.trim()) {
-      toast.error("Please fill the entity name and address");
+    if (!name.trim() || !street.trim() || !city.trim()) {
+      toast.error("Compila nome, indirizzo e città");
+      return;
+    }
+    if (!isValidPartitaIVA(vat.trim())) {
+      toast.error("Partita IVA non valida (11 cifre)");
+      return;
+    }
+    if (!vatConfirmed) {
+      toast.error("Conferma la Partita IVA per continuare");
       return;
     }
     const parsed = accountSchema.safeParse({ email, password, confirm });
@@ -121,7 +129,8 @@ export default function GymOnboarding() {
         name: name.trim(),
         kind,
         street: street.trim(),
-        city: city.trim() || undefined,
+        city: city.trim(),
+        vat: vat.trim(),
         status: "verified",
         verifiedAt: new Date().toISOString(),
         gymEmail: email.trim().toLowerCase(),
