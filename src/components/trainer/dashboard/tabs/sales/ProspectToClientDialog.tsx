@@ -32,12 +32,29 @@ export function ProspectToClientDialog({
 
     setIsLoading(true);
     try {
-      await ClientInvitationService.createInvitation({
-        client_email: contact.email,
-        client_name: contact.name,
-        lead_id: contact.id,
-        message: message || `Ciao ${contact.name}, ti invito a diventare mio cliente per iniziare il nostro percorso di allenamento personalizzato!`
-      });
+      const isDemo = typeof window !== 'undefined' && localStorage.getItem('demo-user') === 'true';
+      const finalMessage = message || `Ciao ${contact.name}, ti invito a diventare mio cliente per iniziare il nostro percorso di allenamento personalizzato!`;
+
+      if (isDemo) {
+        const existing = JSON.parse(localStorage.getItem('demo-client-invitations') || '[]');
+        const invitation = {
+          id: crypto.randomUUID(),
+          client_email: contact.email,
+          client_name: contact.name,
+          lead_id: contact.id,
+          message: finalMessage,
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        };
+        localStorage.setItem('demo-client-invitations', JSON.stringify([invitation, ...existing]));
+      } else {
+        await ClientInvitationService.createInvitation({
+          client_email: contact.email,
+          client_name: contact.name,
+          lead_id: contact.id,
+          message: finalMessage,
+        });
+      }
 
       toast({
         title: "Invito inviato!",
