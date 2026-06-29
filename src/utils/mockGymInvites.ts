@@ -9,6 +9,7 @@ export interface MockGymInvite {
   kind: MockGymKind;
   street: string;
   city?: string;
+  vat?: string;
   notes?: string;
   status: MockGymInviteStatus;
   trainerId?: string;
