@@ -17,6 +17,7 @@ import Dashboard from "./pages/Dashboard";
 import DashboardBasic from "./pages/DashboardBasic";
 import DashboardEssential from "./pages/DashboardEssential";
 import ClientDashboard from "./pages/ClientDashboard";
+import ClientDashboardBasic from "./pages/ClientDashboardBasic";
 import GymDashboard from "./pages/GymDashboard";
 import StudioDashboard from "./pages/StudioDashboard";
 import Privacy from "./pages/Privacy";
@@ -101,6 +102,7 @@ const AppContent = () => {
         <Route path="/dashboard-basic" element={<DashboardBasic />} />
         <Route path="/dashboard-essential" element={<DashboardEssential />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route path="/client-dashboard-basic" element={<ClientDashboardBasic />} />
         <Route path="/studio-dashboard" element={<StudioDashboard />} />
         <Route path="/gym-dashboard" element={<GymDashboard />} />
         <Route path="/gym-onboarding/:token" element={<GymOnboarding />} />

@@ -70,7 +70,11 @@ const Login = () => {
     localStorage.setItem('demo-user', JSON.stringify(demoUserData));
 
     if (loginType === 'client') {
-      navigate('/client-dashboard');
+      if (normalizedEmail === allowedEmail && password === allowedPassword) {
+        navigate('/client-dashboard-basic');
+      } else {
+        navigate('/client-dashboard');
+      }
     } else if (loginType === 'gym') {
       navigate('/gym-dashboard');
     } else if (loginType === 'studio') {

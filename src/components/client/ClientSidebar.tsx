@@ -21,6 +21,7 @@ interface ClientSidebarProps {
     profileImage?: string;
   };
   onLogout?: () => void;
+  variant?: 'full' | 'basic';
 }
 
 const sidebarItems = [
@@ -44,9 +45,14 @@ export function ClientSidebar({
   setShowSidebar,
   unreadMessageCount = 0,
   user,
-  onLogout
+  onLogout,
+  variant = 'full'
 }: ClientSidebarProps) {
   const { unreadCount } = useClientNotifications();
+  const hiddenInBasic = new Set(['sessions', 'packages', 'training-program']);
+  const items = variant === 'basic'
+    ? sidebarItems.filter(i => !hiddenInBasic.has(i.id))
+    : sidebarItems;
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -170,7 +176,7 @@ export function ClientSidebar({
           
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {sidebarItems.map((item) => {
+            {items.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               const showBadge = item.badge && unreadMessageCount > 0;
