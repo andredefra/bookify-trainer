@@ -150,8 +150,16 @@ export function getInvitesForTrainer(trainerId?: string): MockGymInvite[] {
   return getAllInvites().filter((i) => i.trainerId === trainerId);
 }
 
+const PUBLIC_APP_URL = "https://bookify-trainer.lovable.app";
+
 export function buildOnboardingUrl(token: string): string {
   const origin =
     typeof window !== "undefined" ? window.location.origin : "";
-  return `${origin}/gym-onboarding/${token}`;
+  const isInternal =
+    !origin ||
+    origin.includes("id-preview--") ||
+    origin.includes("lovable.dev") ||
+    origin.includes("lovableproject.com");
+  const base = isInternal ? PUBLIC_APP_URL : origin;
+  return `${base}/gym-onboarding/${token}`;
 }
