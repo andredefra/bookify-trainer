@@ -42,6 +42,8 @@ export default function GymOnboarding() {
   const [kind, setKind] = useState<"gym" | "studio">(initialInvite?.kind || "gym");
   const [street, setStreet] = useState(initialInvite?.street || "");
   const [city, setCity] = useState(initialInvite?.city || "");
+  const [vat, setVat] = useState(initialInvite?.vat || "");
+  const [vatConfirmed, setVatConfirmed] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
 
   const [email, setEmail] = useState("");
