@@ -474,13 +474,27 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
             />
           </div>
           <div>
-            <Label htmlFor="m-city">City (optional)</Label>
+            <Label htmlFor="m-city">City *</Label>
             <Input
               id="m-city"
               value={manualCity}
               onChange={(e) => setManualCity(e.target.value)}
               placeholder="e.g. Milan"
             />
+          </div>
+          <div>
+            <Label htmlFor="m-vat">Partita IVA *</Label>
+            <Input
+              id="m-vat"
+              value={manualVat}
+              onChange={(e) => setManualVat(e.target.value.replace(/\D/g, "").slice(0, 11))}
+              placeholder="11 cifre numeriche"
+              inputMode="numeric"
+              maxLength={11}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              11 cifre numeriche (codice fiscale aziendale italiano)
+            </p>
           </div>
           <div>
             <Label htmlFor="m-notes">Notes (optional)</Label>
@@ -497,8 +511,12 @@ export function MyGymsSection({ trainerId }: MyGymsSectionProps) {
             </Button>
             <Button
               onClick={() => {
-                if (!manualName.trim() || !manualStreet.trim()) {
-                  toast.error("Please fill name and address");
+                if (!manualName.trim() || !manualStreet.trim() || !manualCity.trim()) {
+                  toast.error("Compila nome, indirizzo e città");
+                  return;
+                }
+                if (!isValidPartitaIVA(manualVat.trim())) {
+                  toast.error("Partita IVA non valida");
                   return;
                 }
                 setStep("manual-confirm");
