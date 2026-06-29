@@ -8,12 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Building2, ShieldCheck, Upload, X, ArrowRight } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import {
   getInviteByToken,
   updateInvite,
   type MockGymInvite,
 } from "@/utils/mockGymInvites";
+import { isValidPartitaIVA } from "@/utils/validatePartitaIVA";
 
 const accountSchema = z
   .object({
@@ -40,6 +42,8 @@ export default function GymOnboarding() {
   const [kind, setKind] = useState<"gym" | "studio">(initialInvite?.kind || "gym");
   const [street, setStreet] = useState(initialInvite?.street || "");
   const [city, setCity] = useState(initialInvite?.city || "");
+  const [vat, setVat] = useState(initialInvite?.vat || "");
+  const [vatConfirmed, setVatConfirmed] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
 
   const [email, setEmail] = useState("");
@@ -48,7 +52,11 @@ export default function GymOnboarding() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (token) setInvite(getInviteByToken(token));
+    if (token) {
+      const fresh = getInviteByToken(token);
+      setInvite(fresh);
+      if (fresh?.vat) setVat(fresh.vat);
+    }
   }, [token]);
 
   if (!invite) {
@@ -97,8 +105,16 @@ export default function GymOnboarding() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !street.trim()) {
-      toast.error("Please fill the entity name and address");
+    if (!name.trim() || !street.trim() || !city.trim()) {
+      toast.error("Compila nome, indirizzo e città");
+      return;
+    }
+    if (!isValidPartitaIVA(vat.trim())) {
+      toast.error("Partita IVA non valida (11 cifre)");
+      return;
+    }
+    if (!vatConfirmed) {
+      toast.error("Conferma la Partita IVA per continuare");
       return;
     }
     const parsed = accountSchema.safeParse({ email, password, confirm });
@@ -113,7 +129,8 @@ export default function GymOnboarding() {
         name: name.trim(),
         kind,
         street: street.trim(),
-        city: city.trim() || undefined,
+        city: city.trim(),
+        vat: vat.trim(),
         status: "verified",
         verifiedAt: new Date().toISOString(),
         gymEmail: email.trim().toLowerCase(),
@@ -181,7 +198,7 @@ export default function GymOnboarding() {
                 </div>
                 <div className="grid md:grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="o-street">Street / Address</Label>
+                    <Label htmlFor="o-street">Street / Address *</Label>
                     <Input
                       id="o-street"
                       value={street}
@@ -189,8 +206,41 @@ export default function GymOnboarding() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="o-city">City</Label>
+                    <Label htmlFor="o-city">City *</Label>
                     <Input id="o-city" value={city} onChange={(e) => setCity(e.target.value)} />
+                  </div>
+                </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-3 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <Label htmlFor="o-vat" className="text-sm">
+                      Partita IVA * <span className="text-xs text-muted-foreground font-normal">(inserita dal trainer — conferma o correggi)</span>
+                    </Label>
+                    {invite.vat && (
+                      <Badge variant="outline" className="text-[10px]">
+                        Pre-compilata dal trainer
+                      </Badge>
+                    )}
+                  </div>
+                  <Input
+                    id="o-vat"
+                    value={vat}
+                    onChange={(e) => {
+                      setVat(e.target.value.replace(/\D/g, "").slice(0, 11));
+                      setVatConfirmed(false);
+                    }}
+                    placeholder="11 cifre numeriche"
+                    inputMode="numeric"
+                    maxLength={11}
+                  />
+                  <div className="flex items-start gap-2 pt-1">
+                    <Checkbox
+                      id="o-vat-confirm"
+                      checked={vatConfirmed}
+                      onCheckedChange={(c) => setVatConfirmed(c === true)}
+                    />
+                    <Label htmlFor="o-vat-confirm" className="text-xs font-normal leading-tight cursor-pointer">
+                      Confermo che la Partita IVA è corretta e appartiene a {name || "questa entità"}.
+                    </Label>
                   </div>
                 </div>
               </CardContent>
