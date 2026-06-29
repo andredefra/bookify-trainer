@@ -1,20 +1,21 @@
-## Goal
-In the "Add gym or studio manually" dialog: make **City required** and add a new **Partita IVA** required field (11-digit Italian VAT with checksum validation).
+## Obiettivo
+Nella pagina di onboarding gym/studio (`/gym-onboarding/:token`), mostrare la **Partita IVA** inserita dal trainer e richiedere alla palestra di confermarla (o correggerla) prima di completare l'onboarding.
 
-## Changes — `src/components/trainer/dashboard/tabs/settings/sections/MyGymsSection.tsx`
+## Modifiche
 
-1. Add state `manualVat` (string) alongside other manual form fields; reset it in `resetDialog`.
-2. UI:
-   - Change City label `City (optional)` → `City *` (required).
-   - Add a new required `Partita IVA *` input below City. Max length 11, numeric only via `inputMode="numeric"` and `onChange` strip non-digits. Helper text: "11 cifre numeriche".
-3. Validation (used in both Continue button + `handleGenerateInvite`):
-   - Name, Street, City, VAT all required.
-   - VAT must be 11 digits and pass Luhn-style Italian P.IVA checksum (standard algorithm: sum digits at odd positions + double digits at even positions adding digit-sum, then `(10 - sum % 10) % 10` must equal the 11th digit).
-   - On failure show specific toast: "Partita IVA non valida".
-4. Pass `vat` along in the `createInvite` payload and into `LocalManualAffiliation` so it persists (extend the local type with optional `vat?: string`).
+### `src/pages/GymOnboarding.tsx`
+1. Aggiungere stato `vat` inizializzato da `invite.vat`.
+2. Nella card "1. Confirm entity details", aggiungere una nuova riga con il campo **Partita IVA *** (max 11, solo cifre, helper "11 cifre numeriche").
+3. Aggiungere una checkbox obbligatoria sotto al campo: *"Confermo che la Partita IVA è corretta"*.
+4. Validazione in `handleSubmit`:
+   - VAT obbligatoria, 11 cifre, checksum P.IVA italiana valida (stesso algoritmo già usato in `MyGymsSection.tsx` — estrarre in util condivisa `src/utils/validatePartitaIVA.ts` per evitare duplicazione).
+   - Checkbox conferma deve essere true → toast "Conferma la Partita IVA per continuare".
+5. Passare `vat` a `updateInvite(...)` insieme agli altri campi.
 
-## Supporting type change — `src/utils/mockGymInvites.ts`
-- Extend `MockGymInvite` and `createInvite` params to accept optional `vat?: string`.
-- Extend `LocalManualAffiliation` similarly.
+### `src/utils/validatePartitaIVA.ts` (nuovo)
+Esporta `isValidPartitaIVA(value: string): boolean`. Refactor leggero: `MyGymsSection.tsx` importa da qui invece di tenere la funzione locale.
 
-No backend/migrations — this dialog stores via localStorage utilities.
+### `src/utils/mockGymInvites.ts`
+`updateInvite` già accetta partial di `MockGymInvite` (che ora ha `vat?`), quindi nessun cambio strutturale — solo verificare che `vat` venga persistito nel record dell'invito esistente (già supportato).
+
+Nessuna modifica DB / edge function — flusso interamente localStorage demo.
