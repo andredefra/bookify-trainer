@@ -50,9 +50,9 @@ export function SubscriptionsSection() {
                 Active
               </Badge>
             ) : (
-              <Button onClick={() => setShowUpgrade(true)} size="sm">
-                Upgrade to AI Plan
-              </Button>
+              <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+                Coming Soon
+              </Badge>
             )}
           </div>
         </CardHeader>
