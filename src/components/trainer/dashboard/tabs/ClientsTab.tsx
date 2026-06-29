@@ -144,10 +144,12 @@ export function ClientsTab({ clients: rawClients }: ClientsTabProps) {
               <TabsList className="w-auto flex flex-nowrap justify-start min-w-max">
                 <TabsTrigger value="clients" className="flex-1 sm:flex-none whitespace-nowrap">Client List</TabsTrigger>
                 <TabsTrigger value="analytics" className="flex-1 sm:flex-none whitespace-nowrap">Performance Analytics</TabsTrigger>
-                <TabsTrigger value="ai-assistant" className="flex-1 sm:flex-none whitespace-nowrap flex items-center gap-1.5">
-                  <Bot className="h-4 w-4" />
-                  AI Assistant
-                </TabsTrigger>
+                {!isBasic && (
+                  <TabsTrigger value="ai-assistant" className="flex-1 sm:flex-none whitespace-nowrap flex items-center gap-1.5">
+                    <Bot className="h-4 w-4" />
+                    AI Assistant
+                  </TabsTrigger>
+                )}
               </TabsList>
             </div>
             
