@@ -19,6 +19,7 @@ import { CheckInManagerModal } from "./clients/CheckInManagerModal";
 import { ClientWorkoutsDialog } from "./clients/ClientWorkoutsDialog";
 
 import { useClientRoster } from "@/context/ClientRosterContext";
+import { useTrainerPlan } from "@/context/TrainerPlanContext";
 
 interface ClientItem {
   id: number;
