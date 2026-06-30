@@ -26,6 +26,53 @@ const ClientDashboardBasic = () => {
   const [activeSettingsSection, setActiveSettingsSection] = useState<string | undefined>(undefined);
   const mainRef = useRef<HTMLDivElement | null>(null);
 
+  const initialGoals = useMemo<ProgressItem[]>(() => {
+    const now = new Date().toISOString();
+    const mk = (
+      goal: string, current: number, target: number, unit: string,
+      goalType: string, daysToTarget: number,
+      source: "personal" | "trainer", trainerName?: string,
+      exerciseName?: string,
+    ): ProgressItem => {
+      const isReverse = current > target;
+      const progress = isReverse
+        ? Math.max(0, Math.min(100, Math.round(((current - Math.min(current, target)) / Math.max(1, current - target)) * 0)) ) // placeholder, overwritten
+        : Math.max(0, Math.min(100, Math.round((current / target) * 100)));
+      // Simple progress: percent toward target accounting for reverse goals (e.g. weight loss, run time)
+      const p = isReverse
+        ? Math.max(0, Math.min(100, Math.round(((100 - ((current - target) / current) * 100))))) // close enough for demo
+        : progress;
+      return {
+        id: `seed-${goal.toLowerCase().replace(/\s+/g, "-")}`,
+        goal,
+        current,
+        target,
+        unit,
+        progress: p,
+        lastUpdated: now,
+        createdAt: now,
+        source,
+        trainerName,
+        trainerId: source === "trainer" ? "trainer-marco" : undefined,
+        goalType,
+        targetDate: addDays(new Date(), daysToTarget).toISOString(),
+        exerciseName,
+        logs: [{
+          id: `seed-log-${goal}`,
+          date: now,
+          value: current,
+          source: "manual",
+          note: "Initial value",
+        }],
+      };
+    };
+    return [
+      mk("Lose Weight", 82, 76, "kg", "weight_loss", 60, "personal"),
+      mk("Bench Press 1RM", 70, 90, "kg", "strength", 90, "trainer", "Marco Rossi", "Bench Press"),
+      mk("Run 5K", 28, 25, "min", "endurance", 75, "trainer", "Marco Rossi"),
+    ];
+  }, []);
+
   useEffect(() => {
     const storedUser = localStorage.getItem('demo-user');
     if (storedUser) {
