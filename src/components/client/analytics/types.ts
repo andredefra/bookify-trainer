@@ -84,4 +84,6 @@ export interface WorkoutAnalyticsProps {
   workoutTypes?: WorkoutType[];
   fitnessTrackerData?: FitnessTrackerData;
   bodyCompositionData?: BodyCompositionData[];
+  hideAI?: boolean;
 }
+
