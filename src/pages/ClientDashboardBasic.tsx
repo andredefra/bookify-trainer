@@ -93,7 +93,7 @@ const ClientDashboardBasic = () => {
                 <TrainersTab />
               </TabsContent>
               <TabsContent value="analytics" className="mt-0">
-                <AnalyticsTab />
+                <AnalyticsTab hideAI />
               </TabsContent>
               <TabsContent value="my-calendar" className="mt-0">
                 <MyCalendarTab upcomingSessions={[]} />

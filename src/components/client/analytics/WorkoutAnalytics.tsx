@@ -68,8 +68,10 @@ export function WorkoutAnalytics({
   weeklyData,
   workoutTypes,
   fitnessTrackerData,
-  bodyCompositionData
+  bodyCompositionData,
+  hideAI = false
 }: WorkoutAnalyticsProps) {
+
   const [timeframe, setTimeframe] = useState("1month");
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const isMobile = useIsMobile();
@@ -417,10 +419,13 @@ export function WorkoutAnalytics({
             </CardDescription>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button onClick={runAIAnalysis} disabled={isLoadingAI} variant="outline" size="sm" className="flex-1 sm:flex-none">
-              {isLoadingAI ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Brain className="h-4 w-4 mr-2" />}
-              <span className="hidden xs:inline">AI </span>Analysis
-            </Button>
+            {!hideAI && (
+              <Button onClick={runAIAnalysis} disabled={isLoadingAI} variant="outline" size="sm" className="flex-1 sm:flex-none">
+                {isLoadingAI ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Brain className="h-4 w-4 mr-2" />}
+                <span className="hidden xs:inline">AI </span>Analysis
+              </Button>
+            )}
+
             <Select value={timeframe} onValueChange={setTimeframe}>
               <SelectTrigger className="w-full sm:w-32">
                 <SelectValue />
@@ -492,11 +497,14 @@ export function WorkoutAnalytics({
 
         {/* Enhanced Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid grid-cols-3 w-full h-auto gap-1 p-1">
+          <TabsList className={`grid ${hideAI ? 'grid-cols-2' : 'grid-cols-3'} w-full h-auto gap-1 p-1`}>
             <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-2">Overview</TabsTrigger>
-            <TabsTrigger value="ai-insights" className="text-xs sm:text-sm px-2 py-2">AI Insights</TabsTrigger>
+            {!hideAI && (
+              <TabsTrigger value="ai-insights" className="text-xs sm:text-sm px-2 py-2">AI Insights</TabsTrigger>
+            )}
             <TabsTrigger value="activity" className="text-xs sm:text-sm px-2 py-2">Activity</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="overview">
             <div className="grid gap-4">
@@ -519,109 +527,114 @@ export function WorkoutAnalytics({
             </div>
           </TabsContent>
 
-          <TabsContent value="ai-insights">
-            <div className="space-y-4">
-              {/* Enhanced Analytics Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-primary mb-1">{aiInsights.fitnessScore}</div>
-                    <p className="text-xs text-muted-foreground">Fitness Score</p>
-                    <div className="mt-2">
-                      <Progress value={aiInsights.fitnessScore} className="h-2" />
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <div className="text-lg font-bold capitalize mb-1">{aiInsights.dominantIntensity}</div>
-                    <p className="text-xs text-muted-foreground">Activity Level</p>
-                    <Badge variant={aiInsights.dominantIntensity === 'high' ? 'default' : 'secondary'} className="mt-2">
-                      {aiInsights.progressTrend}
-                    </Badge>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <div className="text-lg font-bold mb-1">
-                      {aiInsights.weeklyProgressChange && aiInsights.weeklyProgressChange > 0 ? '+' : ''}{aiInsights.weeklyProgressChange || 0}%
-                    </div>
-                    <p className="text-xs text-muted-foreground">Weekly Change</p>
-                    {aiInsights.progressTrend === 'improving' ? (
-                      <TrendingUp className="h-4 w-4 text-green-500 mx-auto mt-2" />
-                    ) : (
-                      <TrendingDown className="h-4 w-4 text-orange-500 mx-auto mt-2" />
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
+          {!hideAI && (
+            <TabsContent value="ai-insights">
+              <div className="space-y-4">
+                {/* Enhanced Analytics Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-bold text-primary mb-1">{aiInsights.fitnessScore}</div>
+                      <p className="text-xs text-muted-foreground">Fitness Score</p>
+                      <div className="mt-2">
+                        <Progress value={aiInsights.fitnessScore} className="h-2" />
+                      </div>
+                    </CardContent>
+                  </Card>
 
-              {/* Personalized Insights */}
-              {aiInsights.personalizedInsights && aiInsights.personalizedInsights.length > 0 && (
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Brain className="h-4 w-4 text-primary" />
-                      Personalized Insights
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-3">
-                      {aiInsights.personalizedInsights.map((insight, index) => (
-                        <div key={index} className="flex items-start gap-2 p-3 bg-muted/30 rounded-lg">
-                          <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0" />
-                          <p className="text-sm text-foreground">{insight}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-lg font-bold capitalize mb-1">{aiInsights.dominantIntensity}</div>
+                      <p className="text-xs text-muted-foreground">Activity Level</p>
+                      <Badge variant={aiInsights.dominantIntensity === 'high' ? 'default' : 'secondary'} className="mt-2">
+                        {aiInsights.progressTrend}
+                      </Badge>
+                    </CardContent>
+                  </Card>
 
-              {/* Motivation & Improvement Areas */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base">💪 Motivation</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-sm text-muted-foreground leading-relaxed">{aiInsights.currentMotivation}</p>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base">🎯 Focus Areas</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-2">
-                      {aiInsights.improvementAreas.map((area, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
-                          <span className="text-sm text-foreground">{area}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-lg font-bold mb-1">
+                        {aiInsights.weeklyProgressChange && aiInsights.weeklyProgressChange > 0 ? '+' : ''}{aiInsights.weeklyProgressChange || 0}%
+                      </div>
+                      <p className="text-xs text-muted-foreground">Weekly Change</p>
+                      {aiInsights.progressTrend === 'improving' ? (
+                        <TrendingUp className="h-4 w-4 text-green-500 mx-auto mt-2" />
+                      ) : (
+                        <TrendingDown className="h-4 w-4 text-orange-500 mx-auto mt-2" />
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Personalized Insights */}
+                {aiInsights.personalizedInsights && aiInsights.personalizedInsights.length > 0 && (
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Brain className="h-4 w-4 text-primary" />
+                        Personalized Insights
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="space-y-3">
+                        {aiInsights.personalizedInsights.map((insight, index) => (
+                          <div key={index} className="flex items-start gap-2 p-3 bg-muted/30 rounded-lg">
+                            <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0" />
+                            <p className="text-sm text-foreground">{insight}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Motivation & Improvement Areas */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">💪 Motivation</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <p className="text-sm text-muted-foreground leading-relaxed">{aiInsights.currentMotivation}</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">🎯 Focus Areas</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="space-y-2">
+                        {aiInsights.improvementAreas.map((area, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
+                            <span className="text-sm text-foreground">{area}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-            </div>
-          </TabsContent>
+            </TabsContent>
+          )}
+
 
           <TabsContent value="activity">
             <WeeklyActivityChart weeklyData={actualWeeklyData} chartType="bar" />
           </TabsContent>
         </Tabs>
 
-        {/* AI Analytics Chat Section */}
-        <div className="mt-6">
-          <AnalyticsChat 
-            analyticsStats={analyticsStats} 
-            progressData={progressData} 
-          />
-        </div>
+        {!hideAI && (
+          <div className="mt-6">
+            <AnalyticsChat 
+              analyticsStats={analyticsStats} 
+              progressData={progressData} 
+            />
+          </div>
+        )}
+
       </CardContent>
     </Card>
   );

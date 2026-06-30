@@ -1,21 +1,22 @@
-Move the Preferences tab content into the Account section, merging it under the existing "Fitness Preferences" card. Remove the separate Preferences tab from the settings sidebar.
+Hide all AI-based elements from the Analytics view of the Basic client demo (Andrea), leaving only Overview and Activity tabs.
+
+## Scope
+Changes are gated by a `hideAI` prop so only the Basic client dashboard is affected. Regular client/user dashboards remain unchanged.
 
 ## Changes
 
-**1. `src/components/client/tabs/settings/AccountSection.tsx`**
-- Inside the existing "Fitness Preferences" card (lines 429-488), add above the Experience Level / Preferred Workout Time grid:
-  - A "Fitness Goals" subsection — 6 checkboxes (Weight loss, Muscle tone, Flexibility, Cardiovascular health, Strength building, Athletic performance) wired to local state initialized from a new `goals` prop.
-  - A "Language & Region" subsection — Language select (English/Spanish/French/German) and Measurement Units select (Metric / Imperial).
-- A single "Save Preferences" button at the bottom of the card now saves goals, language, units, experience level, and preferred workout time together (goals/language/units stored in local state + toast for now, matching current PreferencesSection behavior).
-- Add `goals?: string[]` to `AccountSectionProps`.
+**1. `src/components/client/analytics/WorkoutAnalytics.tsx`**
+- Add `hideAI?: boolean` prop.
+- When `hideAI` is true:
+  - Don't render the "AI Analysis" button (the one with the Brain icon next to the timeframe Select).
+  - Remove the "AI Insights" `TabsTrigger` and its entire `TabsContent` block (lines ~522-611).
+  - Change `TabsList` from `grid-cols-3` to `grid-cols-2`.
+  - Don't render the bottom `<AnalyticsChat />` section.
 
-**2. `src/components/client/tabs/settings/SettingsTabContent.tsx`**
-- Remove the "Preferences" sidebar button and its content branch.
-- Remove the `PreferencesSection` import.
-- Pass `goals` to `<AccountSection />`.
-- Remove the "preferences" entries from the header title/description switch.
+**2. `src/components/client/tabs/AnalyticsTab.tsx`**
+- Add `hideAI?: boolean` prop, forward to `<WorkoutAnalytics hideAI={hideAI} />`.
 
-**3. `src/components/client/tabs/settings/PreferencesSection.tsx`**
-- Delete the file (no longer referenced).
+**3. `src/pages/ClientDashboardBasic.tsx`**
+- Pass `hideAI` to `<AnalyticsTab />`.
 
-No changes to trainer/gym/studio settings — this only affects the client settings UI.
+No backend/data changes; no other dashboards touched.
