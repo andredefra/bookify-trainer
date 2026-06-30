@@ -360,7 +360,34 @@ interface TransactionsContextType {
 const TransactionsContext = createContext<TransactionsContextType | undefined>(undefined);
 
 export function TransactionsProvider({ children }: { children: ReactNode }) {
-  const [transactions, setTransactions] = useState<TransactionType[]>(initialTransactions);
+  const [bridgeTx, setBridgeTx] = useState<TransactionType[]>(() => getDemoTransactions() as TransactionType[]);
+
+  useEffect(() => {
+    const refresh = () => setBridgeTx(getDemoTransactions() as TransactionType[]);
+    refresh();
+    return subscribeDemoTransactions(refresh);
+  }, []);
+
+  // Merge bridge demo entries (Andrea) with the in-memory mock seed.
+  const mergedSeed: TransactionType[] = [
+    ...bridgeTx,
+    ...initialTransactions.filter((t) => !bridgeTx.find((b) => b.id === t.id)),
+  ];
+
+  const [transactions, setTransactions] = useState<TransactionType[]>(mergedSeed);
+
+  // Sync trainer state when bridge changes (e.g. client requests invoice/refund or confirms receipt)
+  useEffect(() => {
+    setTransactions((prev) => {
+      const bridgeIds = new Set(bridgeTx.map((t) => t.id));
+      const merged = [
+        ...bridgeTx,
+        ...prev.filter((t) => !bridgeIds.has(t.id) && !isDemoTx(t)),
+      ];
+      return merged;
+    });
+  }, [bridgeTx]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedTransactions, setSelectedTransactions] = useState<Set<number>>(new Set());
