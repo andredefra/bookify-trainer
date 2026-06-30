@@ -1,5 +1,6 @@
 import { FitnessProgressCard } from "@/components/client/overview/FitnessProgressCard";
 import { UpcomingSessionsCard } from "@/components/client/overview/UpcomingSessionsCard";
+import { UpcomingEventsCard } from "@/components/client/overview/UpcomingEventsCard";
 import { QuickAnalyticsCard } from "@/components/client/overview/QuickAnalyticsCard";
 import { ExpirationAlertsCard } from "@/components/common/ExpirationAlertsCard";
 import { ClientCheckInCard } from "@/components/client/overview/checkin/ClientCheckInCard";
@@ -11,9 +12,10 @@ import { supabase } from "@/integrations/supabase/client";
 interface OverviewProps {
   progressData: ProgressItem[];
   upcomingSessions: SessionItem[];
+  variant?: "default" | "basic";
 }
 
-export function Overview({ progressData, upcomingSessions }: OverviewProps) {
+export function Overview({ progressData, upcomingSessions, variant = "default" }: OverviewProps) {
   const [clientId, setClientId] = useState<string>('00000000-0000-0000-0000-000000000002');
   const [connectedApps, setConnectedApps] = useState({
     googleFit: false,
@@ -42,6 +44,8 @@ export function Overview({ progressData, upcomingSessions }: OverviewProps) {
     });
   }, []);
 
+  const isBasic = variant === "basic";
+
   return (
     <div className="space-y-6">
       <FitnessProgressCard 
@@ -49,11 +53,21 @@ export function Overview({ progressData, upcomingSessions }: OverviewProps) {
         connectedApps={connectedApps} 
       />
       <ClientCheckInCard clientId={clientId} />
-      <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ExpirationAlertsCard />
-        <QuickAnalyticsCard />
-      </div>
+      {isBasic ? (
+        <UpcomingEventsCard />
+      ) : (
+        <UpcomingSessionsCard upcomingSessions={upcomingSessions} />
+      )}
+      {isBasic ? (
+        <div className="grid grid-cols-1 gap-6">
+          <QuickAnalyticsCard />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ExpirationAlertsCard />
+          <QuickAnalyticsCard />
+        </div>
+      )}
     </div>
   );
 }

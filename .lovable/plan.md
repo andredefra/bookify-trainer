@@ -1,47 +1,42 @@
-## Aggiunte alla Payment History (demo Andrea)
+## Modifiche su `ClientDashboardBasic` (demo Andrea)
 
-Aggiungere voci mock aggiuntive nella Payment History del client Basic con stati realistici e simulazioni funzionanti.
+Tutto isolato sul dashboard `/client-dashboard-basic` — nessun impatto su altri profili.
 
-### 1. Nuove entries mock nel bridge (`src/lib/demoTransactionsBridge.ts`)
+### 1) Overview: rimuovere Upcoming Expirations
+In `src/components/client/tabs/Overview.tsx` aggiungere prop opzionale `variant?: "basic"`. Quando `variant === "basic"`:
+- non renderizzare `<ExpirationAlertsCard />` (la griglia diventa 1 colonna con la sola `QuickAnalyticsCard`);
+- al posto di `<UpcomingSessionsCard />` renderizzare il nuovo `<UpcomingEventsCard />`.
 
-Aggiungere al `SEED` queste transazioni "storiche" così la tabella mostra più vita:
+In `src/pages/ClientDashboardBasic.tsx` passare `variant="basic"` a `<Overview />`.
 
-- **2025-05-20 — Session — €50 — Card** → `invoiceStatus: "sent_to_client"`, con `invoiceNumber: "INV-2025-0042"` e `invoiceIssuedAt` → badge **"Invoice Available"** + bottone **Download PDF**.
-- **2025-05-10 — Program — €200 — Card** → `refundStatus: "approved"`, `refundProcessedAt` + `refundReason` → badge **"Refund Processed"** + bottone **Download Refund Receipt**.
-- **2025-04-28 — Session — €45 — Cash** → `invoiceStatus: "none"` (pagamento contanti senza fattura richiesta).
-- **2025-04-15 — Package — €300 — Card** → `invoiceStatus: "sent_to_client"` con numero fattura → **Download PDF**.
-- **2025-03-30 — Session — €50 — Card** → `refundStatus: "rejected"`, `refundReason` + `refundRejectedAt` → badge **"Refund Rejected"** (read-only, nessuna azione).
+### 2) Nuovo widget "Upcoming Events"
+Nuovo file `src/components/client/overview/UpcomingEventsCard.tsx`:
+- Titolo "Upcoming Events", descrizione "Planned activities and sessions from your calendar".
+- Bottone in alto a destra "Open Calendar" che fa `navigate('/client-dashboard-basic', { state: { activeTab: 'my-calendar' } })`.
+- Sorgente dati: legge da `localStorage` (chiave `basic-calendar-events`) — stessa chiave che useremo per persistere gli eventi del `MyCalendarTab` (vedi step 4). Se vuoto, seed con 2 eventi mock realistici (es. "Upper Body Workout" domani 18:00, "Session with Marco Rossi" tra 3 giorni 10:00).
+- Mostra max 4 eventi futuri ordinati per data, con icona (Dumbbell/User/Heart/Bed), titolo, data relativa (Today/Tomorrow/EEE d MMM), orario, e badge categoria (Training / Session).
+- Stato vuoto: messaggio + CTA "Plan an Event".
 
-Estendere `DemoTransaction` con i campi opzionali nuovi: `invoiceNumber`, `invoiceIssuedAt`, `refundProcessedAt`, `refundRejectedAt`, `refundReceiptNumber`.
+### 3) Persistenza eventi MyCalendarTab (light touch)
+In `MyCalendarTab.tsx` cambiare `useState<PlannedActivity[]>([])` per leggere/scrivere `localStorage` sotto `basic-calendar-events` (con `useEffect` di sync e parse delle date). Così l'Upcoming Events card e il calendario condividono la stessa fonte.
 
-### 2. Generazione PDF reale lato client
+### 4) Pre-popolare goal del cliente
+I goal vengono inietta come `progressData` passato a `<Overview />` (attualmente `[]`).
 
-Creare `src/lib/demoInvoicePdf.ts` con due funzioni:
-- `downloadInvoicePdf(tx)` → genera un PDF fattura italiano (intestazione "Sarah Johnson — Personal Trainer", P.IVA mock, cliente "Andrea M.", riga servizio, imponibile, totale, numero fattura, data) e fa partire il download.
-- `downloadRefundReceiptPdf(tx)` → genera PDF "Ricevuta di Rimborso" con importo, motivo, data processamento.
+In `src/pages/ClientDashboardBasic.tsx` costruire un array `initialGoals: ProgressItem[]` e passarlo:
 
-Implementazione: usare **jsPDF** (libreria leggera, ~50KB), già compatibile con bundle Vite. Verrà aggiunta come dipendenza.
+- **1 goal personale** (`source: 'personal'`):
+  - "Lose Weight" — current 82, target 76, unit kg, goalType `weight_loss`, targetDate +60gg.
+- **2 goal del trainer** (`source: 'trainer'`, `trainerName: 'Marco Rossi'`):
+  - "Bench Press 1RM" — current 70, target 90, unit kg, goalType `strength`, exerciseId opzionale, targetDate +90gg.
+  - "Run 5K under 25 min" — current 28, target 25, unit min, goalType `endurance`, targetDate +75gg.
 
-### 3. UI: `PaymentsTable.tsx`
+Ogni goal include `id`, `createdAt`, `lastUpdated`, `progress` calcolato, e un primo `logs[0]` con il valore iniziale (struttura coerente con `useGoalManagement.addGoal`).
 
-Nella colonna **Receipts** estendere la logica esistente:
-- `invoiceStatus === "sent_to_client"` + `invoiceNumber` → mostrare badge verde **"Invoice Available"** + icona Download cliccabile che chiama `downloadInvoicePdf(tx)`.
-- `refundStatus === "approved"` → badge verde **"Refund Processed"** + icona Download → `downloadRefundReceiptPdf(tx)`.
-- `refundStatus === "rejected"` → badge grigio/rosso **"Refund Rejected"** (tooltip con motivo, nessun bottone).
-- Lasciare invariati i badge esistenti "Invoice Requested" e "Refund Pending".
+### File coinvolti
+- `src/components/client/tabs/Overview.tsx` (modifica: prop `variant`)
+- `src/components/client/overview/UpcomingEventsCard.tsx` (nuovo)
+- `src/components/client/tabs/MyCalendarTab.tsx` (persistenza localStorage)
+- `src/pages/ClientDashboardBasic.tsx` (passa `variant="basic"` e `progressData` pre-popolato)
 
-### 4. Reset seed
-
-Visto che il seed è già stato salvato in `localStorage` dell'utente, aggiungere un check di versione: bump della costante `SEED_VERSION` nel bridge in modo che al prossimo load le nuove entry mock vengano scritte (preservando le eventuali transazioni create dal trainer demo durante la sessione, oppure semplicemente ricaricando il seed completo — è una demo).
-
-### File toccati
-
-- `src/lib/demoTransactionsBridge.ts` — nuovi campi + nuove entries + versioning seed
-- `src/lib/demoInvoicePdf.ts` — **nuovo**, generatore PDF
-- `src/components/client/trainers/PaymentsTable.tsx` — nuovi badge + bottoni download
-- `package.json` — aggiunta `jspdf`
-
-### Note tecniche
-
-- Tutto resta lato client (localStorage + jsPDF in-browser), nessuna modifica a Supabase/edge functions — coerente col pattern demo Andrea.
-- I PDF generati sono reali e scaricabili (non placeholder), così gli sviluppatori vedono il flusso completo.
+Nessuna modifica a DB, edge functions, o ad altri dashboard.
