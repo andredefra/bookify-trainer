@@ -68,8 +68,10 @@ export function WorkoutAnalytics({
   weeklyData,
   workoutTypes,
   fitnessTrackerData,
-  bodyCompositionData
+  bodyCompositionData,
+  hideAI = false
 }: WorkoutAnalyticsProps) {
+
   const [timeframe, setTimeframe] = useState("1month");
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const isMobile = useIsMobile();
