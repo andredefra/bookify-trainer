@@ -91,8 +91,8 @@ const SEED: DemoTransaction[] = [
     invoiceSent: true,
     invoiceNumber: "INV-2025-0042",
     invoiceIssuedAt: "2025-05-21",
-    clientConfirmedReceipt: true, // already finalized → stays visible as historic via filter override
   },
+
   {
     id: 90005,
     client: DEMO_CLIENT_NAME,
