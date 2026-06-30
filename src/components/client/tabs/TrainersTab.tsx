@@ -120,10 +120,25 @@ export function TrainersTab() {
     }
   }, [followedTrainers]);
   
+  const demoTx = useDemoTransactions();
+  const paymentHistory = demoTx
+    .filter((t) => !t.clientConfirmedReceipt)
+    .map((t) => ({
+      id: t.id,
+      trainer: "Sarah Johnson",
+      amount: t.amount,
+      date: t.date,
+      type: t.type,
+      invoiceSent: t.invoiceStatus === "sent_to_client" || !!t.invoiceSent,
+      invoiceRequested: !!t.invoiceRequestedByClient && t.invoiceStatus !== "sent_to_client",
+      refundStatus: t.refundStatus,
+    }));
+
   const handlePayTrainer = (trainer: string, amount: number = 45, trainerPlan: string = "freemium") => {
     setSelectedTrainer({ name: trainer, amount, plan: trainerPlan });
     setShowPaymentDialog(true);
   };
+
 
   const handlePaymentComplete = () => {
     if (selectedTrainer) {
