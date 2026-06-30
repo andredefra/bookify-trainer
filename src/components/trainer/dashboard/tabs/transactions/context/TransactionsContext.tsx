@@ -359,7 +359,10 @@ interface TransactionsContextType {
 
 const TransactionsContext = createContext<TransactionsContextType | undefined>(undefined);
 
+const isDemoTx = (t: TransactionType) => t.client === DEMO_CLIENT_NAME;
+
 export function TransactionsProvider({ children }: { children: ReactNode }) {
+
   const [bridgeTx, setBridgeTx] = useState<TransactionType[]>(() => getDemoTransactions() as TransactionType[]);
 
   useEffect(() => {
