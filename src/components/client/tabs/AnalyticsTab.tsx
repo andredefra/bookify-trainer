@@ -172,7 +172,7 @@ export function AnalyticsTab({ hideAI = false }: { hideAI?: boolean } = {}) {
         {/* Workout Analytics - Mobile optimized */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-foreground">Workout Insights</h2>
-          <WorkoutAnalytics progressData={progressData} />
+          <WorkoutAnalytics progressData={progressData} hideAI={hideAI} />
         </div>
       </div>
     </div>
