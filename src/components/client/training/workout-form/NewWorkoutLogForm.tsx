@@ -14,9 +14,10 @@ import { Label } from "@/components/ui/label";
 interface NewWorkoutLogFormProps {
   onComplete: () => void;
   existingWorkout?: any;
+  hideAI?: boolean;
 }
 
-function WorkoutLogFormContent({ onComplete, existingWorkout }: NewWorkoutLogFormProps) {
+function WorkoutLogFormContent({ onComplete, existingWorkout, hideAI }: NewWorkoutLogFormProps) {
   const { toast } = useToast();
   const { addWorkoutLog, updateWorkoutLog } = useWorkoutLogs();
   const [showAIAssistant, setShowAIAssistant] = useState(false);
