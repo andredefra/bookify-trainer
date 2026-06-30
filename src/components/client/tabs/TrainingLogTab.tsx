@@ -9,7 +9,7 @@ import { WorkoutAnalysisCard } from "@/components/user/training/WorkoutAnalysisC
 import { ClientExerciseLibraryDialog } from "@/components/client/training/ClientExerciseLibraryDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export function TrainingLogTab() {
+export function TrainingLogTab({ hideAI = false }: { hideAI?: boolean } = {}) {
   const [showAddWorkout, setShowAddWorkout] = useState(false);
   const [showExerciseLibrary, setShowExerciseLibrary] = useState(false);
   const [selectedWorkoutForAnalysis, setSelectedWorkoutForAnalysis] = useState<any>(null);
