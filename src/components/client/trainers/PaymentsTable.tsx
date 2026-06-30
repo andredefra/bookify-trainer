@@ -19,8 +19,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RequestInvoiceDialog } from "./RequestInvoiceDialog";
 import { RequestRefundDialog } from "./RequestRefundDialog";
-import { removeDemoTransaction, patchDemoTransaction } from "@/lib/demoTransactionsBridge";
+import { removeDemoTransaction, patchDemoTransaction, DemoTransaction } from "@/lib/demoTransactionsBridge";
 import { notifyDemo } from "@/lib/demoNotify";
+import { downloadInvoicePdf, downloadRefundReceiptPdf } from "@/lib/demoInvoicePdf";
 
 
 interface Payment {
@@ -29,14 +30,23 @@ interface Payment {
   amount: number;
   date: string;
   type: string;
+  name?: string;
+  paymentMethod?: string;
   invoiceSent?: boolean;
   invoiceRequested?: boolean;
-  refundStatus?: 'pending' | 'approved' | 'rejected';
+  refundStatus?: 'pending' | 'approved' | 'rejected' | 'processed';
+  refundReason?: string;
+  invoiceNumber?: string;
+  invoiceIssuedAt?: string;
+  refundProcessedAt?: string;
+  refundReceiptNumber?: string;
+  historic?: boolean;
 }
 
 interface PaymentsTableProps {
   payments: Payment[];
 }
+
 
 export function PaymentsTable({ payments }: PaymentsTableProps) {
   const navigate = useNavigate();
@@ -69,7 +79,43 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
     });
   };
 
+  const toTx = (p: Payment): DemoTransaction => ({
+    id: p.id,
+    client: "Andrea M.",
+    type: p.type as DemoTransaction["type"],
+    name: p.name ?? p.type,
+    amount: p.amount,
+    date: p.date,
+    status: "paid",
+    paymentMethod: (p.paymentMethod as DemoTransaction["paymentMethod"]) ?? "card",
+    invoiceNumber: p.invoiceNumber,
+    invoiceIssuedAt: p.invoiceIssuedAt,
+    refundReason: p.refundReason,
+    refundProcessedAt: p.refundProcessedAt,
+    refundReceiptNumber: p.refundReceiptNumber,
+  });
+
   const renderReceiptsCell = (payment: Payment) => {
+    // Refund processed → final state with downloadable receipt
+    if (payment.refundStatus === "processed") {
+      return (
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-green-700 border-green-300 bg-green-50">
+            Refund Processed
+          </Badge>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-primary"
+            onClick={() => downloadRefundReceiptPdf(toTx(payment))}
+          >
+            <Download className="h-4 w-4 mr-1" />
+            Receipt
+          </Button>
+        </div>
+      );
+    }
+
     // Refund approved → client must confirm receipt of refund
     if (payment.refundStatus === "approved") {
       return (
@@ -92,17 +138,47 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
     // Refund rejected
     if (payment.refundStatus === "rejected") {
       return (
-        <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
+        <Badge
+          variant="outline"
+          className="text-red-600 border-red-300 bg-red-50"
+          title={payment.refundReason}
+        >
           Refund Rejected
         </Badge>
       );
     }
 
-    // Invoice sent → client confirms receipt
+    // Invoice sent
     if (payment.invoiceSent) {
+      // Historic / finalized → only download
+      if (payment.historic) {
+        return (
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-green-700 border-green-300 bg-green-50">
+              <FileText className="h-3 w-3 mr-1" />
+              Invoice Available
+            </Badge>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-primary"
+              onClick={() => downloadInvoicePdf(toTx(payment))}
+            >
+              <Download className="h-4 w-4 mr-1" />
+              PDF
+            </Button>
+          </div>
+        );
+      }
+      // Otherwise: pending confirmation by client
       return (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="text-primary">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-primary"
+            onClick={() => downloadInvoicePdf(toTx(payment))}
+          >
             <Download className="h-4 w-4 mr-1" />
             Invoice
           </Button>
@@ -146,6 +222,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
       </DropdownMenu>
     );
   };
+
 
 
   return (

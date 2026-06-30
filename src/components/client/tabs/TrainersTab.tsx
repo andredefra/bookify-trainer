@@ -129,10 +129,19 @@ export function TrainersTab() {
       amount: t.amount,
       date: t.date,
       type: t.type,
+      name: t.name,
+      paymentMethod: t.paymentMethod,
       invoiceSent: t.invoiceStatus === "sent_to_client" || !!t.invoiceSent,
       invoiceRequested: !!t.invoiceRequestedByClient && t.invoiceStatus !== "sent_to_client",
       refundStatus: t.refundStatus,
+      refundReason: t.refundReason,
+      invoiceNumber: t.invoiceNumber,
+      invoiceIssuedAt: t.invoiceIssuedAt,
+      refundProcessedAt: t.refundProcessedAt,
+      refundReceiptNumber: t.refundReceiptNumber,
+      historic: t.historic,
     }));
+
 
   const handlePayTrainer = (trainer: string, amount: number = 45, trainerPlan: string = "freemium") => {
     setSelectedTrainer({ name: trainer, amount, plan: trainerPlan });
