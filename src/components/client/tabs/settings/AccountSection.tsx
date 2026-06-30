@@ -52,6 +52,16 @@ export function AccountSection({ user, goals = [], onNavigateToSubscriptions }: 
   // Fitness Preferences
   const [experienceLevel, setExperienceLevel] = useState("beginner");
   const [preferredWorkoutTime, setPreferredWorkoutTime] = useState("");
+  const [selectedGoals, setSelectedGoals] = useState<string[]>(goals);
+  const [language, setLanguage] = useState("English");
+  const [units, setUnits] = useState("Metric (kg, cm)");
+
+  const handleGoalToggle = (goal: string) => {
+    setSelectedGoals((prev) =>
+      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    );
+  };
+
 
   // Account Security
   const [showPassword, setShowPassword] = useState(false);
