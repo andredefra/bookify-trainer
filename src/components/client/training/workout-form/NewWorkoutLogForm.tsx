@@ -100,24 +100,27 @@ function WorkoutLogFormContent({ onComplete, existingWorkout, hideAI }: NewWorko
     </form>
     
     {/* AI Assistant FAB */}
-    <Button
-      onClick={() => setShowAIAssistant(true)}
-      className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
-      size="icon"
-      type="button"
-    >
-      <MessageCircle className="h-6 w-6" />
-    </Button>
-    
-    <WorkoutAIAssistant
-      open={showAIAssistant}
-      onOpenChange={setShowAIAssistant}
-      workoutContext={{
-        workoutName: workoutName || "Workout",
-        exercises,
-        isLogging: true
-      }}
-    />
+    {!hideAI && (
+      <>
+        <Button
+          onClick={() => setShowAIAssistant(true)}
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+          size="icon"
+          type="button"
+        >
+          <MessageCircle className="h-6 w-6" />
+        </Button>
+        <WorkoutAIAssistant
+          open={showAIAssistant}
+          onOpenChange={setShowAIAssistant}
+          workoutContext={{
+            workoutName: workoutName || "Workout",
+            exercises,
+            isLogging: true
+          }}
+        />
+      </>
+    )}
     </>
   );
 }
