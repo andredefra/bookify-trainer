@@ -33,6 +33,9 @@ export interface DemoTransaction extends Omit<TransactionType, "refundStatus"> {
   // Invoice metadata (used for downloadable PDF)
   invoiceNumber?: string;
   invoiceIssuedAt?: string;
+  // Historic/finalized entries: skip "Conferma" action, show Download only
+  historic?: boolean;
+
   // Lifecycle: once both sides agree, mark as archived (then removed from lists)
   clientConfirmedReceipt?: boolean;
 }
