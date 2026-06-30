@@ -2,7 +2,8 @@
 import { FitnessAppIntegration } from "@/components/client/settings/fitness-integrations/FitnessAppIntegration";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link2, Scale, Smartphone, Watch, Shield } from "lucide-react";
+import { Link2, Scale, Smartphone, Watch, Shield, Calendar, CalendarDays, CalendarCheck } from "lucide-react";
+import { toast } from "sonner";
 
 interface IntegrationsSectionProps {
   user: { 

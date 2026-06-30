@@ -1,21 +1,25 @@
 
-# Subscriptions Section – Free Plan only + dim AI stats
+# Add Calendar Integrations (Google + Apple) to Settings → Integrations
 
-## Obiettivo
-Nel client demo `andrea.mypersonal.fit@gmail.com`, area Settings → Subscriptions, lasciare solo la card "Free Plan" segnata Coming Soon, oscurare la sezione Monthly Usage / Features (l'AI non è ancora disponibile), e rimuovere la card "Upgrade to AI Plan".
+## Modifica – `src/components/client/tabs/settings/IntegrationsSection.tsx`
 
-## Modifiche – `src/components/client/tabs/settings/SubscriptionsSection.tsx`
+Aggiungere una nuova card **"Calendar Integrations"** sopra la Privacy box (sotto Smart Scale section) con due righe in stile coerente con le altre integrazioni:
 
-1. **Rimuovere la card "Upgrade to AI Plan"** (righe 123-170) completamente.
-2. **Rimuovere la card "Billing Information"** ramo Pro (non rilevante in fase di lancio Basic). Mantenere solo la card Free Plan.
-3. **Card "Free Plan"**:
-   - Conservare titolo "Free Plan", description "Basic access with limited AI features", badge "Coming Soon".
-   - Avvolgere il contenuto `CardContent` (Monthly AI Usage + Your Features) in un wrapper con `opacity-50 pointer-events-none select-none` per oscurarlo, così resta visibile ma chiaramente non attivo.
-   - Sostituire i valori dinamici di usage con valori statici "0/0 requests" e barra di progresso a 0.
-   - Rimuovere il testo "You're approaching your monthly limit…".
-   - Aggiungere sopra il blocco oscurato un piccolo overlay/nota: "Le funzionalità AI non sono ancora disponibili. Saranno attivate al lancio dell'AI Plan."
-4. **Pulire import non più usati** (`Crown`, `CreditCard`, `ClientUpgradeDialog`, `toast`, `upgradeToProViaMock`, `downgradeToFreeViaMock`, `useState`, hook `useAIAccess` non più necessario se mostriamo valori statici). Mantenere solo ciò che serve.
+1. **Google Calendar**
+   - Icona: `Calendar` (lucide) in cerchio blu (bg-blue-100 / text-blue-600).
+   - Titolo: "Google Calendar"
+   - Descrizione: "Sync training sessions and reminders with your Google Calendar"
+   - Bottone "Connect" → on click apre toast "Connessione a Google Calendar in arrivo" (placeholder, demo-mode).
 
-## Out of scope
-- Nessuna modifica a hook, traduzioni globali o ad altre pagine.
-- Nessuna modifica DB.
+2. **Apple Calendar**
+   - Icona: `CalendarDays` o `Apple` (lucide) in cerchio slate.
+   - Titolo: "Apple Calendar (iCloud)"
+   - Descrizione: "Sync training sessions and reminders with Apple Calendar"
+   - Bottone "Connect" → stesso pattern toast placeholder.
+
+Header card: icona `CalendarCheck`, titolo "Calendar Integrations", descrizione "Sync your training schedule and reminders with your personal calendar".
+
+## Note
+- Solo UI/presentazione: nessuna chiamata OAuth reale in questa fase, coerente con il pattern già usato per Zepp/Fitbit/Garmin/Samsung (bottoni Connect non funzionanti).
+- Nessuna modifica DB, nessun connector reale collegato.
+- Nessun cambiamento ad altre pagine.
