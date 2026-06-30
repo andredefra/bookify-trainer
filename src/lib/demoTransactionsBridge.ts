@@ -21,6 +21,9 @@ export const DEMO_TRAINER_NAME = "Sarah Johnson";
 
 export type RefundStatus = "pending" | "approved" | "rejected" | "processed";
 
+type BaseTx = Omit<TransactionType, "refundStatus">;
+
+
 export interface DemoTransaction extends TransactionType {
   // Client-driven flags (mirrors of the trainer-side semantics)
   refundStatus?: RefundStatus;
