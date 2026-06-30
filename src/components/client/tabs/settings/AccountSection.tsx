@@ -313,31 +313,6 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
           <Button onClick={handleSaveAccount}>Save Changes</Button>
         </div>
       </div>
-      
-      <Separator />
-      
-      <div className="bg-blue-50 border border-blue-100 rounded-md p-4">
-        <div className="flex gap-3">
-          <Info className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <h3 className="font-medium text-blue-700 mb-1">Client Account</h3>
-            <p className="text-sm text-blue-600 mb-3">
-              MyPersonal.fit is free for clients. Training programs assigned by your trainer are included at no cost. Advanced AI features (workout coach, form analysis, exercise demos) require a Pro subscription.
-            </p>
-            {onNavigateToSubscriptions && (
-              <Button 
-                variant="link" 
-                size="sm"
-                onClick={onNavigateToSubscriptions}
-                className="p-0 h-auto text-amber-600 hover:text-amber-700 font-medium"
-              >
-                <Crown className="h-4 w-4 mr-1" />
-                View Subscription Plans →
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
 
       <Separator />
 
