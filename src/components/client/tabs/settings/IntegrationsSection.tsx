@@ -96,7 +96,59 @@ export function IntegrationsSection({ user }: IntegrationsSectionProps) {
           </div>
         </CardContent>
       </Card>
-      
+
+      <Card className="border shadow-sm overflow-hidden">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <CalendarCheck className="h-5 w-5 text-primary" />
+            Calendar Integrations
+          </CardTitle>
+          <CardDescription>
+            Sync your training schedule and reminders with your personal calendar
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex justify-between items-center p-4 border rounded-lg">
+            <div className="flex items-center space-x-3">
+              <div className="bg-blue-100 p-2 rounded-full">
+                <Calendar className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h4 className="font-medium">Google Calendar</h4>
+                <p className="text-sm text-muted-foreground">Sync training sessions and reminders with your Google Calendar</p>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast.info("Connessione a Google Calendar in arrivo")}
+            >
+              Connect
+            </Button>
+          </div>
+
+          <div className="flex justify-between items-center p-4 border rounded-lg">
+            <div className="flex items-center space-x-3">
+              <div className="bg-slate-100 p-2 rounded-full">
+                <CalendarDays className="h-5 w-5 text-slate-700" />
+              </div>
+              <div>
+                <h4 className="font-medium">Apple Calendar (iCloud)</h4>
+                <p className="text-sm text-muted-foreground">Sync training sessions and reminders with Apple Calendar</p>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toast.info("Connessione ad Apple Calendar in arrivo")}
+            >
+              Connect
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+
       <div className="bg-amber-50 border border-amber-100 rounded-md p-4 mt-4">
         <div className="flex gap-3">
           <Shield className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
