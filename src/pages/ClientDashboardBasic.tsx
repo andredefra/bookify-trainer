@@ -83,7 +83,7 @@ const ClientDashboardBasic = () => {
           <div className="mx-auto max-w-6xl">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsContent value="overview" className="mt-0">
-                <Overview progressData={[]} upcomingSessions={[]} />
+                <Overview progressData={initialGoals} upcomingSessions={[]} variant="basic" />
               </TabsContent>
               <TabsContent value="mygym" className="mt-0">
                 <MyGymBasicTab />
