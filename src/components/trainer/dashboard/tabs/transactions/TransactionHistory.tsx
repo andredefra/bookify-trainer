@@ -3,13 +3,15 @@ import { TransactionsTable } from "./components/TransactionsTable";
 import { useTransactions } from "./context/TransactionsContext";
 
 export function TransactionHistory() {
-  const { 
-    filteredTransactions, 
-    handleConfirmCashPayment, 
+  const {
+    filteredTransactions,
+    handleConfirmCashPayment,
     handleRejectCashPayment,
     handleMarkNoShow,
     handleToggleInvoice,
     handleUpdateInvoiceStatus,
+    handleApproveRefund,
+    handleRejectRefund,
     selectedTransactions,
     setSelectedTransactions
   } = useTransactions();
@@ -25,15 +27,18 @@ export function TransactionHistory() {
   };
 
   return (
-    <TransactionsTable 
-      transactions={filteredTransactions} 
+    <TransactionsTable
+      transactions={filteredTransactions}
       onConfirmCashPayment={handleConfirmCashPayment}
       onRejectCashPayment={handleRejectCashPayment}
       onMarkNoShow={handleMarkNoShow}
       onToggleInvoice={handleToggleInvoice}
       onUpdateInvoiceStatus={handleUpdateInvoiceStatus}
+      onApproveRefund={handleApproveRefund}
+      onRejectRefund={handleRejectRefund}
       selectedTransactions={selectedTransactions}
       onToggleSelection={handleToggleSelection}
     />
   );
 }
+

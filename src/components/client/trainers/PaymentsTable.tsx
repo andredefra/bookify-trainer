@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, FileText, Download, ChevronDown } from "lucide-react";
+import { CreditCard, FileText, Download, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RequestInvoiceDialog } from "./RequestInvoiceDialog";
 import { RequestRefundDialog } from "./RequestRefundDialog";
+import { removeDemoTransaction, patchDemoTransaction } from "@/lib/demoTransactionsBridge";
+import { notifyDemo } from "@/lib/demoNotify";
+
 
 interface Payment {
   id: number;
@@ -55,14 +58,59 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
     setShowRefundDialog(true);
   };
 
+  const handleConfirmReceipt = (payment: Payment) => {
+    patchDemoTransaction(payment.id, { clientConfirmedReceipt: true });
+    // Remove from both sides after a brief moment so trainer also sees it disappear
+    setTimeout(() => removeDemoTransaction(payment.id), 200);
+    notifyDemo({
+      to: "trainer",
+      title: "Ricezione confermata",
+      description: `Il cliente ha confermato la ricezione per ${payment.type} del ${payment.date} (€${payment.amount}).`,
+    });
+  };
+
   const renderReceiptsCell = (payment: Payment) => {
-    // If invoice is available, show download button
+    // Refund approved → client must confirm receipt of refund
+    if (payment.refundStatus === "approved") {
+      return (
+        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleConfirmReceipt(payment)}>
+          <CheckCircle2 className="h-4 w-4 mr-1" />
+          Conferma rimborso
+        </Button>
+      );
+    }
+
+    // Refund pending
+    if (payment.refundStatus === "pending") {
+      return (
+        <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50">
+          Refund Pending
+        </Badge>
+      );
+    }
+
+    // Refund rejected
+    if (payment.refundStatus === "rejected") {
+      return (
+        <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
+          Refund Rejected
+        </Badge>
+      );
+    }
+
+    // Invoice sent → client confirms receipt
     if (payment.invoiceSent) {
       return (
-        <Button variant="ghost" size="sm" className="text-primary">
-          <Download className="h-4 w-4 mr-1" />
-          Invoice
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" className="text-primary">
+            <Download className="h-4 w-4 mr-1" />
+            Invoice
+          </Button>
+          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleConfirmReceipt(payment)}>
+            <CheckCircle2 className="h-4 w-4 mr-1" />
+            Conferma
+          </Button>
+        </div>
       );
     }
 
@@ -72,21 +120,6 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
         <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50">
           <FileText className="h-3 w-3 mr-1" />
           Invoice Requested
-        </Badge>
-      );
-    }
-
-    // If refund status exists, show appropriate badge
-    if (payment.refundStatus) {
-      const statusConfig = {
-        pending: { label: "Refund Pending", className: "text-amber-600 border-amber-300 bg-amber-50" },
-        approved: { label: "Refund Approved", className: "text-green-600 border-green-300 bg-green-50" },
-        rejected: { label: "Refund Rejected", className: "text-red-600 border-red-300 bg-red-50" },
-      };
-      const config = statusConfig[payment.refundStatus];
-      return (
-        <Badge variant="outline" className={config.className}>
-          {config.label}
         </Badge>
       );
     }
@@ -113,6 +146,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
       </DropdownMenu>
     );
   };
+
 
   return (
     <div className="space-y-6">
@@ -155,6 +189,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
         <RequestInvoiceDialog
           open={showInvoiceDialog}
           onOpenChange={setShowInvoiceDialog}
+          transactionId={selectedPayment.id}
           trainerName={selectedPayment.trainer}
           serviceName={selectedPayment.type}
           serviceDate={selectedPayment.date}
@@ -167,12 +202,14 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
         <RequestRefundDialog
           open={showRefundDialog}
           onOpenChange={setShowRefundDialog}
+          transactionId={selectedPayment.id}
           trainerName={selectedPayment.trainer}
           serviceName={selectedPayment.type}
           serviceDate={selectedPayment.date}
           amount={selectedPayment.amount}
         />
       )}
+
     </div>
   );
 }

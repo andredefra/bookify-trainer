@@ -5,10 +5,13 @@ import { Label } from "@/components/ui/label";
 import { RotateCcw, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { patchDemoTransaction } from "@/lib/demoTransactionsBridge";
+import { notifyDemo } from "@/lib/demoNotify";
 
 interface RequestRefundDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  transactionId?: number;
   trainerName: string;
   serviceName: string;
   serviceDate: string;
@@ -18,6 +21,7 @@ interface RequestRefundDialogProps {
 export function RequestRefundDialog({
   open,
   onOpenChange,
+  transactionId,
   trainerName,
   serviceName,
   serviceDate,
@@ -31,15 +35,27 @@ export function RequestRefundDialog({
       toast.error("Please provide a reason for your refund request");
       return;
     }
-    
+
     setIsSubmitting(true);
-    // Simulate API call - in production this would send notification to trainer
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 300));
+    if (transactionId) {
+      patchDemoTransaction(transactionId, {
+        refundStatus: "pending",
+        refundReason: reason,
+        refundRequestedAt: new Date().toISOString(),
+      });
+      notifyDemo({
+        to: "trainer",
+        title: "Nuova richiesta di rimborso",
+        description: `${serviceName} del ${serviceDate} — €${amount} · Motivo: ${reason}`,
+      });
+    }
     toast.success(`Refund request sent to ${trainerName}`);
     setReason("");
     setIsSubmitting(false);
     onOpenChange(false);
   };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

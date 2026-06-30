@@ -53,20 +53,25 @@ interface TransactionsTableProps {
   onMarkNoShow?: (transactionId: number) => void;
   onToggleInvoice?: (transactionId: number) => void;
   onUpdateInvoiceStatus?: (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => void;
+  onApproveRefund?: (transactionId: number) => void;
+  onRejectRefund?: (transactionId: number) => void;
   selectedTransactions?: Set<number>;
   onToggleSelection?: (transactionId: number) => void;
 }
 
-export function TransactionsTable({ 
-  transactions, 
-  onConfirmCashPayment, 
+export function TransactionsTable({
+  transactions,
+  onConfirmCashPayment,
   onRejectCashPayment,
   onMarkNoShow,
   onToggleInvoice,
   onUpdateInvoiceStatus,
+  onApproveRefund,
+  onRejectRefund,
   selectedTransactions = new Set(),
   onToggleSelection
 }: TransactionsTableProps) {
+
   const [selectedCashTransaction, setSelectedCashTransaction] = useState<Transaction | null>(null);
   const [cashDialogOpen, setCashDialogOpen] = useState(false);
   const [showInvoiceUploadDialog, setShowInvoiceUploadDialog] = useState(false);
@@ -307,8 +312,42 @@ export function TransactionsTable({
                             )}
                           </>
                         )}
+
+                        {/* REFUND WORKFLOW */}
+                        {transaction.refundStatus === 'pending' && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs border-green-300 text-green-700 hover:bg-green-50 relative"
+                              onClick={() => onApproveRefund?.(transaction.id)}
+                            >
+                              Approve refund
+                              <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-destructive animate-pulse" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 text-xs text-red-600"
+                              onClick={() => onRejectRefund?.(transaction.id)}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                        {transaction.refundStatus === 'approved' && (
+                          <Badge variant="outline" className="text-green-600 border-green-300 bg-green-50">
+                            Refund approved · awaiting client
+                          </Badge>
+                        )}
+                        {transaction.refundStatus === 'rejected' && (
+                          <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
+                            Refund rejected
+                          </Badge>
+                        )}
                       </div>
                     </TableCell>
+
                   </TableRow>
                 );
               })
