@@ -626,13 +626,15 @@ export function WorkoutAnalytics({
           </TabsContent>
         </Tabs>
 
-        {/* AI Analytics Chat Section */}
-        <div className="mt-6">
-          <AnalyticsChat 
-            analyticsStats={analyticsStats} 
-            progressData={progressData} 
-          />
-        </div>
+        {!hideAI && (
+          <div className="mt-6">
+            <AnalyticsChat 
+              analyticsStats={analyticsStats} 
+              progressData={progressData} 
+            />
+          </div>
+        )}
+
       </CardContent>
     </Card>
   );
