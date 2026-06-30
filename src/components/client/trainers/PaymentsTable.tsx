@@ -19,8 +19,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RequestInvoiceDialog } from "./RequestInvoiceDialog";
 import { RequestRefundDialog } from "./RequestRefundDialog";
-import { removeDemoTransaction, patchDemoTransaction } from "@/lib/demoTransactionsBridge";
+import { removeDemoTransaction, patchDemoTransaction, DemoTransaction } from "@/lib/demoTransactionsBridge";
 import { notifyDemo } from "@/lib/demoNotify";
+import { downloadInvoicePdf, downloadRefundReceiptPdf } from "@/lib/demoInvoicePdf";
 
 
 interface Payment {
@@ -29,14 +30,23 @@ interface Payment {
   amount: number;
   date: string;
   type: string;
+  name?: string;
+  paymentMethod?: string;
   invoiceSent?: boolean;
   invoiceRequested?: boolean;
-  refundStatus?: 'pending' | 'approved' | 'rejected';
+  refundStatus?: 'pending' | 'approved' | 'rejected' | 'processed';
+  refundReason?: string;
+  invoiceNumber?: string;
+  invoiceIssuedAt?: string;
+  refundProcessedAt?: string;
+  refundReceiptNumber?: string;
+  historic?: boolean;
 }
 
 interface PaymentsTableProps {
   payments: Payment[];
 }
+
 
 export function PaymentsTable({ payments }: PaymentsTableProps) {
   const navigate = useNavigate();
