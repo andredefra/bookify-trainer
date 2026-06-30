@@ -353,9 +353,12 @@ interface TransactionsContextType {
   handleMarkNoShow: (transactionId: number) => void;
   handleToggleInvoice: (transactionId: number) => void;
   handleUpdateInvoiceStatus: (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => void;
+  handleApproveRefund: (transactionId: number) => void;
+  handleRejectRefund: (transactionId: number) => void;
   selectAllPaidTransactions: () => void;
   clearSelection: () => void;
 }
+
 
 const TransactionsContext = createContext<TransactionsContextType | undefined>(undefined);
 
