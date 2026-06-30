@@ -20,10 +20,12 @@ interface AccountSectionProps {
     name?: string; 
     profileImage?: string;
   };
+  goals?: string[];
   onNavigateToSubscriptions?: () => void;
 }
 
-export function AccountSection({ user, onNavigateToSubscriptions }: AccountSectionProps) {
+export function AccountSection({ user, goals = [], onNavigateToSubscriptions }: AccountSectionProps) {
+
   // Use a general image as default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
@@ -50,6 +52,16 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
   // Fitness Preferences
   const [experienceLevel, setExperienceLevel] = useState("beginner");
   const [preferredWorkoutTime, setPreferredWorkoutTime] = useState("");
+  const [selectedGoals, setSelectedGoals] = useState<string[]>(goals);
+  const [language, setLanguage] = useState("English");
+  const [units, setUnits] = useState("Metric (kg, cm)");
+
+  const handleGoalToggle = (goal: string) => {
+    setSelectedGoals((prev) =>
+      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    );
+  };
+
 
   // Account Security
   const [showPassword, setShowPassword] = useState(false);
@@ -433,7 +445,31 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
             Help us personalize your training experience.
           </p>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
+          {/* Fitness Goals */}
+          <div>
+            <h3 className="font-medium mb-3">Fitness Goals</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {["Weight loss", "Muscle tone", "Flexibility", "Cardiovascular health", "Strength building", "Athletic performance"].map((goal) => (
+                <div key={goal} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`goal-${goal}`}
+                    checked={selectedGoals.includes(goal)}
+                    onChange={() => handleGoalToggle(goal)}
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  />
+                  <label htmlFor={`goal-${goal}`} className="ml-2 text-sm cursor-pointer">
+                    {goal}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Experience & Time */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="experienceLevel">Experience Level</Label>
@@ -471,7 +507,42 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
               </Select>
             </div>
           </div>
-          
+
+          <Separator />
+
+          {/* Language & Region */}
+          <div>
+            <h3 className="font-medium mb-3">Language & Region</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="language">Language</Label>
+                <select
+                  id="language"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option>English</option>
+                  <option>Spanish</option>
+                  <option>French</option>
+                  <option>German</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="units">Measurement Units</Label>
+                <select
+                  id="units"
+                  value={units}
+                  onChange={(e) => setUnits(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option>Metric (kg, cm)</option>
+                  <option>Imperial (lb, in)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-end">
             <Button onClick={handleSaveFitnessPreferences} disabled={savingPreferences}>
               {savingPreferences ? (
@@ -486,6 +557,7 @@ export function AccountSection({ user, onNavigateToSubscriptions }: AccountSecti
           </div>
         </CardContent>
       </Card>
+
 
       {/* Account Security */}
       <Card>
