@@ -8,7 +8,7 @@ import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics
 import { StatisticsSection } from "../analytics/sections/StatisticsSection";
 import { GoalsProgress } from "../analytics/sections/GoalsProgress";
 
-export function AnalyticsTab() {
+export function AnalyticsTab({ hideAI = false }: { hideAI?: boolean } = {}) {
   const navigate = useNavigate();
 
   // Get progress data from localStorage or use mock data
