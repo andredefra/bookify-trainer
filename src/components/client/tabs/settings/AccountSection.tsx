@@ -20,10 +20,12 @@ interface AccountSectionProps {
     name?: string; 
     profileImage?: string;
   };
+  goals?: string[];
   onNavigateToSubscriptions?: () => void;
 }
 
-export function AccountSection({ user, onNavigateToSubscriptions }: AccountSectionProps) {
+export function AccountSection({ user, goals = [], onNavigateToSubscriptions }: AccountSectionProps) {
+
   // Use a general image as default profile image
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
   
