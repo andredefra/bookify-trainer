@@ -123,6 +123,7 @@ export function TrainingLogTab({ hideAI = false }: { hideAI?: boolean } = {}) {
                 setEditingWorkout(null);
               }} 
               existingWorkout={editingWorkout}
+              hideAI={hideAI}
             />
           </CardContent>
         </Card>
