@@ -142,7 +142,9 @@ const SEED: DemoTransaction[] = [
     invoiceSent: true,
     invoiceNumber: "INV-2025-0028",
     invoiceIssuedAt: "2025-04-16",
+    historic: true,
   },
+
 
   {
     id: 90008,
