@@ -54,14 +54,14 @@ export function NotificationsSection() {
             </div>
             <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between">
-                <Label className="text-base font-medium" htmlFor="session-reminders">Session Reminders</Label>
+                <Label className="text-base font-medium" htmlFor="session-reminders">Calendar Reminders</Label>
                 <Switch 
                   id="session-reminders" 
                   checked={notifications.session}
                   onCheckedChange={() => handleToggle('session')}
                 />
               </div>
-              <p className="text-sm text-muted-foreground">Get reminded about upcoming training sessions</p>
+              <p className="text-sm text-muted-foreground">Get reminded about upcoming events in your calendar</p>
             </div>
           </div>
           
