@@ -137,8 +137,8 @@ const SEED: DemoTransaction[] = [
     invoiceSent: true,
     invoiceNumber: "INV-2025-0028",
     invoiceIssuedAt: "2025-04-16",
-    clientConfirmedReceipt: true,
   },
+
   {
     id: 90008,
     client: DEMO_CLIENT_NAME,
