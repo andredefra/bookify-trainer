@@ -5,10 +5,13 @@ import { Label } from "@/components/ui/label";
 import { FileText } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { patchDemoTransaction } from "@/lib/demoTransactionsBridge";
+import { notifyDemo } from "@/lib/demoNotify";
 
 interface RequestInvoiceDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  transactionId?: number;
   trainerName: string;
   serviceName: string;
   serviceDate: string;
@@ -18,6 +21,7 @@ interface RequestInvoiceDialogProps {
 export function RequestInvoiceDialog({
   open,
   onOpenChange,
+  transactionId,
   trainerName,
   serviceName,
   serviceDate,
@@ -28,13 +32,24 @@ export function RequestInvoiceDialog({
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate API call - in production this would send notification to trainer
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 300));
+    if (transactionId) {
+      patchDemoTransaction(transactionId, {
+        invoiceRequestedByClient: true,
+        invoiceRequestedAt: new Date().toISOString(),
+      });
+      notifyDemo({
+        to: "trainer",
+        title: "Nuova richiesta fattura",
+        description: `${serviceName} del ${serviceDate} — €${amount}${note ? ` · Nota: ${note}` : ""}`,
+      });
+    }
     toast.success(`Invoice request sent to ${trainerName}`);
     setNote("");
     setIsSubmitting(false);
     onOpenChange(false);
   };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
