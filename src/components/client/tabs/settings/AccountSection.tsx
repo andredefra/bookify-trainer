@@ -445,7 +445,31 @@ export function AccountSection({ user, goals = [], onNavigateToSubscriptions }: 
             Help us personalize your training experience.
           </p>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
+          {/* Fitness Goals */}
+          <div>
+            <h3 className="font-medium mb-3">Fitness Goals</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {["Weight loss", "Muscle tone", "Flexibility", "Cardiovascular health", "Strength building", "Athletic performance"].map((goal) => (
+                <div key={goal} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`goal-${goal}`}
+                    checked={selectedGoals.includes(goal)}
+                    onChange={() => handleGoalToggle(goal)}
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  />
+                  <label htmlFor={`goal-${goal}`} className="ml-2 text-sm cursor-pointer">
+                    {goal}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Experience & Time */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="experienceLevel">Experience Level</Label>
@@ -483,7 +507,42 @@ export function AccountSection({ user, goals = [], onNavigateToSubscriptions }: 
               </Select>
             </div>
           </div>
-          
+
+          <Separator />
+
+          {/* Language & Region */}
+          <div>
+            <h3 className="font-medium mb-3">Language & Region</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="language">Language</Label>
+                <select
+                  id="language"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option>English</option>
+                  <option>Spanish</option>
+                  <option>French</option>
+                  <option>German</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="units">Measurement Units</Label>
+                <select
+                  id="units"
+                  value={units}
+                  onChange={(e) => setUnits(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option>Metric (kg, cm)</option>
+                  <option>Imperial (lb, in)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-end">
             <Button onClick={handleSaveFitnessPreferences} disabled={savingPreferences}>
               {savingPreferences ? (
@@ -498,6 +557,7 @@ export function AccountSection({ user, goals = [], onNavigateToSubscriptions }: 
           </div>
         </CardContent>
       </Card>
+
 
       {/* Account Security */}
       <Card>
