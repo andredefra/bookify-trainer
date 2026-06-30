@@ -53,20 +53,25 @@ interface TransactionsTableProps {
   onMarkNoShow?: (transactionId: number) => void;
   onToggleInvoice?: (transactionId: number) => void;
   onUpdateInvoiceStatus?: (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => void;
+  onApproveRefund?: (transactionId: number) => void;
+  onRejectRefund?: (transactionId: number) => void;
   selectedTransactions?: Set<number>;
   onToggleSelection?: (transactionId: number) => void;
 }
 
-export function TransactionsTable({ 
-  transactions, 
-  onConfirmCashPayment, 
+export function TransactionsTable({
+  transactions,
+  onConfirmCashPayment,
   onRejectCashPayment,
   onMarkNoShow,
   onToggleInvoice,
   onUpdateInvoiceStatus,
+  onApproveRefund,
+  onRejectRefund,
   selectedTransactions = new Set(),
   onToggleSelection
 }: TransactionsTableProps) {
+
   const [selectedCashTransaction, setSelectedCashTransaction] = useState<Transaction | null>(null);
   const [cashDialogOpen, setCashDialogOpen] = useState(false);
   const [showInvoiceUploadDialog, setShowInvoiceUploadDialog] = useState(false);
