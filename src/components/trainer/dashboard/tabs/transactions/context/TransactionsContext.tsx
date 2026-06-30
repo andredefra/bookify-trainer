@@ -1,7 +1,17 @@
-import { createContext, useState, useContext, ReactNode } from "react";
+import { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import { TransactionType, InvoiceStatus } from "../types/transactionTypes";
 import { ClientSummary, ClientData } from "../types/TransactionsTabTypes";
 import { toast } from "sonner";
+import {
+  getDemoTransactions,
+  subscribeDemoTransactions,
+  upsertDemoTransaction,
+  patchDemoTransaction,
+  removeDemoTransaction,
+  DEMO_CLIENT_NAME,
+} from "@/lib/demoTransactionsBridge";
+import { notifyDemo } from "@/lib/demoNotify";
+
 
 // Enhanced mock transaction data - 2025 with realistic revenue distribution
 const initialTransactions: TransactionType[] = [
