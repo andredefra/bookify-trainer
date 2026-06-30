@@ -23,7 +23,12 @@ export interface Transaction {
   invoiceRequestedByClient?: boolean;
   invoiceRequestedAt?: string;
   invoiceSentAt?: string;
+  // Refund workflow (demo)
+  refundStatus?: 'pending' | 'approved' | 'rejected';
+  refundReason?: string;
+  refundRequestedAt?: string;
 }
+
 
 export interface TransactionHistoryProps {
   transactions: Transaction[];
