@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, FileText, Download, ChevronDown } from "lucide-react";
+import { CreditCard, FileText, Download, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RequestInvoiceDialog } from "./RequestInvoiceDialog";
 import { RequestRefundDialog } from "./RequestRefundDialog";
+import { removeDemoTransaction, patchDemoTransaction } from "@/lib/demoTransactionsBridge";
+import { notifyDemo } from "@/lib/demoNotify";
+
 
 interface Payment {
   id: number;
