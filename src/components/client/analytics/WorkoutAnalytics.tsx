@@ -419,10 +419,13 @@ export function WorkoutAnalytics({
             </CardDescription>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button onClick={runAIAnalysis} disabled={isLoadingAI} variant="outline" size="sm" className="flex-1 sm:flex-none">
-              {isLoadingAI ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Brain className="h-4 w-4 mr-2" />}
-              <span className="hidden xs:inline">AI </span>Analysis
-            </Button>
+            {!hideAI && (
+              <Button onClick={runAIAnalysis} disabled={isLoadingAI} variant="outline" size="sm" className="flex-1 sm:flex-none">
+                {isLoadingAI ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Brain className="h-4 w-4 mr-2" />}
+                <span className="hidden xs:inline">AI </span>Analysis
+              </Button>
+            )}
+
             <Select value={timeframe} onValueChange={setTimeframe}>
               <SelectTrigger className="w-full sm:w-32">
                 <SelectValue />
