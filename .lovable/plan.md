@@ -1,25 +1,21 @@
+Move the Preferences tab content into the Account section, merging it under the existing "Fitness Preferences" card. Remove the separate Preferences tab from the settings sidebar.
 
-# Add Calendar Integrations (Google + Apple) to Settings → Integrations
+## Changes
 
-## Modifica – `src/components/client/tabs/settings/IntegrationsSection.tsx`
+**1. `src/components/client/tabs/settings/AccountSection.tsx`**
+- Inside the existing "Fitness Preferences" card (lines 429-488), add above the Experience Level / Preferred Workout Time grid:
+  - A "Fitness Goals" subsection — 6 checkboxes (Weight loss, Muscle tone, Flexibility, Cardiovascular health, Strength building, Athletic performance) wired to local state initialized from a new `goals` prop.
+  - A "Language & Region" subsection — Language select (English/Spanish/French/German) and Measurement Units select (Metric / Imperial).
+- A single "Save Preferences" button at the bottom of the card now saves goals, language, units, experience level, and preferred workout time together (goals/language/units stored in local state + toast for now, matching current PreferencesSection behavior).
+- Add `goals?: string[]` to `AccountSectionProps`.
 
-Aggiungere una nuova card **"Calendar Integrations"** sopra la Privacy box (sotto Smart Scale section) con due righe in stile coerente con le altre integrazioni:
+**2. `src/components/client/tabs/settings/SettingsTabContent.tsx`**
+- Remove the "Preferences" sidebar button and its content branch.
+- Remove the `PreferencesSection` import.
+- Pass `goals` to `<AccountSection />`.
+- Remove the "preferences" entries from the header title/description switch.
 
-1. **Google Calendar**
-   - Icona: `Calendar` (lucide) in cerchio blu (bg-blue-100 / text-blue-600).
-   - Titolo: "Google Calendar"
-   - Descrizione: "Sync training sessions and reminders with your Google Calendar"
-   - Bottone "Connect" → on click apre toast "Connessione a Google Calendar in arrivo" (placeholder, demo-mode).
+**3. `src/components/client/tabs/settings/PreferencesSection.tsx`**
+- Delete the file (no longer referenced).
 
-2. **Apple Calendar**
-   - Icona: `CalendarDays` o `Apple` (lucide) in cerchio slate.
-   - Titolo: "Apple Calendar (iCloud)"
-   - Descrizione: "Sync training sessions and reminders with Apple Calendar"
-   - Bottone "Connect" → stesso pattern toast placeholder.
-
-Header card: icona `CalendarCheck`, titolo "Calendar Integrations", descrizione "Sync your training schedule and reminders with your personal calendar".
-
-## Note
-- Solo UI/presentazione: nessuna chiamata OAuth reale in questa fase, coerente con il pattern già usato per Zepp/Fitbit/Garmin/Samsung (bottoni Connect non funzionanti).
-- Nessuna modifica DB, nessun connector reale collegato.
-- Nessun cambiamento ad altre pagine.
+No changes to trainer/gym/studio settings — this only affects the client settings UI.
