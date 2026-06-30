@@ -189,6 +189,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
         <RequestInvoiceDialog
           open={showInvoiceDialog}
           onOpenChange={setShowInvoiceDialog}
+          transactionId={selectedPayment.id}
           trainerName={selectedPayment.trainer}
           serviceName={selectedPayment.type}
           serviceDate={selectedPayment.date}
@@ -201,12 +202,14 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
         <RequestRefundDialog
           open={showRefundDialog}
           onOpenChange={setShowRefundDialog}
+          transactionId={selectedPayment.id}
           trainerName={selectedPayment.trainer}
           serviceName={selectedPayment.type}
           serviceDate={selectedPayment.date}
           amount={selectedPayment.amount}
         />
       )}
+
     </div>
   );
 }
