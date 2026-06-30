@@ -100,7 +100,7 @@ const SEED: DemoTransaction[] = [
     name: "Hypertrophy 8-week Program",
     amount: 200,
     date: "2025-05-10",
-    status: "refunded",
+    status: "paid",
     paymentMethod: "card",
     invoiceStatus: "sent_to_client",
     invoiceSent: true,
