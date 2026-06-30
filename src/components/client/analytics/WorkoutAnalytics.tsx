@@ -497,11 +497,14 @@ export function WorkoutAnalytics({
 
         {/* Enhanced Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid grid-cols-3 w-full h-auto gap-1 p-1">
+          <TabsList className={`grid ${hideAI ? 'grid-cols-2' : 'grid-cols-3'} w-full h-auto gap-1 p-1`}>
             <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-2">Overview</TabsTrigger>
-            <TabsTrigger value="ai-insights" className="text-xs sm:text-sm px-2 py-2">AI Insights</TabsTrigger>
+            {!hideAI && (
+              <TabsTrigger value="ai-insights" className="text-xs sm:text-sm px-2 py-2">AI Insights</TabsTrigger>
+            )}
             <TabsTrigger value="activity" className="text-xs sm:text-sm px-2 py-2">Activity</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="overview">
             <div className="grid gap-4">
