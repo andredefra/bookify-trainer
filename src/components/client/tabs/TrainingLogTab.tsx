@@ -181,16 +181,18 @@ export function TrainingLogTab({ hideAI = false }: { hideAI?: boolean } = {}) {
                       </div>
                       <div className="flex items-center space-x-2 sm:ml-auto">
                         <Badge variant="secondary" className="hidden sm:inline-flex">Completed</Badge>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => setSelectedWorkoutForAnalysis(
-                            selectedWorkoutForAnalysis?.id === workout.id ? null : workout
-                          )}
-                          className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
-                        >
-                          <Brain className="h-4 w-4" />
-                        </Button>
+                        {!hideAI && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => setSelectedWorkoutForAnalysis(
+                              selectedWorkoutForAnalysis?.id === workout.id ? null : workout
+                            )}
+                            className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
+                          >
+                            <Brain className="h-4 w-4" />
+                          </Button>
+                        )}
                         <Button 
                           variant="ghost" 
                           size="sm"
@@ -204,7 +206,7 @@ export function TrainingLogTab({ hideAI = false }: { hideAI?: boolean } = {}) {
                       </div>
                     </div>
                   </div>
-                  {selectedWorkoutForAnalysis?.id === workout.id && (
+                  {!hideAI && selectedWorkoutForAnalysis?.id === workout.id && (
                     <div className="mt-2 ml-4 border-l-2 border-primary/30 pl-4">
                       <WorkoutAnalysisCard
                         workoutLog={workout}
