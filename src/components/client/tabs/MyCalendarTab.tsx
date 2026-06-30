@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,24 @@ function resolveSessionDate(dateStr: string | Date): Date {
 
 export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>([]);
+  const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>(() => {
+    try {
+      const raw = localStorage.getItem("basic-calendar-events");
+      if (!raw) return [];
+      const parsed = JSON.parse(raw) as any[];
+      return parsed.map(a => ({ ...a, date: new Date(a.date) }));
+    } catch { return []; }
+  });
+
+  useEffect(() => {
+    try {
+      const serializable = plannedActivities.map(a => ({
+        ...a,
+        date: (a.date instanceof Date ? a.date : new Date(a.date)).toISOString(),
+      }));
+      localStorage.setItem("basic-calendar-events", JSON.stringify(serializable));
+    } catch {}
+  }, [plannedActivities]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
   const [newActivity, setNewActivity] = useState({

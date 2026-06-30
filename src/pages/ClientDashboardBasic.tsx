@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ClientHeader } from "@/components/client/ClientHeader";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
@@ -12,6 +12,8 @@ import { MyCalendarTab } from "@/components/client/tabs/MyCalendarTab";
 import { MyGymBasicTab } from "@/components/client/tabs/MyGymBasicTab";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ProgressItem } from "@/components/client/overview/fitness-progress/types";
+import { addDays } from "date-fns";
 
 const ClientDashboardBasic = () => {
   const navigate = useNavigate();
