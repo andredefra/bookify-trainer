@@ -601,9 +601,12 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     handleMarkNoShow,
     handleToggleInvoice,
     handleUpdateInvoiceStatus,
+    handleApproveRefund,
+    handleRejectRefund,
     selectAllPaidTransactions,
     clearSelection
   };
+
 
   return (
     <TransactionsContext.Provider value={value}>
