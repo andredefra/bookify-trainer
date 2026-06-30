@@ -9,7 +9,7 @@ import { WorkoutAnalysisCard } from "@/components/user/training/WorkoutAnalysisC
 import { ClientExerciseLibraryDialog } from "@/components/client/training/ClientExerciseLibraryDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export function TrainingLogTab() {
+export function TrainingLogTab({ hideAI = false }: { hideAI?: boolean } = {}) {
   const [showAddWorkout, setShowAddWorkout] = useState(false);
   const [showExerciseLibrary, setShowExerciseLibrary] = useState(false);
   const [selectedWorkoutForAnalysis, setSelectedWorkoutForAnalysis] = useState<any>(null);
@@ -123,6 +123,7 @@ export function TrainingLogTab() {
                 setEditingWorkout(null);
               }} 
               existingWorkout={editingWorkout}
+              hideAI={hideAI}
             />
           </CardContent>
         </Card>
@@ -180,16 +181,18 @@ export function TrainingLogTab() {
                       </div>
                       <div className="flex items-center space-x-2 sm:ml-auto">
                         <Badge variant="secondary" className="hidden sm:inline-flex">Completed</Badge>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => setSelectedWorkoutForAnalysis(
-                            selectedWorkoutForAnalysis?.id === workout.id ? null : workout
-                          )}
-                          className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
-                        >
-                          <Brain className="h-4 w-4" />
-                        </Button>
+                        {!hideAI && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => setSelectedWorkoutForAnalysis(
+                              selectedWorkoutForAnalysis?.id === workout.id ? null : workout
+                            )}
+                            className={selectedWorkoutForAnalysis?.id === workout.id ? 'bg-primary/10' : ''}
+                          >
+                            <Brain className="h-4 w-4" />
+                          </Button>
+                        )}
                         <Button 
                           variant="ghost" 
                           size="sm"
@@ -203,7 +206,7 @@ export function TrainingLogTab() {
                       </div>
                     </div>
                   </div>
-                  {selectedWorkoutForAnalysis?.id === workout.id && (
+                  {!hideAI && selectedWorkoutForAnalysis?.id === workout.id && (
                     <div className="mt-2 ml-4 border-l-2 border-primary/30 pl-4">
                       <WorkoutAnalysisCard
                         workoutLog={workout}

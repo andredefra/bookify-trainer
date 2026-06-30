@@ -87,7 +87,7 @@ const ClientDashboardBasic = () => {
                 <MyGymBasicTab />
               </TabsContent>
               <TabsContent value="training-log" className="mt-0">
-                <TrainingLogTab />
+                <TrainingLogTab hideAI />
               </TabsContent>
               <TabsContent value="trainers" className="mt-0">
                 <TrainersTab />
