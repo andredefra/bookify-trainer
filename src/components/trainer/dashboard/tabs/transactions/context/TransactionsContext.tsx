@@ -438,31 +438,43 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
       id: Math.max(...transactions.map(t => t.id)) + 1
     };
     setTransactions(prev => [transaction, ...prev]);
+    if (isDemoTx(transaction)) {
+      upsertDemoTransaction(transaction as any);
+      notifyDemo({
+        to: "client",
+        title: "Nuova transazione registrata",
+        description: `${transaction.type} · ${transaction.name} — €${transaction.amount}`,
+      });
+    }
     setShowAddDialog(false);
     toast.success("Transaction added successfully", { duration: 2000 });
   };
 
   const handleConfirmCashPayment = (transactionId: number) => {
-    setTransactions(prev => 
-      prev.map(t => 
+    setTransactions(prev =>
+      prev.map(t =>
         t.id === transactionId ? { ...t, status: 'paid' as const } : t
       )
     );
+    const tx = transactions.find(t => t.id === transactionId);
+    if (tx && isDemoTx(tx)) patchDemoTransaction(transactionId, { status: 'paid' });
     toast.success("Cash payment confirmed", { duration: 2000 });
   };
 
   const handleRejectCashPayment = (transactionId: number) => {
-    setTransactions(prev => 
-      prev.map(t => 
+    setTransactions(prev =>
+      prev.map(t =>
         t.id === transactionId ? { ...t, status: 'rejected' as const } : t
       )
     );
+    const tx = transactions.find(t => t.id === transactionId);
+    if (tx && isDemoTx(tx)) patchDemoTransaction(transactionId, { status: 'rejected' });
     toast.info("Payment rejected - transaction cancelled", { duration: 2000 });
   };
 
   const handleMarkNoShow = (transactionId: number) => {
-    setTransactions(prev => 
-      prev.map(t => 
+    setTransactions(prev =>
+      prev.map(t =>
         t.id === transactionId ? { ...t, status: 'no_show' as const } : t
       )
     );
@@ -470,27 +482,69 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
   };
 
   const handleToggleInvoice = (transactionId: number) => {
-    setTransactions(prev => 
-      prev.map(t => 
+    setTransactions(prev =>
+      prev.map(t =>
         t.id === transactionId ? { ...t, invoiceSent: !t.invoiceSent } : t
       )
     );
   };
 
   const handleUpdateInvoiceStatus = (transactionId: number, status: InvoiceStatus, invoiceUrl?: string) => {
-    setTransactions(prev => 
-      prev.map(t => 
-        t.id === transactionId 
-          ? { 
-              ...t, 
+    setTransactions(prev =>
+      prev.map(t =>
+        t.id === transactionId
+          ? {
+              ...t,
               invoiceStatus: status,
               invoiceUrl: invoiceUrl || t.invoiceUrl,
-              invoiceSentAt: status === 'sent_to_client' ? new Date().toISOString() : t.invoiceSentAt
-            } 
+              invoiceSentAt: status === 'sent_to_client' ? new Date().toISOString() : t.invoiceSentAt,
+              invoiceSent: status === 'sent_to_client' ? true : t.invoiceSent,
+            }
           : t
       )
     );
+    const tx = transactions.find(t => t.id === transactionId);
+    if (tx && isDemoTx(tx)) {
+      patchDemoTransaction(transactionId, {
+        invoiceStatus: status,
+        invoiceUrl: invoiceUrl || tx.invoiceUrl,
+        invoiceSentAt: status === 'sent_to_client' ? new Date().toISOString() : tx.invoiceSentAt,
+        invoiceSent: status === 'sent_to_client' ? true : tx.invoiceSent,
+      });
+      if (status === 'sent_to_client') {
+        notifyDemo({
+          to: "client",
+          title: "Fattura inviata",
+          description: `Il trainer ha inviato la fattura per ${tx.type} del ${tx.date} (€${tx.amount}). Conferma la ricezione.`,
+        });
+      }
+    }
   };
+
+  const handleApproveRefund = (transactionId: number) => {
+    const tx = transactions.find(t => t.id === transactionId);
+    if (!tx) return;
+    patchDemoTransaction(transactionId, { refundStatus: 'approved' } as any);
+    notifyDemo({
+      to: "client",
+      title: "Rimborso approvato",
+      description: `Il trainer ha approvato il rimborso per ${tx.type} (€${tx.amount}). Conferma la ricezione.`,
+    });
+    toast.success("Refund approved", { duration: 2000 });
+  };
+
+  const handleRejectRefund = (transactionId: number) => {
+    const tx = transactions.find(t => t.id === transactionId);
+    if (!tx) return;
+    patchDemoTransaction(transactionId, { refundStatus: 'rejected' } as any);
+    notifyDemo({
+      to: "client",
+      title: "Rimborso rifiutato",
+      description: `Il trainer ha rifiutato il rimborso per ${tx.type} (€${tx.amount}).`,
+    });
+    toast.info("Refund rejected", { duration: 2000 });
+  };
+
 
   const selectAllPaidTransactions = () => {
     const paidTransactionIds = transactions
