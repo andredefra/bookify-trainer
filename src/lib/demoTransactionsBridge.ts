@@ -21,7 +21,8 @@ export const DEMO_TRAINER_NAME = "Sarah Johnson";
 
 export type RefundStatus = "pending" | "approved" | "rejected" | "processed";
 
-type BaseTx = Omit<TransactionType, "refundStatus">;
+export interface DemoTransaction extends Omit<TransactionType, "refundStatus"> {
+
 
 
 export interface DemoTransaction extends TransactionType {
