@@ -29,7 +29,12 @@ export interface TransactionType {
   invoiceRequestedByClient?: boolean;
   invoiceRequestedAt?: string;
   invoiceSentAt?: string;
+  // Refund workflow (demo)
+  refundStatus?: 'pending' | 'approved' | 'rejected';
+  refundReason?: string;
+  refundRequestedAt?: string;
 }
+
 
 // Form validation schema
 export const transactionSchema = z.object({
