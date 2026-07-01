@@ -1,42 +1,47 @@
-## Modifiche su `ClientDashboardBasic` (demo Andrea)
+## Obiettivo
+Nel dialog "Client Profile" del trainer (tab Overview), aggiungere sezioni con più informazioni provenienti dal profilo cliente, così da non lasciare la vista quasi vuota.
 
-Tutto isolato sul dashboard `/client-dashboard-basic` — nessun impatto su altri profili.
+## Modifiche
 
-### 1) Overview: rimuovere Upcoming Expirations
-In `src/components/client/tabs/Overview.tsx` aggiungere prop opzionale `variant?: "basic"`. Quando `variant === "basic"`:
-- non renderizzare `<ExpirationAlertsCard />` (la griglia diventa 1 colonna con la sola `QuickAnalyticsCard`);
-- al posto di `<UpcomingSessionsCard />` renderizzare il nuovo `<UpcomingEventsCard />`.
+### 1. `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/OverviewTab.tsx`
+Estendere il contenuto della card Overview aggiungendo, sotto le sezioni esistenti (ClientSummary, UpcomingSessions, BasicMeasurements), tre nuovi blocchi:
 
-In `src/pages/ClientDashboardBasic.tsx` passare `variant="basic"` a `<Overview />`.
+- **Health & Medical Info**
+  - Food Allergies & Intolerances
+  - Health Conditions
+  - Physical Limitations & Injuries
+  - Medical Certificate: nome file mock (`Certificato_Medico_Sportivo_2024.pdf`), data scadenza, badge stato (Valido / In scadenza / Scaduto) coerente con `HealthDocumentsUpload`, pulsante "Download" (mock/toast)
 
-### 2) Nuovo widget "Upcoming Events"
-Nuovo file `src/components/client/overview/UpcomingEventsCard.tsx`:
-- Titolo "Upcoming Events", descrizione "Planned activities and sessions from your calendar".
-- Bottone in alto a destra "Open Calendar" che fa `navigate('/client-dashboard-basic', { state: { activeTab: 'my-calendar' } })`.
-- Sorgente dati: legge da `localStorage` (chiave `basic-calendar-events`) — stessa chiave che useremo per persistere gli eventi del `MyCalendarTab` (vedi step 4). Se vuoto, seed con 2 eventi mock realistici (es. "Upper Body Workout" domani 18:00, "Session with Marco Rossi" tra 3 giorni 10:00).
-- Mostra max 4 eventi futuri ordinati per data, con icona (Dumbbell/User/Heart/Bed), titolo, data relativa (Today/Tomorrow/EEE d MMM), orario, e badge categoria (Training / Session).
-- Stato vuoto: messaggio + CTA "Plan an Event".
+- **Fitness Preferences**
+  - Fitness Goals (badge list)
+  - Experience Level
+  - Preferred Workout Time
 
-### 3) Persistenza eventi MyCalendarTab (light touch)
-In `MyCalendarTab.tsx` cambiare `useState<PlannedActivity[]>([])` per leggere/scrivere `localStorage` sotto `basic-calendar-events` (con `useEffect` di sync e parse delle date). Così l'Upcoming Events card e il calendario condividono la stessa fonte.
+Icone Lucide (`Heart`, `AlertTriangle`, `FileText`, `Target`, `Clock`) coerenti col resto della UI. Layout in griglia responsive 1 col mobile / 2 col desktop.
 
-### 4) Pre-popolare goal del cliente
-I goal vengono inietta come `progressData` passato a `<Overview />` (attualmente `[]`).
+### 2. `src/components/trainer/dashboard/tabs/clients/data/clientDetails.ts` (o il file mock esistente che produce `mockClientDetails`)
+Estendere l'oggetto con i nuovi campi mock (in italiano/inglese come il resto della UI):
+```ts
+allergies: "Lattosio, frutta secca"
+healthConditions: "Ipertensione lieve (in trattamento)"
+physicalLimitations: "Pregressa distorsione ginocchio destro — evitare salti massimali"
+medicalCertificate: {
+  fileName: "Certificato_Medico_Sportivo_2024.pdf",
+  expiryDate: "2026-07-19",
+  sizeKB: 348
+}
+fitnessGoals: ["Weight loss", "Muscle tone", "Cardiovascular health"]
+experienceLevel: "Intermediate"
+preferredWorkoutTime: "Early morning (6–9 AM)"
+```
+I valori vengono usati da tutti i client mock (stesso mock condiviso già oggi).
 
-In `src/pages/ClientDashboardBasic.tsx` costruire un array `initialGoals: ProgressItem[]` e passarlo:
+### 3. Tipi
+Aggiornare l'interfaccia `mockClientDetails` in `OverviewTab.tsx` e in `ClientProfileTabContent.tsx` per includere i nuovi campi opzionali, in modo che TypeScript resti pulito senza toccare le altre tab.
 
-- **1 goal personale** (`source: 'personal'`):
-  - "Lose Weight" — current 82, target 76, unit kg, goalType `weight_loss`, targetDate +60gg.
-- **2 goal del trainer** (`source: 'trainer'`, `trainerName: 'Marco Rossi'`):
-  - "Bench Press 1RM" — current 70, target 90, unit kg, goalType `strength`, exerciseId opzionale, targetDate +90gg.
-  - "Run 5K under 25 min" — current 28, target 25, unit min, goalType `endurance`, targetDate +75gg.
+### 4. Search
+I nuovi campi vengono passati anche a `useTabSearchResults` così la search interna al profilo li include (estensione minima dell'hook per matchare i nuovi testi nella tab Overview).
 
-Ogni goal include `id`, `createdAt`, `lastUpdated`, `progress` calcolato, e un primo `logs[0]` con il valore iniziale (struttura coerente con `useGoalManagement.addGoal`).
-
-### File coinvolti
-- `src/components/client/tabs/Overview.tsx` (modifica: prop `variant`)
-- `src/components/client/overview/UpcomingEventsCard.tsx` (nuovo)
-- `src/components/client/tabs/MyCalendarTab.tsx` (persistenza localStorage)
-- `src/pages/ClientDashboardBasic.tsx` (passa `variant="basic"` e `progressData` pre-popolato)
-
-Nessuna modifica a DB, edge functions, o ad altri dashboard.
+## Fuori scope
+- Nessuna modifica al dashboard cliente, al DB o alle altre tab (Programs/Packages/Sales/Notes).
+- Nessuna logica reale di download del certificato: solo mock + toast, come già fatto altrove nel demo.
