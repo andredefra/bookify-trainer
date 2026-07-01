@@ -31,7 +31,18 @@ const mockClientDetails = {
   weight: "65kg",
   height: "168cm",
   bodyFat: "24%",
-  notes: "Prefers morning sessions. Has a previous knee injury to be mindful of."
+  notes: "Prefers morning sessions. Has a previous knee injury to be mindful of.",
+  allergies: "Lactose, tree nuts (almonds, walnuts)",
+  healthConditions: "Mild hypertension (under treatment). Occasional lower back pain.",
+  physicalLimitations: "Previous right knee sprain — avoid maximal jumps and deep loaded squats.",
+  medicalCertificate: {
+    fileName: "Certificato_Medico_Sportivo_2024.pdf",
+    expiryDate: "2026-07-19",
+    sizeKB: 348,
+  },
+  fitnessGoals: ["Weight loss", "Muscle tone", "Cardiovascular health"],
+  experienceLevel: "Intermediate",
+  preferredWorkoutTime: "Early morning (6–9 AM)",
 };
 
 interface ClientProfileDialogProps {

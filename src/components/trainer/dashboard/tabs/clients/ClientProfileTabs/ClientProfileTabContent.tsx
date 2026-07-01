@@ -28,6 +28,13 @@ interface ClientProfileTabContentProps {
     height: string;
     bodyFat: string;
     notes: string;
+    allergies?: string;
+    healthConditions?: string;
+    physicalLimitations?: string;
+    medicalCertificate?: { fileName: string; expiryDate: string; sizeKB?: number };
+    fitnessGoals?: string[];
+    experienceLevel?: string;
+    preferredWorkoutTime?: string;
   };
   searchQuery?: string;
   initialTab?: string;
