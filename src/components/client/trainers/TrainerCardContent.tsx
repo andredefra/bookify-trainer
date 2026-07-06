@@ -1,5 +1,5 @@
 
-import { Star, MapPin, Clock, DollarSign } from "lucide-react";
+import { Star, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UserMinus, UserPlus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -79,12 +79,6 @@ export function TrainerCardContent({
           </div>
         )}
         
-        {hourlyRate && (
-          <div className="flex items-center gap-1.5 text-gray-900 font-medium">
-            <DollarSign className="h-3 w-3 shrink-0" />
-            <span className="text-xs">${hourlyRate}/hour</span>
-          </div>
-        )}
         
         {nextAvailability && (
           <div className="flex items-center gap-1.5 text-green-600">
