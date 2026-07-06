@@ -71,7 +71,7 @@ export function BookingDialog({
           <BookingForm 
             trainerName={selectedTrainer}
             onSubmit={onSubmit}
-            onRequest={onRequest}
+            
             onCancel={() => onOpenChange(false)}
             isMobile={isMobile}
           />
