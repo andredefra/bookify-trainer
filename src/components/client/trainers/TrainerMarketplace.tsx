@@ -1,9 +1,13 @@
 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { TrainerList } from "./TrainerList";
 import { BookingDialog } from "./BookingDialog";
+import { TrainerProfileDialog } from "./TrainerProfileDialog";
 import { useTrainerMarketplace } from "./hooks/useTrainerMarketplace";
 import { useFollowedTrainers } from "./hooks/useFollowedTrainers";
+import { toast } from "@/hooks/use-toast";
 
 interface TrainerMarketplaceProps {
   isMyTrainersView?: boolean;
@@ -16,11 +20,9 @@ export function TrainerMarketplace({
   isGymFilterActive = false,
   gymId
 }: TrainerMarketplaceProps) {
+  const navigate = useNavigate();
   const { followedTrainers, handleFollowToggle } = useFollowedTrainers();
-  
-  // Adding explicit debug log to check followed trainers
-  console.log("Followed trainers in TrainerMarketplace:", followedTrainers);
-  
+
   const {
     searchQuery,
     setSearchQuery,
@@ -33,10 +35,29 @@ export function TrainerMarketplace({
     handleBookSession,
     handleBookingSubmit
   } = useTrainerMarketplace(followedTrainers, isGymFilterActive, gymId);
-  
-  // Add explicit debug log to check filtered trainers
-  console.log("Filtered trainers in marketplace:", trainers.map(t => `${t.id} - ${t.name}`));
-  
+
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<{ id: number; name: string } | null>(null);
+
+  const handleViewProfile = (id: number, name: string) => {
+    setSelectedProfile({ id, name });
+    setShowProfileDialog(true);
+  };
+
+  const handleProfileBookSession = (trainerName: string) => {
+    setShowProfileDialog(false);
+    handleBookSession(trainerName);
+  };
+
+  const handleProfileSendMessage = (trainerName: string) => {
+    setShowProfileDialog(false);
+    navigate('/client-dashboard', { state: { activeTab: "messages" } });
+    toast({
+      title: "Opening Messages",
+      description: `Opening chat with ${trainerName}`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Search and filter */}
@@ -53,13 +74,13 @@ export function TrainerMarketplace({
           <p className="text-sm mt-2">Try adjusting your filters or check your followed trainers.</p>
         </div>
       ) : (
-        /* Trainer cards */
         <TrainerList 
           trainers={trainers} 
           onBookSession={handleBookSession} 
           followedTrainers={followedTrainers}
           onFollowToggle={handleFollowToggle}
           isMyTrainersView={isMyTrainersView}
+          onViewProfile={handleViewProfile}
         />
       )}
       
@@ -71,6 +92,18 @@ export function TrainerMarketplace({
         onSubmit={handleBookingSubmit}
         onCancel={() => setShowBookingDialog(false)}
       />
+
+      {/* Profile Dialog */}
+      {selectedProfile && (
+        <TrainerProfileDialog
+          open={showProfileDialog}
+          onOpenChange={setShowProfileDialog}
+          trainerId={selectedProfile.id}
+          trainerName={selectedProfile.name}
+          onBookSession={handleProfileBookSession}
+          onSendMessage={handleProfileSendMessage}
+        />
+      )}
     </div>
   );
 }
