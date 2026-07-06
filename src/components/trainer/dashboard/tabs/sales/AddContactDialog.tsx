@@ -26,6 +26,7 @@ export function AddContactDialog({ open, onOpenChange, onAdd, defaultStatus = 'l
     notes: '',
     nextAction: '',
     nextActionDate: '',
+    gymStudio: 'MyPersonal Studio — Turin',
     status: defaultStatus
   });
 
@@ -51,6 +52,7 @@ export function AddContactDialog({ open, onOpenChange, onAdd, defaultStatus = 'l
       notes: formData.notes || undefined,
       nextAction: formData.nextAction || undefined,
       nextActionDate: formData.nextActionDate || undefined,
+      gymStudio: formData.gymStudio || undefined,
       status: formData.status
     });
     
@@ -65,6 +67,7 @@ export function AddContactDialog({ open, onOpenChange, onAdd, defaultStatus = 'l
       notes: '',
       nextAction: '',
       nextActionDate: '',
+      gymStudio: 'MyPersonal Studio — Turin',
       status: defaultStatus
     });
     
@@ -237,6 +240,25 @@ export function AddContactDialog({ open, onOpenChange, onAdd, defaultStatus = 'l
                 onChange={handleChange}
                 className="col-span-3"
               />
+            </div>
+
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="gymStudio" className="text-right pt-2">
+                Gym / Studio
+              </Label>
+              <div className="col-span-3 space-y-1">
+                <Input
+                  id="gymStudio"
+                  name="gymStudio"
+                  value={formData.gymStudio}
+                  readOnly
+                  tabIndex={-1}
+                  className="bg-muted cursor-not-allowed"
+                />
+                <p className="text-[11px] text-muted-foreground">
+                  Auto-fetched from the client's registered gym / studio.
+                </p>
+              </div>
             </div>
           </div>
           

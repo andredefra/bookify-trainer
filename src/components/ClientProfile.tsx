@@ -1,5 +1,5 @@
 
-import { User, Calendar, Trash2 } from "lucide-react";
+import { User, Calendar, Trash2, Building2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ interface ClientProfileProps {
   since: string;
   sessions: number;
   image?: string;
+  gymStudio?: string;
   onRemove?: () => void;
 }
 
@@ -19,6 +20,7 @@ export function ClientProfile({
   since,
   sessions,
   image,
+  gymStudio,
   onRemove
 }: ClientProfileProps) {
   const defaultImage = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&h=500&q=80";
@@ -54,6 +56,12 @@ export function ClientProfile({
             <Calendar className="h-3 w-3 text-primary/70" />
             <span className="truncate">{since}</span>
           </div>
+          {gymStudio && (
+            <div className="bg-primary/5 px-2 py-1 rounded-md flex items-center gap-1 text-xs">
+              <Building2 className="h-3 w-3 text-primary/70" />
+              <span className="truncate">{gymStudio}</span>
+            </div>
+          )}
         </div>
 
         {onRemove && (
