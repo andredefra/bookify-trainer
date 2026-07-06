@@ -24,6 +24,7 @@ const mockClientDetails = {
   name: "Sarah Johnson",
   email: "sarah@example.com",
   since: "March 2023",
+  gymStudio: "FitLife Gym — Milan",
   sessions: 12,
   goals: ["Lose 5kg", "Run 10K", "Strength Training"],
   lastActivity: "Yesterday",
@@ -105,6 +106,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
               email={mockClientDetails.email}
               since={mockClientDetails.since}
               sessions={client.sessions}
+              gymStudio={mockClientDetails.gymStudio}
               onRemove={() => setConfirmOpen(true)}
             />
           </div>
@@ -117,6 +119,7 @@ export function ClientProfileDialog({ client, open, onOpenChange, onMessage, onS
                 email={mockClientDetails.email}
                 since={mockClientDetails.since}
                 sessions={client.sessions}
+                gymStudio={mockClientDetails.gymStudio}
                 onRemove={() => setConfirmOpen(true)}
               />
             </div>

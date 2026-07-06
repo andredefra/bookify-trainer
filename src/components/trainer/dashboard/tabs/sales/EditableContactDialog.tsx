@@ -176,6 +176,22 @@ export function EditableContactDialog({
               onChange={(e) => handleChange('nextAction', e.target.value)} 
             />
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="gymStudio" className="flex items-center gap-1">
+              Gym / Studio <Lock className="h-3 w-3 text-muted-foreground" />
+            </Label>
+            <Input
+              id="gymStudio"
+              value={formData.gymStudio || '—'}
+              readOnly
+              tabIndex={-1}
+              className="bg-muted cursor-not-allowed"
+            />
+            <p className="text-[11px] text-muted-foreground">
+              Auto-fetched from the client's registered gym / studio.
+            </p>
+          </div>
           
           <div className="space-y-2">
             <Label htmlFor="notes">Notes</Label>

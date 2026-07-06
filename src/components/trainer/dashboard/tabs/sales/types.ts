@@ -15,4 +15,5 @@ export interface SalesContact {
   value?: number;
   nextAction?: string;
   nextActionDate?: string;
+  gymStudio?: string;
 }

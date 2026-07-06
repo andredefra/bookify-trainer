@@ -100,6 +100,13 @@ export function SalesCard({ contact, onUpdateContact }: SalesCardProps) {
                 <span className="truncate">{contact.company}</span>
               </div>
             )}
+
+            {contact.gymStudio && (
+              <div className={`flex items-center ${isMobile ? 'text-[0.65rem]' : 'text-xs'} text-muted-foreground`}>
+                <Building className={`${isMobile ? 'h-2.5 w-2.5 mr-1' : 'h-3 w-3 mr-1.5'} flex-shrink-0`} />
+                <span className="truncate">{contact.gymStudio}</span>
+              </div>
+            )}
             
             <div className={`flex items-center ${isMobile ? 'text-[0.65rem]' : 'text-xs'} text-muted-foreground`}>
               <Mail className={`${isMobile ? 'h-2.5 w-2.5 mr-1' : 'h-3 w-3 mr-1.5'} flex-shrink-0`} />
