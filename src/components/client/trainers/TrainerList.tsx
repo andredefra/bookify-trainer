@@ -9,6 +9,7 @@ interface TrainerListProps {
   followedTrainers?: number[];
   onFollowToggle?: (id: number, name: string) => void;
   isMyTrainersView?: boolean;
+  onViewProfile?: (id: number, name: string) => void;
 }
 
 export function TrainerList({ 
@@ -16,7 +17,8 @@ export function TrainerList({
   onBookSession, 
   followedTrainers = [],
   onFollowToggle,
-  isMyTrainersView = false
+  isMyTrainersView = false,
+  onViewProfile
 }: TrainerListProps) {
   return (
     <ScrollArea className="h-[calc(100vh-350px)] pr-4">
@@ -29,6 +31,7 @@ export function TrainerList({
             followedTrainers={followedTrainers}
             onFollowToggle={onFollowToggle}
             isMyTrainersView={isMyTrainersView}
+            onViewProfile={onViewProfile}
           />
         ))}
       </div>

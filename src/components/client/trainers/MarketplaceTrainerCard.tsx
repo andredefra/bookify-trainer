@@ -10,6 +10,7 @@ interface TrainerCardProps {
   followedTrainers?: number[];
   onFollowToggle?: (id: number, name: string) => void;
   isMyTrainersView?: boolean;
+  onViewProfile?: (id: number, name: string) => void;
 }
 
 export function MarketplaceTrainerCard({ 
@@ -17,7 +18,8 @@ export function MarketplaceTrainerCard({
   onBookSession,
   followedTrainers = [],
   onFollowToggle,
-  isMyTrainersView = false
+  isMyTrainersView = false,
+  onViewProfile
 }: TrainerCardProps) {
   const navigate = useNavigate();
   const trainerId = parseInt(trainer.id.replace(/\D/g, ''));
@@ -33,7 +35,11 @@ export function MarketplaceTrainerCard({
   };
 
   const handleViewProfile = () => {
-    navigate(`/trainer/${trainer.id}`);
+    if (onViewProfile) {
+      onViewProfile(trainerId, trainer.name);
+    } else {
+      navigate(`/trainer/${trainer.id}`);
+    }
   };
 
   return (
