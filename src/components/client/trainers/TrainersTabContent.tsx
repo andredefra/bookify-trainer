@@ -53,6 +53,7 @@ interface Payment {
 interface TrainersTabContentProps {
   activeTab: "trainers" | "payments" | "marketplace" | "followed";
   myTrainers: Trainer[];
+  allTrainers?: Trainer[];
   paymentHistory: Payment[];
   followedTrainers: number[];
   onPayClick: (trainer: string, amount: number, trainerPlan?: string) => void;
@@ -66,6 +67,7 @@ interface TrainersTabContentProps {
 export function TrainersTabContent({
   activeTab,
   myTrainers,
+  allTrainers,
   paymentHistory,
   followedTrainers,
   onPayClick,
@@ -146,7 +148,7 @@ export function TrainersTabContent({
         return (
           <FollowedTrainersSection 
             followedTrainers={followedTrainers}
-            allTrainers={myTrainers}
+            allTrainers={allTrainers ?? myTrainers}
             onPayClick={onPayClick}
             onFollowToggle={onFollowToggle}
             onBrowseTrainers={() => onTabChange("marketplace")}

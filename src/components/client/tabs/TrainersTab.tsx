@@ -12,7 +12,7 @@ import { useDemoTransactions } from "@/hooks/useDemoTransactions";
 
 
 
-const myTrainers = [
+const allTrainers = [
   { 
     id: 1, 
     name: "Sarah Johnson", 
@@ -95,6 +95,10 @@ const myTrainers = [
   }
 ];
 
+// The user is only an actual client of Sarah Johnson (id 1).
+// Alex Thompson is only followed, not a personal trainer for this user.
+const myTrainers = allTrainers.filter((t) => t.id === 1);
+
 export function TrainersTab() {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<"trainers" | "payments" | "marketplace" | "followed">("trainers");
@@ -102,7 +106,7 @@ export function TrainersTab() {
   const [selectedTrainer, setSelectedTrainer] = useState<{name: string, amount: number, plan?: string} | null>(null);
   const [isGymFilterActive, setIsGymFilterActive] = useState(false);
   
-  const { followedTrainers, handleFollowToggle } = useFollowedTrainers(myTrainers);
+  const { followedTrainers, handleFollowToggle } = useFollowedTrainers(allTrainers);
   const { connection: gymConnection } = useGymConnection();
   const userPlan = localStorage.getItem('user-plan') || "freemium";
   
@@ -115,7 +119,7 @@ export function TrainersTab() {
   
   useEffect(() => {
     if (followedTrainers.length === 0) {
-      const trainerIds = myTrainers.map(trainer => trainer.id);
+      const trainerIds = allTrainers.map(trainer => trainer.id);
       localStorage.setItem('followedTrainers', JSON.stringify(trainerIds));
     }
   }, [followedTrainers]);
@@ -170,6 +174,7 @@ export function TrainersTab() {
         <TrainersTabContent
           activeTab={activeTab}
           myTrainers={myTrainers}
+          allTrainers={allTrainers}
           paymentHistory={paymentHistory}
           followedTrainers={followedTrainers}
           onPayClick={handlePayTrainer}
