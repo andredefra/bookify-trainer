@@ -5,7 +5,6 @@ import {
   Star,
   MapPin,
   Clock,
-  Euro,
   CheckCircle,
   MessageSquare,
   Calendar,
@@ -51,7 +50,7 @@ export function TrainerHeaderInfo({
 
         <h2 className="text-xl text-muted-foreground mb-4">{trainer.title}</h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-4 w-4" />
             <span className="text-sm">{trainer.location}</span>
@@ -65,10 +64,6 @@ export function TrainerHeaderInfo({
             <span className="text-sm">
               {averageRating.toFixed(1)} ({trainer.reviews} reviews)
             </span>
-          </div>
-          <div className="flex items-center gap-2 text-foreground font-semibold">
-            <Euro className="h-4 w-4" />
-            <span className="text-sm">€{trainer.hourlyRate}/hour</span>
           </div>
         </div>
       </div>

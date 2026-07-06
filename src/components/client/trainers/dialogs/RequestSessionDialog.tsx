@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,15 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, Trash2, Calendar, Euro, Info } from "lucide-react";
+import { Plus, Trash2, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { TrainerData } from "../data/trainerData";
 
@@ -49,20 +42,7 @@ export function RequestSessionDialog({
   trainerId,
 }: RequestSessionDialogProps) {
   const [slots, setSlots] = useState<Slot[]>([newSlot()]);
-  const [duration, setDuration] = useState<"60" | "90">("60");
   const [message, setMessage] = useState("");
-
-  const estimatedPrice = useMemo(
-    () => Math.round(trainer.hourlyRate * (parseInt(duration) / 60)),
-    [trainer.hourlyRate, duration],
-  );
-
-  const availabilitySummary = useMemo(() => {
-    const days = Object.entries(trainer.availability)
-      .filter(([, slots]) => slots[0] && slots[0] !== "Closed")
-      .map(([day, slots]) => `${day.slice(0, 3)}: ${slots.join(", ")}`);
-    return days.join(" · ");
-  }, [trainer.availability]);
 
   const addSlot = () => {
     if (slots.length >= 3) return;
@@ -95,9 +75,6 @@ export function RequestSessionDialog({
       trainerId,
       trainerName: trainer.name,
       trainerImage: trainer.image,
-      hourlyRate: trainer.hourlyRate,
-      duration: parseInt(duration),
-      estimatedPrice,
       proposedSlots: validSlots.map(({ date, time }) => ({ date, time })),
       message: message.trim(),
       status: "awaiting_trainer" as const,
@@ -117,9 +94,7 @@ export function RequestSessionDialog({
       `Request sent. ${trainer.name.split(" ")[0]} will review your proposed times and reply.`,
     );
 
-    // reset & close
     setSlots([newSlot()]);
-    setDuration("60");
     setMessage("");
     onOpenChange(false);
   };
@@ -128,7 +103,7 @@ export function RequestSessionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Request a session</DialogTitle>
+          <DialogTitle>Request an event</DialogTitle>
           <DialogDescription>
             Propose up to 3 dates that work for you. The trainer will confirm
             one and send a final invitation.
@@ -143,34 +118,7 @@ export function RequestSessionDialog({
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="font-semibold truncate">{trainer.name}</p>
-            <p className="text-sm text-muted-foreground flex items-center gap-1">
-              <Euro className="h-3.5 w-3.5" />€{trainer.hourlyRate}/hour
-            </p>
           </div>
-        </div>
-
-        {availabilitySummary && (
-          <p className="text-xs text-muted-foreground flex items-start gap-1.5">
-            <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-            <span>Trainer availability — {availabilitySummary}</span>
-          </p>
-        )}
-
-        {/* Duration */}
-        <div className="space-y-2">
-          <Label>Session duration</Label>
-          <Select
-            value={duration}
-            onValueChange={(v) => setDuration(v as "60" | "90")}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="60">60 minutes</SelectItem>
-              <SelectItem value="90">90 minutes</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         {/* Proposed slots */}
@@ -238,20 +186,6 @@ export function RequestSessionDialog({
             placeholder="Hi! I'd like to book a session to work on…"
             rows={4}
           />
-        </div>
-
-        {/* Estimated price */}
-        <div className="rounded-lg border p-3 bg-muted/30 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium">Estimated price</p>
-            <p className="text-xs text-muted-foreground">
-              Trainer may adjust the price or offer the session for free.
-            </p>
-          </div>
-          <p className="text-2xl font-bold flex items-center gap-1">
-            <Euro className="h-5 w-5" />
-            {estimatedPrice}
-          </p>
         </div>
 
         <DialogFooter>
