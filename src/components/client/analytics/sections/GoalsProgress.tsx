@@ -81,6 +81,7 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
         <BodyMeasurementsCard 
           latestMeasurements={latestMeasurements} 
           bodyMeasurements={bodyMeasurements}
+          userProfile={{ height: profile?.height, gender: profile?.gender as 'male' | 'female' | undefined }}
         />
       )}
 
