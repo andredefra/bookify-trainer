@@ -98,10 +98,12 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
       </div>
       
       <div className="grid grid-cols-2 gap-3">
+        {latestMeasurements.chest && renderMeasurementItem('Chest', latestMeasurements.chest, 'cm', chestTrend)}
         {latestMeasurements.waist && renderMeasurementItem('Waist', latestMeasurements.waist, 'cm', waistTrend)}
+        {latestMeasurements.abdomen && renderMeasurementItem('Abdomen', latestMeasurements.abdomen, 'cm', abdomenTrend)}
         {latestMeasurements.hips && renderMeasurementItem('Hips', latestMeasurements.hips, 'cm', hipsTrend)}
         {latestMeasurements.arms && renderMeasurementItem('Arms', latestMeasurements.arms, 'cm', armsTrend)}
-        {latestMeasurements.thighs && renderMeasurementItem('Thighs', latestMeasurements.thighs, 'cm', thighsTrend)}
+        {(latestMeasurements.quadriceps ?? latestMeasurements.thighs) && renderMeasurementItem('Quadriceps', (latestMeasurements.quadriceps ?? latestMeasurements.thighs)!, 'cm', quadricepsTrend)}
       </div>
     </div>
   );
