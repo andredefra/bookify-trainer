@@ -293,7 +293,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                     )}
                   >
                     <User className="h-4 w-4" />
-                    Session
+                    Trainer Session
                   </button>
                   <button
                     type="button"
