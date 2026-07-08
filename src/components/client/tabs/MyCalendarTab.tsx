@@ -72,6 +72,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
     return new Date();
   }, [location.state]);
   const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
+  const [currentMonth, setCurrentMonth] = useState<Date>(initialDate);
   const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>(() => {
     try {
       const raw = localStorage.getItem("basic-calendar-events");
