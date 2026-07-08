@@ -96,6 +96,7 @@ export function UserAnalytics() {
         weight: 77,
         height: 175,
         gender: "male" as const,
+        chest: 104,
         waist: 85,
         hips: 97,
         quadriceps: 56,
