@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { CalendarDays, Dumbbell, Flame, Heart, Bed, User, Clock, ArrowRight, Plus, Video, MapPin, UserCheck, UserPlus } from "lucide-react";
+import { CalendarDays, Dumbbell, Flame, Heart, User, Clock, ArrowRight, Plus, Video, MapPin, UserCheck, UserPlus } from "lucide-react";
 import { addDays, format, isToday, isTomorrow } from "date-fns";
 
 interface CalendarEvent {
