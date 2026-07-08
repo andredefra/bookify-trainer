@@ -53,9 +53,6 @@ export function ClientCheckInHistoryDialog({
                   {selectedSubmission.measurements.waist && (
                     <div><span className="text-muted-foreground">Waist:</span> {selectedSubmission.measurements.waist}cm</div>
                   )}
-                  {selectedSubmission.measurements.abdomen && (
-                    <div><span className="text-muted-foreground">Abdomen:</span> {selectedSubmission.measurements.abdomen}cm</div>
-                  )}
                   {selectedSubmission.measurements.hips && (
                     <div><span className="text-muted-foreground">Hips:</span> {selectedSubmission.measurements.hips}cm</div>
                   )}
