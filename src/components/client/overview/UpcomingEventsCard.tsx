@@ -153,7 +153,7 @@ export function UpcomingEventsCard() {
     });
 
   const originBadge = (ev: CalendarEvent) => {
-    if (ev.category === "training") {
+    if (ev.category === "training" || ev.category === "general") {
       return (
         <Badge variant="secondary" className="gap-1">
           <UserCheck className="h-3 w-3" /> Planned by you
