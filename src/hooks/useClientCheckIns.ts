@@ -154,6 +154,13 @@ export function useClientCheckIns(clientId: string) {
     try {
       setLoading(true);
 
+      // Demo user: use in-memory mocks, skip Supabase
+      if (clientId === DEMO_CLIENT_ID) {
+        setSettings(getDemoSettings());
+        setSubmissions(getDemoSubmissions());
+        return;
+      }
+
       // Fetch settings
       const { data: settingsData, error: settingsError } = await supabase
         .from('check_in_settings')
