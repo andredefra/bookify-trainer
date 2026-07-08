@@ -55,9 +55,7 @@ export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDele
                     <TableCell>{fmt(log.waist)}</TableCell>
                     <TableCell>{fmt(log.hips)}</TableCell>
                     <TableCell>{fmt(log.thighs)}</TableCell>
-                    <TableCell>{fmt(log.shoulders)}</TableCell>
                     <TableCell>{fmt(log.arms)}</TableCell>
-                    <TableCell>{fmt(log.neck)}</TableCell>
                     <TableCell>
                       <Button variant="ghost" size="icon" onClick={() => log.id && onDelete(log.id)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
