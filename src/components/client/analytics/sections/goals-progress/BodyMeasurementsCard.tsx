@@ -8,11 +8,12 @@ import { getMeasurementsStatus } from "./utils/measurementsStatus";
 interface BodyMeasurementsCardProps {
   latestMeasurements: BodyMeasurements;
   bodyMeasurements: BodyMeasurements[];
+  userProfile?: { height?: number; gender?: 'male' | 'female' };
 }
 
-export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements }: BodyMeasurementsCardProps) {
+export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, userProfile }: BodyMeasurementsCardProps) {
   const getStatusInfo = () => {
-    const status = getMeasurementsStatus(latestMeasurements);
+    const status = getMeasurementsStatus(latestMeasurements, userProfile);
     
     if (!status) {
       // Fallback if not enough data
