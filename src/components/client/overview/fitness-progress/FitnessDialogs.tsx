@@ -27,25 +27,25 @@ interface FitnessDialogsProps {
   setOpenMeasurementsDialog: (open: boolean) => void;
   openManageActivityTypesDialog: boolean;
   setOpenManageActivityTypesDialog: (open: boolean) => void;
-  openWeightHistoryDialog: boolean;
-  setOpenWeightHistoryDialog: (open: boolean) => void;
-  openMeasurementsHistoryDialog: boolean;
-  setOpenMeasurementsHistoryDialog: (open: boolean) => void;
+  openWeightHistoryDialog?: boolean;
+  setOpenWeightHistoryDialog?: (open: boolean) => void;
+  openMeasurementsHistoryDialog?: boolean;
+  setOpenMeasurementsHistoryDialog?: (open: boolean) => void;
   selectedGoal: ProgressItem | null;
-  weightLogs: WeightLog[];
-  bodyMeasurements: BodyMeasurements[];
+  weightLogs?: WeightLog[];
+  bodyMeasurements?: BodyMeasurements[];
   onSubmit: (data: any) => void;
   onUpdateSubmit: (data: any) => void;
   onLogSubmit: (data: any) => void;
   onWeightSubmit: (data: any) => void;
   onMeasurementsSubmit: (data: any) => void;
   onDeleteGoal: () => void;
-  onDeleteWeightLog: (id: string) => void;
-  onDeleteBodyMeasurement: (id: string) => void;
-  onViewWeightHistory: () => void;
-  onViewMeasurementsHistory: () => void;
-  onBackToWeightLog: () => void;
-  onBackToMeasurementsLog: () => void;
+  onDeleteWeightLog?: (id: string) => void;
+  onDeleteBodyMeasurement?: (id: string) => void;
+  onViewWeightHistory?: () => void;
+  onViewMeasurementsHistory?: () => void;
+  onBackToWeightLog?: () => void;
+  onBackToMeasurementsLog?: () => void;
   onManageGoalTypes?: () => void;
 }
 
