@@ -218,7 +218,7 @@ export function UpcomingEventsCard() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-medium text-foreground truncate">{labelFor(ev)}</p>
                       <Badge variant={ev.category === "session" ? "default" : "secondary"} className="text-xs">
-                        {ev.category === "session" ? "Session" : "Training"}
+                        {ev.category === "session" ? "Session" : ev.category === "general" ? "General" : "Training"}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground mt-0.5">
