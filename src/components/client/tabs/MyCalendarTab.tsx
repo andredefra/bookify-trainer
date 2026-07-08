@@ -124,6 +124,11 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const selectedDayPlanned = plannedActivities.filter(a => isSameDay(a.date, selectedDate));
 
   const handleAddActivity = () => {
+    const trimmedTitle = newActivity.title.trim();
+    if (!trimmedTitle) {
+      toast({ title: "Please add a title for the event", variant: "destructive" });
+      return;
+    }
     if (eventCategory === "session") {
       const trainer = mockTrainers.find(t => t.id === newActivity.trainerId);
       if (!trainer) {
@@ -139,6 +144,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
         time: newActivity.time,
         category: "session",
         type: "workout",
+        title: trimmedTitle,
         notes: newActivity.notes,
         trainer: trainer.name,
         sessionMode: newActivity.sessionMode,
@@ -165,12 +171,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
         time: newActivity.time,
         category: "training",
         type: newActivity.type as PlannedActivity["type"],
+        title: trimmedTitle,
         notes: newActivity.notes,
       };
       setPlannedActivities(prev => [...prev, activity]);
     }
 
-    setNewActivity({ time: "09:00", type: "workout", notes: "", trainerId: "", sessionMode: "in-person" });
+    setNewActivity({ title: "", time: "09:00", type: "workout", notes: "", trainerId: "", sessionMode: "in-person" });
     setEventCategory("training");
     setDialogOpen(false);
   };
