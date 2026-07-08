@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ interface PlannedActivity {
   time: string;
   category: "training" | "session";
   type: "workout" | "cardio" | "stretching" | "rest";
+  title?: string;
   notes: string;
   trainer?: string;
   sessionMode?: "video" | "in-person";
@@ -60,7 +62,16 @@ function resolveSessionDate(dateStr: string | Date): Date {
 }
 
 export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const location = useLocation();
+  const initialDate = useMemo(() => {
+    const iso = (location.state as any)?.selectedDate;
+    if (iso) {
+      const d = new Date(iso);
+      if (!isNaN(d.getTime())) return d;
+    }
+    return new Date();
+  }, [location.state]);
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
   const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>(() => {
     try {
       const raw = localStorage.getItem("basic-calendar-events");
@@ -82,6 +93,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
   const [newActivity, setNewActivity] = useState({
+    title: "",
     time: "09:00",
     type: "workout",
     notes: "",
@@ -112,6 +124,11 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const selectedDayPlanned = plannedActivities.filter(a => isSameDay(a.date, selectedDate));
 
   const handleAddActivity = () => {
+    const trimmedTitle = newActivity.title.trim();
+    if (!trimmedTitle) {
+      toast({ title: "Please add a title for the event", variant: "destructive" });
+      return;
+    }
     if (eventCategory === "session") {
       const trainer = mockTrainers.find(t => t.id === newActivity.trainerId);
       if (!trainer) {
@@ -127,6 +144,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
         time: newActivity.time,
         category: "session",
         type: "workout",
+        title: trimmedTitle,
         notes: newActivity.notes,
         trainer: trainer.name,
         sessionMode: newActivity.sessionMode,
@@ -153,12 +171,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
         time: newActivity.time,
         category: "training",
         type: newActivity.type as PlannedActivity["type"],
+        title: trimmedTitle,
         notes: newActivity.notes,
       };
       setPlannedActivities(prev => [...prev, activity]);
     }
 
-    setNewActivity({ time: "09:00", type: "workout", notes: "", trainerId: "", sessionMode: "in-person" });
+    setNewActivity({ title: "", time: "09:00", type: "workout", notes: "", trainerId: "", sessionMode: "in-person" });
     setEventCategory("training");
     setDialogOpen(false);
   };
@@ -231,6 +250,17 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                     Session with Trainer
                   </button>
                 </div>
+              </div>
+
+              {/* Title */}
+              <div>
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  placeholder={eventCategory === "training" ? "e.g. Upper Body Workout" : "e.g. Personal training – Lower Body"}
+                  value={newActivity.title}
+                  onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
+                />
               </div>
 
               {/* Date */}
@@ -456,7 +486,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                           }
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-foreground">Session with {activity.trainer}</p>
+                          <p className="font-medium text-foreground">{activity.title || `Session with ${activity.trainer}`}</p>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5">
                             <Clock className="h-3.5 w-3.5" />
                             <span>{activity.time}</span>
@@ -498,7 +528,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                         <Icon className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-foreground capitalize">{activity.type}</p>
+                        <p className="font-medium text-foreground">{activity.title || <span className="capitalize">{activity.type}</span>}</p>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5">
                           <Clock className="h-3.5 w-3.5" />
                           <span>{activity.time}</span>
