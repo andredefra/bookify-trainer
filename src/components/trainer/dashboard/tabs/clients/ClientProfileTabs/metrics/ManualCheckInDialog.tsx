@@ -36,7 +36,6 @@ export function ManualCheckInDialog({
   const [measurements, setMeasurements] = useState({
     chest: "",
     waist: "",
-    abdomen: "",
     hips: "",
     quadriceps: "",
     arms: "",
