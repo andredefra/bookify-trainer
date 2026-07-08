@@ -11,7 +11,7 @@ interface CalendarEvent {
   id: string;
   date: string; // ISO
   time: string;
-  category: "training" | "session";
+  category: "training" | "session" | "general";
   type: string;
   title?: string;
   notes?: string;
