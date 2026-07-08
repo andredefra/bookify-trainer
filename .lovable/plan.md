@@ -1,26 +1,21 @@
-Restructure the "Plan an Event" dialog so that "Rest Day" is no longer an activity type under Training Day, and add a new top-level event category for generic events.
+Implementerò questi interventi nel tab Calendar:
 
-### What will change
+1. Più eventi mock nel calendario
+- Aggiungere un set iniziale di eventi demo distribuiti nel mese corrente e nei mesi vicini.
+- Includere esempi di Training Day, General Event e Trainer Session/request, così i marker e la lista giornaliera risultano più popolati.
+- Mantenere gli eventi salvati in localStorage senza sovrascrivere quelli creati dall’utente.
 
-**`src/components/client/tabs/MyCalendarTab.tsx`**
-- Remove `rest` / "Rest Day" from the `activityTypes` list used under Training Day.
-- Add `"general"` as a third event category alongside `"training"` and `"session"`.
-- Update the `PlannedActivity` interface so `category` accepts `"training" | "session" | "general"` and add a generic `type` value for general events.
-- Add a third "General Event" button in the Event Type selector (Training Day / Session with Trainer / General Event).
-- When "General Event" is selected, show only title, date, time and notes — no Activity Type dropdown and no trainer/session-mode fields.
-- Update `handleAddActivity` to create a general-event activity with category `"general"` and type `"general"`.
-- Update calendar day modifiers, selected-day list rendering, icon helpers and color helpers to recognise general events.
-- Keep existing training/session behaviour unchanged.
+2. Navigazione mese precedente/successivo
+- Correggere la sincronizzazione tra `selectedDate` e `currentMonth`, che oggi può riportare il calendario al mese del giorno selezionato e impedire di navigare liberamente tra i mesi.
+- Lasciare il bottone Today come azione esplicita per tornare a oggi.
+- Quando si clicca un giorno di un altro mese, aggiornare normalmente la selezione.
 
-**`src/components/client/overview/UpcomingEventsCard.tsx`**
-- Update the `CalendarEvent` interface to accept `category: "training" | "session" | "general"`.
-- Update `iconFor`, `colorFor` and `labelFor` helpers to handle general events.
-- Update the category badge in the list and in the details dialog so general events show as "General Event".
-- Update `originBadge` so general events planned by the user show "Planned by you".
+3. Conferma prima di rimuovere un evento
+- Sostituire la rimozione immediata con un dialog di conferma.
+- Mostrare titolo dell’evento e azioni Cancel / Remove.
+- Rimuovere l’evento solo dopo conferma e mostrare un feedback toast.
 
-### Not in scope
-- No database or backend changes (calendar events are stored in localStorage in this view).
-- No changes to session request logic or trainer plans.
+File coinvolto:
+- `src/components/client/tabs/MyCalendarTab.tsx`
 
-### UX note
-The new General Event category is meant for anything that is not a training session or a trainer appointment (e.g. "Massage", "Meal prep", "Rest/recovery note").
+Non toccherò database o logiche backend: resterà una modifica frontend/mock come richiesto.
