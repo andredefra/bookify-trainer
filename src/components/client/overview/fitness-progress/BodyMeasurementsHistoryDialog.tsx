@@ -18,7 +18,7 @@ const fmt = (v?: number) => (v && v > 0 ? v : "—");
 export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDelete, onBack }: BodyMeasurementsHistoryDialogProps) {
   // Only show entries that actually have measurements (skip pure weight snapshots)
   const measurementEntries = logs.filter(l =>
-    l.waist || l.hips || l.thighs || l.shoulders || l.arms || l.neck
+    l.waist || l.hips || l.thighs || l.arms
   );
   const sorted = [...measurementEntries].sort((a, b) => (a.date < b.date ? 1 : -1));
 
@@ -44,9 +44,7 @@ export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDele
                   <TableHead>Waist</TableHead>
                   <TableHead>Hips</TableHead>
                   <TableHead>Thighs</TableHead>
-                  <TableHead>Shoulders</TableHead>
                   <TableHead>Arms</TableHead>
-                  <TableHead>Neck</TableHead>
                   <TableHead className="w-[60px]" />
                 </TableRow>
               </TableHeader>
@@ -57,9 +55,7 @@ export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDele
                     <TableCell>{fmt(log.waist)}</TableCell>
                     <TableCell>{fmt(log.hips)}</TableCell>
                     <TableCell>{fmt(log.thighs)}</TableCell>
-                    <TableCell>{fmt(log.shoulders)}</TableCell>
                     <TableCell>{fmt(log.arms)}</TableCell>
-                    <TableCell>{fmt(log.neck)}</TableCell>
                     <TableCell>
                       <Button variant="ghost" size="icon" onClick={() => log.id && onDelete(log.id)}>
                         <Trash2 className="h-4 w-4 text-destructive" />

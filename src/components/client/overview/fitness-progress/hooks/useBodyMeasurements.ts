@@ -5,19 +5,19 @@ import { calculateBodyComposition } from "../utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
 const STORAGE_KEY = "body-measurements-data";
-const SEED_FLAG = "body-measurements-seeded-v2";
+const SEED_FLAG = "body-measurements-seeded-v3";
 
 // 6-entry history over ~5 months. Weights match the weight-log trend
 // (ending at 82 kg today). Circumferences aligned with prior Analytics values.
 const getMockBodyMeasurements = (): BodyMeasurements[] => {
   const today = new Date();
   const entries = [
-    { daysAgo: 150, weight: 84.5, waist: 89, neck: 39, hips: 100, thighs: 58, shoulders: 118, arms: 34 },
-    { daysAgo: 120, weight: 84.0, waist: 88, neck: 39, hips: 99,  thighs: 57, shoulders: 118, arms: 34 },
-    { daysAgo: 90,  weight: 83.4, waist: 87, neck: 38, hips: 98,  thighs: 57, shoulders: 117, arms: 34 },
-    { daysAgo: 60,  weight: 82.7, waist: 86, neck: 38, hips: 97,  thighs: 56, shoulders: 116, arms: 33 },
-    { daysAgo: 30,  weight: 82.2, waist: 85, neck: 38, hips: 96,  thighs: 56, shoulders: 116, arms: 33 },
-    { daysAgo: 3,   weight: 82.0, waist: 84, neck: 38, hips: 95,  thighs: 55, shoulders: 115, arms: 33 },
+    { daysAgo: 150, weight: 84.5, waist: 89, hips: 100, thighs: 58, arms: 34 },
+    { daysAgo: 120, weight: 84.0, waist: 88, hips: 99,  thighs: 57, arms: 34 },
+    { daysAgo: 90,  weight: 83.4, waist: 87, hips: 98,  thighs: 57, arms: 34 },
+    { daysAgo: 60,  weight: 82.7, waist: 86, hips: 97,  thighs: 56, arms: 33 },
+    { daysAgo: 30,  weight: 82.2, waist: 85, hips: 96,  thighs: 56, arms: 33 },
+    { daysAgo: 3,   weight: 82.0, waist: 84, hips: 95,  thighs: 55, arms: 33 },
   ];
   return entries.map((e, i) => {
     const d = new Date(today);
@@ -27,10 +27,8 @@ const getMockBodyMeasurements = (): BodyMeasurements[] => {
       date: d.toISOString().split('T')[0],
       weight: e.weight,
       waist: e.waist,
-      neck: e.neck,
       hips: e.hips,
       thighs: e.thighs,
-      shoulders: e.shoulders,
       arms: e.arms,
       source: 'manual' as const,
     };

@@ -21,9 +21,7 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
       waist: 0,
       hips: 0,
       thighs: 0,
-      shoulders: 0,
-      arms: 0,
-      neck: 0
+      arms: 0
     }
   });
 
@@ -127,25 +125,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
                 )}
               />
               
-              <FormField
-                control={measurementsForm.control}
-                name="shoulders"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Shoulders (cm)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.1"
-                        placeholder="0" 
-                        {...field} 
-                        onChange={e => field.onChange(Number(e.target.value))} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               
               <FormField
                 control={measurementsForm.control}
@@ -153,26 +132,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Arms (cm)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.1"
-                        placeholder="0" 
-                        {...field} 
-                        onChange={e => field.onChange(Number(e.target.value))} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={measurementsForm.control}
-                name="neck"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Neck (cm)</FormLabel>
                     <FormControl>
                       <Input 
                         type="number" 
