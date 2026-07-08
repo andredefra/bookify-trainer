@@ -478,12 +478,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 }}
                 modifiersClassNames={{
                   hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
-                  hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
-                  hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
+                  hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-8px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
+                  hasGeneral: "relative before:absolute before:bottom-1 before:left-1/2 before:-translate-x-1/2 before:h-1.5 before:w-1.5 before:rounded-full before:bg-slate-500",
+                  hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+6px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
                 }}
               />
               {/* Legend */}
-              <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-primary" />
                   Sessions
@@ -491,6 +492,10 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-green-500" />
                   Planned
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-slate-500" />
+                  General
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-amber-500" />
