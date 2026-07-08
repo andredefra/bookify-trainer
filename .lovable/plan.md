@@ -1,12 +1,10 @@
-The trainer-side "Body Measurements" card and "Check-in Details" dialog render directly from real DB rows in `check_in_submissions` (fetched by `useCheckInSubmissions`). Two rows for demo client Emma Thompson (`00000000-0000-0000-0000-000000000002`) still hold the old shape (`thighs`, no `chest`), so the trainer UI shows "Thighs" and misses "Chest".
+The Measurements card in the client analytics (`BodyMeasurementsCard` in goals-progress) omits Chest because the default mock in `src/components/client/tabs/AnalyticsTab.tsx` → `getBodyMeasurements()` has no `chest` field on either entry. `UserAnalytics.tsx` was already patched; `AnalyticsTab.tsx` was missed.
 
 ### Fix
-Run a data-only Supabase migration that updates those two rows so the JSONB `measurements` includes `chest` and renames `thighs` → `quadriceps`:
+Add `chest` to both default entries in `AnalyticsTab.tsx#getBodyMeasurements()`:
+- entry 1 (2024-03-15): `chest: 100`
+- entry 2 (2024-03-01): `chest: 102`
 
-- Row `2025-12-02` (weight 77.8): `{ chest: 103, waist: 84, hips: 98, quadriceps: 58, arms: 32.5 }`
-- Row `2025-11-25` (weight 78.5): `{ chest: 104, waist: 85, hips: 99, quadriceps: 59, arms: 32 }`
+No component changes; the card already renders `chest` when present.
 
-SQL uses `jsonb_set` / rebuild for the two ids. No schema change, no code change — the existing components already render whatever keys are present (and `Object.entries(measurements)` in `CheckInDetailDialog` will now display "Quadriceps" and "Chest" via the capitalize class).
-
-### Verification
-Re-open the check-ins modal for Emma Thompson: the Body Measurements card should show Chest + Quadriceps (instead of Thighs); the details dialog should list all 5 fields.
+Note: if the user's browser has `body-measurements-data` cached in localStorage from before the update, that legacy blob (still without `chest`) will be used. If chest still doesn't show after the fix, clearing that localStorage key will make the new defaults render.
