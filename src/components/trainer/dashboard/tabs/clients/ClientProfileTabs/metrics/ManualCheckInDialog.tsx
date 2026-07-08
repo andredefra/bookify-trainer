@@ -86,7 +86,7 @@ export function ManualCheckInDialog({
       
       // Reset form
       setWeight("");
-      setMeasurements({ chest: "", waist: "", abdomen: "", hips: "", quadriceps: "", arms: "", shoulders: "", neck: "" });
+      setMeasurements({ chest: "", waist: "", hips: "", quadriceps: "", arms: "", shoulders: "", neck: "" });
       setMoodRating([5]);
       setEnergyLevel([5]);
       setNotes("");
