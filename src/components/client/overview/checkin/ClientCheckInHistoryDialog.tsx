@@ -47,14 +47,20 @@ export function ClientCheckInHistoryDialog({
               <div className="p-3 rounded-lg border">
                 <h4 className="text-sm font-medium mb-2">Measurements</h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
+                  {selectedSubmission.measurements.chest && (
+                    <div><span className="text-muted-foreground">Chest:</span> {selectedSubmission.measurements.chest}cm</div>
+                  )}
                   {selectedSubmission.measurements.waist && (
                     <div><span className="text-muted-foreground">Waist:</span> {selectedSubmission.measurements.waist}cm</div>
+                  )}
+                  {selectedSubmission.measurements.abdomen && (
+                    <div><span className="text-muted-foreground">Abdomen:</span> {selectedSubmission.measurements.abdomen}cm</div>
                   )}
                   {selectedSubmission.measurements.hips && (
                     <div><span className="text-muted-foreground">Hips:</span> {selectedSubmission.measurements.hips}cm</div>
                   )}
-                  {selectedSubmission.measurements.thighs && (
-                    <div><span className="text-muted-foreground">Thighs:</span> {selectedSubmission.measurements.thighs}cm</div>
+                  {(selectedSubmission.measurements.quadriceps ?? selectedSubmission.measurements.thighs) && (
+                    <div><span className="text-muted-foreground">Quadriceps:</span> {selectedSubmission.measurements.quadriceps ?? selectedSubmission.measurements.thighs}cm</div>
                   )}
                   {selectedSubmission.measurements.arms && (
                     <div><span className="text-muted-foreground">Arms:</span> {selectedSubmission.measurements.arms}cm</div>
