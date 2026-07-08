@@ -316,7 +316,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
-                  placeholder={eventCategory === "training" ? "e.g. Upper Body Workout" : "e.g. Personal training – Lower Body"}
+                  placeholder={
+                    eventCategory === "training"
+                      ? "e.g. Upper Body Workout"
+                      : eventCategory === "general"
+                      ? "e.g. Massage, Meal prep..."
+                      : "e.g. Personal training – Lower Body"
+                  }
                   value={newActivity.title}
                   onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
                 />
