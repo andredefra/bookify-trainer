@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, Dumbbell, Flame, Heart, Bed, User, Clock, ArrowRight, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { CalendarDays, Dumbbell, Flame, Heart, Bed, User, Clock, ArrowRight, Plus, Video, MapPin, UserCheck, UserPlus } from "lucide-react";
 import { addDays, format, isToday, isTomorrow } from "date-fns";
 
 interface CalendarEvent {
@@ -12,12 +13,15 @@ interface CalendarEvent {
   time: string;
   category: "training" | "session";
   type: string;
+  title?: string;
   notes?: string;
   trainer?: string;
   sessionMode?: "video" | "in-person";
+  origin?: "self" | "trainer"; // who created the event
+  requestStatus?: "pending" | "confirmed" | "declined";
 }
 
-const STORAGE_KEY = "basic-calendar-events-v2";
+const STORAGE_KEY = "basic-calendar-events-v3";
 
 function getSeedEvents(): CalendarEvent[] {
   const now = new Date();
@@ -28,7 +32,9 @@ function getSeedEvents(): CalendarEvent[] {
       time: "18:30",
       category: "training",
       type: "workout",
-      notes: "Upper Body Workout",
+      title: "Upper Body Workout",
+      notes: "Focus on chest & shoulders, 45 min. Superset bench + rows.",
+      origin: "self",
     },
     {
       id: "seed-2",
@@ -36,7 +42,9 @@ function getSeedEvents(): CalendarEvent[] {
       time: "07:30",
       category: "training",
       type: "cardio",
-      notes: "Morning Run 5K",
+      title: "Morning Run 5K",
+      notes: "Easy pace, target 28 min. Warm-up 5 min walk.",
+      origin: "self",
     },
     {
       id: "seed-3",
@@ -44,9 +52,12 @@ function getSeedEvents(): CalendarEvent[] {
       time: "10:00",
       category: "session",
       type: "workout",
+      title: "Personal training – Lower Body",
       trainer: "Marco Rossi",
       sessionMode: "in-person",
-      notes: "Personal training – Lower Body",
+      notes: "Working on squat depth and hip mobility.",
+      origin: "self",
+      requestStatus: "confirmed",
     },
     {
       id: "seed-4",
@@ -54,7 +65,9 @@ function getSeedEvents(): CalendarEvent[] {
       time: "19:00",
       category: "training",
       type: "workout",
-      notes: "HIIT 20'",
+      title: "HIIT 20'",
+      notes: "Tabata intervals, bodyweight only.",
+      origin: "self",
     },
     {
       id: "seed-5",
@@ -62,9 +75,12 @@ function getSeedEvents(): CalendarEvent[] {
       time: "09:00",
       category: "session",
       type: "workout",
+      title: "Weekly check-in review",
       trainer: "Marco Rossi",
       sessionMode: "video",
-      notes: "Weekly check-in review",
+      notes: "Review last week's progress and adjust the plan.",
+      origin: "trainer",
+      requestStatus: "confirmed",
     },
   ];
 }
@@ -90,6 +106,7 @@ function colorFor(ev: CalendarEvent) {
 }
 
 function labelFor(ev: CalendarEvent) {
+  if (ev.title) return ev.title;
   if (ev.category === "session") return ev.notes || `Session with ${ev.trainer ?? "trainer"}`;
   const map: Record<string, string> = {
     workout: "Workout",
@@ -109,6 +126,7 @@ function formatDay(d: Date) {
 export function UpcomingEventsCard() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [selected, setSelected] = useState<CalendarEvent | null>(null);
 
   useEffect(() => {
     try {
@@ -129,8 +147,32 @@ export function UpcomingEventsCard() {
     .sort((a, b) => a._d.getTime() - b._d.getTime())
     .slice(0, 4);
 
-  const goCalendar = () =>
-    navigate("/client-dashboard-basic", { state: { activeTab: "my-calendar" } });
+  const goCalendar = (dateIso?: string) =>
+    navigate("/client-dashboard-basic", {
+      state: { activeTab: "my-calendar", ...(dateIso ? { selectedDate: dateIso } : {}) },
+    });
+
+  const originBadge = (ev: CalendarEvent) => {
+    if (ev.category === "training") {
+      return (
+        <Badge variant="secondary" className="gap-1">
+          <UserCheck className="h-3 w-3" /> Planned by you
+        </Badge>
+      );
+    }
+    if (ev.origin === "trainer") {
+      return (
+        <Badge className="gap-1 bg-primary/10 text-primary border-primary/30 hover:bg-primary/10">
+          <UserPlus className="h-3 w-3" /> Invited by {ev.trainer ?? "trainer"}
+        </Badge>
+      );
+    }
+    return (
+      <Badge variant="secondary" className="gap-1">
+        <UserCheck className="h-3 w-3" /> Requested by you
+      </Badge>
+    );
+  };
 
   return (
     <Card>
@@ -143,7 +185,7 @@ export function UpcomingEventsCard() {
             </CardTitle>
             <CardDescription>Planned activities and sessions from your calendar</CardDescription>
           </div>
-          <Button onClick={goCalendar} variant="default" size="sm" className="w-full sm:w-auto">
+          <Button onClick={() => goCalendar()} variant="default" size="sm" className="w-full sm:w-auto">
             Open Calendar
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
@@ -155,7 +197,7 @@ export function UpcomingEventsCard() {
             <CalendarDays className="h-10 w-10 mx-auto mb-3 opacity-30" />
             <p className="font-medium">No upcoming events</p>
             <p className="text-sm mt-1 mb-4">Plan a workout or request a session with your trainer</p>
-            <Button onClick={goCalendar} size="sm" variant="outline">
+            <Button onClick={() => goCalendar()} size="sm" variant="outline">
               <Plus className="mr-2 h-4 w-4" /> Plan an Event
             </Button>
           </div>
@@ -167,7 +209,7 @@ export function UpcomingEventsCard() {
                 <div
                   key={ev.id}
                   className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-muted/40 transition-colors cursor-pointer"
-                  onClick={goCalendar}
+                  onClick={() => setSelected(ev)}
                 >
                   <div className={`h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 ${colorFor(ev)}`}>
                     <Icon className="h-5 w-5" />
@@ -197,6 +239,78 @@ export function UpcomingEventsCard() {
           </div>
         )}
       </CardContent>
+
+      {/* Event details dialog */}
+      <Dialog open={!!selected} onOpenChange={o => !o && setSelected(null)}>
+        <DialogContent className="max-w-md">
+          {selected && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-start gap-2 pr-6">
+                  <span className="flex-1">{labelFor(selected)}</span>
+                </DialogTitle>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <Badge variant={selected.category === "session" ? "default" : "secondary"}>
+                    {selected.category === "session" ? "Session" : "Training"}
+                  </Badge>
+                  {originBadge(selected)}
+                  {selected.requestStatus && (
+                    <Badge
+                      variant="outline"
+                      className={
+                        selected.requestStatus === "confirmed"
+                          ? "text-green-600 border-green-500/40"
+                          : selected.requestStatus === "declined"
+                          ? "text-destructive border-destructive/40"
+                          : "text-amber-600 border-amber-500/40"
+                      }
+                    >
+                      {selected.requestStatus.charAt(0).toUpperCase() + selected.requestStatus.slice(1)}
+                    </Badge>
+                  )}
+                </div>
+              </DialogHeader>
+
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <CalendarDays className="h-4 w-4" />
+                  <span>{formatDay(new Date(selected.date))} · {format(new Date(selected.date), "EEEE, MMMM d, yyyy")}</span>
+                </div>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Clock className="h-4 w-4" />
+                  <span>{selected.time}</span>
+                </div>
+                {selected.trainer && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <User className="h-4 w-4" />
+                    <span>with {selected.trainer}</span>
+                  </div>
+                )}
+                {selected.sessionMode && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    {selected.sessionMode === "video" ? <Video className="h-4 w-4" /> : <MapPin className="h-4 w-4" />}
+                    <span>{selected.sessionMode === "video" ? "Video Call" : "In Person"}</span>
+                  </div>
+                )}
+                {selected.notes && (
+                  <div className="p-3 rounded-lg bg-muted/50 text-foreground">
+                    <p className="text-xs font-medium text-muted-foreground mb-1">Notes</p>
+                    <p className="whitespace-pre-wrap">{selected.notes}</p>
+                  </div>
+                )}
+              </div>
+
+              <DialogFooter className="gap-2 sm:gap-2">
+                <Button variant="outline" onClick={() => setSelected(null)}>Close</Button>
+                <Button onClick={() => { const iso = selected.date; setSelected(null); goCalendar(iso); }}>
+                  Open in Calendar
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
