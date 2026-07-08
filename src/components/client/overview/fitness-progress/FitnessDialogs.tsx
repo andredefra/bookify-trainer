@@ -70,8 +70,12 @@ export function FitnessDialogs({
       <LogActivityDialog open={openLogDialog} onOpenChange={setOpenLogDialog} onSubmit={onLogSubmit} onManageActivityTypes={() => { setOpenLogDialog(false); setOpenManageActivityTypesDialog(true); }} goals={progressData} />
       <LogWeightDialog open={openWeightDialog} onOpenChange={setOpenWeightDialog} onSubmit={onWeightSubmit} onViewHistory={onViewWeightHistory} />
       <BodyMeasurementsDialog open={openMeasurementsDialog} onOpenChange={setOpenMeasurementsDialog} onSubmit={onMeasurementsSubmit} onViewHistory={onViewMeasurementsHistory} />
-      <WeightHistoryDialog open={openWeightHistoryDialog} onOpenChange={setOpenWeightHistoryDialog} logs={weightLogs} onDelete={onDeleteWeightLog} onBack={onBackToWeightLog} />
-      <BodyMeasurementsHistoryDialog open={openMeasurementsHistoryDialog} onOpenChange={setOpenMeasurementsHistoryDialog} logs={bodyMeasurements} onDelete={onDeleteBodyMeasurement} onBack={onBackToMeasurementsLog} />
+      {setOpenWeightHistoryDialog && (
+        <WeightHistoryDialog open={!!openWeightHistoryDialog} onOpenChange={setOpenWeightHistoryDialog} logs={weightLogs ?? []} onDelete={onDeleteWeightLog ?? (() => {})} onBack={onBackToWeightLog ?? (() => {})} />
+      )}
+      {setOpenMeasurementsHistoryDialog && (
+        <BodyMeasurementsHistoryDialog open={!!openMeasurementsHistoryDialog} onOpenChange={setOpenMeasurementsHistoryDialog} logs={bodyMeasurements ?? []} onDelete={onDeleteBodyMeasurement ?? (() => {})} onBack={onBackToMeasurementsLog ?? (() => {})} />
+      )}
       <DeleteGoalDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog} onDelete={onDeleteGoal} selectedGoal={selectedGoal} />
       <ManageActivityTypesDialog open={openManageActivityTypesDialog} onOpenChange={setOpenManageActivityTypesDialog} />
     </>
