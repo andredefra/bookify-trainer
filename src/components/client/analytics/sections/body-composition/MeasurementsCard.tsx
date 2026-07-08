@@ -41,12 +41,6 @@ export function MeasurementsCard({ latestMeasurements }: MeasurementsCardProps) 
                   <span className="ml-1 font-medium">{latestMeasurements.waist}cm</span>
                 </div>
               )}
-              {latestMeasurements.abdomen && (
-                <div>
-                  <span className="text-slate-600">Abdomen:</span>
-                  <span className="ml-1 font-medium">{latestMeasurements.abdomen}cm</span>
-                </div>
-              )}
               {latestMeasurements.hips && (
                 <div>
                   <span className="text-slate-600">Hips:</span>
