@@ -137,6 +137,10 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
     plannedActivities.filter(a => a.category === "training").map(a => a.date),
     [plannedActivities]
   );
+  const daysWithGeneral = useMemo(() =>
+    plannedActivities.filter(a => a.category === "general").map(a => a.date),
+    [plannedActivities]
+  );
   const daysWithSessionRequests = useMemo(() =>
     plannedActivities.filter(a => a.category === "session").map(a => a.date),
     [plannedActivities]
