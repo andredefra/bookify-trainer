@@ -50,6 +50,7 @@ const activityTypes = [
 ];
 
 const generalEventType = { value: "general", label: "General Event", icon: CalendarDays, color: "bg-slate-500" };
+const MOCK_CALENDAR_EVENTS_SEEDED_KEY = "basic-calendar-events-mocks-v2-seeded";
 
 const mockTrainers = [
   { id: "1", name: "Marco Rossi", plan: "pro" as const },
@@ -206,6 +207,20 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
       localStorage.setItem("basic-calendar-events", JSON.stringify(serializable));
     } catch {}
   }, [plannedActivities]);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(MOCK_CALENDAR_EVENTS_SEEDED_KEY)) return;
+
+      const mockEvents = createMockCalendarEvents();
+      setPlannedActivities(prev => {
+        const existingIds = new Set(prev.map(a => a.id));
+        const missingMockEvents = mockEvents.filter(a => !existingIds.has(a.id));
+        return missingMockEvents.length ? [...prev, ...missingMockEvents] : prev;
+      });
+      localStorage.setItem(MOCK_CALENDAR_EVENTS_SEEDED_KEY, "true");
+    } catch {}
+  }, []);
 
   // Keep calendar view in sync when the selected date changes programmatically
   // (e.g. "Today" button or navigation from the overview card).
