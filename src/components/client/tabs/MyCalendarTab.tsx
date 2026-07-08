@@ -227,11 +227,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   };
 
   const getActivityIcon = (type: string) => {
+    if (type === "general") return generalEventType.icon;
     const found = activityTypes.find(a => a.value === type);
     return found ? found.icon : Dumbbell;
   };
 
   const getActivityColor = (type: string) => {
+    if (type === "general") return generalEventType.color;
     const found = activityTypes.find(a => a.value === type);
     return found ? found.color : "bg-muted";
   };
