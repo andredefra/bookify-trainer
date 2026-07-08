@@ -5,13 +5,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Video, MapPin, User, Send, Info } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
-import { format, isSameDay, parseISO, isToday, isTomorrow, addDays, isSameMonth } from "date-fns";
+import { format, isSameDay, parseISO, isToday, isTomorrow, addDays, addMonths, isSameMonth } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -47,6 +57,110 @@ const mockTrainers = [
   { id: "3", name: "Giovanni Verdi", plan: "free" as const },
 ];
 
+const createMockCalendarEvents = (baseDate = new Date()): PlannedActivity[] => [
+  {
+    id: "mock-training-today",
+    date: baseDate,
+    time: "07:30",
+    category: "training",
+    type: "workout",
+    title: "Upper Body Strength",
+    notes: "Bench press, rows, shoulder accessories.",
+  },
+  {
+    id: "mock-general-this-week",
+    date: addDays(baseDate, 2),
+    time: "18:00",
+    category: "general",
+    type: "general",
+    title: "Mobility check-in",
+    notes: "Review hip and ankle mobility progress.",
+  },
+  {
+    id: "mock-session-this-week",
+    date: addDays(baseDate, 4),
+    time: "12:30",
+    category: "session",
+    type: "workout",
+    title: "Technique session",
+    notes: "Squat depth and bracing work.",
+    trainer: "Marco Rossi",
+    sessionMode: "in-person",
+    requestStatus: "pending",
+    trainerPlan: "pro",
+  },
+  {
+    id: "mock-cardio-next-week",
+    date: addDays(baseDate, 8),
+    time: "06:45",
+    category: "training",
+    type: "cardio",
+    title: "Zone 2 Run",
+    notes: "40 minutes easy pace.",
+  },
+  {
+    id: "mock-general-next-week",
+    date: addDays(baseDate, 11),
+    time: "20:00",
+    category: "general",
+    type: "general",
+    title: "Meal prep",
+    notes: "Prepare lunches for training days.",
+  },
+  {
+    id: "mock-stretching-prev-month",
+    date: addDays(addMonths(baseDate, -1), 5),
+    time: "19:15",
+    category: "training",
+    type: "stretching",
+    title: "Recovery Stretching",
+    notes: "Full body recovery flow.",
+  },
+  {
+    id: "mock-session-prev-month",
+    date: addDays(addMonths(baseDate, -1), 12),
+    time: "10:00",
+    category: "session",
+    type: "workout",
+    title: "Monthly review",
+    notes: "Progress review with trainer.",
+    trainer: "Laura Bianchi",
+    sessionMode: "video",
+    requestStatus: "confirmed",
+    trainerPlan: "essential",
+  },
+  {
+    id: "mock-training-next-month",
+    date: addDays(addMonths(baseDate, 1), 3),
+    time: "08:00",
+    category: "training",
+    type: "workout",
+    title: "Lower Body Strength",
+    notes: "Deadlift variation and unilateral work.",
+  },
+  {
+    id: "mock-general-next-month",
+    date: addDays(addMonths(baseDate, 1), 9),
+    time: "17:30",
+    category: "general",
+    type: "general",
+    title: "Physio appointment",
+    notes: "Follow-up appointment after training block.",
+  },
+  {
+    id: "mock-session-next-month",
+    date: addDays(addMonths(baseDate, 1), 14),
+    time: "13:00",
+    category: "session",
+    type: "workout",
+    title: "Conditioning session",
+    notes: "Metcon pacing and recovery strategy.",
+    trainer: "Giovanni Verdi",
+    sessionMode: "in-person",
+    trainerPlan: "free",
+  },
+];
+
 function resolveSessionDate(dateStr: string | Date): Date {
   if (dateStr instanceof Date) return dateStr;
   const lower = dateStr.toLowerCase();
@@ -77,10 +191,10 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>(() => {
     try {
       const raw = localStorage.getItem("basic-calendar-events");
-      if (!raw) return [];
+      if (!raw) return createMockCalendarEvents();
       const parsed = JSON.parse(raw) as any[];
       return parsed.map(a => ({ ...a, date: new Date(a.date) }));
-    } catch { return []; }
+    } catch { return createMockCalendarEvents(); }
   });
 
   useEffect(() => {
@@ -106,13 +220,8 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
     }
   }, [location.state]);
 
-  useEffect(() => {
-    if (!isSameMonth(selectedDate, currentMonth)) {
-      setCurrentMonth(selectedDate);
-    }
-  }, [selectedDate, currentMonth]);
-
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [activityToRemove, setActivityToRemove] = useState<PlannedActivity | null>(null);
   const [eventCategory, setEventCategory] = useState<"training" | "session" | "general">("training");
   const [newActivity, setNewActivity] = useState({
     title: "",
@@ -220,8 +329,11 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
     setDialogOpen(false);
   };
 
-  const handleRemovePlanned = (id: string) => {
-    setPlannedActivities(prev => prev.filter(a => a.id !== id));
+  const handleConfirmRemovePlanned = () => {
+    if (!activityToRemove) return;
+    setPlannedActivities(prev => prev.filter(a => a.id !== activityToRemove.id));
+    toast({ title: "Event removed", description: `${activityToRemove.title || "Event"} was removed from your calendar.` });
+    setActivityToRemove(null);
   };
 
   const handleToday = () => {
@@ -244,6 +356,23 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
 
   return (
     <div className="space-y-6">
+      <AlertDialog open={!!activityToRemove} onOpenChange={open => !open && setActivityToRemove(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove this event?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove {activityToRemove?.title ? `“${activityToRemove.title}”` : "this event"} from your calendar.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmRemovePlanned} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -478,7 +607,11 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               <Calendar
                 mode="single"
                 selected={selectedDate}
-                onSelect={d => d && setSelectedDate(d)}
+                onSelect={d => {
+                  if (!d) return;
+                  setSelectedDate(d);
+                  if (!isSameMonth(d, currentMonth)) setCurrentMonth(d);
+                }}
                 month={currentMonth}
                 onMonthChange={setCurrentMonth}
                 className="pointer-events-auto"
@@ -600,7 +733,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                           {isBasic && !activity.requestStatus && (
                             <Badge variant="outline" className="text-xs">Calendar Event</Badge>
                           )}
-                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive text-xs h-7" onClick={() => handleRemovePlanned(activity.id)}>
+                          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive text-xs h-7" onClick={() => setActivityToRemove(activity)}>
                             Remove
                           </Button>
                         </div>
@@ -626,7 +759,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                           <p className="text-sm text-muted-foreground mt-1">{activity.notes}</p>
                         )}
                       </div>
-                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleRemovePlanned(activity.id)}>
+                       <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => setActivityToRemove(activity)}>
                         Remove
                       </Button>
                     </div>
