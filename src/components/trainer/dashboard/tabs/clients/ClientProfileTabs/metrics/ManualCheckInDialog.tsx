@@ -14,6 +14,7 @@ import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Scale, Ruler, Brain, FileText } from "lucide-react";
+import { MeasurementGuidePopover } from "@/components/client/overview/fitness-progress/MeasurementGuidePopover";
 
 interface ManualCheckInDialogProps {
   open: boolean;
