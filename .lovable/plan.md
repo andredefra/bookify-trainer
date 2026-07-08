@@ -1,36 +1,35 @@
-## What's actually wrong
+## Root causes
 
-1. **Overview seed uses the wrong `goalType`.** `ClientDashboardBasic.tsx` seeds `"Lose Weight" 82→76 kg` with `goalType: "weight_loss"`, but the Analytics Weight Goal card looks for `"weight_management"`. That's why Weight Goal is missing in Analytics. There is also no Monthly Step Target goal seeded, so Workout Goal is missing.
-2. **My previous weight/measurement seeds never ran** because:
-   - The gate `if (!user)` blocked seeding for real Supabase users (e.g. `andrea.mypersonal.fit`).
-   - When localStorage already held a small stub entry (69 kg, the 44/44 measurement) the "seed only if empty" logic skipped.
-3. **Weight seed value (78 kg) was not aligned** with the visible Lose Weight goal (82 kg).
+1. **BMI shows 0**: `GoalsProgress.tsx` calls `calculateBMI(weight, profile.height)`, but `profile.height` is stored in **cm** (175) while `calculateBMI` expects **meters**. 70 / (175 × 175) rounds to 0.
+2. **BMI & Weight shows 70 kg (not 82)** and **Weight Goal / Monthly Step Target cards are missing**: `useGoalManagement` hydrated an older `fitness-progress-data` payload from localStorage that still uses legacy `goalType: "weight_loss" | "strength" | "endurance"`. Since no goal has `weight_management` or `activity_level`, `getWeightData` returns `null` (→ fallback 70) and the two cards render nothing. `AnalyticsTab` also reads that stale localStorage directly.
+3. **Measurements → "Insufficient Data"**: `BodyMeasurementsCard` calls `getMeasurementsStatus(latestMeasurements)` **without** a `userProfile`, so the function returns `null` because it needs `userProfile.height` for the WHtR calculation.
 
 ## Fixes
 
-### `src/pages/ClientDashboardBasic.tsx`
-- Change `mk("Lose Weight", 82, 76, "kg", "weight_loss", …)` → `goalType: "weight_management"`.
-- Add a new seeded goal: `mk("Monthly Step Target", 210000, 300000, "steps", "activity_level", 30, "personal")` so the Workout Goal card renders in Analytics.
-- Keep Bench Press and Run 5K as-is.
+### `src/components/client/analytics/sections/GoalsProgress.tsx`
+- Convert height cm → m before BMI: `calculateBMI(currentWeight, profile.height / 100)`.
+- Pass `userProfile={{ height: profile?.height, gender: profile?.gender }}` down to `BodyMeasurementsCard`.
 
-### `src/components/client/overview/fitness-progress/hooks/useWeightLogs.ts`
-- Remove the `!user` gate — seed for any user.
-- Reseed whenever the stored array has **fewer than 3 entries** (treated as un-seeded stub data) and no `weight-logs-seeded-v2` flag is set. After seeding, write the flag.
-- Align mock trend with the Lose Weight goal: 82.4 → 82.0 → 81.1 → 80.4 → 79.6 → 78.9 → 78.4 → 78.0 → **82.0 (today)** so the latest weight matches the goal's `current: 82`. Actually use a smoother realistic history that ends near 82 kg (the current goal value): 84.5 → 84.0 → 83.4 → 83.0 → 82.7 → 82.4 → 82.1 → 82.0 (today).
+### `src/components/client/analytics/sections/goals-progress/BodyMeasurementsCard.tsx`
+- Accept an optional `userProfile` prop and forward it to `getMeasurementsStatus(latestMeasurements, userProfile)`.
 
-### `src/components/client/overview/fitness-progress/hooks/useBodyMeasurements.ts`
-- Same treatment: remove the `!user` gate; reseed when count < 3 and no `body-measurements-seeded-v2` flag; write flag after seeding.
-- Update mock weights to match the new weight-log trend (ending at 82 kg today).
-- Keep the 6-entry history with realistic circumferences that match the old Analytics values users had before (Waist 84–89, Hips 95–100, Thighs 55–58, Shoulders 115–118, Arms 33–34, Neck 38–39).
+### `src/components/client/overview/fitness-progress/hooks/useGoalManagement.ts`
+- On hydration, if the stored array exists but contains **no** goal with `goalType === "weight_management"` **and no** `activity_level`, treat it as legacy data and replace with `initialProgressData` (the current seed from `ClientDashboardBasic`). Also persist immediately so `AnalyticsTab`'s direct localStorage read picks up the refreshed goals.
 
-### Result
-- Log Weight → View History: 8 entries from ~4 months ago to today, aligned with the Lose Weight goal (82 kg current).
-- Body Measurements → View History: 6 entries over ~5 months with matching weights.
-- Analytics Goals Progress: all 6 cards visible — Weight Goal (from `weight_management`), BMI & Weight, Workout Goal (Monthly Step Target from `activity_level`), Progress Trends, Body Measurements, Body Fat % (computed from waist/neck/hips + profile height 175 / gender male).
+### `src/components/client/tabs/AnalyticsTab.tsx`
+- Update the hard-coded fallback goals to match the current Overview seed (Lose Weight 82 → 76 kg with `weight_management`, Monthly Step Target 210 000 → 300 000 steps with `activity_level`, Bench Press 1RM 70 → 90 kg with `strength_progress`, Run 5K 28 → 25 min with `cardiovascular_endurance`).
+- After reading localStorage, if the parsed array lacks `weight_management` **or** `activity_level`, merge the missing goals from the defaults so Analytics always shows the six cards.
+
+## Result
+- BMI & Weight: shows **82 kg**, BMI **≈ 26.8** (Overweight), consistent with the Lose Weight goal.
+- Weight Goal Progress and Monthly Step Target cards appear again in Analytics.
+- Measurements card shows the WHtR status (Healthy / Increased Risk / …) instead of "Insufficient Data".
+- All six Goals Progress cards render as before.
 
 ## Files touched
-- `src/pages/ClientDashboardBasic.tsx`
-- `src/components/client/overview/fitness-progress/hooks/useWeightLogs.ts`
-- `src/components/client/overview/fitness-progress/hooks/useBodyMeasurements.ts`
+- `src/components/client/analytics/sections/GoalsProgress.tsx`
+- `src/components/client/analytics/sections/goals-progress/BodyMeasurementsCard.tsx`
+- `src/components/client/overview/fitness-progress/hooks/useGoalManagement.ts`
+- `src/components/client/tabs/AnalyticsTab.tsx`
 
-No DB, RLS or analytics component changes needed.
+No changes to DB, RLS, BMI/WHtR formulas, or profile settings.
