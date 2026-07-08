@@ -87,20 +87,20 @@ function getSeedEvents(): CalendarEvent[] {
 
 function iconFor(ev: CalendarEvent) {
   if (ev.category === "session") return User;
+  if (ev.category === "general") return CalendarDays;
   switch (ev.type) {
     case "cardio": return Flame;
     case "stretching": return Heart;
-    case "rest": return Bed;
     default: return Dumbbell;
   }
 }
 
 function colorFor(ev: CalendarEvent) {
   if (ev.category === "session") return "bg-primary/10 text-primary";
+  if (ev.category === "general") return "bg-slate-500/10 text-slate-600";
   switch (ev.type) {
     case "cardio": return "bg-orange-500/10 text-orange-600";
     case "stretching": return "bg-purple-500/10 text-purple-600";
-    case "rest": return "bg-green-500/10 text-green-600";
     default: return "bg-blue-500/10 text-blue-600";
   }
 }
@@ -108,11 +108,11 @@ function colorFor(ev: CalendarEvent) {
 function labelFor(ev: CalendarEvent) {
   if (ev.title) return ev.title;
   if (ev.category === "session") return ev.notes || `Session with ${ev.trainer ?? "trainer"}`;
+  if (ev.category === "general") return ev.notes || "General Event";
   const map: Record<string, string> = {
     workout: "Workout",
     cardio: "Cardio",
     stretching: "Stretching",
-    rest: "Rest Day",
   };
   return ev.notes || map[ev.type] || "Training";
 }
