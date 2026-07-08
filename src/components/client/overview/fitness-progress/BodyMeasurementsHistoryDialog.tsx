@@ -41,9 +41,11 @@ export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDele
               <TableHeader>
                 <TableRow>
                   <TableHead>Date</TableHead>
+                  <TableHead>Chest</TableHead>
                   <TableHead>Waist</TableHead>
+                  <TableHead>Abdomen</TableHead>
                   <TableHead>Hips</TableHead>
-                  <TableHead>Thighs</TableHead>
+                  <TableHead>Quadriceps</TableHead>
                   <TableHead>Arms</TableHead>
                   <TableHead className="w-[60px]" />
                 </TableRow>
@@ -52,9 +54,11 @@ export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDele
                 {sorted.map(log => (
                   <TableRow key={log.id}>
                     <TableCell>{formatDate(log.date)}</TableCell>
+                    <TableCell>{fmt(log.chest)}</TableCell>
                     <TableCell>{fmt(log.waist)}</TableCell>
+                    <TableCell>{fmt(log.abdomen)}</TableCell>
                     <TableCell>{fmt(log.hips)}</TableCell>
-                    <TableCell>{fmt(log.thighs)}</TableCell>
+                    <TableCell>{fmt(log.quadriceps ?? log.thighs)}</TableCell>
                     <TableCell>{fmt(log.arms)}</TableCell>
                     <TableCell>
                       <Button variant="ghost" size="icon" onClick={() => log.id && onDelete(log.id)}>
