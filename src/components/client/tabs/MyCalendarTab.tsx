@@ -465,6 +465,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
             </div>
           </CardContent>
         </Card>
+        </div>
 
         {/* Day detail */}
         <Card>
