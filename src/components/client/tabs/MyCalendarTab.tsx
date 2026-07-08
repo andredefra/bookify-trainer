@@ -448,23 +448,23 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                   hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
                 }}
               />
-            {/* Legend */}
-            <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                Sessions
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                Planned
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-amber-500" />
-                Requests
-              </span>
-            </div>
-          </CardContent>
-        </Card>
+              {/* Legend */}
+              <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  Sessions
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-green-500" />
+                  Planned
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-amber-500" />
+                  Requests
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Day detail */}
