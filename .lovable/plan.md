@@ -1,83 +1,42 @@
-
 ## Goal
+Seed realistic historical data so Log Weight and Body Measurements show a real history, and restore the missing **Weight Goal**, **Body Measurements** and **Body Fat %** cards in Goals Progress by aligning them with the profile's height/gender/age.
 
-1. Add a **"View History"** entry point to the Log Weight and Log Body Measurements dialogs (bottom-left), opening a table of previous logs. From that table the user can go back to the log form.
-2. Make saving a weight or measurements log actually flow into the Analytics page so:
-   - **Weight Goal** card current value + progress updates
-   - **BMI & Weight** card updates (weight + BMI recomputed from `profile.height`)
-   - **Body Measurements** card updates with the new entries
-   - **Body Fat %** card recomputes via the existing US Navy formula, which already reads waist/neck/hips + `profile.height` + `profile.gender`
+## Why cards are missing today
+- **Weight Goal card** renders only if a `weight_management` goal exists in `progressData`. The current seed has none → card hidden.
+- **Measurements card** shows "Insufficient Data" because localStorage got persisted as `[]` after prior interactions, so `latestMeasurements` is null.
+- **Body Fat % card** always renders but shows "Missing: Waist, Neck" for the same reason (no measurements).
 
-No changes to the trainer side or to the body-fat formula itself — the formula is already correct; we only need the data to reach it.
+## Changes
 
-## UI changes
+### 1. `hooks/useWeightLogs.ts` — seed history
+Add a `getMockWeightLogs()` that returns ~8 entries over the last ~120 days showing a gentle downward trend (e.g. 82 → 78 kg). Hydrate with mocks when localStorage is empty AND no authenticated user (same pattern as `useBodyMeasurements`).
 
-### `LogWeightDialog.tsx` / `BodyMeasurementsDialog.tsx`
-- Add a **"View History"** ghost button with a `History` icon in the `DialogFooter`, aligned left (footer becomes `justify-between`).
-- Clicking it calls a new `onViewHistory` prop passed by the parent.
-- Dialogs stay presentational; no data fetching inside.
+### 2. `hooks/useBodyMeasurements.ts` — expand mock history
+Replace the current 2-entry mock with ~6 entries spread across the last ~150 days, with consistent weight values matching the weight-log trend and full waist/neck/hips/thighs/shoulders/arms so Body Fat % can compute for both genders.
 
-### New `WeightHistoryDialog.tsx` and `BodyMeasurementsHistoryDialog.tsx`
-- New dialogs under `src/components/client/overview/fitness-progress/`.
-- Content: a shadcn `Table` listing all entries sorted desc by date.
-  - Weight table columns: Date, Weight (kg), Notes, action (delete row).
-  - Measurements table columns: Date, Waist, Hips, Thighs, Shoulders, Arms, Neck, action (delete row).
-- Empty state: "No logs yet."
-- Footer has a **"Back to Log"** button that closes the history and reopens the log form, and a Close button.
-- Receives `logs`, `onDelete(id)`, `onBack`, `open`, `onOpenChange` props.
+Force re-seed when storage holds an empty array `[]` (not just null) so users who lost their data recover the demo history.
 
-### `FitnessProgressCard.tsx` / `FitnessDialogs.tsx`
-- Add `openWeightHistoryDialog` and `openMeasurementsHistoryDialog` state.
-- Wire `onViewHistory` on each log dialog to close it and open the corresponding history dialog.
-- Wire `onBack` on each history dialog to close it and reopen the log dialog.
-- Pass the log arrays and delete handlers into the history dialogs.
+### 3. `hooks/useGoalManagement.ts` — seed a weight goal
+When hydration finds no stored `fitness-progress-data` (or an empty array), inject a default `weight_management` goal aligned with the seeded weight logs:
+```
+goal: "Reach target weight"
+goalType: "weight_management"
+current: 78, target: 75, unit: "kg"
+logs: derived from the seeded weight-log dates
+```
+Plus one `activity_level` goal so the Workout Goal card also renders.
 
-## Data persistence changes
+### 4. Alignment with profile (height/gender/age)
+No new code needed — `GoalsProgress.tsx`, `bodyFatCalculations`, and `calculateBMI` already read `profile.height` and `profile.gender` from `useUserProfile`, which defaults to `height: 175`, `gender: 'male'` for the demo user. Once measurements + weight goal exist, all four cards (Weight Goal, BMI & Weight, Body Measurements, Body Fat %) render correctly with values derived from that profile.
 
-Analytics (`UserAnalytics.tsx` and `AnalyticsTab.tsx`) already reads from `localStorage`:
-- `fitness-progress-data` → goals (drives Weight Goal card + BMI weight fallback)
-- `body-measurements-data` → measurements (drives BMI, Body Measurements, Body Fat cards)
-
-Today the log flow only mutates in-memory React state, so nothing reaches Analytics. Fix:
-
-### `hooks/useGoalManagement.ts` (existing)
-- On every update to `progressData`, write to `localStorage["fitness-progress-data"]` (a `useEffect` that syncs).
-- On mount, hydrate from `localStorage["fitness-progress-data"]` if present (fallback to `initialProgressData`).
-
-### `hooks/useBodyMeasurements.ts` (existing)
-- Add `weight` field handling: when saving a weight-only log we still update the last measurement's weight so BMI stays in sync (see below).
-- Add `deleteBodyMeasurement(id)`.
-- On mount, hydrate from `localStorage["body-measurements-data"]`; if empty, keep the current mock seeding for demo mode.
-- On every change to `bodyMeasurements`, sync to `localStorage["body-measurements-data"]`.
-
-### New `hooks/useWeightLogs.ts`
-- Manages a `weight-logs-data` array in localStorage: `{ id, date, weight, note }`.
-- Exposes `weightLogs`, `addWeightLog(data)`, `deleteWeightLog(id)`.
-- `addWeightLog` also:
-  - Calls the existing `logWeight` flow in `useActivityLogging` so any `weight_management` / `body_composition` goal in `progressData` updates its `current`, `progress`, and `logs` (already implemented).
-  - Appends a lightweight body-measurement snapshot `{ id, date, weight, source: 'manual' }` via `useBodyMeasurements.addBodyMeasurements`, so BMI & Weight, Body Fat, and Body Measurements cards all see the new weight for calculations. The existing `calculateBodyComposition` will recompute BMI when height is present.
-
-### `useFitnessGoals.ts`
-- Expose the new `weightLogs`, `deleteWeightLog`, `deleteBodyMeasurement`, and route `logWeight` through `useWeightLogs.addWeightLog` (which internally calls the existing goal-update logic).
-
-## Analytics flow (no code changes needed beyond the data reaching localStorage)
-
-Once persistence lands:
-- `StatisticsSection` and `GoalsProgress` on `/user/analytics` and `/client/analytics` already read `fitness-progress-data` and `body-measurements-data`.
-- `GoalsProgress` already computes BMI from `profile.height` + latest weight, and body fat via `calculateBodyFatPercentage({ waist, neck, hips, height, gender })` using `useUserProfile()`.
-- So logging weight/measurements will update Weight Goal, BMI & Weight, Body Measurements, and Body Fat % automatically.
+### 5. History dialogs auto-benefit
+`WeightHistoryDialog` and `BodyMeasurementsHistoryDialog` read from the same hooks, so the seeded rows appear immediately in "View History" tables — no changes needed there.
 
 ## Files touched
+- `src/components/client/overview/fitness-progress/hooks/useWeightLogs.ts`
+- `src/components/client/overview/fitness-progress/hooks/useBodyMeasurements.ts`
+- `src/components/client/overview/fitness-progress/hooks/useGoalManagement.ts`
 
-- `src/components/client/overview/fitness-progress/LogWeightDialog.tsx` — add `onViewHistory` prop + footer button.
-- `src/components/client/overview/fitness-progress/BodyMeasurementsDialog.tsx` — same.
-- `src/components/client/overview/fitness-progress/WeightHistoryDialog.tsx` — new.
-- `src/components/client/overview/fitness-progress/BodyMeasurementsHistoryDialog.tsx` — new.
-- `src/components/client/overview/fitness-progress/FitnessDialogs.tsx` — mount the two new dialogs, plumb history props.
-- `src/components/client/overview/fitness-progress/FitnessProgressCard.tsx` — new state + handlers for open/close/back navigation.
-- `src/components/client/overview/fitness-progress/hooks/useGoalManagement.ts` — localStorage hydrate/sync for `fitness-progress-data`.
-- `src/components/client/overview/fitness-progress/hooks/useBodyMeasurements.ts` — localStorage hydrate/sync for `body-measurements-data`, add delete.
-- `src/components/client/overview/fitness-progress/hooks/useWeightLogs.ts` — new, manages weight-log history + fan-out to goals + measurements.
-- `src/components/client/overview/fitness-progress/hooks/useFitnessGoals.ts` — expose new APIs.
-
-No changes to `useUserProfile`, `bodyFatCalculations`, or the Analytics components themselves.
+## Out of scope
+- No changes to analytics cards, body-fat formula, or profile settings.
+- No DB/migration work — demo data only, stored in localStorage.

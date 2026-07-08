@@ -7,6 +7,69 @@ import { generateMilestones } from "../utils/progressCalculator";
 
 const STORAGE_KEY = "fitness-progress-data";
 
+// Seed goals aligned with the mock weight-log / body-measurement history
+// so the Weight Goal and Workout Goal cards render in Goals Progress.
+function getSeededGoals(): ProgressItem[] {
+  const today = new Date();
+  const iso = (daysAgo: number) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - daysAgo);
+    return d.toISOString().split("T")[0];
+  };
+  const targetDate = (() => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + 60);
+    return d.toISOString().split("T")[0];
+  })();
+
+  const weightLogs: GoalLog[] = [
+    { id: "seed-w-1", date: iso(120), value: 82.4, source: "manual", note: "Starting point" },
+    { id: "seed-w-2", date: iso(90),  value: 81.1, source: "manual" },
+    { id: "seed-w-3", date: iso(60),  value: 79.8, source: "manual" },
+    { id: "seed-w-4", date: iso(30),  value: 78.6, source: "manual" },
+    { id: "seed-w-5", date: iso(3),   value: 78.0, source: "manual", note: "On track" },
+  ];
+
+  const activityLogs: GoalLog[] = [
+    { id: "seed-a-1", date: iso(21), value: 2, source: "workout" },
+    { id: "seed-a-2", date: iso(14), value: 3, source: "workout" },
+    { id: "seed-a-3", date: iso(7),  value: 3, source: "workout" },
+    { id: "seed-a-4", date: iso(1),  value: 4, source: "workout" },
+  ];
+
+  return [
+    {
+      id: "seed-goal-weight",
+      goal: "Reach target weight",
+      current: 78,
+      target: 75,
+      unit: "kg",
+      progress: calculateProgress(78, 75),
+      lastUpdated: iso(3),
+      createdAt: iso(120),
+      goalType: "weight_management",
+      targetDate,
+      source: "personal",
+      logs: weightLogs,
+    },
+    {
+      id: "seed-goal-activity",
+      goal: "Weekly training sessions",
+      current: 4,
+      target: 5,
+      unit: "sessions/week",
+      progress: calculateProgress(4, 5),
+      lastUpdated: iso(1),
+      createdAt: iso(60),
+      goalType: "activity_level",
+      targetDate,
+      source: "personal",
+      frequency: { value: 5, period: "weekly" },
+      logs: activityLogs,
+    },
+  ];
+}
+
 export function useGoalManagement(initialProgressData: ProgressItem[]) {
   const [progressData, setProgressData] = useState<ProgressItem[]>(() => {
     try {
@@ -18,7 +81,8 @@ export function useGoalManagement(initialProgressData: ProgressItem[]) {
     } catch (e) {
       console.warn("Failed to hydrate fitness-progress-data:", e);
     }
-    return initialProgressData;
+    if (initialProgressData && initialProgressData.length > 0) return initialProgressData;
+    return getSeededGoals();
   });
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
   const didMount = useRef(false);
