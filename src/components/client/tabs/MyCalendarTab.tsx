@@ -473,6 +473,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 modifiers={{
                   hasSession: daysWithSessions,
                   hasPlanned: daysWithPlanned,
+                  hasGeneral: daysWithGeneral,
                   hasRequest: daysWithSessionRequests,
                 }}
                 modifiersClassNames={{
