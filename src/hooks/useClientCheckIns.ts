@@ -232,6 +232,53 @@ export function useClientCheckIns(clientId: string) {
         return false;
       }
 
+      // Demo user: mutate local state only
+      if (clientId === DEMO_CLIENT_ID) {
+        setSubmissions(prev => {
+          const nowIso = new Date().toISOString();
+          if (data.submissionId) {
+            return prev.map(s => s.id === data.submissionId ? {
+              ...s,
+              weight: data.weight,
+              measurements: data.measurements,
+              mood_rating: data.mood_rating,
+              energy_level: data.energy_level,
+              sleep_quality: data.sleep_quality,
+              notes: data.notes,
+              photos: data.photos,
+              custom_answers: data.custom_answers,
+              status: 'completed',
+              completed_at: nowIso,
+              updated_at: nowIso,
+            } : s);
+          }
+          return [{
+            id: `demo-checkin-${Date.now()}`,
+            client_id: clientId,
+            trainer_id: settings.trainer_id,
+            settings_id: settings.id,
+            due_date: new Date().toISOString().split('T')[0],
+            status: 'completed',
+            weight: data.weight,
+            measurements: data.measurements,
+            mood_rating: data.mood_rating,
+            energy_level: data.energy_level,
+            sleep_quality: data.sleep_quality,
+            notes: data.notes,
+            photos: data.photos,
+            custom_answers: data.custom_answers,
+            completed_at: nowIso,
+            created_at: nowIso,
+            updated_at: nowIso,
+          }, ...prev];
+        });
+        toast({
+          title: "Check-in submitted",
+          description: "Your check-in has been sent to your trainer"
+        });
+        return true;
+      }
+
       const updateData = {
         weight: data.weight,
         measurements: data.measurements as Json,
