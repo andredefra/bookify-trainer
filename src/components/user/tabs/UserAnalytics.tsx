@@ -7,6 +7,7 @@ import { InfoIcon, Settings } from "lucide-react";
 import { WorkoutAnalytics } from "@/components/client/analytics/WorkoutAnalytics";
 import { StatisticsSection } from "@/components/client/analytics/sections/StatisticsSection";
 import { GoalsProgress } from "@/components/client/analytics/sections/GoalsProgress";
+import { getMockBodyMeasurements, readBodyMeasurements } from "@/components/client/overview/fitness-progress/measurementStorage";
 
 export function UserAnalytics() {
   const navigate = useNavigate();
@@ -64,48 +65,8 @@ export function UserAnalytics() {
 
   // Get body measurements from localStorage or use mock data
   const getBodyMeasurements = () => {
-    try {
-      const stored = localStorage.getItem('body-measurements-data');
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (error) {
-      console.log('No stored body measurements found, using defaults');
-    }
-    
-    // Default body measurements data
-    return [
-      {
-        id: "measurement-1",
-        date: "2024-03-15",
-        weight: 75,
-        height: 175,
-        gender: "male" as const,
-        chest: 102,
-        waist: 82,
-        hips: 95,
-        quadriceps: 55,
-        shoulders: 110,
-        arms: 32,
-        neck: 38,
-        source: "manual"
-      },
-      {
-        id: "measurement-2", 
-        date: "2024-03-01",
-        weight: 77,
-        height: 175,
-        gender: "male" as const,
-        chest: 104,
-        waist: 85,
-        hips: 97,
-        quadriceps: 56,
-        shoulders: 109,
-        arms: 31,
-        neck: 39,
-        source: "manual"
-      }
-    ];
+    const measurements = readBodyMeasurements();
+    return measurements.length > 0 ? measurements : getMockBodyMeasurements();
   };
 
   const progressData = getProgressData();
