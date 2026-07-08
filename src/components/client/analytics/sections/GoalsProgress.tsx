@@ -27,7 +27,8 @@ export function GoalsProgress({ progressData, bodyMeasurements }: GoalsProgressP
   
   // Calculate BMI and body fat data
   const currentWeight = weightData?.current || 70;
-  const bmi = profile?.height ? calculateBMI(currentWeight, profile.height) : calculateBMI(currentWeight);
+  // profile.height is stored in cm; calculateBMI expects meters
+  const bmi = profile?.height ? calculateBMI(currentWeight, profile.height / 100) : calculateBMI(currentWeight);
   const bmiStatus = getBMIStatus(bmi);
 
   // Get specific goals from progress data
