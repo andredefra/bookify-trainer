@@ -1,16 +1,13 @@
-## Seed mock Upcoming Events
+## Fix: mocks non attivi perché `clientId` viene sovrascritto
 
-Il card ha già un seed ma l'utente vede vuoto perché in localStorage esiste già `basic-calendar-events` (probabilmente `[]`). Bump della storage key e arricchimento del seed.
+Il problema: in `Overview.tsx` `clientId` parte come demo UUID, poi `useEffect` chiama `supabase.auth.getUser()` e lo sostituisce con l'ID reale dell'utente autenticato. La mia iniezione di mock in `useClientCheckIns` scattava solo per `DEMO_CLIENT_ID`, quindi in pratica non si attivava mai per l'utente loggato.
 
 ### Modifica
 
-**`src/components/client/overview/UpcomingEventsCard.tsx`**:
-- Cambiare `STORAGE_KEY` da `"basic-calendar-events"` a `"basic-calendar-events-v2"` così parte pulito.
-- Espandere `getSeedEvents()` con 5 eventi realistici allineati al percorso attuale (weight loss, 82 kg → obiettivo):
-  1. **Oggi 18:30** — Training: Upper Body Workout
-  2. **Domani 07:30** — Training: Morning Run 5K (cardio)
-  3. **+2 giorni 10:00** — Session con Marco Rossi (in-person), "Personal training – Lower Body"
-  4. **+4 giorni 19:00** — Training: HIIT 20'
-  5. **+6 giorni 09:00** — Session con Marco Rossi (video), "Weekly check-in review"
+1. **`src/hooks/useClientCheckIns.ts`** — aggiungere un secondo parametro opzionale `options?: { useMocks?: boolean }`. Quando `useMocks` è true (oppure `clientId === DEMO_CLIENT_ID`), il fetch salta Supabase e restituisce i mock; anche `submitCheckIn` mantiene la logica solo-locale già presente.
 
-Nessuna altra modifica.
+2. **`src/components/client/overview/checkin/ClientCheckInCard.tsx`** — accettare prop opzionale `useMocks?: boolean` e passarla al hook.
+
+3. **`src/components/client/tabs/Overview.tsx`** — passare `useMocks={isBasic}` a `<ClientCheckInCard />`. Sulla dashboard basic (mock/demo) l'utente vede sempre i 4 check-in fittizi.
+
+Nessuna modifica a DB, RLS o layout.
