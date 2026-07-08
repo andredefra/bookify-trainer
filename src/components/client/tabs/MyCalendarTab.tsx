@@ -543,7 +543,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                   </div>
                 ))}
 
-                {/* Planned activities & session requests */}
+                {/* Planned activities, general events & session requests */}
                 {selectedDayPlanned.map(activity => {
                   if (activity.category === "session") {
                     const isBasic = activity.trainerPlan === "free";
@@ -598,8 +598,9 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
 
                   const Icon = getActivityIcon(activity.type);
                   const colorClass = getActivityColor(activity.type);
+                  const isGeneral = activity.category === "general";
                   return (
-                    <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg border bg-muted/30">
+                    <div key={activity.id} className={cn("flex items-start gap-3 p-3 rounded-lg border", isGeneral ? "bg-slate-500/5 border-slate-500/20" : "bg-muted/30")}>
                       <div className={cn("h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5", colorClass)}>
                         <Icon className="h-4 w-4 text-white" />
                       </div>
