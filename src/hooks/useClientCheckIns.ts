@@ -47,7 +47,7 @@ const getDemoSubmissions = (): CheckInSubmission[] => [
     due_date: dateDaysAgo(3),
     status: 'completed',
     weight: 82.0,
-    measurements: { waist: 84, hips: 95, quadriceps: 55, arms: 33 },
+    measurements: { chest: 102, waist: 84, hips: 95, quadriceps: 55, arms: 33 },
     mood_rating: 4,
     energy_level: 4,
     sleep_quality: 3,
