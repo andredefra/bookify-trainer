@@ -186,6 +186,18 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
           description: `Session request sent to ${trainer.name}.`,
         });
       }
+    } else if (eventCategory === "general") {
+      const activity: PlannedActivity = {
+        id: crypto.randomUUID(),
+        date: selectedDate,
+        time: newActivity.time,
+        category: "general",
+        type: "general",
+        title: trimmedTitle,
+        notes: newActivity.notes,
+      };
+      setPlannedActivities(prev => [...prev, activity]);
+      toast({ title: "Event added", description: "General event added to your calendar." });
     } else {
       const activity: PlannedActivity = {
         id: crypto.randomUUID(),
