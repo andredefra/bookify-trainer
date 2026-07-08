@@ -1,31 +1,26 @@
-## Obiettivo
-Aggiungere un pulsante **Today** nella tab **My Calendar** del client dashboard che riporti la selezione e la vista del calendario alla data corrente.
+Restructure the "Plan an Event" dialog so that "Rest Day" is no longer an activity type under Training Day, and add a new top-level event category for generic events.
 
-## Modifiche previste
+### What will change
 
-### File: `src/components/client/tabs/MyCalendarTab.tsx`
+**`src/components/client/tabs/MyCalendarTab.tsx`**
+- Remove `rest` / "Rest Day" from the `activityTypes` list used under Training Day.
+- Add `"general"` as a third event category alongside `"training"` and `"session"`.
+- Update the `PlannedActivity` interface so `category` accepts `"training" | "session" | "general"` and add a generic `type` value for general events.
+- Add a third "General Event" button in the Event Type selector (Training Day / Session with Trainer / General Event).
+- When "General Event" is selected, show only title, date, time and notes — no Activity Type dropdown and no trainer/session-mode fields.
+- Update `handleAddActivity` to create a general-event activity with category `"general"` and type `"general"`.
+- Update calendar day modifiers, selected-day list rendering, icon helpers and color helpers to recognise general events.
+- Keep existing training/session behaviour unchanged.
 
-1. **Stato per il mese visualizzato**
-   - Aggiungere uno stato `currentMonth` inizializzato con `selectedDate` (o `initialDate`).
-   - Aggiornare `initialDate` / `useEffect` da `location.state.selectedDate` in modo che, quando si arriva da un evento della overview, anche `currentMonth` venga sincronizzato sulla data selezionata.
+**`src/components/client/overview/UpcomingEventsCard.tsx`**
+- Update the `CalendarEvent` interface to accept `category: "training" | "session" | "general"`.
+- Update `iconFor`, `colorFor` and `labelFor` helpers to handle general events.
+- Update the category badge in the list and in the details dialog so general events show as "General Event".
+- Update `originBadge` so general events planned by the user show "Planned by you".
 
-2. **Controllo del calendario**
-   - Passare al componente `<Calendar>` le props:
-     - `month={currentMonth}`
-     - `onMonthChange={setCurrentMonth}`
-   - Questo permette di riportare la vista del calendario al mese corrente quando si preme Today.
+### Not in scope
+- No database or backend changes (calendar events are stored in localStorage in this view).
+- No changes to session request logic or trainer plans.
 
-3. **Pulsante Today**
-   - Aggiungere un pulsante "Today" (testo + icona opzionale, es. `CalendarDays`) sopra o accanto al calendario, in modo visibile e coerente con l'UI esistente.
-   - Al click:
-     - `setSelectedDate(new Date())`
-     - `setCurrentMonth(new Date())`
-   - Il pulsante può essere disabilitato o stilizzato diversamente quando `selectedDate` è già oggi (opzionale, da valutare in fase di implementazione).
-
-## Cosa non cambia
-- Nessuna modifica alla logica di creazione eventi, ai mock trainer, ai seed degli upcoming events o alla navigazione da overview.
-- Nessun impatto su backend/DB/RLS.
-
-## Accettazione
-- Il calendario mostra un pulsante "Today".
-- Click su "Today" seleziona il giorno corrente e riporta la vista del calendario al mese corrente, anche se l'utente si era spostato su mesi lontani.
+### UX note
+The new General Event category is meant for anything that is not a training session or a trainer appointment (e.g. "Massage", "Meal prep", "Rest/recovery note").

@@ -4,14 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { CalendarDays, Dumbbell, Flame, Heart, Bed, User, Clock, ArrowRight, Plus, Video, MapPin, UserCheck, UserPlus } from "lucide-react";
+import { CalendarDays, Dumbbell, Flame, Heart, User, Clock, ArrowRight, Plus, Video, MapPin, UserCheck, UserPlus } from "lucide-react";
 import { addDays, format, isToday, isTomorrow } from "date-fns";
 
 interface CalendarEvent {
   id: string;
   date: string; // ISO
   time: string;
-  category: "training" | "session";
+  category: "training" | "session" | "general";
   type: string;
   title?: string;
   notes?: string;
@@ -87,20 +87,20 @@ function getSeedEvents(): CalendarEvent[] {
 
 function iconFor(ev: CalendarEvent) {
   if (ev.category === "session") return User;
+  if (ev.category === "general") return CalendarDays;
   switch (ev.type) {
     case "cardio": return Flame;
     case "stretching": return Heart;
-    case "rest": return Bed;
     default: return Dumbbell;
   }
 }
 
 function colorFor(ev: CalendarEvent) {
   if (ev.category === "session") return "bg-primary/10 text-primary";
+  if (ev.category === "general") return "bg-slate-500/10 text-slate-600";
   switch (ev.type) {
     case "cardio": return "bg-orange-500/10 text-orange-600";
     case "stretching": return "bg-purple-500/10 text-purple-600";
-    case "rest": return "bg-green-500/10 text-green-600";
     default: return "bg-blue-500/10 text-blue-600";
   }
 }
@@ -108,11 +108,11 @@ function colorFor(ev: CalendarEvent) {
 function labelFor(ev: CalendarEvent) {
   if (ev.title) return ev.title;
   if (ev.category === "session") return ev.notes || `Session with ${ev.trainer ?? "trainer"}`;
+  if (ev.category === "general") return ev.notes || "General Event";
   const map: Record<string, string> = {
     workout: "Workout",
     cardio: "Cardio",
     stretching: "Stretching",
-    rest: "Rest Day",
   };
   return ev.notes || map[ev.type] || "Training";
 }
@@ -153,7 +153,7 @@ export function UpcomingEventsCard() {
     });
 
   const originBadge = (ev: CalendarEvent) => {
-    if (ev.category === "training") {
+    if (ev.category === "training" || ev.category === "general") {
       return (
         <Badge variant="secondary" className="gap-1">
           <UserCheck className="h-3 w-3" /> Planned by you
@@ -218,7 +218,7 @@ export function UpcomingEventsCard() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-medium text-foreground truncate">{labelFor(ev)}</p>
                       <Badge variant={ev.category === "session" ? "default" : "secondary"} className="text-xs">
-                        {ev.category === "session" ? "Session" : "Training"}
+                        {ev.category === "session" ? "Session" : ev.category === "general" ? "General" : "Training"}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground mt-0.5">
@@ -251,7 +251,7 @@ export function UpcomingEventsCard() {
                 </DialogTitle>
                 <div className="flex flex-wrap gap-2 pt-2">
                   <Badge variant={selected.category === "session" ? "default" : "secondary"}>
-                    {selected.category === "session" ? "Session" : "Training"}
+                    {selected.category === "session" ? "Session" : selected.category === "general" ? "General Event" : "Training"}
                   </Badge>
                   {originBadge(selected)}
                   {selected.requestStatus && (

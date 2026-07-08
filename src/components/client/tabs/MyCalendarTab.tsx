@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Bed, Video, MapPin, User, Send, Info } from "lucide-react";
+import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Video, MapPin, User, Send, Info } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
 import { format, isSameDay, parseISO, isToday, isTomorrow, addDays, isSameMonth } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -19,8 +19,8 @@ interface PlannedActivity {
   id: string;
   date: Date;
   time: string;
-  category: "training" | "session";
-  type: "workout" | "cardio" | "stretching" | "rest";
+  category: "training" | "session" | "general";
+  type: "workout" | "cardio" | "stretching" | "general";
   title?: string;
   notes: string;
   trainer?: string;
@@ -37,8 +37,9 @@ const activityTypes = [
   { value: "workout", label: "Workout", icon: Dumbbell, color: "bg-blue-500" },
   { value: "cardio", label: "Cardio", icon: Flame, color: "bg-orange-500" },
   { value: "stretching", label: "Stretching", icon: Heart, color: "bg-purple-500" },
-  { value: "rest", label: "Rest Day", icon: Bed, color: "bg-green-500" },
 ];
+
+const generalEventType = { value: "general", label: "General Event", icon: CalendarDays, color: "bg-slate-500" };
 
 const mockTrainers = [
   { id: "1", name: "Marco Rossi", plan: "pro" as const },
@@ -112,7 +113,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   }, [selectedDate, currentMonth]);
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
+  const [eventCategory, setEventCategory] = useState<"training" | "session" | "general">("training");
   const [newActivity, setNewActivity] = useState({
     title: "",
     time: "09:00",
@@ -134,6 +135,10 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   );
   const daysWithPlanned = useMemo(() =>
     plannedActivities.filter(a => a.category === "training").map(a => a.date),
+    [plannedActivities]
+  );
+  const daysWithGeneral = useMemo(() =>
+    plannedActivities.filter(a => a.category === "general").map(a => a.date),
     [plannedActivities]
   );
   const daysWithSessionRequests = useMemo(() =>
@@ -185,6 +190,18 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
           description: `Session request sent to ${trainer.name}.`,
         });
       }
+    } else if (eventCategory === "general") {
+      const activity: PlannedActivity = {
+        id: crypto.randomUUID(),
+        date: selectedDate,
+        time: newActivity.time,
+        category: "general",
+        type: "general",
+        title: trimmedTitle,
+        notes: newActivity.notes,
+      };
+      setPlannedActivities(prev => [...prev, activity]);
+      toast({ title: "Event added", description: "General event added to your calendar." });
     } else {
       const activity: PlannedActivity = {
         id: crypto.randomUUID(),
@@ -214,11 +231,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   };
 
   const getActivityIcon = (type: string) => {
+    if (type === "general") return generalEventType.icon;
     const found = activityTypes.find(a => a.value === type);
     return found ? found.icon : Dumbbell;
   };
 
   const getActivityColor = (type: string) => {
+    if (type === "general") return generalEventType.color;
     const found = activityTypes.find(a => a.value === type);
     return found ? found.color : "bg-muted";
   };
@@ -249,12 +268,12 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               {/* Event category selector */}
               <div>
                 <Label className="text-sm font-medium">Event Type</Label>
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-3 gap-2 mt-2">
                   <button
                     type="button"
                     onClick={() => setEventCategory("training")}
                     className={cn(
-                      "flex items-center gap-2 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      "flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
                       eventCategory === "training"
                         ? "border-primary bg-primary/10 text-primary"
                         : "border-border bg-background text-muted-foreground hover:border-primary/50"
@@ -267,14 +286,27 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                     type="button"
                     onClick={() => setEventCategory("session")}
                     className={cn(
-                      "flex items-center gap-2 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      "flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
                       eventCategory === "session"
                         ? "border-primary bg-primary/10 text-primary"
                         : "border-border bg-background text-muted-foreground hover:border-primary/50"
                     )}
                   >
                     <User className="h-4 w-4" />
-                    Session with Trainer
+                    Trainer Session
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEventCategory("general")}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      eventCategory === "general"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/50"
+                    )}
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    General
                   </button>
                 </div>
               </div>
@@ -284,7 +316,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
-                  placeholder={eventCategory === "training" ? "e.g. Upper Body Workout" : "e.g. Personal training – Lower Body"}
+                  placeholder={
+                    eventCategory === "training"
+                      ? "e.g. Upper Body Workout"
+                      : eventCategory === "general"
+                      ? "e.g. Massage, Meal prep..."
+                      : "e.g. Personal training – Lower Body"
+                  }
                   value={newActivity.title}
                   onChange={e => setNewActivity(prev => ({ ...prev, title: e.target.value }))}
                 />
@@ -310,7 +348,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               </div>
 
               {/* Category-specific fields */}
-              {eventCategory === "training" ? (
+              {eventCategory === "training" && (
                 <div>
                   <Label>Activity Type</Label>
                   <Select value={newActivity.type} onValueChange={v => setNewActivity(prev => ({ ...prev, type: v }))}>
@@ -329,7 +367,8 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                     </SelectContent>
                   </Select>
                 </div>
-              ) : (
+              )}
+              {eventCategory === "session" && (
                 <>
                   <div>
                     <Label>Trainer</Label>
@@ -395,7 +434,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"
-                  placeholder={eventCategory === "training" ? "e.g. Focus on upper body, 45 min..." : "e.g. Want to work on technique..."}
+                  placeholder={
+                    eventCategory === "training"
+                      ? "e.g. Focus on upper body, 45 min..."
+                      : eventCategory === "general"
+                      ? "e.g. Any notes for this event..."
+                      : "e.g. Want to work on technique..."
+                  }
                   value={newActivity.notes}
                   onChange={e => setNewActivity(prev => ({ ...prev, notes: e.target.value }))}
                 />
@@ -440,16 +485,18 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 modifiers={{
                   hasSession: daysWithSessions,
                   hasPlanned: daysWithPlanned,
+                  hasGeneral: daysWithGeneral,
                   hasRequest: daysWithSessionRequests,
                 }}
                 modifiersClassNames={{
                   hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
-                  hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
-                  hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
+                  hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-8px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
+                  hasGeneral: "relative before:absolute before:bottom-1 before:left-1/2 before:-translate-x-1/2 before:h-1.5 before:w-1.5 before:rounded-full before:bg-slate-500",
+                  hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+6px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
                 }}
               />
               {/* Legend */}
-              <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-primary" />
                   Sessions
@@ -457,6 +504,10 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-green-500" />
                   Planned
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-slate-500" />
+                  General
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-amber-500" />
@@ -504,7 +555,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                   </div>
                 ))}
 
-                {/* Planned activities & session requests */}
+                {/* Planned activities, general events & session requests */}
                 {selectedDayPlanned.map(activity => {
                   if (activity.category === "session") {
                     const isBasic = activity.trainerPlan === "free";
@@ -559,8 +610,9 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
 
                   const Icon = getActivityIcon(activity.type);
                   const colorClass = getActivityColor(activity.type);
+                  const isGeneral = activity.category === "general";
                   return (
-                    <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg border bg-muted/30">
+                    <div key={activity.id} className={cn("flex items-start gap-3 p-3 rounded-lg border", isGeneral ? "bg-slate-500/5 border-slate-500/20" : "bg-muted/30")}>
                       <div className={cn("h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5", colorClass)}>
                         <Icon className="h-4 w-4 text-white" />
                       </div>
