@@ -18,9 +18,11 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
   const measurementsForm = useForm({
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
+      chest: 0,
       waist: 0,
+      abdomen: 0,
       hips: 0,
-      thighs: 0,
+      quadriceps: 0,
       arms: 0
     }
   });
