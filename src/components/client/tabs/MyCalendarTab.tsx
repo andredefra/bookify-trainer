@@ -421,24 +421,33 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6">
         {/* Calendar */}
-        <Card className="w-fit">
-          <CardContent className="p-4">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={d => d && setSelectedDate(d)}
-              className="pointer-events-auto"
-              modifiers={{
-                hasSession: daysWithSessions,
-                hasPlanned: daysWithPlanned,
-                hasRequest: daysWithSessionRequests,
-              }}
-              modifiersClassNames={{
-                hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
-                hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
-                hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
-              }}
-            />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-sm font-medium text-foreground">Calendar</span>
+            <Button variant="outline" size="sm" onClick={handleToday}>
+              Today
+            </Button>
+          </div>
+          <Card className="w-fit">
+            <CardContent className="p-4">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={d => d && setSelectedDate(d)}
+                month={currentMonth}
+                onMonthChange={setCurrentMonth}
+                className="pointer-events-auto"
+                modifiers={{
+                  hasSession: daysWithSessions,
+                  hasPlanned: daysWithPlanned,
+                  hasRequest: daysWithSessionRequests,
+                }}
+                modifiersClassNames={{
+                  hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
+                  hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
+                  hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
+                }}
+              />
             {/* Legend */}
             <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
