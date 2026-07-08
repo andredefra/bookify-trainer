@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Bed, Video, MapPin, User, Send, Info } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
-import { format, isSameDay, parseISO, isToday, isTomorrow, addDays } from "date-fns";
+import { format, isSameDay, parseISO, isToday, isTomorrow, addDays, isSameMonth } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
