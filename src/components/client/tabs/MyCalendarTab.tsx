@@ -62,7 +62,16 @@ function resolveSessionDate(dateStr: string | Date): Date {
 }
 
 export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const location = useLocation();
+  const initialDate = useMemo(() => {
+    const iso = (location.state as any)?.selectedDate;
+    if (iso) {
+      const d = new Date(iso);
+      if (!isNaN(d.getTime())) return d;
+    }
+    return new Date();
+  }, [location.state]);
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
   const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>(() => {
     try {
       const raw = localStorage.getItem("basic-calendar-events");
@@ -84,6 +93,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
   const [newActivity, setNewActivity] = useState({
+    title: "",
     time: "09:00",
     type: "workout",
     notes: "",
