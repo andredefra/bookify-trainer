@@ -7,33 +7,36 @@ import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "body-measurements-data";
 
-// Mock body measurements data for demo users
-const getMockBodyMeasurements = (): BodyMeasurements[] => [
-  {
-    id: "mock-measurement-1",
-    date: new Date().toISOString().split('T')[0],
-    weight: 78,
-    waist: 84,
-    neck: 38,
-    hips: 95,
-    thighs: 55,
-    shoulders: 115,
-    arms: 33,
-    source: 'manual'
-  },
-  {
-    id: "mock-measurement-2",
-    date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    weight: 80,
-    waist: 86,
-    neck: 38,
-    hips: 96,
-    thighs: 56,
-    shoulders: 115,
-    arms: 32,
-    source: 'manual'
-  }
-];
+// Mock body measurements data for demo users — 6 entries over ~150 days,
+// weights aligned with the seeded weight-log trend, full circumferences
+// so Body Fat % can be computed for both genders.
+const getMockBodyMeasurements = (): BodyMeasurements[] => {
+  const today = new Date();
+  const entries = [
+    { daysAgo: 150, weight: 82.4, waist: 89, neck: 39, hips: 100, thighs: 58, shoulders: 118, arms: 34 },
+    { daysAgo: 120, weight: 81.5, waist: 88, neck: 39, hips: 99,  thighs: 57, shoulders: 118, arms: 34 },
+    { daysAgo: 90,  weight: 80.6, waist: 87, neck: 38, hips: 98,  thighs: 57, shoulders: 117, arms: 34 },
+    { daysAgo: 60,  weight: 79.8, waist: 86, neck: 38, hips: 97,  thighs: 56, shoulders: 116, arms: 33 },
+    { daysAgo: 30,  weight: 78.9, waist: 85, neck: 38, hips: 96,  thighs: 56, shoulders: 116, arms: 33 },
+    { daysAgo: 3,   weight: 78.0, waist: 84, neck: 38, hips: 95,  thighs: 55, shoulders: 115, arms: 33 },
+  ];
+  return entries.map((e, i) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - e.daysAgo);
+    return {
+      id: `mock-measurement-${i}`,
+      date: d.toISOString().split('T')[0],
+      weight: e.weight,
+      waist: e.waist,
+      neck: e.neck,
+      hips: e.hips,
+      thighs: e.thighs,
+      shoulders: e.shoulders,
+      arms: e.arms,
+      source: 'manual' as const,
+    };
+  });
+};
 
 function hydrate(): BodyMeasurements[] | null {
   try {
@@ -49,14 +52,17 @@ function hydrate(): BodyMeasurements[] | null {
 }
 
 export function useBodyMeasurements() {
-  const [bodyMeasurements, setBodyMeasurements] = useState<BodyMeasurements[]>(() => hydrate() ?? []);
+  const initial = hydrate();
+  const [bodyMeasurements, setBodyMeasurements] = useState<BodyMeasurements[]>(
+    initial && initial.length > 0 ? initial : []
+  );
   const { profile } = useUserProfile();
   const didMount = useRef(false);
-  const hydratedFromStorage = useRef(hydrate() !== null);
+  const needsSeed = useRef(!initial || initial.length === 0);
 
-  // Seed mock data for demo mode only if nothing in localStorage yet
+  // Seed mock data for demo mode when storage is empty or missing
   useEffect(() => {
-    if (hydratedFromStorage.current) return;
+    if (!needsSeed.current) return;
     const checkDemoMode = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
