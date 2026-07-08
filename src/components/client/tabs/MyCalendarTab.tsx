@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CalendarDays, Plus, Clock, Dumbbell, Heart, Flame, Bed, Video, MapPin, User, Send, Info } from "lucide-react";
 import { SessionItem } from "@/types/sessions";
-import { format, isSameDay, parseISO, isToday, isTomorrow, addDays } from "date-fns";
+import { format, isSameDay, parseISO, isToday, isTomorrow, addDays, isSameMonth } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -72,6 +72,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
     return new Date();
   }, [location.state]);
   const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
+  const [currentMonth, setCurrentMonth] = useState<Date>(initialDate);
   const [plannedActivities, setPlannedActivities] = useState<PlannedActivity[]>(() => {
     try {
       const raw = localStorage.getItem("basic-calendar-events");
@@ -90,6 +91,26 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
       localStorage.setItem("basic-calendar-events", JSON.stringify(serializable));
     } catch {}
   }, [plannedActivities]);
+
+  // Keep calendar view in sync when the selected date changes programmatically
+  // (e.g. "Today" button or navigation from the overview card).
+  useEffect(() => {
+    const iso = (location.state as any)?.selectedDate;
+    if (iso) {
+      const d = new Date(iso);
+      if (!isNaN(d.getTime())) {
+        setSelectedDate(d);
+        setCurrentMonth(d);
+      }
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (!isSameMonth(selectedDate, currentMonth)) {
+      setCurrentMonth(selectedDate);
+    }
+  }, [selectedDate, currentMonth]);
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
   const [newActivity, setNewActivity] = useState({
@@ -184,6 +205,12 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
 
   const handleRemovePlanned = (id: string) => {
     setPlannedActivities(prev => prev.filter(a => a.id !== id));
+  };
+
+  const handleToday = () => {
+    const today = new Date();
+    setSelectedDate(today);
+    setCurrentMonth(today);
   };
 
   const getActivityIcon = (type: string) => {
@@ -394,41 +421,51 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6">
         {/* Calendar */}
-        <Card className="w-fit">
-          <CardContent className="p-4">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={d => d && setSelectedDate(d)}
-              className="pointer-events-auto"
-              modifiers={{
-                hasSession: daysWithSessions,
-                hasPlanned: daysWithPlanned,
-                hasRequest: daysWithSessionRequests,
-              }}
-              modifiersClassNames={{
-                hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
-                hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
-                hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
-              }}
-            />
-            {/* Legend */}
-            <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                Sessions
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                Planned
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-amber-500" />
-                Requests
-              </span>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-sm font-medium text-foreground">Calendar</span>
+            <Button variant="outline" size="sm" onClick={handleToday}>
+              Today
+            </Button>
+          </div>
+          <Card className="w-fit">
+            <CardContent className="p-4">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={d => d && setSelectedDate(d)}
+                month={currentMonth}
+                onMonthChange={setCurrentMonth}
+                className="pointer-events-auto"
+                modifiers={{
+                  hasSession: daysWithSessions,
+                  hasPlanned: daysWithPlanned,
+                  hasRequest: daysWithSessionRequests,
+                }}
+                modifiersClassNames={{
+                  hasSession: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary",
+                  hasPlanned: "relative before:absolute before:bottom-1 before:left-[calc(50%-5px)] before:h-1.5 before:w-1.5 before:rounded-full before:bg-green-500",
+                  hasRequest: "relative [&>*]:after:absolute [&>*]:after:bottom-1 [&>*]:after:left-[calc(50%+3px)] [&>*]:after:h-1.5 [&>*]:after:w-1.5 [&>*]:after:rounded-full [&>*]:after:bg-amber-500",
+                }}
+              />
+              {/* Legend */}
+              <div className="flex items-center gap-4 mt-3 px-3 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  Sessions
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-green-500" />
+                  Planned
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-amber-500" />
+                  Requests
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Day detail */}
         <Card>

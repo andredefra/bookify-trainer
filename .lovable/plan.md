@@ -1,38 +1,31 @@
-## Add Title field + click-through details to Upcoming Events
+## Obiettivo
+Aggiungere un pulsante **Today** nella tab **My Calendar** del client dashboard che riporti la selezione e la vista del calendario alla data corrente.
 
-Due modifiche legate al Plan-an-Event / Upcoming Events:
+## Modifiche previste
 
-### 1. Campo "Title" nel dialog Plan an Event
+### File: `src/components/client/tabs/MyCalendarTab.tsx`
 
-Attualmente il dialog non ha un titolo dedicato: la card in Overview mostra la stringa che sta in `notes` (o fallback al tipo). Aggiungo un campo Title esplicito.
+1. **Stato per il mese visualizzato**
+   - Aggiungere uno stato `currentMonth` inizializzato con `selectedDate` (o `initialDate`).
+   - Aggiornare `initialDate` / `useEffect` da `location.state.selectedDate` in modo che, quando si arriva da un evento della overview, anche `currentMonth` venga sincronizzato sulla data selezionata.
 
-**`src/components/client/tabs/MyCalendarTab.tsx`**
-- Interfaccia `PlannedActivity`: nuovo `title?: string`.
-- Stato `newActivity`: aggiungere `title: ""`.
-- Nel dialog, sopra il campo "Notes", inserire un `<Input>` "Title" (required per submit; placeholder in base al tipo: es. "Upper Body Workout" o "Personal training – Lower Body").
-- `handleAddActivity`: usare il title inserito (fallback: label del tipo o "Session with <trainer>").
-- Nel rendering del giorno, mostrare `activity.title` invece della sola parola-tipo capitalizzata.
+2. **Controllo del calendario**
+   - Passare al componente `<Calendar>` le props:
+     - `month={currentMonth}`
+     - `onMonthChange={setCurrentMonth}`
+   - Questo permette di riportare la vista del calendario al mese corrente quando si preme Today.
 
-### 2. Click su Upcoming Event → dettagli con provenienza
+3. **Pulsante Today**
+   - Aggiungere un pulsante "Today" (testo + icona opzionale, es. `CalendarDays`) sopra o accanto al calendario, in modo visibile e coerente con l'UI esistente.
+   - Al click:
+     - `setSelectedDate(new Date())`
+     - `setCurrentMonth(new Date())`
+   - Il pulsante può essere disabilitato o stilizzato diversamente quando `selectedDate` è già oggi (opzionale, da valutare in fase di implementazione).
 
-**`src/components/client/overview/UpcomingEventsCard.tsx`**
-- Aggiungere `title?: string` a `CalendarEvent`; se presente `title`, `labelFor` lo restituisce prima di `notes`.
-- Aggiornare il seed dei mock per usare `title` (i valori attuali diventano il titolo, es. "Upper Body Workout", "Personal training – Lower Body", …).
-- Al click su un evento, invece di andare subito al calendar, aprire un piccolo `Dialog` "Event Details" con:
-  - Titolo grande + badge categoria (Training / Session).
-  - Data (Today/Tomorrow/EEE d MMM) + ora.
-  - **Origine**: 
-    - Training → badge "Planned by you".
-    - Session con `trainer` → "Invited by <trainer>" se `requestStatus` è definito (richiesta al PT), altrimenti "Planned with <trainer>".
-  - Session mode (In-person / Video) se disponibile.
-  - Notes (se presenti).
-  - Pulsanti: "Close" e "Open in Calendar" — quest'ultimo chiama `navigate("/client-dashboard-basic", { state: { activeTab: "my-calendar", selectedDate: ev.date } })`.
+## Cosa non cambia
+- Nessuna modifica alla logica di creazione eventi, ai mock trainer, ai seed degli upcoming events o alla navigazione da overview.
+- Nessun impatto su backend/DB/RLS.
 
-**`src/components/client/tabs/MyCalendarTab.tsx`**
-- All'avvio leggere `location.state?.selectedDate` (via `useLocation`) e, se valido, impostare `selectedDate` a quella data così l'utente atterra sul giorno giusto.
-
-### Non tocco
-
-- Logica trainer plans / session request status.
-- Storage keys (già bumped a v2).
-- DB/RLS.
+## Accettazione
+- Il calendario mostra un pulsante "Today".
+- Click su "Today" seleziona il giorno corrente e riporta la vista del calendario al mese corrente, anche se l'utente si era spostato su mesi lontani.
