@@ -17,36 +17,54 @@ interface CalendarEvent {
   sessionMode?: "video" | "in-person";
 }
 
-const STORAGE_KEY = "basic-calendar-events";
+const STORAGE_KEY = "basic-calendar-events-v2";
 
 function getSeedEvents(): CalendarEvent[] {
   const now = new Date();
   return [
     {
       id: "seed-1",
-      date: addDays(now, 1).toISOString(),
-      time: "18:00",
+      date: now.toISOString(),
+      time: "18:30",
       category: "training",
       type: "workout",
       notes: "Upper Body Workout",
     },
     {
       id: "seed-2",
-      date: addDays(now, 3).toISOString(),
+      date: addDays(now, 1).toISOString(),
+      time: "07:30",
+      category: "training",
+      type: "cardio",
+      notes: "Morning Run 5K",
+    },
+    {
+      id: "seed-3",
+      date: addDays(now, 2).toISOString(),
       time: "10:00",
       category: "session",
       type: "workout",
       trainer: "Marco Rossi",
       sessionMode: "in-person",
-      notes: "Personal training session",
+      notes: "Personal training – Lower Body",
     },
     {
-      id: "seed-3",
-      date: addDays(now, 5).toISOString(),
-      time: "07:30",
+      id: "seed-4",
+      date: addDays(now, 4).toISOString(),
+      time: "19:00",
       category: "training",
-      type: "cardio",
-      notes: "Morning run 5K",
+      type: "workout",
+      notes: "HIIT 20'",
+    },
+    {
+      id: "seed-5",
+      date: addDays(now, 6).toISOString(),
+      time: "09:00",
+      category: "session",
+      type: "workout",
+      trainer: "Marco Rossi",
+      sessionMode: "video",
+      notes: "Weekly check-in review",
     },
   ];
 }

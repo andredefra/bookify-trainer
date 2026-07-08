@@ -1,21 +1,16 @@
-## Mock Weekly Check-in data
+## Seed mock Upcoming Events
 
-Aggiungo dei check-in fittizi lato client-side quando l'utente demo (`00000000-0000-0000-0000-000000000002`) apre la Overview, così il card "Weekly Check-in" mostra il flusso completo senza toccare il DB.
+Il card ha già un seed ma l'utente vede vuoto perché in localStorage esiste già `basic-calendar-events` (probabilmente `[]`). Bump della storage key e arricchimento del seed.
 
 ### Modifica
 
-**`src/hooks/useClientCheckIns.ts`** — dopo il fetch, se `clientId` è il demo UUID:
-- se **`settings`** è `null`, iniettare mock settings (weekly, tutti i toggle attivi).
-- se **`submissions`** è vuoto, iniettare 4 mock:
-  1. **Pending** — dovuto oggi (mostra banner giallo "due today", pulsante "Complete Check-in").
-  2. **Completed, awaiting review** — 3 giorni fa, con weight/mood/measurements, `trainer_feedback` vuoto (mostra "Awaiting review").
-  3. **Reviewed con feedback** — 10 giorni fa, con `trainer_feedback` "Great job this week! Keep the protein intake up." → attiva il badge "New Feedback".
-  4. **Reviewed** — 17 giorni fa, feedback già visto.
+**`src/components/client/overview/UpcomingEventsCard.tsx`**:
+- Cambiare `STORAGE_KEY` da `"basic-calendar-events"` a `"basic-calendar-events-v2"` così parte pulito.
+- Espandere `getSeedEvents()` con 5 eventi realistici allineati al percorso attuale (weight loss, 82 kg → obiettivo):
+  1. **Oggi 18:30** — Training: Upper Body Workout
+  2. **Domani 07:30** — Training: Morning Run 5K (cardio)
+  3. **+2 giorni 10:00** — Session con Marco Rossi (in-person), "Personal training – Lower Body"
+  4. **+4 giorni 19:00** — Training: HIIT 20'
+  5. **+6 giorni 09:00** — Session con Marco Rossi (video), "Weekly check-in review"
 
-`submitCheckIn` per il demo user aggiorna solo lo stato locale (nessuna insert reale su Supabase) così i mock restano coerenti.
-
-### File da modificare
-
-- `src/hooks/useClientCheckIns.ts` — costante `DEMO_CLIENT_ID`, funzione `getDemoMocks()`, iniezione nel `fetchCheckIns`, short-circuit demo in `submitCheckIn`.
-
-Nessuna modifica a DB, RLS, UI del card o dialog.
+Nessuna altra modifica.
