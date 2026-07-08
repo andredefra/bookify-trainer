@@ -91,6 +91,26 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
       localStorage.setItem("basic-calendar-events", JSON.stringify(serializable));
     } catch {}
   }, [plannedActivities]);
+
+  // Keep calendar view in sync when the selected date changes programmatically
+  // (e.g. "Today" button or navigation from the overview card).
+  useEffect(() => {
+    const iso = (location.state as any)?.selectedDate;
+    if (iso) {
+      const d = new Date(iso);
+      if (!isNaN(d.getTime())) {
+        setSelectedDate(d);
+        setCurrentMonth(d);
+      }
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (!isSameMonth(selectedDate, currentMonth)) {
+      setCurrentMonth(selectedDate);
+    }
+  }, [selectedDate, currentMonth]);
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
   const [newActivity, setNewActivity] = useState({
