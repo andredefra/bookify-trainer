@@ -251,7 +251,7 @@ export function UpcomingEventsCard() {
                 </DialogTitle>
                 <div className="flex flex-wrap gap-2 pt-2">
                   <Badge variant={selected.category === "session" ? "default" : "secondary"}>
-                    {selected.category === "session" ? "Session" : "Training"}
+                    {selected.category === "session" ? "Session" : selected.category === "general" ? "General Event" : "Training"}
                   </Badge>
                   {originBadge(selected)}
                   {selected.requestStatus && (
