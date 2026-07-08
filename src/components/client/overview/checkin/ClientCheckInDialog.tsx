@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Loader2, Scale, Ruler, Smile, Zap, Moon } from 'lucide-react';
 import { CheckInSettings, CheckInMeasurements, CheckInSubmission } from '@/hooks/useClientCheckIns';
+import { MeasurementGuidePopover } from '@/components/client/overview/fitness-progress/MeasurementGuidePopover';
 
 interface ClientCheckInDialogProps {
   open: boolean;
@@ -105,7 +106,9 @@ export function ClientCheckInDialog({
               </Label>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Chest</Label>
+                  <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                    Chest <MeasurementGuidePopover measurement="chest" />
+                  </Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -118,46 +121,39 @@ export function ClientCheckInDialog({
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Waist</Label>
+                  <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                    Waist <MeasurementGuidePopover measurement="waist" />
+                  </Label>
                   <Input
                     type="number"
                     step="0.1"
                     placeholder="cm"
                     value={measurements.waist || ''}
-                    onChange={(e) => setMeasurements(prev => ({ 
-                      ...prev, 
-                      waist: e.target.value ? parseFloat(e.target.value) : undefined 
-                    }))}
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Abdomen</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    placeholder="cm"
-                    value={measurements.abdomen || ''}
                     onChange={(e) => setMeasurements(prev => ({
                       ...prev,
-                      abdomen: e.target.value ? parseFloat(e.target.value) : undefined
+                      waist: e.target.value ? parseFloat(e.target.value) : undefined
                     }))}
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Hips</Label>
+                  <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                    Hips <MeasurementGuidePopover measurement="hips" />
+                  </Label>
                   <Input
                     type="number"
                     step="0.1"
                     placeholder="cm"
                     value={measurements.hips || ''}
-                    onChange={(e) => setMeasurements(prev => ({ 
-                      ...prev, 
-                      hips: e.target.value ? parseFloat(e.target.value) : undefined 
+                    onChange={(e) => setMeasurements(prev => ({
+                      ...prev,
+                      hips: e.target.value ? parseFloat(e.target.value) : undefined
                     }))}
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Quadriceps</Label>
+                  <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                    Quadriceps <MeasurementGuidePopover measurement="quadriceps" />
+                  </Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -170,15 +166,17 @@ export function ClientCheckInDialog({
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Arms</Label>
+                  <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                    Arms <MeasurementGuidePopover measurement="arms" />
+                  </Label>
                   <Input
                     type="number"
                     step="0.1"
                     placeholder="cm"
                     value={measurements.arms || ''}
-                    onChange={(e) => setMeasurements(prev => ({ 
-                      ...prev, 
-                      arms: e.target.value ? parseFloat(e.target.value) : undefined 
+                    onChange={(e) => setMeasurements(prev => ({
+                      ...prev,
+                      arms: e.target.value ? parseFloat(e.target.value) : undefined
                     }))}
                   />
                 </div>

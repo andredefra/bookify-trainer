@@ -100,7 +100,7 @@ const getDemoSubmissions = (): CheckInSubmission[] => [
 export interface CheckInMeasurements {
   chest?: number;
   waist?: number;
-  abdomen?: number;
+  
   hips?: number;
   quadriceps?: number;
   /** @deprecated use `quadriceps` — legacy field */

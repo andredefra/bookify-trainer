@@ -1,48 +1,43 @@
-## Body measurements update
+## Changes to Body Measurements
 
-Aggiungiamo **Chest** e **Abdomen** e rinominiamo **Thighs → Quadriceps** in tutti i punti dell'app in cui compaiono i body measurements: dialog di logging, storico, check-in (client + trainer), e analytics.
+### 1. Remove `abdomen` field
+Revert the previous addition across all files (types, dialogs, history, analytics, hooks, mock data). Keep only: **chest, waist, hips, quadriceps, arms**.
 
-### Modifiche funzionali
+Files to update (remove abdomen references):
+- `src/components/client/overview/fitness-progress/types.ts`
+- `src/components/client/overview/fitness-progress/BodyMeasurementsDialog.tsx`
+- `src/components/client/overview/fitness-progress/BodyMeasurementsHistoryDialog.tsx`
+- `src/components/client/overview/fitness-progress/hooks/useBodyMeasurements.ts`
+- `src/components/client/overview/checkin/ClientCheckInDialog.tsx`
+- `src/components/client/overview/checkin/ClientCheckInHistoryDialog.tsx`
+- `src/hooks/useClientCheckIns.ts`, `src/hooks/useCheckInSubmissions.ts`
+- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/metrics/ManualCheckInDialog.tsx`
+- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/metrics/ConfigureCheckInsDialog.tsx`
+- `src/components/client/analytics/sections/body-composition/MeasurementsCard.tsx`
+- `src/components/client/analytics/sections/goals-progress/BodyMeasurementsCard.tsx`
+- `src/components/user/tabs/UserAnalytics.tsx`, `src/components/user/overview/UserFitnessProgress.tsx`
 
-1. **Nuovi campi**: `chest` (cm) e `abdomen` (cm) affiancati agli attuali (waist, hips, arms).
-2. **Rename**: il campo `thighs` viene rinominato in `quadriceps` (label "Quadriceps"). I dati storici mock vengono aggiornati; nel merge dei log esistenti in localStorage, se è presente `thighs` viene mappato automaticamente a `quadriceps` per non perdere lo storico.
-3. **Ordine visuale suggerito** nei dialog e nelle card (2 colonne):
-   Chest • Waist  
-   Abdomen • Hips  
-   Quadriceps • Arms
+### 2. Measurement Guide (help popover)
 
-### File da aggiornare
+Create a small reusable component `MeasurementGuidePopover.tsx` under `src/components/client/overview/fitness-progress/`.
 
-**Client — logging & history**
-- `src/components/client/overview/fitness-progress/types.ts` — aggiunge `chest`, `abdomen`, `quadriceps` (rimuove `thighs`).
-- `src/components/client/overview/fitness-progress/BodyMeasurementsDialog.tsx` — nuovi input + rename label Thighs→Quadriceps.
-- `src/components/client/overview/fitness-progress/BodyMeasurementsHistoryDialog.tsx` — nuove colonne Chest / Abdomen + rename colonna Thighs→Quadriceps.
-- `src/components/client/overview/fitness-progress/hooks/useBodyMeasurements.ts` — mock seed con nuovi campi + migrazione runtime `thighs → quadriceps`.
-- `src/components/client/overview/fitness-progress/utils.ts` — utility su set di misure.
-- `src/components/client/overview/fitness-progress/data/goalTemplates.ts` — eventuali template collegati.
+- Renders a `HelpCircle` icon button (14–16px) placed next to each measurement field label.
+- Uses shadcn `Popover` (click) — works on both desktop and mobile (hover-only would fail on touch). Opens on click; icon has `aria-label`.
+- Content: title of the measurement + two short sections **Men** / **Women** with instructions in Italian on where/how to measure with a tape.
+- Guide dictionary keyed by measurement: `chest`, `waist`, `hips`, `quadriceps`, `arms`. Example contents:
+  - **Chest**: at nipple line (men) / at fullest bust point (women), arms relaxed, tape parallel to floor.
+  - **Waist**: narrowest point above navel (both), relaxed abdomen.
+  - **Hips**: widest point of glutes/hips (both).
+  - **Quadriceps**: mid-thigh, halfway between hip crease and knee, relaxed (both, note women often measure slightly higher).
+  - **Arms**: bicep at largest circumference, arm relaxed at side (both).
 
-**Client — check-in**
-- `src/components/client/overview/checkin/ClientCheckInDialog.tsx` — nuovi input + rename.
-- `src/components/client/overview/checkin/ClientCheckInHistoryDialog.tsx` — nuove colonne + rename.
-- `src/hooks/useClientCheckIns.ts`, `src/hooks/useCheckInSubmissions.ts` — tipi/DTO estesi con `chest`, `abdomen`, `quadriceps` (+ mapping compat `thighs`).
+### 3. Places to add the guide icon
+Next to each of the 5 measurement labels in:
+- `BodyMeasurementsDialog.tsx` (client logging)
+- `ClientCheckInDialog.tsx` (client check-in)
+- `ManualCheckInDialog.tsx` (trainer manual check-in)
 
-**Trainer — check-in & profilo cliente**
-- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/metrics/ManualCheckInDialog.tsx` — nuovi input + rename Thighs→Quadriceps.
-- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/metrics/ConfigureCheckInsDialog.tsx` — se elenca le misure disponibili, aggiornare.
-- `src/components/trainer/dashboard/tabs/clients/ClientProfileTabs/metrics/DeltaBadge.tsx` — supporto per i nuovi campi.
+The history view dialogs and analytics cards will only get the abdomen removal — no guide icons there (guide is only relevant when entering values).
 
-**Analytics (client + trainer)**
-- `src/components/client/analytics/sections/body-composition/MeasurementsCard.tsx` — mostra Chest, Abdomen, Quadriceps (oltre a Waist, Hips, Arms).
-- `src/components/client/analytics/sections/goals-progress/BodyMeasurementsCard.tsx` — trend per Chest / Abdomen / Quadriceps.
-- `src/components/client/analytics/sections/goals-progress/utils/measurementsStatus.ts` e `trendCalculations.ts` — includono i nuovi campi.
-- `src/components/user/tabs/UserAnalytics.tsx`, `src/components/user/overview/UserFitnessProgress.tsx` — rename Thighs→Quadriceps e nuovi campi dove elencati.
-- `src/components/trainer/dashboard/tabs/analytics/utils/metricsCalculator.ts`, `clientDataConverter.ts`, `data/clientMockData.ts` — nuovi campi nel calcolo delle metriche e mock coerenti.
-
-**Compat & fitness integrations**
-- `src/components/client/settings/fitness-integrations/FitnessAppList.tsx` — se elenca le misure sincronizzate, aggiornare label.
-- `src/components/client/analytics/utils/bodyFatCalculations.ts` — non modifichiamo la formula (usa waist/hips/neck), ma verifichiamo che i nuovi campi non la rompano.
-
-### Note
-
-- Nessuna modifica a Supabase migrations in questa passata: i dati vivono in localStorage/mock nel percorso `client-dashboard-basic`. Se in futuro andremo a persistere su DB, aggiungeremo una migration dedicata con nuove colonne `chest`, `abdomen`, `quadriceps` (+ backfill da `thighs`).
-- WHtR resta calcolato su waist/height (immutato). L'header dell'immagine di riferimento non cambia.
+### 4. Verification
+Update mock data to drop `abdomen`. Confirm no lingering `abdomen` references via search after edits.

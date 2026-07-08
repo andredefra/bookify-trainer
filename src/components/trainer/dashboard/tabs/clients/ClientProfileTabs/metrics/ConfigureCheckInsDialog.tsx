@@ -224,7 +224,7 @@ export function ConfigureCheckInsDialog({
                   <Ruler className="h-4 w-4 text-green-500" />
                   <div>
                     <p className="text-sm font-medium">Body Measurements</p>
-                    <p className="text-xs text-muted-foreground">Chest, waist, abdomen, hips, quadriceps, arms</p>
+                    <p className="text-xs text-muted-foreground">Chest, waist, hips, quadriceps, arms</p>
                   </div>
                 </div>
                 <Switch checked={includeMeasurements} onCheckedChange={setIncludeMeasurements} />

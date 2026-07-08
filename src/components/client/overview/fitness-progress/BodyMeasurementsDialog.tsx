@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { Ruler, History } from "lucide-react";
+import { MeasurementGuidePopover, type MeasurementKey } from "./MeasurementGuidePopover";
 
 interface BodyMeasurementsDialogProps {
   open: boolean;
@@ -20,7 +21,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
       date: new Date().toISOString().split('T')[0],
       chest: 0,
       waist: 0,
-      abdomen: 0,
       hips: 0,
       quadriceps: 0,
       arms: 0
@@ -67,89 +67,31 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
             />
             
             <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={measurementsForm.control}
-                name="chest"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Chest (cm)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={measurementsForm.control}
-                name="waist"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Waist (cm)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={measurementsForm.control}
-                name="abdomen"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Abdomen (cm)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={measurementsForm.control}
-                name="hips"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hips (cm)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={measurementsForm.control}
-                name="quadriceps"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quadriceps (cm)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={measurementsForm.control}
-                name="arms"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Arms (cm)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {([
+                { name: "chest", label: "Chest" },
+                { name: "waist", label: "Waist" },
+                { name: "hips", label: "Hips" },
+                { name: "quadriceps", label: "Quadriceps" },
+                { name: "arms", label: "Arms" },
+              ] as { name: MeasurementKey; label: string }[]).map(({ name, label }) => (
+                <FormField
+                  key={name}
+                  control={measurementsForm.control}
+                  name={name}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1.5">
+                        {label} (cm)
+                        <MeasurementGuidePopover measurement={name} />
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="number" step="0.1" placeholder="0" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
             </div>
             
             <DialogFooter className="sm:justify-between gap-2">
