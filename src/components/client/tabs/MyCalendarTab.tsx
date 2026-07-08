@@ -324,7 +324,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               </div>
 
               {/* Category-specific fields */}
-              {eventCategory === "training" ? (
+              {eventCategory === "training" && (
                 <div>
                   <Label>Activity Type</Label>
                   <Select value={newActivity.type} onValueChange={v => setNewActivity(prev => ({ ...prev, type: v }))}>
@@ -343,7 +343,8 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                     </SelectContent>
                   </Select>
                 </div>
-              ) : (
+              )}
+              {eventCategory === "session" && (
                 <>
                   <div>
                     <Label>Trainer</Label>
