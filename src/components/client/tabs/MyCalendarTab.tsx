@@ -113,7 +113,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
   }, [selectedDate, currentMonth]);
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [eventCategory, setEventCategory] = useState<"training" | "session">("training");
+  const [eventCategory, setEventCategory] = useState<"training" | "session" | "general">("training");
   const [newActivity, setNewActivity] = useState({
     title: "",
     time: "09:00",
