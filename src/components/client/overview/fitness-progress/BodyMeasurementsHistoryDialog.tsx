@@ -18,7 +18,7 @@ const fmt = (v?: number) => (v && v > 0 ? v : "—");
 export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDelete, onBack }: BodyMeasurementsHistoryDialogProps) {
   // Only show entries that actually have measurements (skip pure weight snapshots)
   const measurementEntries = logs.filter(l =>
-    l.chest || l.waist || l.abdomen || l.hips || l.quadriceps || l.thighs || l.arms
+    l.chest || l.waist || l.hips || l.quadriceps || l.thighs || l.arms
   );
   const sorted = [...measurementEntries].sort((a, b) => (a.date < b.date ? 1 : -1));
 
