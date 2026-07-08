@@ -211,7 +211,7 @@ export function useClientCheckIns(clientId: string, options?: { useMocks?: boole
     if (clientId) {
       fetchCheckIns();
     }
-  }, [clientId]);
+  }, [clientId, useMocks]);
 
   const submitCheckIn = async (data: {
     submissionId?: string;
