@@ -21,6 +21,7 @@ interface PlannedActivity {
   time: string;
   category: "training" | "session";
   type: "workout" | "cardio" | "stretching" | "rest";
+  title?: string;
   notes: string;
   trainer?: string;
   sessionMode?: "video" | "in-person";
