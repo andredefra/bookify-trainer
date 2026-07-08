@@ -125,25 +125,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
                 )}
               />
               
-              <FormField
-                control={measurementsForm.control}
-                name="shoulders"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Shoulders (cm)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.1"
-                        placeholder="0" 
-                        {...field} 
-                        onChange={e => field.onChange(Number(e.target.value))} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               
               <FormField
                 control={measurementsForm.control}
