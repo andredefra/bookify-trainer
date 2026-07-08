@@ -34,10 +34,12 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
   const statusInfo = getStatusInfo();
 
   // Calculate trends for each measurement
+  const chestTrend = getMeasurementTrend(bodyMeasurements, 'chest');
   const waistTrend = getMeasurementTrend(bodyMeasurements, 'waist');
+  const abdomenTrend = getMeasurementTrend(bodyMeasurements, 'abdomen');
   const hipsTrend = getMeasurementTrend(bodyMeasurements, 'hips');
   const armsTrend = getMeasurementTrend(bodyMeasurements, 'arms');
-  const thighsTrend = getMeasurementTrend(bodyMeasurements, 'thighs');
+  const quadricepsTrend = getMeasurementTrend(bodyMeasurements, 'quadriceps');
 
   // Get previous measurement date for reference
   const getPreviousDate = () => {
