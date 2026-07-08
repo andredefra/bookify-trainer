@@ -145,26 +145,6 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
                   </FormItem>
                 )}
               />
-              
-              <FormField
-                control={measurementsForm.control}
-                name="neck"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Neck (cm)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.1"
-                        placeholder="0" 
-                        {...field} 
-                        onChange={e => field.onChange(Number(e.target.value))} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
             
             <DialogFooter className="sm:justify-between gap-2">
