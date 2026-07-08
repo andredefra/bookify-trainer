@@ -434,7 +434,13 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"
-                  placeholder={eventCategory === "training" ? "e.g. Focus on upper body, 45 min..." : "e.g. Want to work on technique..."}
+                  placeholder={
+                    eventCategory === "training"
+                      ? "e.g. Focus on upper body, 45 min..."
+                      : eventCategory === "general"
+                      ? "e.g. Any notes for this event..."
+                      : "e.g. Want to work on technique..."
+                  }
                   value={newActivity.notes}
                   onChange={e => setNewActivity(prev => ({ ...prev, notes: e.target.value }))}
                 />
