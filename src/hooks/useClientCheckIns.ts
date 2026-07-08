@@ -64,7 +64,7 @@ const getDemoSubmissions = (): CheckInSubmission[] => [
     due_date: dateDaysAgo(10),
     status: 'reviewed',
     weight: 82.5,
-    measurements: { waist: 85, hips: 96, quadriceps: 56, arms: 33 },
+    measurements: { chest: 103, waist: 85, hips: 96, quadriceps: 56, arms: 33 },
     mood_rating: 4,
     energy_level: 3,
     sleep_quality: 4,
