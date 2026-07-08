@@ -528,7 +528,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                         <Icon className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-foreground capitalize">{activity.type}</p>
+                        <p className="font-medium text-foreground">{activity.title || <span className="capitalize">{activity.type}</span>}</p>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5">
                           <Clock className="h-3.5 w-3.5" />
                           <span>{activity.time}</span>
