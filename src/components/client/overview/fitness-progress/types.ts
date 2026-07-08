@@ -146,7 +146,7 @@ export interface BodyMeasurements {
   // gender?: 'male' | 'female';
   chest?: number; // petto
   waist?: number; // vita
-  abdomen?: number; // addome
+  
   hips?: number; // fianchi
   quadriceps?: number; // quadricipiti (ex thighs)
   /** @deprecated use `quadriceps` — kept for legacy log compatibility */
