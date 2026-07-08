@@ -37,9 +37,7 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
   const waistTrend = getMeasurementTrend(bodyMeasurements, 'waist');
   const hipsTrend = getMeasurementTrend(bodyMeasurements, 'hips');
   const armsTrend = getMeasurementTrend(bodyMeasurements, 'arms');
-  const neckTrend = getMeasurementTrend(bodyMeasurements, 'neck');
   const thighsTrend = getMeasurementTrend(bodyMeasurements, 'thighs');
-  const shouldersTrend = getMeasurementTrend(bodyMeasurements, 'shoulders');
 
   // Get previous measurement date for reference
   const getPreviousDate = () => {
