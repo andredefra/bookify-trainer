@@ -134,64 +134,52 @@ export function ManualCheckInDialog({
             </Label>
             <div className="grid grid-cols-2 gap-3">
               <div>
+                <Label className="text-xs text-muted-foreground">Chest</Label>
+                <Input type="number" step="0.1" placeholder="cm"
+                  value={measurements.chest}
+                  onChange={(e) => setMeasurements({ ...measurements, chest: e.target.value })} />
+              </div>
+              <div>
                 <Label className="text-xs text-muted-foreground">Waist</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="cm"
+                <Input type="number" step="0.1" placeholder="cm"
                   value={measurements.waist}
-                  onChange={(e) => setMeasurements({ ...measurements, waist: e.target.value })}
-                />
+                  onChange={(e) => setMeasurements({ ...measurements, waist: e.target.value })} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Abdomen</Label>
+                <Input type="number" step="0.1" placeholder="cm"
+                  value={measurements.abdomen}
+                  onChange={(e) => setMeasurements({ ...measurements, abdomen: e.target.value })} />
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Hips</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="cm"
+                <Input type="number" step="0.1" placeholder="cm"
                   value={measurements.hips}
-                  onChange={(e) => setMeasurements({ ...measurements, hips: e.target.value })}
-                />
+                  onChange={(e) => setMeasurements({ ...measurements, hips: e.target.value })} />
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">Thighs</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="cm"
-                  value={measurements.thighs}
-                  onChange={(e) => setMeasurements({ ...measurements, thighs: e.target.value })}
-                />
+                <Label className="text-xs text-muted-foreground">Quadriceps</Label>
+                <Input type="number" step="0.1" placeholder="cm"
+                  value={measurements.quadriceps}
+                  onChange={(e) => setMeasurements({ ...measurements, quadriceps: e.target.value })} />
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Arms</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="cm"
+                <Input type="number" step="0.1" placeholder="cm"
                   value={measurements.arms}
-                  onChange={(e) => setMeasurements({ ...measurements, arms: e.target.value })}
-                />
+                  onChange={(e) => setMeasurements({ ...measurements, arms: e.target.value })} />
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Shoulders</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="cm"
+                <Input type="number" step="0.1" placeholder="cm"
                   value={measurements.shoulders}
-                  onChange={(e) => setMeasurements({ ...measurements, shoulders: e.target.value })}
-                />
+                  onChange={(e) => setMeasurements({ ...measurements, shoulders: e.target.value })} />
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Neck</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="cm"
+                <Input type="number" step="0.1" placeholder="cm"
                   value={measurements.neck}
-                  onChange={(e) => setMeasurements({ ...measurements, neck: e.target.value })}
-                />
+                  onChange={(e) => setMeasurements({ ...measurements, neck: e.target.value })} />
               </div>
             </div>
           </div>
