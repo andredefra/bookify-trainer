@@ -29,10 +29,22 @@ export function MeasurementsCard({ latestMeasurements }: MeasurementsCardProps) 
             </div>
             
             <div className="grid grid-cols-2 gap-2 text-xs">
+              {latestMeasurements.chest && (
+                <div>
+                  <span className="text-slate-600">Chest:</span>
+                  <span className="ml-1 font-medium">{latestMeasurements.chest}cm</span>
+                </div>
+              )}
               {latestMeasurements.waist && (
                 <div>
                   <span className="text-slate-600">Waist:</span>
                   <span className="ml-1 font-medium">{latestMeasurements.waist}cm</span>
+                </div>
+              )}
+              {latestMeasurements.abdomen && (
+                <div>
+                  <span className="text-slate-600">Abdomen:</span>
+                  <span className="ml-1 font-medium">{latestMeasurements.abdomen}cm</span>
                 </div>
               )}
               {latestMeasurements.hips && (
@@ -47,10 +59,10 @@ export function MeasurementsCard({ latestMeasurements }: MeasurementsCardProps) 
                   <span className="ml-1 font-medium">{latestMeasurements.arms}cm</span>
                 </div>
               )}
-              {latestMeasurements.thighs && (
+              {(latestMeasurements.quadriceps ?? latestMeasurements.thighs) && (
                 <div>
-                  <span className="text-slate-600">Thighs:</span>
-                  <span className="ml-1 font-medium">{latestMeasurements.thighs}cm</span>
+                  <span className="text-slate-600">Quadriceps:</span>
+                  <span className="ml-1 font-medium">{latestMeasurements.quadriceps ?? latestMeasurements.thighs}cm</span>
                 </div>
               )}
             </div>
