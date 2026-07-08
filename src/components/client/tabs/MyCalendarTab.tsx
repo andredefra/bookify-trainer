@@ -486,7 +486,7 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                           }
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-foreground">Session with {activity.trainer}</p>
+                          <p className="font-medium text-foreground">{activity.title || `Session with ${activity.trainer}`}</p>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-0.5">
                             <Clock className="h-3.5 w-3.5" />
                             <span>{activity.time}</span>
