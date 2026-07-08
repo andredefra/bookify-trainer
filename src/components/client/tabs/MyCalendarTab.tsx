@@ -19,8 +19,8 @@ interface PlannedActivity {
   id: string;
   date: Date;
   time: string;
-  category: "training" | "session";
-  type: "workout" | "cardio" | "stretching" | "rest";
+  category: "training" | "session" | "general";
+  type: "workout" | "cardio" | "stretching" | "general";
   title?: string;
   notes: string;
   trainer?: string;
@@ -37,8 +37,9 @@ const activityTypes = [
   { value: "workout", label: "Workout", icon: Dumbbell, color: "bg-blue-500" },
   { value: "cardio", label: "Cardio", icon: Flame, color: "bg-orange-500" },
   { value: "stretching", label: "Stretching", icon: Heart, color: "bg-purple-500" },
-  { value: "rest", label: "Rest Day", icon: Bed, color: "bg-green-500" },
 ];
+
+const generalEventType = { value: "general", label: "General Event", icon: CalendarDays, color: "bg-slate-500" };
 
 const mockTrainers = [
   { id: "1", name: "Marco Rossi", plan: "pro" as const },
