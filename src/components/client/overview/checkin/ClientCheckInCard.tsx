@@ -12,9 +12,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 interface ClientCheckInCardProps {
   clientId: string;
+  useMocks?: boolean;
 }
 
-export function ClientCheckInCard({ clientId }: ClientCheckInCardProps) {
+export function ClientCheckInCard({ clientId, useMocks }: ClientCheckInCardProps) {
   const [showCheckInDialog, setShowCheckInDialog] = useState(false);
   const [showHistoryDialog, setShowHistoryDialog] = useState(false);
   
@@ -27,7 +28,7 @@ export function ClientCheckInCard({ clientId }: ClientCheckInCardProps) {
     hasNewFeedback,
     nextCheckInDate,
     submitCheckIn
-  } = useClientCheckIns(clientId);
+  } = useClientCheckIns(clientId, { useMocks });
 
   if (loading) {
     return (

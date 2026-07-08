@@ -52,7 +52,7 @@ export function Overview({ progressData, upcomingSessions, variant = "default" }
         progressData={progressData} 
         connectedApps={connectedApps} 
       />
-      <ClientCheckInCard clientId={clientId} />
+      <ClientCheckInCard clientId={clientId} useMocks={isBasic} />
       {isBasic ? (
         <UpcomingEventsCard />
       ) : (
