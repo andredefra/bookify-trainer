@@ -250,12 +250,12 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
               {/* Event category selector */}
               <div>
                 <Label className="text-sm font-medium">Event Type</Label>
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-3 gap-2 mt-2">
                   <button
                     type="button"
                     onClick={() => setEventCategory("training")}
                     className={cn(
-                      "flex items-center gap-2 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      "flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
                       eventCategory === "training"
                         ? "border-primary bg-primary/10 text-primary"
                         : "border-border bg-background text-muted-foreground hover:border-primary/50"
@@ -268,14 +268,27 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
                     type="button"
                     onClick={() => setEventCategory("session")}
                     className={cn(
-                      "flex items-center gap-2 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      "flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
                       eventCategory === "session"
                         ? "border-primary bg-primary/10 text-primary"
                         : "border-border bg-background text-muted-foreground hover:border-primary/50"
                     )}
                   >
                     <User className="h-4 w-4" />
-                    Session with Trainer
+                    Session
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEventCategory("general")}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 text-sm font-medium transition-colors",
+                      eventCategory === "general"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/50"
+                    )}
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    General
                   </button>
                 </div>
               </div>
