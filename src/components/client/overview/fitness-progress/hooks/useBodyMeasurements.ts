@@ -5,7 +5,7 @@ import { calculateBodyComposition } from "../utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
 const STORAGE_KEY = "body-measurements-data";
-const SEED_FLAG = "body-measurements-seeded-v2";
+const SEED_FLAG = "body-measurements-seeded-v3";
 
 // 6-entry history over ~5 months. Weights match the weight-log trend
 // (ending at 82 kg today). Circumferences aligned with prior Analytics values.
