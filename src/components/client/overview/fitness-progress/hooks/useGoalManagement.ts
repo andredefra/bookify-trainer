@@ -72,17 +72,32 @@ function getSeededGoals(): ProgressItem[] {
 
 export function useGoalManagement(initialProgressData: ProgressItem[]) {
   const [progressData, setProgressData] = useState<ProgressItem[]>(() => {
+    const fallback = (initialProgressData && initialProgressData.length > 0)
+      ? initialProgressData
+      : getSeededGoals();
     try {
       const stored = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Legacy invalidation: older seeds used weight_loss / strength / endurance.
+          // If none of the current expected types are present, treat as stale and re-seed.
+          const hasCurrentTypes = parsed.some(
+            (g: any) => g?.goalType === "weight_management" || g?.goalType === "activity_level"
+          );
+          if (hasCurrentTypes) return parsed;
+        }
       }
     } catch (e) {
       console.warn("Failed to hydrate fitness-progress-data:", e);
     }
-    if (initialProgressData && initialProgressData.length > 0) return initialProgressData;
-    return getSeededGoals();
+    // Persist the fallback so other readers (e.g. AnalyticsTab) see fresh data.
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fallback));
+      }
+    } catch {}
+    return fallback;
   });
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
   const didMount = useRef(false);
