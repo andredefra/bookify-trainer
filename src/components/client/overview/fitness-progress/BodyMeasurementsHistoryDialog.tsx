@@ -44,9 +44,7 @@ export function BodyMeasurementsHistoryDialog({ open, onOpenChange, logs, onDele
                   <TableHead>Waist</TableHead>
                   <TableHead>Hips</TableHead>
                   <TableHead>Thighs</TableHead>
-                  <TableHead>Shoulders</TableHead>
                   <TableHead>Arms</TableHead>
-                  <TableHead>Neck</TableHead>
                   <TableHead className="w-[60px]" />
                 </TableRow>
               </TableHeader>
