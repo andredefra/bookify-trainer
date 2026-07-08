@@ -63,9 +63,11 @@ export function ManualCheckInDialog({
         trainer_reviewed_at: new Date().toISOString(),
         weight: weight ? parseFloat(weight) : null,
         measurements: {
+          chest: measurements.chest ? parseFloat(measurements.chest) : null,
           waist: measurements.waist ? parseFloat(measurements.waist) : null,
+          abdomen: measurements.abdomen ? parseFloat(measurements.abdomen) : null,
           hips: measurements.hips ? parseFloat(measurements.hips) : null,
-          thighs: measurements.thighs ? parseFloat(measurements.thighs) : null,
+          quadriceps: measurements.quadriceps ? parseFloat(measurements.quadriceps) : null,
           arms: measurements.arms ? parseFloat(measurements.arms) : null,
           shoulders: measurements.shoulders ? parseFloat(measurements.shoulders) : null,
           neck: measurements.neck ? parseFloat(measurements.neck) : null,
