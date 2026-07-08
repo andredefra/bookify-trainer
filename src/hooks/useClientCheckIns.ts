@@ -235,7 +235,7 @@ export function useClientCheckIns(clientId: string, options?: { useMocks?: boole
       }
 
       // Demo user: mutate local state only
-      if (clientId === DEMO_CLIENT_ID) {
+      if (useMocks) {
         setSubmissions(prev => {
           const nowIso = new Date().toISOString();
           if (data.submissionId) {
