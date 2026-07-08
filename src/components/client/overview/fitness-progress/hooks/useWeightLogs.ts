@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 
 export interface WeightLog {
   id: string;
@@ -10,20 +9,21 @@ export interface WeightLog {
 }
 
 const STORAGE_KEY = "weight-logs-data";
+const SEED_FLAG = "weight-logs-seeded-v2";
 
-// Historical weight trend: gentle downward progress over ~4 months
+// Historical weight trend ending at 82 kg (matches "Lose Weight" goal current).
 const getMockWeightLogs = (): WeightLog[] => {
   const today = new Date();
   const entries: Array<{ daysAgo: number; weight: number; note?: string }> = [
-    { daysAgo: 120, weight: 82.4, note: "Starting point" },
-    { daysAgo: 105, weight: 81.8 },
-    { daysAgo: 90, weight: 81.1, note: "Feeling stronger" },
-    { daysAgo: 75, weight: 80.5 },
-    { daysAgo: 60, weight: 79.8, note: "New nutrition plan" },
-    { daysAgo: 45, weight: 79.2 },
-    { daysAgo: 30, weight: 78.6 },
-    { daysAgo: 14, weight: 78.2 },
-    { daysAgo: 3, weight: 78.0, note: "On track" },
+    { daysAgo: 120, weight: 84.5, note: "Starting point" },
+    { daysAgo: 105, weight: 84.0 },
+    { daysAgo: 90,  weight: 83.4, note: "Feeling stronger" },
+    { daysAgo: 75,  weight: 83.0 },
+    { daysAgo: 60,  weight: 82.7, note: "New nutrition plan" },
+    { daysAgo: 45,  weight: 82.4 },
+    { daysAgo: 30,  weight: 82.2 },
+    { daysAgo: 14,  weight: 82.1 },
+    { daysAgo: 3,   weight: 82.0, note: "On track" },
   ];
   return entries.map((e, i) => {
     const d = new Date(today);
@@ -37,7 +37,7 @@ const getMockWeightLogs = (): WeightLog[] => {
   });
 };
 
-function hydrate(): WeightLog[] | null {
+function hydrate(): WeightLog[] {
   try {
     const stored = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
     if (stored) {
@@ -47,28 +47,26 @@ function hydrate(): WeightLog[] | null {
   } catch (e) {
     console.warn("Failed to hydrate weight-logs-data:", e);
   }
-  return null;
+  return [];
 }
 
 export function useWeightLogs() {
-  const initial = hydrate();
-  const [weightLogs, setWeightLogs] = useState<WeightLog[]>(
-    initial && initial.length > 0 ? initial : []
-  );
+  const [weightLogs, setWeightLogs] = useState<WeightLog[]>(() => {
+    const initial = hydrate();
+    if (typeof window === "undefined") return initial;
+    const seeded = localStorage.getItem(SEED_FLAG);
+    // Reseed if history is a stub (<3 entries) and we haven't seeded v2 yet
+    if (!seeded && initial.length < 3) {
+      const mocks = getMockWeightLogs();
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mocks));
+        localStorage.setItem(SEED_FLAG, "1");
+      } catch {}
+      return mocks;
+    }
+    return initial;
+  });
   const didMount = useRef(false);
-  const needsSeed = useRef(!initial || initial.length === 0);
-
-  // Seed mock history for demo users (no authenticated session) when empty
-  useEffect(() => {
-    if (!needsSeed.current) return;
-    const checkDemoMode = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setWeightLogs(getMockWeightLogs());
-      }
-    };
-    checkDemoMode();
-  }, []);
 
   useEffect(() => {
     if (!didMount.current) {

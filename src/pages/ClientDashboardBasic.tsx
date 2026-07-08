@@ -67,7 +67,8 @@ const ClientDashboardBasic = () => {
       };
     };
     return [
-      mk("Lose Weight", 82, 76, "kg", "weight_loss", 60, "personal"),
+      mk("Lose Weight", 82, 76, "kg", "weight_management", 60, "personal"),
+      mk("Monthly Step Target", 210000, 300000, "steps", "activity_level", 30, "personal"),
       mk("Bench Press 1RM", 70, 90, "kg", "strength", 90, "trainer", "Marco Rossi", "Bench Press"),
       mk("Run 5K", 28, 25, "min", "endurance", 75, "trainer", "Marco Rossi"),
     ];
