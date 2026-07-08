@@ -11,59 +11,83 @@ import { GoalsProgress } from "../analytics/sections/GoalsProgress";
 export function AnalyticsTab({ hideAI = false }: { hideAI?: boolean } = {}) {
   const navigate = useNavigate();
 
+  // Default progress data, aligned with the current Overview seed
+  const getDefaultProgressData = () => ([
+    {
+      goal: "Lose Weight",
+      current: 82,
+      target: 76,
+      unit: "kg",
+      progress: 60,
+      goalType: "weight_management",
+      targetDate: "2026-12-31",
+      createdAt: "2026-03-01",
+      lastUpdated: "2026-07-01",
+      source: "personal",
+    },
+    {
+      goal: "Monthly Step Target",
+      current: 210000,
+      target: 300000,
+      unit: "steps",
+      progress: 70,
+      goalType: "activity_level",
+      targetDate: "2026-07-31",
+      createdAt: "2026-07-01",
+      lastUpdated: "2026-07-08",
+      source: "personal",
+    },
+    {
+      goal: "Bench Press 1RM",
+      current: 90,
+      target: 100,
+      unit: "kg",
+      progress: 90,
+      goalType: "strength_progress",
+      targetDate: "2026-12-31",
+      exerciseName: "Bench Press",
+      createdAt: "2026-03-01",
+      lastUpdated: "2026-07-01",
+      source: "trainer",
+      trainerName: "Sarah Johnson",
+    },
+    {
+      goal: "Run 5K",
+      current: 28,
+      target: 25,
+      unit: "min",
+      progress: 80,
+      goalType: "cardiovascular_endurance",
+      targetDate: "2026-10-31",
+      createdAt: "2026-03-01",
+      lastUpdated: "2026-07-01",
+      source: "personal",
+    },
+  ]);
+
   // Get progress data from localStorage or use mock data
   const getProgressData = () => {
+    const defaults = getDefaultProgressData();
     try {
       const stored = localStorage.getItem('fitness-progress-data');
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Ensure the two key cards are always present
+          const merged = [...parsed];
+          for (const requiredType of ['weight_management', 'activity_level']) {
+            if (!merged.some((g: any) => g?.goalType === requiredType)) {
+              const missing = defaults.find(g => g.goalType === requiredType);
+              if (missing) merged.push(missing);
+            }
+          }
+          return merged;
+        }
       }
     } catch (error) {
       console.log('No stored progress data found, using defaults');
     }
-    
-    // Default progress data
-    return [
-      { 
-        goal: "Lose weight for summer", 
-        current: 68, 
-        target: 65, 
-        unit: "kg", 
-        progress: 75,
-        goalType: "weight_management",
-        targetDate: "2024-06-30",
-        createdAt: "2024-03-01",
-        lastUpdated: "2024-03-15",
-        source: "trainer",
-        trainerName: "Sarah Johnson"
-      },
-      { 
-        goal: "Annual step goal (healthy lifestyle)", 
-        current: 900000, 
-        target: 3650000, 
-        unit: "steps", 
-        progress: 25,
-        goalType: "activity_level",
-        targetDate: "2024-12-31",
-        createdAt: "2024-01-01",
-        lastUpdated: "2024-03-15",
-        source: "personal"
-      },
-      { 
-        goal: "Bench press strength", 
-        current: 70, 
-        target: 80, 
-        unit: "kg", 
-        progress: 87,
-        goalType: "strength_progress",
-        targetDate: "2024-05-31",
-        exerciseName: "Bench Press",
-        createdAt: "2024-03-01",
-        lastUpdated: "2024-03-15",
-        source: "trainer",
-        trainerName: "Sarah Johnson"
-      },
-    ];
+    return defaults;
   };
 
   // Get body measurements from localStorage or use mock data
