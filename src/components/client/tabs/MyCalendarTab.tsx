@@ -207,6 +207,12 @@ export function MyCalendarTab({ upcomingSessions }: MyCalendarTabProps) {
     setPlannedActivities(prev => prev.filter(a => a.id !== id));
   };
 
+  const handleToday = () => {
+    const today = new Date();
+    setSelectedDate(today);
+    setCurrentMonth(today);
+  };
+
   const getActivityIcon = (type: string) => {
     const found = activityTypes.find(a => a.value === type);
     return found ? found.icon : Dumbbell;
