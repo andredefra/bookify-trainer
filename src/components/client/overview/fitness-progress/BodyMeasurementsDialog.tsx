@@ -21,9 +21,7 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHis
       waist: 0,
       hips: 0,
       thighs: 0,
-      shoulders: 0,
-      arms: 0,
-      neck: 0
+      arms: 0
     }
   });
 
