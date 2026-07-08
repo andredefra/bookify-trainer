@@ -144,22 +144,24 @@ export interface CheckInSettings {
   reminder_time?: string;
 }
 
-export function useClientCheckIns(clientId: string) {
+export function useClientCheckIns(clientId: string, options?: { useMocks?: boolean }) {
   const [submissions, setSubmissions] = useState<CheckInSubmission[]>([]);
   const [settings, setSettings] = useState<CheckInSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const useMocks = options?.useMocks || clientId === DEMO_CLIENT_ID;
 
   const fetchCheckIns = async () => {
     try {
       setLoading(true);
 
-      // Demo user: use in-memory mocks, skip Supabase
-      if (clientId === DEMO_CLIENT_ID) {
+      // Demo / mock mode: skip Supabase entirely
+      if (useMocks) {
         setSettings(getDemoSettings());
         setSubmissions(getDemoSubmissions());
         return;
       }
+
 
       // Fetch settings
       const { data: settingsData, error: settingsError } = await supabase
