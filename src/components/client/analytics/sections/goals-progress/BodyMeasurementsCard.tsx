@@ -36,7 +36,7 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
   // Calculate trends for each measurement
   const chestTrend = getMeasurementTrend(bodyMeasurements, 'chest');
   const waistTrend = getMeasurementTrend(bodyMeasurements, 'waist');
-  const abdomenTrend = getMeasurementTrend(bodyMeasurements, 'abdomen');
+  
   const hipsTrend = getMeasurementTrend(bodyMeasurements, 'hips');
   const armsTrend = getMeasurementTrend(bodyMeasurements, 'arms');
   const quadricepsTrend = getMeasurementTrend(bodyMeasurements, 'quadriceps');
