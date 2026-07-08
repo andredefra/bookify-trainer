@@ -5,15 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
-import { Weight } from "lucide-react";
+import { Weight, History } from "lucide-react";
 
 interface LogWeightDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => void;
+  onViewHistory?: () => void;
 }
 
-export function LogWeightDialog({ open, onOpenChange, onSubmit }: LogWeightDialogProps) {
+export function LogWeightDialog({ open, onOpenChange, onSubmit, onViewHistory }: LogWeightDialogProps) {
   const weightForm = useForm({
     defaultValues: {
       weight: 0,
@@ -94,11 +95,19 @@ export function LogWeightDialog({ open, onOpenChange, onSubmit }: LogWeightDialo
               )}
             />
             
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                Cancel
-              </Button>
-              <Button type="submit">Save Weight</Button>
+            <DialogFooter className="sm:justify-between gap-2">
+              {onViewHistory ? (
+                <Button type="button" variant="ghost" onClick={onViewHistory} className="gap-2">
+                  <History className="h-4 w-4" />
+                  View History
+                </Button>
+              ) : <span />}
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save Weight</Button>
+              </div>
             </DialogFooter>
           </form>
         </Form>

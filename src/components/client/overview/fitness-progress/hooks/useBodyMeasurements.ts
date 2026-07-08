@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { BodyMeasurements } from "../types";
 import { calculateBodyComposition } from "../utils";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { supabase } from "@/integrations/supabase/client";
+
+const STORAGE_KEY = "body-measurements-data";
 
 // Mock body measurements data for demo users
 const getMockBodyMeasurements = (): BodyMeasurements[] => [
@@ -33,12 +35,28 @@ const getMockBodyMeasurements = (): BodyMeasurements[] => [
   }
 ];
 
-export function useBodyMeasurements() {
-  const [bodyMeasurements, setBodyMeasurements] = useState<BodyMeasurements[]>([]);
-  const { profile } = useUserProfile();
+function hydrate(): BodyMeasurements[] | null {
+  try {
+    const stored = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn("Failed to hydrate body-measurements-data:", e);
+  }
+  return null;
+}
 
-  // Load mock data for demo mode
+export function useBodyMeasurements() {
+  const [bodyMeasurements, setBodyMeasurements] = useState<BodyMeasurements[]>(() => hydrate() ?? []);
+  const { profile } = useUserProfile();
+  const didMount = useRef(false);
+  const hydratedFromStorage = useRef(hydrate() !== null);
+
+  // Seed mock data for demo mode only if nothing in localStorage yet
   useEffect(() => {
+    if (hydratedFromStorage.current) return;
     const checkDemoMode = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -48,7 +66,19 @@ export function useBodyMeasurements() {
     checkDemoMode();
   }, []);
 
-  // Add body measurements
+  // Persist to localStorage
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bodyMeasurements));
+    } catch (e) {
+      console.warn("Failed to persist body-measurements-data:", e);
+    }
+  }, [bodyMeasurements]);
+
   const addBodyMeasurements = (data: BodyMeasurements) => {
     const measurementWithCalculations = {
       ...data,
@@ -58,14 +88,20 @@ export function useBodyMeasurements() {
         weight: data.weight
       })
     };
-    
+
     setBodyMeasurements(prev => [...prev, measurementWithCalculations]);
     toast.success("Body measurements logged successfully!");
     return true;
   };
 
+  const deleteBodyMeasurement = (id: string) => {
+    setBodyMeasurements(prev => prev.filter(m => m.id !== id));
+    toast.success("Measurement deleted");
+  };
+
   return {
     bodyMeasurements,
-    addBodyMeasurements
+    addBodyMeasurements,
+    deleteBodyMeasurement,
   };
 }

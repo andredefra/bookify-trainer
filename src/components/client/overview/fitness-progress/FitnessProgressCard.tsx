@@ -22,16 +22,21 @@ export function FitnessProgressCard({
   const [openMeasurementsDialog, setOpenMeasurementsDialog] = useState(false);
   const [openManageGoalTypesDialog, setOpenManageGoalTypesDialog] = useState(false);
   const [openManageActivityTypesDialog, setOpenManageActivityTypesDialog] = useState(false);
+  const [openWeightHistoryDialog, setOpenWeightHistoryDialog] = useState(false);
+  const [openMeasurementsHistoryDialog, setOpenMeasurementsHistoryDialog] = useState(false);
   
   const {
     progressData,
     bodyMeasurements,
+    weightLogs,
     selectedGoal,
     addGoal,
     updateGoal,
     logActivity,
     logWeight,
     addBodyMeasurements,
+    deleteBodyMeasurement,
+    deleteWeightLog,
     syncFromFitnessApps,
     deleteGoal,
     selectGoal,
@@ -170,13 +175,25 @@ export function FitnessProgressCard({
         setOpenMeasurementsDialog={setOpenMeasurementsDialog}
         openManageActivityTypesDialog={openManageActivityTypesDialog}
         setOpenManageActivityTypesDialog={setOpenManageActivityTypesDialog}
+        openWeightHistoryDialog={openWeightHistoryDialog}
+        setOpenWeightHistoryDialog={setOpenWeightHistoryDialog}
+        openMeasurementsHistoryDialog={openMeasurementsHistoryDialog}
+        setOpenMeasurementsHistoryDialog={setOpenMeasurementsHistoryDialog}
         selectedGoal={selectedGoal}
+        weightLogs={weightLogs}
+        bodyMeasurements={bodyMeasurements}
         onSubmit={handleSubmit}
         onUpdateSubmit={handleUpdateSubmit}
         onLogSubmit={handleLogSubmit}
         onWeightSubmit={handleWeightSubmit}
         onMeasurementsSubmit={handleMeasurementsSubmit}
         onDeleteGoal={handleDeleteGoal}
+        onDeleteWeightLog={deleteWeightLog}
+        onDeleteBodyMeasurement={deleteBodyMeasurement}
+        onViewWeightHistory={() => { setOpenWeightDialog(false); setOpenWeightHistoryDialog(true); }}
+        onViewMeasurementsHistory={() => { setOpenMeasurementsDialog(false); setOpenMeasurementsHistoryDialog(true); }}
+        onBackToWeightLog={() => { setOpenWeightHistoryDialog(false); setOpenWeightDialog(true); }}
+        onBackToMeasurementsLog={() => { setOpenMeasurementsHistoryDialog(false); setOpenMeasurementsDialog(true); }}
         onManageGoalTypes={() => setOpenManageGoalTypesDialog(true)}
       />
 

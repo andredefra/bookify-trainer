@@ -5,15 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
-import { Ruler } from "lucide-react";
+import { Ruler, History } from "lucide-react";
 
 interface BodyMeasurementsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => void;
+  onViewHistory?: () => void;
 }
 
-export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMeasurementsDialogProps) {
+export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit, onViewHistory }: BodyMeasurementsDialogProps) {
   const measurementsForm = useForm({
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
@@ -187,11 +188,19 @@ export function BodyMeasurementsDialog({ open, onOpenChange, onSubmit }: BodyMea
               />
             </div>
             
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                Cancel
-              </Button>
-              <Button type="submit">Save Measurements</Button>
+            <DialogFooter className="sm:justify-between gap-2">
+              {onViewHistory ? (
+                <Button type="button" variant="ghost" onClick={onViewHistory} className="gap-2">
+                  <History className="h-4 w-4" />
+                  View History
+                </Button>
+              ) : <span />}
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save Measurements</Button>
+              </div>
             </DialogFooter>
           </form>
         </Form>

@@ -1,13 +1,39 @@
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { ProgressItem, GoalLog } from "../types";
 import { calculateProgress, getCurrentDate } from "../utils";
 import { generateMilestones } from "../utils/progressCalculator";
 
+const STORAGE_KEY = "fitness-progress-data";
+
 export function useGoalManagement(initialProgressData: ProgressItem[]) {
-  const [progressData, setProgressData] = useState<ProgressItem[]>(initialProgressData);
+  const [progressData, setProgressData] = useState<ProgressItem[]>(() => {
+    try {
+      const stored = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn("Failed to hydrate fitness-progress-data:", e);
+    }
+    return initialProgressData;
+  });
   const [selectedGoal, setSelectedGoal] = useState<ProgressItem | null>(null);
+  const didMount = useRef(false);
+
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progressData));
+    } catch (e) {
+      console.warn("Failed to persist fitness-progress-data:", e);
+    }
+  }, [progressData]);
 
   // Add a new goal with creation timestamp and milestones
   const addGoal = (data: any) => {
