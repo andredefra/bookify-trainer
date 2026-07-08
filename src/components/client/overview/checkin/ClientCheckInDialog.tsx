@@ -105,6 +105,19 @@ export function ClientCheckInDialog({
               </Label>
               <div className="grid grid-cols-2 gap-3">
                 <div>
+                  <Label className="text-xs text-muted-foreground">Chest</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    placeholder="cm"
+                    value={measurements.chest || ''}
+                    onChange={(e) => setMeasurements(prev => ({
+                      ...prev,
+                      chest: e.target.value ? parseFloat(e.target.value) : undefined
+                    }))}
+                  />
+                </div>
+                <div>
                   <Label className="text-xs text-muted-foreground">Waist</Label>
                   <Input
                     type="number"
@@ -114,6 +127,19 @@ export function ClientCheckInDialog({
                     onChange={(e) => setMeasurements(prev => ({ 
                       ...prev, 
                       waist: e.target.value ? parseFloat(e.target.value) : undefined 
+                    }))}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Abdomen</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    placeholder="cm"
+                    value={measurements.abdomen || ''}
+                    onChange={(e) => setMeasurements(prev => ({
+                      ...prev,
+                      abdomen: e.target.value ? parseFloat(e.target.value) : undefined
                     }))}
                   />
                 </div>
@@ -131,15 +157,15 @@ export function ClientCheckInDialog({
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Thighs</Label>
+                  <Label className="text-xs text-muted-foreground">Quadriceps</Label>
                   <Input
                     type="number"
                     step="0.1"
                     placeholder="cm"
-                    value={measurements.thighs || ''}
-                    onChange={(e) => setMeasurements(prev => ({ 
-                      ...prev, 
-                      thighs: e.target.value ? parseFloat(e.target.value) : undefined 
+                    value={measurements.quadriceps || ''}
+                    onChange={(e) => setMeasurements(prev => ({
+                      ...prev,
+                      quadriceps: e.target.value ? parseFloat(e.target.value) : undefined
                     }))}
                   />
                 </div>
