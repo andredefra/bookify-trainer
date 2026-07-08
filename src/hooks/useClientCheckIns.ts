@@ -3,6 +3,100 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Json } from '@/integrations/supabase/types';
 
+const DEMO_CLIENT_ID = '00000000-0000-0000-0000-000000000002';
+const DEMO_TRAINER_ID = '00000000-0000-0000-0000-000000000001';
+const DEMO_SETTINGS_ID = 'demo-checkin-settings';
+
+const isoDaysAgo = (days: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toISOString();
+};
+const dateDaysAgo = (days: number) => isoDaysAgo(days).split('T')[0];
+
+const getDemoSettings = (): CheckInSettings => ({
+  id: DEMO_SETTINGS_ID,
+  client_id: DEMO_CLIENT_ID,
+  trainer_id: DEMO_TRAINER_ID,
+  frequency: 'weekly',
+  enabled: true,
+  include_weight: true,
+  include_measurements: true,
+  include_mood: true,
+  include_photos: true,
+  include_notes: true,
+  custom_questions: [],
+});
+
+const getDemoSubmissions = (): CheckInSubmission[] => [
+  {
+    id: 'demo-checkin-pending',
+    client_id: DEMO_CLIENT_ID,
+    trainer_id: DEMO_TRAINER_ID,
+    settings_id: DEMO_SETTINGS_ID,
+    due_date: dateDaysAgo(0),
+    status: 'pending',
+    created_at: isoDaysAgo(0),
+    updated_at: isoDaysAgo(0),
+  },
+  {
+    id: 'demo-checkin-awaiting',
+    client_id: DEMO_CLIENT_ID,
+    trainer_id: DEMO_TRAINER_ID,
+    settings_id: DEMO_SETTINGS_ID,
+    due_date: dateDaysAgo(3),
+    status: 'completed',
+    weight: 82.0,
+    measurements: { waist: 84, hips: 95, thighs: 55, arms: 33 },
+    mood_rating: 4,
+    energy_level: 4,
+    sleep_quality: 3,
+    notes: 'Felt strong on Wednesday session, a bit tired on Friday.',
+    completed_at: isoDaysAgo(3),
+    created_at: isoDaysAgo(3),
+    updated_at: isoDaysAgo(3),
+  },
+  {
+    id: 'demo-checkin-reviewed-new',
+    client_id: DEMO_CLIENT_ID,
+    trainer_id: DEMO_TRAINER_ID,
+    settings_id: DEMO_SETTINGS_ID,
+    due_date: dateDaysAgo(10),
+    status: 'reviewed',
+    weight: 82.5,
+    measurements: { waist: 85, hips: 96, thighs: 56, arms: 33 },
+    mood_rating: 4,
+    energy_level: 3,
+    sleep_quality: 4,
+    notes: 'Weekend was heavier on carbs, back to routine Monday.',
+    trainer_feedback: 'Great job this week! Keep the protein intake up and try to hit 8k steps on rest days.',
+    trainer_reviewed_at: isoDaysAgo(8),
+    completed_at: isoDaysAgo(10),
+    created_at: isoDaysAgo(10),
+    updated_at: isoDaysAgo(8),
+  },
+  {
+    id: 'demo-checkin-reviewed-old',
+    client_id: DEMO_CLIENT_ID,
+    trainer_id: DEMO_TRAINER_ID,
+    settings_id: DEMO_SETTINGS_ID,
+    due_date: dateDaysAgo(17),
+    status: 'reviewed',
+    weight: 82.7,
+    measurements: { waist: 86, hips: 97, thighs: 56, arms: 33 },
+    mood_rating: 3,
+    energy_level: 3,
+    sleep_quality: 3,
+    notes: 'Busy work week, missed one session.',
+    trainer_feedback: 'No worries about the missed session — let\'s prioritize consistency next week.',
+    trainer_reviewed_at: isoDaysAgo(15),
+    completed_at: isoDaysAgo(17),
+    created_at: isoDaysAgo(17),
+    updated_at: isoDaysAgo(15),
+  },
+];
+
+
 export interface CheckInMeasurements {
   waist?: number;
   hips?: number;
@@ -59,6 +153,13 @@ export function useClientCheckIns(clientId: string) {
   const fetchCheckIns = async () => {
     try {
       setLoading(true);
+
+      // Demo user: use in-memory mocks, skip Supabase
+      if (clientId === DEMO_CLIENT_ID) {
+        setSettings(getDemoSettings());
+        setSubmissions(getDemoSubmissions());
+        return;
+      }
 
       // Fetch settings
       const { data: settingsData, error: settingsError } = await supabase
@@ -129,6 +230,53 @@ export function useClientCheckIns(clientId: string) {
           variant: "destructive"
         });
         return false;
+      }
+
+      // Demo user: mutate local state only
+      if (clientId === DEMO_CLIENT_ID) {
+        setSubmissions(prev => {
+          const nowIso = new Date().toISOString();
+          if (data.submissionId) {
+            return prev.map(s => s.id === data.submissionId ? {
+              ...s,
+              weight: data.weight,
+              measurements: data.measurements,
+              mood_rating: data.mood_rating,
+              energy_level: data.energy_level,
+              sleep_quality: data.sleep_quality,
+              notes: data.notes,
+              photos: data.photos,
+              custom_answers: data.custom_answers,
+              status: 'completed',
+              completed_at: nowIso,
+              updated_at: nowIso,
+            } : s);
+          }
+          return [{
+            id: `demo-checkin-${Date.now()}`,
+            client_id: clientId,
+            trainer_id: settings.trainer_id,
+            settings_id: settings.id,
+            due_date: new Date().toISOString().split('T')[0],
+            status: 'completed',
+            weight: data.weight,
+            measurements: data.measurements,
+            mood_rating: data.mood_rating,
+            energy_level: data.energy_level,
+            sleep_quality: data.sleep_quality,
+            notes: data.notes,
+            photos: data.photos,
+            custom_answers: data.custom_answers,
+            completed_at: nowIso,
+            created_at: nowIso,
+            updated_at: nowIso,
+          }, ...prev];
+        });
+        toast({
+          title: "Check-in submitted",
+          description: "Your check-in has been sent to your trainer"
+        });
+        return true;
       }
 
       const updateData = {
