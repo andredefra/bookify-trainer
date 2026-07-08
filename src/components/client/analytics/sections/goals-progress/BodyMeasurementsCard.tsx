@@ -34,10 +34,12 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
   const statusInfo = getStatusInfo();
 
   // Calculate trends for each measurement
+  const chestTrend = getMeasurementTrend(bodyMeasurements, 'chest');
   const waistTrend = getMeasurementTrend(bodyMeasurements, 'waist');
+  const abdomenTrend = getMeasurementTrend(bodyMeasurements, 'abdomen');
   const hipsTrend = getMeasurementTrend(bodyMeasurements, 'hips');
   const armsTrend = getMeasurementTrend(bodyMeasurements, 'arms');
-  const thighsTrend = getMeasurementTrend(bodyMeasurements, 'thighs');
+  const quadricepsTrend = getMeasurementTrend(bodyMeasurements, 'quadriceps');
 
   // Get previous measurement date for reference
   const getPreviousDate = () => {
@@ -96,10 +98,12 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
       </div>
       
       <div className="grid grid-cols-2 gap-3">
+        {latestMeasurements.chest && renderMeasurementItem('Chest', latestMeasurements.chest, 'cm', chestTrend)}
         {latestMeasurements.waist && renderMeasurementItem('Waist', latestMeasurements.waist, 'cm', waistTrend)}
+        {latestMeasurements.abdomen && renderMeasurementItem('Abdomen', latestMeasurements.abdomen, 'cm', abdomenTrend)}
         {latestMeasurements.hips && renderMeasurementItem('Hips', latestMeasurements.hips, 'cm', hipsTrend)}
         {latestMeasurements.arms && renderMeasurementItem('Arms', latestMeasurements.arms, 'cm', armsTrend)}
-        {latestMeasurements.thighs && renderMeasurementItem('Thighs', latestMeasurements.thighs, 'cm', thighsTrend)}
+        {(latestMeasurements.quadriceps ?? latestMeasurements.thighs) && renderMeasurementItem('Quadriceps', (latestMeasurements.quadriceps ?? latestMeasurements.thighs)!, 'cm', quadricepsTrend)}
       </div>
     </div>
   );

@@ -218,10 +218,10 @@ export function UserFitnessProgress() {
                       <span className="font-medium">{latestMeasurement.arms} cm</span>
                     </div>
                   )}
-                  {latestMeasurement.thighs && (
+                  {(latestMeasurement.quadriceps ?? latestMeasurement.thighs) && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Thighs:</span>
-                      <span className="font-medium">{latestMeasurement.thighs} cm</span>
+                      <span className="text-muted-foreground">Quadriceps:</span>
+                      <span className="font-medium">{latestMeasurement.quadriceps ?? latestMeasurement.thighs} cm</span>
                     </div>
                   )}
                   {latestMeasurement.shoulders && (
@@ -305,10 +305,10 @@ export function UserFitnessProgress() {
                             <span>{measurement.arms} cm</span>
                           </div>
                         )}
-                        {measurement.thighs && (
+                        {(measurement.quadriceps ?? measurement.thighs) && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Thighs:</span>
-                            <span>{measurement.thighs} cm</span>
+                            <span className="text-muted-foreground">Quadriceps:</span>
+                            <span>{measurement.quadriceps ?? measurement.thighs} cm</span>
                           </div>
                         )}
                         {measurement.shoulders && (

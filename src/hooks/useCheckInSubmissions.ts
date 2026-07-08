@@ -3,11 +3,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 export interface CheckInMeasurements {
+  chest?: number;
   waist?: number;
+  abdomen?: number;
   hips?: number;
+  quadriceps?: number;
+  /** @deprecated use `quadriceps` — legacy field */
   thighs?: number;
   arms?: number;
-  chest?: number;
   shoulders?: number;
   neck?: number;
 }

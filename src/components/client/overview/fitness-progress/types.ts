@@ -144,9 +144,13 @@ export interface BodyMeasurements {
   // DEPRECATED: height e gender ora sono nel profilo utente (user_profiles table)
   // height?: number; 
   // gender?: 'male' | 'female';
+  chest?: number; // petto
   waist?: number; // vita
+  abdomen?: number; // addome
   hips?: number; // fianchi
-  thighs?: number; // cosce
+  quadriceps?: number; // quadricipiti (ex thighs)
+  /** @deprecated use `quadriceps` — kept for legacy log compatibility */
+  thighs?: number;
   shoulders?: number; // spalle
   arms?: number; // braccia
   neck?: number; // collo
