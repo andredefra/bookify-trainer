@@ -99,9 +99,7 @@ export function BodyMeasurementsCard({ latestMeasurements, bodyMeasurements, use
         {latestMeasurements.waist && renderMeasurementItem('Waist', latestMeasurements.waist, 'cm', waistTrend)}
         {latestMeasurements.hips && renderMeasurementItem('Hips', latestMeasurements.hips, 'cm', hipsTrend)}
         {latestMeasurements.arms && renderMeasurementItem('Arms', latestMeasurements.arms, 'cm', armsTrend)}
-        {latestMeasurements.neck && renderMeasurementItem('Neck', latestMeasurements.neck, 'cm', neckTrend)}
         {latestMeasurements.thighs && renderMeasurementItem('Thighs', latestMeasurements.thighs, 'cm', thighsTrend)}
-        {latestMeasurements.shoulders && renderMeasurementItem('Shoulders', latestMeasurements.shoulders, 'cm', shouldersTrend)}
       </div>
     </div>
   );
