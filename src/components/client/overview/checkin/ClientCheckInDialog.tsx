@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Loader2, Scale, Ruler, Smile, Zap, Moon } from 'lucide-react';
 import { CheckInSettings, CheckInMeasurements, CheckInSubmission } from '@/hooks/useClientCheckIns';
+import { MeasurementGuidePopover } from '@/components/client/overview/fitness-progress/MeasurementGuidePopover';
 
 interface ClientCheckInDialogProps {
   open: boolean;
