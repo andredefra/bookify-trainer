@@ -1,27 +1,32 @@
+## Problema 1 — Disconnessione palestra fallisce
 
-## Obiettivo
-Nella sezione "La mia palestra" (client basic, `MyGymBasicTab`):
-1. Aggiungere una **barra di ricerca** (nome palestra) + **filtro città** nel `ConnectGymCard`.
-2. Prima di connettere, l'utente deve **compilare i dati del piano** (data iscrizione, scadenza iscrizione, scadenza certificato medico). Solo dopo si abilita la connessione, e i dati risultano già precompilati nella card "Il mio piano".
+In `MyGymSection.tsx`, `handleDisconnect` fa una UPDATE su `gym_connection_requests` usando `connection.id`. Ma nel caso demo (utente non loggato / nessuna riga in DB), `useGymConnection` carica una connessione fittizia con `id: 'demo-connection-id'` — la UPDATE non colpisce nessuna riga reale e/o fallisce con RLS, quindi vediamo "Failed to disconnect from gym."
 
-## Modifiche
+### Fix
+In `src/components/client/tabs/settings/MyGymSection.tsx`:
+- Riconoscere il caso demo: se `connection.id === 'demo-connection-id'` (o non c'è un utente autenticato), **saltare la chiamata Supabase** e disconnettere localmente (svuotare lo stato via un nuovo `clearDemoConnection` esposto da `useGymConnection`, oppure semplicemente ricaricare demo → cambiamo la firma minimamente).
+- Mostrare comunque il toast "Disconnected" e chiamare `refetch()` (che ora, in demo, ricarica lo stato "connesso"). Quindi in demo esporremo invece un `disconnectDemo()` che imposta `connection = null` in stato locale.
 
-### 1. `src/components/client/tabs/mygym-basic/ConnectGymCard.tsx`
-- Estendere `DEMO_GYMS` con un campo `city` (Milano per tutte quelle attuali) e aggiungere qualche palestra di altre città per rendere utile il filtro (es. Roma, Torino).
-- Aggiungere sopra la lista:
-  - `Input` con icona `Search` per ricerca per nome/indirizzo.
-  - `Select` per città (popolato dinamicamente dalle città uniche di `DEMO_GYMS`, con opzione "Tutte le città").
-- Filtrare la lista in base ai due criteri. Empty state se nessun risultato.
-- Dopo aver selezionato una palestra e premuto "Connetti", **aprire un `Dialog`** con il form del piano (stessi 3 campi di `MembershipPlanCard`: `joinDate`, `expiryDate`, `certificateExpiryDate`, tutti `type="date"`). Bottone "Conferma e connetti" disabilitato finché almeno `joinDate` non è compilata (le scadenze restano opzionali per non bloccare).
-- Estendere la prop `onConnected` per passare anche il piano: `onConnected(conn, plan)`.
+In `src/hooks/useGymConnection.ts`:
+- Aggiungere una funzione `disconnect()` che:
+  - se `connection?.id === 'demo-connection-id'` → `setConnection(null); setPackages([]); setCommunications([])` e ritorna successo.
+  - altrimenti → esegue la UPDATE su Supabase come oggi, poi `fetchGymConnection()`.
+- `MyGymSection` userà `disconnect()` invece della UPDATE inline.
 
-### 2. `src/components/client/tabs/MyGymBasicTab.tsx`
-- Aggiornare `handleConnected` per ricevere `(conn, plan)` e salvare entrambi in localStorage (`CONN_KEY` e `PLAN_KEY`), aggiornando anche lo stato `plan` così la `MembershipPlanCard` mostra subito i dati precompilati.
+Nessuna modifica DB / RLS.
 
-### 3. Nessuna modifica a `MembershipPlanCard.tsx`
-Legge già da `plan` via prop, quindi i dati appaiono automaticamente.
+## Problema 2 — X di chiusura sui toast
 
-## Note tecniche
-- Tutto client-side, nessun cambio DB/Supabase.
-- Solo UI/presentazione, coerente con lo stile shadcn esistente (`Input`, `Select`, `Dialog`, `Button`).
-- Testi in italiano come nel resto del tab.
+Il progetto usa **sonner** (`src/components/ui/sonner.tsx`) montato in `App.tsx`. Sonner supporta `closeButton` come prop del `<Toaster />` che aggiunge una X su ogni toast.
+
+### Fix
+In `src/components/ui/sonner.tsx`:
+- Aggiungere `closeButton` al `<Sonner />`.
+- Aggiungere in `toastOptions.classNames.closeButton` uno stile coerente col design system (bordo/foreground tramite token, niente colori hardcoded), così la X è visibile anche sui toast destructive.
+
+Nessun'altra modifica: tutti i `toast(...)` esistenti guadagnano automaticamente la X.
+
+## File toccati
+- `src/hooks/useGymConnection.ts` (+ funzione `disconnect`)
+- `src/components/client/tabs/settings/MyGymSection.tsx` (usa `disconnect`)
+- `src/components/ui/sonner.tsx` (abilita `closeButton`)
