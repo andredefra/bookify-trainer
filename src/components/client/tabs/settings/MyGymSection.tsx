@@ -72,7 +72,7 @@ export function MyGymSection({ user }: MyGymSectionProps) {
         title: "Disconnected",
         description: "You have been disconnected from the gym.",
       });
-      await refetch();
+    
     } catch (error) {
       console.error('Error disconnecting:', error);
       toast({
