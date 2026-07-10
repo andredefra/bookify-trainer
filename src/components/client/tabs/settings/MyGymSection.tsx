@@ -37,7 +37,7 @@ const mockGyms = [
 ];
 
 export function MyGymSection({ user }: MyGymSectionProps) {
-  const { connection, loading, isConnected, sendConnectionRequest, refetch } = useGymConnection();
+  const { connection, loading, isConnected, sendConnectionRequest, disconnect, refetch } = useGymConnection();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGym, setSelectedGym] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,20 +66,12 @@ export function MyGymSection({ user }: MyGymSectionProps) {
 
   const handleDisconnect = async () => {
     if (!connection) return;
-    
     try {
-      const { error } = await supabase
-        .from('gym_connection_requests')
-        .update({ status: 'rejected' })
-        .eq('id', connection.id);
-
-      if (error) throw error;
-
+      await disconnect();
       toast({
         title: "Disconnected",
         description: "You have been disconnected from the gym.",
       });
-      
       await refetch();
     } catch (error) {
       console.error('Error disconnecting:', error);
@@ -90,6 +82,7 @@ export function MyGymSection({ user }: MyGymSectionProps) {
       });
     }
   };
+
 
   if (loading) {
     return (

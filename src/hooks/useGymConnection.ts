@@ -381,6 +381,24 @@ export function useGymConnection() {
     }
   };
 
+  const disconnect = async () => {
+    if (!connection) return;
+    // Demo connection: just clear local state
+    if (connection.id === 'demo-connection-id') {
+      setConnection(null);
+      setPackages([]);
+      setCommunications([]);
+      return;
+    }
+    const { error } = await supabase
+      .from('gym_connection_requests')
+      .update({ status: 'rejected' })
+      .eq('id', connection.id);
+    if (error) throw error;
+    await fetchGymConnection();
+    setConnection(null);
+  };
+
   return {
     connection,
     packages,
@@ -390,6 +408,7 @@ export function useGymConnection() {
     isConnected: !!connection,
     sendConnectionRequest,
     markCommunicationAsRead,
+    disconnect,
     refetch: fetchGymConnection,
   };
 }
