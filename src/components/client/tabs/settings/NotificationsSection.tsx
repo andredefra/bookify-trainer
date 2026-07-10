@@ -12,7 +12,7 @@ export function NotificationsSection() {
     email: true,
     session: true,
     workout: true,
-    marketing: false,
+    marketing: true,
     messages: true
   });
 
@@ -106,11 +106,12 @@ export function NotificationsSection() {
             <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between">
                 <Label className="text-base font-medium" htmlFor="marketing-notifications">Marketing</Label>
-                <Switch 
-                  id="marketing-notifications" 
-                  checked={notifications.marketing}
-                  onCheckedChange={() => handleToggle('marketing')}
+                <Switch
+                  id="marketing-notifications"
+                  checked
+                  disabled
                 />
+
               </div>
               <p className="text-sm text-muted-foreground">Receive promotions, news and updates</p>
             </div>
