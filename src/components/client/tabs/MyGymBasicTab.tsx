@@ -28,9 +28,11 @@ export function MyGymBasicTab() {
     }
   }, []);
 
-  const handleConnected = (conn: BasicGymConnection) => {
+  const handleConnected = (conn: BasicGymConnection, initialPlan: MembershipPlan) => {
     localStorage.setItem(CONN_KEY, JSON.stringify(conn));
     setConnection(conn);
+    localStorage.setItem(PLAN_KEY, JSON.stringify(initialPlan));
+    setPlan(initialPlan);
   };
 
   const handleDisconnect = () => {
