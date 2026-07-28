@@ -165,14 +165,14 @@ export function CreateGymEventDialog({
             <div className="space-y-2">
               <Label htmlFor="client">Client</Label>
                 <Select
-                  value={formData.client_id}
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, client_id: value }))}
+                  value={formData.client_id || "none"}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, client_id: value === "none" ? "" : value }))}
                 >
                   <SelectTrigger className="min-h-[44px]">
                     <SelectValue placeholder="Select client (optional)" />
                   </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No client selected</SelectItem>
+                  <SelectItem value="none">No client selected</SelectItem>
                   {clients.length > 0 ? (
                     clients.map(client => (
                       <SelectItem key={client.id} value={client.id}>
