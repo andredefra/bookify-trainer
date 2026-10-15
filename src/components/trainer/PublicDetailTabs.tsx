@@ -49,7 +49,7 @@ export function PublicDetailTabs({ trainer, demoTrainer, tab, onBook }: Props) {
         const slot = demoTrainer?.schedule.weekly[index];
         const legacyHours = trainer.availability[day] ?? [];
         const closed = slot ? slot.closed : legacyHours.length === 0;
-        return <div className={`public-profile-weekday${closed ? " is-closed" : ""}`} key={day}><strong>{t(`publicProfile.day.${day}`)}</strong><div>{slot ? slot.closed ? t("publicProfile.unavailable") : <>{slot.start} — {slot.end}{slot.break && <span className="public-profile-break"> ({t("publicProfile.break")} {slot.break.start}–{slot.break.end})</span>}</> : closed ? t("publicProfile.unavailable") : legacyHours.join(" · ")}</div></div>;
+        return <div className={`public-profile-weekday${closed ? " is-closed" : ""}`} key={day}><strong>{t(`publicProfile.day.${day}`)}</strong><div>{slot ? "start" in slot ? <>{slot.start} — {slot.end}{slot.break && <span className="public-profile-break"> ({t("publicProfile.break")} {slot.break.start}–{slot.break.end})</span>}</> : t("publicProfile.unavailable") : closed ? t("publicProfile.unavailable") : legacyHours.join(" · ")}</div></div>;
       })}</div>
       {demoTrainer && <>
         <div className="public-profile-session-pills"><span>{t("publicProfile.sessionDuration").replace("{n}", String(demoTrainer.schedule.sessionMinutes))}</span><span>{t("publicProfile.sessionGap").replace("{n}", String(demoTrainer.schedule.gapMinutes))}</span></div>
