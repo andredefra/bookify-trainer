@@ -61,8 +61,8 @@ export const en = {
   'heroPreview.d7': 'Sun',
   'heroPreview.notif1Title': 'Payment received',
   'heroPreview.notif1Sub': 'Luca Rossi · €120',
-  'heroPreview.notif2Title': 'Your AI assistant',
-  'heroPreview.notif2Sub': 'Program ready for Giulia',
+  'heroPreview.notif2Title': 'A.I. replied',
+  'heroPreview.notif2Sub': '3 messages handled',
   
   // Features
   'features.title': 'Everything You Need to Grow Your Training Business',

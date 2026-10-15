@@ -61,8 +61,8 @@ export const it = {
   'heroPreview.d7': 'Dom',
   'heroPreview.notif1Title': 'Pagamento ricevuto',
   'heroPreview.notif1Sub': 'Luca Rossi · €120',
-  'heroPreview.notif2Title': 'La tua assistente AI',
-  'heroPreview.notif2Sub': 'Scheda pronta per Giulia',
+  'heroPreview.notif2Title': 'A.I. ha risposto',
+  'heroPreview.notif2Sub': '3 messaggi gestiti',
   
   // Features
   'features.title': 'Tutto ciò di cui hai bisogno per far crescere la tua attività',
