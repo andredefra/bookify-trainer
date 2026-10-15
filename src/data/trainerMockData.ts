@@ -134,9 +134,11 @@ export const aiConversation: Message[] = [
 ];
 
 export function getTrainerById(id: string): Trainer | undefined {
-  if (id === "t1") {
+  // Marketplace profiles can be reached by numeric id ("1", "2", ...) or the
+  // legacy mock id ("t1", "t2", ...) — resolve both.
+  if (id === "t1" || id === "1") {
     return trainerData;
-  } else if (id === "t2") {
+  } else if (id === "t2" || id === "2") {
     return {
       ...trainerData,
       id: "t2",
@@ -149,7 +151,35 @@ export function getTrainerById(id: string): Trainer | undefined {
       profileImage: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop",
       status: "online",
       nextAvailability: "Available now"
-    }
+    };
+  } else if (id === "t3" || id === "3") {
+    return {
+      ...trainerData,
+      id: "t3",
+      name: "Emma Davis",
+      title: "Yoga Instructor",
+      location: "Chicago, IL",
+      rating: 4.8,
+      reviews: 156,
+      hourlyRate: 40,
+      profileImage: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=1470&auto=format&fit=crop",
+      status: "online",
+      nextAvailability: "Available today"
+    };
+  } else if (id === "t4" || id === "4") {
+    return {
+      ...trainerData,
+      id: "t4",
+      name: "James Wilson",
+      title: "Nutrition Coach",
+      location: "Austin, TX",
+      rating: 4.6,
+      reviews: 87,
+      hourlyRate: 60,
+      profileImage: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop",
+      status: "online",
+      nextAvailability: "Available this week"
+    };
   }
   return undefined;
 }

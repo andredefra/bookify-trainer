@@ -12,7 +12,7 @@ export const MarketingSection = ({ trainerName }: MarketingSectionProps) => {
   return (
     <div className="mt-12">
       <h2 className="text-2xl font-display font-semibold text-center mb-8">
-        How Personal.ai helps trainers like {trainerName}
+        How MyPersonal helps trainers like {trainerName}
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -56,7 +56,7 @@ export const MarketingSection = ({ trainerName }: MarketingSectionProps) => {
       <div className="text-center mt-10">
         <Link to="/register">
           <Button size="lg" className="px-8">
-            Try Personal.ai for Your Training Business
+            Try MyPersonal for Your Training Business
           </Button>
         </Link>
       </div>

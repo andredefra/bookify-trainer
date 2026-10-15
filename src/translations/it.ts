@@ -79,7 +79,7 @@ export const it = {
   'features.videoFeature2': 'I clienti possono guardare i video incorporati direttamente nel loro piano di allenamento',
   'features.videoFeature3': 'Migliora la forma del cliente e riduci il rischio di infortuni con guida visiva',
   'features.profileTitle': 'Mostra il tuo brand con la tua pagina da personal trainer',
-  'features.profileDesc': 'Condividi il tuo URL unico (personal.ai/nometrainer) con potenziali clienti per mostrare i tuoi servizi, disponibilità e recensioni dei clienti.',
+  'features.profileDesc': 'Condividi il tuo URL unico (my-personal-fit.it/nometrainer) con potenziali clienti per mostrare i tuoi servizi, disponibilità e recensioni dei clienti.',
   'features.findTrainer': 'Cerchi un trainer?',
   
   // Additional Feature Translations
