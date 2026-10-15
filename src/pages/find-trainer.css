@@ -1,0 +1,13 @@
+.trainer-market .market-hero { isolation: isolate; }
+.trainer-market .market-glow { position: absolute; width: 1100px; height: 700px; top: -240px; left: 50%; transform: translateX(-50%); background: var(--hero-glow); z-index: -1; pointer-events: none; }
+.trainer-market .market-dot { box-shadow: var(--hero-dot-shadow); }
+.trainer-market .market-field { background: var(--preview-notification-bg); border-color: var(--preview-notification-border); }
+.trainer-market .market-card { background: hsl(var(--brand-text)); color: hsl(var(--brand-canvas)); border: 1px solid var(--market-card-border); }
+.trainer-market .market-muted { color: var(--preview-muted); }
+.trainer-market .market-photo::after { content: ''; position: absolute; inset: 0; background: var(--market-photo-overlay); pointer-events: none; }
+.trainer-market .market-credential { border-radius: 5px; padding: 4px 7px; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+.trainer-market .credential-certified { background: var(--preview-tag-amber-bg); color: var(--market-cert-text); }
+.trainer-market .credential-verified { background: var(--preview-tag-positive-bg); color: var(--preview-tag-positive-text); }
+.trainer-market .credential-topRated { background: hsl(var(--brand-canvas)); color: hsl(var(--brand-highlight)); }
+.trainer-market .credential-nutrition { background: var(--market-nutrition-bg); color: var(--market-nutrition-text); }
+.trainer-market .market-divider { border-color: var(--market-card-border); }
