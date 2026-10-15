@@ -10,10 +10,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const UserNavbar = () => {
+const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
+  const handleJoinWaitlist = () => {
+    setIsMenuOpen(false);
+    if (onJoinWaitlist) onJoinWaitlist();
+    else navigate(`${language === 'en' ? '/user-en' : '/user'}?waitlist=1`);
+  };
 
   const handleLanguageChange = (lang: 'en' | 'it') => {
     setLanguage(lang);
@@ -115,11 +120,9 @@ const UserNavbar = () => {
                 {t('userNav.login')}
               </Button>
             </Link>
-            <Link to="/user-register">
-              <Button size="sm">
-                {t('userNav.startTrial')}
-              </Button>
-            </Link>
+            <Button size="sm" onClick={handleJoinWaitlist}>
+              {t('userNav.startTrial')}
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -184,11 +187,9 @@ const UserNavbar = () => {
                     {t('userNav.login')}
                   </Button>
                 </Link>
-                <Link to="/user-register" className="block">
-                  <Button className="w-full">
-                    {t('userNav.startTrial')}
-                  </Button>
-                </Link>
+                <Button className="w-full" onClick={handleJoinWaitlist}>
+                  {t('userNav.startTrial')}
+                </Button>
               </div>
             </div>
           </div>

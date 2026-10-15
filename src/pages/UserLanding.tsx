@@ -4,12 +4,30 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield, Infinity, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import WaitlistDialog from '@/components/WaitlistDialog';
+
+// Flip to true when the free cohort closes to re-enable the paid plan card.
+const PAID_PLAN_ENABLED = false;
 
 const UserLanding = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const openWaitlist = () => setWaitlistOpen(true);
+
+  useEffect(() => {
+    if (searchParams.get('waitlist') === '1') {
+      setWaitlistOpen(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete('waitlist');
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   return (
     <div className="min-h-screen flex flex-col">
-      <UserNavbar />
+      <UserNavbar onJoinWaitlist={openWaitlist} />
+      <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
       
       <main className="flex-grow">
         {/* Hero Section */}
@@ -32,12 +50,10 @@ const UserLanding = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <Button asChild size="lg" className="text-lg px-4 py-4 sm:px-8">
-                  <Link to="/user-register" className="text-center">
+                <Button size="lg" className="text-lg px-4 py-4 sm:px-8" onClick={openWaitlist}>
                     <span className="hidden sm:inline">👉 Inizia ora – Gratis per 1 anno per i primi 100 utenti!</span>
                     <span className="sm:hidden">👉 Inizia ora – Gratis 1 anno!</span>
-                  </Link>
-                </Button>
+                  </Button>
               </div>
             </div>
           </div>
@@ -89,7 +105,7 @@ const UserLanding = () => {
                   <p className="text-xl font-semibold text-primary mb-4">
                     👉 Tutto questo senza stress, in totale autonomia.
                   </p>
-                  <Button size="lg" className="px-8">
+                  <Button size="lg" className="px-8" onClick={openWaitlist}>
                     Inizia Subito Gratis
                   </Button>
                 </div>
@@ -338,14 +354,7 @@ const UserLanding = () => {
                   
                   {/* Counter */}
                   <div className="bg-green-100 border border-green-200 rounded-lg p-4 mt-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-green-800">Posti rimanenti</span>
-                      <span className="text-lg font-bold text-green-600">95/100</span>
-                    </div>
-                    <div className="w-full bg-green-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{width: '5%'}}></div>
-                    </div>
-                    <p className="text-xs text-green-700 mt-2">⚡ Solo 5 utenti si sono già registrati!</p>
+                    <p className="text-sm font-medium text-green-800">Posti disponibili: coming soon</p>
                   </div>
                 </CardHeader>
                 
@@ -371,11 +380,9 @@ const UserLanding = () => {
                     ))}
                   </div>
                   
-                  <Button asChild size="lg" className="w-full bg-green-600 hover:bg-green-700">
-                    <Link to="/user-register">
+                  <Button size="lg" className="w-full bg-green-600 hover:bg-green-700" onClick={openWaitlist}>
                       🚀 Prendi il Tuo Posto Gratis
-                    </Link>
-                  </Button>
+                    </Button>
                   
                   <div className="text-center mt-4 space-y-1">
                     <p className="text-sm text-green-700 font-medium">✅ Accesso completo per 1 anno</p>
@@ -386,9 +393,9 @@ const UserLanding = () => {
               </Card>
 
               {/* Normal Plan (after 100 users) */}
-              <Card className="relative p-8 border-2 border-primary/30 hover:border-primary/50 transition-colors">
+              <Card aria-disabled={!PAID_PLAN_ENABLED} className={`relative p-8 border-2 border-primary/30 transition-colors ${PAID_PLAN_ENABLED ? 'hover:border-primary/50' : 'opacity-50 grayscale pointer-events-none select-none'}`}>
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">💼 PIANO NORMALE</Badge>
+                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">{PAID_PLAN_ENABLED ? '💼 PIANO NORMALE' : 'Disponibile dopo i primi 100'}</Badge>
                 </div>
                 
                 <CardHeader className="p-0 mb-6">
@@ -431,7 +438,7 @@ const UserLanding = () => {
                     ))}
                   </div>
                   
-                  <Button variant="outline" size="lg" className="w-full">
+                  <Button variant="outline" size="lg" className="w-full" disabled={!PAID_PLAN_ENABLED}>
                     Inizia con Piano Normale
                   </Button>
                   
@@ -475,16 +482,14 @@ const UserLanding = () => {
               
               <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg mb-8">
                 <p className="text-xl text-muted-foreground mb-6">
-                  🏃‍♂️ <strong>95 posti rimanenti</strong> per l'accesso gratuito di 1 anno<br />
+                  🎁 <strong>Accesso gratuito di 1 anno</strong><br />
                   ⏰ <strong>Offerta a tempo limitato</strong> - non aspettare troppo!
                 </p>
                 
-                <Button asChild size="lg" className="text-lg px-6 py-6 sm:px-12 hover-scale">
-                  <Link to="/user-register" className="text-center">
+                <Button size="lg" className="text-lg px-6 py-6 sm:px-12 hover-scale" onClick={openWaitlist}>
                     <span className="hidden sm:inline">👉 Accedi Gratis Ora - Affrettati!</span>
                     <span className="sm:hidden">👉 Accedi Gratis!</span>
-                  </Link>
-                </Button>
+                  </Button>
                 
                 <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
