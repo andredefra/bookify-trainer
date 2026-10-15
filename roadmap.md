@@ -7,3 +7,4 @@
 - [x] Verify rebuilt hero on desktop/mobile and both languages without changing other sections.
 - [x] Replace trainer demo records with six complete Italian profiles, preserving legacy profile compatibility.
 - [x] Rebuild trainer marketplace and verify both languages, slug links and mobile overflow.
+- [ ] Replace only the public trainer header, add the bilingual about card and verify Giulia/Matteo on desktop and mobile.
