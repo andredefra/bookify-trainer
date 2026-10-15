@@ -79,7 +79,7 @@ export const en = {
   'features.videoFeature2': 'Clients can watch embedded videos directly in their workout plan',
   'features.videoFeature3': 'Improve client form and reduce injury risk with visual guidance',
   'features.profileTitle': 'Showcase your brand with your personal trainer page',
-  'features.profileDesc': 'Share your unique URL (personal.ai/trainername) with potential clients to showcase your services, availability, and client reviews.',
+  'features.profileDesc': 'Share your unique URL (my-personal-fit.it/trainername) with potential clients to showcase your services, availability, and client reviews.',
   'features.findTrainer': 'Looking for a trainer?',
   
   // Additional Feature Translations

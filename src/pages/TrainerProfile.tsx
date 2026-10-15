@@ -54,97 +54,107 @@ const TrainerProfile = () => {
     fetchTrainerData();
   }, [idOrSlug]);
 
+  const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
   const fetchTrainerData = async () => {
     if (!idOrSlug) return;
-    
+
     setLoading(true);
+
+    // Try the database first. A miss or an error here must never swallow the
+    // mock-data fallback below.
+    let profileData: any = null;
     try {
       // First try to find by slug
-      let { data: profileData, error } = await supabase
+      const { data: slugData, error: slugError } = await supabase
         .from('trainer_profiles')
         .select('*')
         .eq('slug', idOrSlug)
         .eq('is_public', true)
         .maybeSingle();
 
-      // If not found by slug, try by trainer_id (fallback to old ID system)
-      if (!profileData) {
+      if (slugError) throw slugError;
+      profileData = slugData;
+
+      // If not found by slug, try by trainer_id (fallback to old ID system).
+      // trainer_id is a uuid column — only query it when the param actually
+      // looks like a UUID, otherwise Postgres throws 22P02 on "1", "2", etc.
+      if (!profileData && UUID_REGEX.test(idOrSlug)) {
         const { data: fallbackData, error: fallbackError } = await supabase
           .from('trainer_profiles')
           .select('*')
           .eq('trainer_id', idOrSlug)
           .eq('is_public', true)
           .maybeSingle();
-        
+
+        if (fallbackError) throw fallbackError;
         profileData = fallbackData;
-        error = fallbackError;
       }
-
-      if (error && error.code !== 'PGRST116') {
-        throw error;
-      }
-
-      if (profileData) {
-        setTrainerProfile(profileData);
-        setTrainerId(profileData.trainer_id);
-        
-        // Convert database profile to trainer format for existing components
-        const convertedTrainer: Trainer = {
-          id: profileData.trainer_id,
-          name: profileData.title || "Personal Trainer",
-          title: profileData.title || "Personal Trainer",
-          bio: profileData.bio || "",
-          location: profileData.location || "",
-          rating: averageRating || 4.9,
-          reviews: totalReviews || 0,
-          specialties: (profileData.specialties as string[]) || [],
-          hourlyRate: profileData.hourly_rate || 50,
-          profileImage: profileData.profile_image_url || defaultTrainerData.profileImage,
-          certifications: Array.isArray(profileData.certifications) ? 
-            (profileData.certifications as any[]).map(cert => typeof cert === 'string' ? cert : cert.name || 'Certification') : [],
-          education: typeof profileData.education === 'string' ? profileData.education : "Education details",
-          experience: Array.isArray(profileData.experience) ? 
-            (profileData.experience as any[]).map(exp => ({
-              title: exp.title || "Position",
-              company: exp.company || "Company",
-              period: exp.period || "Period",
-              description: exp.description || "Description"
-            })) : [],
-          availability: defaultTrainerData.availability, // Will be replaced with real data later
-          status: "online" as const,
-          nextAvailability: "Today at 2:00 PM"
-        };
-        
-        setTrainer(convertedTrainer);
-        
-        // Fetch primary gym info if available
-        if (profileData.primary_gym_id) {
-          const allGyms = await searchGyms("");
-          const primaryGym = allGyms.find(gym => gym.id === profileData.primary_gym_id);
-          if (primaryGym) {
-            setPrimaryGymInfo(primaryGym);
-          }
-        }
-      } else {
-        // Fallback to mock data for demo
-        const mockTrainer = getTrainerById(idOrSlug);
-        if (mockTrainer) {
-          setTrainer(mockTrainer);
-        } else {
-          navigate('/404');
-          return;
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching trainer data:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load trainer profile",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+    } catch (dbError) {
+      console.error('Error fetching trainer profile from database:', dbError);
     }
+
+    if (profileData) {
+      setTrainerProfile(profileData);
+      setTrainerId(profileData.trainer_id);
+      // Convert database profile to trainer format for existing components
+      const convertedTrainer: Trainer = {
+        id: profileData.trainer_id,
+        name: profileData.title || "Personal Trainer",
+        title: profileData.title || "Personal Trainer",
+        bio: profileData.bio || "",
+        location: profileData.location || "",
+        rating: averageRating || 4.9,
+        reviews: totalReviews || 0,
+        specialties: (profileData.specialties as string[]) || [],
+        hourlyRate: profileData.hourly_rate || 50,
+        profileImage: profileData.profile_image_url || defaultTrainerData.profileImage,
+        certifications: Array.isArray(profileData.certifications) ?
+          (profileData.certifications as any[]).map(cert => typeof cert === 'string' ? cert : cert.name || 'Certification') : [],
+        education: typeof profileData.education === 'string' ? profileData.education : "Education details",
+        experience: Array.isArray(profileData.experience) ?
+          (profileData.experience as any[]).map(exp => ({
+            title: exp.title || "Position",
+            company: exp.company || "Company",
+            period: exp.period || "Period",
+            description: exp.description || "Description"
+          })) : [],
+        availability: defaultTrainerData.availability, // Will be replaced with real data later
+        status: "online" as const,
+        nextAvailability: "Today at 2:00 PM"
+      };
+
+      setTrainer(convertedTrainer);
+
+      // Fetch primary gym info if available
+      if (profileData.primary_gym_id) {
+        const allGyms = await searchGyms("");
+        const primaryGym = allGyms.find(gym => gym.id === profileData.primary_gym_id);
+        if (primaryGym) {
+          setPrimaryGymInfo(primaryGym);
+        }
+      }
+      setLoading(false);
+      return;
+    }
+
+    // Fallback to mock data for demo
+    const mockTrainer = getTrainerById(idOrSlug);
+    if (mockTrainer) {
+      setTrainer(mockTrainer);
+      setLoading(false);
+      return;
+    }
+
+    // Only surface the destructive toast when neither source resolved the profile
+    console.error(`Trainer profile "${idOrSlug}" not found in database or mock data`);
+    toast({
+      title: "Error",
+      description: "Failed to load trainer profile",
+      variant: "destructive",
+    });
+    navigate('/404');
+    setLoading(false);
   };
 
   const handleBookSession = () => {
