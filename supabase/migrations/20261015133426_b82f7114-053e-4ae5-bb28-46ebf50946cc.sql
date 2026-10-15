@@ -1,0 +1,1 @@
+DELETE FROM public.waitlist WHERE email LIKE 'wltest%@example.com';
