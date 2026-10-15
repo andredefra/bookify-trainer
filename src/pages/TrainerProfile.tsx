@@ -8,8 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // Import refactored components
-import { TrainerHeader } from "@/components/trainer/TrainerHeader";
-import { TrainerInfo } from "@/components/trainer/TrainerInfo";
+import { PublicHeader, type PublicProfileTab } from "@/components/trainer/PublicHeader";
 import { MarketingSection } from "@/components/trainer/MarketingSection";
 import { registerSchema } from "@/components/trainer/RegisterForm";
 import { bookingSchema } from "@/components/trainer/BookingForm";
@@ -27,6 +26,7 @@ import {
   trainerData as defaultTrainerData, 
   testimonials, 
   aiConversation,
+  demoTrainers,
   getTrainerById,
   Trainer
 } from "@/data/trainerMockData";
@@ -44,6 +44,8 @@ const TrainerProfile = () => {
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openMessageDialog, setOpenMessageDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState<PublicProfileTab>("about");
+  const demoTrainer = demoTrainers.find(record => record.id === trainer.id);
 
   const { reviews, averageRating, totalReviews } = useTrainerReviews(trainerId || undefined);
   const { affiliations, searchGyms } = useTrainerGymAffiliations(trainerId || undefined);
@@ -51,6 +53,7 @@ const TrainerProfile = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setActiveTab("about");
     fetchTrainerData();
   }, [idOrSlug]);
 
@@ -220,18 +223,16 @@ const TrainerProfile = () => {
       <Navbar />
       
       <main className="flex-grow pt-24 pb-16">
+        <PublicHeader
+          trainer={trainer}
+          demoTrainer={demoTrainer}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onBookSession={handleBookSession}
+          onMessageClick={() => setOpenMessageDialog(true)}
+          primaryGym={primaryGymInfo}
+        />
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <TrainerHeader trainer={trainer} />
-          
-          <div className="md:col-span-2 space-y-6">
-            <TrainerInfo 
-              trainer={trainer} 
-              onBookSession={handleBookSession}
-              onMessageClick={() => setOpenMessageDialog(true)}
-              primaryGym={primaryGymInfo}
-            />
-          </div>
-          
           <TabsSection 
             trainer={trainer} 
             testimonials={displayTestimonials} 
