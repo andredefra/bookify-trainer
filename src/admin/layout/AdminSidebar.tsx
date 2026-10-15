@@ -18,10 +18,10 @@ export default function AdminSidebar() {
   const navigate = useNavigate();
   return (
     <aside className="w-60 shrink-0 border-r bg-card flex flex-col">
-      <div className="p-5 border-b">
+      <div className="px-5 py-4 border-b">
         <p className="text-sm font-semibold tracking-tight">{it.appName}</p>
-        <p className="text-xs text-muted-foreground">{it.subtitle}</p>
       </div>
+
       <nav className="flex-1 p-3 space-y-1">
         {items.map(({ to, label, icon: Icon, end }) => (
           <NavLink
