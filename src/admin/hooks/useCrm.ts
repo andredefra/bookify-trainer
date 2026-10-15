@@ -101,3 +101,43 @@ export function useDeleteOpportunity() {
     onSettled: () => qc.invalidateQueries({ queryKey: KEY }),
   });
 }
+
+/** Opportunities already created from the given waitlist signups, keyed by waitlist_id. */
+export function useOpportunitiesForWaitlist(ids: string[]) {
+  return useQuery({
+    queryKey: ["mkt", "crm", "byWaitlist", ids],
+    enabled: ids.length > 0,
+    queryFn: async () => {
+      const { data, error } = await sb.from("mkt_crm_opportunities").select("id,waitlist_id").in("waitlist_id", ids);
+      if (error) throw error;
+      const m: Record<string, string> = {};
+      (data ?? []).forEach((r: any) => (m[r.waitlist_id] = r.id));
+      return m;
+    },
+  });
+}
+
+export class AlreadyPromotedError extends Error {}
+
+/** Creates a CRM opportunity from a waitlist signup. Never writes to the waitlist row. */
+export function usePromoteWaitlist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (w: { id: string; full_name: string; email: string; phone: string | null; city: string | null }) => {
+      const { data: existing, error: e1 } = await sb
+        .from("mkt_crm_opportunities").select("id").eq("waitlist_id", w.id).limit(1);
+      if (e1) throw e1;
+      if (existing?.length) throw new AlreadyPromotedError();
+      const { data: last } = await sb
+        .from("mkt_crm_opportunities").select("sort_order").eq("stage", "nuovo")
+        .order("sort_order", { ascending: false }).limit(1);
+      const sort_order = last?.length ? Number(last[0].sort_order) + 1 : 1;
+      const { error } = await sb.from("mkt_crm_opportunities").insert({
+        full_name: w.full_name, email: w.email, phone: w.phone, city: w.city,
+        source: "waitlist", stage: "nuovo", waitlist_id: w.id, sort_order,
+      });
+      if (error) throw error;
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ["mkt", "crm"] }),
+  });
+}
