@@ -43,6 +43,11 @@
     --preview-notification-bg: #161616;
     --preview-notification-border: #2c2c2c;
     --preview-notification-muted: #8c8c8c;
+    --market-card-border: #E0DACB;
+    --market-cert-text: #8a6200;
+    --market-nutrition-bg: #FFE6F2;
+    --market-nutrition-text: #B03070;
+    --market-photo-overlay: linear-gradient(to bottom, hsl(var(--brand-canvas) / .65), transparent 42%);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
