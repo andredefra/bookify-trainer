@@ -18,7 +18,6 @@ export const en = {
   'hero.payoff': 'AND YOU KEEP YOUR SUNDAY.',
   'hero.subtitle': 'Leads, programmes, calendar and payments in one place. No more Excel on a Sunday night.',
   'hero.cta': 'Try the Demo',
-  'hero.secondaryCta': 'See How It Works',
   
   // Features
   'features.title': 'Everything You Need to Grow Your Training Business',

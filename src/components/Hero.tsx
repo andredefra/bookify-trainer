@@ -30,7 +30,7 @@ const Hero = () => {
           </div>
           <h1 className="trainer-headline mx-auto mt-7 max-w-6xl leading-[1.08] text-balance">
             <span className="block text-2xl sm:text-4xl lg:text-[40px] xl:text-[44px]">{t('hero.problem')}</span>
-            <span className="block text-4xl text-brand-highlight sm:text-5xl lg:text-[60px] xl:text-[64px]">{t('hero.payoff')}</span>
+            <span className="block text-4xl text-brand-highlight sm:text-5xl lg:text-[48px] xl:text-[56px]">{t('hero.payoff')}</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-brand-text/70 md:text-xl">{t('hero.subtitle')}</p>
           <Button asChild size="lg" className="mt-8 h-12 rounded-full px-8 text-base font-semibold md:h-14 md:px-10">

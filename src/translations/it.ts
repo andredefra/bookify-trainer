@@ -18,7 +18,6 @@ export const it = {
   'hero.payoff': 'E LA DOMENICA TE LA TIENI.',
   'hero.subtitle': 'Lead, schede, calendario e incassi in un posto solo. Niente più Excel la domenica sera.',
   'hero.cta': 'Prova la Demo',
-  'hero.secondaryCta': 'Scopri Come Funziona',
   
   // Features
   'features.title': 'Tutto ciò di cui hai bisogno per far crescere la tua attività',
