@@ -10,5 +10,5 @@
 - [x] Replace only the public trainer header, add the bilingual about card and verify Giulia/Matteo on desktop and mobile.
 - [x] Complete package and class records, render only their tab bodies, and carry selections into the existing booking dialog.
 - [x] Verify Giulia/Matteo, bilingual labels, seat states and mobile overflow without changing other pages.
-- [ ] Remove the legacy tab bar; complete experience, education, reviews, availability and attribution strip.
-- [ ] Verify all seven Giulia tabs, six Matteo tabs, certification provenance, bilingual labels and 390px layout.
+- [x] Remove the legacy tab bar; complete experience, education, reviews, availability and attribution strip.
+- [x] Verify all seven Giulia tabs, six Matteo tabs, certification provenance, bilingual labels and 390px layout.
