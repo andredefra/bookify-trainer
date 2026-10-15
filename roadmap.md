@@ -3,5 +3,7 @@
 - [x] Align trainer navbar, mobile navigation and shared selector's trainer variant.
 - [x] Align trainer hero and bilingual copy.
 - [x] Verify desktop/mobile appearance, product screenshot and language navigation; do not publish.
-- [ ] Rebuild trainer hero with a light coded preview, bilingual copy and reduced-motion-safe animations.
-- [ ] Verify rebuilt hero on desktop/mobile and both languages without changing other sections.
+- [x] Rebuild trainer hero with a light coded preview, bilingual copy and reduced-motion-safe animations.
+- [x] Verify rebuilt hero on desktop/mobile and both languages without changing other sections.
+- [ ] Replace trainer demo records with six complete Italian profiles, preserving legacy profile compatibility.
+- [ ] Rebuild trainer marketplace and verify both languages, slug links and mobile overflow.
