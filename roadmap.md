@@ -8,3 +8,5 @@
 - [x] Replace trainer demo records with six complete Italian profiles, preserving legacy profile compatibility.
 - [x] Rebuild trainer marketplace and verify both languages, slug links and mobile overflow.
 - [x] Replace only the public trainer header, add the bilingual about card and verify Giulia/Matteo on desktop and mobile.
+- [ ] Complete package and class records, render only their tab bodies, and carry selections into the existing booking dialog.
+- [ ] Verify Giulia/Matteo, bilingual labels, seat states and mobile overflow without changing other pages.
