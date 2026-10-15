@@ -1921,6 +1921,154 @@ export type Database = {
           },
         ]
       }
+      mkt_crm_members: {
+        Row: {
+          city: string | null
+          contract_status: string
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          notes: string | null
+          opportunity_id: string | null
+          paid_at: string | null
+          payment_due_at: string | null
+          penalty_card: string
+          penalty_month: number | null
+          phone: string | null
+          platform_url: string | null
+          platform_user_id: string | null
+          price_eur: number | null
+          seat_number: number
+          signed_at: string | null
+          tier: number | null
+          updated_at: string
+        }
+        Insert: {
+          city?: string | null
+          contract_status?: string
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          notes?: string | null
+          opportunity_id?: string | null
+          paid_at?: string | null
+          payment_due_at?: string | null
+          penalty_card?: string
+          penalty_month?: number | null
+          phone?: string | null
+          platform_url?: string | null
+          platform_user_id?: string | null
+          price_eur?: number | null
+          seat_number: number
+          signed_at?: string | null
+          tier?: number | null
+          updated_at?: string
+        }
+        Update: {
+          city?: string | null
+          contract_status?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          notes?: string | null
+          opportunity_id?: string | null
+          paid_at?: string | null
+          payment_due_at?: string | null
+          penalty_card?: string
+          penalty_month?: number | null
+          phone?: string | null
+          platform_url?: string | null
+          platform_user_id?: string | null
+          price_eur?: number | null
+          seat_number?: number
+          signed_at?: string | null
+          tier?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_crm_members_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "mkt_crm_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mkt_crm_opportunities: {
+        Row: {
+          city: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          instagram_handle: string | null
+          lost_reason: string | null
+          next_step: string | null
+          next_step_date: string | null
+          notes: string | null
+          persona: string | null
+          phone: string | null
+          sort_order: number
+          source: string
+          stage: string
+          updated_at: string
+          value_eur: number | null
+          waitlist_id: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          instagram_handle?: string | null
+          lost_reason?: string | null
+          next_step?: string | null
+          next_step_date?: string | null
+          notes?: string | null
+          persona?: string | null
+          phone?: string | null
+          sort_order?: number
+          source?: string
+          stage?: string
+          updated_at?: string
+          value_eur?: number | null
+          waitlist_id?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          instagram_handle?: string | null
+          lost_reason?: string | null
+          next_step?: string | null
+          next_step_date?: string | null
+          notes?: string | null
+          persona?: string | null
+          phone?: string | null
+          sort_order?: number
+          source?: string
+          stage?: string
+          updated_at?: string
+          value_eur?: number | null
+          waitlist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mkt_crm_opportunities_waitlist_id_fkey"
+            columns: ["waitlist_id"]
+            isOneToOne: false
+            referencedRelation: "waitlist"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mkt_dm_presets: {
         Row: {
           age_bucket: string
