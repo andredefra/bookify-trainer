@@ -10,6 +10,7 @@ import Branding from "../pages/Branding";
 import Settings from "../pages/Settings";
 import Outreach from "../pages/Outreach";
 import Waitlist from "../pages/Waitlist";
+import Crm from "../pages/Crm";
 
 // Admin module gets its own QueryClient so its caches stay isolated
 // from the rest of the app (also avoids contaminating existing queries).
@@ -34,6 +35,7 @@ export default function AdminRoutes() {
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="outreach" element={<Outreach />} />
           <Route path="waitlist" element={<Waitlist />} />
+          <Route path="crm" element={<Crm />} />
           <Route path="branding" element={<Branding />} />
           <Route path="settings" element={<Settings />} />
         </Route>
