@@ -49,6 +49,32 @@ export interface Message {
 
 export type TrainerCredential = 'certified' | 'verified' | 'topRated' | 'nutrition';
 
+export interface TrainerPackage {
+  name: string;
+  subtitle: string;
+  price: number;
+  unit: string;
+  includes: string[];
+  featured: boolean;
+}
+
+export interface TrainerClass {
+  weekday: string;
+  day: number;
+  name: string;
+  venue: string;
+  time: string;
+  level: string;
+  capacity: number;
+  booked: number;
+}
+
+export interface PublicBookingSelection {
+  name: string;
+  dateLabel?: string;
+  time?: string;
+}
+
 // Complete public demo records; legacy profile consumers receive an adapter below.
 export interface DemoTrainer extends Omit<Trainer, 'certifications' | 'education' | 'experience' | 'availability' | 'status' | 'nextAvailability'> {
   slug: string;
@@ -61,15 +87,23 @@ export interface DemoTrainer extends Omit<Trainer, 'certifications' | 'education
   credentials: TrainerCredential[];
   availableLabel: string;
   stats: { clientsHelped: number; goalsHit: string; avgProgress: string };
-  packages?: { name: string }[];
-  classes?: { name: string }[];
+  packages?: TrainerPackage[];
+  classes?: TrainerClass[];
 }
 
 export const demoTrainers: DemoTrainer[] = [
   {
     id: 't1', slug: 'giulia-ferrero', name: 'Giulia Ferrero', title: 'Personal Trainer certificata', location: 'Milano', rating: 4.9, reviews: 38, hourlyRate: 50, yearsExperience: 6,
-    packages: [{ name: 'Prova' }, { name: 'Percorso 3 mesi' }, { name: 'Bootcamp 10 ingressi' }],
-    classes: [{ name: 'Bootcamp al Parco Sempione' }],
+    packages: [
+      { name: 'Prova', subtitle: 'Per capire se ci troviamo', price: 45, unit: '1 seduta', includes: ['1 seduta individuale', 'Valutazione iniziale', "Accesso all'app"], featured: false },
+      { name: 'Percorso 3 mesi', subtitle: 'Il programma completo', price: 390, unit: '12 sedute · €32 a seduta', includes: ['12 sedute individuali', 'Scheda aggiornata ogni 4 settimane', 'Check-in misure e foto', 'Supporto in chat'], featured: true },
+      { name: 'Bootcamp', subtitle: 'Classi di gruppo al parco', price: 80, unit: '10 ingressi · 3 mesi', includes: ['10 classi a scelta', 'Martedì e giovedì 19:00', "Lista d'attesa automatica"], featured: false },
+    ],
+    classes: [
+      { weekday: 'Mar', day: 20, name: 'Bootcamp', venue: 'Parco Sempione', time: '19:00 — 20:00', level: 'livello intermedio', capacity: 12, booked: 8 },
+      { weekday: 'Gio', day: 22, name: 'Bootcamp', venue: 'Parco Sempione', time: '19:00 — 20:00', level: 'livello intermedio', capacity: 12, booked: 11 },
+      { weekday: 'Sab', day: 24, name: 'Functional', venue: 'Studio MP', time: '10:00 — 11:00', level: 'tutti i livelli', capacity: 10, booked: 10 },
+    ],
     credentials: ['certified', 'verified', 'topRated', 'nutrition'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 64, goalsHit: '78%', avgProgress: '61%' },
     primaryGym: { name: 'Virgin Active Bicocca', verified: true }, languages: ['Italiano', 'Inglese', 'Spagnolo'],
     specialties: ['Ricomposizione corporea', 'Dimagrimento', 'Forza per principianti', 'Bootcamp di gruppo', 'Post-gravidanza', 'Nutrizione'],
@@ -90,7 +124,11 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't2', slug: 'matteo-bianchi', name: 'Matteo Bianchi', title: 'Coach di forza e preparatore', location: 'Torino', rating: 4.8, reviews: 52, hourlyRate: 60, yearsExperience: 9,
-    packages: [{ name: 'Valutazione della forza' }, { name: 'Coaching forza 3 mesi' }, { name: 'Tecnica dei fondamentali' }],
+    packages: [
+      { name: 'Valutazione della forza', subtitle: 'Test e controllo delle alzate', price: 70, unit: '1 incontro', includes: ['Test di forza sui fondamentali', 'Analisi della tecnica', 'Indicazioni sui carichi di partenza'], featured: false },
+      { name: 'Coaching forza 3 mesi', subtitle: 'Programma e revisioni settimanali', price: 540, unit: '12 settimane · €45 a settimana', includes: ['Programmazione per 12 settimane', 'Revisione video delle alzate', 'Aggiornamento settimanale dei carichi', 'Supporto in chat'], featured: true },
+      { name: 'Programmazione online', subtitle: 'Una scheda da seguire in autonomia', price: 180, unit: '1 mese · rinnovabile', includes: ['Scheda di forza per 4 settimane', 'Diario dei carichi in app', 'Revisione di fine mese'], featured: false },
+    ],
     credentials: ['certified', 'topRated'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 88, goalsHit: '81%', avgProgress: '67%' }, primaryGym: null, languages: ['Italiano', 'Inglese'],
     specialties: ['Forza', 'Powerlifting', 'Ipertrofia', 'Coaching online', 'Periodizzazione'],
     bio: 'Lavoro soprattutto online con atleti amatoriali che vogliono smettere di improvvisare. Programmo sul lungo periodo, controllo i video delle alzate e aggiorno i carichi in base ai dati del diario. Uso un metodo scientifico, ma tengo conto anche del sonno, del lavoro e delle settimane in cui allenarsi è più difficile.',
@@ -104,8 +142,15 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't3', slug: 'sara-moretti', name: 'Sara Moretti', title: 'Istruttrice pre e post parto', location: 'Bologna', rating: 4.9, reviews: 64, hourlyRate: 45, yearsExperience: 7,
-    packages: [{ name: 'Primo incontro' }, { name: 'Ritorno al movimento' }, { name: 'Mobilità in gruppo' }],
-    classes: [{ name: 'Movimento dolce post parto' }],
+    packages: [
+      { name: 'Primo incontro', subtitle: 'Respirazione e movimenti di base', price: 40, unit: '1 seduta', includes: ['1 seduta individuale', 'Valutazione della mobilità', 'Esercizi di respirazione da ripetere a casa'], featured: false },
+      { name: 'Ritorno al movimento', subtitle: 'Riprendere con incontri individuali', price: 320, unit: '10 sedute · €32 a seduta', includes: ['10 sedute individuali', 'Esercizi di mobilità e forza', 'Scheda per il lavoro a casa', 'Check-in sul percorso'], featured: true },
+      { name: 'Mobilità in gruppo', subtitle: 'Incontri di movimento in piccoli gruppi', price: 70, unit: '8 ingressi · 2 mesi', includes: ['8 classi in piccolo gruppo', 'Esercizi di respirazione e mobilità', 'Movimenti adattati al proprio livello'], featured: false },
+    ],
+    classes: [
+      { weekday: 'Lun', day: 19, name: 'Movimento dolce post parto', venue: 'Studio Wellness Lab', time: '10:30 — 11:30', level: 'principianti', capacity: 8, booked: 5 },
+      { weekday: 'Mer', day: 21, name: 'Movimento dolce post parto', venue: 'Studio Wellness Lab', time: '10:30 — 11:30', level: 'principianti', capacity: 8, booked: 8 },
+    ],
     credentials: ['certified', 'verified', 'topRated'], availableLabel: 'Libera da giovedì', stats: { clientsHelped: 71, goalsHit: '85%', avgProgress: '72%' }, primaryGym: { name: 'Wellness Lab Bologna', verified: true }, languages: ['Italiano', 'Inglese'],
     specialties: ['Pre e post parto', 'Mobilità', 'Pavimento pelvico', 'Rieducazione al movimento'],
     bio: 'Seguo donne in gravidanza e nel ritorno al movimento dopo il parto, rispettando le indicazioni del medico e dei professionisti sanitari. Parto da respirazione, mobilità e gesti quotidiani, poi introduco la forza con gradualità. Al Wellness Lab lavoro in piccoli gruppi e in incontri individuali, senza chiedere a tutte lo stesso ritmo.',
@@ -119,7 +164,11 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't4', slug: 'lorenzo-greco', name: 'Lorenzo Greco', title: 'Preparatore atletico', location: 'Roma', rating: 4.7, reviews: 29, hourlyRate: 45, yearsExperience: 5,
-    packages: [{ name: 'Test atletico' }, { name: 'Preparazione running' }, { name: 'Forza per lo sport' }],
+    packages: [
+      { name: 'Test atletico', subtitle: 'Un punto di partenza per allenarsi', price: 40, unit: '1 valutazione', includes: ['Test di corsa e forza', 'Valutazione della coordinazione', 'Indicazioni per il programma'], featured: false },
+      { name: 'Preparazione running', subtitle: 'Corsa e forza nella stessa settimana', price: 350, unit: '10 sedute · €35 a seduta', includes: ['10 sedute individuali', 'Programma settimanale di corsa', 'Esercizi di forza per runner', 'Ripetizione dei test iniziali'], featured: true },
+      { name: 'Forza per lo sport', subtitle: 'Lavoro in sala per il proprio sport', price: 240, unit: '8 sedute · €30 a seduta', includes: ['8 sedute di forza', 'Esercizi per coordinazione e stabilità', 'Scheda da ripetere tra gli incontri'], featured: false },
+    ],
     credentials: ['certified', 'verified'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 43, goalsHit: '74%', avgProgress: '58%' }, primaryGym: { name: 'Centro Sportivo Tre Fontane', verified: true }, languages: ['Italiano'],
     specialties: ['Preparazione atletica', 'Running', 'Forza funzionale', 'Sport di squadra'],
     bio: 'Preparo runner amatoriali e chi pratica sport di squadra. Alterno lavoro sul campo e forza in sala, organizzando le sedute attorno alle partite e agli allenamenti della settimana. Al Tre Fontane parto da test semplici e ripetibili: preferisco pochi dati utili a programmi che nessuno riesce a seguire.',
@@ -133,7 +182,11 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't5', slug: 'chiara-rinaldi', name: 'Chiara Rinaldi', title: 'Chinesiologa e personal trainer', location: 'Firenze', rating: 4.8, reviews: 45, hourlyRate: 55, yearsExperience: 8,
-    packages: [{ name: 'Valutazione del movimento' }, { name: 'Forza e postura' }, { name: 'Equilibrio e mobilità' }],
+    packages: [
+      { name: 'Valutazione del movimento', subtitle: 'Osservare come ti muovi', price: 50, unit: '1 incontro', includes: ['Valutazione di mobilità ed equilibrio', 'Prova dei movimenti di base', 'Indicazioni per gli esercizi a casa'], featured: false },
+      { name: 'Forza e postura', subtitle: 'Esercizi individuali da imparare e ripetere', price: 430, unit: '10 sedute · €43 a seduta', includes: ['10 sedute individuali', 'Esercizi progressivi di forza', 'Scheda di mobilità per casa', 'Check-in sui movimenti'], featured: true },
+      { name: 'Equilibrio e mobilità Over 60', subtitle: 'Muoversi con esercizi guidati', price: 300, unit: '10 sedute · €30 a seduta', includes: ['10 sedute individuali', 'Esercizi di equilibrio e mobilità', 'Lavoro sui gesti quotidiani', 'Scheda per continuare a casa'], featured: false },
+    ],
     credentials: ['certified', 'verified'], availableLabel: 'Libera da lunedì', stats: { clientsHelped: 59, goalsHit: '79%', avgProgress: '64%' }, primaryGym: { name: 'Studio Movimento Firenze', verified: true }, languages: ['Italiano', 'Inglese', 'Francese'],
     specialties: ['Postura', 'Rieducazione al movimento', 'Mal di schiena', 'Over 60'],
     bio: 'Lavoro con adulti che vogliono muoversi con più sicurezza, spesso dopo lunghi periodi di inattività. Costruisco sedute di forza, equilibrio e mobilità con esercizi che si possono ripetere anche a casa. Quando c’è dolore mi coordino con il professionista sanitario di riferimento, senza sostituire il suo lavoro.',
@@ -147,8 +200,15 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't6', slug: 'davide-ferrara', name: 'Davide Ferrara', title: 'Personal Trainer', location: 'Napoli', rating: 4.6, reviews: 21, hourlyRate: 38, yearsExperience: 3,
-    packages: [{ name: 'Prima seduta' }, { name: 'Riparti in sala pesi' }, { name: 'Funzionale outdoor' }],
-    classes: [{ name: 'Funzionale per principianti' }],
+    packages: [
+      { name: 'Prima seduta', subtitle: 'Imparare i primi esercizi', price: 30, unit: '1 seduta', includes: ['1 seduta individuale', 'Prova delle attrezzature', 'Indicazioni sui carichi iniziali'], featured: false },
+      { name: 'Riparti in sala pesi', subtitle: 'Un percorso per tornare ad allenarsi', price: 280, unit: '10 sedute · €28 a seduta', includes: ['10 sedute individuali', 'Scheda con i movimenti di base', 'Diario dei carichi in app', 'Revisione della tecnica'], featured: true },
+      { name: 'Funzionale outdoor', subtitle: 'Allenamenti di gruppo al parco', price: 90, unit: '10 ingressi · 3 mesi', includes: ['10 classi di gruppo', 'Esercizi a corpo libero', 'Movimenti adattati ai principianti', "Accesso alla lista d'attesa"], featured: false },
+    ],
+    classes: [
+      { weekday: 'Mar', day: 20, name: 'Funzionale per principianti', venue: 'Parco Virgiliano', time: '18:30 — 19:30', level: 'principianti', capacity: 15, booked: 9 },
+      { weekday: 'Ven', day: 23, name: 'Funzionale per principianti', venue: 'Parco Virgiliano', time: '18:30 — 19:30', level: 'principianti', capacity: 15, booked: 14 },
+    ],
     credentials: ['certified'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 27, goalsHit: '70%', avgProgress: '55%' }, primaryGym: null, languages: ['Italiano'],
     specialties: ['Dimagrimento', 'Allenamento funzionale', 'Primo approccio alla sala pesi'],
     bio: 'Seguo chi entra in sala pesi per la prima volta o vuole riprendere dopo una pausa. Spiego gli esercizi, scelgo pochi movimenti da imparare bene e tengo un diario dei carichi. Per chi vuole dimagrire cerco prima una routine sostenibile di allenamento, senza promesse sul peso o scadenze impossibili.',

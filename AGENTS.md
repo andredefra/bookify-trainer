@@ -5,3 +5,4 @@
 - Store complete marketplace demo records separately from the legacy Trainer adapter so the marketplace can use structured credentials and history without changing the existing profile rendering.
 - Keep marketplace-only presentation scoped under trainer-market and reuse public brand tokens to isolate other pages.
 - Keep PublicHeader presentation scoped to public trainer profiles, with active tab state owned by the page and optional tabs derived from trainer records, so future tab bodies can reuse the same selection without changing lookup logic.
+- Keep package/class bodies in PublicOfferTabs using structured trainer records and computed seat states; carry offer context through page-owned selection into the shared booking dialog so registration does not discard it.

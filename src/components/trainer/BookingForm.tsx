@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { safeFormatDate } from "@/utils/safeFormatDate";
 
 export const bookingSchema = z.object({
   date: z.date().min(new Date(), { message: "Select a date in the future" }),
@@ -25,6 +25,8 @@ interface BookingFormProps {
   onSubmit: (values: BookingFormValues) => void;
   onCancel: () => void;
   isMobile?: boolean;
+  initialNotes?: string;
+  initialTime?: string;
 }
 
 // Create an array of time options from 8am to 9pm in 30 minutes intervals
@@ -34,13 +36,13 @@ const timeOptions = Array.from({ length: 26 }, (_, i) => {
   return `${hour.toString().padStart(2, '0')}:${minutes}`;
 });
 
-export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false }: BookingFormProps) {
+export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false, initialNotes = "", initialTime = "" }: BookingFormProps) {
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       date: undefined,
-      time: "",
-      notes: "",
+      time: initialTime,
+      notes: initialNotes,
     },
   });
 
@@ -64,7 +66,7 @@ export function BookingForm({ trainerName, onSubmit, onCancel, isMobile = false 
                       )}
                     >
                       {field.value ? (
-                        format(field.value, "PPP")
+                        safeFormatDate(field.value, "PPP")
                       ) : (
                         <span>Pick a date</span>
                       )}

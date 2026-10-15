@@ -15,6 +15,8 @@ import { bookingSchema } from "@/components/trainer/BookingForm";
 import { SessionDialogs } from "@/components/trainer/SessionDialogs";
 import { ChatDialog } from "@/components/trainer/ChatDialog";
 import { TabsSection } from "@/components/trainer/TabsSection";
+import { useLanguage } from "@/context/LanguageContext";
+import type { PublicBookingSelection } from "@/data/trainerMockData";
 
 // Import hooks and types
 import { useTrainerProfile, type TrainerProfile } from "@/hooks/useTrainerProfile";
@@ -35,6 +37,8 @@ const TrainerProfile = () => {
   const { idOrSlug } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
+  const [bookingSelection, setBookingSelection] = useState<PublicBookingSelection | null>(null);
   
   const [trainer, setTrainer] = useState<Trainer>(defaultTrainerData);
   const [trainerProfile, setTrainerProfile] = useState<TrainerProfile | null>(null);
@@ -161,6 +165,7 @@ const TrainerProfile = () => {
   };
 
   const handleBookSession = () => {
+    setBookingSelection(null);
     if (!isLoggedIn) {
       setShowRegister(true);
     } else {
@@ -168,20 +173,28 @@ const TrainerProfile = () => {
     }
   };
 
+  const handleOfferBook = (selection: PublicBookingSelection) => {
+    setBookingSelection(selection);
+    if (!isLoggedIn) setShowRegister(true);
+    else setShowBookingForm(true);
+  };
+
   const onRegisterSubmit = (data: z.infer<typeof registerSchema>) => {
-    console.log("Register data:", data);
     setIsLoggedIn(true);
     setShowRegister(false);
     setShowBookingForm(true);
-    toast({
+    if (!demoTrainer) toast({
       title: "Registration successful",
       description: "You can now book a session with Sarah.",
     });
   };
 
   const onBookingSubmit = (data: z.infer<typeof bookingSchema>) => {
-    console.log("Booking data:", data);
     setShowBookingForm(false);
+    if (demoTrainer) {
+      toast({ title: t("publicProfile.demoTitle"), description: t("publicProfile.demoNote") });
+      return;
+    }
     toast({
       title: "Booking successful",
       description: `Your session with ${trainer.name} has been booked for ${data.date.toLocaleDateString()} at ${data.time}.`,
@@ -229,6 +242,7 @@ const TrainerProfile = () => {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           onBookSession={handleBookSession}
+          onOfferBook={handleOfferBook}
           onMessageClick={() => setOpenMessageDialog(true)}
           primaryGym={primaryGymInfo}
         />
@@ -246,6 +260,7 @@ const TrainerProfile = () => {
             trainerName={trainer.name}
             showRegister={showRegister}
             showBookingForm={showBookingForm}
+            selection={bookingSelection}
             onRegisterSubmit={onRegisterSubmit}
             onBookingSubmit={onBookingSubmit}
             onRegisterCancel={() => setShowRegister(false)}

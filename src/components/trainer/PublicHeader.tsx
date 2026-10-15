@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
 import type { DemoTrainer, Trainer } from "@/data/trainerMockData";
 import "./public-header.css";
+import { PublicOfferTabs } from "./PublicOfferTabs";
+import type { PublicBookingSelection } from "@/data/trainerMockData";
 
 export type PublicProfileTab = "about" | "packages" | "classes" | "experience" | "education" | "reviews" | "availability";
 
@@ -13,10 +15,11 @@ interface PublicHeaderProps {
   onTabChange: (tab: PublicProfileTab) => void;
   onBookSession: () => void;
   onMessageClick: () => void;
+  onOfferBook: (selection: PublicBookingSelection) => void;
   primaryGym?: { name: string; verified?: boolean };
 }
 
-export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onBookSession, onMessageClick, primaryGym }: PublicHeaderProps) {
+export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onBookSession, onMessageClick, onOfferBook, primaryGym }: PublicHeaderProps) {
   const { t } = useLanguage();
   const record = demoTrainer ?? trainer;
   const gym = demoTrainer ? demoTrainer.primaryGym : primaryGym;
@@ -80,6 +83,7 @@ export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onB
       </section>
       <section className="public-profile-about-section">
         <div className="public-profile-inner">
+          {demoTrainer && (activeTab === "packages" || activeTab === "classes") ? <PublicOfferTabs trainer={demoTrainer} tab={activeTab} onBook={onOfferBook} /> : <>
           <article className="public-profile-about">
             <h2 className="trainer-headline public-profile-about-heading"><UserRound size={21} className="shrink-0" />{t("publicProfile.aboutHeading").replace("{name}", record.name)}</h2>
             <p className="public-profile-bio">{record.bio}</p>
@@ -90,6 +94,7 @@ export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onB
               <div className="public-profile-detail"><div className="public-profile-detail-label font-brand-mono">{t("publicProfile.tab.experience")}</div><strong>{years == null ? "—" : `${years} ${t("publicProfile.years")}`}</strong><p className="public-profile-note">{t("publicProfile.positionsNote").replace("{n}", String(record.experience.length))}</p></div>
             </div>
           </article>
+          </>}
         </div>
       </section>
     </div>
