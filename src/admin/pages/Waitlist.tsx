@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download } from "lucide-react";
+import { Download, ArrowRight, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { AlreadyPromotedError, useOpportunitiesForWaitlist, usePromoteWaitlist } from "../hooks/useCrm";
 import { useDebounce } from "@/hooks/useDebounce";
 import { safeFormatDate } from "@/utils/safeFormatDate";
 import { it } from "../i18n/it";
@@ -29,6 +32,18 @@ export default function Waitlist() {
   const { data, isLoading, error } = useWaitlistPage(filters, page);
   const rows = data?.rows ?? [];
   const totalFiltered = data?.count ?? 0;
+  const navigate = useNavigate();
+  const { data: promotedMap = {} } = useOpportunitiesForWaitlist(rows.map((r) => r.id));
+  const promote = usePromoteWaitlist();
+  const onPromote = (r: (typeof rows)[number]) =>
+    promote.mutate(r, {
+      onSuccess: () =>
+        toast.success(t.promotedToast, { action: { label: t.openCrm, onClick: () => navigate("/admin/crm") } }),
+      onError: (e) =>
+        e instanceof AlreadyPromotedError
+          ? toast.info(t.promoteExists, { action: { label: t.openCrm, onClick: () => navigate("/admin/crm") } })
+          : toast.error(t.promoteError),
+    });
   const pages = Math.max(1, Math.ceil(totalFiltered / WAITLIST_PAGE_SIZE));
 
   const onExport = async () => {
@@ -108,15 +123,16 @@ export default function Waitlist() {
               <TableHead>{t.cols.trains}</TableHead>
               <TableHead>{t.cols.consent}</TableHead>
               <TableHead>{t.cols.campaign}</TableHead>
+              <TableHead>{t.actions}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {error ? (
-              <TableRow><TableCell colSpan={10} className="text-destructive">{t.error}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={11} className="text-destructive">{t.error}</TableCell></TableRow>
             ) : isLoading ? (
-              <TableRow><TableCell colSpan={10} className="text-muted-foreground">{it.common.loading}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={11} className="text-muted-foreground">{it.common.loading}</TableCell></TableRow>
             ) : rows.length === 0 ? (
-              <TableRow><TableCell colSpan={10} className="text-muted-foreground">{it.common.empty}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={11} className="text-muted-foreground">{it.common.empty}</TableCell></TableRow>
             ) : (
               rows.map((r) => (
                 <TableRow key={r.id}>
@@ -136,6 +152,25 @@ export default function Waitlist() {
                     </Badge>
                   </TableCell>
                   <TableCell>{r.utm_campaign || "—"}</TableCell>
+                  <TableCell>
+                    {promotedMap[r.id] ? (
+                      <Button variant="ghost" size="sm" className="whitespace-nowrap" onClick={() => navigate("/admin/crm")}>
+                        <Check className="h-3.5 w-3.5 mr-1" />
+                        {t.promoted}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="whitespace-nowrap"
+                        disabled={promote.isPending}
+                        onClick={() => onPromote(r)}
+                      >
+                        <ArrowRight className="h-3.5 w-3.5 mr-1" />
+                        {t.promote}
+                      </Button>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))
             )}
