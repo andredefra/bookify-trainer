@@ -1,0 +1,72 @@
+.trainer-hero { isolation: isolate; }
+.hero-glow { position:absolute; width:1100px; height:700px; left:50%; top:-240px; transform:translateX(-50%); background:var(--hero-glow); z-index:-1; }
+.hero-grid { position:absolute; inset:0; background-image:var(--hero-grid); background-size:64px 64px; mask-image:var(--hero-grid-mask); z-index:-1; }
+.hero-kicker { display:inline-flex; align-items:center; gap:12px; border:1px solid hsl(var(--brand-highlight) / .3); background:hsl(var(--brand-highlight) / .07); padding:7px 16px 7px 11px; font-size:11.5px; font-weight:700; }
+.hero-kicker-dot { width:7px; height:7px; flex-shrink:0; border-radius:50%; background:hsl(var(--brand-highlight)); box-shadow:var(--hero-dot-shadow); }
+.hero-pill { display:flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--hero-pill-border); background:hsl(var(--brand-text) / .035); padding:9px 16px; font-size:11.5px; font-weight:700; color:var(--hero-pill-text); white-space:nowrap; }
+.hero-primary { box-shadow:var(--hero-cta-shadow); }
+.hero-preview-window { background:hsl(var(--brand-text)); border:1px solid hsl(var(--brand-text) / .14); border-radius:16px; box-shadow:var(--hero-window-shadow); overflow:hidden; text-align:left; }
+.hero-preview-titlebar { display:flex; align-items:center; gap:16px; background:hsl(var(--brand-screen)); border-bottom:1px solid var(--preview-divider); padding:12px 16px; }
+.hero-preview-titlebar i { width:10px; height:10px; border-radius:50%; }
+.hero-preview-address { border:1px solid var(--preview-divider); border-radius:99px; background:hsl(var(--brand-text)); color:var(--preview-muted); padding:4px 14px; font-size:10.5px; }
+.hero-preview-scroll { overflow-x:auto; }
+.hero-preview-body { display:flex; min-width:760px; height:428px; }
+.hero-preview-rail { width:62px; flex-shrink:0; background:var(--preview-surface); border-right:1px solid hsl(var(--brand-screen)); display:flex; align-items:center; flex-direction:column; gap:14px; padding-top:20px; }
+.hero-preview-rail > span { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--preview-faint); }
+.hero-preview-rail > .active { background:hsl(var(--brand-canvas)); color:hsl(var(--brand-highlight)); }
+.hero-preview-main { flex:1; min-width:0; padding:20px 22px; display:flex; flex-direction:column; gap:16px; color:hsl(var(--brand-canvas)); }
+.hero-preview-heading { font-size:19px; }
+.hero-preview-range { background:hsl(var(--brand-highlight)); color:hsl(var(--brand-canvas)); border-radius:99px; padding:6px 12px; font-size:10px; font-weight:700; text-transform:uppercase; }
+.hero-preview-kpi { background:var(--preview-surface); border:1px solid hsl(var(--brand-screen)); border-radius:12px; padding:12px 13px; }
+.hero-preview-label { font-size:9.5px; font-weight:700; text-transform:uppercase; color:var(--preview-label); }
+.hero-preview-value { font-weight:800; font-size:22px; margin:5px 0 3px; }
+.kpi-3 .hero-preview-value { color:var(--preview-gold); }
+.hero-preview-delta { font-size:10.5px; font-weight:600; color:var(--preview-positive); }
+.kpi-4 .hero-preview-delta { color:var(--preview-amber); }
+.hero-preview-columns { display:grid; grid-template-columns:1.25fr 1fr; gap:14px; flex:1; }
+.hero-preview-panel { border:1px solid hsl(var(--brand-screen)); border-radius:12px; padding:14px; }
+.hero-preview-client { display:flex; align-items:center; gap:9px; padding:9px 0; border-bottom:1px solid var(--preview-separator); }
+.hero-preview-client:last-child { border-bottom:0; }
+.hero-preview-avatar { display:flex; align-items:center; justify-content:center; flex-shrink:0; width:26px; height:26px; border-radius:50%; background:hsl(var(--brand-canvas)); color:hsl(var(--brand-highlight)); font-size:9.5px; font-weight:700; }
+.hero-preview-name { color:var(--preview-name); font-size:12.5px; }
+.hero-preview-tag { margin-left:auto; padding:3px 7px; border-radius:5px; font-size:8.5px; font-weight:700; text-transform:uppercase; white-space:nowrap; background:var(--preview-tag-positive-bg); color:var(--preview-tag-positive-text); }
+.tag-2 { background:var(--preview-tag-amber-bg); color:var(--preview-amber); }
+.tag-4 { background:var(--preview-separator); color:var(--preview-muted); }
+.hero-preview-days { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; margin-top:14px; }
+.hero-preview-day { background:var(--preview-surface); border:1px solid hsl(var(--brand-screen)); border-radius:8px; padding:7px 5px; text-align:center; }
+.hero-preview-day > span { display:block; color:var(--preview-faint); font-size:8px; }
+.hero-preview-day > b { display:block; font-size:12px; margin:3px 0 8px; color:var(--preview-date); }
+.hero-preview-day i { display:block; height:4px; background:var(--preview-divider); border-radius:2px; }
+.hero-preview-day i.filled { background:hsl(var(--brand-highlight)); }
+.hero-preview-day.today { background:hsl(var(--brand-canvas)); border-color:hsl(var(--brand-canvas)); }
+.hero-preview-day.today > span { color:var(--preview-muted); }
+.hero-preview-day.today > b { color:hsl(var(--brand-highlight)); }
+.hero-preview-day.today i:not(.filled) { background:var(--preview-dark-slot); }
+.hero-preview-chart { display:flex; align-items:flex-end; height:84px; gap:10px; margin-top:10px; }
+.chart-bar { flex:1; border-radius:4px 4px 0 0; background:var(--preview-bar); }
+.chart-bar.highlight { background:hsl(var(--brand-highlight)); }
+.bar-38 {height:38%}.bar-46 {height:46%}.bar-42 {height:42%}.bar-58 {height:58%}.bar-66 {height:66%}.bar-82 {height:82%}
+.hero-preview-notification { position:absolute; gap:10px; align-items:center; text-align:left; padding:12px 14px; border:1px solid var(--preview-notification-border); border-radius:16px; background:var(--preview-notification-bg); box-shadow:var(--hero-notification-shadow); color:hsl(var(--brand-text)); }
+.notification-left { left:-126px; top:52px; }
+.notification-right { right:-118px; top:272px; }
+.notification-icon { display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; background:hsl(var(--brand-highlight) / .14); color:hsl(var(--brand-highlight)); }
+.notification-icon.result { background:hsl(var(--brand-result) / .14); color:hsl(var(--brand-result)); }
+.hero-preview-notification p { font-size:12px; font-weight:700; }
+.hero-preview-notification small { font-size:11px; color:var(--preview-notification-muted); }
+@media (max-width:1279px) and (min-width:1024px) { .notification-left {left:-18px;top:65px}.notification-right {right:-18px;top:285px} }
+@media (max-width:767px) { .hero-kicker {font-size:9px;max-width:100%}.hero-pill {padding:8px 10px;font-size:10px}.hero-preview-address {font-size:9px} }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hero-up {from {opacity:0;transform:translateY(16px)} to {opacity:1;transform:translateY(0)}}
+  @keyframes hero-in {from {opacity:0} to {opacity:1}}
+  @keyframes hero-window {from {opacity:0;transform:translateY(40px) scale(.97)} to {opacity:1;transform:none}}
+  @keyframes hero-float {0%,100% {transform:translateY(0)} 50% {transform:translateY(-6px)}}
+  @keyframes hero-pulse {0%,100% {box-shadow:var(--hero-cta-shadow)} 50% {box-shadow:var(--hero-cta-shadow-strong)}}
+  .hero-kicker,.hero-line-a,.hero-line-b,.hero-subtitle,.hero-pill {animation:hero-up .6s ease-out both}
+  .hero-line-a {animation-delay:90ms}.hero-line-b {animation-delay:180ms}.hero-subtitle {animation-delay:300ms}
+  .hero-pill:nth-child(1) {animation-delay:420ms}.hero-pill:nth-child(2) {animation-delay:460ms}.hero-pill:nth-child(3) {animation-delay:500ms}.hero-pill:nth-child(4) {animation-delay:540ms}.hero-pill:nth-child(5) {animation-delay:580ms}.hero-pill:nth-child(6) {animation-delay:620ms}.hero-pill:nth-child(7) {animation-delay:660ms}.hero-pill:nth-child(8) {animation-delay:700ms}
+  .hero-actions,.hero-trust {animation:hero-in .6s ease-out 700ms both}
+  .hero-preview-window {animation:hero-window .9s ease-out 850ms both}
+  .notification-left {animation:hero-in .6s ease-out 1300ms both,hero-float 5s ease-in-out 1900ms infinite}
+  .notification-right {animation:hero-in .6s ease-out 1550ms both,hero-float 6s ease-in-out 2150ms infinite}
+  .hero-primary {animation:hero-pulse 3s ease-in-out infinite}
+}

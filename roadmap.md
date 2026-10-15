@@ -1,5 +1,7 @@
-- [ ] Logo blocked: original base64 is invalid (6513 characters); awaiting original PNG or valid base64. Do not substitute artwork.
+- [x] Supplied logo verified by exact size and checksum.
 - [x] Add scoped brand tokens and load fonts without changing other areas.
 - [x] Align trainer navbar, mobile navigation and shared selector's trainer variant.
 - [x] Align trainer hero and bilingual copy.
 - [x] Verify desktop/mobile appearance, product screenshot and language navigation; do not publish.
+- [ ] Rebuild trainer hero with a light coded preview, bilingual copy and reduced-motion-safe animations.
+- [ ] Verify rebuilt hero on desktop/mobile and both languages without changing other sections.

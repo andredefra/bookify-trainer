@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-import { CalendarCheck, CalendarDays, CreditCard, Bot, Table2, MessageCircle } from 'lucide-react';
+import { CalendarCheck, Calendar, CreditCard, Bot, MessageCircle, Users, Dumbbell, Sparkles, Globe, ShoppingBag, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
+import AppPreview from '@/components/hero/AppPreview';
+import '@/components/hero/hero.css';
 
 const Hero = () => {
   const { t } = useLanguage();
-  const oldTools = [Table2, MessageCircle, CalendarDays, CreditCard];
+  const pills = [Users, Dumbbell, Calendar, MessageCircle, CreditCard, Sparkles, Globe, ShoppingBag];
   const features = [
     { icon: CalendarCheck, title: 'features.smartScheduling', description: 'features.smartSchedulingDesc' },
     { icon: CreditCard, title: 'features.automatedPayments', description: 'features.automatedPaymentsDesc' },
@@ -13,41 +15,27 @@ const Hero = () => {
   ];
 
   return (
-    <section className="trainer-brand bg-brand-canvas text-brand-text pt-32 pb-16 md:pt-40 md:pb-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+    <section className="trainer-brand trainer-hero relative overflow-hidden bg-brand-canvas text-brand-text pt-32 pb-16 md:pt-40 md:pb-24">
+      <div className="hero-glow pointer-events-none" aria-hidden="true" />
+      <div className="hero-grid pointer-events-none" aria-hidden="true" />
+      <div className="relative mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
         <div className="text-center">
-          <p className="mx-auto max-w-2xl font-brand-mono text-xs font-bold uppercase leading-relaxed text-brand-text/60 sm:text-sm">{t('hero.positioning')}</p>
-          <div className="mt-6 opacity-75">
-            <div aria-hidden="true" className="flex justify-center gap-3 sm:gap-4">
-              {oldTools.map((Icon, index) => (
-                <div key={index} className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-brand-border bg-brand-surface sm:h-14 sm:w-14">
-                  <Icon className="h-6 w-6 text-brand-text/80 sm:h-7 sm:w-7" strokeWidth={1.5} />
-                  <span className="absolute h-0.5 w-[140%] -rotate-45 bg-brand-pain" />
-                </div>
-              ))}
-            </div>
-            <p className="mt-3 font-brand-mono text-xs font-bold uppercase text-brand-pain">{t('hero.oldWay')}</p>
-          </div>
-          <h1 className="trainer-headline mx-auto mt-7 max-w-6xl leading-[1.08] text-balance">
-            <span className="block text-2xl sm:text-4xl lg:text-[40px] xl:text-[44px]">{t('hero.problem')}</span>
-            <span className="block text-4xl text-brand-highlight sm:text-5xl lg:text-[48px] xl:text-[56px]">{t('hero.payoff')}</span>
+          <p className="hero-kicker rounded-full font-brand-mono uppercase text-brand-highlight"><span className="hero-kicker-dot" aria-hidden="true" />{t('hero.positioning')}</p>
+          <h1 className="trainer-headline mx-auto mt-7 max-w-[1240px] text-[32px] leading-[1.02] text-balance md:text-[42px] xl:text-[50px]">
+            <span className="hero-line-a block">{t('hero.headlineA')}</span>
+            <span className="hero-line-b block text-brand-highlight">{t('hero.headlineB')}</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-brand-text/70 md:text-xl">{t('hero.subtitle')}</p>
-          <Button asChild size="lg" className="mt-8 h-12 rounded-full px-8 text-base font-semibold md:h-14 md:px-10">
-            <Link to="/register">{t('hero.cta')}</Link>
-          </Button>
-        </div>
-
-        <div className="mx-auto mt-12 max-w-5xl overflow-hidden rounded-lg border border-brand-border bg-brand-screen md:mt-16">
-          <div className="flex h-9 items-center gap-2 border-b border-brand-canvas/10 bg-brand-screen px-4">
-            <span className="h-2.5 w-2.5 rounded-full bg-brand-pain" />
-            <span className="h-2.5 w-2.5 rounded-full bg-brand-highlight" />
-            <span className="h-2.5 w-2.5 rounded-full bg-brand-result" />
+          <p className="hero-subtitle mx-auto mt-6 max-w-[830px] text-base leading-relaxed text-brand-text/70 md:text-[19.5px]">{t('hero.subtitle')} <strong className="font-bold text-brand-text">{t('hero.subtitleStrong')}</strong></p>
+          <div className="mx-auto mt-7 grid max-w-[600px] grid-cols-2 justify-items-stretch gap-[11px] sm:grid-cols-4">
+            {pills.map((Icon, i) => <div key={i} className="hero-pill rounded-full font-brand-mono uppercase"><Icon className="h-4 w-4 shrink-0 text-brand-highlight" /><span>{t(`hero.pill${i + 1}`)}</span></div>)}
           </div>
-          <div className="bg-brand-screen p-2 md:p-5">
-            <img src="/lovable-uploads/ec9840eb-8606-47a2-bb42-c3a7d3fada14.png" alt="Sales dashboard analytics" className="block h-auto w-full object-contain md:max-h-[500px]" />
+          <div className="hero-actions mx-auto mt-8 flex max-w-xl flex-col items-stretch justify-center gap-3 md:max-w-none md:flex-row">
+            <Button asChild size="lg" className="hero-primary h-auto rounded-full bg-brand-highlight px-9 py-4 text-[16.5px] font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to="/register">{t('hero.cta')}</Link></Button>
+            <Button asChild variant="ghost" size="lg" className="h-auto rounded-full border border-brand-text/30 px-7 py-[15px] text-base font-semibold text-brand-text hover:bg-brand-text/10"><Link to="/register"><span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-brand-text/10"><Play className="h-3 w-3" /></span>{t('hero.ctaSecondary')}</Link></Button>
           </div>
+          <p className="hero-trust mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13.5px] text-brand-text/45"><span>{t('hero.trust1')}</span><span aria-hidden="true">·</span><b className="text-brand-text/75">{t('hero.trust2')}</b><span aria-hidden="true">·</span><span>{t('hero.trust3')}</span></p>
         </div>
+        <AppPreview />
 
         <div className="mx-auto mt-8 grid max-w-5xl grid-cols-1 gap-4 md:mt-10 md:grid-cols-3 md:gap-6">
           {features.map(({ icon: Icon, title, description }) => (
