@@ -75,6 +75,33 @@ export interface PublicBookingSelection {
   time?: string;
 }
 
+export interface PublicTrainerReview {
+  name: string;
+  rating: number;
+  date: string;
+  text: string;
+  reply?: string;
+}
+
+export type WeeklySlot = { start: string; end: string; break?: { start: string; end: string }; closed?: false } | { closed: true };
+export interface PublicTrainerSchedule {
+  weekly: WeeklySlot[]; // Monday through Sunday
+  upcoming: { date: string; booked: number }[];
+  sessionMinutes: number;
+  gapMinutes: number;
+}
+
+function demoSchedule(weekly: WeeklySlot[], bookings: number[]): PublicTrainerSchedule {
+  const upcoming = bookings.map((booked, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() + index + 1);
+    const slot = weekly[(date.getDay() + 6) % 7];
+    const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return { date: dateString, booked: slot.closed ? 0 : booked };
+  });
+  return { weekly, upcoming, sessionMinutes: 60, gapMinutes: 15 };
+}
+
 // Complete public demo records; legacy profile consumers receive an adapter below.
 export interface DemoTrainer extends Omit<Trainer, 'certifications' | 'education' | 'experience' | 'availability' | 'status' | 'nextAvailability'> {
   slug: string;
@@ -89,10 +116,18 @@ export interface DemoTrainer extends Omit<Trainer, 'certifications' | 'education
   stats: { clientsHelped: number; goalsHit: string; avgProgress: string };
   packages?: TrainerPackage[];
   classes?: TrainerClass[];
+  publicReviews: PublicTrainerReview[];
+  schedule: PublicTrainerSchedule;
 }
 
 export const demoTrainers: DemoTrainer[] = [
   {
+    publicReviews: [
+      {"name": "Marta Conti", "rating": 5, "date": "2026-10-10", "text": "Prima saltavo gli allenamenti quando uscivo tardi dal lavoro. Con due sedute brevi e la scheda in app riesco a tenere il ritmo anche nelle settimane piene.", "reply": "Abbiamo tenuto pochi esercizi e due orari fissi: continuiamo a usare il diario per adattare le settimane."},
+      {"name": "Elena Riva", "rating": 4.9, "date": "2026-09-26", "text": "Al bootcamp ho imparato a fare gli affondi senza perdere equilibrio. Quando un esercizio è troppo impegnativo Giulia mi dà una variante, così resto nel gruppo."},
+      {"name": "Paolo Neri", "rating": 4.8, "date": "2026-09-12", "text": "Dopo tre mesi so scegliere i carichi senza andare a caso. I check-in mi hanno aiutato a guardare anche le misure e non soltanto il peso."}
+    ],
+    schedule: demoSchedule([{"start": "07:00", "end": "21:00", "break": {"start": "13:00", "end": "16:30"}}, {"start": "07:00", "end": "21:00", "break": {"start": "13:00", "end": "16:30"}}, {"start": "07:30", "end": "20:30", "break": {"start": "13:00", "end": "16:00"}}, {"start": "07:00", "end": "21:00", "break": {"start": "13:00", "end": "16:30"}}, {"start": "07:00", "end": "19:30", "break": {"start": "12:30", "end": "15:30"}}, { closed: true }, { closed: true }], [5, 0, 0, 4, 3, 0, 6]),
     id: 't1', slug: 'giulia-ferrero', name: 'Giulia Ferrero', title: 'Personal Trainer certificata', location: 'Milano', rating: 4.9, reviews: 38, hourlyRate: 50, yearsExperience: 6,
     packages: [
       { name: 'Prova', subtitle: 'Per capire se ci troviamo', price: 45, unit: '1 seduta', includes: ['1 seduta individuale', 'Valutazione iniziale', "Accesso all'app"], featured: false },
@@ -123,6 +158,12 @@ export const demoTrainers: DemoTrainer[] = [
     ]
   },
   {
+    publicReviews: [
+      {"name": "Luca Serra", "rating": 4.9, "date": "2026-10-08", "text": "Registravo lo squat ma non capivo cosa correggere. Matteo mi ha fatto lavorare sulla profondità e ora le serie hanno una tecnica più costante.", "reply": "Il confronto dei video è servito a scegliere una correzione alla volta. Manteniamo lo stesso lavoro nel prossimo blocco."},
+      {"name": "Andrea Costa", "rating": 4.8, "date": "2026-09-24", "text": "Il programma tiene conto delle mie tre giornate libere. Ho smesso di aggiungere esercizi a caso e riesco a seguire la progressione dei carichi."},
+      {"name": "Marco Villa", "rating": 4.7, "date": "2026-09-05", "text": "Nelle settimane con turni notturni abbiamo ridotto il volume invece di saltare tutto. Le revisioni online mi hanno aiutato a continuare."}
+    ],
+    schedule: demoSchedule([{"start": "10:00", "end": "20:00", "break": {"start": "14:00", "end": "15:30"}}, {"start": "12:00", "end": "21:00", "break": {"start": "16:00", "end": "17:00"}}, {"start": "10:00", "end": "18:00"}, {"start": "12:00", "end": "21:00", "break": {"start": "16:00", "end": "17:00"}}, {"start": "10:00", "end": "18:00"}, {"start": "09:00", "end": "13:00"}, { closed: true }], [3, 2, 0, 4, 0, 2, 3]),
     id: 't2', slug: 'matteo-bianchi', name: 'Matteo Bianchi', title: 'Coach di forza e preparatore', location: 'Torino', rating: 4.8, reviews: 52, hourlyRate: 60, yearsExperience: 9,
     packages: [
       { name: 'Valutazione della forza', subtitle: 'Test e controllo delle alzate', price: 70, unit: '1 incontro', includes: ['Test di forza sui fondamentali', 'Analisi della tecnica', 'Indicazioni sui carichi di partenza'], featured: false },
@@ -141,6 +182,12 @@ export const demoTrainers: DemoTrainer[] = [
     ]
   },
   {
+    publicReviews: [
+      {"name": "Francesca Galli", "rating": 5, "date": "2026-10-09", "text": "Dopo il parto non sapevo da dove ricominciare. Siamo partite dalla respirazione e ora riesco a fare una seduta senza voler recuperare tutto subito.", "reply": "Continuiamo con gradualità e seguendo le indicazioni dei professionisti sanitari che ti accompagnano."},
+      {"name": "Laura Bassi", "rating": 4.9, "date": "2026-09-22", "text": "Nel gruppo ognuna ha tempi diversi. Sara mi ha mostrato varianti che riesco a ripetere anche a casa mentre il bambino dorme."},
+      {"name": "Silvia Ricci", "rating": 4.8, "date": "2026-09-03", "text": "Passavo molte ore seduta e mi sentivo rigida. Gli esercizi brevi di mobilità sono diventati una pausa che riesco a fare tutti i giorni."}
+    ],
+    schedule: demoSchedule([{"start": "08:30", "end": "13:30", "break": {"start": "10:00", "end": "10:30"}}, {"start": "09:00", "end": "13:00"}, {"start": "08:30", "end": "13:30", "break": {"start": "10:00", "end": "10:30"}}, {"start": "09:00", "end": "14:00", "break": {"start": "11:30", "end": "12:00"}}, {"start": "08:30", "end": "12:30"}, { closed: true }, { closed: true }], [2, 0, 0, 3, 2, 1, 0]),
     id: 't3', slug: 'sara-moretti', name: 'Sara Moretti', title: 'Istruttrice pre e post parto', location: 'Bologna', rating: 4.9, reviews: 64, hourlyRate: 45, yearsExperience: 7,
     packages: [
       { name: 'Primo incontro', subtitle: 'Respirazione e movimenti di base', price: 40, unit: '1 seduta', includes: ['1 seduta individuale', 'Valutazione della mobilità', 'Esercizi di respirazione da ripetere a casa'], featured: false },
@@ -163,6 +210,12 @@ export const demoTrainers: DemoTrainer[] = [
     ]
   },
   {
+    publicReviews: [
+      {"name": "Stefano Morelli", "rating": 4.8, "date": "2026-10-07", "text": "Correvo sempre allo stesso ritmo. Con le sedute distinte e il lavoro di forza riesco a gestire meglio le uscite lunghe.", "reply": "Teniamo separate le giornate impegnative e ripetiamo i test prima di aumentare ancora il lavoro."},
+      {"name": "Giovanni Rosi", "rating": 4.7, "date": "2026-09-20", "text": "Gioco a calcetto e non avevo mai programmato il lavoro in sala. Adesso gli allenamenti non mi lasciano stanco il giorno della partita."},
+      {"name": "Alessia Fabbri", "rating": 4.6, "date": "2026-09-01", "text": "Ho imparato un riscaldamento che riesco a rifare da sola prima della corsa. I test ripetuti mi fanno capire cosa sta cambiando."}
+    ],
+    schedule: demoSchedule([{"start": "06:30", "end": "15:00", "break": {"start": "10:30", "end": "11:30"}}, {"start": "07:00", "end": "16:00", "break": {"start": "12:00", "end": "13:00"}}, { closed: true }, {"start": "06:30", "end": "15:00", "break": {"start": "10:30", "end": "11:30"}}, {"start": "07:00", "end": "14:00"}, {"start": "08:00", "end": "12:00"}, { closed: true }], [2, 3, 0, 4, 1, 0, 2]),
     id: 't4', slug: 'lorenzo-greco', name: 'Lorenzo Greco', title: 'Preparatore atletico', location: 'Roma', rating: 4.7, reviews: 29, hourlyRate: 45, yearsExperience: 5,
     packages: [
       { name: 'Test atletico', subtitle: 'Un punto di partenza per allenarsi', price: 40, unit: '1 valutazione', includes: ['Test di corsa e forza', 'Valutazione della coordinazione', 'Indicazioni per il programma'], featured: false },
@@ -181,6 +234,12 @@ export const demoTrainers: DemoTrainer[] = [
     ]
   },
   {
+    publicReviews: [
+      {"name": "Anna Martini", "rating": 4.9, "date": "2026-10-06", "text": "Mi appoggiavo sempre quando facevo gli esercizi di equilibrio. Ora riesco a ripetere quelli concordati a casa senza cercare subito una sedia.", "reply": "Continuiamo con gli stessi appoggi a portata di mano e aumentiamo la difficoltà soltanto quando il movimento è stabile."},
+      {"name": "Roberto Guidi", "rating": 4.8, "date": "2026-09-18", "text": "Dopo mesi fermo ho ripreso con carichi piccoli. Chiara mi ha insegnato a distinguere lo sforzo dai segnali da riferire al fisioterapista."},
+      {"name": "Monica Ferri", "rating": 4.7, "date": "2026-08-30", "text": "La scheda contiene pochi movimenti che so eseguire. La ripeto tra un incontro e l’altro e non devo più ricordare una lista lunga di esercizi."}
+    ],
+    schedule: demoSchedule([{"start": "09:00", "end": "18:00", "break": {"start": "13:00", "end": "14:30"}}, {"start": "09:30", "end": "17:30", "break": {"start": "13:00", "end": "14:00"}}, {"start": "09:00", "end": "18:00", "break": {"start": "13:00", "end": "14:30"}}, {"start": "09:30", "end": "17:30", "break": {"start": "13:00", "end": "14:00"}}, {"start": "09:00", "end": "15:00", "break": {"start": "12:00", "end": "12:30"}}, { closed: true }, { closed: true }], [1, 0, 0, 3, 2, 0, 4]),
     id: 't5', slug: 'chiara-rinaldi', name: 'Chiara Rinaldi', title: 'Chinesiologa e personal trainer', location: 'Firenze', rating: 4.8, reviews: 45, hourlyRate: 55, yearsExperience: 8,
     packages: [
       { name: 'Valutazione del movimento', subtitle: 'Osservare come ti muovi', price: 50, unit: '1 incontro', includes: ['Valutazione di mobilità ed equilibrio', 'Prova dei movimenti di base', 'Indicazioni per gli esercizi a casa'], featured: false },
@@ -199,6 +258,12 @@ export const demoTrainers: DemoTrainer[] = [
     ]
   },
   {
+    publicReviews: [
+      {"name": "Antonio Russo", "rating": 4.7, "date": "2026-10-05", "text": "Entravo in sala e usavo le macchine che trovavo libere. Adesso ho una sequenza di esercizi e segno i carichi, quindi so cosa fare quando arrivo.", "reply": "Il diario ci aiuta a cambiare i carichi senza fretta. Continuiamo a controllare prima la tecnica."},
+      {"name": "Valentina Esposito", "rating": 4.6, "date": "2026-09-16", "text": "Al parco temevo di non stare dietro agli altri. Davide mi ha dato tempi di recupero adatti e ho finito la classe senza dovermi fermare a metà."},
+      {"name": "Gennaro De Luca", "rating": 4.5, "date": "2026-08-28", "text": "Dopo una pausa lunga ho ripreso due volte a settimana. Le spiegazioni sui movimenti mi hanno tolto il dubbio di sbagliare ogni esercizio."}
+    ],
+    schedule: demoSchedule([{"start": "14:30", "end": "20:30", "break": {"start": "17:00", "end": "17:30"}}, {"start": "15:00", "end": "21:00", "break": {"start": "17:30", "end": "18:00"}}, {"start": "14:00", "end": "20:00"}, {"start": "15:00", "end": "21:00", "break": {"start": "17:30", "end": "18:00"}}, {"start": "14:30", "end": "20:30"}, {"start": "08:30", "end": "12:30"}, { closed: true }], [4, 2, 0, 3, 5, 0, 2]),
     id: 't6', slug: 'davide-ferrara', name: 'Davide Ferrara', title: 'Personal Trainer', location: 'Napoli', rating: 4.6, reviews: 21, hourlyRate: 38, yearsExperience: 3,
     packages: [
       { name: 'Prima seduta', subtitle: 'Imparare i primi esercizi', price: 30, unit: '1 seduta', includes: ['1 seduta individuale', 'Prova delle attrezzature', 'Indicazioni sui carichi iniziali'], featured: false },
