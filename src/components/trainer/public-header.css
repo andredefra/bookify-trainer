@@ -157,7 +157,8 @@
   .public-profile-seats { justify-self: start; grid-column: 2; }
   .public-profile .class-action { grid-column: 2; width: 100%; }
   .public-profile-certifications { grid-template-columns: 1fr; }
-  .public-profile-upcoming { gap: 3px; }
-  .public-profile-upcoming-day p { font-size: 9px; }
+  .public-profile-upcoming { gap: 3px; margin-inline: -12px; }
+  .public-profile-upcoming-day { padding-inline: 2px; }
+  .public-profile-upcoming-day p { font-size: 8.5px; overflow-wrap: normal; }
   .public-profile-weekday strong { flex-basis: 110px; }
 }
