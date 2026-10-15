@@ -1,0 +1,64 @@
+.public-profile {
+  --profile-strip-border: #1d1d1d;
+  --profile-photo-border: #2e2e2e;
+  --profile-divider: #1e1e1e;
+  --profile-muted: #6e6e6e;
+  --profile-label: #7c7c7c;
+  --profile-stat-label: #cfcfcf;
+  --profile-pill-border: #2c2c2c;
+  --profile-pill-text: #dcdcdc;
+  color: hsl(var(--brand-text));
+  font-family: Inter, sans-serif;
+}
+.public-profile-inner { width: min(1020px, calc(100% - 48px)); margin-inline: auto; position: relative; }
+.public-profile-band { isolation: isolate; }
+.public-profile-glow { position: absolute; width: 900px; height: 650px; right: -300px; top: -300px; background: var(--hero-glow); pointer-events: none; z-index: -1; }
+.public-profile-cover { border-bottom: 1px solid var(--profile-strip-border); padding: 15px 0; color: var(--profile-muted); font-size: 12px; overflow-wrap: anywhere; }
+.public-profile-header { display: flex; align-items: flex-start; gap: 28px; padding: 32px 0; }
+.public-profile-photo { width: 190px; height: 230px; object-fit: cover; border-radius: 12px; border: 1px solid var(--profile-photo-border); flex-shrink: 0; }
+.public-profile-identity { flex: 1; min-width: 0; }
+.public-profile-name { font-size: 40px; line-height: 1.12; overflow-wrap: anywhere; }
+.public-profile-credential { font-size: 9.5px; font-weight: 800; text-transform: uppercase; border-radius: 999px; padding: 5px 11px; border: 1px solid transparent; white-space: nowrap; }
+.public-profile-credential.certified { background: hsl(var(--brand-highlight)); color: hsl(var(--brand-canvas)); }
+.public-profile-credential.verified { background: hsl(var(--brand-result) / .16); color: hsl(var(--brand-result)); border-color: hsl(var(--brand-result) / .4); }
+.public-profile-credential.topRated { background: hsl(var(--brand-text)); color: hsl(var(--brand-canvas)); }
+.public-profile-credential.nutrition { background: hsl(var(--brand-pop) / .16); color: hsl(var(--brand-pop)); border-color: hsl(var(--brand-pop) / .45); }
+.public-profile-title { font-size: 17px; color: hsl(var(--brand-text) / .66); margin: 12px 0; }
+.public-profile-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13.5px; color: hsl(var(--brand-text) / .6); }
+.public-profile-meta strong { color: hsl(var(--brand-text)); }
+.public-profile-gym { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 17px; font-size: 12.5px; color: hsl(var(--brand-text) / .55); }
+.public-profile-rate { border: 1px solid hsl(var(--brand-text) / .3); border-radius: 999px; padding: 5px 11px; }
+.public-profile-actions { width: 200px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; }
+.public-profile-actions .public-profile-book { background: hsl(var(--brand-highlight)); color: hsl(var(--brand-canvas)); border-radius: 999px; font-weight: 700; box-shadow: var(--hero-cta-shadow); white-space: normal; min-height: 44px; height: auto; }
+.public-profile-actions .public-profile-message { background: transparent; color: hsl(var(--brand-text)); border: 1px solid hsl(var(--brand-text) / .3); border-radius: 999px; white-space: normal; min-height: 44px; height: auto; }
+.public-profile-actions .public-profile-message:hover { background: hsl(var(--brand-text) / .08); }
+.public-profile-stats { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1px; background: var(--profile-divider); border: 1px solid var(--profile-divider); border-radius: 12px; overflow: hidden; }
+.public-profile-stat { background: hsl(var(--brand-canvas)); padding: 18px 16px; }
+.public-profile-stat-value { font-size: 28px; font-weight: 800; color: hsl(var(--brand-highlight)); }
+.public-profile-stat-label { color: var(--profile-stat-label); font-size: 10px; text-transform: uppercase; margin: 5px 0 7px; }
+.public-profile-stat-source { font-size: 11px; color: var(--profile-muted); line-height: 1.5; }
+.public-profile-specialties { padding: 25px 0 28px; }
+.public-profile-small-label { color: var(--profile-label); font-size: 10px; text-transform: uppercase; margin-bottom: 10px; }
+.public-profile-specialty { border: 1px solid var(--profile-pill-border); background: hsl(var(--brand-text) / .05); color: var(--profile-pill-text); border-radius: 999px; padding: 6px 12px; font-size: 12.5px; }
+.public-profile-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--profile-divider); gap: 22px; }
+.public-profile-tabs .public-profile-tab { flex-shrink: 0; border-radius: 0; background: transparent; color: var(--profile-label); border-bottom: 2px solid transparent; padding: 14px 0; height: auto; }
+.public-profile-tabs .public-profile-tab[aria-selected="true"] { color: hsl(var(--brand-highlight)); border-bottom-color: hsl(var(--brand-highlight)); }
+.public-profile-about-section { background: hsl(var(--brand-screen)); padding: 30px 0; color: hsl(var(--brand-canvas)); }
+.public-profile-about { background: hsl(var(--brand-text)); border: 1px solid var(--market-card-border); border-radius: 16px; padding: 22px; }
+.public-profile-about-heading { display: flex; align-items: center; gap: 10px; font-size: 19px; margin-bottom: 16px; }
+.public-profile-bio { font-size: 14.5px; line-height: 1.7; }
+.public-profile-details { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 22px; }
+.public-profile-detail { background: var(--preview-surface); border-radius: 8px; padding: 16px; font-size: 14px; }
+.public-profile-detail-label { color: var(--preview-label); font-size: 9.5px; text-transform: uppercase; margin-bottom: 9px; }
+.public-profile-language { background: hsl(var(--brand-text)); border: 1px solid var(--market-card-border); border-radius: 999px; padding: 4px 9px; font-size: 11px; }
+.public-profile-verified-gym { color: var(--preview-tag-positive-text); background: var(--preview-tag-positive-bg); font-size: 10px; padding: 3px 7px; border-radius: 999px; }
+.public-profile-note { color: var(--preview-muted); font-size: 11px; line-height: 1.5; margin-top: 7px; }
+@media(max-width: 767px) {
+  .public-profile-inner { width: calc(100% - 32px); }
+  .public-profile-header { flex-direction: column; }
+  .public-profile-name { font-size: 34px; }
+  .public-profile-actions { width: 100%; }
+  .public-profile-stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .public-profile-tabs { gap: 20px; }
+  .public-profile-details { grid-template-columns: 1fr; }
+}

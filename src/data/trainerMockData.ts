@@ -61,11 +61,15 @@ export interface DemoTrainer extends Omit<Trainer, 'certifications' | 'education
   credentials: TrainerCredential[];
   availableLabel: string;
   stats: { clientsHelped: number; goalsHit: string; avgProgress: string };
+  packages?: { name: string }[];
+  classes?: { name: string }[];
 }
 
 export const demoTrainers: DemoTrainer[] = [
   {
     id: 't1', slug: 'giulia-ferrero', name: 'Giulia Ferrero', title: 'Personal Trainer certificata', location: 'Milano', rating: 4.9, reviews: 38, hourlyRate: 50, yearsExperience: 6,
+    packages: [{ name: 'Prova' }, { name: 'Percorso 3 mesi' }, { name: 'Bootcamp 10 ingressi' }],
+    classes: [{ name: 'Bootcamp al Parco Sempione' }],
     credentials: ['certified', 'verified', 'topRated', 'nutrition'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 64, goalsHit: '78%', avgProgress: '61%' },
     primaryGym: { name: 'Virgin Active Bicocca', verified: true }, languages: ['Italiano', 'Inglese', 'Spagnolo'],
     specialties: ['Ricomposizione corporea', 'Dimagrimento', 'Forza per principianti', 'Bootcamp di gruppo', 'Post-gravidanza', 'Nutrizione'],
@@ -86,6 +90,7 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't2', slug: 'matteo-bianchi', name: 'Matteo Bianchi', title: 'Coach di forza e preparatore', location: 'Torino', rating: 4.8, reviews: 52, hourlyRate: 60, yearsExperience: 9,
+    packages: [{ name: 'Valutazione della forza' }, { name: 'Coaching forza 3 mesi' }, { name: 'Tecnica dei fondamentali' }],
     credentials: ['certified', 'topRated'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 88, goalsHit: '81%', avgProgress: '67%' }, primaryGym: null, languages: ['Italiano', 'Inglese'],
     specialties: ['Forza', 'Powerlifting', 'Ipertrofia', 'Coaching online', 'Periodizzazione'],
     bio: 'Lavoro soprattutto online con atleti amatoriali che vogliono smettere di improvvisare. Programmo sul lungo periodo, controllo i video delle alzate e aggiorno i carichi in base ai dati del diario. Uso un metodo scientifico, ma tengo conto anche del sonno, del lavoro e delle settimane in cui allenarsi è più difficile.',
@@ -99,6 +104,8 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't3', slug: 'sara-moretti', name: 'Sara Moretti', title: 'Istruttrice pre e post parto', location: 'Bologna', rating: 4.9, reviews: 64, hourlyRate: 45, yearsExperience: 7,
+    packages: [{ name: 'Primo incontro' }, { name: 'Ritorno al movimento' }, { name: 'Mobilità in gruppo' }],
+    classes: [{ name: 'Movimento dolce post parto' }],
     credentials: ['certified', 'verified', 'topRated'], availableLabel: 'Libera da giovedì', stats: { clientsHelped: 71, goalsHit: '85%', avgProgress: '72%' }, primaryGym: { name: 'Wellness Lab Bologna', verified: true }, languages: ['Italiano', 'Inglese'],
     specialties: ['Pre e post parto', 'Mobilità', 'Pavimento pelvico', 'Rieducazione al movimento'],
     bio: 'Seguo donne in gravidanza e nel ritorno al movimento dopo il parto, rispettando le indicazioni del medico e dei professionisti sanitari. Parto da respirazione, mobilità e gesti quotidiani, poi introduco la forza con gradualità. Al Wellness Lab lavoro in piccoli gruppi e in incontri individuali, senza chiedere a tutte lo stesso ritmo.',
@@ -112,6 +119,7 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't4', slug: 'lorenzo-greco', name: 'Lorenzo Greco', title: 'Preparatore atletico', location: 'Roma', rating: 4.7, reviews: 29, hourlyRate: 45, yearsExperience: 5,
+    packages: [{ name: 'Test atletico' }, { name: 'Preparazione running' }, { name: 'Forza per lo sport' }],
     credentials: ['certified', 'verified'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 43, goalsHit: '74%', avgProgress: '58%' }, primaryGym: { name: 'Centro Sportivo Tre Fontane', verified: true }, languages: ['Italiano'],
     specialties: ['Preparazione atletica', 'Running', 'Forza funzionale', 'Sport di squadra'],
     bio: 'Preparo runner amatoriali e chi pratica sport di squadra. Alterno lavoro sul campo e forza in sala, organizzando le sedute attorno alle partite e agli allenamenti della settimana. Al Tre Fontane parto da test semplici e ripetibili: preferisco pochi dati utili a programmi che nessuno riesce a seguire.',
@@ -125,6 +133,7 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't5', slug: 'chiara-rinaldi', name: 'Chiara Rinaldi', title: 'Chinesiologa e personal trainer', location: 'Firenze', rating: 4.8, reviews: 45, hourlyRate: 55, yearsExperience: 8,
+    packages: [{ name: 'Valutazione del movimento' }, { name: 'Forza e postura' }, { name: 'Equilibrio e mobilità' }],
     credentials: ['certified', 'verified'], availableLabel: 'Libera da lunedì', stats: { clientsHelped: 59, goalsHit: '79%', avgProgress: '64%' }, primaryGym: { name: 'Studio Movimento Firenze', verified: true }, languages: ['Italiano', 'Inglese', 'Francese'],
     specialties: ['Postura', 'Rieducazione al movimento', 'Mal di schiena', 'Over 60'],
     bio: 'Lavoro con adulti che vogliono muoversi con più sicurezza, spesso dopo lunghi periodi di inattività. Costruisco sedute di forza, equilibrio e mobilità con esercizi che si possono ripetere anche a casa. Quando c’è dolore mi coordino con il professionista sanitario di riferimento, senza sostituire il suo lavoro.',
@@ -138,6 +147,8 @@ export const demoTrainers: DemoTrainer[] = [
   },
   {
     id: 't6', slug: 'davide-ferrara', name: 'Davide Ferrara', title: 'Personal Trainer', location: 'Napoli', rating: 4.6, reviews: 21, hourlyRate: 38, yearsExperience: 3,
+    packages: [{ name: 'Prima seduta' }, { name: 'Riparti in sala pesi' }, { name: 'Funzionale outdoor' }],
+    classes: [{ name: 'Funzionale per principianti' }],
     credentials: ['certified'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 27, goalsHit: '70%', avgProgress: '55%' }, primaryGym: null, languages: ['Italiano'],
     specialties: ['Dimagrimento', 'Allenamento funzionale', 'Primo approccio alla sala pesi'],
     bio: 'Seguo chi entra in sala pesi per la prima volta o vuole riprendere dopo una pausa. Spiego gli esercizi, scelgo pochi movimenti da imparare bene e tengo un diario dei carichi. Per chi vuole dimagrire cerco prima una routine sostenibile di allenamento, senza promesse sul peso o scadenze impossibili.',
