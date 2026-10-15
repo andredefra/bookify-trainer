@@ -48,12 +48,12 @@
 .bar-38 {height:38%}.bar-46 {height:46%}.bar-42 {height:42%}.bar-58 {height:58%}.bar-66 {height:66%}.bar-82 {height:82%}
 .hero-preview-notification { position:absolute; gap:10px; align-items:center; text-align:left; padding:12px 14px; border:1px solid var(--preview-notification-border); border-radius:16px; background:var(--preview-notification-bg); box-shadow:var(--hero-notification-shadow); color:hsl(var(--brand-text)); }
 .notification-left { left:-126px; top:52px; }
-.notification-right { right:-118px; top:340px; }
+.notification-right { right:-118px; top:360px; }
 .notification-icon { display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; background:hsl(var(--brand-highlight) / .14); color:hsl(var(--brand-highlight)); }
 .notification-icon.result { background:hsl(var(--brand-result) / .14); color:hsl(var(--brand-result)); }
 .hero-preview-notification p { font-size:12px; font-weight:700; }
 .hero-preview-notification small { font-size:11px; color:var(--preview-notification-muted); }
-@media (max-width:1279px) and (min-width:1024px) { .notification-left {left:-18px;top:65px}.notification-right {right:-18px;top:352px} }
+@media (max-width:1279px) and (min-width:1024px) { .notification-left {left:-18px;top:65px}.notification-right {right:-18px;top:360px} }
 @media (max-width:767px) { .hero-kicker {font-size:9px;max-width:100%}.hero-pill {padding:8px 10px;font-size:10px}.hero-preview-address {font-size:9px} }
 @media (prefers-reduced-motion: no-preference) {
   @keyframes hero-up {from {opacity:0;transform:translateY(16px)} to {opacity:1;transform:translateY(0)}}
