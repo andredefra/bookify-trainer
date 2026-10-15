@@ -124,7 +124,6 @@ export const it = {
     subtitle: "Pipeline di vendita e membri PT Premium.",
     tabPipeline: "Pipeline",
     tabMembers: "Membri PT Premium",
-    membersSoon: "In arrivo: la gestione dei 250 posti PT Premium sarà disponibile a breve.",
     newOpp: "Nuova opportunità",
     editOpp: "Modifica opportunità",
     search: "Cerca per nome o email",

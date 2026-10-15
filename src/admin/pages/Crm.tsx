@@ -42,6 +42,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import MembersTab from "../components/crm/MembersTab";
+import MemberDialog from "../components/crm/MemberDialog";
+import { CrmMember, lowestFreeSeat, useCrmMembers } from "../hooks/useCrmMembers";
 
 const t = it.crm;
 const eur = (n: number) =>
@@ -53,31 +56,37 @@ const fmtDate = (d: string) => {
 };
 
 export default function Crm() {
+  const [tab, setTab] = useState("pipeline");
+  const [member, setMember] = useState<Partial<CrmMember> | null>(null);
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">{t.title}</h1>
         <p className="text-sm text-muted-foreground">{t.subtitle}</p>
       </div>
-      <Tabs defaultValue="pipeline">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
           <TabsTrigger value="pipeline">{t.tabPipeline}</TabsTrigger>
           <TabsTrigger value="members">{t.tabMembers}</TabsTrigger>
         </TabsList>
         <TabsContent value="pipeline" className="mt-4">
-          <Pipeline />
+          <Pipeline
+            onOpenMember={(m) => {
+              if (m.id) setTab("members");
+              setMember(m);
+            }}
+          />
         </TabsContent>
         <TabsContent value="members" className="mt-4">
-          <div className="rounded-lg border border-dashed p-10 text-center text-sm text-muted-foreground">
-            {t.membersSoon}
-          </div>
+          <MembersTab onOpen={setMember} />
         </TabsContent>
       </Tabs>
+      {member && <MemberDialog key={member.id ?? "new"} initial={member} onClose={() => setMember(null)} />}
     </div>
   );
 }
 
-function Pipeline() {
+function Pipeline({ onOpenMember }: { onOpenMember: (m: Partial<CrmMember>) => void }) {
   const { data = [], isLoading, error } = useCrmOpportunities();
   const move = useMoveOpportunity();
   const [search, setSearch] = useState("");
@@ -200,6 +209,10 @@ function Pipeline() {
         <OpportunityDialog
           initial={editing}
           onClose={() => setEditing(null)}
+          onOpenMember={(m) => {
+            setEditing(null);
+            onOpenMember(m);
+          }}
           nextSort={(stage) => {
             const col = data.filter((o) => o.stage === stage);
             return col.length ? Math.max(...col.map((o) => Number(o.sort_order))) + 1 : 1;
@@ -308,15 +321,19 @@ function OpportunityDialog({
   initial,
   onClose,
   nextSort,
+  onOpenMember,
 }: {
   initial: Partial<CrmOpportunity>;
   onClose: () => void;
+  onOpenMember: (m: Partial<CrmMember>) => void;
   nextSort: (stage: string) => number;
 }) {
   const [f, setF] = useState<Partial<CrmOpportunity>>(initial);
   const [confirmDel, setConfirmDel] = useState(false);
   const save = useSaveOpportunity();
   const del = useDeleteOpportunity();
+  const { data: members = [] } = useCrmMembers();
+  const linked = f.id ? members.find((m) => m.opportunity_id === f.id) : undefined;
   const set = (k: keyof CrmOpportunity, v: any) => setF((p) => ({ ...p, [k]: v }));
   const txt = (k: keyof CrmOpportunity) => ({
     value: (f[k] as any) ?? "",
@@ -403,10 +420,36 @@ function OpportunityDialog({
           </Field>
         </div>
         <DialogFooter className="sm:justify-between gap-2">
-          <div>
+          <div className="flex flex-wrap gap-2">
             {f.id && (
               <Button variant="destructive" onClick={() => setConfirmDel(true)}>
                 {it.common.delete}
+              </Button>
+            )}
+            {f.id && linked && (
+              <Button variant="link" className="px-1" onClick={() => onOpenMember(linked)}>
+                {t.openMember(linked.seat_number)}
+              </Button>
+            )}
+            {f.id && !linked && initial.stage === "firmato" && f.stage === "firmato" && (
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  const seat = lowestFreeSeat(members);
+                  if (seat == null) return toast.error(t.members.programmeFull);
+                  onOpenMember({
+                    opportunity_id: f.id,
+                    seat_number: seat,
+                    full_name: f.full_name ?? "",
+                    email: f.email ?? null,
+                    phone: f.phone ?? null,
+                    city: f.city ?? null,
+                    contract_status: "firmato",
+                    penalty_card: "nessuno",
+                  });
+                }}
+              >
+                {t.createMember}
               </Button>
             )}
           </div>
