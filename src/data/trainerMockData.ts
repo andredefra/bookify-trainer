@@ -93,7 +93,7 @@ export const demoTrainers: DemoTrainer[] = [
     certifications: [ { title: 'Personal Trainer', org: 'ISSA Europe', expiry: null }, { title: 'Tecnico di powerlifting', org: 'FIPL', expiry: null } ],
     education: [ { title: 'Laurea in Scienze Motorie', org: 'Università degli Studi di Torino', years: '2012 — 2015' }, { title: 'Laurea magistrale in Scienze dello Sport', org: 'Università degli Studi di Torino', years: '2015 — 2017' } ],
     experience: [
-      { role: 'Coach di forza indipendente', org: 'Coaching online — Torino', from: '2020', to: 'present', description: 'Seguо atleti amatoriali con programmi a blocchi e revisioni settimanali delle alzate.' },
+      { role: 'Coach di forza indipendente', org: 'Coaching online — Torino', from: '2020', to: 'present', description: 'Seguo atleti amatoriali con programmi a blocchi e revisioni settimanali delle alzate.' },
       { role: 'Personal Trainer di sala', org: 'Palestra indipendente — Torino', from: '2017', to: '2020', description: 'Ho accompagnato principianti e praticanti di powerlifting nella progressione dei fondamentali.' }
     ]
   },
@@ -115,7 +115,7 @@ export const demoTrainers: DemoTrainer[] = [
     credentials: ['certified', 'verified'], availableLabel: 'Disponibile oggi', stats: { clientsHelped: 43, goalsHit: '74%', avgProgress: '58%' }, primaryGym: { name: 'Centro Sportivo Tre Fontane', verified: true }, languages: ['Italiano'],
     specialties: ['Preparazione atletica', 'Running', 'Forza funzionale', 'Sport di squadra'],
     bio: 'Preparo runner amatoriali e chi pratica sport di squadra. Alterno lavoro sul campo e forza in sala, organizzando le sedute attorno alle partite e agli allenamenti della settimana. Al Tre Fontane parto da test semplici e ripetibili: preferisco pochi dati utili a programmi che nessuno riesce a seguire.',
-    profileImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=85',
+    profileImage: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=85',
     certifications: [ { title: 'Personal Trainer', org: 'ISSA Europe', expiry: null }, { title: 'BLSD primo soccorso', org: 'Croce Rossa Italiana', expiry: '2028-02-10' } ],
     education: [ { title: 'Laurea in Scienze Motorie', org: 'Università degli Studi di Roma Foro Italico', years: '2015 — 2018' }, { title: 'Laurea magistrale in Scienza e Tecnica dello Sport', org: 'Università degli Studi di Roma Foro Italico', years: '2018 — 2020' } ],
     experience: [
@@ -128,7 +128,7 @@ export const demoTrainers: DemoTrainer[] = [
     credentials: ['certified', 'verified'], availableLabel: 'Libera da lunedì', stats: { clientsHelped: 59, goalsHit: '79%', avgProgress: '64%' }, primaryGym: { name: 'Studio Movimento Firenze', verified: true }, languages: ['Italiano', 'Inglese', 'Francese'],
     specialties: ['Postura', 'Rieducazione al movimento', 'Mal di schiena', 'Over 60'],
     bio: 'Lavoro con adulti che vogliono muoversi con più sicurezza, spesso dopo lunghi periodi di inattività. Costruisco sedute di forza, equilibrio e mobilità con esercizi che si possono ripetere anche a casa. Quando c’è dolore mi coordino con il professionista sanitario di riferimento, senza sostituire il suo lavoro.',
-    profileImage: 'https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?auto=format&fit=crop&w=800&q=85',
+    profileImage: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=85',
     certifications: [ { title: 'Personal Trainer', org: 'FIF', expiry: null }, { title: 'BLSD primo soccorso', org: 'Croce Rossa Italiana', expiry: '2028-04-20' } ],
     education: [ { title: 'Laurea in Scienze Motorie', org: 'Università degli Studi di Firenze', years: '2012 — 2015' }, { title: 'Laurea magistrale in Scienze e Tecniche delle Attività Motorie Preventive e Adattate', org: 'Università degli Studi di Firenze', years: '2015 — 2017' } ],
     experience: [

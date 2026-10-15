@@ -5,5 +5,5 @@
 - [x] Verify desktop/mobile appearance, product screenshot and language navigation; do not publish.
 - [x] Rebuild trainer hero with a light coded preview, bilingual copy and reduced-motion-safe animations.
 - [x] Verify rebuilt hero on desktop/mobile and both languages without changing other sections.
-- [ ] Replace trainer demo records with six complete Italian profiles, preserving legacy profile compatibility.
-- [ ] Rebuild trainer marketplace and verify both languages, slug links and mobile overflow.
+- [x] Replace trainer demo records with six complete Italian profiles, preserving legacy profile compatibility.
+- [x] Rebuild trainer marketplace and verify both languages, slug links and mobile overflow.
