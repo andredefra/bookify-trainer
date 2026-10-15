@@ -14,7 +14,6 @@ import { registerSchema } from "@/components/trainer/RegisterForm";
 import { bookingSchema } from "@/components/trainer/BookingForm";
 import { SessionDialogs } from "@/components/trainer/SessionDialogs";
 import { ChatDialog } from "@/components/trainer/ChatDialog";
-import { TabsSection } from "@/components/trainer/TabsSection";
 import { useLanguage } from "@/context/LanguageContext";
 import type { PublicBookingSelection } from "@/data/trainerMockData";
 
@@ -26,7 +25,6 @@ import { useTrainerGymAffiliations } from "@/hooks/useTrainerGymAffiliations";
 // Import mock data as fallback
 import { 
   trainerData as defaultTrainerData, 
-  testimonials, 
   aiConversation,
   demoTrainers,
   getTrainerById,
@@ -220,17 +218,6 @@ const TrainerProfile = () => {
     );
   }
 
-  // Convert reviews to testimonials format for existing components
-  const reviewTestimonials = reviews.map(review => ({
-    id: Number(review.id.slice(-6)),
-    name: `Client ${review.client_id.slice(0, 8)}`,
-    image: "https://images.unsplash.com/photo-1494790108755-2616b32ff93d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&h=256&q=80",
-    text: review.comment || "Great session!",
-    rating: review.rating
-  }));
-
-  const displayTestimonials = reviewTestimonials.length > 0 ? reviewTestimonials : testimonials;
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -247,12 +234,6 @@ const TrainerProfile = () => {
           primaryGym={primaryGymInfo}
         />
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <TabsSection 
-            trainer={trainer} 
-            testimonials={displayTestimonials} 
-            onBookSession={handleBookSession} 
-          />
-          
           <MarketingSection trainerName={trainer.name} />
           
           {/* Dialogs */}

@@ -4,6 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import type { DemoTrainer, Trainer } from "@/data/trainerMockData";
 import "./public-header.css";
 import { PublicOfferTabs } from "./PublicOfferTabs";
+import { PublicDetailTabs } from "./PublicDetailTabs";
 import type { PublicBookingSelection } from "@/data/trainerMockData";
 
 export type PublicProfileTab = "about" | "packages" | "classes" | "experience" | "education" | "reviews" | "availability";
@@ -83,7 +84,7 @@ export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onB
       </section>
       <section className="public-profile-about-section">
         <div className="public-profile-inner">
-          {demoTrainer && (activeTab === "packages" || activeTab === "classes") ? <PublicOfferTabs trainer={demoTrainer} tab={activeTab} onBook={onOfferBook} /> : <>
+          {activeTab === "packages" || activeTab === "classes" ? demoTrainer && <PublicOfferTabs trainer={demoTrainer} tab={activeTab} onBook={onOfferBook} /> : activeTab !== "about" ? <PublicDetailTabs trainer={trainer} demoTrainer={demoTrainer} tab={activeTab} onBook={onBookSession} /> : <>
           <article className="public-profile-about">
             <h2 className="trainer-headline public-profile-about-heading"><UserRound size={21} className="shrink-0" />{t("publicProfile.aboutHeading").replace("{name}", record.name)}</h2>
             <p className="public-profile-bio">{record.bio}</p>
@@ -97,6 +98,9 @@ export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onB
           </>}
         </div>
       </section>
+      <div className="public-profile-attribution">
+        <div className="public-profile-inner font-brand-mono"><img src="/brand/logo-biceps.png" alt="" /><p>{t("publicProfile.createdWith")} <strong>mypersonal<span>.fit</span></strong> — {t("publicProfile.platformTagline")}</p></div>
+      </div>
     </div>
   );
 }
