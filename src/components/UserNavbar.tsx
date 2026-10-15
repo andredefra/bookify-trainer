@@ -2,33 +2,17 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
-import { Menu, X, Globe } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Menu, X } from 'lucide-react';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
   const navigate = useNavigate();
   const handleJoinWaitlist = () => {
     setIsMenuOpen(false);
     if (onJoinWaitlist) onJoinWaitlist();
     else navigate(`${language === 'en' ? '/user-en' : '/user'}?waitlist=1`);
-  };
-
-  const handleLanguageChange = (lang: 'en' | 'it') => {
-    setLanguage(lang);
-    const currentPath = window.location.pathname;
-    
-    if (currentPath === '/user' || currentPath === '/user-en') {
-      navigate(lang === 'en' ? '/user-en' : '/user');
-    } else {
-      navigate(lang === 'en' ? '/' : '/it');
-    }
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -97,23 +81,7 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Language Selector */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <Globe className="w-4 h-4" />
-                  <span className="uppercase">{language}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleLanguageChange('it')}>
-                  🇮🇹 Italiano
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                  🇬🇧 English
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <LanguageSwitcher />
 
             <Link to="/user-login">
               <Button variant="outline" size="sm">
@@ -156,28 +124,7 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
               
               {/* Mobile Language Selector */}
               <div className="px-3 py-2">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Globe className="w-4 h-4" />
-                  <span className="text-sm font-medium">{t('nav.language')}</span>
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleLanguageChange('it')}
-                    className={`px-3 py-1 text-sm rounded ${
-                      language === 'it' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
-                    }`}
-                  >
-                    🇮🇹 IT
-                  </button>
-                  <button
-                    onClick={() => handleLanguageChange('en')}
-                    className={`px-3 py-1 text-sm rounded ${
-                      language === 'en' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
-                    }`}
-                  >
-                    🇬🇧 EN
-                  </button>
-                </div>
+                <LanguageSwitcher onChange={() => setIsMenuOpen(false)} align="start" />
               </div>
 
               {/* Mobile Actions */}

@@ -6,7 +6,7 @@ import BrandLogo from './navbar/BrandLogo';
 import NavLinks from './navbar/NavLinks';
 import AuthButtons from './navbar/AuthButtons';
 import MobileMenu from './navbar/MobileMenu';
-import LanguageToggle from './navbar/LanguageToggle';
+import LanguageSwitcher from './LanguageSwitcher';
 import { useScrollHandler } from './navbar/useScrollHandler';
 import { useSectionScroll } from './navbar/useSectionScroll';
 
@@ -60,7 +60,7 @@ const Navbar = () => {
         )}
         
         <div className="flex-none flex items-center gap-3">
-          {shouldShowDesktopMenu && <LanguageToggle />}
+          {shouldShowDesktopMenu && <LanguageSwitcher />}
           {shouldShowDesktopMenu && <AuthButtons />}
         </div>
         

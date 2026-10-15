@@ -7,7 +7,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import MobileNavLinks from './MobileNavLinks';
 import { useLanguage } from '@/context/LanguageContext';
 import MobileMenuHeader from './mobile/MobileMenuHeader';
-import MobileLanguageSelector from './mobile/MobileLanguageSelector';
+import LanguageSwitcher from '../LanguageSwitcher';
 import MobileAuthButtons from './mobile/MobileAuthButtons';
 
 interface MobileMenuProps {
@@ -77,7 +77,9 @@ const MobileMenu = ({
               className="mb-4"
             />
             
-            <MobileLanguageSelector onLanguageChange={handleCloseMenu} />
+            <div className="mb-5">
+              <LanguageSwitcher onChange={handleCloseMenu} align="center" className="w-full justify-center" />
+            </div>
             
             <MobileAuthButtons onButtonClick={handleCloseMenu} />
           </div>
