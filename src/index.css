@@ -5,6 +5,15 @@
 
 @layer base {
   :root {
+    --brand-canvas: 0 0% 3.9216%;
+    --brand-highlight: 44.8571 92.1053% 55.2941%;
+    --brand-text: 0 0% 100%;
+    --brand-screen: 42.3529 30.9091% 89.2157%;
+    --brand-pain: 3.8049 96.2441% 58.2353%;
+    --brand-result: 76.0976 86.3158% 62.7451%;
+    --brand-pop: 331.3636 100% 65.4902%;
+    --brand-surface: 0 0% 8%;
+    --brand-border: 0 0% 19%;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -58,6 +67,29 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+
+/* Opt-in: other public pages and application areas retain their theme. */
+.trainer-brand {
+  --background: var(--brand-canvas);
+  --foreground: var(--brand-text);
+  --primary: var(--brand-highlight);
+  --primary-foreground: var(--brand-canvas);
+  --accent: var(--brand-surface);
+  --accent-foreground: var(--brand-text);
+  --border: var(--brand-border);
+  --input: var(--brand-border);
+  --ring: var(--brand-highlight);
+  font-family: Inter, sans-serif;
+}
+
+.trainer-headline {
+  font-family: Archivo, sans-serif;
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: 'wdth' 125;
+  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 @layer base {

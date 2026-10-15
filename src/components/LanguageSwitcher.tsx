@@ -50,9 +50,10 @@ interface LanguageSwitcherProps {
   /** Called after a language is picked (e.g. to close a mobile menu). */
   onChange?: () => void;
   align?: 'start' | 'center' | 'end';
+  theme?: 'default' | 'trainer';
 }
 
-const LanguageSwitcher = ({ className, onChange, align = 'end' }: LanguageSwitcherProps) => {
+const LanguageSwitcher = ({ className, onChange, align = 'end', theme = 'default' }: LanguageSwitcherProps) => {
   const { language, setLanguage } = useLanguage();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -68,12 +69,12 @@ const LanguageSwitcher = ({ className, onChange, align = 'end' }: LanguageSwitch
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className={`gap-2 ${className || ''}`} aria-label={active.label}>
+        <Button variant="outline" size="sm" className={`gap-2 ${theme === 'trainer' ? 'bg-transparent border-brand-text/30 text-brand-text hover:bg-brand-text/10 hover:text-brand-text' : ''} ${className || ''}`} aria-label={active.label}>
           <FlagFrame><ActiveFlag /></FlagFrame>
           <span className="text-sm font-medium uppercase">{active.code}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={align} className="w-40 bg-background">
+      <DropdownMenuContent align={align} className={`w-40 ${theme === 'trainer' ? 'trainer-brand bg-brand-canvas text-brand-text border-brand-border' : 'bg-background'}`}>
         {LANGUAGES.map((lang) => {
           const Flag = lang.flag;
           const isActive = lang.code === language;
@@ -85,7 +86,7 @@ const LanguageSwitcher = ({ className, onChange, align = 'end' }: LanguageSwitch
             >
               <FlagFrame><Flag /></FlagFrame>
               <span className="flex-1 text-sm">{lang.label}</span>
-              {isActive && <Check className="h-4 w-4 text-primary" />}
+              {isActive && <Check className="h-4 w-4 text-foreground" />}
             </DropdownMenuItem>
           );
         })}

@@ -52,7 +52,7 @@ const MobileMenu = ({
         ref={menuButtonRef}
         variant="ghost" 
         size="icon" 
-        className="relative z-50" 
+        className="relative z-50 text-brand-text" 
         onClick={handleOpenMenu}
         aria-label={t('nav.openMenu') || "Open menu"}
       >
@@ -65,9 +65,9 @@ const MobileMenu = ({
       >
         <SheetContent 
           side="right" 
-          className="p-0 w-full max-w-xs overflow-y-auto bg-background/95 backdrop-blur-md border-l border-border/20"
+          className="trainer-brand p-0 w-full max-w-sm overflow-y-auto bg-brand-canvas text-brand-text border-l border-brand-border [&>button]:hidden"
         >
-          <div className="p-6 flex flex-col h-full bg-background/50">
+          <div className="p-5 flex flex-col h-full bg-brand-canvas">
             <MobileMenuHeader onClose={handleCloseMenu} />
             
             <MobileNavLinks 
@@ -78,7 +78,7 @@ const MobileMenu = ({
             />
             
             <div className="mb-5">
-              <LanguageSwitcher onChange={handleCloseMenu} align="center" className="w-full justify-center" />
+              <LanguageSwitcher theme="trainer" onChange={handleCloseMenu} align="center" className="w-full justify-center" />
             </div>
             
             <MobileAuthButtons onButtonClick={handleCloseMenu} />

@@ -24,6 +24,17 @@ export default {
 		},
 		extend: {
 			colors: {
+                brand: {
+                    canvas: 'hsl(var(--brand-canvas))',
+                    highlight: 'hsl(var(--brand-highlight))',
+                    text: 'hsl(var(--brand-text))',
+                    screen: 'hsl(var(--brand-screen))',
+                    pain: 'hsl(var(--brand-pain))',
+                    result: 'hsl(var(--brand-result))',
+                    pop: 'hsl(var(--brand-pop))',
+                    surface: 'hsl(var(--brand-surface))',
+                    border: 'hsl(var(--brand-border))',
+                },
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -69,6 +80,8 @@ export default {
 				}
 			},
 			fontFamily: {
+                'brand-display': ['Archivo', 'sans-serif'],
+                'brand-mono': ['JetBrains Mono', 'monospace'],
 				sans: ['Inter', 'sans-serif'],
 				display: ['SF Pro Display', 'Inter', 'sans-serif']
 			},

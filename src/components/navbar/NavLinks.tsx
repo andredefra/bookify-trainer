@@ -12,7 +12,7 @@ const NavLinks = ({ isHomePage, scrollToSection }: NavLinksProps) => {
   const { t } = useLanguage();
   
   return (
-    <div className="flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+    <div className="flex items-center gap-5">
       <NavItem
         to="/"
         label={t('nav.home')}
