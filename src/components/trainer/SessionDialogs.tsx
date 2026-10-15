@@ -3,6 +3,8 @@ import { z } from "zod";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { RegisterForm, registerSchema } from "@/components/trainer/RegisterForm";
 import { BookingForm, bookingSchema } from "@/components/trainer/BookingForm";
+import type { PublicBookingSelection } from "@/data/trainerMockData";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface SessionDialogsProps {
   trainerName: string;
@@ -12,6 +14,7 @@ interface SessionDialogsProps {
   onBookingSubmit: (data: z.infer<typeof bookingSchema>) => void;
   onRegisterCancel: () => void;
   onBookingCancel: () => void;
+  selection?: PublicBookingSelection | null;
 }
 
 export const SessionDialogs = ({
@@ -21,8 +24,10 @@ export const SessionDialogs = ({
   onRegisterSubmit,
   onBookingSubmit,
   onRegisterCancel,
-  onBookingCancel
+  onBookingCancel,
+  selection
 }: SessionDialogsProps) => {
+  const { t } = useLanguage();
   return (
     <Dialog open={showRegister || showBookingForm} onOpenChange={(open) => {
       if (!open) {
@@ -31,12 +36,17 @@ export const SessionDialogs = ({
       }
     }}>
       <DialogContent>
+        {selection && <div className="text-sm border-b pb-3">
+          <p className="text-muted-foreground">{t("publicProfile.selectedOffer")}</p>
+          <p className="font-semibold">{selection.name}</p>
+          {selection.dateLabel && <p>{selection.dateLabel} · {selection.time}</p>}
+        </div>}
         {showRegister && (
           <>
             <DialogHeader>
-              <DialogTitle>Create an account to book a session</DialogTitle>
+              <DialogTitle>{t("publicProfile.registerTitle")}</DialogTitle>
               <DialogDescription>
-                Join Personal.ai to book sessions with {trainerName} and other trainers.
+                {t("publicProfile.registerDescription").replace("{name}", trainerName)}
               </DialogDescription>
             </DialogHeader>
             
@@ -50,14 +60,16 @@ export const SessionDialogs = ({
         {showBookingForm && (
           <>
             <DialogHeader>
-              <DialogTitle>Book a Session with {trainerName}</DialogTitle>
+              <DialogTitle>{t("publicProfile.bookingTitle").replace("{name}", trainerName)}</DialogTitle>
               <DialogDescription>
-                Select a date and time for your session
+                {t("publicProfile.bookingDescription")}
               </DialogDescription>
             </DialogHeader>
             
             <BookingForm 
               trainerName={trainerName}
+              initialNotes={selection ? [selection.name, selection.dateLabel, selection.time].filter(Boolean).join(" · ") : undefined}
+              initialTime={selection?.time?.split(" — ")[0]}
               onSubmit={onBookingSubmit}
               onCancel={onBookingCancel}
             />
