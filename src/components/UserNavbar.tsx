@@ -65,7 +65,7 @@ const UserNavbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/user" className="flex items-center">
+            <Link to={language === 'it' ? '/user' : '/user-en'} className="flex items-center">
               <span className="font-display text-xl font-bold tracking-tight text-primary">
                 MyPersonal.fit
               </span>

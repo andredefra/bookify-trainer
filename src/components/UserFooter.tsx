@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
 const UserFooter = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const currentYear = new Date().getFullYear();
   
   const footerLinks = [{
@@ -50,7 +50,7 @@ const UserFooter = () => {
             <p className="mt-4 text-sm text-muted-foreground">{t('userFooter.description')}</p>
             <div className="mt-8">{/* Increased margin to align with other links */}
               <Link 
-                to="/" 
+                to={language === 'it' ? '/it' : '/'} 
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {t('userFooter.trainerPlatformLink')}
