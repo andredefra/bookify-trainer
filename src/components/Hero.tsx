@@ -17,7 +17,7 @@ const Hero = () => {
     <section className="trainer-brand bg-brand-canvas text-brand-text pt-32 pb-16 md:pt-40 md:pb-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <div className="text-center">
-          <span className="inline-flex rounded-full border border-brand-pain/40 bg-brand-pain/10 px-4 py-2 font-mono text-xs font-bold uppercase text-brand-pain">{t('hero.oldWay')}</span>
+          <span className="inline-flex rounded-full border border-brand-pain/40 bg-brand-pain/10 px-4 py-2 font-brand-mono text-xs font-bold uppercase text-brand-pain">{t('hero.oldWay')}</span>
           <h1 className="trainer-headline mx-auto mt-7 max-w-6xl text-4xl leading-[1.08] sm:text-5xl lg:text-6xl xl:text-7xl text-balance">
             {before}<span className="text-brand-highlight">{highlight}</span>{after}
           </h1>

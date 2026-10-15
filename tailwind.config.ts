@@ -81,7 +81,7 @@ export default {
 			},
 			fontFamily: {
                 'brand-display': ['Archivo', 'sans-serif'],
-                mono: ['JetBrains Mono', 'monospace'],
+                'brand-mono': ['JetBrains Mono', 'monospace'],
 				sans: ['Inter', 'sans-serif'],
 				display: ['SF Pro Display', 'Inter', 'sans-serif']
 			},

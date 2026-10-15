@@ -5,13 +5,13 @@
 
 @layer base {
   :root {
-    --brand-canvas: 0 0% 4%;
-    --brand-highlight: 45 92% 55%;
+    --brand-canvas: 0 0% 3.9216%;
+    --brand-highlight: 44.8571 92.1053% 55.2941%;
     --brand-text: 0 0% 100%;
-    --brand-screen: 42 31% 89%;
-    --brand-pain: 4 96% 58%;
-    --brand-result: 76 86% 63%;
-    --brand-pop: 331 100% 65%;
+    --brand-screen: 42.3529 30.9091% 89.2157%;
+    --brand-pain: 3.8049 96.2441% 58.2353%;
+    --brand-result: 76.0976 86.3158% 62.7451%;
+    --brand-pop: 331.3636 100% 65.4902%;
     --brand-surface: 0 0% 8%;
     --brand-border: 0 0% 19%;
     --background: 0 0% 100%;

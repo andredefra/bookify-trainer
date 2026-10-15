@@ -1,5 +1,5 @@
-- [ ] Decode and verify the supplied logo.
-- [ ] Add scoped brand tokens and load fonts without changing other areas.
-- [ ] Align trainer navbar, mobile navigation and shared selector's trainer variant.
-- [ ] Align trainer hero and bilingual copy.
-- [ ] Verify desktop/mobile appearance and navigation; do not publish.
+- [ ] Logo blocked: original base64 is invalid (6513 characters); awaiting original PNG or valid base64. Do not substitute artwork.
+- [x] Add scoped brand tokens and load fonts without changing other areas.
+- [x] Align trainer navbar, mobile navigation and shared selector's trainer variant.
+- [x] Align trainer hero and bilingual copy.
+- [x] Verify desktop/mobile appearance, product screenshot and language navigation; do not publish.
