@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
-import { CalendarCheck, CreditCard, Bot } from 'lucide-react';
+import { CalendarCheck, CalendarDays, CreditCard, Bot, Table2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 
 const Hero = () => {
   const { t } = useLanguage();
-  const highlight = t('hero.highlight');
-  const [before, after] = t('hero.title').split(highlight);
+  const oldTools = [Table2, MessageCircle, CalendarDays, CreditCard];
   const features = [
     { icon: CalendarCheck, title: 'features.smartScheduling', description: 'features.smartSchedulingDesc' },
     { icon: CreditCard, title: 'features.automatedPayments', description: 'features.automatedPaymentsDesc' },
@@ -17,9 +16,21 @@ const Hero = () => {
     <section className="trainer-brand bg-brand-canvas text-brand-text pt-32 pb-16 md:pt-40 md:pb-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <div className="text-center">
-          <span className="inline-flex rounded-full border border-brand-pain/40 bg-brand-pain/10 px-4 py-2 font-brand-mono text-xs font-bold uppercase text-brand-pain">{t('hero.oldWay')}</span>
-          <h1 className="trainer-headline mx-auto mt-7 max-w-6xl text-4xl leading-[1.08] sm:text-5xl lg:text-6xl xl:text-7xl text-balance">
-            {before}<span className="text-brand-highlight">{highlight}</span>{after}
+          <p className="mx-auto max-w-2xl font-brand-mono text-xs font-bold uppercase leading-relaxed text-brand-text/60 sm:text-sm">{t('hero.positioning')}</p>
+          <div className="mt-6 opacity-75">
+            <div aria-hidden="true" className="flex justify-center gap-3 sm:gap-4">
+              {oldTools.map((Icon, index) => (
+                <div key={index} className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border border-brand-border bg-brand-surface sm:h-14 sm:w-14">
+                  <Icon className="h-6 w-6 text-brand-text/80 sm:h-7 sm:w-7" strokeWidth={1.5} />
+                  <span className="absolute h-0.5 w-[140%] -rotate-45 bg-brand-pain" />
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 font-brand-mono text-xs font-bold uppercase text-brand-pain">{t('hero.oldWay')}</p>
+          </div>
+          <h1 className="trainer-headline mx-auto mt-7 max-w-6xl leading-[1.08] text-balance">
+            <span className="block text-2xl sm:text-4xl lg:text-[40px] xl:text-[44px]">{t('hero.problem')}</span>
+            <span className="block text-4xl text-brand-highlight sm:text-5xl lg:text-[60px] xl:text-[64px]">{t('hero.payoff')}</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-brand-text/70 md:text-xl">{t('hero.subtitle')}</p>
           <Button asChild size="lg" className="mt-8 h-12 rounded-full px-8 text-base font-semibold md:h-14 md:px-10">
