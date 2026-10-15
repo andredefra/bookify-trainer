@@ -13,11 +13,11 @@ export const it = {
   
   // Hero
   'hero.oldWay': 'LA VECCHIA SCUOLA',
-  'hero.title': '4 APP SLEGATE E LA DOMENICA A INCROCIARE EXCEL.',
-  'hero.highlight': 'DOMENICA',
-  'hero.subtitle': 'Lead, schede, calendario e incassi in un posto solo. La domenica te la tieni.',
+  'hero.positioning': 'LA PIATTAFORMA ALL-IN-ONE PER PERSONAL TRAINER',
+  'hero.problem': '4 APP DIVERSE PER UN CLIENTE SOLO.',
+  'hero.payoff': 'E LA DOMENICA TE LA TIENI.',
+  'hero.subtitle': 'Lead, schede, calendario e incassi in un posto solo. Niente più Excel la domenica sera.',
   'hero.cta': 'Prova la Demo',
-  'hero.secondaryCta': 'Scopri Come Funziona',
   
   // Features
   'features.title': 'Tutto ciò di cui hai bisogno per far crescere la tua attività',

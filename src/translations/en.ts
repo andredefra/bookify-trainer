@@ -13,11 +13,11 @@ export const en = {
   
   // Hero
   'hero.oldWay': 'THE OLD WAY',
-  'hero.title': '4 APPS AND YOUR SUNDAY LOST IN A SPREADSHEET.',
-  'hero.highlight': 'SUNDAY',
-  'hero.subtitle': 'Leads, programmes, calendar and payments in one place. Keep your Sunday.',
+  'hero.positioning': 'THE ALL-IN-ONE PLATFORM FOR PERSONAL TRAINERS',
+  'hero.problem': '4 DIFFERENT APPS FOR ONE CLIENT.',
+  'hero.payoff': 'AND YOU KEEP YOUR SUNDAY.',
+  'hero.subtitle': 'Leads, programmes, calendar and payments in one place. No more Excel on a Sunday night.',
   'hero.cta': 'Try the Demo',
-  'hero.secondaryCta': 'See How It Works',
   
   // Features
   'features.title': 'Everything You Need to Grow Your Training Business',
