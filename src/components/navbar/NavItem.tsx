@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface NavItemProps {
   to: string;
@@ -27,8 +28,8 @@ const NavItem = ({
 }: NavItemProps) => {
   // Common styles
   const baseClasses = isMobile
-    ? "w-full py-4 text-xl font-bold text-primary"
-    : "text-sm font-medium text-muted-foreground hover:text-primary transition-colors";
+    ? "w-full h-auto py-4 text-xl font-medium text-brand-text/70 hover:text-brand-text"
+    : "h-auto p-0 text-sm font-medium text-brand-text/70 hover:text-brand-text hover:bg-transparent transition-colors";
   
   const iconClasses = isMobile 
     ? "flex items-center gap-4" 
@@ -40,7 +41,7 @@ const NavItem = ({
   // If we're on the homepage and this item has a sectionId, use a button to scroll
   if (isHomePage && sectionId) {
     return (
-      <button
+      <Button variant="ghost"
         onClick={() => {
           scrollToSection(sectionId);
           if (onClick) onClick();
@@ -49,7 +50,7 @@ const NavItem = ({
       >
         {Icon && <Icon size={isMobile ? 24 : 16} />}
         {label}
-      </button>
+      </Button>
     );
   }
 

@@ -45,11 +45,11 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 px-6 lg:px-10 ${
-        scrolled ? 'py-3 glass-navbar' : 'py-5 bg-transparent'
+      className={`trainer-brand text-brand-text fixed top-0 left-0 w-full z-40 transition-all duration-300 px-6 lg:px-10 ${
+        scrolled ? 'py-3 bg-brand-canvas border-b border-brand-border' : 'py-5 bg-brand-canvas/95'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-6 relative">
         <div className="flex-none">
           <BrandLogo />
         </div>
@@ -60,7 +60,7 @@ const Navbar = () => {
         )}
         
         <div className="flex-none flex items-center gap-3">
-          {shouldShowDesktopMenu && <LanguageSwitcher />}
+          {shouldShowDesktopMenu && <LanguageSwitcher theme="trainer" />}
           {shouldShowDesktopMenu && <AuthButtons />}
         </div>
         

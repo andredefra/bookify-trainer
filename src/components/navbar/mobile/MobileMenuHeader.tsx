@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import BrandLogo from '../BrandLogo';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
@@ -14,13 +14,7 @@ const MobileMenuHeader = ({ onClose }: MobileMenuHeaderProps) => {
   
   return (
     <div className="flex items-center justify-between mb-5">
-      <Link 
-        to="/" 
-        className="font-display text-xl font-bold text-primary"
-        onClick={onClose}
-      >
-        Personal.fit
-      </Link>
+      <div onClick={onClose}><BrandLogo /></div>
       <SheetClose asChild>
         <Button 
           variant="ghost" 

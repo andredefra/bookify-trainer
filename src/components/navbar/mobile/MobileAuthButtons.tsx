@@ -17,7 +17,7 @@ const MobileAuthButtons = ({ onButtonClick }: MobileAuthButtonsProps) => {
         className="w-full block"
         onClick={onButtonClick}
       >
-        <Button variant="outline" className="w-full" size="lg">
+        <Button variant="outline" className="w-full bg-transparent border-brand-text/50 text-brand-text hover:bg-brand-text/10" size="lg">
           {t('auth.login')}
         </Button>
       </Link>
@@ -26,7 +26,7 @@ const MobileAuthButtons = ({ onButtonClick }: MobileAuthButtonsProps) => {
         className="w-full block"
         onClick={onButtonClick}
       >
-        <Button className="w-full" size="lg">
+        <Button className="w-full rounded-full" size="lg">
           {t('auth.register')}
         </Button>
       </Link>
