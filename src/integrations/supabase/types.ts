@@ -3858,6 +3858,66 @@ export type Database = {
         }
         Relationships: []
       }
+      waitlist: {
+        Row: {
+          audience: string
+          city: string | null
+          consent_at: string | null
+          country: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          language: string | null
+          marketing_consent: boolean
+          phone: string | null
+          source_page: string | null
+          status: string
+          trains_with_pt: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          audience?: string
+          city?: string | null
+          consent_at?: string | null
+          country?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          language?: string | null
+          marketing_consent?: boolean
+          phone?: string | null
+          source_page?: string | null
+          status?: string
+          trains_with_pt?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          audience?: string
+          city?: string | null
+          consent_at?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          language?: string | null
+          marketing_consent?: boolean
+          phone?: string | null
+          source_page?: string | null
+          status?: string
+          trains_with_pt?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
