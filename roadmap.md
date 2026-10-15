@@ -1,0 +1,5 @@
+- [ ] Decode and verify the supplied logo.
+- [ ] Add scoped brand tokens and load fonts without changing other areas.
+- [ ] Align trainer navbar, mobile navigation and shared selector's trainer variant.
+- [ ] Align trainer hero and bilingual copy.
+- [ ] Verify desktop/mobile appearance and navigation; do not publish.

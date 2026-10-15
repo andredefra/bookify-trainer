@@ -12,8 +12,10 @@ export const en = {
   'auth.register': 'Try the Demo',
   
   // Hero
-  'hero.title': 'The all-in-one platform for personal trainers',
-  'hero.subtitle': 'Simplify scheduling, payments, and client management in one seamless platform.',
+  'hero.oldWay': 'THE OLD WAY',
+  'hero.title': '4 APPS AND YOUR SUNDAY LOST IN A SPREADSHEET.',
+  'hero.highlight': 'SUNDAY',
+  'hero.subtitle': 'Leads, programmes, calendar and payments in one place. Keep your Sunday.',
   'hero.cta': 'Try the Demo',
   'hero.secondaryCta': 'See How It Works',
   

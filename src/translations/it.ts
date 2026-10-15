@@ -12,8 +12,10 @@ export const it = {
   'auth.register': 'Prova la Demo',
   
   // Hero
-  'hero.title': 'La piattaforma all-in-one per personal trainer',
-  'hero.subtitle': 'Semplifica programmazione, pagamenti e gestione dei clienti in un\'unica piattaforma.',
+  'hero.oldWay': 'LA VECCHIA SCUOLA',
+  'hero.title': '4 APP SLEGATE E LA DOMENICA A INCROCIARE EXCEL.',
+  'hero.highlight': 'DOMENICA',
+  'hero.subtitle': 'Lead, schede, calendario e incassi in un posto solo. La domenica te la tieni.',
   'hero.cta': 'Prova la Demo',
   'hero.secondaryCta': 'Scopri Come Funziona',
   
