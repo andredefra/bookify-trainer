@@ -1,6 +1,5 @@
 
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
+import LegalPage from '@/components/legal/LegalPage';
 import { useEffect } from 'react';
 
 const Cookies = () => {
@@ -9,14 +8,7 @@ const Cookies = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-primary mb-8">Cookie Policy</h1>
-          
-          <div className="prose prose-slate max-w-none">
+    <LegalPage title="Cookie Policy" current="cookies">
             <p className="legal-updated">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
             <h2>1. What Are Cookies</h2>
@@ -63,12 +55,7 @@ const Cookies = () => {
             </ul>
             
             <p>To find information relating to other browsers, visit the browser developer's website.</p>
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+    </LegalPage>
   );
 };
 
