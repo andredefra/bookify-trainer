@@ -102,7 +102,7 @@ const AIFeatureDialog = ({ type, open, onOpenChange }: AIFeatureDialogProps) => 
                 {isClient ? t('aiPricing.client.title') : t('aiPricing.trainer.title')}
               </DialogTitle>
               <DialogDescription>
-                {isClient ? t('aiPricing.client.description') : t('aiPricing.trainer.description')}
+                {isClient ? t('aiPricing.client.tagline') : t('aiPricing.trainer.description')}
               </DialogDescription>
             </div>
           </div>
