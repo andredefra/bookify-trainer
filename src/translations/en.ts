@@ -737,7 +737,7 @@ export const en = {
 
   'feat2.c17.t': 'PT Page and Marketplace',
   'feat2.c17.d': "Your link says who you are, what you charge and when you are free, with your clients' reviews. And you are in the marketplace, where people look for you.",
-  'feat2.c17.g': 'mypersonal.fit/t/yourname'
+  'feat2.c17.g': 'mypersonal.fit/t/yourname',
 
   // Home — How it works
   'how2.kicker': 'How you start',

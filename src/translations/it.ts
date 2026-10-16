@@ -737,7 +737,7 @@ export const it = {
 
   'feat2.c17.t': 'Pagina PT e Marketplace',
   'feat2.c17.d': 'Il tuo link dice chi sei, quanto costi e quando sei libero, con le recensioni dei tuoi clienti. E sei nel marketplace, dove ti cercano.',
-  'feat2.c17.g': 'mypersonal.fit/t/tuonome'
+  'feat2.c17.g': 'mypersonal.fit/t/tuonome',
 
   // Home — Come funziona
   'how2.kicker': 'Come si parte',
