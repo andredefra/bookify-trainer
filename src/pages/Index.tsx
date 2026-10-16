@@ -1,7 +1,6 @@
 
 import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import type { Language } from '@/translations';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -26,18 +25,39 @@ const Index = ({ language }: { language: Language }) => {
     window.scrollTo(0, 0);
   }, [language]);
 
+  useEffect(() => {
+    document.documentElement.lang = language;
+
+    const updateLink = (selector: string, attributes: Record<string, string>) => {
+      let link = document.head.querySelector<HTMLLinkElement>(selector);
+      if (!link) {
+        link = document.createElement('link');
+        document.head.appendChild(link);
+      }
+      Object.entries(attributes).forEach(([name, value]) => {
+        link.setAttribute(name, value);
+      });
+    };
+
+    updateLink('link[rel="canonical"]', { rel: 'canonical', href: canonical });
+    const alternates = {
+      it: 'https://mypersonal.fit/',
+      en: 'https://mypersonal.fit/en',
+      'x-default': 'https://mypersonal.fit/',
+    };
+    Object.entries(alternates).forEach(([hreflang, href]) => {
+      updateLink(`link[rel="alternate"][hreflang="${hreflang}"]`, {
+        rel: 'alternate', hreflang, href,
+      });
+    });
+  }, [language, canonical]);
+
   if (redirectToEnglish) {
     return <Navigate to={`/en${location.search}${location.hash}`} replace />;
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Helmet htmlAttributes={{ lang: language }}>
-        <link rel="canonical" href={canonical} />
-        <link rel="alternate" hrefLang="it" href="https://mypersonal.fit/" />
-        <link rel="alternate" hrefLang="en" href="https://mypersonal.fit/en" />
-        <link rel="alternate" hrefLang="x-default" href="https://mypersonal.fit/" />
-      </Helmet>
       <Navbar />
       
       <main className="flex-grow">
