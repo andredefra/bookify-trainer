@@ -476,6 +476,9 @@ export const it = {
   'footer.copyright': '© {year} mypersonalai ltd. Tutti i diritti riservati.',
   'footer.product': 'Prodotto',
   'footer.legal': 'Legale',
+  'footer.privacy': 'Privacy',
+  'footer.terms': 'Termini',
+  'footer.cookies': 'Cookie',
   'footer.userPlatformLink': 'Se ti alleni senza PT puoi provare MyPersonal per utenti',
   
   // User Navigation (for /user page)
