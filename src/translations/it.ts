@@ -864,6 +864,14 @@ export const it = {
   'pv.d4': 'GIO',
   'pv.d5': 'VEN',
   'pv.d6': 'SAB',
-  'pv.d7': 'DOM'
+  'pv.d7': 'DOM',
+
+  // Pricing — header badges
+  'pricing.kicker': 'Piani e prezzi',
+  'pricing.titleA': 'Inizia gratis,',
+  'pricing.titleB': 'cresci quando vuoi',
+  'pricing.badgeOpen': 'Aperto oggi',
+  'pricing.badgeSoon': 'In arrivo',
+  'pricing.forTrainers': 'Per personal trainer'
 
 };

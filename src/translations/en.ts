@@ -864,6 +864,14 @@ export const en = {
   'pv.d4': 'THU',
   'pv.d5': 'FRI',
   'pv.d6': 'SAT',
-  'pv.d7': 'SUN'
+  'pv.d7': 'SUN',
+
+  // Pricing — header badges
+  'pricing.kicker': 'Plans and pricing',
+  'pricing.titleA': 'Start free,',
+  'pricing.titleB': 'grow when you want',
+  'pricing.badgeOpen': 'Open today',
+  'pricing.badgeSoon': 'Coming soon',
+  'pricing.forTrainers': 'For personal trainers'
 
 };
