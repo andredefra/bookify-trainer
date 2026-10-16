@@ -12,5 +12,5 @@
 - [x] Verify Giulia/Matteo, bilingual labels, seat states and mobile overflow without changing other pages.
 - [x] Remove the legacy tab bar; complete experience, education, reviews, availability and attribution strip.
 - [x] Verify all seven Giulia tabs, six Matteo tabs, certification provenance, bilingual labels and 390px layout.
-- [ ] Replace the home walkthrough with six selectable steps and a stable animated phone preview.
-- [ ] Verify automatic/manual selection, reduced motion, both languages and desktop/mobile layout.
+- [x] Replace the home walkthrough with six selectable steps and a stable animated phone preview.
+- [x] Verify automatic/manual selection, reduced motion, both languages and desktop/mobile layout.
