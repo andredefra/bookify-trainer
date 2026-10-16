@@ -872,6 +872,11 @@ export const en = {
   'pricing.titleB': 'grow when you want',
   'pricing.badgeOpen': 'Open today',
   'pricing.badgeSoon': 'Coming soon',
-  'pricing.forTrainers': 'For personal trainers'
+  'pricing.forTrainers': 'For personal trainers',
+
+  // Gym/Studio section — header
+  'gym.kicker': 'Studios and gyms',
+  'gym.titleA': 'The perfect solution for',
+  'gym.titleB': 'PT studios and gyms'
 
 };

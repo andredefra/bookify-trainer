@@ -872,6 +872,11 @@ export const it = {
   'pricing.titleB': 'cresci quando vuoi',
   'pricing.badgeOpen': 'Aperto oggi',
   'pricing.badgeSoon': 'In arrivo',
-  'pricing.forTrainers': 'Per personal trainer'
+  'pricing.forTrainers': 'Per personal trainer',
+
+  // Gym/Studio section — header
+  'gym.kicker': 'Studi e palestre',
+  'gym.titleA': 'La soluzione perfetta per',
+  'gym.titleB': 'studi PT e palestre'
 
 };
