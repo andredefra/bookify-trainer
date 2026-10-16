@@ -138,7 +138,7 @@ export const en = {
   'heroPreview.notif2Sub': '3 messages handled',
   
   // Trainer marketplace
-  'market.kicker': "Verified trainers across Italy",
+  'market.kicker': "Only verified trainers",
   'market.titleA': "Find the personal trainer",
   'market.titleB': "who's right for you.",
   'market.subtitle': "Search by specialty or city, see who is already getting results, and book your first session straight from their page.",
