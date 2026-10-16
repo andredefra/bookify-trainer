@@ -70,3 +70,7 @@
   .notification-right {animation:hero-in .6s ease-out 1550ms both,hero-float 6s ease-in-out 2150ms infinite}
   .hero-primary {animation:hero-pulse 3s ease-in-out infinite}
 }
+/* The hero phone shows a single short scene: let its screen follow the content,
+   with a floor so it can never collapse. Scoped to the hero so the
+   "How it works" phone keeps its fixed 452px screen. */
+.trainer-hero .phone-preview .phone-screen-body { min-height: 280px; }
