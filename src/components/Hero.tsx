@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CalendarCheck, Calendar, CreditCard, Bot, MessageCircle, Users, Dumbbell, Sparkles, Globe, ShoppingBag, Play } from 'lucide-react';
+import { Calendar, CreditCard, MessageCircle, Users, Dumbbell, Sparkles, Globe, ShoppingBag, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 import AppPreview from '@/components/hero/AppPreview';
@@ -8,11 +8,6 @@ import '@/components/hero/hero.css';
 const Hero = () => {
   const { t } = useLanguage();
   const pills = [Users, Dumbbell, Calendar, MessageCircle, CreditCard, Sparkles, Globe, ShoppingBag];
-  const features = [
-    { icon: CalendarCheck, title: 'features.smartScheduling', description: 'features.smartSchedulingDesc' },
-    { icon: CreditCard, title: 'features.automatedPayments', description: 'features.automatedPaymentsDesc' },
-    { icon: Bot, title: 'features.aiAssistant', description: 'features.aiAssistantDesc' },
-  ];
 
   return (
     <section className="trainer-brand trainer-hero relative overflow-hidden bg-brand-canvas text-brand-text pt-32 pb-16 md:pt-40 md:pb-24">
@@ -37,15 +32,6 @@ const Hero = () => {
         </div>
         <AppPreview />
 
-        <div className="mx-auto mt-8 grid max-w-5xl grid-cols-1 gap-4 md:mt-10 md:grid-cols-3 md:gap-6">
-          {features.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="rounded-lg border border-brand-border bg-brand-surface p-6 text-left">
-              <Icon className="mb-5 h-6 w-6 text-brand-highlight" />
-              <h3 className="mb-2 text-base font-semibold text-brand-text">{t(title)}</h3>
-              <p className="text-sm leading-relaxed text-brand-text/60">{t(description)}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
