@@ -663,5 +663,79 @@ export const it = {
   'waitlist.success.body': "Grazie! Ti scriveremo appena l'app sarà aperta.",
   'waitlist.duplicate.title': "Sei già in lista",
   'waitlist.duplicate.body': "Questa email è già registrata. Ti contatteremo presto.",
-  'waitlist.close': "Chiudi"
+  'waitlist.close': "Chiudi",
+
+  // Home — Funzionalità
+  'feat2.kicker': 'Tutto dentro una piattaforma',
+  'feat2.titleA': 'Quello che fai in cinque posti,',
+  'feat2.titleB': 'da oggi in uno.',
+  'feat2.sub': 'Non è una funzione in più. È tutto quello che smetti di fare a mano ogni settimana.',
+
+  'feat2.c1.t': 'Gestione Vendite (CRM)',
+  'feat2.c1.d': 'Ogni contatto che ti scrive entra in una pipeline visuale: chi è lead, chi sta decidendo, chi ha pagato. Con follow-up e promemoria automatici.',
+  'feat2.c1.g': 'Dal primo DM alla firma',
+
+  'feat2.c2.t': 'Gestione Clienti',
+  'feat2.c2.d': 'Schede complete: obiettivi, limitazioni mediche, note private, documenti con la loro scadenza. Clienti illimitati, su ogni piano.',
+  'feat2.c2.g': 'Nessun limite di clienti',
+
+  'feat2.c3.t': 'Integrazione Google Calendar',
+  'feat2.c3.d': 'Sincronizzazione bidirezionale: quello che hai già in agenda blocca gli slot, e i conflitti di orario li gestisce la piattaforma.',
+  'feat2.c3.g': 'Niente doppie prenotazioni',
+
+  'feat2.c4.t': 'Gestione Sessioni',
+  'feat2.c4.d': 'Individuali o di gruppo, con capienza, prenotazione diretta del cliente, rinvio con notifica e politica di disdetta decisa da te.',
+  'feat2.c4.g': 'Private e di gruppo',
+
+  'feat2.c5.t': "Gestione Liste d'Attesa",
+  'feat2.c5.d': 'Se qualcuno disdice il posto passa in automatico al primo della lista, con priorità sullo storico e notifica immediata.',
+  'feat2.c5.g': 'Le classi non restano mezze vuote',
+
+  'feat2.c6.t': 'Programmi Personalizzati',
+  'feat2.c6.d': 'Builder drag-and-drop, periodizzazione e progressione, assegnazione per singolo cliente e tracking di chi la scheda la sta davvero facendo.',
+  'feat2.c6.g': 'Builder drag and drop',
+
+  'feat2.c7.t': 'Lista e Gestione Esercizi',
+  'feat2.c7.d': 'Database esteso con gruppo muscolare, difficoltà e attrezzi richiesti. E puoi creare i tuoi esercizi, con le tue note e le tue varianti.',
+  'feat2.c7.g': 'E continua a crescere',
+
+  'feat2.c8.t': 'Dimostrazioni Video degli Esercizi',
+  'feat2.c8.d': 'Colleghi un video YouTube o Vimeo a qualsiasi esercizio. Il cliente lo guarda dentro la scheda, mentre si allena, e lo esegue giusto.',
+  'feat2.c8.g': 'Meno errori, meno infortuni',
+
+  'feat2.c9.t': 'Check-in e Progressi',
+  'feat2.c9.d': 'Peso, misure, foto e scale da 0 a 10 per sonno e umore arrivano a scadenza fissa e si incrociano da soli con quello che ha fatto in sala.',
+  'feat2.c9.g': 'Dati, non sensazioni',
+
+  'feat2.c10.t': 'Messaggistica Illimitata',
+  'feat2.c10.d': 'Chat in tempo reale con foto e video per il controllo della forma. Illimitata, con tutti i clienti, su ogni piano.',
+  'feat2.c10.g': 'Fuori da WhatsApp',
+
+  'feat2.c11.t': 'Automazione Messaggi',
+  'feat2.c11.d': 'Imposti la regola una volta: pacchetto in scadenza, promemoria seduta, fine programma, benvenuto. Poi parte da sola.',
+  'feat2.c11.g': 'Set and forget',
+
+  'feat2.c12.t': 'Pagamenti Digitali e in Contanti',
+  'feat2.c12.d': "Il cliente pre-autorizza quando prenota e l'addebito parte a seduta fatta. Più contanti tracciati, Paga in 3 Rate e protezione no-show.",
+  'feat2.c12.g': 'Non rincorri più nessuno',
+
+  'feat2.c13.t': 'Gestione della Fatturazione',
+  'feat2.c13.d': 'Dici una volta in che regime sei — forfettario, IVA, cassa al 4% — e il prezzo che vede il cliente è già quello finale. Poi la fattura la generi con un bottone nel gestionale collegato.',
+  'feat2.c13.g': 'IVA e cassa già calcolate',
+
+  'feat2.c14.t': 'Niente gestionale? Nessun problema',
+  'feat2.c14.d': 'Se non hai un gestionale fra le integrazioni, ti diamo il template della fattura già compilato con i dati della seduta: lo incolli nel tuo e hai finito.',
+  'feat2.c14.g': 'Zero doppio lavoro',
+
+  'feat2.c15.t': 'Business Dashboard',
+  'feat2.c15.d': 'Pipeline in stile Kanban, ricavi, retention, valore del cliente nel tempo, stagionalità. E i report li scarichi.',
+  'feat2.c15.g': 'I numeri senza aprire Excel',
+
+  'feat2.c16.t': 'AI Plus',
+  'feat2.c16.d': 'Business insights, assistente in chat che risponde mentre sei in sessione, analytics sui clienti e raccomandazioni su chi sta per mollare.',
+  'feat2.c16.g': '€1,99 al mese',
+
+  'feat2.c17.t': 'Pagina PT e Marketplace',
+  'feat2.c17.d': 'Il tuo link dice chi sei, quanto costi e quando sei libero, con le recensioni dei tuoi clienti. E sei nel marketplace, dove ti cercano.',
+  'feat2.c17.g': 'mypersonal.fit/t/tuonome'
 };

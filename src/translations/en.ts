@@ -663,5 +663,79 @@ export const en = {
   'waitlist.success.body': "Thanks! We will write to you as soon as the app opens.",
   'waitlist.duplicate.title': "You are already on the list",
   'waitlist.duplicate.body': "This email is already registered. We will be in touch soon.",
-  'waitlist.close': "Close"
+  'waitlist.close': "Close",
+
+  // Home — Funzionalità
+  'feat2.kicker': 'Everything in one platform',
+  'feat2.titleA': 'What you do in five places,',
+  'feat2.titleB': 'you do in one now.',
+  'feat2.sub': "It is not one more feature. It is everything you stop doing by hand every week.",
+
+  'feat2.c1.t': 'Sales Management (CRM)',
+  'feat2.c1.d': 'Every contact who writes to you lands in a visual pipeline: who is a lead, who is deciding, who has paid. With automatic follow-ups and reminders.',
+  'feat2.c1.g': 'From the first DM to the signature',
+
+  'feat2.c2.t': 'Client Management',
+  'feat2.c2.d': 'Complete profiles: goals, medical limitations, private notes, documents with their expiry dates. Unlimited clients, on every plan.',
+  'feat2.c2.g': 'No client limit',
+
+  'feat2.c3.t': 'Google Calendar Integration',
+  'feat2.c3.d': 'Two-way sync: what is already in your diary blocks the slots, and scheduling conflicts are handled by the platform.',
+  'feat2.c3.g': 'No double bookings',
+
+  'feat2.c4.t': 'Session Management',
+  'feat2.c4.d': 'Private or group, with capacity, direct booking by the client, postponement with notification and a cancellation policy you set.',
+  'feat2.c4.g': 'Private and group',
+
+  'feat2.c5.t': 'Waitlist Management',
+  'feat2.c5.d': 'If someone cancels, the seat passes automatically to the first in line, with priority on history and immediate notification.',
+  'feat2.c5.g': 'Classes never stay half empty',
+
+  'feat2.c6.t': 'Custom Programs',
+  'feat2.c6.d': 'Drag-and-drop builder, periodization and progression, assignment per individual client, and tracking of who is actually working the plan.',
+  'feat2.c6.g': 'Drag and drop builder',
+
+  'feat2.c7.t': 'Exercise List and Management',
+  'feat2.c7.d': 'Extended database with muscle group, difficulty and required equipment. And you can build your own exercises, with your own notes and variations.',
+  'feat2.c7.g': 'And it keeps growing',
+
+  'feat2.c8.t': 'Video Exercise Demos',
+  'feat2.c8.d': 'Link a YouTube or Vimeo video to any exercise. The client watches it inside the plan, while training, and performs it correctly.',
+  'feat2.c8.g': 'Fewer mistakes, fewer injuries',
+
+  'feat2.c9.t': 'Check-ins and Progress',
+  'feat2.c9.d': 'Weight, measurements, photos and 0-to-10 scales for sleep and mood arrive on a fixed schedule and cross-reference themselves with what they did in the gym.',
+  'feat2.c9.g': 'Data, not feelings',
+
+  'feat2.c10.t': 'Unlimited Messaging',
+  'feat2.c10.d': 'Real-time chat with photos and video for form checks. Unlimited, with all clients, on every plan.',
+  'feat2.c10.g': 'Off WhatsApp',
+
+  'feat2.c11.t': 'Message Automation',
+  'feat2.c11.d': 'You set the rule once: package expiring, session reminder, program end, welcome. Then it runs on its own.',
+  'feat2.c11.g': 'Set and forget',
+
+  'feat2.c12.t': 'Digital and Cash Payments',
+  'feat2.c12.d': "The client pre-authorizes when booking and the charge goes off once the session is done. Plus tracked cash, Pay in 3 Installments and no-show protection.",
+  'feat2.c12.g': 'You stop chasing people',
+
+  'feat2.c13.t': 'Invoicing Management',
+  'feat2.c13.d': 'You say once which tax regime you are in — flat-rate, VAT, 4% cash basis — and the price the client sees is already the final one. Then you generate the invoice with one button in the connected accounting software.',
+  'feat2.c13.g': 'VAT and pension fund already included',
+
+  'feat2.c14.t': 'No accounting software? No problem',
+  'feat2.c14.d': 'If you have no accounting tool among the integrations, we give you the invoice template already filled with the session data: you paste it into yours and you are done.',
+  'feat2.c14.g': 'No double work',
+
+  'feat2.c15.t': 'Business Dashboard',
+  'feat2.c15.d': 'Kanban-style pipeline, revenue, retention, customer lifetime value, seasonality. And you can download the reports.',
+  'feat2.c15.g': 'The numbers without opening Excel',
+
+  'feat2.c16.t': 'AI Plus',
+  'feat2.c16.d': 'Business insights, a chat assistant that replies while you are in session, client analytics and recommendations on who is about to quit.',
+  'feat2.c16.g': '€1.99 per month',
+
+  'feat2.c17.t': 'PT Page and Marketplace',
+  'feat2.c17.d': "Your link says who you are, what you charge and when you are free, with your clients' reviews. And you are in the marketplace, where people look for you.",
+  'feat2.c17.g': 'mypersonal.fit/t/yourname'
 };
