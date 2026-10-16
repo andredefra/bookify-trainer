@@ -118,24 +118,6 @@ const PricingSection = () => {
     t('pricing.features.advancedAnalytics'),
   ];
 
-  const studioFeatures = [
-    t('pricing.features.unlimitedTrainers'),
-    t('pricing.features.gymUnlimitedClients'),
-    t('pricing.features.directClientChat'),
-    t('pricing.features.clientResults'),
-    t('pricing.features.createProgramsDirectly'),
-    t('pricing.features.dynamicPTAssignment'),
-  ];
-
-  const gymFeatures = [
-    t('pricing.features.unlimitedTrainers'),
-    t('pricing.features.gymUnlimitedClients'),
-    t('pricing.features.memberSubscriptionManagement'),
-    t('pricing.features.commissionOnPTServices'),
-    t('pricing.features.serviceRequestsToTrainers'),
-    t('pricing.features.gymIntegration'),
-  ];
-
   const clientFeatures = [
     t('aiPricing.client.features.aiWorkoutCoach'),
     t('aiPricing.client.features.advancedInsights'),
@@ -327,144 +309,128 @@ const PricingSection = () => {
           </div>
         </div>
 
-        {/* Studio & Gym plans */}
-        <p
-          className="mt-12 uppercase"
-          style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', color: '#938C7C' }}
-        >
-          {t('pricing.forGyms')}
-        </p>
-        <p className="mt-2 text-[14px] leading-[1.6]" style={{ color: '#5d574d' }}>
-          {t('pricing.gymPlanDescription')}
-        </p>
+        {/* AI band */}
+        <div className="relative mt-10 overflow-hidden rounded-[18px]" style={{ background: '#0A0A0A' }}>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[-10%] right-[-10%] top-[-40%] h-[320px]"
+            style={{ background: 'radial-gradient(60% 100% at 50% 0, rgba(246,193,36,.16), transparent 70%)' }}
+          />
+          <div className="relative z-[1] px-5 py-7 md:px-[34px] md:py-[34px]">
+            <p
+              className="inline-flex items-center gap-[9px] rounded-full border px-[14px] py-[7px] uppercase"
+              style={{ borderColor: 'rgba(246,193,36,.45)', background: 'rgba(246,193,36,.09)', fontFamily: MONO, fontWeight: 700, fontSize: 10.5, letterSpacing: '.2em', color: '#F6C124' }}
+            >
+              <span aria-hidden="true" className="inline-block shrink-0 rounded-full" style={{ width: 7, height: 7, background: '#F6C124', boxShadow: '0 0 0 4px rgba(246,193,36,.3)' }} />
+              {t('aiPricing.title')}
+            </p>
 
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div className={CARD}>
-            <Badge open={false} />
-            <PlanHeading
-              name={t('pricing.gym.title')}
-              price={annual ? t('pricing.gym.priceAnnual') : t('pricing.gym.price')}
-              period={t('pricing.gym.period')}
-              fee={t('pricing.gym.fee')}
-            />
-            <FeatureList items={studioFeatures} />
-            <div className="mt-auto pt-5">
-              <button
-                type="button"
-                onClick={() => setComingSoonOpen(true)}
-                className={soonButton}
-                style={{ background: '#0A0A0A', color: '#ECE7DB' }}
-              >
-                {t('pricing.gym.cta')}
-              </button>
-            </div>
-          </div>
+            <h3
+              className="mt-4 max-w-[760px] uppercase text-[24px] leading-[1.05] md:text-[30px]"
+              style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 118, 'wght' 900", color: '#ECE7DB' }}
+            >
+              {t('aiPricing.band.title')}
+            </h3>
 
-          <div className={CARD}>
-            <Badge open={false} />
-            <PlanHeading
-              name={t('pricing.gymPlan.title')}
-              price={annual ? t('pricing.gymPlan.priceAnnual') : t('pricing.gymPlan.price')}
-              period={t('pricing.gymPlan.period')}
-              fee={t('pricing.gymPlan.fee')}
-            />
-            <FeatureList items={gymFeatures} />
-            <div className="mt-auto pt-5">
-              <button
-                type="button"
-                onClick={() => setComingSoonOpen(true)}
-                className={soonButton}
-                style={{ background: '#0A0A0A', color: '#ECE7DB' }}
-              >
-                {t('pricing.gymPlan.cta')}
-              </button>
-            </div>
-          </div>
-        </div>
+            <p className="mt-[10px] max-w-[620px] text-[14.5px] leading-[1.6]" style={{ color: 'rgba(236,231,219,.62)' }}>
+              {t('aiPricing.band.subtitle')}
+            </p>
 
-        {/* AI add-ons */}
-        <p
-          className="mt-12 uppercase"
-          style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, letterSpacing: '.18em', color: '#938C7C' }}
-        >
-          {t('aiPricing.title')}
-        </p>
-        <p className="mt-2 text-[14px] leading-[1.6]" style={{ color: '#5d574d' }}>
-          {t('aiPricing.subtitle')}
-        </p>
-
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {[
-            {
-              icon: Crown,
-              title: t('aiPricing.client.title'),
-              badge: t('aiPricing.client.badge'),
-              price: t('aiPricing.client.price'),
-              period: t('aiPricing.client.period'),
-              description: t('aiPricing.client.description'),
-              features: clientFeatures,
-              cta: t('aiPricing.client.cta'),
-              onOpen: () => setClientDialogOpen(true),
-            },
-            {
-              icon: Sparkles,
-              title: t('aiPricing.trainer.title'),
-              badge: t('aiPricing.trainer.badge'),
-              price: t('aiPricing.trainer.price'),
-              period: t('aiPricing.trainer.period'),
-              description: t('aiPricing.trainer.description'),
-              features: trainerFeatures,
-              cta: t('aiPricing.trainer.cta'),
-              onOpen: () => setTrainerDialogOpen(true),
-            },
-          ].map(({ icon: Icon, title, badge, price, period, description, features, cta, onOpen }) => (
-            <div key={title} className={CARD}>
-              <div className="flex items-center gap-3">
+            <div className="mt-[22px] grid grid-cols-1 gap-3 md:grid-cols-2">
+              {[
+                {
+                  k: 'client',
+                  icon: Crown,
+                  title: t('aiPricing.client.title'),
+                  who: t('aiPricing.client.who'),
+                  price: t('aiPricing.client.price'),
+                  period: t('aiPricing.client.period'),
+                  desc: t('aiPricing.client.tagline'),
+                  features: clientFeatures,
+                  cta: t('aiPricing.client.cta'),
+                  onOpen: () => setClientDialogOpen(true),
+                },
+                {
+                  k: 'trainer',
+                  icon: Sparkles,
+                  title: t('aiPricing.trainer.title'),
+                  who: t('aiPricing.trainer.who'),
+                  price: t('aiPricing.trainer.price'),
+                  period: t('aiPricing.trainer.period'),
+                  desc: t('aiPricing.trainer.description'),
+                  features: trainerFeatures,
+                  cta: t('aiPricing.trainer.cta'),
+                  onOpen: () => setTrainerDialogOpen(true),
+                },
+              ].map(({ k, icon: Icon, title, who, price, period, desc, features, cta, onOpen }) => (
                 <div
-                  aria-hidden="true"
-                  className="flex shrink-0 items-center justify-center rounded-[9px]"
-                  style={{ width: 34, height: 34, background: '#0A0A0A' }}
+                  key={k}
+                  className="flex flex-col rounded-[13px] border p-[18px]"
+                  style={{ borderColor: 'rgba(236,231,219,.16)', background: 'rgba(236,231,219,.045)' }}
                 >
-                  <Icon size={17} color="#F6C124" strokeWidth={1.8} />
-                </div>
-                <div className="min-w-0">
-                  <h3
-                    className="uppercase text-[15px] leading-[1.1]"
-                    style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#0A0A0A' }}
+                  <div className="flex items-center gap-[11px]">
+                    <div
+                      aria-hidden="true"
+                      className="flex shrink-0 items-center justify-center rounded-[9px]"
+                      style={{ width: 34, height: 34, background: '#F6C124' }}
+                    >
+                      <Icon size={17} color="#0A0A0A" strokeWidth={1.8} />
+                    </div>
+                    <div className="min-w-0">
+                      <h4
+                        className="uppercase text-[15px] leading-[1.1]"
+                        style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#ECE7DB' }}
+                      >
+                        {title}
+                      </h4>
+                      <span
+                        className="mt-[3px] block uppercase"
+                        style={{ fontFamily: MONO, fontWeight: 700, fontSize: 9.5, letterSpacing: '.1em', color: '#F6C124' }}
+                      >
+                        {who}
+                      </span>
+                    </div>
+                    <span
+                      className="ml-auto shrink-0 rounded-full border px-[9px] py-[3px] uppercase"
+                      style={{ borderColor: 'rgba(236,231,219,.22)', color: 'rgba(236,231,219,.55)', fontFamily: MONO, fontWeight: 700, fontSize: 9, letterSpacing: '.08em' }}
+                    >
+                      {t('pricing.badgeSoon')}
+                    </span>
+                  </div>
+
+                  <div className="mt-[14px] flex flex-wrap items-baseline gap-x-2">
+                    <span
+                      className="text-[32px] leading-none"
+                      style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#ECE7DB' }}
+                    >
+                      {price}
+                    </span>
+                    <span style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, color: 'rgba(236,231,219,.5)' }}>{period}</span>
+                  </div>
+
+                  <p className="mt-2 text-[12.5px] leading-[1.55]" style={{ color: 'rgba(236,231,219,.58)' }}>{desc}</p>
+
+                  <ul className="mt-4 flex flex-col gap-[9px]">
+                    {features.map((f, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CircleCheck size={15} color="#F6C124" strokeWidth={2} className="mt-[2px] shrink-0" aria-hidden="true" />
+                        <span className="text-[13px] leading-[1.5]" style={{ color: 'rgba(236,231,219,.88)' }}>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    type="button"
+                    onClick={onOpen}
+                    className="mt-auto w-full rounded-full border py-[11px] text-[12.5px] font-bold transition-colors hover:bg-[rgba(236,231,219,.08)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F6C124] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+                    style={{ borderColor: 'rgba(236,231,219,.3)', color: '#ECE7DB', background: 'transparent', marginTop: 18 }}
                   >
-                    {title}
-                  </h3>
-                  <span
-                    className="mt-1 inline-block rounded-full uppercase"
-                    style={{ fontFamily: MONO, fontWeight: 700, fontSize: 9, letterSpacing: '.08em', border: '1px solid #E0DACB', background: '#F4F2ED', color: '#8a8478', padding: '3px 9px' }}
-                  >
-                    {badge}
-                  </span>
+                    {cta}
+                  </button>
                 </div>
-              </div>
-              <div className="mt-3 flex flex-wrap items-baseline gap-x-2">
-                <span
-                  className="uppercase text-[34px] leading-none"
-                  style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#0A0A0A' }}
-                >
-                  {price}
-                </span>
-                <span style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, color: '#938C7C' }}>{period}</span>
-              </div>
-              <p className="mt-2 text-[12px] leading-[1.5]" style={{ color: '#5d574d' }}>{description}</p>
-              <FeatureList items={features} />
-              <div className="mt-auto pt-5">
-                <button
-                  type="button"
-                  onClick={onOpen}
-                  className="w-full rounded-full border py-3 text-[13px] font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B98A00] focus-visible:ring-offset-2"
-                  style={{ borderColor: '#0A0A0A', color: '#0A0A0A', background: 'transparent' }}
-                >
-                  {cta}
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Disclaimers */}
