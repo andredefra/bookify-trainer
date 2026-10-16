@@ -68,6 +68,7 @@ const Index = ({ language }: { language: Language }) => {
         <FeaturesGrid />
         <HowItWorksSteps />
         <PricingSection />
+        <GymStudioSection />
         <RegistrationCTA />
       </main>
       
