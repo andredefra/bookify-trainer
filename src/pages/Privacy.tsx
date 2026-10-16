@@ -39,7 +39,7 @@ const Privacy = () => {
             <ul>
               <li><strong>Your right of access</strong> - You have the right to ask us for copies of your personal information.</li>
               <li><strong>Your right to rectification</strong> - You have the right to ask us to rectify information you think is inaccurate. You also have the right to ask us to complete information you think is incomplete.</li>
-              <li><strong>Your right of erasure</strong> - You have the right to ask us to erase your personal information in certain circumstances.</li>
+              <li><strong>Your right to erasure</strong> - You have the right to ask us to erase your personal information in certain circumstances.</li>
               <li><strong>Your right to restriction of processing</strong> - You have the right to ask us to restrict the processing of your information in certain circumstances.</li>
               <li><strong>Your right to object to processing</strong> - You have the right to object to the processing of your personal data in certain circumstances.</li>
               <li><strong>Your right to data portability</strong> - You have the right to ask that we transfer the information you gave us to another organization, or to you, in certain circumstances.</li>
