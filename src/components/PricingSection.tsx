@@ -138,7 +138,6 @@ const PricingSection = () => {
 
   const clientFeatures = [
     t('aiPricing.client.features.aiWorkoutCoach'),
-    t('aiPricing.client.features.exerciseDemos'),
     t('aiPricing.client.features.advancedInsights'),
   ];
 
