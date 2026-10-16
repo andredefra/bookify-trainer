@@ -1,13 +1,25 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, CreditCard, MessageCircle, Users, Dumbbell, Sparkles, Globe, ShoppingBag, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 import AppPreview from '@/components/hero/AppPreview';
+import PhonePreview from '@/components/home/PhonePreview';
 import '@/components/hero/hero.css';
 
 const Hero = () => {
   const { t } = useLanguage();
   const pills = [Users, Dumbbell, Calendar, MessageCircle, CreditCard, Sparkles, Globe, ShoppingBag];
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
+  );
+  useEffect(() => {
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const onChange = () => setIsDesktop(mql.matches);
+    mql.addEventListener('change', onChange);
+    onChange();
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
 
   return (
     <section className="trainer-brand trainer-hero relative overflow-hidden bg-brand-canvas text-brand-text pt-32 pb-16 md:pt-40 md:pb-24">
@@ -30,7 +42,11 @@ const Hero = () => {
           </div>
           <p className="hero-trust mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13.5px] text-brand-text/45"><span>{t('hero.trust1')}</span><span aria-hidden="true">·</span><b className="text-brand-text/75">{t('hero.trust2')}</b><span aria-hidden="true">·</span><span>{t('hero.trust3')}</span></p>
         </div>
-        <AppPreview />
+        {isDesktop ? <AppPreview /> : (
+          <div className="mt-[58px] flex justify-center">
+            <PhonePreview step={5} />
+          </div>
+        )}
 
       </div>
     </section>
