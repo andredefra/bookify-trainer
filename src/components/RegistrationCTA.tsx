@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 const MONO = "'JetBrains Mono', ui-monospace, monospace";
