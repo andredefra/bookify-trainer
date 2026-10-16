@@ -7,6 +7,7 @@ import Hero from '@/components/Hero';
 import FeaturesGrid from '@/components/home/FeaturesGrid';
 import HowItWorksSteps from '@/components/home/HowItWorksSteps';
 import PricingSection from '@/components/PricingSection';
+import GymStudioSection from '@/components/home/GymStudioSection';
 import RegistrationCTA from '@/components/RegistrationCTA';
 import Footer from '@/components/Footer';
 
@@ -67,6 +68,7 @@ const Index = ({ language }: { language: Language }) => {
         <FeaturesGrid />
         <HowItWorksSteps />
         <PricingSection />
+        <GymStudioSection />
         <RegistrationCTA />
       </main>
       
