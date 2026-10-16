@@ -1,5 +1,5 @@
 // Language context provider
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Language, translations } from '@/translations';
 
@@ -13,6 +13,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const location = useLocation();
   // Check if there's a language preference in localStorage
   const getSavedLanguage = (): Language => {
     if (typeof window !== 'undefined') {
@@ -39,7 +40,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return 'en'; // Default to English
   };
 
-  const [language, setLanguageState] = useState<Language>(() => {
+  const [preferredLanguage, setLanguageState] = useState<Language>(() => {
     // Forza la lingua in base alla route alla prima inizializzazione
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
@@ -56,7 +57,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return getSavedLanguage();
   });
 
-  const location = useLocation();
+  // Home URLs determine the rendered language without saving an inferred choice.
+  const language = location.pathname === '/' ? 'it'
+    : location.pathname === '/en' ? 'en'
+    : preferredLanguage;
 
   // Forza la lingua in base alla route quando cambia
   useEffect(() => {
@@ -70,16 +74,13 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [location.pathname, language]);
 
-  // Save language preference to localStorage when it changes
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('language', language);
-    }
-  }, [language]);
-
-  const setLanguage = (newLanguage: Language) => {
+  // Only an explicit selection is a saved preference, never browser detection.
+  const setLanguage = useCallback((newLanguage: Language) => {
     setLanguageState(newLanguage);
-  };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', newLanguage);
+    }
+  }, []);
 
   const t = (key: string): string => {
     if (!translations[language]) {

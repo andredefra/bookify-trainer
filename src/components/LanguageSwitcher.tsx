@@ -33,8 +33,8 @@ const GbFlag = () => (
 
 /** Add a language by adding one entry here. */
 const LANGUAGES: { code: LangCode; label: string; flag: () => JSX.Element; consumerRoute: string; publicRoute: string }[] = [
-  { code: 'it', label: 'Italiano', flag: ItFlag, consumerRoute: '/user', publicRoute: '/it' },
-  { code: 'en', label: 'English', flag: GbFlag, consumerRoute: '/user-en', publicRoute: '/' },
+  { code: 'it', label: 'Italiano', flag: ItFlag, consumerRoute: '/user', publicRoute: '/' },
+  { code: 'en', label: 'English', flag: GbFlag, consumerRoute: '/user-en', publicRoute: '/en' },
 ];
 
 const CONSUMER_ROUTES = LANGUAGES.map((l) => l.consumerRoute);

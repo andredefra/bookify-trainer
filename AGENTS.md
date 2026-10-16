@@ -9,3 +9,4 @@
 - Render public experience, education, reviews and availability in PublicDetailTabs, never a second tab system; demo schedules derive upcoming dates from each record's weekly pattern to prevent stale dates and closed-day bookings.
 - Keep home-page feature cards generated from one array of translation-key/icon pairs in components/home, so adding a card is a data edit and never a hand-written JSX block.
 - Keep the home walkthrough phone presentational and driven by section-owned step state; stop automatic rotation after manual selection and under reduced motion to preserve user control without touching live application data.
+- Mount one language-parameterized trainer home for both language URLs; derive home context from the pathname, persist only explicit language selections, and reuse the existing Helmet integration for route-owned canonical/alternate tags to avoid duplicated content and redirect loops.

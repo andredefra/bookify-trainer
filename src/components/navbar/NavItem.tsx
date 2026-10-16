@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -26,6 +26,9 @@ const NavItem = ({
   onClick,
   className
 }: NavItemProps) => {
+  const { pathname } = useLocation();
+  const destination = pathname === '/en' && to.startsWith('/') && (to === '/' || to.startsWith('/#'))
+    ? `/en${to.slice(1)}` : to;
   // Common styles
   const baseClasses = isMobile
     ? "w-full h-auto py-4 text-xl font-medium text-brand-text/70 hover:text-brand-text"
@@ -57,7 +60,7 @@ const NavItem = ({
   // Otherwise, use a Link component to navigate
   return (
     <Link
-      to={to}
+      to={destination}
       className={combinedClasses}
       onClick={onClick}
     >

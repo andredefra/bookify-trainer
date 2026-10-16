@@ -3,11 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
 import Index from "./pages/Index";
-import IndexIta from "./pages/IndexIta";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import FindTrainer from "./pages/FindTrainer";
@@ -92,8 +91,9 @@ const AppContent = () => {
       <ScrollToTop />
       <RevealObserver />
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/it" element={<IndexIta />} />
+        <Route path="/" element={<Index language="it" />} />
+        <Route path="/en" element={<Index language="en" />} />
+        <Route path="/it" element={<Navigate to="/" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/find-trainer" element={<FindTrainer />} />
