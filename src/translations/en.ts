@@ -483,6 +483,9 @@ export const en = {
   'footer.copyright': '© {year} mypersonalai ltd. All rights reserved.',
   'footer.product': 'Product',
   'footer.legal': 'Legal',
+  'footer.privacy': 'Privacy',
+  'footer.terms': 'Terms',
+  'footer.cookies': 'Cookies',
   'footer.userPlatformLink': 'If you train without a PT you can try MyPersonal for users',
   
   // User Navigation (for /user page)
