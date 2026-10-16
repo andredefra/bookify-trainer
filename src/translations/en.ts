@@ -383,7 +383,7 @@ export const en = {
   'pricing.detailedFeatures.pro.services.name': 'Additional Services',
   'pricing.detailedFeatures.pro.services.description': 'Custom service creation beyond training sessions, nutrition consultations, fitness assessments, specialized services management, service pricing and booking.',
   'pricing.detailedFeatures.pro.payments.name': 'Digital & Cash Payments',
-  'pricing.detailedFeatures.pro.payments.description': 'Stripe integration for automatic payments, pre-authorization before sessions, automatic post-session billing, cash payment tracking with management, no-show protection with customizable policies.',
+  'pricing.detailedFeatures.pro.payments.description': 'Automatic digital payments, pre-authorization at booking, automatic charge once the session is completed, cash payment tracking with manual confirmation, no-show protection with customizable policies.',
   'pricing.detailedFeatures.pro.installments.name': 'Pay in 3 Installments',
   'pricing.detailedFeatures.pro.installments.description': 'Automatic installment system, payment deadline and reminder management, partial payment tracking, debt recovery system integration, detailed collection reporting.',
   'pricing.detailedFeatures.pro.invoicing.name': 'Invoicing Management',
