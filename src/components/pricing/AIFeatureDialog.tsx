@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Crown, Sparkles, Check, Dumbbell, Brain, BarChart3, MessageSquare, Users, Lightbulb, Video, TrendingUp } from 'lucide-react';
+import { Crown, Sparkles, Check, Dumbbell, Brain, BarChart3, MessageSquare, Users, Lightbulb, TrendingUp } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface AIFeatureDialogProps {
@@ -22,17 +22,6 @@ const AIFeatureDialog = ({ type, open, onOpenChange }: AIFeatureDialogProps) => 
         "Receive personalized tips based on your current exercise",
         "Get suggestions for weight adjustments and rest times",
         "Voice-enabled hands-free assistance"
-      ]
-    },
-    {
-      icon: Video,
-      name: t('aiPricing.client.features.exerciseDemos'),
-      description: "Never wonder how to perform an exercise again with AI-generated visual demonstrations.",
-      details: [
-        "On-demand exercise demonstrations for any movement",
-        "Multiple angles and variations shown",
-        "Equipment setup guidance included",
-        "Search from 1000+ exercise library"
       ]
     },
     {
