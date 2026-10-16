@@ -138,7 +138,7 @@ export const it = {
   'heroPreview.notif2Sub': '3 messaggi gestiti',
   
   // Trainer marketplace
-  'market.kicker': "Trainer verificati in tutta Italia",
+  'market.kicker': "Solo trainer verificati",
   'market.titleA': "Trova il personal trainer",
   'market.titleB': "giusto per te.",
   'market.subtitle': "Cerca per specialità o per città, guarda chi ha già ottenuto risultati e prenota la prima seduta direttamente dalla sua pagina.",
