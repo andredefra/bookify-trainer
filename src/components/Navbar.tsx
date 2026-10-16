@@ -17,7 +17,7 @@ const Navbar = () => {
   const scrolled = useScrollHandler();
   
   // Check if we're on the home page
-  const isHomePage = location.pathname === '/' || location.pathname === '/it';
+  const isHomePage = location.pathname === '/' || location.pathname === '/en';
   
   // Get scroll to section function
   const scrollToSection = useSectionScroll(isHomePage, setMobileMenuOpen);

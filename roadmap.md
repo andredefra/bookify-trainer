@@ -14,3 +14,5 @@
 - [x] Verify all seven Giulia tabs, six Matteo tabs, certification provenance, bilingual labels and 390px layout.
 - [x] Replace the home walkthrough with six selectable steps and a stable animated phone preview.
 - [x] Verify automatic/manual selection, reduced motion, both languages and desktop/mobile layout.
+- [x] Share one trainer home across / (Italian) and /en (English), with first-entry detection and persistent navigation.
+- [x] Verify language routes, reloads, switcher, canonical/alternates and html language in the browser.
