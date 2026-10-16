@@ -738,6 +738,17 @@ export const en = {
   'feat2.c17.t': 'PT Page and Marketplace',
   'feat2.c17.d': "Your link says who you are, what you charge and when you are free, with your clients' reviews. And you are in the marketplace, where people look for you.",
   'feat2.c17.g': 'mypersonal.fit/t/yourname',
+  'feat2.vid.kicker': 'Inside the program',
+  'feat2.vid.titleA': "Clients don't have",
+  'feat2.vid.titleB': 'to guess how it\'s done.',
+  'feat2.vid.d': "Link a YouTube or Vimeo video to any exercise in the program. Clients open it inside their program while they train, and perform it the way you explained it.",
+  'feat2.vid.b1': 'Link YouTube or Vimeo videos to any exercise',
+  'feat2.vid.b2': 'Clients watch them inside their program, without leaving the app',
+  'feat2.vid.b3': 'Fewer technique errors, fewer injuries',
+  'feat2.vid.ex': 'Barbell squat',
+  'feat2.vid.exs': '4 sets × 8 · 75 kg',
+  'feat2.vid.note': 'Go to parallel and keep your chest up',
+  'feat2.vid.tag': 'Video linked',
 
   // Home — How it works
   'how2.kicker': 'How you start',
