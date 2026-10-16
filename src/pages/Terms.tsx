@@ -1,6 +1,5 @@
 
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
+import LegalPage from '@/components/legal/LegalPage';
 import { useEffect } from 'react';
 
 const Terms = () => {
@@ -9,14 +8,7 @@ const Terms = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-primary mb-8">Terms and Conditions</h1>
-          
-          <div className="prose prose-slate max-w-none">
+    <LegalPage title="Terms and Conditions" current="terms">
             <p className="legal-updated">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
             <h2>1. Introduction</h2>
@@ -55,12 +47,7 @@ const Terms = () => {
             <p>mypersonalai ltd<br />
             Email: legal@mypersonalai.com<br />
             Address: 123 Fitness Street, London, EC1A 1BB, United Kingdom</p>
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+    </LegalPage>
   );
 };
 
