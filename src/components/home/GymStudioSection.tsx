@@ -25,7 +25,7 @@ const GymStudioSection = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="gym-solution" className="bg-[#0A0A0A] py-16 md:py-20 px-5 md:px-10">
+    <section id="gym-solution" className="bg-[#0A0A0A] py-16 md:py-20 px-5 md:px-10" style={{ color: '#ECE7DB', ['--border' as string]: '0 0% 16%', ['--foreground' as string]: '42 24% 89%', ['--ring' as string]: '45 92% 55%' } as CSSProperties}>
       <div className="mx-auto max-w-[1080px]">
         <div className="text-center">
           <p

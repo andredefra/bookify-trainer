@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { CircleCheck, Sparkles, Crown } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
@@ -134,7 +135,7 @@ const PricingSection = () => {
     'mt-auto w-full rounded-full py-3 text-[13px] font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B98A00] focus-visible:ring-offset-2';
 
   return (
-    <section id="pricing" className="bg-[#ECE7DB] py-16 md:py-20 px-5 md:px-10">
+    <section id="pricing" className="bg-[#ECE7DB] py-16 md:py-20 px-5 md:px-10" style={{ color: '#0A0A0A', ['--border' as string]: '43 25% 84%', ['--foreground' as string]: '0 0% 4%', ['--ring' as string]: '45 92% 55%' } as CSSProperties}>
       <div className="mx-auto max-w-[1080px]">
         {/* Header — same pattern as FeaturesGrid */}
         <div className="text-center">
