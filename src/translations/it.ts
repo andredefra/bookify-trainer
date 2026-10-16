@@ -383,7 +383,7 @@ export const it = {
   'pricing.detailedFeatures.pro.services.name': 'Servizi Aggiuntivi',
   'pricing.detailedFeatures.pro.services.description': 'Creazione servizi personalizzati oltre sessioni allenamento, consulenze nutrizionali, valutazioni fitness, gestione servizi specializzati, pricing e prenotazione servizi.',
   'pricing.detailedFeatures.pro.payments.name': 'Pagamenti Digitali e Contanti',
-  'pricing.detailedFeatures.pro.payments.description': 'Integrazione Stripe per pagamenti automatici, pre-autorizzazione prima sessione, addebito automatico post-sessione, tracking pagamenti contanti con gestione, protezione no-show con politiche personalizzabili.',
+  'pricing.detailedFeatures.pro.payments.description': 'Pagamenti digitali automatici, pre-autorizzazione alla prenotazione, addebito automatico a seduta completata, tracciamento dei pagamenti in contanti con conferma manuale, protezione no-show con politiche personalizzabili.',
   'pricing.detailedFeatures.pro.installments.name': 'Paga in 3 Rate',
   'pricing.detailedFeatures.pro.installments.description': 'Sistema rateizzazione automatica, gestione scadenze e promemoria pagamento, tracking pagamenti parziali, integrazione sistemi recupero crediti, reporting dettagliato incassi.',
   'pricing.detailedFeatures.pro.invoicing.name': 'Gestione della Fatturazione',
