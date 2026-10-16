@@ -738,6 +738,17 @@ export const it = {
   'feat2.c17.t': 'Pagina PT e Marketplace',
   'feat2.c17.d': 'Il tuo link dice chi sei, quanto costi e quando sei libero, con le recensioni dei tuoi clienti. E sei nel marketplace, dove ti cercano.',
   'feat2.c17.g': 'mypersonal.fit/t/tuonome',
+  'feat2.vid.kicker': 'Dentro la scheda',
+  'feat2.vid.titleA': 'Il cliente non deve',
+  'feat2.vid.titleB': 'indovinare come si fa.',
+  'feat2.vid.d': "Colleghi un video YouTube o Vimeo a qualsiasi esercizio del programma. Il cliente lo apre dentro la scheda, mentre si allena, e lo esegue come glielo hai spiegato tu.",
+  'feat2.vid.b1': 'Colleghi video YouTube o Vimeo a qualsiasi esercizio',
+  'feat2.vid.b2': "Il cliente li guarda dentro il suo programma, senza uscire dall'app",
+  'feat2.vid.b3': 'Meno errori di esecuzione, meno infortuni',
+  'feat2.vid.ex': 'Squat con bilanciere',
+  'feat2.vid.exs': '4 serie × 8 · 75 kg',
+  'feat2.vid.note': 'Scendi in parallelo e tieni il petto alto',
+  'feat2.vid.tag': 'Video collegato',
 
   // Home — Come funziona
   'how2.kicker': 'Come si parte',
