@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import FeaturesGrid from '@/components/home/FeaturesGrid';
-import HowItWorks from '@/components/HowItWorks';
+import HowItWorksSteps from '@/components/home/HowItWorksSteps';
 import PricingSection from '@/components/PricingSection';
 import RegistrationCTA from '@/components/RegistrationCTA';
 import Footer from '@/components/Footer';
@@ -33,7 +33,7 @@ const Index = () => {
           <Hero />
         </div>
         <FeaturesGrid />
-        <HowItWorks />
+        <HowItWorksSteps />
         <PricingSection />
         <RegistrationCTA />
       </main>
