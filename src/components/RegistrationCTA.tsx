@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 const MONO = "'JetBrains Mono', ui-monospace, monospace";
@@ -7,7 +8,7 @@ const RegistrationCTA = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="bg-[#ECE7DB] px-5 py-16 md:px-10 md:py-20">
+    <section className="bg-[#ECE7DB] px-5 py-16 md:px-10 md:py-20" style={{ color: '#0A0A0A', ['--border' as string]: '43 25% 84%' } as CSSProperties}>
       <div className="mx-auto max-w-[1080px]">
         <div
           className="mx-auto flex flex-col items-center rounded-[18px] border px-6 py-12 text-center md:px-12 md:py-14"

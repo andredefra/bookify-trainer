@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -28,7 +29,7 @@ const Footer = () => {
   return (
     <footer
       className="bg-[#0A0A0A] px-5 py-14 md:px-10 md:py-16"
-      style={{ borderTop: '1px solid rgba(236,231,219,.10)' }}
+      style={{ borderTop: '1px solid rgba(236,231,219,.10)', color: '#ECE7DB', ['--border' as string]: '0 0% 16%' } as CSSProperties}
     >
       <div className="mx-auto max-w-[1080px] text-left">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-12 md:gap-8">
