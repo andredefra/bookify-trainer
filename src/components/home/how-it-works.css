@@ -1,0 +1,23 @@
+.home-how { font-family: Inter, sans-serif; }
+.home-how .how-mono, .phone-preview .phone-mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 0; }
+.home-how .how-heading { font-family: Archivo, sans-serif; font-variation-settings: 'wdth' 118, 'wght' 900; }
+.home-how .how-step-title, .phone-preview .phone-heading { font-family: Archivo, sans-serif; font-variation-settings: 'wdth' 112, 'wght' 900; }
+.home-how .how-step { height: auto; white-space: normal; justify-content: flex-start; align-items: flex-start; background: var(--how-surface); border: 1px solid var(--how-border); color: hsl(var(--brand-text)); padding: 14px 16px; border-radius: 12px; gap: 14px; transition: background-color 300ms, border-color 300ms; }
+.home-how .how-step[aria-pressed='true'] { background: var(--how-active); border-color: hsl(var(--brand-highlight) / .42); }
+.home-how .how-step-number { color: var(--how-number); }
+.home-how .how-step[aria-pressed='true'] .how-step-number { color: hsl(var(--brand-highlight)); }
+.home-how .how-step-description { color: hsl(var(--brand-text) / .5); font-weight: 400; }
+.home-how .how-step[aria-pressed='true'] .how-step-description { color: hsl(var(--brand-text) / .72); }
+.phone-preview { width: 300px; max-width: 100%; background: var(--phone-shell); border-radius: 40px; padding: 11px; box-shadow: var(--phone-shadow); position: relative; margin: 0 auto; color: hsl(var(--brand-canvas)); }
+.phone-preview .phone-card { background: hsl(var(--brand-text)); border: 1px solid var(--phone-border); border-radius: 10px; padding: 9px 10px; margin-bottom: 7px; }
+.phone-preview .phone-pill { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 7.5px; text-transform: uppercase; padding: 3px 6px; border-radius: 5px; margin-left: auto; white-space: nowrap; flex-shrink: 0; background: var(--phone-neutral); color: var(--phone-neutral-text); }
+.phone-preview .phone-pill-green { background: hsl(var(--brand-result) / .32); color: var(--phone-positive); }
+.phone-preview .phone-pill-gold { background: hsl(var(--brand-highlight) / .3); color: var(--phone-gold-text); }
+.phone-preview .phone-avatar { width: 25px; height: 25px; flex-shrink: 0; border-radius: 50%; background: var(--phone-avatar); color: var(--phone-chip-text); display: grid; place-items: center; font-size: 9px; font-weight: 700; }
+.phone-preview .phone-title { font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
+.phone-preview .phone-subtitle { font-size: 9.5px; color: var(--phone-muted); overflow-wrap: anywhere; }
+.phone-preview .phone-fake-button { text-align: center; font-size: 10px; font-weight: 700; padding: 8px; border-radius: 8px; background: hsl(var(--brand-canvas)); color: hsl(var(--brand-highlight)); }
+.phone-preview .phone-screen-body { min-height: 452px; padding: 3px 13px 17px; }
+.phone-preview .phone-scene { animation: phone-scene-in 300ms ease-out; }
+@keyframes phone-scene-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .phone-preview .phone-scene { animation: none; } .home-how .how-step { transition: none; } }
