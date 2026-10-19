@@ -3,13 +3,25 @@ import UserFooter from '@/components/UserFooter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield, Infinity, X } from 'lucide-react';
+import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import WaitlistDialog from '@/components/WaitlistDialog';
 
 // Flip to true when the free cohort closes to re-enable the paid plan card.
 const PAID_PLAN_ENABLED = false;
+
+const pricingFeatures = [
+  { text: "20 messages a day with Coach AI", icon: Bot },
+  { text: "Today's session, built from your goals, your log and what your trainer last asked you to do", icon: Target },
+  { text: "3 four-week programs a month", icon: Clock },
+  { text: "Tell it what you did and it opens the form already filled in — activities and goals", icon: Zap },
+  { text: "Analysis of every logged workout", icon: BarChart3 },
+  { text: "It proposes, you save: it never writes anything into your history by itself", icon: Check },
+  { text: "Private: no one else reads it, not even your trainer", icon: Shield },
+  { text: "All device integrations", icon: Smartphone },
+];
+
 import { useLanguage } from '@/context/LanguageContext';
 
 const UserLandingEn = () => {
@@ -48,7 +60,7 @@ const UserLandingEn = () => {
               </h1>
               
               <p className="mx-auto max-w-3xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
-                Discover the first virtual personal trainer that truly listens to you.<br />
+                A virtual personal trainer that truly listens to you.<br />
                 Create your plan, track progress, receive personalized advice. With your trainer, or on your own.
               </p>
               
@@ -90,10 +102,10 @@ const UserLandingEn = () => {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   {[
-                    { icon: Bot, text: "Real-time AI Chat" },
-                    { icon: Target, text: "Personalized Programs" },
-                    { icon: BarChart3, text: "Automatic Tracking" },
-                    { icon: Heart, text: "Device Integration" }
+                    { icon: Bot, text: "20 messages a day" },
+                    { icon: Target, text: "3 programs a month" },
+                    { icon: BarChart3, text: "Log it in one tap" },
+                    { icon: Heart, text: "Device integrations" }
                   ].map((item, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 bg-background/50 rounded-lg hover-scale">
                       <div className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10">
@@ -188,28 +200,34 @@ const UserLandingEn = () => {
                   title: "Adapts to you",
                   description: "Every advice is based on your personal data",
                   icon: Target,
-                  gradient: "from-blue-500/10 to-blue-600/10"
+                  background: "#ECE7DB",
+                  chip: "#F6C124",
+                  iconColor: "#0A0A0A"
                 },
                 {
                   title: "Learns with you", 
                   description: "Evolves based on your progress and preferences",
                   icon: Bot,
-                  gradient: "from-purple-500/10 to-purple-600/10"
+                  background: "#FDF4D9",
+                  chip: "#C6F24E",
+                  iconColor: "#0A0A0A"
                 },
                 {
                   title: "Always available",
                   description: "Answers when your trainer isn't there: in the evening, at the gym, between sets",
                   icon: Clock,
-                  gradient: "from-green-500/10 to-green-600/10"
+                  background: "#F1F8DF",
+                  chip: "#0A0A0A",
+                  iconColor: "#FFFFFF"
                 }
               ].map((feature, index) => (
-                <Card key={index} className={`p-6 border-0 bg-gradient-to-br ${feature.gradient} hover-scale`}>
+                <Card key={index} className="p-6 hover-scale" style={{ background: feature.background, border: "1px solid rgba(10,10,10,0.08)", color: "#0A0A0A" }}>
                   <CardContent className="p-0">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 mb-4">
-                      <feature.icon className="h-6 w-6 text-primary" />
+                    <div className="w-12 h-12 flex items-center justify-center rounded-full mb-4" style={{ background: feature.chip, color: feature.iconColor }}>
+                      <feature.icon className="h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                    <p className="text-muted-foreground text-sm">{feature.description}</p>
+                    <p className="text-sm" style={{ color: "rgba(10,10,10,0.7)" }}>{feature.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -363,16 +381,7 @@ const UserLandingEn = () => {
                 
                 <CardContent className="p-0">
                   <div className="space-y-4 mb-8">
-                    {[
-                      { text: "20 messages a day with Coach AI", icon: Bot },
-                      { text: "Today's session, built around your log and goals", icon: Target },
-                      { text: "3 training plans a month", icon: Clock },
-                      { text: "Log workouts, activity and goals in one tap", icon: Zap },
-                      { text: "Analysis of every logged workout", icon: BarChart3 },
-                      { text: "Private: no one else reads it, not even your trainer", icon: Shield },
-                      { text: "All device integrations", icon: Smartphone },
-                      { text: "Early access updates", icon: Infinity }
-                    ].map((feature, index) => (
+                    {pricingFeatures.map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
                           <Check className="h-3 w-3" />
@@ -411,7 +420,7 @@ const UserLandingEn = () => {
                     </div>
                   </div>
                   <CardDescription className="text-base">
-                    Same features except early access updates, which are reserved for the first 10 clients
+                    Exactly the same features. Only the price changes.
                   </CardDescription>
                   
                   <div className="bg-primary/10 rounded-lg p-4 mt-4">
@@ -423,15 +432,7 @@ const UserLandingEn = () => {
                 
                 <CardContent className="p-0">
                   <div className="space-y-4 mb-8">
-                    {[
-                      { text: "20 messages a day with Coach AI", icon: Bot },
-                      { text: "Today's session, built around your log and goals", icon: Target },
-                      { text: "3 training plans a month", icon: Clock },
-                      { text: "Log workouts, activity and goals in one tap", icon: Zap },
-                      { text: "Analysis of every logged workout", icon: BarChart3 },
-                      { text: "Private: no one else reads it, not even your trainer", icon: Shield },
-                      { text: "All device integrations", icon: Smartphone },
-                    ].map((feature, index) => (
+                    {pricingFeatures.map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">
                           <Check className="h-3 w-3" />
