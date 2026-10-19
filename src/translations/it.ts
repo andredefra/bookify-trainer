@@ -519,7 +519,6 @@ export const it = {
   // User Landing
   'user.hero.title': 'Allena corpo e mente. Con Trainer.ai, non sei mai da solo.',
   'user.hero.subtitle': 'Scopri il primo personal trainer virtuale che ti ascolta davvero. Crea il tuo piano, registra i progressi, ricevi consigli su misura.',
-  'user.hero.cta': 'Inizia ora – Gratis per 1 anno per i primi 100 utenti!',
   
   // AI Summary
   'aiSummary.title': 'Riassunto AI',
