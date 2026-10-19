@@ -1,527 +1,76 @@
-import UserNavbar from '@/components/UserNavbar';
-import UserFooter from '@/components/UserFooter';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import WaitlistDialog from '@/components/WaitlistDialog';
+import type { ReactNode } from 'react';
+import { ConsumerLanding, type ConsumerCopy } from './UserLanding';
 
-// Flip to true when the free cohort closes to re-enable the paid plan card.
-const PAID_PLAN_ENABLED = false;
+const S = ({ children }: { children: ReactNode }) => <strong className="text-[#0A0A0A]">{children}</strong>;
 
-const pricingFeatures = [
-  { text: "20 messages a day with Coach AI", icon: Bot },
-  { text: "Today's session, built from your goals, your log and what your trainer last asked you to do", icon: Target },
-  { text: "3 four-week programs a month", icon: Clock },
-  { text: "Tell it what you did and it opens the form already filled in — activities and goals", icon: Zap },
-  { text: "Analysis of every logged workout", icon: BarChart3 },
-  { text: "It proposes, you save: it never writes anything into your history by itself", icon: Check },
-  { text: "Private: no one else reads it, not even your trainer", icon: Shield },
-  { text: "All device integrations", icon: Smartphone },
-];
-
-import { useLanguage } from '@/context/LanguageContext';
-
-const UserLandingEn = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const openWaitlist = () => setWaitlistOpen(true);
-
-  useEffect(() => {
-    if (searchParams.get('waitlist') === '1') {
-      setWaitlistOpen(true);
-      const next = new URLSearchParams(searchParams);
-      next.delete('waitlist');
-      setSearchParams(next, { replace: true });
-    }
-  }, [searchParams, setSearchParams]);
-  const { t } = useLanguage();
-  
-  return (
-    <div className="min-h-screen flex flex-col">
-      <UserNavbar onJoinWaitlist={openWaitlist} />
-      <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
-      
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden"
-          style={{
-            backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.9)), url("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-6 md:space-y-10">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-primary mx-auto max-w-5xl md:leading-tight text-balance">
-                Train body and mind. With Coach AI, you're never alone.
-              </h1>
-              
-              <p className="mx-auto max-w-3xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
-                A virtual personal trainer that truly listens to you.<br />
-                Create your plan, track progress, receive personalized advice. With your trainer, or on your own.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <Button size="lg" className="text-lg px-8 py-4" onClick={openWaitlist}>
-                    <span className="hidden sm:inline">👉 Start now – Free 1 year for the first 10 clients</span>
-                    <span className="sm:hidden">👉 Start now – Free 1 year!</span>
-                  </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 1 - Start Your Journey */}
-        <section id="features" className="py-16 md:py-24 bg-muted/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Left Content */}
-              <div className="space-y-8 animate-fade-in">
-                <div>
-                  <Badge variant="secondary" className="mb-4">🏋️‍♂️ Your Journey</Badge>
-                  <h2 className="text-3xl md:text-4xl font-display font-bold text-primary mb-6">
-                    Start your journey.<br />
-                    <span className="text-2xl md:text-3xl text-muted-foreground">When you want. Where you want.</span>
-                  </h2>
-                </div>
-                
-                <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-                  <p>
-                    <strong className="text-primary">How many times</strong> have you thought about starting to work out, but didn't know where to begin?
-                    Or maybe you already have experience, but you lack <strong className="text-primary">constant guidance</strong>.
-                  </p>
-                  
-                  <p>
-                    With <strong className="text-primary">Coach AI</strong> you can build a personalized routine,
-                    whether you have a trainer or not.
-                  </p>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {[
-                    { icon: Bot, text: "20 messages a day" },
-                    { icon: Target, text: "3 programs a month" },
-                    { icon: BarChart3, text: "Log it in one tap" },
-                    { icon: Heart, text: "Device integrations" }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-background/50 rounded-lg hover-scale">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10">
-                        <item.icon className="h-4 w-4 text-primary" />
-                      </div>
-                      <span className="font-medium text-sm">{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="text-center sm:text-left">
-                  <p className="text-xl font-semibold text-primary mb-4">
-                    👉 All this without stress, in complete autonomy.
-                  </p>
-                  <Button size="lg" className="px-8" onClick={openWaitlist}>
-                    Start Now for Free
-                  </Button>
-                </div>
-              </div>
-
-              {/* Right Image */}
-              <div className="relative animate-fade-in">
-                <div className="relative mx-auto w-full max-w-sm">
-                  {/* Phone Mockup */}
-                  <div className="relative bg-background border-8 border-primary/20 rounded-[2.5rem] p-6 shadow-2xl">
-                    <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                          <Bot className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-semibold">Coach AI</div>
-                          <div className="text-xs text-muted-foreground">Online now</div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-3">
-                        <div className="bg-primary/10 rounded-lg p-3 text-sm">
-                          Hi! I've created your 3-day weight loss program 💪
-                        </div>
-                        <div className="bg-background rounded-lg p-3 text-sm text-right">
-                          Perfect! How many calories do I burn?
-                        </div>
-                        <div className="bg-primary/10 rounded-lg p-3 text-sm">
-                          About 300-400 cal per session. Want me to show you the first workout? 🔥
-                        </div>
-                      </div>
-                      
-                      <div className="pt-2">
-                        <Button size="sm" className="w-full">
-                          <Zap className="h-4 w-4 mr-2" />
-                          Start Workout
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Floating Elements */}
-                  <div className="absolute -top-4 -right-4 bg-green-500 text-white rounded-full p-2 shadow-lg animate-pulse">
-                    <Check className="h-4 w-4" />
-                  </div>
-                  <div className="absolute -bottom-4 -left-4 bg-background border border-border rounded-lg p-2 shadow-lg">
-                    <div className="text-xs font-semibold">Today: 245 kcal</div>
-                    <div className="text-xs text-muted-foreground">🔥 Great work!</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 2 - Coach AI Your Virtual Ally */}
-        <section className="py-16 md:py-24 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5"></div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="text-center mb-12 animate-fade-in">
-              <Badge variant="outline" className="mb-4">🤖 Artificial Intelligence</Badge>
-              <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                Coach AI: your new<br />
-                <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">virtual ally</span>
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                No pre-made templates. An AI that listens to you, understands you, evolves with you.
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-3 gap-8 mb-12">
-              {[
-                {
-                  title: "Adapts to you",
-                  description: "Every advice is based on your personal data",
-                  icon: Target,
-                  background: "#ECE7DB",
-                  chip: "#F6C124",
-                  iconColor: "#0A0A0A"
-                },
-                {
-                  title: "Learns with you", 
-                  description: "Evolves based on your progress and preferences",
-                  icon: Bot,
-                  background: "#FDF4D9",
-                  chip: "#C6F24E",
-                  iconColor: "#0A0A0A"
-                },
-                {
-                  title: "Always available",
-                  description: "Answers when your trainer isn't there: in the evening, at the gym, between sets",
-                  icon: Clock,
-                  background: "#F1F8DF",
-                  chip: "#0A0A0A",
-                  iconColor: "#FFFFFF"
-                }
-              ].map((feature, index) => (
-                <Card key={index} className="p-6 hover-scale" style={{ background: feature.background, border: "1px solid rgba(10,10,10,0.08)", color: "#0A0A0A" }}>
-                  <CardContent className="p-0">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full mb-4" style={{ background: feature.chip, color: feature.iconColor }}>
-                      <feature.icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                    <p className="text-sm" style={{ color: "rgba(10,10,10,0.7)" }}>{feature.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg">
-                <h3 className="text-2xl font-semibold text-primary mb-6 text-center">
-                  💬 Questions you can ask Coach AI:
-                </h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {[
-                    "I only have 30 minutes today, what should I do?",
-                    "Am I gaining weight or building muscle?",
-                    "How long should I rest between sets?",
-                    "Create a 3-day program for weight loss"
-                  ].map((question, index) => (
-                    <div key={index} className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary">
-                      <p className="italic text-muted-foreground">{question}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-center mt-8">
-                  <p className="text-lg">
-                    <strong className="text-primary">Coach AI always responds.</strong> Concrete, simple, effective.<br />
-                    <span className="text-muted-foreground">And if you have a trainer, Coach AI knows what they've asked you to do.</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 3 - Keep Everything Under Control */}
-        <section className="py-16 md:py-24 bg-muted/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-primary mb-8 text-center">
-                📊 Keep everything under control
-              </h2>
-              
-              <div className="space-y-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
-                <p className="text-center">
-                  MyPersonal.fit is not just training. It's also control, consistency and results.
-                </p>
-                
-                <div className="bg-background/50 rounded-lg p-6 my-8">
-                  <h3 className="text-xl font-semibold text-primary mb-4">In the app you can:</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-3">
-                        <BarChart3 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span>View your active goals</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <Target className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span>See weight progress, body fat, body measurements</span>
-                      </li>
-                    </ul>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-3">
-                        <Heart className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span>Analyze your daily activity (steps, sessions, progress)</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <Zap className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                        <span>Receive targeted suggestions for improvement</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <p className="text-center text-lg">
-                  And if one day you decide to work with a real personal trainer,
-                  your history will be there, ready to be shared. No lost data, no resets.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 4 - Why We Do This */}
-        <section id="about" className="py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-primary mb-8">
-                💙 Why we do this
-              </h2>
-              
-              <div className="space-y-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
-                <p className="text-xl font-semibold">
-                  Training should be simple.<br />
-                  Instead it's often expensive, complicated or unmotivating.
-                </p>
-                
-                <p>
-                  We at MyPersonal.fit believe in a new approach:
-                  A smart, accessible experience guided by intelligence, where the user always remains at the center.
-                </p>
-                
-                <div className="bg-primary/5 rounded-lg p-8 my-8">
-                  <p className="text-xl">
-                    We created MyPersonal specifically for you: to help you enter our world without barriers.
-                  </p>
-                  <p className="text-lg mt-4">
-                    And from here, if you want, you can evolve with us. Until you train with the best PTs, the real ones!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Pricing Section */}
-        <section id="pricing" className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-background to-primary/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 animate-fade-in">
-              <Badge variant="secondary" className="mb-4">💶 Pricing</Badge>
-              <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                One plan. All features.
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                The first 10 clients get free access for one year. After that: €0.99 per month for the first year, then €1.99.
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* Free Plan for first 10 clients */}
-              <Card className="relative p-8 border-2 border-green-500/50 bg-green-50/50 hover:bg-green-50/70 transition-colors">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge className="bg-green-500 hover:bg-green-500 text-white">🎉 FIRST 10 CLIENTS</Badge>
-                </div>
-                
-                <CardHeader className="p-0 mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <CardTitle className="text-2xl">Free Access</CardTitle>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-green-600">€0</div>
-                      <div className="text-sm text-muted-foreground">for 1 complete year</div>
-                    </div>
-                  </div>
-                  <CardDescription className="text-base">
-                    All premium features, completely free for one year
-                  </CardDescription>
-                  
-                  {/* Counter */}
-                  <div className="bg-green-100 border border-green-200 rounded-lg p-4 mt-4">
-                    <p className="text-sm font-medium text-green-800">10 spots in total</p>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="p-0">
-                  <div className="space-y-4 mb-8">
-                    {pricingFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                          <Check className="h-3 w-3" />
-                        </div>
-                        <feature.icon className="h-4 w-4 text-green-600" />
-                        <span className="text-foreground font-medium">{feature.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button size="lg" className="w-full bg-green-600 hover:bg-green-700" onClick={openWaitlist}>
-                      🚀 Get Your Free Spot
-                    </Button>
-                  
-                  <div className="text-center mt-4 space-y-1">
-                    <p className="text-sm text-green-700 font-medium">✅ Full access for 1 year</p>
-                    <p className="text-sm text-green-700">✅ No credit card required</p>
-                    <p className="text-sm text-green-700">✅ All features included</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Normal Plan (after 10 clients) */}
-              <Card aria-disabled={!PAID_PLAN_ENABLED} className={`relative p-8 border-2 border-primary/30 transition-colors ${PAID_PLAN_ENABLED ? 'hover:border-primary/50' : 'opacity-50 grayscale pointer-events-none select-none'}`}>
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">{PAID_PLAN_ENABLED ? '💼 NORMAL PLAN' : 'Available after the first 10'}</Badge>
-                </div>
-                
-                <CardHeader className="p-0 mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <CardTitle className="text-2xl">Normal Access</CardTitle>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold">€0.99</div>
-                      <div className="text-sm text-muted-foreground">per month for the first year</div>
-                      <div className="text-xs text-muted-foreground">then €1.99 per month</div>
-                    </div>
-                  </div>
-                  <CardDescription className="text-base">
-                    Exactly the same features. Only the price changes.
-                  </CardDescription>
-                  
-                  <div className="bg-primary/10 rounded-lg p-4 mt-4">
-                    <p className="text-sm text-primary font-medium">
-                      💡 Same premium service, you just didn't make it in time for the free period!
-                    </p>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="p-0">
-                  <div className="space-y-4 mb-8">
-                    {pricingFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                          <Check className="h-3 w-3" />
-                        </div>
-                        <feature.icon className="h-4 w-4 text-primary" />
-                        <span className="text-foreground font-medium">{feature.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button variant="outline" className="w-full" size="lg" disabled={!PAID_PLAN_ENABLED}>
-                    Subscribe at €0.99/month for the first year
-                  </Button>
-                  
-                  <div className="text-center mt-4 space-y-1">
-                    <p className="text-sm text-primary">💎 Same features, €0.99 per month for the first year</p>
-                    <p className="text-sm text-muted-foreground">Cancel anytime</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            
-            <div className="text-center mt-12">
-              <div className="max-w-2xl mx-auto">
-                <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg">
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10">
-                      <Target className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary">
-                      One premium service level
-                    </h3>
-                  </div>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    No hidden features. The limits are the same for everyone. All our users get the best possible experience. 
-                    The first 10 clients get it free for one year; everyone else pays €0.99 per month for the first year, then €1.99.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Final CTA Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
-                <Badge variant="outline" className="mb-4">🚀 Final Step</Badge>
-                <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                  Stop postponing.<br />
-                  <span className="text-2xl md:text-3xl text-muted-foreground">Coach AI is ready. Are you?</span>
-                </h2>
-              </div>
-              
-              <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg mb-8">
-                <p className="text-xl text-muted-foreground mb-6">
-                  🎁 <strong>1-year free access</strong><br />
-                  ⏰ <strong>Limited time offer</strong> - don't wait too long!
-                </p>
-                
-                <Button size="lg" className="text-lg px-12 py-6 hover-scale" onClick={openWaitlist}>
-                    <span className="hidden sm:inline">👉 Get Free Access Now - Hurry Up!</span>
-                    <span className="sm:hidden">👉 Get Free Access!</span>
-                  </Button>
-                
-                <div className="flex items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Check className="h-4 w-4 text-green-600" />
-                    <span>2-minute setup</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Check className="h-4 w-4 text-green-600" />
-                    <span>No card required</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Check className="h-4 w-4 text-green-600" />
-                    <span>Easy cancellation</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-      
-      <UserFooter />
-    </div>
-  );
+const EN: ConsumerCopy = {
+  hero: { a: "Train body and mind. With ", gold: 'Coach AI', b: ", you're never alone.",
+    sub1: 'A virtual personal trainer that truly listens to you.',
+    sub2: 'Create your plan, track progress, receive personalized advice. With your trainer, or on your own.',
+    ctaLong: '👉 Start now – Free 1 year for the first 10 clients', ctaShort: '👉 Start now – Free 1 year!',
+    micro: 'No card required · Live in 2 minutes · Your data stays yours' },
+  journey: { eyebrow: 'Your journey', title: 'Start your journey.', subtitle: 'When you want. Where you want.',
+    p1: <><S>How many times</S> have you thought about starting to work out, but didn't know where to begin? Or maybe you already have experience, but you lack <S>constant guidance</S>.</>,
+    p2: <>With <S>Coach AI</S> you can build a personalized routine, whether you have a trainer or not.</>,
+    chips: ['20 messages a day', '3 programs a month', 'Log it in one tap', 'Device integrations'],
+    closing: '👉 All this without stress, in complete autonomy.', cta: 'Start Now for Free',
+    chatOnline: 'Online now', chat: ["Hi! I've created your 3-day weight loss program 💪", 'Perfect! How many calories do I burn?', 'About 300-400 cal per session. Want me to show you the first workout? 🔥'],
+    chatCta: 'Start Workout', today: 'Today: 245 kcal', todayNote: '🔥 Great job!' },
+  control: { title: 'Keep everything under control', intro: "MyPersonal.fit is not just training. It's also control, consistency and results.",
+    listTitle: 'In the app you can:', items: ['View your active goals', 'See weight progress, body fat, body measurements', 'Analyze your daily activity (steps, sessions, progress)', 'Receive targeted suggestions for improvement'],
+    outro: 'And if one day you decide to work with a real personal trainer, your history will be there, ready to be shared. No lost data, no resets.' },
+  ai: { eyebrow: 'Artificial intelligence', titleA: 'Coach AI: your new', titleB: 'virtual ally',
+    lead: 'No pre-made templates. An AI that listens to you, understands you, evolves with you.',
+    cards: [
+      { title: 'Adapts to you', description: 'Every advice is based on your personal data' },
+      { title: 'Learns with you', description: 'Evolves based on your progress and preferences' },
+      { title: 'Always available', description: "Answers when your trainer isn't there: in the evening, at the gym, between sets" },
+    ],
+    qTitle: '💬 Questions you can ask Coach AI:',
+    questions: ['I only have 30 minutes today, what should I do?', 'Am I gaining weight or building muscle?', 'How long should I rest between sets?', 'Create a 3-day program for weight loss'],
+    answerStrong: 'Coach AI always responds.', answerRest: 'Concrete, simple, effective.', answerNote: "And if you have a trainer, Coach AI knows what they've asked you to do." },
+  together: { eyebrow: 'Coach AI and your trainer', titleA: "You don't have to choose.", titleB: 'They work together.',
+    lead: "Coach AI replaces no one, and doesn't try to. It does the things a person can't do at eleven at night. The rest is for someone who looks you in the eye.",
+    coachLabel: 'Coach AI', coachTitle: 'Always there, even at 11pm',
+    coachItems: ["Answers you while you're in the gym, phone in hand", "Builds today's session from your own numbers", 'Writes your four-week programs', 'Opens the forms already filled in: it proposes, you save'],
+    trainerLabel: 'Your trainer', trainerTitle: "What an AI doesn't do",
+    trainerItems: ['Watches you move and fixes your form', "Gets your videos and tells you what's off", 'Runs your check-ins: weight, measurements, photos, sleep and mood', 'Knows you, and knows when to push and when to stop'],
+    note: <>And if one day you add a trainer, <b>nothing of yours moves</b>: Coach AI simply starts reading what they send you, and stays inside what they asked you to do.</>,
+    marketTitle: 'The right trainer is already in the app',
+    marketText: "Search, see who they are, what they do, what they charge and when they're free. Read reviews from people already training with them. And you book the first session right here, without leaving the app.",
+    mockLabel: "A trainer's profile", mockSpec: 'Specialty · City', mockRow: 'Reviews · Rate · Availability', mockCta: 'Book a session' },
+  about: { title: '💙 Why we do this', lead: <>Training should be simple.<br />Instead it's often expensive, complicated or unmotivating.</>,
+    p: 'We at MyPersonal.fit believe in a new approach: A smart, accessible experience guided by intelligence, where the user always remains at the center.',
+    box1: 'We created MyPersonal specifically for you: to help you enter our world without barriers.',
+    box2: 'And from here, if you want, you can evolve with us. Until you train with the best PTs, the real ones!' },
+  pricing: { eyebrow: 'Pricing', title: 'One plan. All features.',
+    intro: 'The first 10 clients get free access for one year. After that: €0.99 per month for the first year, then €1.99.',
+    features: [
+      '20 messages a day with Coach AI',
+      "Today's session, built from your goals, your log and what your trainer last asked you to do",
+      '3 four-week programs a month',
+      'Tell it what you did and it opens the form already filled in — activities and goals',
+      'Analysis of every logged workout',
+      'It proposes, you save: it never writes anything into your history by itself',
+      'Private: no one else reads it, not even your trainer',
+      'All device integrations',
+    ],
+    freeBadge: '🎉 First 10 clients', freeTitle: 'Free Access', freePeriod: 'for 1 full year',
+    freeDesc: 'All premium features, completely free for one year', counter: '10 spots in total',
+    freeCta: '🚀 Get Your Free Spot', freeNotes: ['✅ Full access for 1 year', '✅ No credit card required', '✅ All features included'],
+    paidBadgeOn: '💼 Normal plan', paidBadgeOff: 'Available after the first 10', paidTitle: 'Normal Access',
+    paidPrice: '€0.99', paidPeriod: 'per month for the first year', paidThen: 'then €1.99 per month',
+    paidDesc: 'Exactly the same features. Only the price changes.',
+    paidTip: "💡 Same premium service, you just didn't make it in time for the free period!",
+    paidCta: 'Subscribe at €0.99/month for the first year', paidFoot: '💎 Same features, €0.99 per month for the first year', paidCancel: 'Cancel anytime',
+    boxTitle: 'One premium service level',
+    boxText: 'No hidden features. The limits are the same for everyone. All our users get the best possible experience.',
+    boxText2: 'The first 10 clients get it free for one year; everyone else pays €0.99 per month for the first year, then €1.99.' },
+  cta: { eyebrow: 'Final step', titleA: 'Stop postponing.', titleB: 'Coach AI is ready. Are you?',
+    offer1: '1-year free access', offer2: "Limited time offer - don't wait too long!",
+    ctaLong: '👉 Get Free Access Now - Hurry Up!', ctaShort: '👉 Get Free Access!',
+    checks: ['2-minute setup', 'No card required', 'Easy cancellation'] },
 };
 
+const UserLandingEn = () => <ConsumerLanding c={EN} />;
 export default UserLandingEn;

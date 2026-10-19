@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -49,16 +48,16 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
+    <nav className="trainer-brand fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-[#242424] text-left" style={{ background: 'rgba(10,10,10,.92)' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to={language === 'it' ? '/user' : '/user-en'} className="flex items-center">
-              <span className="font-display text-xl font-bold tracking-tight text-primary">
-                MyPersonal.fit
+              <span className="text-base text-white sm:text-lg" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", fontWeight: 800 }}>
+                mypersonal<span className="text-[#F6C124]">.fit</span>
               </span>
-              <span className="ml-2 text-sm font-medium text-muted-foreground">
+              <span className="ml-2 text-[10px] uppercase text-[#7d7668]" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", fontWeight: 700, letterSpacing: '.18em' }}>
                 {t('userNav.forUsers')}
               </span>
             </Link>
@@ -71,7 +70,7 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
                 <button
                   key={item.key}
                   onClick={() => handleMenuClick(item.href)}
-                  className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors cursor-pointer"
+                  className="text-[#a8a296] hover:text-[#F6C124] px-3 py-2 text-sm font-medium transition-colors cursor-pointer"
                 >
                   {t(item.key)}
                 </button>
@@ -81,23 +80,23 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <LanguageSwitcher />
+            <LanguageSwitcher theme="trainer" />
 
             <Link to="/user-login">
-              <Button variant="outline" size="sm">
+              <span className="inline-flex items-center rounded-full border border-[#3a3a3a] px-4 py-1.5 text-sm font-medium text-[#ddd7ca] transition-colors hover:border-[#F6C124]">
                 {t('userNav.login')}
-              </Button>
+              </span>
             </Link>
-            <Button size="sm" onClick={handleJoinWaitlist}>
+            <button type="button" onClick={handleJoinWaitlist} className="rounded-full bg-[#F6C124] px-4 py-1.5 text-sm font-semibold text-[#0A0A0A]">
               {t('userNav.startTrial')}
-            </Button>
+            </button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-primary hover:bg-accent focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              className="inline-flex items-center justify-center p-2 rounded-md text-[#ddd7ca] hover:text-[#F6C124] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#F6C124]"
             >
               {isMenuOpen ? (
                 <X className="block h-6 w-6" />
@@ -111,12 +110,12 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-border">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-[#242424]">
               {menuItems.map((item) => (
                 <button
                   key={item.key}
                   onClick={() => handleMenuClick(item.href)}
-                  className="text-muted-foreground hover:text-primary block px-3 py-2 text-base font-medium transition-colors w-full text-left"
+                  className="text-[#a8a296] hover:text-[#F6C124] block px-3 py-2 text-base font-medium transition-colors w-full text-left"
                 >
                   {t(item.key)}
                 </button>
@@ -124,19 +123,19 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
               
               {/* Mobile Language Selector */}
               <div className="px-3 py-2">
-                <LanguageSwitcher onChange={() => setIsMenuOpen(false)} align="start" />
+                <LanguageSwitcher theme="trainer" onChange={() => setIsMenuOpen(false)} align="start" />
               </div>
 
               {/* Mobile Actions */}
               <div className="px-3 py-2 space-y-2">
                 <Link to="/user-login" className="block">
-                  <Button variant="outline" className="w-full">
+                  <span className="flex w-full justify-center rounded-full border border-[#3a3a3a] py-2 font-medium text-[#ddd7ca]">
                     {t('userNav.login')}
-                  </Button>
+                  </span>
                 </Link>
-                <Button className="w-full" onClick={handleJoinWaitlist}>
+                <button type="button" className="w-full rounded-full bg-[#F6C124] py-2 font-semibold text-[#0A0A0A]" onClick={handleJoinWaitlist}>
                   {t('userNav.startTrial')}
-                </Button>
+                </button>
               </div>
             </div>
           </div>
