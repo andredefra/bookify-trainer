@@ -395,9 +395,11 @@ const PricingSection = () => {
                     </div>
                     <span
                       className="ml-auto shrink-0 rounded-full border px-[9px] py-[3px] uppercase"
-                      style={{ borderColor: 'rgba(236,231,219,.22)', color: 'rgba(236,231,219,.55)', fontFamily: MONO, fontWeight: 700, fontSize: 9, letterSpacing: '.08em' }}
+                      style={k === 'client'
+                        ? { borderColor: '#F6C124', background: '#F6C124', color: '#0A0A0A', fontFamily: MONO, fontWeight: 700, fontSize: 9, letterSpacing: '.08em' }
+                        : { borderColor: 'rgba(236,231,219,.22)', color: 'rgba(236,231,219,.55)', fontFamily: MONO, fontWeight: 700, fontSize: 9, letterSpacing: '.08em' }}
                     >
-                      {t('pricing.badgeSoon')}
+                      {k === 'client' ? t('aiPricing.client.badge10') : t('pricing.badgeSoon')}
                     </span>
                   </div>
 
@@ -410,6 +412,11 @@ const PricingSection = () => {
                     </span>
                     <span style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, color: 'rgba(236,231,219,.5)' }}>{period}</span>
                   </div>
+                  {k === 'client' && (
+                    <p className="mt-[6px]" style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, color: '#F6C124' }}>
+                      {t('aiPricing.client.then')}
+                    </p>
+                  )}
 
                   <p className="mt-2 text-[12.5px] leading-[1.55]" style={{ color: 'rgba(236,231,219,.58)' }}>{desc}</p>
 
