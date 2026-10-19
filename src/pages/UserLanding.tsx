@@ -130,7 +130,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                   {c.journey.chips.map((text, i) => {
                     const I = CHIP_ICONS[i];
                     return (
-                      <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-white p-3">
+                      <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-[#FFFFFF] p-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-[#F6C124]"><I className="h-4 w-4" color="#0A0A0A" /></div>
                         <span className="text-sm font-semibold text-[#0A0A0A]">{text}</span>
                       </div>
@@ -145,7 +145,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
 
               <div className="relative mx-auto w-full max-w-sm">
                 <div className="rounded-[2.5rem] border-[8px] border-[#1C1C1C] bg-[#F4F2ED] p-5 shadow-2xl">
-                  <div className="space-y-4 rounded-2xl bg-white p-5">
+                  <div className="space-y-4 rounded-2xl bg-[#FFFFFF] p-5">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A0A0A]"><Bot className="h-5 w-5" color="#F6C124" /></div>
                       <div>
@@ -162,7 +162,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                   </div>
                 </div>
                 <div className="absolute -right-3 -top-3 rounded-full bg-[#C6F24E] p-2 shadow-lg"><Check className="h-4 w-4" color="#0A0A0A" /></div>
-                <div className="absolute -bottom-4 -left-3 rounded-lg border border-[#E0DACB] bg-white p-2 shadow-lg">
+                <div className="absolute -bottom-4 -left-3 rounded-lg border border-[#E0DACB] bg-[#FFFFFF] p-2 shadow-lg">
                   <div className="text-[10px] text-[#0A0A0A]" style={BADGE}>{c.journey.today}</div>
                   <div className="text-xs text-[#5a5346]">{c.journey.todayNote}</div>
                 </div>
@@ -172,7 +172,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
             <div className="mx-auto mt-20 max-w-4xl">
               <h3 className="text-center text-2xl text-[#0A0A0A] md:text-3xl" style={H3}>{c.control.title}</h3>
               <p className="mt-5 text-center text-lg text-[#5a5346]">{c.control.intro}</p>
-              <div className="my-8 rounded-2xl border border-[#E0DACB] bg-white p-6">
+              <div className="my-8 rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6">
                 <h3 className="mb-4 text-lg text-[#0A0A0A]" style={H3}>{c.control.listTitle}</h3>
                 <ul className="grid gap-4 md:grid-cols-2">
                   {c.control.items.map((it, i) => {
@@ -245,7 +245,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 <h3 className="mt-2 text-xl text-white" style={H3}>{c.together.coachTitle}</h3>
                 <CheckList items={c.together.coachItems} check="#F6C124" text="#a9a396" />
               </div>
-              <div className="rounded-2xl border border-[#E0DACB] bg-white p-6">
+              <div className="rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6">
                 <span className="text-[11px] text-[#B98A00]" style={MICRO}>{c.together.trainerLabel}</span>
                 <h3 className="mt-2 text-xl text-[#0A0A0A]" style={H3}>{c.together.trainerTitle}</h3>
                 <CheckList items={c.together.trainerItems} check="#B98A00" text="#3f3a33" />
@@ -285,7 +285,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
             </div>
 
             <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
-              <div className="relative rounded-2xl border border-[#F6C124] bg-white p-7" style={{ boxShadow: '0 0 0 3px rgba(246,193,36,.16)' }}>
+              <div className="relative rounded-2xl border border-[#F6C124] bg-[#FFFFFF] p-7" style={{ boxShadow: '0 0 0 3px rgba(246,193,36,.16)' }}>
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#F6C124] px-3 py-1 text-[10px] text-[#0A0A0A]" style={BADGE}>{P.freeBadge}</span>
                 <div className="mb-4 flex items-start justify-between gap-4">
                   <h3 className="text-2xl text-[#0A0A0A]" style={H3}>{P.freeTitle}</h3>
@@ -303,7 +303,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 </div>
               </div>
 
-              <div aria-disabled={!PAID_PLAN_ENABLED} className={`relative rounded-2xl border border-[#E0DACB] bg-white p-7 ${PAID_PLAN_ENABLED ? '' : 'opacity-50 grayscale pointer-events-none select-none'}`}>
+              <div aria-disabled={!PAID_PLAN_ENABLED} className={`relative rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-7 ${PAID_PLAN_ENABLED ? '' : 'opacity-50 grayscale pointer-events-none select-none'}`}>
                 <span className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-[#E0DACB] bg-[#F4F2ED] px-3 py-1 text-[10px] text-[#8a8478]" style={BADGE}>{PAID_PLAN_ENABLED ? P.paidBadgeOn : P.paidBadgeOff}</span>
                 <div className="mb-4 flex items-start justify-between gap-4">
                   <h3 className="text-2xl text-[#0A0A0A]" style={H3}>{P.paidTitle}</h3>
@@ -324,7 +324,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
               </div>
             </div>
 
-            <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-[#E0DACB] bg-white p-6 text-center">
+            <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6 text-center">
               <h3 className="mb-2 text-xl text-[#0A0A0A]" style={H3}>{P.boxTitle}</h3>
               <p className="text-[#5a5346]">{P.boxText} {P.boxText2}</p>
             </div>
