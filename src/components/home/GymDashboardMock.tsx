@@ -36,7 +36,7 @@ const GymDashboardMock = () => {
     { l: t('gymMock.goals'), v: '92%', s: t('gymMock.goalsSub'), vc: '#B98A00', sc: '#938C7C' },
   ];
   const tabs = [t('gymMock.tabTrainer'), t('gymMock.tabAvail'), t('gymMock.tabPerf')];
-  const x = (i: number) => 8 + i * 29;
+  const x = (i: number) => 7 + i * 27;
   const y = (v: number) => 70 - (v - 20) * 1.05;
 
   return (
