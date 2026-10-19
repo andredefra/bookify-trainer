@@ -62,6 +62,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     : location.pathname === '/en' ? 'en'
     : location.pathname === '/user-find-trainer' ? 'it'
     : location.pathname === '/user-find-trainer-en' ? 'en'
+    : location.pathname === '/prossimamente' ? 'it'
+    : location.pathname === '/coming-soon' ? 'en'
     : preferredLanguage;
 
   // Forza la lingua in base alla route quando cambia
