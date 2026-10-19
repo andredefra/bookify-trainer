@@ -490,7 +490,7 @@ export const it = {
   'userNav.startTrial': 'Inizia Gratis',
   
   // User Footer (for /user page)
-  'userFooter.description': 'La piattaforma per l\'utente che vuole allenarsi con un personal trainer AI',
+  'userFooter.description': 'La piattaforma per chi vuole allenarsi con il Coach AI, con un personal trainer o da solo.',
   'userFooter.trainerPlatformLink': 'Se sei un personal trainer puoi provare la nostra versione per Personal Trainers',
   'pricing.detailedFeatures.everythingInBasic.name': 'Tutto del Basic',
   'pricing.detailedFeatures.everythingInBasic.description': 'Tutte le funzionalità del piano Basic sono incluse',
