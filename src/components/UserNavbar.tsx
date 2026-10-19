@@ -18,11 +18,17 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
 
   const menuItems = [
     { key: 'userNav.features', href: '#features' },
+    { key: 'consumerMarket.nav', href: language === 'it' ? '/user-find-trainer' : '/user-find-trainer-en' },
     { key: 'userNav.pricing', href: '#pricing' },
     { key: 'userNav.about', href: '#about' },
   ];
 
   const handleMenuClick = (href: string) => {
+    if (href.startsWith('/')) {
+      navigate(href);
+      setIsMenuOpen(false);
+      return;
+    }
     const currentPath = window.location.pathname;
     
     // Se siamo su /user o /user-en, fai scroll nella pagina corrente

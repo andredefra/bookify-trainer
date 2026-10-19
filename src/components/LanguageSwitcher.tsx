@@ -62,7 +62,8 @@ const LanguageSwitcher = ({ className, onChange, align = 'end', theme = 'default
 
   const pick = (lang: (typeof LANGUAGES)[number]) => {
     setLanguage(lang.code);
-    navigate(CONSUMER_ROUTES.includes(pathname) ? lang.consumerRoute : lang.publicRoute);
+    const marketplace = pathname === '/user-find-trainer' || pathname === '/user-find-trainer-en';
+    navigate(marketplace ? (lang.code === 'it' ? '/user-find-trainer' : '/user-find-trainer-en') : CONSUMER_ROUTES.includes(pathname) ? lang.consumerRoute : lang.publicRoute);
     onChange?.();
   };
 

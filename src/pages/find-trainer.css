@@ -11,3 +11,4 @@
 .trainer-market .credential-topRated { background: hsl(var(--brand-canvas)); color: hsl(var(--brand-highlight)); }
 .trainer-market .credential-nutrition { background: var(--market-nutrition-bg); color: var(--market-nutrition-text); }
 .trainer-market .market-divider { border-color: var(--market-card-border); }
+.trainer-market .market-demo-notice { background: hsl(var(--brand-highlight) / .12); border: 1px solid hsl(var(--brand-highlight) / .45); border-radius: 12px; padding: 14px 18px; }

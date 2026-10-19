@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import FindTrainer from "./pages/FindTrainer";
+import UserFindTrainer from "./pages/UserFindTrainer";
 import TrainerProfile from "./pages/TrainerProfile";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
@@ -111,6 +112,8 @@ const AppContent = () => {
         <Route path="/cookies" element={<Cookies />} />
         <Route path="/user" element={<UserLanding />} />
         <Route path="/user-en" element={<UserLandingEn />} />
+        <Route path="/user-find-trainer" element={<UserFindTrainer />} />
+        <Route path="/user-find-trainer-en" element={<UserFindTrainer />} />
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/user-register" element={<UserRegister />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />

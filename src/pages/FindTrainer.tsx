@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import UserNavbar from '@/components/UserNavbar';
+import UserFooter from '@/components/UserFooter';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Search, MapPin, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,15 +12,16 @@ import { useLanguage } from '@/context/LanguageContext';
 import { demoTrainers } from '@/data/trainerMockData';
 import './find-trainer.css';
 
-const FindTrainer = () => {
+export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [city, setCity] = useState('');
+  const [showDemoDialog, setShowDemoDialog] = useState(false);
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
     <div className="trainer-brand trainer-market min-h-screen flex flex-col bg-brand-canvas text-brand-text">
-      <Navbar />
+      {consumer ? <UserNavbar /> : <Navbar />}
       <main className="flex-grow">
         <section className="market-hero relative overflow-hidden bg-brand-canvas px-5 pb-12 pt-32 text-center md:pt-36">
           <div className="market-glow" aria-hidden="true" />
@@ -30,7 +34,7 @@ const FindTrainer = () => {
               <span className="block">{t('market.titleA')}</span>
               <span className="block text-brand-highlight">{t('market.titleB')}</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-[620px] text-base leading-relaxed text-brand-text/70">{t('market.subtitle')}</p>
+            <p className="mx-auto mt-5 max-w-[620px] text-base leading-relaxed text-brand-text/70">{t(consumer ? 'consumerMarket.subtitle' : 'market.subtitle')}</p>
             <form onSubmit={event => event.preventDefault()} className="mx-auto mt-8 flex max-w-[920px] flex-col gap-3 md:flex-row">
               <div className="relative min-w-0 flex-[1.7]">
                 <Search aria-hidden="true" className="absolute left-4 top-4 h-5 w-5 text-brand-text/50" />
@@ -56,6 +60,10 @@ const FindTrainer = () => {
               <p className="text-sm font-bold">{t('market.count').replace('{n}', String(demoTrainers.length))}</p>
               <p className="market-muted font-brand-mono text-[10px] font-bold uppercase sm:text-xs">{t('market.sort')}</p>
             </div>
+            <aside data-demo-notice className="market-demo-notice mb-6 flex flex-col gap-2 sm:flex-row sm:gap-4">
+              <span className="shrink-0 font-brand-mono text-xs font-bold uppercase">{t('market.demoLabel')}</span>
+              <p className="text-sm leading-relaxed">{t('market.demoNotice')}</p>
+            </aside>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {demoTrainers.map(trainer => {
                 const today = trainer.availableLabel === 'Disponibile oggi';
@@ -80,7 +88,12 @@ const FindTrainer = () => {
                       <div className="mb-5 mt-4 flex flex-wrap gap-1.5">{trainer.credentials.map(credential => <span key={credential} className={`market-credential credential-${credential} font-brand-mono`}>{t(`cred.${credential}`)}</span>)}</div>
                       <div className="market-divider mt-auto flex flex-wrap items-center justify-between gap-3 border-t pt-4">
                         <p className="font-brand-mono text-[17px] font-extrabold">€{trainer.hourlyRate} <span className="market-muted text-[9px] font-bold">{t('market.perHour')}</span></p>
-                        <Button asChild className="h-9 rounded-full bg-brand-canvas px-4 text-xs font-bold text-brand-highlight hover:bg-brand-canvas/90"><Link to={`/trainer/${trainer.slug}`}>{t('market.viewProfile')}</Link></Button>
+                        {consumer ? (
+                          <div className="flex w-full flex-wrap gap-2">
+                            <Button variant="outline" onClick={() => setShowDemoDialog(true)} className="h-9 rounded-full border-brand-canvas/20 bg-transparent px-4 text-xs font-bold text-brand-canvas hover:bg-brand-canvas/5 hover:text-brand-canvas">{t('market.viewProfile')}</Button>
+                            <Button onClick={() => setShowDemoDialog(true)} className="h-9 rounded-full bg-brand-highlight px-4 text-xs font-bold text-brand-canvas hover:bg-brand-highlight/90">{t('consumerMarket.contact')}</Button>
+                          </div>
+                        ) : <Button asChild className="h-9 rounded-full bg-brand-canvas px-4 text-xs font-bold text-brand-highlight hover:bg-brand-canvas/90"><Link to={`/trainer/${trainer.slug}`}>{t('market.viewProfile')}</Link></Button>}
                       </div>
                     </div>
                   </article>
@@ -91,14 +104,25 @@ const FindTrainer = () => {
         </section>
 
         <section className="bg-brand-canvas px-5 py-16 text-center">
-          <h2 className="trainer-headline text-[27px] leading-[1.12] md:text-[36px]"><span className="block">{t('market.ctaA')}</span><span className="block text-brand-highlight">{t('market.ctaB')}</span></h2>
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-brand-text/70">{t('market.ctaSub')}</p>
-          <Button asChild className="mt-7 h-12 rounded-full bg-brand-highlight px-8 font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to="/register">{t('market.ctaBtn')}</Link></Button>
+          <h2 className="trainer-headline text-[27px] leading-[1.12] md:text-[36px]"><span className="block">{t(consumer ? 'consumerMarket.ctaA' : 'market.ctaA')}</span><span className="block text-brand-highlight">{t(consumer ? 'consumerMarket.ctaB' : 'market.ctaB')}</span></h2>
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-brand-text/70">{t(consumer ? 'consumerMarket.ctaSub' : 'market.ctaSub')}</p>
+          <Button asChild className="mt-7 h-12 rounded-full bg-brand-highlight px-8 font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to={consumer ? '/user-register' : '/register'}>{t('market.ctaBtn')}</Link></Button>
         </section>
       </main>
-      <Footer />
+      {consumer ? <UserFooter /> : <Footer />}
+      {consumer && <Dialog open={showDemoDialog} onOpenChange={setShowDemoDialog}>
+        <DialogContent className="trainer-brand max-w-[calc(100%-2rem)] rounded-xl border-brand-border bg-brand-canvas text-brand-text sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="trainer-headline pr-5 leading-tight">{t('consumerMarket.dialogTitle')}</DialogTitle>
+            <DialogDescription className="pt-3 text-brand-text/70 leading-relaxed">{t('consumerMarket.dialogBody')}</DialogDescription>
+          </DialogHeader>
+          <Button asChild className="rounded-full bg-brand-highlight text-brand-canvas hover:bg-brand-highlight/90"><Link to="/user-register">{t('consumerMarket.signup')}</Link></Button>
+          <Button variant="link" onClick={() => setShowDemoDialog(false)} className="text-brand-text/70">{t('consumerMarket.back')}</Button>
+        </DialogContent>
+      </Dialog>}
     </div>
   );
 };
 
+const FindTrainer = () => <MarketplacePage />;
 export default FindTrainer;
