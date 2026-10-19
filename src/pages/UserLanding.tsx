@@ -1,9 +1,9 @@
 import type { CSSProperties, ReactNode } from 'react';
 import UserNavbar from '@/components/UserNavbar';
 import UserFooter from '@/components/UserFooter';
-import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield, User } from 'lucide-react';
+import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import WaitlistDialog from '@/components/WaitlistDialog';
 
 // Flip to true when the free cohort closes to re-enable the paid plan card.
@@ -37,13 +37,14 @@ export type ConsumerCopy = {
   hero: { a: string; gold: string; b: string; sub1: string; sub2: string; ctaLong: string; ctaShort: string; micro: string };
   journey: { eyebrow: string; title: string; subtitle: string; p1: ReactNode; p2: ReactNode; chips: string[]; closing: string; cta: string;
     chatOnline: string; chat: string[]; chatCta: string; today: string; todayNote: string };
-  control: { title: string; intro: string; listTitle: string; items: string[]; outro: string };
+  what: { eyebrow: string; titleA: string; titleB: string; lead: string };
+  market: { titleA: string; titleB: string; lead: string; cta: string; href: string };
+  control: { eyebrow: string; titleA: string; titleB: string; intro: string; listTitle: string; items: string[]; outro: string };
   ai: { eyebrow: string; titleA: string; titleB: string; lead: string; cards: { title: string; description: string }[];
     qTitle: string; questions: string[]; answerStrong: string; answerRest: string; answerNote: string };
   together: { eyebrow: string; titleA: string; titleB: string; lead: string;
     coachLabel: string; coachTitle: string; coachItems: string[];
-    trainerLabel: string; trainerTitle: string; trainerItems: string[]; note: ReactNode;
-    marketTitle: string; marketText: string; mockLabel: string; mockSpec: string; mockRow: string; mockCta: string };
+    trainerLabel: string; trainerTitle: string; trainerItems: string[]; note: ReactNode };
   about: { title: string; lead: ReactNode; p: string; box1: string; box2: string };
   pricing: { eyebrow: string; title: string; intro: string; features: string[];
     freeBadge: string; freeTitle: string; freePeriod: string; freeDesc: string; counter: string; freeCta: string; freeNotes: string[];
@@ -110,82 +111,68 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
           </div>
         </section>
 
-        {/* Journey + control */}
+        {/* What you can do */}
         <section id="features" className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
           <div className="mx-auto max-w-6xl px-5">
-            <div className="grid items-center gap-12 lg:grid-cols-2">
-              <div className="space-y-7">
-                <div>
-                  <Eyebrow>{c.journey.eyebrow}</Eyebrow>
-                  <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-[44px]" style={H12}>
-                    {c.journey.title}<br />
-                    <span className="text-2xl text-[#B98A00] md:text-[32px]">{c.journey.subtitle}</span>
-                  </h2>
-                </div>
-                <div className="space-y-5 text-lg leading-relaxed">
-                  <p>{c.journey.p1}</p>
-                  <p>{c.journey.p2}</p>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {c.journey.chips.map((text, i) => {
-                    const I = CHIP_ICONS[i];
-                    return (
-                      <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-[#FFFFFF] p-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-[#F6C124]"><I className="h-4 w-4" color="#0A0A0A" /></div>
-                        <span className="text-sm font-semibold text-[#0A0A0A]">{text}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div>
-                  <p className="mb-4 text-lg font-semibold text-[#0A0A0A]">{c.journey.closing}</p>
-                  <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-7 py-3`}>{c.journey.cta}</button>
-                </div>
-              </div>
-
-              <div className="relative mx-auto w-full max-w-sm">
-                <div className="rounded-[2.5rem] border-[8px] border-[#1C1C1C] bg-[#F4F2ED] p-5 shadow-2xl">
-                  <div className="space-y-4 rounded-2xl bg-[#FFFFFF] p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A0A0A]"><Bot className="h-5 w-5" color="#F6C124" /></div>
-                      <div>
-                        <div className="text-sm font-bold text-[#0A0A0A]">Coach AI</div>
-                        <div className="text-[10px] text-[#938C7C]" style={BADGE}>{c.journey.chatOnline}</div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 text-sm">
-                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[0]}</div>
-                      <div className="ml-6 rounded-lg bg-[#0A0A0A] p-3 text-right text-[#ECE7DB]">{c.journey.chat[1]}</div>
-                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[2]}</div>
-                    </div>
-                    <button type="button" className={`${GOLD_BTN} w-full py-2 text-sm`}><Zap className="mr-2 h-4 w-4" />{c.journey.chatCta}</button>
+            <div className="mb-10 text-center">
+              <Eyebrow>{c.what.eyebrow}</Eyebrow>
+              <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-5xl" style={H12}>
+                {c.what.titleA}<br /><span className="text-[#B98A00]">{c.what.titleB}</span>
+              </h2>
+              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.what.lead}</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {c.journey.chips.map((text, i) => {
+                const I = CHIP_ICONS[i];
+                return (
+                  <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-[#FFFFFF] p-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-[#F6C124]"><I className="h-4 w-4" color="#0A0A0A" /></div>
+                    <span className="text-sm font-semibold text-[#0A0A0A]">{text}</span>
                   </div>
-                </div>
-                <div className="absolute -right-3 -top-3 rounded-full bg-[#C6F24E] p-2 shadow-lg"><Check className="h-4 w-4" color="#0A0A0A" /></div>
-                <div className="absolute -bottom-4 -left-3 rounded-lg border border-[#E0DACB] bg-[#FFFFFF] p-2 shadow-lg">
-                  <div className="text-[10px] text-[#0A0A0A]" style={BADGE}>{c.journey.today}</div>
-                  <div className="text-xs text-[#5a5346]">{c.journey.todayNote}</div>
-                </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Marketplace strip */}
+        <section className="bg-[#0A0A0A] py-16 md:py-24">
+          <div className="mx-auto max-w-4xl px-5 text-center">
+            <Eyebrow dark>Marketplace</Eyebrow>
+            <h2 className="mt-5 text-3xl text-white md:text-5xl" style={H12}>
+              {c.market.titleA}<br /><span className="text-[#F6C124]">{c.market.titleB}</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#a09a8d]">{c.market.lead}</p>
+            <div className="mt-9 flex justify-center">
+              <Link to={c.market.href} className={`${GOLD_BTN} px-7 py-3.5 text-base`}>{c.market.cta}</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Coach AI + trainer */}
+        <section className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="mb-10 text-center">
+              <Eyebrow>{c.together.eyebrow}</Eyebrow>
+              <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-5xl" style={H12}>
+                {c.together.titleA}<br /><span className="text-[#B98A00]">{c.together.titleB}</span>
+              </h2>
+              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.together.lead}</p>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              <div className="rounded-2xl border border-[#242424] bg-[#0A0A0A] p-6">
+                <span className="text-[11px] text-[#F6C124]" style={MICRO}>{c.together.coachLabel}</span>
+                <h3 className="mt-2 text-xl text-white" style={H3}>{c.together.coachTitle}</h3>
+                <CheckList items={c.together.coachItems} check="#F6C124" text="#a9a396" />
+              </div>
+              <div className="rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6">
+                <span className="text-[11px] text-[#B98A00]" style={MICRO}>{c.together.trainerLabel}</span>
+                <h3 className="mt-2 text-xl text-[#0A0A0A]" style={H3}>{c.together.trainerTitle}</h3>
+                <CheckList items={c.together.trainerItems} check="#B98A00" text="#3f3a33" />
               </div>
             </div>
-
-            <div className="mx-auto mt-20 max-w-4xl">
-              <h3 className="text-center text-2xl text-[#0A0A0A] md:text-3xl" style={H3}>{c.control.title}</h3>
-              <p className="mt-5 text-center text-lg text-[#5a5346]">{c.control.intro}</p>
-              <div className="my-8 rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6">
-                <h3 className="mb-4 text-lg text-[#0A0A0A]" style={H3}>{c.control.listTitle}</h3>
-                <ul className="grid gap-4 md:grid-cols-2">
-                  {c.control.items.map((it, i) => {
-                    const I = CONTROL_ICONS[i];
-                    return (
-                      <li key={it} className="flex items-start gap-3 text-[#3f3a33]">
-                        <I className="mt-0.5 h-5 w-5 flex-shrink-0" color="#B98A00" /><span>{it}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-              <p className="text-center text-lg text-[#5a5346]">{c.control.outro}</p>
+            <div className="mt-5 rounded-2xl border border-[#E0DACB] bg-[#F4F2ED] p-5 text-[15px] leading-relaxed text-[#3f3a33] [&_b]:text-[#0A0A0A]">
+              {c.together.note}
             </div>
           </div>
         </section>
@@ -229,51 +216,82 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
           </div>
         </section>
 
-        {/* Coach AI + trainer */}
+        {/* Journey + control */}
         <section className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
           <div className="mx-auto max-w-6xl px-5">
-            <div className="mb-10 text-center">
-              <Eyebrow>{c.together.eyebrow}</Eyebrow>
-              <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-5xl" style={H12}>
-                {c.together.titleA}<br /><span className="text-[#B98A00]">{c.together.titleB}</span>
-              </h2>
-              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.together.lead}</p>
-            </div>
-            <div className="grid gap-5 md:grid-cols-2">
-              <div className="rounded-2xl border border-[#242424] bg-[#0A0A0A] p-6">
-                <span className="text-[11px] text-[#F6C124]" style={MICRO}>{c.together.coachLabel}</span>
-                <h3 className="mt-2 text-xl text-white" style={H3}>{c.together.coachTitle}</h3>
-                <CheckList items={c.together.coachItems} check="#F6C124" text="#a9a396" />
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div className="space-y-7">
+                <div>
+                  <Eyebrow>{c.journey.eyebrow}</Eyebrow>
+                  <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-[44px]" style={H12}>
+                    {c.journey.title}<br />
+                    <span className="text-2xl text-[#B98A00] md:text-[32px]">{c.journey.subtitle}</span>
+                  </h2>
+                </div>
+                <div className="space-y-5 text-lg leading-relaxed">
+                  <p>{c.journey.p1}</p>
+                  <p>{c.journey.p2}</p>
+                </div>
+                <div>
+                  <p className="mb-4 text-lg font-semibold text-[#0A0A0A]">{c.journey.closing}</p>
+                  <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-7 py-3`}>{c.journey.cta}</button>
+                </div>
               </div>
-              <div className="rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6">
-                <span className="text-[11px] text-[#B98A00]" style={MICRO}>{c.together.trainerLabel}</span>
-                <h3 className="mt-2 text-xl text-[#0A0A0A]" style={H3}>{c.together.trainerTitle}</h3>
-                <CheckList items={c.together.trainerItems} check="#B98A00" text="#3f3a33" />
-              </div>
-            </div>
-            <div className="mt-5 rounded-2xl border border-[#E0DACB] bg-[#F4F2ED] p-5 text-[15px] leading-relaxed text-[#3f3a33] [&_b]:text-[#0A0A0A]">
-              {c.together.note}
-            </div>
-            <div className="mt-8 grid items-center gap-6 rounded-2xl bg-[#0A0A0A] p-6 md:grid-cols-[1fr_auto]">
-              <div>
-                <Eyebrow dark>Marketplace</Eyebrow>
-                <h3 className="mt-4 text-xl text-white md:text-2xl" style={H3}>{c.together.marketTitle}</h3>
-                <p className="mt-3 max-w-xl leading-relaxed text-[#a09a8d]">{c.together.marketText}</p>
-              </div>
-              <div aria-hidden className="mx-auto w-full max-w-[250px] rounded-[13px] border border-[#242424] bg-[#131313] p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#242424]"><User className="h-5 w-5" color="#5e5849" /></div>
-                  <div>
-                    <div className="text-sm font-bold text-white">{c.together.mockLabel}</div>
-                    <div className="mt-0.5 text-[9px] text-[#F6C124]" style={BADGE}>{c.together.mockSpec}</div>
+
+              <div className="relative mx-auto w-full max-w-sm">
+                <div className="rounded-[2.5rem] border-[8px] border-[#1C1C1C] bg-[#F4F2ED] p-5 shadow-2xl">
+                  <div className="space-y-4 rounded-2xl bg-[#FFFFFF] p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A0A0A]"><Bot className="h-5 w-5" color="#F6C124" /></div>
+                      <div>
+                        <div className="text-sm font-bold text-[#0A0A0A]">Coach AI</div>
+                        <div className="text-[10px] text-[#938C7C]" style={BADGE}>{c.journey.chatOnline}</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[0]}</div>
+                      <div className="ml-6 rounded-lg bg-[#0A0A0A] p-3 text-right text-[#ECE7DB]">{c.journey.chat[1]}</div>
+                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[2]}</div>
+                    </div>
+                    <button type="button" className={`${GOLD_BTN} w-full py-2 text-sm`}><Zap className="mr-2 h-4 w-4" />{c.journey.chatCta}</button>
                   </div>
                 </div>
-                <div className="mt-4 text-[9px] text-[#5e5849]" style={BADGE}>{c.together.mockRow}</div>
-                <div className={`${GOLD_BTN} mt-4 w-full py-2 text-xs`}>{c.together.mockCta}</div>
+                <div className="absolute -right-3 -top-3 rounded-full bg-[#C6F24E] p-2 shadow-lg"><Check className="h-4 w-4" color="#0A0A0A" /></div>
+                <div className="absolute -bottom-4 -left-3 rounded-lg border border-[#E0DACB] bg-[#FFFFFF] p-2 shadow-lg">
+                  <div className="text-[10px] text-[#0A0A0A]" style={BADGE}>{c.journey.today}</div>
+                  <div className="text-xs text-[#5a5346]">{c.journey.todayNote}</div>
+                </div>
               </div>
             </div>
+
           </div>
         </section>
+
+        {/* Control — lime payoff */}
+        <section className="bg-[#0A0A0A] py-16 md:py-24 text-[#9c9689]">
+          <div className="mx-auto max-w-4xl px-5 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px]" style={{ ...MICRO, borderColor: 'rgba(198,242,78,.45)', background: 'rgba(198,242,78,.09)', color: '#C6F24E' }}>
+            <span className="inline-block h-[7px] w-[7px] rounded-full" style={{ background: '#C6F24E', boxShadow: '0 0 0 4px rgba(198,242,78,.3)' }} />
+            {c.control.eyebrow}
+          </span>
+            <h2 className="mt-5 text-3xl text-white md:text-5xl" style={H12}>
+              {c.control.titleA}<br /><span className="text-[#C6F24E]">{c.control.titleB}</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed">{c.control.intro}</p>
+            <div className="my-8 rounded-2xl border border-[#242424] bg-[#131313] p-6 text-left">
+              <h3 className="mb-4 text-lg text-white" style={H3}>{c.control.listTitle}</h3>
+              <ul className="grid gap-4 md:grid-cols-2">
+                {c.control.items.map((it) => (
+                  <li key={it} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-5 w-5 flex-shrink-0" color="#C6F24E" strokeWidth={2.6} /><span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="text-lg">{c.control.outro}</p>
+          </div>
+        </section>
+
 
         {/* Pricing */}
         <section id="pricing" className="bg-[#ECE7DB] pb-16 md:pb-24 pt-4 text-[#3f3a33]">
