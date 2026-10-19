@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Crown, Sparkles, Check, Dumbbell, Brain, BarChart3, MessageSquare, Users, Lightbulb, TrendingUp } from 'lucide-react';
+import { Crown, Sparkles, CircleCheck } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface AIFeatureDialogProps {
@@ -9,149 +8,86 @@ interface AIFeatureDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+const MONO = "'JetBrains Mono', ui-monospace, monospace";
+const DISPLAY = "'Archivo', sans-serif";
+const BODY = "'Inter', sans-serif";
+
+const CLIENT_KEYS = ['aiWorkoutCoach', 'todaySession', 'advancedInsights', 'privateChats'];
+const TRAINER_KEYS = ['businessInsights', 'chatAssistant', 'clientAnalytics', 'smartRecommendations'];
+
 const AIFeatureDialog = ({ type, open, onOpenChange }: AIFeatureDialogProps) => {
   const { t } = useLanguage();
-
-  const clientFeatures = [
-    {
-      icon: Brain,
-      name: t('aiPricing.client.features.aiWorkoutCoach'),
-      description: "Your personal AI coach guides you through every workout with real-time tips, form corrections, and motivation.",
-      details: [
-        "Ask questions during your workout and get instant answers",
-        "Receive personalized tips based on your current exercise",
-        "Get suggestions for weight adjustments and rest times",
-        "Voice-enabled hands-free assistance"
-      ]
-    },
-    {
-      icon: BarChart3,
-      name: t('aiPricing.client.features.advancedInsights'),
-      description: "Deep analytics powered by AI to understand your progress and optimize your training.",
-      details: [
-        "Body composition trend analysis",
-        "Performance predictions and goal tracking",
-        "Personalized workout recommendations",
-        "Recovery and fatigue monitoring"
-      ]
-    }
-  ];
-
-  const trainerFeatures = [
-    {
-      icon: TrendingUp,
-      name: t('aiPricing.trainer.features.businessInsights'),
-      description: "Make data-driven decisions with AI-powered business analytics.",
-      details: [
-        "Revenue forecasting and trend analysis",
-        "Client retention predictions",
-        "Seasonal demand patterns",
-        "Growth opportunity identification"
-      ]
-    },
-    {
-      icon: MessageSquare,
-      name: t('aiPricing.trainer.features.chatAssistant'),
-      description: "Your AI assistant helps manage client communications and content creation.",
-      details: [
-        "Generate workout program descriptions",
-        "Draft professional client messages",
-        "Answer common client questions automatically",
-        "Create social media content"
-      ]
-    },
-    {
-      icon: Users,
-      name: t('aiPricing.trainer.features.clientAnalytics'),
-      description: "Comprehensive performance tracking for all your clients in one place.",
-      details: [
-        "Individual progress dashboards",
-        "Comparative client performance metrics",
-        "Goal achievement tracking",
-        "Automated progress reports"
-      ]
-    },
-    {
-      icon: Lightbulb,
-      name: t('aiPricing.trainer.features.smartRecommendations'),
-      description: "AI suggests the perfect programs and adjustments for each client.",
-      details: [
-        "Personalized program suggestions",
-        "Exercise substitution recommendations",
-        "Load progression optimization",
-        "Recovery-based training adjustments"
-      ]
-    }
-  ];
-
   const isClient = type === 'client';
-  const features = isClient ? clientFeatures : trainerFeatures;
   const Icon = isClient ? Crown : Sparkles;
-  const colorClass = isClient ? 'amber' : 'violet';
+  const features = (isClient ? CLIENT_KEYS : TRAINER_KEYS).map((k) => t(`aiPricing.${type}.features.${k}`));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+      <DialogContent
+        className="max-w-lg max-h-[85vh] overflow-y-auto"
+        style={{ background: '#FFFFFF', color: '#3f3a33', fontFamily: BODY, borderColor: '#E0DACB' }}
+      >
         <DialogHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <div className={`p-2 bg-${colorClass}-100 rounded-lg`}>
-              <Icon className={`h-6 w-6 text-${colorClass}-600`} />
+          <div className="flex items-center gap-3">
+            <div
+              aria-hidden="true"
+              className="flex shrink-0 items-center justify-center rounded-[9px]"
+              style={{ width: 34, height: 34, background: '#F6C124' }}
+            >
+              <Icon size={17} color="#0A0A0A" strokeWidth={1.8} />
             </div>
-            <div>
-              <DialogTitle className="text-xl">
-                {isClient ? t('aiPricing.client.title') : t('aiPricing.trainer.title')}
+            <div className="text-left">
+              <DialogTitle
+                className="uppercase text-[20px] leading-[1.1]"
+                style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#0A0A0A' }}
+              >
+                {t(`aiPricing.${type}.title`)}
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="mt-1 text-[13px]" style={{ color: '#3f3a33' }}>
                 {isClient ? t('aiPricing.client.tagline') : t('aiPricing.trainer.description')}
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="space-y-6 mt-4">
-          {features.map((feature, index) => (
-            <div 
-              key={index} 
-              className={`p-4 rounded-lg border ${isClient ? 'border-amber-200 bg-amber-50/50' : 'border-violet-200 bg-violet-50/50'}`}
+        <ul className="mt-4 flex flex-col gap-2">
+          {features.map((f, i) => (
+            <li
+              key={i}
+              className="flex items-start gap-2 rounded-[12px] border px-4 py-3"
+              style={{ background: '#FFFFFF', borderColor: '#E0DACB' }}
             >
-              <div className="flex items-start gap-3">
-                <div className={`p-2 rounded-lg ${isClient ? 'bg-amber-100' : 'bg-violet-100'}`}>
-                  <feature.icon className={`h-5 w-5 ${isClient ? 'text-amber-600' : 'text-violet-600'}`} />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-semibold mb-1">{feature.name}</h4>
-                  <p className="text-sm text-muted-foreground mb-3">{feature.description}</p>
-                  <ul className="space-y-1.5">
-                    {feature.details.map((detail, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm">
-                        <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+              <CircleCheck size={16} color="#B98A00" strokeWidth={2} className="mt-[2px] shrink-0" aria-hidden="true" />
+              <span className="text-[14px] leading-[1.5]" style={{ color: '#3f3a33' }}>{f}</span>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        <div className="mt-6 pt-4 border-t">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <span className={`text-2xl font-bold ${isClient ? 'text-amber-600' : 'text-violet-600'}`}>
-                {isClient ? t('aiPricing.client.price') : t('aiPricing.trainer.price')}
-              </span>
-              <span className="text-muted-foreground ml-1">
-                {isClient ? t('aiPricing.client.period') : t('aiPricing.trainer.period')}
-              </span>
-            </div>
+        <div className="mt-5 border-t pt-4" style={{ borderColor: '#E0DACB' }}>
+          <div className="flex flex-wrap items-baseline gap-x-2">
+            <span
+              className="text-[28px] leading-none"
+              style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#0A0A0A' }}
+            >
+              {t(`aiPricing.${type}.price`)}
+            </span>
+            <span style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, color: '#938C7C' }}>
+              {t(`aiPricing.${type}.period`)}
+            </span>
           </div>
-          <Button 
+          {isClient && (
+            <p className="mt-[6px]" style={{ fontFamily: MONO, fontWeight: 700, fontSize: 11, color: '#B98A00' }}>
+              {t('aiPricing.client.then')}
+            </p>
+          )}
+          <button
+            type="button"
             disabled
-            className={`w-full cursor-not-allowed opacity-70 ${isClient ? 'bg-amber-500 hover:bg-amber-500' : 'bg-violet-500 hover:bg-violet-500'}`}
+            className="mt-4 w-full cursor-not-allowed rounded-full py-[11px] text-[13px] font-bold"
+            style={{ background: '#0A0A0A', color: '#ECE7DB' }}
           >
             {t('aiPricing.comingSoon')}
-          </Button>
+          </button>
         </div>
       </DialogContent>
     </Dialog>
