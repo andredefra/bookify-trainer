@@ -900,7 +900,7 @@ export const en = {
   // Gym/Studio section — header
   'gym.kicker': 'Studios and gyms',
   'gym.titleA': 'The perfect solution for',
-  'gym.titleB': 'PT studios and gyms'
+  'gym.titleB': 'PT studios and gyms',
 
   'gymMock.title': 'Your trainers',
   'gymMock.tabTrainer': 'Trainer',
