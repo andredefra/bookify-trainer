@@ -268,7 +268,7 @@ export const en = {
   'gym.benefit2.description': 'One dashboard to manage all trainers, their clients, schedules, and performance metrics.',
   'gym.benefit3.title': 'Member Experience',
   'gym.benefit3.description': 'Offer your clients a digital experience with progress tracking, session booking, and trainer communication.',
-  'gym.cta': 'See Studio Pricing Plan',
+  'gym.cta': "Let me know when it's ready",
 
   // Pricing
   'pricing.title': 'Start Free, Scale as You Grow',
@@ -492,7 +492,7 @@ export const en = {
   
   // Footer
   'footer.description': 'The all-in-one platform for personal trainers.',
-  'footer.copyright': '© {year} mypersonalai ltd. All rights reserved.',
+  'footer.copyright': '© {year} MyPersonal. All rights reserved.',
   'footer.product': 'Product',
   'footer.legal': 'Legal',
   'footer.privacy': 'Privacy',
@@ -517,8 +517,6 @@ export const en = {
   'pricing.detailedFeatures.everythingInEssential.description': 'All features from the Essential plan are included',
 
   // User Landing
-  'user.hero.title': 'Train body and mind. With Trainer.ai, you\'re never alone.',
-  'user.hero.subtitle': 'Discover the first virtual personal trainer that truly listens to you. Create your plan, track progress, receive personalized advice.',
   
   // AI Summary
   'aiSummary.title': 'AI Summary',
@@ -636,7 +634,6 @@ export const en = {
   'aiPricing.client.badge10': "First 10 free",
   'aiPricing.client.price': "€0.99",
   'aiPricing.client.period': "/month, first year",
-  'aiPricing.client.description': 'Unlimited AI coaching and advanced features',
   'aiPricing.client.features.trainingPrograms': 'Training Programs',
   'aiPricing.client.features.workoutLogging': 'Workout Logging',
   'aiPricing.client.features.aiWorkoutCoach': '20 messages a day',
@@ -905,4 +902,25 @@ export const en = {
   'gym.titleA': 'The perfect solution for',
   'gym.titleB': 'PT studios and gyms'
 
+  'gymMock.title': 'Your trainers',
+  'gymMock.tabTrainer': 'Trainer',
+  'gymMock.tabAvail': 'Availability',
+  'gymMock.tabPerf': 'Performance',
+  'gymMock.rating': 'Average rating',
+  'gymMock.ratingSub': 'on 245 reviews',
+  'gymMock.retention': 'Clients who stay',
+  'gymMock.retentionSub': '+3% on last month',
+  'gymMock.goals': 'Goals reached',
+  'gymMock.goalsSub': 'clients on target',
+  'gymMock.chart1': 'Clients who stay by trainer',
+  'gymMock.stay': 'Stay %',
+  'gymMock.new': 'New clients',
+  'gymMock.chart2': 'Sessions per month',
+  'gymMock.months': 'Jan,Feb,Mar,Apr,May,Jun',
+  'soon.kicker': 'Studios and gyms · Coming soon',
+  'soon.titleA': "We're working on it.",
+  'soon.titleB': 'Coming soon.',
+  'soon.body': "The version for studios and gyms is being built: one place for your team of trainers, their clients and the packages they sell. Leave us a contact and we'll write to you as soon as it's ready.",
+  'soon.write': 'Write to us',
+  'soon.home': 'Back to home',
 };
