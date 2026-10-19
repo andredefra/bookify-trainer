@@ -4,9 +4,9 @@ import { ConsumerLanding, type ConsumerCopy } from './UserLanding';
 const S = ({ children }: { children: ReactNode }) => <strong className="text-[#0A0A0A]">{children}</strong>;
 
 const EN: ConsumerCopy = {
-  hero: { a: "Train body and mind. With ", gold: 'Coach AI', b: ", you're never alone.",
-    sub1: 'A virtual personal trainer that truly listens to you.',
-    sub2: 'Create your plan, track progress, receive personalized advice. With your trainer, or on your own.',
+  hero: { a: 'The right trainer.\nAnd a ', gold: 'Coach AI', b: '\nthat never sleeps.',
+    sub1: 'Find the personal trainer who fits you, right here.',
+    sub2: "And when they're not around, Coach AI answers: in the evening, at the gym, between sets.",
     ctaLong: '👉 Start now – Free 1 year for the first 10 clients', ctaShort: '👉 Start now – Free 1 year!',
     micro: 'No card required · Live in 2 minutes · Your data stays yours' },
   journey: { eyebrow: 'Your journey', title: 'Start your journey.', subtitle: 'When you want. Where you want.',

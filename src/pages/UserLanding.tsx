@@ -94,7 +94,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
           <div aria-hidden className="pointer-events-none absolute inset-0" style={{ backgroundImage: 'var(--hero-grid)', backgroundSize: '56px 56px', WebkitMaskImage: 'var(--hero-grid-mask)', maskImage: 'var(--hero-grid-mask)' }} />
           <div aria-hidden className="pointer-events-none absolute left-1/2 top-10 h-[520px] w-[900px] max-w-[160vw] -translate-x-1/2" style={{ background: 'var(--hero-glow)' }} />
           <div className="relative mx-auto max-w-6xl px-5 text-center">
-            <h1 className="mx-auto max-w-5xl text-[34px] text-white sm:text-5xl lg:text-[68px]" style={H12}>
+            <h1 className="mx-auto max-w-5xl text-[34px] text-white sm:text-5xl lg:text-[68px]" style={{ ...H12, whiteSpace: 'pre-line' }}>
               {c.hero.a}<span className="text-[#F6C124]">{c.hero.gold}</span>{c.hero.b}
             </h1>
             <p className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-[#bdb7aa] md:text-lg">
@@ -377,9 +377,9 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
 const S = ({ children }: { children: ReactNode }) => <strong className="text-[#0A0A0A]">{children}</strong>;
 
 const IT: ConsumerCopy = {
-  hero: { a: 'Allena corpo e mente. Con il ', gold: 'Coach AI', b: ', non sei mai da solo.',
-    sub1: 'Un personal trainer virtuale che ti ascolta davvero.',
-    sub2: 'Crea il tuo piano, registra i progressi, ricevi consigli su misura. Con il tuo trainer, o per conto tuo.',
+  hero: { a: 'Il trainer giusto.\nE un ', gold: 'Coach AI', b: '\nche non dorme mai.',
+    sub1: 'Trova il personal trainer che fa per te, qui dentro.',
+    sub2: "E quando lui non c'è, il Coach AI ti risponde: la sera, in palestra, fra due serie.",
     ctaLong: '👉 Inizia ora – Gratis 1 anno per i primi 10 clienti', ctaShort: '👉 Inizia ora – Gratis 1 anno!',
     micro: 'Nessuna carta richiesta · Attiva in 2 minuti · I tuoi dati restano tuoi' },
   journey: { eyebrow: 'Il tuo percorso', title: 'Fai partire il tuo percorso.', subtitle: 'Quando vuoi. Dove vuoi.',
