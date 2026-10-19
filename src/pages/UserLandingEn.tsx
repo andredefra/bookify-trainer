@@ -44,17 +44,17 @@ const UserLandingEn = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-6 md:space-y-10">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-primary mx-auto max-w-5xl md:leading-tight text-balance">
-                Train body and mind. With MyPersonal's AI Trainer, you're never alone.
+                Train body and mind. With Coach AI, you're never alone.
               </h1>
               
               <p className="mx-auto max-w-3xl text-lg md:text-xl text-muted-foreground leading-relaxed text-balance">
                 Discover the first virtual personal trainer that truly listens to you.<br />
-                Create your plan, track progress, receive personalized advice. All this, without having to pay a coach.
+                Create your plan, track progress, receive personalized advice. With your trainer, or on your own.
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                 <Button size="lg" className="text-lg px-8 py-4" onClick={openWaitlist}>
-                    <span className="hidden sm:inline">👉 Start now – Free for 1 year for the first 100 users!</span>
+                    <span className="hidden sm:inline">👉 Start now – Free 1 year for the first 10 clients</span>
                     <span className="sm:hidden">👉 Start now – Free 1 year!</span>
                   </Button>
               </div>
@@ -83,8 +83,8 @@ const UserLandingEn = () => {
                   </p>
                   
                   <p>
-                    With <strong className="text-primary">MyPersonal's AI Trainer</strong>, you can finally build a personalized routine 
-                    without having to depend on a human coach.
+                    With <strong className="text-primary">Coach AI</strong> you can build a personalized routine,
+                    whether you have a trainer or not.
                   </p>
                 </div>
 
@@ -125,7 +125,7 @@ const UserLandingEn = () => {
                           <Bot className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">MyPersonal's AI Trainer</div>
+                          <div className="text-sm font-semibold">Coach AI</div>
                           <div className="text-xs text-muted-foreground">Online now</div>
                         </div>
                       </div>
@@ -165,7 +165,7 @@ const UserLandingEn = () => {
           </div>
         </section>
 
-        {/* Section 2 - Trainer.ai Your Virtual Ally */}
+        {/* Section 2 - Coach AI Your Virtual Ally */}
         <section className="py-16 md:py-24 relative overflow-hidden">
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5"></div>
@@ -174,7 +174,7 @@ const UserLandingEn = () => {
             <div className="text-center mb-12 animate-fade-in">
               <Badge variant="outline" className="mb-4">🤖 Artificial Intelligence</Badge>
               <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
-                MyPersonal's AI Trainer: your new<br />
+                Coach AI: your new<br />
                 <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">virtual ally</span>
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -198,7 +198,7 @@ const UserLandingEn = () => {
                 },
                 {
                   title: "Always available",
-                  description: "24/7, cheaper than a human coach",
+                  description: "Answers when your trainer isn't there: in the evening, at the gym, between sets",
                   icon: Clock,
                   gradient: "from-green-500/10 to-green-600/10"
                 }
@@ -218,13 +218,13 @@ const UserLandingEn = () => {
             <div className="max-w-4xl mx-auto">
               <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 border shadow-lg">
                 <h3 className="text-2xl font-semibold text-primary mb-6 text-center">
-                  💬 Questions you can ask MyPersonal's AI Trainer:
+                  💬 Questions you can ask Coach AI:
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   {[
                     "I only have 30 minutes today, what should I do?",
                     "Am I gaining weight or building muscle?",
-                    "What can I eat instead of bread?",
+                    "How long should I rest between sets?",
                     "Create a 3-day program for weight loss"
                   ].map((question, index) => (
                     <div key={index} className="bg-primary/5 rounded-lg p-4 border-l-4 border-primary">
@@ -234,8 +234,8 @@ const UserLandingEn = () => {
                 </div>
                 <div className="text-center mt-8">
                   <p className="text-lg">
-                    <strong className="text-primary">MyPersonal's AI Trainer always responds.</strong> Concrete, simple, effective.<br />
-                    <span className="text-muted-foreground">Like having a coach in your pocket, but cheaper and always available.</span>
+                    <strong className="text-primary">Coach AI always responds.</strong> Concrete, simple, effective.<br />
+                    <span className="text-muted-foreground">And if you have a trainer, Coach AI knows what they've asked you to do.</span>
                   </p>
                 </div>
               </div>
@@ -332,15 +332,15 @@ const UserLandingEn = () => {
                 One plan. All features.
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Only the first 100 users get free access for 1 year. After that, normal plan at €4.99/month.
+                The first 10 clients get free access for one year. After that: €0.99 per month for the first year, then €1.99.
               </p>
             </div>
             
             <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* Free Plan for first 100 users */}
+              {/* Free Plan for first 10 clients */}
               <Card className="relative p-8 border-2 border-green-500/50 bg-green-50/50 hover:bg-green-50/70 transition-colors">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge className="bg-green-500 hover:bg-green-500 text-white">🎉 FIRST 100 USERS</Badge>
+                  <Badge className="bg-green-500 hover:bg-green-500 text-white">🎉 FIRST 10 CLIENTS</Badge>
                 </div>
                 
                 <CardHeader className="p-0 mb-6">
@@ -357,20 +357,20 @@ const UserLandingEn = () => {
                   
                   {/* Counter */}
                   <div className="bg-green-100 border border-green-200 rounded-lg p-4 mt-4">
-                    <p className="text-sm font-medium text-green-800">Spots available: coming soon</p>
+                    <p className="text-sm font-medium text-green-800">10 spots in total</p>
                   </div>
                 </CardHeader>
                 
                 <CardContent className="p-0">
                   <div className="space-y-4 mb-8">
                     {[
-                      { text: "Unlimited chat with MyPersonal's AI Trainer", icon: Bot },
-                      { text: "Advanced personalized programs", icon: Target },
-                      { text: "Complete analytics and insights", icon: BarChart3 },
-                      { text: "Detailed nutritional advice", icon: Heart },
+                      { text: "20 messages a day with Coach AI", icon: Bot },
+                      { text: "Today's session, built around your log and goals", icon: Target },
+                      { text: "3 training plans a month", icon: Clock },
+                      { text: "Log workouts, activity and goals in one tap", icon: Zap },
+                      { text: "Analysis of every logged workout", icon: BarChart3 },
+                      { text: "Private: no one else reads it, not even your trainer", icon: Shield },
                       { text: "All device integrations", icon: Smartphone },
-                      { text: "Advanced AI features", icon: Zap },
-                      { text: "Priority 24/7 support", icon: Shield },
                       { text: "Early access updates", icon: Infinity }
                     ].map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
@@ -395,22 +395,23 @@ const UserLandingEn = () => {
                 </CardContent>
               </Card>
 
-              {/* Normal Plan (after 100 users) */}
+              {/* Normal Plan (after 10 clients) */}
               <Card aria-disabled={!PAID_PLAN_ENABLED} className={`relative p-8 border-2 border-primary/30 transition-colors ${PAID_PLAN_ENABLED ? 'hover:border-primary/50' : 'opacity-50 grayscale pointer-events-none select-none'}`}>
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">{PAID_PLAN_ENABLED ? '💼 NORMAL PLAN' : 'Available after the first 100'}</Badge>
+                  <Badge variant="outline" className="bg-background border-2 border-primary/30 shadow-sm">{PAID_PLAN_ENABLED ? '💼 NORMAL PLAN' : 'Available after the first 10'}</Badge>
                 </div>
                 
                 <CardHeader className="p-0 mb-6">
                   <div className="flex items-center justify-between mb-4">
                     <CardTitle className="text-2xl">Normal Access</CardTitle>
                     <div className="text-right">
-                      <div className="text-3xl font-bold">€4.99</div>
-                      <div className="text-sm text-muted-foreground">per month</div>
+                      <div className="text-3xl font-bold">€0.99</div>
+                      <div className="text-sm text-muted-foreground">per month for the first year</div>
+                      <div className="text-xs text-muted-foreground">then €1.99 per month</div>
                     </div>
                   </div>
                   <CardDescription className="text-base">
-                    Same features except early access updates, which are reserved for the first 100 users
+                    Same features except early access updates, which are reserved for the first 10 clients
                   </CardDescription>
                   
                   <div className="bg-primary/10 rounded-lg p-4 mt-4">
@@ -423,13 +424,13 @@ const UserLandingEn = () => {
                 <CardContent className="p-0">
                   <div className="space-y-4 mb-8">
                     {[
-                      { text: "Unlimited chat with MyPersonal's AI Trainer", icon: Bot },
-                      { text: "Advanced personalized programs", icon: Target },
-                      { text: "Complete analytics and insights", icon: BarChart3 },
-                      { text: "Detailed nutritional advice", icon: Heart },
+                      { text: "20 messages a day with Coach AI", icon: Bot },
+                      { text: "Today's session, built around your log and goals", icon: Target },
+                      { text: "3 training plans a month", icon: Clock },
+                      { text: "Log workouts, activity and goals in one tap", icon: Zap },
+                      { text: "Analysis of every logged workout", icon: BarChart3 },
+                      { text: "Private: no one else reads it, not even your trainer", icon: Shield },
                       { text: "All device integrations", icon: Smartphone },
-                      { text: "Advanced AI features", icon: Zap },
-                      { text: "Priority 24/7 support", icon: Shield },
                     ].map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center">
@@ -442,11 +443,11 @@ const UserLandingEn = () => {
                   </div>
                   
                   <Button variant="outline" className="w-full" size="lg" disabled={!PAID_PLAN_ENABLED}>
-                    Subscribe at €4.99/month
+                    Subscribe at €0.99/month for the first year
                   </Button>
                   
                   <div className="text-center mt-4 space-y-1">
-                    <p className="text-sm text-primary">🔄 Monthly subscription</p>
+                    <p className="text-sm text-primary">💎 Same features, €0.99 per month for the first year</p>
                     <p className="text-sm text-muted-foreground">Cancel anytime</p>
                   </div>
                 </CardContent>
@@ -465,8 +466,8 @@ const UserLandingEn = () => {
                     </h3>
                   </div>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    No hidden or limited features. All our users get the best possible experience. 
-                    The first 100 get it free for 1 year, the others pay €4.99/month.
+                    No hidden features. The limits are the same for everyone. All our users get the best possible experience. 
+                    The first 10 clients get it free for one year; everyone else pays €0.99 per month for the first year, then €1.99.
                   </p>
                 </div>
               </div>
@@ -482,7 +483,7 @@ const UserLandingEn = () => {
                 <Badge variant="outline" className="mb-4">🚀 Final Step</Badge>
                 <h2 className="text-3xl md:text-5xl font-display font-bold text-primary mb-6">
                   Stop postponing.<br />
-                  <span className="text-2xl md:text-3xl text-muted-foreground">MyPersonal's AI Trainer is ready. Are you?</span>
+                  <span className="text-2xl md:text-3xl text-muted-foreground">Coach AI is ready. Are you?</span>
                 </h2>
               </div>
               
