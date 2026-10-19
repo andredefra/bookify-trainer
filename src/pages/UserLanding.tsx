@@ -109,6 +109,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
             <p className="mt-5 text-[10px] text-[#8c8678] sm:text-[11px]" style={MICRO}>{c.hero.micro}</p>
           </div>
 
+
         {/* What you can do */}
         <section id="features" className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
           <div className="mx-auto max-w-6xl px-5">
@@ -147,49 +148,34 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
           </div>
         </section>
 
-                  <p>{c.journey.p1}</p>
-                  <p>{c.journey.p2}</p>
-                </div>
-                <div>
-                  <p className="mb-4 text-lg font-semibold text-[#0A0A0A]">{c.journey.closing}</p>
-                  <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-7 py-3`}>{c.journey.cta}</button>
-                </div>
-              </div>
-
-              <div className="relative mx-auto w-full max-w-sm">
-                <div className="rounded-[2.5rem] border-[8px] border-[#1C1C1C] bg-[#F4F2ED] p-5 shadow-2xl">
-                  <div className="space-y-4 rounded-2xl bg-[#FFFFFF] p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A0A0A]"><Bot className="h-5 w-5" color="#F6C124" /></div>
-                      <div>
-                        <div className="text-sm font-bold text-[#0A0A0A]">Coach AI</div>
-                        <div className="text-[10px] text-[#938C7C]" style={BADGE}>{c.journey.chatOnline}</div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 text-sm">
-                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[0]}</div>
-                      <div className="ml-6 rounded-lg bg-[#0A0A0A] p-3 text-right text-[#ECE7DB]">{c.journey.chat[1]}</div>
-                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[2]}</div>
-                    </div>
-                    <button type="button" className={`${GOLD_BTN} w-full py-2 text-sm`}><Zap className="mr-2 h-4 w-4" />{c.journey.chatCta}</button>
-            {c.control.eyebrow}
-          </span>
-
-                return (
-                  <div key={card.title} className="rounded-[14px] border border-[#242424] bg-[#131313] p-6">
-                    <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#F6C124]"><I className="h-[18px] w-[18px]" color="#0A0A0A" /></div>
-                    <h3 className="mb-2 text-lg text-white" style={H3}>{card.title}</h3>
-                    <p className="text-sm leading-relaxed text-[#948e81]">{card.description}</p>
-                  </div>
-                );
-              })}
+                  <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-[#FFFFFF] p-3">
+          <div className="mx-auto max-w-4xl px-5 text-center">
+            <Eyebrow dark>Marketplace</Eyebrow>
+            <h2 className="mt-5 text-3xl text-white md:text-5xl" style={H12}>
+              {c.market.titleA}<br /><span className="text-[#F6C124]">{c.market.titleB}</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#a09a8d]">{c.market.lead}</p>
+            <div className="mt-9 flex justify-center">
+              <Link to={c.market.href} className={`${GOLD_BTN} px-7 py-3.5 text-base`}>{c.market.cta}</Link>
             </div>
-            <div className="mx-auto max-w-4xl rounded-2xl border border-[#242424] bg-[#131313] p-6 md:p-8">
-              <h3 className="mb-6 text-center text-xl text-white md:text-2xl" style={H3}>{c.ai.qTitle}</h3>
-              <div className="grid gap-4 md:grid-cols-2">
-                {c.ai.questions.map((q) => (
-                  <div key={q} className="rounded-r-lg border-l-2 border-[#F6C124] p-4" style={{ background: 'rgba(236,231,219,.045)' }}>
-                    <p className="italic text-[#d6d0c3]">{q}</p>
+          </div>
+        </section>
+
+        {/* Coach AI + trainer */}
+        <section className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="mb-10 text-center">
+              <Eyebrow>{c.together.eyebrow}</Eyebrow>
+              <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-5xl" style={H12}>
+                {c.together.titleA}<br /><span className="text-[#B98A00]">{c.together.titleB}</span>
+              </h2>
+              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.together.lead}</p>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              <div className="rounded-2xl border border-[#242424] bg-[#0A0A0A] p-6">
+            <h2 className="mt-5 text-3xl text-white md:text-5xl" style={H12}>
+              {c.control.titleA}<br /><span className="text-[#C6F24E]">{c.control.titleB}</span>
+
                   </div>
                 ))}
               </div>
@@ -228,10 +214,23 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {c.journey.chips.map((text, i) => {
                 const I = CHIP_ICONS[i];
+
+        <section className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="mb-10 text-center">
+              <Eyebrow>{c.what.eyebrow}</Eyebrow>
+              <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-5xl" style={H12}>
+                {c.what.titleA}<br /><span className="text-[#B98A00]">{c.what.titleB}</span>
+              </h2>
+              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.what.lead}</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {c.journey.chips.map((text, i) => {
+                const I = CHIP_ICONS[i];
                 return (
                   <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-[#FFFFFF] p-3">
-          <div className="mx-auto max-w-4xl px-5 text-center">
-            <Eyebrow dark>Marketplace</Eyebrow>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-[#F6C124]"><I className="h-4 w-4" color="#0A0A0A" /></div>
+                    <span className="text-sm font-semibold text-[#0A0A0A]">{text}</span>
             <h2 className="mt-5 text-3xl text-white md:text-5xl" style={H12}>
               {c.market.titleA}<br /><span className="text-[#F6C124]">{c.market.titleB}</span>
             </h2>
@@ -242,26 +241,28 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
           </div>
         </section>
 
-        {/* Coach AI + trainer */}
-        <section className="bg-[#ECE7DB] py-16 md:py-24 text-[#3f3a33]">
-          <div className="mx-auto max-w-6xl px-5">
-            <div className="mb-10 text-center">
-              <Eyebrow>{c.together.eyebrow}</Eyebrow>
-              <h2 className="mt-5 text-3xl text-[#0A0A0A] md:text-5xl" style={H12}>
-                {c.together.titleA}<br /><span className="text-[#B98A00]">{c.together.titleB}</span>
-              </h2>
-              <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.together.lead}</p>
-            </div>
-            <div className="grid gap-5 md:grid-cols-2">
-              <div className="rounded-2xl border border-[#242424] bg-[#0A0A0A] p-6">
-                <span className="text-[11px] text-[#F6C124]" style={MICRO}>{c.together.coachLabel}</span>
-                <h3 className="mt-2 text-xl text-white" style={H3}>{c.together.coachTitle}</h3>
-                <CheckList items={c.together.coachItems} check="#F6C124" text="#a9a396" />
+                  <p>{c.journey.p1}</p>
+                  <p>{c.journey.p2}</p>
+                </div>
+                <div>
+                  <p className="mb-4 text-lg font-semibold text-[#0A0A0A]">{c.journey.closing}</p>
+                  <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-7 py-3`}>{c.journey.cta}</button>
+                </div>
               </div>
-              <div className="rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-6">
-                <span className="text-[11px] text-[#B98A00]" style={MICRO}>{c.together.trainerLabel}</span>
-                <h3 className="mt-2 text-xl text-[#0A0A0A]" style={H3}>{c.together.trainerTitle}</h3>
-                <CheckList items={c.together.trainerItems} check="#B98A00" text="#3f3a33" />
+
+              <div className="relative mx-auto w-full max-w-sm">
+                <div className="rounded-[2.5rem] border-[8px] border-[#1C1C1C] bg-[#F4F2ED] p-5 shadow-2xl">
+                  <div className="space-y-4 rounded-2xl bg-[#FFFFFF] p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A0A0A]"><Bot className="h-5 w-5" color="#F6C124" /></div>
+                      <div>
+                        <div className="text-sm font-bold text-[#0A0A0A]">Coach AI</div>
+                        <div className="text-[10px] text-[#938C7C]" style={BADGE}>{c.journey.chatOnline}</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[0]}</div>
+                      <div className="ml-6 rounded-lg bg-[#0A0A0A] p-3 text-right text-[#ECE7DB]">{c.journey.chat[1]}</div>
           </div>
         </section>
 
@@ -274,6 +275,22 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
           </span>
             <h2 className="mt-5 text-3xl text-white md:text-5xl" style={H12}>
               {c.control.titleA}<br /><span className="text-[#C6F24E]">{c.control.titleB}</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed">{c.control.intro}</p>
+            <div className="my-8 rounded-2xl border border-[#242424] bg-[#131313] p-6 text-left">
+              <h3 className="mb-4 text-lg text-white" style={H3}>{c.control.listTitle}</h3>
+              <ul className="grid gap-4 md:grid-cols-2">
+                {c.control.items.map((it) => (
+                  <li key={it} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-5 w-5 flex-shrink-0" color="#C6F24E" strokeWidth={2.6} /><span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="text-lg">{c.control.outro}</p>
+          </div>
+        </section>
+
             </h2>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed">{c.control.intro}</p>
             <div className="my-8 rounded-2xl border border-[#242424] bg-[#131313] p-6 text-left">
@@ -423,7 +440,9 @@ const IT: ConsumerCopy = {
     closing: '👉 Tutto questo senza stress, in totale autonomia.', cta: 'Inizia Subito Gratis',
     chatOnline: 'Online ora', chat: ['Ciao! Ho creato il tuo programma da 3 giorni per dimagrire 💪', 'Perfetto! Quante calorie brucio?', 'Circa 300-400 cal per sessione. Vuoi che ti mostri il primo allenamento? 🔥'],
     chatCta: 'Inizia Allenamento', today: 'Today: 245 kcal', todayNote: '🔥 Ottimo lavoro!' },
-  control: { title: 'Tieni tutto sotto controllo', intro: 'MyPersonal.fit non è solo allenamento. È anche controllo, costanza e risultati.',
+  what: { eyebrow: 'Cosa puoi fare', titleA: 'Tutto quello che ti serve,', titleB: 'in un posto solo.', lead: "Registri l'allenamento, segui i numeri, chiedi al Coach AI. Senza saltare da un'app all'altra." },
+  market: { titleA: 'Il trainer giusto,', titleB: 'prima ancora di iscriverti.', lead: 'Cerchi per specialità o per città, guardi chi è, cosa fa, quanto costa e quando è libero. Su MyPersonal ogni trainer è verificato.', cta: 'Vedi i trainer', href: '/user-find-trainer' },
+  control: { eyebrow: 'Risultati', titleA: 'Tieni tutto', titleB: 'sotto controllo', intro: 'MyPersonal.fit non è solo allenamento. È anche controllo, costanza e risultati.',
     listTitle: 'Da telefono o da computer:', items: ['Visualizzare i tuoi obiettivi attivi', "Vedere l'andamento del peso, della massa grassa, delle misure corporee", 'Analizzare la tua attività giornaliera (passi, sessioni, progressi)', 'Ricevere suggerimenti mirati per migliorare'],
     outro: 'E se un giorno deciderai di lavorare con un personal trainer vero, il tuo storico sarà lì, pronto per essere condiviso. Nessun dato perso, nessun reset.' },
   ai: { eyebrow: 'Intelligenza artificiale', titleA: 'Il Coach AI: il tuo nuovo', titleB: 'alleato virtuale',
@@ -442,10 +461,7 @@ const IT: ConsumerCopy = {
     coachItems: ['Ti risponde mentre sei in palestra col telefono in mano', 'Costruisce la sessione di oggi sui tuoi numeri', 'Ti fa i programmi da quattro settimane', 'Ti apre i moduli già compilati: propone lui, salvi tu'],
     trainerLabel: 'Il tuo trainer', trainerTitle: "Quello che un'AI non fa",
     trainerItems: ["Ti guarda mentre ti muovi e ti corregge l'esecuzione", 'Riceve i tuoi video e ti dice cosa non va', 'Ti fa i check-in: peso, misure, foto, sonno e umore', 'Ti conosce, e sa quando spingerti e quando fermarti'],
-    note: <>E se un giorno un trainer lo aggiungi, <b>non si sposta niente di tuo</b>: il Coach AI inizia a leggere quello che ti manda lui, e resta dentro quello che ti ha chiesto di fare.</>,
-    marketTitle: 'Il trainer giusto è già qui dentro',
-    marketText: "Cerchi, guardi chi è, cosa fa, quanto costa e quando è libero. Leggi le recensioni di chi si allena già con lui. E la prima seduta la prenoti da qui.",
-    mockLabel: 'Il profilo di un trainer', mockSpec: 'Specialità · Città', mockRow: 'Recensioni · Tariffa · Disponibilità', mockCta: 'Prenota una seduta' },
+    note: <>E se un giorno un trainer lo aggiungi, <b>non si sposta niente di tuo</b>: il Coach AI inizia a leggere quello che ti manda lui, e resta dentro quello che ti ha chiesto di fare.</> },
   about: { title: '💙 Perché lo facciamo', lead: <>Allenarsi dovrebbe essere semplice.<br />E invece spesso è costoso, complicato o poco motivante.</>,
     p: "Noi di MyPersonal.fit crediamo in un nuovo approccio: Un'esperienza smart, accessibile e guidata dall'intelligenza, dove l'utente resta sempre al centro.",
     box1: 'Abbiamo creato MyPersonal proprio per te: per farti entrare nel nostro mondo senza barriere.',
