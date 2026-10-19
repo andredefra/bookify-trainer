@@ -60,6 +60,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Home URLs determine the rendered language without saving an inferred choice.
   const language = location.pathname === '/' ? 'it'
     : location.pathname === '/en' ? 'en'
+    : location.pathname === '/user-find-trainer' ? 'it'
+    : location.pathname === '/user-find-trainer-en' ? 'en'
     : preferredLanguage;
 
   // Forza la lingua in base alla route quando cambia
