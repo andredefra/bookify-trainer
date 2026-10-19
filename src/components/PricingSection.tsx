@@ -121,7 +121,9 @@ const PricingSection = () => {
 
   const clientFeatures = [
     t('aiPricing.client.features.aiWorkoutCoach'),
+    t('aiPricing.client.features.todaySession'),
     t('aiPricing.client.features.advancedInsights'),
+    t('aiPricing.client.features.privateChats'),
   ];
 
   const trainerFeatures = [

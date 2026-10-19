@@ -497,7 +497,7 @@ export const it = {
   'pricing.detailedFeatures.everythingInEssential.name': 'Tutto dell\'Essential',
   'pricing.detailedFeatures.everythingInEssential.description': 'Tutte le funzionalità del piano Essential sono incluse',
   'pricing.disclaimer1': 'Piano gratuito include funzionalità essenziali per sempre. I piani a pagamento includono elaborazione sicura dei pagamenti. Puoi fare upgrade, downgrade o cancellare in qualsiasi momento.',
-  'pricing.disclaimer2': 'I tuoi clienti non pagano mai per l\'app — ottengono accesso alle funzionalità premium tramite il tuo abbonamento',
+  'pricing.disclaimer2': "L'app resta gratis per i tuoi clienti: ci accedono con il tuo abbonamento. Il Coach AI è a parte — lo attiva il cliente e lo paga lui, €0,99 al mese il primo anno.",
   
   // Registration CTA
   'cta.title': 'Sii il Primo a Sapere Quando Lanciamo',
@@ -615,33 +615,35 @@ export const it = {
   'messageAutomation.loading': 'Caricamento automazione messaggi...',
 
   // AI Pricing Section
-  'aiPricing.title': 'Sblocca le Funzionalità AI',
+  'aiPricing.title': 'AI Plus',
   'aiPricing.subtitle': 'Migliora la tua esperienza con funzionalità AI avanzate a soli €1,99/mese',
   
   // Client AI
-  'aiPricing.client.title': 'Piano AI',
+  'aiPricing.client.title': 'Coach AI',
   'aiPricing.client.badge': 'Per Clienti',
   'aiPricing.client.price': '€1,99',
   'aiPricing.client.period': '/mese',
   'aiPricing.client.description': 'Coaching AI illimitato e funzionalità avanzate',
   'aiPricing.client.features.trainingPrograms': 'Programmi di Allenamento',
   'aiPricing.client.features.workoutLogging': 'Registro Allenamenti',
-  'aiPricing.client.features.aiWorkoutCoach': 'AI Workout Coach',
+  'aiPricing.client.features.aiWorkoutCoach': '20 messaggi al giorno',
   'aiPricing.client.features.formAnalysis': 'Analisi della Forma',
   'aiPricing.client.features.exerciseDemos': 'Demo Esercizi',
-  'aiPricing.client.features.advancedInsights': 'Insights Allenamento Avanzati',
+  'aiPricing.client.features.todaySession': 'La sessione di oggi, sui suoi obiettivi e sul suo log',
+  'aiPricing.client.features.advancedInsights': '3 programmi da quattro settimane al mese',
+  'aiPricing.client.features.privateChats': 'Le sue conversazioni restano private',
   'aiPricing.client.cta': 'Scopri di Più',
 
-  // Trainer AI Plus
-  'aiPricing.trainer.title': 'AI Plus',
+  // Personal AI (trainer side of AI Plus)
+  'aiPricing.trainer.title': 'Personal AI',
   'aiPricing.trainer.badge': 'Per Trainer',
   'aiPricing.trainer.price': '€1,99',
   'aiPricing.trainer.period': '/mese',
   'aiPricing.trainer.description': 'Accesso completo a tutte le funzionalità AI',
-  'aiPricing.trainer.features.businessInsights': 'AI Business Insights',
-  'aiPricing.trainer.features.chatAssistant': 'AI Chat Assistant (Business)',
-  'aiPricing.trainer.features.clientAnalytics': 'AI Client Analytics',
-  'aiPricing.trainer.features.smartRecommendations': 'Raccomandazioni Intelligenti',
+  'aiPricing.trainer.features.businessInsights': 'Business insights',
+  'aiPricing.trainer.features.chatAssistant': 'Assistente in chat mentre sei in sessione',
+  'aiPricing.trainer.features.clientAnalytics': 'Analytics sui clienti',
+  'aiPricing.trainer.features.smartRecommendations': 'Raccomandazioni su chi sta per mollare',
   'aiPricing.trainer.cta': 'Scopri di Più',
   'aiPricing.comingSoon': 'Prossimamente',
   'aiPricing.band.title': 'Un coach che non dorme mai, per te e per i tuoi clienti',
