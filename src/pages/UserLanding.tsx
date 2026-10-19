@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import UserNavbar from '@/components/UserNavbar';
 import UserFooter from '@/components/UserFooter';
-import { Check, Bot, Target, BarChart3, Heart, Zap, Smartphone, Clock, Shield } from 'lucide-react';
+import { Check, Bot, Target, BarChart3, Zap, Smartphone, Clock, Shield, Dumbbell, Footprints, Ruler, MessageCircle, CalendarDays } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import WaitlistDialog from '@/components/WaitlistDialog';
@@ -37,7 +37,7 @@ export type ConsumerCopy = {
   hero: { a: string; gold: string; b: string; sub1: string; sub2: string; ctaLong: string; ctaShort: string; micro: string };
   journey: { eyebrow: string; title: string; subtitle: string; p1: ReactNode; p2: ReactNode; chips: string[]; closing: string; cta: string;
     chatOnline: string; chat: string[]; chatCta: string; today: string; todayNote: string };
-  what: { eyebrow: string; titleA: string; titleB: string; lead: string };
+  what: { eyebrow: string; titleA: string; titleB: string; lead: string; chips: string[] };
   market: { titleA: string; titleB: string; lead: string; cta: string; href: string };
   control: { eyebrow: string; titleA: string; titleB: string; intro: string; listTitle: string; items: string[]; outro: string };
   ai: { eyebrow: string; titleA: string; titleB: string; lead: string; cards: { title: string; description: string }[];
@@ -54,7 +54,7 @@ export type ConsumerCopy = {
 };
 
 const FEATURE_ICONS: Icon[] = [Bot, Target, Clock, Zap, BarChart3, Check, Shield, Smartphone];
-const CHIP_ICONS: Icon[] = [Bot, Target, BarChart3, Heart];
+const CHIP_ICONS: Icon[] = [Dumbbell, Footprints, Target, Ruler, BarChart3, MessageCircle, CalendarDays, Smartphone];
 const AI_ICONS: Icon[] = [Target, Bot, Clock];
 
 const CheckList = ({ items, check, text }: { items: string[]; check: string; text: string }) => (
@@ -121,7 +121,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
               <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-[#5a5346]">{c.what.lead}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {c.journey.chips.map((text, i) => {
+              {c.what.chips.map((text, i) => {
                 const I = CHIP_ICONS[i];
                 return (
                   <div key={text} className="flex items-center gap-3 rounded-xl border border-[#E0DACB] bg-[#FFFFFF] p-3">
@@ -406,7 +406,9 @@ const IT: ConsumerCopy = {
     closing: '👉 Tutto questo senza stress, in totale autonomia.', cta: 'Inizia Subito Gratis',
     chatOnline: 'Online ora', chat: ['Ciao! Ho creato il tuo programma da 3 giorni per dimagrire 💪', 'Perfetto! Quante calorie brucio?', 'Circa 300-400 cal per sessione. Vuoi che ti mostri il primo allenamento? 🔥'],
     chatCta: 'Inizia Allenamento', today: 'Today: 245 kcal', todayNote: '🔥 Ottimo lavoro!' },
-  what: { eyebrow: 'Cosa puoi fare', titleA: 'Tutto quello che ti serve,', titleB: 'in un posto solo.', lead: "Registri l'allenamento, segui i numeri, chiedi al Coach AI. Senza saltare da un'app all'altra." },
+  what: { eyebrow: 'Cosa puoi fare', titleA: 'Tutto quello che ti serve,', titleB: 'in un posto solo.',
+    lead: 'Tutto quello che fai in palestra e fuori, in un posto solo. E il Coach AI ci lavora sopra.',
+    chips: ["Registri l'allenamento, serie per serie", 'Registri le attività: passi, corsa, nuoto', 'I tuoi obiettivi, con i progressi', 'Peso, massa grassa e misure nel tempo', "L'analisi di ogni allenamento", 'Chat con il tuo trainer', 'Prenoti le tue sedute', 'Integrazione dispositivi'] },
   market: { titleA: 'Il trainer giusto,', titleB: 'prima ancora di iscriverti.', lead: 'Cerchi per specialità o per città, guardi chi è, cosa fa, quanto costa e quando è libero. Su MyPersonal ogni trainer è verificato.', cta: 'Vedi i trainer', href: '/user-find-trainer' },
   control: { eyebrow: 'Risultati', titleA: 'Tieni tutto', titleB: 'sotto controllo', intro: 'MyPersonal.fit non è solo allenamento. È anche controllo, costanza e risultati.',
     listTitle: 'Da telefono o da computer:', items: ['Visualizzare i tuoi obiettivi attivi', "Vedere l'andamento del peso, della massa grassa, delle misure corporee", 'Analizzare la tua attività giornaliera (passi, sessioni, progressi)', 'Ricevere suggerimenti mirati per migliorare'],
