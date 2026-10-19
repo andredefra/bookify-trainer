@@ -519,7 +519,6 @@ export const en = {
   // User Landing
   'user.hero.title': 'Train body and mind. With Trainer.ai, you\'re never alone.',
   'user.hero.subtitle': 'Discover the first virtual personal trainer that truly listens to you. Create your plan, track progress, receive personalized advice.',
-  'user.hero.cta': 'Start now – Free for 1 year for the first 100 users!',
   
   // AI Summary
   'aiSummary.title': 'AI Summary',
@@ -793,7 +792,7 @@ export const en = {
   'how2.s2.d': 'You sync Google Calendar and say when you work. From then on, busy slots block themselves.',
   'how2.s3.t': 'You bring clients in',
   'how2.s3.d': "You invite them with a link, they get in **free**, on their phone or their computer. You load the old ones from a file, without retyping anything.",
-  'how2.s4.t': 'You build programmes and packages',
+  'how2.s4.t': 'You build programs and packages',
   'how2.s4.d': 'You drag exercises in, put packages together, set prices and expiry dates. Once, then you reuse them.',
   'how2.s5.t': 'Clients book and pay',
   'how2.s5.d': "They book from your page, pre-authorize, and the money lands once the session is done. **You never chase anyone again.**",
