@@ -138,9 +138,9 @@ export const en = {
   'heroPreview.notif2Sub': '3 messages handled',
   
   // Trainer marketplace
-  'market.kicker': "Demo profiles",
+  'market.kicker': "Only verified trainers",
   'market.demoLabel': "NOTE",
-  'market.demoNotice': "The profiles below are demonstrations: they show you how the marketplace works. We're connecting real trainers and updating the list as they come in.",
+  'market.demoNotice': "The profiles below are demonstrations, here to show you how the marketplace works. Every trainer on MyPersonal is verified: we're connecting the first ones and updating the list as they come in.",
   'consumerMarket.nav': "Find a trainer",
   'consumerMarket.subtitle': "Search by specialty or city, see who they are and what they do, and book the first session from their page.",
   'consumerMarket.ctaA': "Want to train with one of them?",
