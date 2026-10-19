@@ -12,7 +12,7 @@ const Cookies = () => {
             <p className="legal-updated">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
             <h2>1. What Are Cookies</h2>
-            <p>As is common practice with almost all professional websites, Personal.ai uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the site's functionality.</p>
+            <p>As is common practice with almost all professional websites, MyPersonal uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the site's functionality.</p>
             
             <h2>2. How We Use Cookies</h2>
             <p>We use cookies for a variety of reasons detailed below. Unfortunately, in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site. It is recommended that you leave on all cookies if you are not sure whether you need them or not in case they are used to provide a service that you use.</p>
@@ -37,7 +37,7 @@ const Cookies = () => {
             <h2>5. More Information</h2>
             <p>Hopefully that has clarified things for you and as was previously mentioned if there is something that you aren't sure whether you need or not it's usually safer to leave cookies enabled in case it does interact with one of the features you use on our site.</p>
             <p>However if you are still looking for more information then you can contact us through one of our preferred contact methods:</p>
-            <p>Email: cookies@mypersonalai.com</p>
+            <p>Email: <a href="mailto:andrea.mypersonal.fit@gmail.com">andrea.mypersonal.fit@gmail.com</a></p>
             
             <h2>6. Cookie Consent</h2>
             <p>When you first visit our website, we will request your consent to the use of cookies as described in this policy. You can choose to accept all cookies, only necessary cookies, or customize your preferences. You can change your cookie preferences at any time by clicking on the 'Cookie Settings' link in the footer of our website.</p>

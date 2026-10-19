@@ -268,7 +268,7 @@ export const it = {
   'gym.benefit2.description': 'Un\'unica dashboard per gestire tutti i trainer, i loro clienti, calendari e metriche di performance.',
   'gym.benefit3.title': 'Esperienza Membri',
   'gym.benefit3.description': 'Offri ai tuoi clienti un\'esperienza digitale con tracking progressi, prenotazione sessioni e comunicazione con i trainer.',
-  'gym.cta': 'Vedi Piano Prezzi Studio',
+  'gym.cta': 'Avvisami quando arriva',
   
   // Pricing
   'pricing.title': 'Inizia Gratis, Cresci Quando Vuoi',
@@ -485,7 +485,7 @@ export const it = {
   
   // Footer
   'footer.description': 'La piattaforma all-in-one per personal trainer.',
-  'footer.copyright': '© {year} mypersonalai ltd. Tutti i diritti riservati.',
+  'footer.copyright': '© {year} MyPersonal. Tutti i diritti riservati.',
   'footer.product': 'Prodotto',
   'footer.legal': 'Legale',
   'footer.privacy': 'Privacy',
@@ -517,8 +517,6 @@ export const it = {
   'cta.button': 'Compila il Modulo per Accesso Anticipato',
 
   // User Landing
-  'user.hero.title': 'Allena corpo e mente. Con Trainer.ai, non sei mai da solo.',
-  'user.hero.subtitle': 'Scopri il primo personal trainer virtuale che ti ascolta davvero. Crea il tuo piano, registra i progressi, ricevi consigli su misura.',
   
   // AI Summary
   'aiSummary.title': 'Riassunto AI',
@@ -636,7 +634,6 @@ export const it = {
   'aiPricing.client.badge10': "Primi 10 gratis",
   'aiPricing.client.price': "€0,99",
   'aiPricing.client.period': "/mese il primo anno",
-  'aiPricing.client.description': 'Coaching AI illimitato e funzionalità avanzate',
   'aiPricing.client.features.trainingPrograms': 'Programmi di Allenamento',
   'aiPricing.client.features.workoutLogging': 'Registro Allenamenti',
   'aiPricing.client.features.aiWorkoutCoach': '20 messaggi al giorno',
@@ -903,6 +900,27 @@ export const it = {
   // Gym/Studio section — header
   'gym.kicker': 'Studi e palestre',
   'gym.titleA': 'La soluzione perfetta per',
-  'gym.titleB': 'studi PT e palestre'
+  'gym.titleB': 'studi PT e palestre',
 
+  'gymMock.title': 'I tuoi trainer',
+  'gymMock.tabTrainer': 'Trainer',
+  'gymMock.tabAvail': 'Disponibilità',
+  'gymMock.tabPerf': 'Performance',
+  'gymMock.rating': 'Valutazione media',
+  'gymMock.ratingSub': 'su 245 recensioni',
+  'gymMock.retention': 'Clienti che restano',
+  'gymMock.retentionSub': '+3% sul mese scorso',
+  'gymMock.goals': 'Obiettivi raggiunti',
+  'gymMock.goalsSub': 'clienti a obiettivo',
+  'gymMock.chart1': 'Clienti che restano, per trainer',
+  'gymMock.stay': 'Restano %',
+  'gymMock.new': 'Nuovi clienti',
+  'gymMock.chart2': 'Sedute al mese',
+  'gymMock.months': 'Gen,Feb,Mar,Apr,Mag,Giu',
+  'soon.kicker': 'Studi e palestre · In arrivo',
+  'soon.titleA': 'Ci stiamo lavorando.',
+  'soon.titleB': 'Arriva presto.',
+  'soon.body': 'La versione per studi e palestre è in costruzione: un posto solo per il tuo team di trainer, i loro clienti e i pacchetti venduti. Lasciaci un contatto e ti scriviamo appena è pronta.',
+  'soon.write': 'Scrivici',
+  'soon.home': 'Torna alla home',
 };

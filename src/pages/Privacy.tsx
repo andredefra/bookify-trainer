@@ -8,7 +8,7 @@ const Privacy = () => {
             <p className="legal-updated">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
             <h2>1. Introduction</h2>
-            <p>MyPersonal ltd ("we", "our", "us") respects your privacy and is committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
+            <p>MyPersonal ("we", "our", "us") respects your privacy and is committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
             
             <h2>2. The Data We Collect About You</h2>
             <p>Personal data means any information about an individual from which that person can be identified. We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:</p>
@@ -48,8 +48,8 @@ const Privacy = () => {
             
             <h2>7. Contact Us</h2>
             <p>If you have any questions about this privacy policy or our privacy practices, please contact us at:</p>
-            <p>mypersonalai ltd<br />
-            Email: privacy@mypersonalai.com<br />
+            <p>MyPersonal<br />
+            Email: <a href="mailto:andrea.mypersonal.fit@gmail.com">andrea.mypersonal.fit@gmail.com</a><br />
             Address: 123 Fitness Street, London, EC1A 1BB, United Kingdom</p>
             
             <h2>8. Changes to the Privacy Policy</h2>

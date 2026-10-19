@@ -98,7 +98,7 @@ const Footer = () => {
             className="text-center uppercase"
             style={{ fontFamily: MONO, fontWeight: 700, fontSize: 10, letterSpacing: '.14em', color: 'rgba(236,231,219,.38)' }}
           >
-            MyPersonal ltd.
+            {t('footer.copyright')}
           </p>
         </div>
       </div>

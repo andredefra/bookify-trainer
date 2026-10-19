@@ -92,7 +92,7 @@ const UserFooter = () => {
         
         {/* Copyright section - moved to bottom */}
         <div className="mt-12 pt-6 border-t border-[#242424]">
-          <p className="text-[10px] uppercase text-[#5e5849] text-center" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", fontWeight: 700, letterSpacing: '.18em' }}>MyPersonal ltd.</p>
+          <p className="text-[10px] uppercase text-[#5e5849] text-center" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", fontWeight: 700, letterSpacing: '.18em' }}>{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>

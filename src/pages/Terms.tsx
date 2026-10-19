@@ -12,7 +12,7 @@ const Terms = () => {
             <p className="legal-updated">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
             <h2>1. Introduction</h2>
-            <p>These terms and conditions ("Terms") govern your use of the Personal.ai platform and website (collectively, the "Service") operated by mypersonalai ltd ("Company", "we", "us", or "our"). Please read these Terms carefully before using our Service.</p>
+            <p>These terms and conditions ("Terms") govern your use of the MyPersonal platform and website (collectively, the "Service") operated by MyPersonal ("Company", "we", "us", or "our"). Please read these Terms carefully before using our Service.</p>
             <p>By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, then you may not access the Service.</p>
             
             <h2>2. Accounts</h2>
@@ -25,14 +25,14 @@ const Terms = () => {
             <p>By posting Content on or through the Service, you represent and warrant that: (i) the Content is yours (you own it) or you have the right to use it and grant us the rights and license as provided in these Terms, and (ii) the posting of your Content on or through the Service does not violate the privacy rights, publicity rights, copyrights, contract rights or any other rights of any person.</p>
             
             <h2>4. Intellectual Property</h2>
-            <p>The Service and its original content (excluding Content provided by users), features and functionality are and will remain the exclusive property of mypersonalai ltd and its licensors. The Service is protected by copyright, trademark, and other laws of both the United Kingdom and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of mypersonalai ltd.</p>
+            <p>The Service and its original content (excluding Content provided by users), features and functionality are and will remain the exclusive property of MyPersonal and its licensors. The Service is protected by copyright, trademark, and other laws of both the United Kingdom and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of MyPersonal.</p>
             
             <h2>5. Termination</h2>
             <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
             <p>Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service.</p>
             
             <h2>6. Limitation Of Liability</h2>
-            <p>In no event shall mypersonalai ltd, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your access to or use of or inability to access or use the Service; (ii) any conduct or content of any third party on the Service; (iii) any content obtained from the Service; and (iv) unauthorized access, use or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage.</p>
+            <p>In no event shall MyPersonal, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your access to or use of or inability to access or use the Service; (ii) any conduct or content of any third party on the Service; (iii) any content obtained from the Service; and (iv) unauthorized access, use or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage.</p>
             
             <h2>7. Governing Law</h2>
             <p>These Terms shall be governed and construed in accordance with the laws of the United Kingdom, without regard to its conflict of law provisions.</p>
@@ -44,8 +44,8 @@ const Terms = () => {
             
             <h2>9. Contact Us</h2>
             <p>If you have any questions about these Terms, please contact us at:</p>
-            <p>mypersonalai ltd<br />
-            Email: legal@mypersonalai.com<br />
+            <p>MyPersonal<br />
+            Email: <a href="mailto:andrea.mypersonal.fit@gmail.com">andrea.mypersonal.fit@gmail.com</a><br />
             Address: 123 Fitness Street, London, EC1A 1BB, United Kingdom</p>
     </LegalPage>
   );
