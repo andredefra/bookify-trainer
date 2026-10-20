@@ -28,6 +28,7 @@ export const it = {
   'gymMock.t3': 'G. Verdi',
   'pv.s6.k1v': '€2.840',
   'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/e31dlYSC',
+  'earlyAccess.typeformUrl': 'https://andredefra64.typeform.com/to/E2ELTdNF',
   // Public trainer header
   'publicProfile.perHour': '/ ora',
   'publicProfile.years': 'anni',
@@ -775,11 +776,11 @@ export const it = {
   'feat2.c12.g': 'Non rincorri più nessuno',
 
   'feat2.c13.t': 'Gestione della Fatturazione',
-  'feat2.c13.d': 'Dici una volta in che regime sei — forfettario, IVA, cassa al 4% — e il prezzo che vede il cliente è già quello finale. Poi la fattura la generi con un bottone nel gestionale collegato.',
+  'feat2.c13.d': 'Dici una volta il tuo regime — e il prezzo che vede il cliente è già quello finale; la fattura si genera con un bottone nel gestionale collegato.',
   'feat2.c13.g': 'IVA e cassa già calcolate',
 
   'feat2.c14.t': 'Niente gestionale? Nessun problema',
-  'feat2.c14.d': 'Se non hai un gestionale fra le integrazioni, ti diamo il template della fattura già compilato con i dati della seduta: lo incolli nel tuo e hai finito.',
+  'feat2.c14.d': 'Senza gestionale fra le integrazioni? Ricevi il template della fattura già compilato con i dati della seduta: lo incolli nel tuo e hai finito.',
   'feat2.c14.g': 'Zero doppio lavoro',
 
   'feat2.c15.t': 'Business Dashboard',

@@ -28,6 +28,7 @@ export const en = {
   'gymMock.t3': 'G. Verdi',
   'pv.s6.k1v': '€2,840',
   'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/JeSaWIge',
+  'earlyAccess.typeformUrl': 'https://andredefra64.typeform.com/to/z2CwBewR',
   // Public trainer header
   'publicProfile.perHour': '/ hour',
   'publicProfile.years': 'years',
@@ -775,11 +776,11 @@ export const en = {
   'feat2.c12.g': 'You stop chasing people',
 
   'feat2.c13.t': 'Invoicing Management',
-  'feat2.c13.d': 'You say once which tax regime you are in — flat-rate, VAT, 4% cash basis — and the price the client sees is already the final one. Then you generate the invoice with one button in the connected accounting software.',
+  'feat2.c13.d': 'Set your tax regime once — the price the client sees is already final, and the invoice is one button away in your connected accounting tool.',
   'feat2.c13.g': 'VAT and pension fund already included',
 
   'feat2.c14.t': 'No accounting software? No problem',
-  'feat2.c14.d': 'If you have no accounting tool among the integrations, we give you the invoice template already filled with the session data: you paste it into yours and you are done.',
+  'feat2.c14.d': 'No accounting tool among the integrations? You get an invoice template already filled with the session data — paste it into yours and you are done.',
   'feat2.c14.g': 'No double work',
 
   'feat2.c15.t': 'Business Dashboard',

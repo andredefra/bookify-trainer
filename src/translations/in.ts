@@ -6,6 +6,7 @@ export const inOverrides: Partial<Record<keyof typeof en, string>> = {
   'market.cityPh': 'Mumbai',
   'market.perHour': '/ session',
   'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/tWw25WDw',
+  'earlyAccess.typeformUrl': 'https://andredefra64.typeform.com/to/cuAL2wU7',
 
   // Plan prices (1 € = ₹106.64)
   'pricing.standard.price': '₹0',
