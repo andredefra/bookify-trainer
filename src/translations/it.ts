@@ -661,9 +661,6 @@ export const it = {
   'aiPricing.client.tagline': 'Il coach che risponde fra una seduta e l\'altra, quando tu non ci sei.',
   'aiPricing.client.who': 'Per i tuoi clienti',
   'aiPricing.trainer.who': 'Per te',
-  'gym.price.studioNote': 'In arrivo · trainer illimitati',
-  'gym.price.gymNote': 'In arrivo · gestionale integrato',
-  'gym.price.seeIncluded': 'Vedi cosa include',
   // Waitlist
   'waitlist.title': "Entra in lista d'attesa",
   'waitlist.subtitle': "L'app non è ancora aperta. Lascia i tuoi dati e ti avviseremo appena il tuo posto gratuito sarà pronto.",
@@ -764,9 +761,10 @@ export const it = {
   'feat2.vid.kicker': 'Dentro la scheda',
   'feat2.vid.titleA': 'Il cliente non deve',
   'feat2.vid.titleB': 'indovinare come si fa.',
-  'feat2.vid.d': "Colleghi un video YouTube o Vimeo a qualsiasi esercizio del programma. Il cliente lo apre dentro la scheda, mentre si allena, e lo esegue come glielo hai spiegato tu.",
-  'feat2.vid.b1': 'Colleghi video YouTube o Vimeo a qualsiasi esercizio',
-  'feat2.vid.b2': "Il cliente li guarda dentro il suo programma, senza andarli a cercare su YouTube",
+  'feat2.vid.d': "Colleghi un video YouTube o Vimeo a qualsiasi esercizio. Il cliente lo trova sotto l'esercizio, mentre si allena, e lo esegue come glielo hai spiegato tu.",
+  'feat2.vid.b1': 'Basta il link: un video tuo o uno che ti piace',
+  'feat2.vid.b2': 'Lo vede dove gli serve: sotto serie, carico e la tua nota',
+
   'feat2.vid.b3': 'Meno errori di esecuzione, meno infortuni',
   'feat2.vid.ex': 'Squat con bilanciere',
   'feat2.vid.exs': '4 serie × 8 · 75 kg',

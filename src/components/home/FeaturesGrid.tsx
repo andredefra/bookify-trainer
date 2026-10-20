@@ -131,7 +131,7 @@ const FeaturesGrid = () => {
         </div>
 
         <div className="mt-3 overflow-hidden rounded-[14px] border border-[#E0DACB] bg-white">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
+          <div className="grid grid-cols-1 lg:grid-cols-[5fr_6fr]">
             <div className="flex flex-col justify-center p-[28px] md:p-[36px]">
               <p className="inline-flex items-center gap-2 uppercase" style={{ fontFamily: MONO, fontWeight: 700, fontSize: 10, letterSpacing: '.18em', color: '#938C7C' }}>
                 <span aria-hidden="true" className="inline-block shrink-0 rounded-full" style={{ width: 6, height: 6, background: '#F6C124' }} />
@@ -153,23 +153,36 @@ const FeaturesGrid = () => {
               </ul>
             </div>
 
-            <div className="flex items-center justify-center bg-[#ECE7DB] p-[28px] md:p-[36px]">
-              <div className="w-full max-w-[380px] rounded-[12px] border border-[#E0DACB] bg-white p-[14px]">
+            <div
+              className="flex items-center justify-center p-[28px]"
+              style={{
+                background: '#0A0A0A',
+                backgroundImage: 'radial-gradient(60% 100% at 50% 0, rgba(246,193,36,.18), transparent 70%)',
+              }}
+            >
+              <div
+                className="w-full rounded-[14px] bg-white p-[16px]"
+                style={{ boxShadow: '0 20px 50px rgba(0,0,0,.45)' }}
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="uppercase text-[14px]" style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#0A0A0A' }}>{t('feat2.vid.ex')}</p>
-                    <p className="text-[11.5px]" style={{ color: '#8a8478' }}>{t('feat2.vid.exs')}</p>
+                    <p className="uppercase text-[17px]" style={{ fontFamily: DISPLAY, fontVariationSettings: "'wdth' 112, 'wght' 900", color: '#0A0A0A' }}>{t('feat2.vid.ex')}</p>
+                    <p className="text-[12.5px]" style={{ color: '#8a8478' }}>{t('feat2.vid.exs')}</p>
                   </div>
-                  <span className="shrink-0 rounded-[5px] px-2 py-1 uppercase" style={{ background: 'rgba(246,193,36,.3)', color: '#8a6a00', fontFamily: MONO, fontWeight: 700, fontSize: 8.5, letterSpacing: '.06em' }}>{t('feat2.vid.tag')}</span>
+                  <span className="shrink-0 rounded-[5px] px-2 py-1 uppercase" style={{ background: 'rgba(246,193,36,.3)', color: '#8a6a00', fontFamily: MONO, fontWeight: 700, fontSize: 9.5, letterSpacing: '.06em' }}>{t('feat2.vid.tag')}</span>
                 </div>
-                <p className="mt-[10px] rounded-[7px] bg-[#F4F2ED] px-[10px] py-2 text-[11.5px]" style={{ color: '#5d574d' }}>{t('feat2.vid.note')}</p>
-                <div aria-hidden="true" className="mt-[10px] flex h-[150px] items-center justify-center rounded-[9px]" style={{ background: 'linear-gradient(135deg,#2a2a2a,#111)' }}>
-                  <div className="flex items-center justify-center rounded-full" style={{ width: 46, height: 46, background: '#F6C124' }}>
-                    <span style={{ width: 0, height: 0, marginLeft: 4, borderTop: '9px solid transparent', borderBottom: '9px solid transparent', borderLeft: '14px solid #0A0A0A' }} />
-                  </div>
+                <p className="mt-[10px] rounded-[7px] bg-[#F4F2ED] px-[10px] py-2 text-[12.5px]" style={{ color: '#5d574d' }}>{t('feat2.vid.note')}</p>
+                <div aria-hidden="true" className="mt-[10px] overflow-hidden rounded-[9px]" style={{ aspectRatio: '863 / 484' }}>
+                  <img
+                    src="/lovable-uploads/66e06f64-e5e8-4ff1-814e-b919c087ddd0.png"
+                    alt=""
+                    aria-hidden="true"
+                    style={{ display: 'block', width: '104.75%', maxWidth: 'none', marginLeft: '-2.665%', marginTop: '-17.265%' }}
+                  />
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>

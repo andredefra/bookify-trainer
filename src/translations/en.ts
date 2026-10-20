@@ -661,9 +661,6 @@ export const en = {
   'aiPricing.client.tagline': 'The coach that answers between one session and the next, when you\'re not there.',
   'aiPricing.client.who': 'For your clients',
   'aiPricing.trainer.who': 'For you',
-  'gym.price.studioNote': 'Coming soon · unlimited trainers',
-  'gym.price.gymNote': 'Coming soon · integrated management',
-  'gym.price.seeIncluded': "See what's included",
   // Waitlist
   'waitlist.title': "Join the waitlist",
   'waitlist.subtitle': "The app is not open yet. Leave your details and we will let you know as soon as your free spot is ready.",
@@ -764,9 +761,10 @@ export const en = {
   'feat2.vid.kicker': 'Inside the program',
   'feat2.vid.titleA': "Clients don't have",
   'feat2.vid.titleB': 'to guess how it\'s done.',
-  'feat2.vid.d': "Link a YouTube or Vimeo video to any exercise in the program. Clients open it inside their program while they train, and perform it the way you explained it.",
-  'feat2.vid.b1': 'Link YouTube or Vimeo videos to any exercise',
-  'feat2.vid.b2': "Clients watch them inside their program, without hunting for them on YouTube",
+  'feat2.vid.d': "Link a YouTube or Vimeo video to any exercise. Clients find it under the exercise while they train, and do it the way you explained it.",
+  'feat2.vid.b1': 'Just the link: your own video or one you like',
+  'feat2.vid.b2': 'They see it where they need it: under sets, load and your note',
+
   'feat2.vid.b3': 'Fewer technique errors, fewer injuries',
   'feat2.vid.ex': 'Barbell squat',
   'feat2.vid.exs': '4 sets × 8 · 75 kg',
