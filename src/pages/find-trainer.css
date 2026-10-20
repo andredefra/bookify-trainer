@@ -9,6 +9,12 @@
 .trainer-market .credential-certified { background: var(--preview-tag-amber-bg); color: var(--market-cert-text); }
 .trainer-market .credential-verified { background: var(--preview-tag-positive-bg); color: var(--preview-tag-positive-text); }
 .trainer-market .credential-topRated { background: hsl(var(--brand-canvas)); color: hsl(var(--brand-highlight)); }
-.trainer-market .credential-nutrition { background: var(--market-nutrition-bg); color: var(--market-nutrition-text); }
+.trainer-market .credential-nutrition,
+.trainer-market .credential-strength,
+.trainer-market .credential-hiit,
+.trainer-market .credential-running,
+.trainer-market .credential-prenatal,
+.trainer-market .credential-mobility,
+.trainer-market .credential-yoga { background: var(--market-nutrition-bg); color: var(--market-nutrition-text); }
 .trainer-market .market-divider { border-color: var(--market-card-border); }
 .trainer-market .market-demo-notice { background: hsl(var(--brand-highlight) / .12); border: 1px solid hsl(var(--brand-highlight) / .45); border-radius: 12px; padding: 14px 18px; }
