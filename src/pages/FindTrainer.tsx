@@ -10,10 +10,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/context/LanguageContext';
 import { demoTrainers } from '@/data/trainerMockData';
+import indiaMarketplaceData from '@/data/indiaMarketplaceData.json';
 import './find-trainer.css';
+
+// Reuse presentation assets only; India identities never inherit Italian profile data.
+const indiaTrainers = indiaMarketplaceData.flatMap(record => {
+  const portrait = demoTrainers[record.portraitIndex];
+  if (!portrait) return [];
+  return [{ ...record, slug: record.id, profileImage: portrait.profileImage, credentials: portrait.credentials }];
+});
 
 export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) => {
   const { t, language } = useLanguage();
+  const trainers = language === 'in' ? indiaTrainers : demoTrainers;
   const [searchQuery, setSearchQuery] = useState('');
   const [city, setCity] = useState('');
   const [showDemoDialog, setShowDemoDialog] = useState(false);
@@ -57,7 +66,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
         <section className="bg-brand-screen px-5 py-9 text-brand-canvas md:px-8">
           <div className="mx-auto max-w-6xl">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm font-bold">{t('market.count').replace('{n}', String(demoTrainers.length))}</p>
+              <p className="text-sm font-bold">{t('market.count').replace('{n}', String(trainers.length))}</p>
               <p className="market-muted font-brand-mono text-[10px] font-bold uppercase sm:text-xs">{t('market.sort')}</p>
             </div>
             <aside data-demo-notice className="market-demo-notice mb-6 flex flex-col gap-2 sm:flex-row sm:gap-4">
@@ -65,15 +74,15 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
               <p className="text-sm leading-relaxed">{t('market.demoNotice')}</p>
             </aside>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {demoTrainers.map(trainer => {
-                const today = trainer.availableLabel === 'Disponibile oggi';
+              {trainers.map(trainer => {
+                const today = trainer.availableLabel === 'Disponibile oggi' || trainer.availableLabel === 'Available today';
                 const availabilityKey = today ? 'availableToday' : trainer.availableLabel === 'Libera da giovedì' ? 'availableThursday' : 'availableMonday';
                 return (
                   <article key={trainer.id} className="market-card flex min-w-0 flex-col overflow-hidden rounded-2xl" data-trainer-card>
                     <div className="market-photo relative h-[196px]">
                       <img src={trainer.profileImage} alt={trainer.name} className="h-full w-full object-cover" />
                       <div className={`absolute left-3 top-3 z-10 flex items-center gap-2 rounded-full border bg-brand-canvas/80 px-2.5 py-1.5 font-brand-mono text-[9px] font-bold ${today ? 'border-brand-result/60 text-brand-result' : 'border-brand-highlight/60 text-brand-highlight'}`}>
-                        <span className={`h-[5px] w-[5px] rounded-full ${today ? 'bg-brand-result' : 'bg-brand-highlight'}`} />{t(`cred.${availabilityKey}`)}
+                        <span className={`h-[5px] w-[5px] rounded-full ${today ? 'bg-brand-result' : 'bg-brand-highlight'}`} />{language === 'in' ? trainer.availableLabel : t(`cred.${availabilityKey}`)}
                       </div>
                       <div className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-brand-highlight px-2.5 py-1.5 font-brand-mono text-[11px] font-bold text-brand-canvas"><Star className="h-3 w-3 fill-current" />{trainer.rating.toFixed(1)}</div>
                     </div>
@@ -87,7 +96,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
                       </div>
                       <div className="mb-5 mt-4 flex flex-wrap gap-1.5">{trainer.credentials.map(credential => <span key={credential} className={`market-credential credential-${credential} font-brand-mono`}>{t(`cred.${credential}`)}</span>)}</div>
                       <div className="market-divider mt-auto flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-                        <p className="font-brand-mono text-[17px] font-extrabold">{language === 'in' ? `₹${(trainer.hourlyRate * 25).toLocaleString('en-IN')}` : `€${trainer.hourlyRate}`} <span className="market-muted text-[9px] font-bold">{t('market.perHour')}</span></p>
+                        <p className="font-brand-mono text-[17px] font-extrabold">{language === 'in' ? `₹${trainer.hourlyRate.toLocaleString('en-IN')}` : `€${trainer.hourlyRate}`} <span className="market-muted text-[9px] font-bold">{t('market.perHour')}</span></p>
                         {consumer ? (
                           <div className="flex w-full flex-wrap gap-2">
                             <Button variant="outline" onClick={() => setShowDemoDialog(true)} className="h-9 rounded-full border-brand-canvas/20 bg-transparent px-4 text-xs font-bold text-brand-canvas hover:bg-brand-canvas/5 hover:text-brand-canvas">{t('market.viewProfile')}</Button>
