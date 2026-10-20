@@ -15,7 +15,7 @@ const EN: ConsumerCopy = {
     chips: ['20 messages a day', '3 programs a month', 'Log it in one tap', 'Device integrations'],
     closing: '👉 All this without stress, in complete autonomy.', cta: 'Start Now for Free',
     chatOnline: 'Online now', chat: ["Hi! I've created your 3-day weight loss program 💪", 'Perfect! How many calories do I burn?', 'About 300-400 cal per session. Want me to show you the first workout? 🔥'],
-    chatCta: 'Start Workout', today: 'Today: 245 kcal', todayNote: '🔥 Great job!' },
+    chatCta: 'Start Workout', today: 'Today: 245 kcal', todayNote: '🔥 Great job!', chatInput: 'Message Coach AI…' },
   what: { eyebrow: 'What you can do', titleA: 'Everything you need,', titleB: 'in one place.',
     lead: 'Everything you do in the gym and outside it, in one place. And Coach AI works on top of it.',
     chips: ['Log your training, set by set', 'Log your activity: steps, running, swimming', 'Your goals, with the progress', 'Weight, body fat and measurements over time', 'The analysis of every workout', 'Chat with your trainer', 'Book your sessions', 'Device integrations'] },
