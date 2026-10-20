@@ -20,3 +20,4 @@
 - [x] Verify routes, both card actions, language switching and unchanged consumer homes; do not deploy.
 - [x] Keep India studio coming-soon navigation in IN and return to /in.
 - [x] Add the six approved Mumbai marketplace demos for IN only; verify gates, mobile layout and unchanged other markets.
+- [x] Give the six India marketplace cards their dedicated portraits and per-market badges; verify data rules in tests.
