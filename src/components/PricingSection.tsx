@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
 import { CircleCheck, Sparkles, Crown } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import {
@@ -224,13 +223,15 @@ const PricingSection = () => {
             />
             <FeatureList items={standardFeatures} />
             <div className="mt-auto pt-5">
-              <Link
-                to="/register?plan=basic"
+              <a
+                href={t('pricing.standard.ctaHref')}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full rounded-full py-3 text-center text-[13px] font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B98A00] focus-visible:ring-offset-2"
                 style={{ background: '#F6C124', color: '#0A0A0A' }}
               >
                 {t('pricing.standard.cta')}
-              </Link>
+              </a>
               <div className="mt-3 flex justify-center">
                 <PlanDetailsDialog planType="basic" triggerText={t('pricing.discoverDetails')}>
                   <button

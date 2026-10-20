@@ -5,15 +5,15 @@ const DISPLAY = "'Archivo', sans-serif";
 const label = { fontFamily: MONO, fontWeight: 700, fontSize: 8.5, letterSpacing: '.08em', color: '#938C7C' } as const;
 const tile = 'rounded-[9px] border border-[#E0DACB] bg-[#FFFFFF] p-[10px] min-w-0';
 
-const bars = [
-  { n: 'M. Rossi', stay: 92, fresh: 34 },
-  { n: 'L. Bianchi', stay: 88, fresh: 26 },
-  { n: 'G. Verdi', stay: 82, fresh: 20 },
+const barData = [
+  { stay: 92, fresh: 34 },
+  { stay: 88, fresh: 26 },
+  { stay: 82, fresh: 20 },
 ];
-const lines = [
-  { n: 'M. Rossi', c: '#F6C124', w: 2.4, d: undefined, v: [42, 48, 55, 60, 68, 76] },
-  { n: 'L. Bianchi', c: '#0A0A0A', w: 1.8, d: undefined, v: [38, 40, 46, 44, 52, 56] },
-  { n: 'G. Verdi', c: '#938C7C', w: 1.6, d: '4 3', v: [30, 34, 32, 38, 40, 44] },
+const lineData = [
+  { c: '#F6C124', w: 2.4, d: undefined, v: [42, 48, 55, 60, 68, 76] },
+  { c: '#0A0A0A', w: 1.8, d: undefined, v: [38, 40, 46, 44, 52, 56] },
+  { c: '#938C7C', w: 1.6, d: '4 3', v: [30, 34, 32, 38, 40, 44] },
 ];
 
 const Legend = ({ items }: { items: { c: string; n: string; dashed?: boolean }[] }) => (
@@ -30,6 +30,9 @@ const Legend = ({ items }: { items: { c: string; n: string; dashed?: boolean }[]
 const GymDashboardMock = () => {
   const { t } = useLanguage();
   const months = t('gymMock.months').split(',');
+  const names = [t('gymMock.t1'), t('gymMock.t2'), t('gymMock.t3')];
+  const bars = barData.map((b, i) => ({ ...b, n: names[i] }));
+  const lines = lineData.map((l, i) => ({ ...l, n: names[i] }));
   const kpis = [
     { l: t('gymMock.rating'), v: '4,7/5', s: t('gymMock.ratingSub'), vc: '#0A0A0A', sc: '#938C7C' },
     { l: t('gymMock.retention'), v: '87%', s: t('gymMock.retentionSub'), vc: '#0A0A0A', sc: '#5a8a00' },

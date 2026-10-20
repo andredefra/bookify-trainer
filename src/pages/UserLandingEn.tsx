@@ -3,7 +3,7 @@ import { ConsumerLanding, type ConsumerCopy } from './UserLanding';
 
 const S = ({ children }: { children: ReactNode }) => <strong className="text-[#0A0A0A]">{children}</strong>;
 
-const EN: ConsumerCopy = {
+export const EN: ConsumerCopy = {
   hero: { a: 'The right trainer.\nAnd a ', gold: 'Coach AI', b: '\nthat never sleeps.',
     sub1: 'Find the personal trainer who fits you, right here.',
     sub2: "And when they're not around, Coach AI answers: in the evening, at the gym, between sets.",

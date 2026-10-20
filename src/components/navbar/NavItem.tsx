@@ -27,8 +27,9 @@ const NavItem = ({
   className
 }: NavItemProps) => {
   const { pathname } = useLocation();
-  const destination = pathname === '/en' && to.startsWith('/') && (to === '/' || to.startsWith('/#'))
-    ? `/en${to.slice(1)}` : to;
+  const homePrefix = pathname === '/en' || pathname === '/in' ? pathname : '';
+  const destination = homePrefix && to.startsWith('/') && (to === '/' || to.startsWith('/#'))
+    ? `${homePrefix}${to.slice(1)}` : to;
   // Common styles
   const baseClasses = isMobile
     ? "w-full h-auto py-4 text-xl font-medium text-brand-text/70 hover:text-brand-text"

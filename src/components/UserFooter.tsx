@@ -50,7 +50,7 @@ const UserFooter = () => {
             <p className="mt-4 text-sm text-[#a8a296]">{t('userFooter.description')}</p>
             <div className="mt-8">{/* Increased margin to align with other links */}
               <Link 
-                to={language === 'it' ? '/it' : '/'} 
+                to={language === 'in' ? '/in' : language === 'it' ? '/it' : '/'} 
                 className="text-sm text-[#a8a296] hover:text-[#F6C124] transition-colors"
               >
                 {t('userFooter.trainerPlatformLink')}

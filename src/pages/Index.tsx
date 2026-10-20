@@ -19,7 +19,7 @@ const Index = ({ language }: { language: Language }) => {
     savedLanguage === 'en' ||
     (savedLanguage === null && !browserLanguage?.toLowerCase().startsWith('it'))
   );
-  const canonical = `https://mypersonal.fit${language === 'it' ? '/' : '/en'}`;
+  const canonical = `https://mypersonal.fit${language === 'it' ? '/' : language === 'in' ? '/in' : '/en'}`;
   
   // Language comes from the route, not a timer or a stored default.
   useEffect(() => {
@@ -27,7 +27,7 @@ const Index = ({ language }: { language: Language }) => {
   }, [language]);
 
   useEffect(() => {
-    document.documentElement.lang = language;
+    document.documentElement.lang = language === 'in' ? 'en-IN' : language;
 
     const updateLink = (selector: string, attributes: Record<string, string>) => {
       let link = document.head.querySelector<HTMLLinkElement>(selector);
@@ -44,6 +44,7 @@ const Index = ({ language }: { language: Language }) => {
     const alternates = {
       it: 'https://mypersonal.fit/',
       en: 'https://mypersonal.fit/en',
+      'en-IN': 'https://mypersonal.fit/in',
       'x-default': 'https://mypersonal.fit/',
     };
     Object.entries(alternates).forEach(([hreflang, href]) => {

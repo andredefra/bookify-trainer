@@ -26,6 +26,7 @@ import Cookies from "./pages/Cookies";
 import ComingSoon from "./pages/ComingSoon";
 import UserLanding from "./pages/UserLanding";
 import UserLandingEn from "./pages/UserLandingEn";
+import UserLandingIn from "./pages/UserLandingIn";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import UserDashboard from "./pages/UserDashboard";
@@ -95,6 +96,9 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Index language="it" />} />
         <Route path="/en" element={<Index language="en" />} />
+        <Route path="/in" element={<Index language="in" />} />
+        <Route path="/in-user" element={<UserLandingIn />} />
+        <Route path="/in-find-trainer" element={<UserFindTrainer />} />
         <Route path="/it" element={<Navigate to="/" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { Home, Users, Dumbbell, Calendar, MessageCircle, CreditCard, LineChart, Check, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { numberLocale } from '@/translations';
 
 const railIcons = [Home, Users, Dumbbell, Calendar, MessageCircle, CreditCard, LineChart];
-const clients = ['Giulia Marchetti', 'Luca Rossi', 'Sara Bianchi', 'Marco Ferrari', 'Anna Conti'];
-const targets = [24, 31, 2840, 380];
 
 const AppPreview = () => {
   const { t, language } = useLanguage();
+  const clients = [1, 2, 3, 4, 5].map(n => t(`heroPreview.client${n}`));
+  // Animate toward the localized value so each market keeps its own currency and amounts.
+  const values = [1, 2, 3, 4].map(n => t(`heroPreview.kpi${n}Value`));
+  const targets = values.map(v => Number(v.replace(/\D/g, '')));
   const ref = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(1);
 
@@ -58,7 +61,7 @@ const AppPreview = () => {
                   <div key={i} className={`hero-preview-kpi kpi-${i + 1}`}>
                     <p className="hero-preview-label font-brand-mono">{t(`heroPreview.kpi${i + 1}Label`)}</p>
                     <p className="hero-preview-value font-brand-mono" aria-label={t(`heroPreview.kpi${i + 1}Value`)}>
-                      {progress === 1 ? t(`heroPreview.kpi${i + 1}Value`) : `${i > 1 ? '€' : ''}${Math.round(target * progress).toLocaleString(language === 'it' ? 'it-IT' : 'en-US')}`}
+                      {progress === 1 ? t(`heroPreview.kpi${i + 1}Value`) : `${values[i].match(/^\D*/)?.[0] ?? ''}${Math.round(target * progress).toLocaleString(numberLocale(language))}`}
                     </p>
                     <p className="hero-preview-delta">{t(`heroPreview.kpi${i + 1}Delta`)}</p>
                   </div>

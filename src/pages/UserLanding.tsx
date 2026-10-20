@@ -48,7 +48,7 @@ export type ConsumerCopy = {
   about: { title: string; lead: ReactNode; p: string; box1: string; box2: string };
   pricing: { eyebrow: string; title: string; intro: string; features: string[];
     freeBadge: string; freeTitle: string; freePeriod: string; freeDesc: string; counter: string; freeCta: string; freeNotes: string[];
-    paidBadgeOn: string; paidBadgeOff: string; paidTitle: string; paidPrice: string; paidPeriod: string; paidThen: string; paidDesc: string; paidTip: string; paidCta: string; paidFoot: string; paidCancel: string;
+    paidBadgeOn: string; paidBadgeOff: string; paidTitle: string; freePrice?: string; paidPrice: string; paidPeriod: string; paidThen: string; paidDesc: string; paidTip: string; paidCta: string; paidFoot: string; paidCancel: string;
     boxTitle: string; boxText: string; boxText2: string };
   cta: { eyebrow: string; titleA: string; titleB: string; offer1: string; offer2: string; ctaLong: string; ctaShort: string; checks: string[] };
 };
@@ -315,7 +315,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 <div className="mb-4 flex items-start justify-between gap-4">
                   <h3 className="text-2xl text-[#0A0A0A]" style={H3}>{P.freeTitle}</h3>
                   <div className="text-right">
-                    <div className="text-3xl text-[#0A0A0A]" style={{ fontFamily: MONO, fontWeight: 800 }}>€0</div>
+                    <div className="text-3xl text-[#0A0A0A]" style={{ fontFamily: MONO, fontWeight: 800 }}>{P.freePrice ?? '€0'}</div>
                     <div className="text-[10px] text-[#938C7C]" style={BADGE}>{P.freePeriod}</div>
                   </div>
                 </div>
@@ -413,7 +413,7 @@ const IT: ConsumerCopy = {
     chips: ['20 messaggi al giorno', '3 programmi al mese', 'Registri in un tocco', 'Integrazione dispositivi'],
     closing: '👉 Tutto questo senza stress, in totale autonomia.', cta: 'Inizia Subito Gratis',
     chatOnline: 'Online ora', chat: ['Ciao! Ho creato il tuo programma da 3 giorni per dimagrire 💪', 'Perfetto! Quante calorie brucio?', 'Circa 300-400 cal per sessione. Vuoi che ti mostri il primo allenamento? 🔥'],
-    chatCta: 'Inizia Allenamento', today: 'Today: 245 kcal', todayNote: '🔥 Ottimo lavoro!', chatInput: 'Scrivi al Coach AI…' },
+    chatCta: 'Inizia Allenamento', today: 'Oggi: 245 kcal', todayNote: '🔥 Ottimo lavoro!', chatInput: 'Scrivi al Coach AI…' },
   what: { eyebrow: 'Cosa puoi fare', titleA: 'Tutto quello che ti serve,', titleB: 'in un posto solo.',
     lead: 'Tutto quello che fai in palestra e fuori, in un posto solo. E il Coach AI ci lavora sopra.',
     chips: ["Registri l'allenamento, serie per serie", 'Registri le attività: passi, corsa, nuoto', 'I tuoi obiettivi, con i progressi', 'Peso, massa grassa e misure nel tempo', "L'analisi di ogni allenamento", 'Chat con il tuo trainer', 'Prenoti le tue sedute', 'Integrazione dispositivi'] },
