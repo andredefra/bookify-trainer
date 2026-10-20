@@ -1,0 +1,8 @@
+[
+  { "id": "in-rohan", "name": "Rohan Mehta", "location": "Andheri West, Mumbai", "title": "Strength & muscle gain · gym floor trainer", "hourlyRate": 1500, "rating": 4.8, "reviews": 62, "availableLabel": "Available today", "portraitIndex": 1 },
+  { "id": "in-priya", "name": "Priya Sharma", "location": "Bandra West, Mumbai", "title": "Weight loss & HIIT", "hourlyRate": 1800, "rating": 4.9, "reviews": 118, "availableLabel": "Available tomorrow", "portraitIndex": 0 },
+  { "id": "in-arjun", "name": "Arjun Iyer", "location": "Powai, Mumbai", "title": "Performance & running", "hourlyRate": 2000, "rating": 4.7, "reviews": 41, "availableLabel": "Available this week", "portraitIndex": 3 },
+  { "id": "in-kavya", "name": "Kavya Nair", "location": "Lower Parel, Mumbai", "title": "Pre & post-natal fitness", "hourlyRate": 2200, "rating": 4.9, "reviews": 57, "availableLabel": "Available this week", "portraitIndex": 2 },
+  { "id": "in-vikram", "name": "Vikram Singh", "location": "Juhu, Mumbai", "title": "Functional training & mobility", "hourlyRate": 1200, "rating": 4.6, "reviews": 33, "availableLabel": "Available today", "portraitIndex": 5 },
+  { "id": "in-sana", "name": "Sana Qureshi", "location": "Colaba, Mumbai", "title": "Yoga & flexibility", "hourlyRate": 1000, "rating": 4.8, "reviews": 74, "availableLabel": "Available tomorrow", "portraitIndex": 4 }
+]

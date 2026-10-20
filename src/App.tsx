@@ -99,6 +99,7 @@ const AppContent = () => {
         <Route path="/in" element={<Index language="in" />} />
         <Route path="/in-user" element={<UserLandingIn />} />
         <Route path="/in-find-trainer" element={<UserFindTrainer />} />
+        <Route path="/in-coming-soon" element={<ComingSoon />} />
         <Route path="/it" element={<Navigate to="/" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

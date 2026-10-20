@@ -132,7 +132,7 @@ const GymStudioSection = () => {
 
         <div className="mt-10 text-center">
           <Link
-            to={language === 'en' ? '/coming-soon' : '/prossimamente'}
+            to={language === 'in' ? '/in-coming-soon' : language === 'en' ? '/coming-soon' : '/prossimamente'}
             className="inline-block rounded-full px-9 py-[15px] text-[15.5px] font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F6C124] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
             style={{ background: '#F6C124', color: '#0A0A0A' }}
           >
