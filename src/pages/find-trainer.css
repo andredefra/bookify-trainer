@@ -5,6 +5,7 @@
 .trainer-market .market-card { background: hsl(var(--brand-text)); color: hsl(var(--brand-canvas)); border: 1px solid var(--market-card-border); }
 .trainer-market .market-muted { color: var(--preview-muted); }
 .trainer-market .market-photo::after { content: ''; position: absolute; inset: 0; background: var(--market-photo-overlay); pointer-events: none; }
+.trainer-market .market-photo-top { object-position: center 0%; }
 .trainer-market .market-credential { border-radius: 5px; padding: 4px 7px; font-size: 9px; font-weight: 700; text-transform: uppercase; }
 .trainer-market .credential-certified { background: var(--preview-tag-amber-bg); color: var(--market-cert-text); }
 .trainer-market .credential-verified { background: var(--preview-tag-positive-bg); color: var(--preview-tag-positive-text); }

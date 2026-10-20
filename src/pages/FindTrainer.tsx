@@ -80,7 +80,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
                 return (
                   <article key={trainer.id} className="market-card flex min-w-0 flex-col overflow-hidden rounded-2xl" data-trainer-card>
                     <div className="market-photo relative h-[196px]">
-                      <img src={trainer.profileImage} alt={trainer.name} className="h-full w-full object-cover" />
+                      <img src={trainer.profileImage} alt={trainer.name} className={`h-full w-full object-cover ${language === 'in' ? 'market-photo-top' : ''}`} />
                       <div className={`absolute left-3 top-3 z-10 flex items-center gap-2 rounded-full border bg-brand-canvas/80 px-2.5 py-1.5 font-brand-mono text-[9px] font-bold ${today ? 'border-brand-result/60 text-brand-result' : 'border-brand-highlight/60 text-brand-highlight'}`}>
                         <span className={`h-[5px] w-[5px] rounded-full ${today ? 'bg-brand-result' : 'bg-brand-highlight'}`} />{language === 'in' ? trainer.availableLabel : t(`cred.${availabilityKey}`)}
                       </div>
