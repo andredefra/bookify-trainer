@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import UserNavbar from '@/components/UserNavbar';
 import UserFooter from '@/components/UserFooter';
-import { Check, Bot, Target, BarChart3, Zap, Smartphone, Clock, Shield, Dumbbell, Footprints, Ruler, MessageCircle, CalendarDays } from 'lucide-react';
+import { Check, Bot, Target, BarChart3, Zap, Smartphone, Clock, Shield, Dumbbell, Footprints, Ruler, MessageCircle, CalendarDays, Send } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import WaitlistDialog from '@/components/WaitlistDialog';
