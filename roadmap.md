@@ -18,5 +18,5 @@
 - [x] Verify language routes, reloads, switcher, canonical/alternates and html language in the browser.
 - [x] Add bilingual consumer marketplace, demo notices, consumer card gates and navbar link.
 - [x] Verify routes, both card actions, language switching and unchanged consumer homes; do not deploy.
-- [ ] Keep India studio coming-soon navigation in IN and return to /in.
-- [ ] Add the six approved Mumbai marketplace demos for IN only; verify gates, mobile layout and unchanged other markets.
+- [x] Keep India studio coming-soon navigation in IN and return to /in.
+- [x] Add the six approved Mumbai marketplace demos for IN only; verify gates, mobile layout and unchanged other markets.
