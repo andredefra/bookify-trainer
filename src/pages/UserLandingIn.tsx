@@ -8,7 +8,7 @@ const IN: ConsumerCopy = {
   pricing: {
     ...EN.pricing,
     intro: 'The first 10 clients get free access for one year. After that: ₹106 per month for the first year, then ₹212.',
-    paidPrice: '₹106', paidThen: 'then ₹212 per month',
+    freePrice: '₹0', paidPrice: '₹106', paidThen: 'then ₹212 per month',
     paidCta: 'Subscribe at ₹106/month for the first year', paidFoot: '💎 Same features, ₹106 per month for the first year',
     boxText2: 'The first 10 clients get it free for one year; everyone else pays ₹106 per month for the first year, then ₹212.',
   },

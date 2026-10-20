@@ -48,7 +48,7 @@ export type ConsumerCopy = {
   about: { title: string; lead: ReactNode; p: string; box1: string; box2: string };
   pricing: { eyebrow: string; title: string; intro: string; features: string[];
     freeBadge: string; freeTitle: string; freePeriod: string; freeDesc: string; counter: string; freeCta: string; freeNotes: string[];
-    paidBadgeOn: string; paidBadgeOff: string; paidTitle: string; paidPrice: string; paidPeriod: string; paidThen: string; paidDesc: string; paidTip: string; paidCta: string; paidFoot: string; paidCancel: string;
+    paidBadgeOn: string; paidBadgeOff: string; paidTitle: string; freePrice?: string; paidPrice: string; paidPeriod: string; paidThen: string; paidDesc: string; paidTip: string; paidCta: string; paidFoot: string; paidCancel: string;
     boxTitle: string; boxText: string; boxText2: string };
   cta: { eyebrow: string; titleA: string; titleB: string; offer1: string; offer2: string; ctaLong: string; ctaShort: string; checks: string[] };
 };
@@ -315,7 +315,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 <div className="mb-4 flex items-start justify-between gap-4">
                   <h3 className="text-2xl text-[#0A0A0A]" style={H3}>{P.freeTitle}</h3>
                   <div className="text-right">
-                    <div className="text-3xl text-[#0A0A0A]" style={{ fontFamily: MONO, fontWeight: 800 }}>€0</div>
+                    <div className="text-3xl text-[#0A0A0A]" style={{ fontFamily: MONO, fontWeight: 800 }}>{P.freePrice ?? '€0'}</div>
                     <div className="text-[10px] text-[#938C7C]" style={BADGE}>{P.freePeriod}</div>
                   </div>
                 </div>
