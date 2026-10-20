@@ -71,8 +71,20 @@ const PhonePreview = ({ step }: { step: number }) => {
               <div className="mb-[7px] grid grid-cols-3 gap-[5px]">{[{ value: language === 'it' ? '€2.840' : '€2,840', delta: '+€420' }, { value: '31', delta: '+12%' }, { value: '94%', delta: '+3 pt' }].map((kpi, i) => <div key={i} className="rounded-[9px] border border-[var(--phone-border)] bg-brand-text px-[7px] py-2"><p className="phone-mono text-[6.5px] font-bold uppercase text-[var(--phone-label)]">{text(`k${i + 1}`)}</p><p className="phone-mono mt-[3px] text-[14px] font-extrabold">{kpi.value}</p><p className="mt-[1px] text-[8px] font-semibold text-[var(--phone-positive)]">{kpi.delta}</p></div>)}</div>
               <Card><div className="flex items-center gap-2"><p className="phone-title">{text('cht')}</p><Pill>{text('exp')}</Pill></div><div aria-hidden="true" className="mt-[9px] flex h-[52px] items-end gap-[5px]">{[38, 52, 46, 68, 61, 88].map((height, i) => <div key={i} style={{ height: `${height}%` }} className={`flex-1 rounded-t-[3px] ${i === 5 ? 'bg-brand-highlight' : i < 2 ? 'bg-[var(--phone-bar)]' : 'bg-brand-canvas'}`} />)}</div></Card>
               <Card><Row title={text('rkt')} subtitle={text('rks')} pill={text('rkp')} tone="gold" avatar="⚠" /></Card>
+              {dataRow(6, 'gold', 'LR')}{dataRow(7, 'green', 'MB')}
             </>}
           </div>
+        </div>
+        <div className="border-t border-[var(--phone-border)] bg-brand-text px-4 pb-2 pt-[9px]">
+          <div className="flex items-start justify-between">
+            {[Home, Users, CalendarDays, MessageCircle].map((TabIcon, i) => (
+              <div key={i} className="flex flex-col items-center gap-[3px]">
+                <span className={`grid h-4 w-4 place-items-center rounded-[5px] ${i === 0 ? 'bg-brand-canvas text-brand-highlight' : 'bg-[#E5DFD1] text-[#8a8478]'}`}><TabIcon className="h-[9px] w-[9px]" strokeWidth={2.4} /></span>
+                <span className={`phone-mono text-[7px] font-bold uppercase ${i === 0 ? 'text-brand-canvas' : 'text-[var(--phone-label)]'}`}>{t(`pv.tab${i + 1}`)}</span>
+              </div>
+            ))}
+          </div>
+          <div aria-hidden="true" className="mx-auto mt-2 h-1 w-[100px] rounded-full bg-brand-canvas/80" />
         </div>
       </div>
     </div>
