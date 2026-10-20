@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { CalendarDays, Home, MessageCircle, Users } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import './how-it-works.css';
 
@@ -34,10 +35,10 @@ const PhonePreview = ({ step }: { step: number }) => {
 
   return (
     <div className="phone-preview" data-step={current}>
-      <div aria-hidden="true" className="absolute left-1/2 top-[9px] z-[3] h-[21px] w-[84px] -translate-x-1/2 rounded-full bg-brand-canvas" />
-      <div className="overflow-hidden rounded-[30px] bg-[var(--phone-screen)]">
-        <div aria-hidden="true" className="phone-mono flex items-center justify-between px-[18px] pb-[5px] pt-3 text-[9.5px] font-extrabold">
-          <span>9:41</span><div className="flex items-center gap-1"><span>MyPersonal</span><div className="h-[7.5px] w-[15px] rounded-[2px] border-[1.2px] border-brand-canvas p-[1px]"><div className="h-full w-4/5 bg-brand-canvas" /></div></div>
+      <div aria-hidden="true" className="absolute left-1/2 top-[21px] z-[3] h-[24px] w-[88px] -translate-x-1/2 rounded-full bg-brand-canvas" />
+      <div className="flex h-full flex-col overflow-hidden rounded-[36px] bg-[var(--phone-screen)]">
+        <div aria-hidden="true" className="phone-mono flex items-center justify-between px-[26px] pb-[4px] pt-[17px] text-[9.5px] font-extrabold">
+          <span>9:41</span><div className="h-[7.5px] w-[15px] rounded-[2px] border-[1.2px] border-brand-canvas p-[1px]"><div className="h-full w-4/5 bg-brand-canvas" /></div>
         </div>
         <div className="flex items-center gap-2 px-[15px] pb-[10px] pt-[7px]">
           <div aria-hidden="true" className="grid h-[19px] w-[19px] shrink-0 place-items-center rounded-[5px] bg-brand-canvas"><div className="h-[7px] w-[7px] rounded-[2px] bg-brand-highlight" /></div>
