@@ -261,10 +261,11 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                         <span className="rounded-full bg-[#C6F24E] px-2 py-[3px] text-[8px] font-bold text-[#0A0A0A]">{c.journey.todayNote}</span>
                       </div>
                     </div>
-                    <div className="mx-3 mb-[22px] mt-2 flex items-center gap-2">
+                    <div className="mx-3 mb-2 mt-2 flex items-center gap-2">
                       <div className="flex-1 rounded-full border border-[#E0DACB] bg-[#FFFFFF] px-3 py-2 text-[10px] text-[#938C7C]">{c.journey.chatInput}</div>
                       <div className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-[#F6C124]"><Send className="h-3.5 w-3.5" color="#0A0A0A" /></div>
                     </div>
+                    <div aria-hidden="true" className="mx-auto mb-2 h-1 w-[100px] rounded-full bg-[#0A0A0A]/80" />
                   </div>
                 </div>
               </div>
