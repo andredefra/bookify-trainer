@@ -36,7 +36,7 @@ type Icon = typeof Bot;
 export type ConsumerCopy = {
   hero: { a: string; gold: string; b: string; sub1: string; sub2: string; ctaLong: string; ctaShort: string; micro: string };
   journey: { eyebrow: string; title: string; subtitle: string; p1: ReactNode; p2: ReactNode; chips: string[]; closing: string; cta: string;
-    chatOnline: string; chat: string[]; chatCta: string; today: string; todayNote: string };
+    chatOnline: string; chat: string[]; chatCta: string; today: string; todayNote: string; chatInput: string };
   what: { eyebrow: string; titleA: string; titleB: string; lead: string; chips: string[] };
   market: { titleA: string; titleB: string; lead: string; cta: string; href: string };
   control: { eyebrow: string; titleA: string; titleB: string; intro: string; listTitle: string; items: string[]; outro: string };
@@ -237,28 +237,35 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 </div>
               </div>
 
-              <div className="relative mx-auto w-full max-w-sm">
-                <div className="rounded-[2.5rem] border-[8px] border-[#1C1C1C] bg-[#F4F2ED] p-5 shadow-2xl">
-                  <div className="space-y-4 rounded-2xl bg-[#FFFFFF] p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0A0A0A]"><Bot className="h-5 w-5" color="#F6C124" /></div>
+              <div className="mx-auto w-[300px] max-w-full">
+                <div className="rounded-[46px] bg-[#1C1C1C] p-[11px] shadow-2xl" style={{ aspectRatio: '300 / 618' }}>
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[36px] bg-[#F4F2ED]">
+                    <div aria-hidden="true" className="absolute left-1/2 top-[21px] z-[3] h-[24px] w-[88px] -translate-x-1/2 rounded-full bg-[#1C1C1C]" />
+                    <div aria-hidden="true" className="flex items-center justify-between px-[26px] pb-[4px] pt-[17px] text-[9.5px] font-extrabold text-[#0A0A0A]" style={MICRO}>
+                      <span>9:41</span><div className="h-[7.5px] w-[15px] rounded-[2px] border-[1.2px] border-[#0A0A0A] p-[1px]"><div className="h-full w-4/5 bg-[#0A0A0A]" /></div>
+                    </div>
+                    <div className="flex items-center gap-2 border-b border-[#E0DACB] bg-[#FFFFFF] px-[14px] py-[10px]">
+                      <div className="flex h-[25px] w-[25px] items-center justify-center rounded-full bg-[#0A0A0A] text-[9px] font-extrabold text-[#F6C124]" style={MICRO}>AI</div>
                       <div>
-                        <div className="text-sm font-bold text-[#0A0A0A]">Coach AI</div>
-                        <div className="text-[10px] text-[#938C7C]" style={BADGE}>{c.journey.chatOnline}</div>
+                        <div className="text-[11px] font-semibold text-[#0A0A0A]">Coach AI</div>
+                        <div className="text-[8px] uppercase text-[#938C7C]" style={MICRO}>{c.journey.chatOnline}</div>
                       </div>
                     </div>
-                    <div className="space-y-3 text-sm">
-                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[0]}</div>
-                      <div className="ml-6 rounded-lg bg-[#0A0A0A] p-3 text-right text-[#ECE7DB]">{c.journey.chat[1]}</div>
-                      <div className="rounded-lg bg-[#F4F2ED] p-3 text-[#3f3a33]">{c.journey.chat[2]}</div>
+                    <div className="flex flex-1 flex-col gap-[10px] overflow-hidden px-[14px] py-[6px]">
+                      <div className="rounded-[12px_12px_12px_4px] border border-[#E0DACB] bg-[#FFFFFF] p-2.5 text-[11px] leading-snug text-[#3f3a33]">{c.journey.chat[0]}</div>
+                      <div className="self-end rounded-[12px_12px_4px_12px] bg-[#0A0A0A] p-2.5 text-[11px] leading-snug text-[#ECE7DB]">{c.journey.chat[1]}</div>
+                      <div className="rounded-[12px_12px_12px_4px] border border-[#E0DACB] bg-[#FFFFFF] p-2.5 text-[11px] leading-snug text-[#3f3a33]">{c.journey.chat[2]}</div>
+                      <button type="button" className={`${GOLD_BTN} w-full py-2 text-[11px]`}><Zap className="mr-1.5 h-3.5 w-3.5" />{c.journey.chatCta}</button>
+                      <div className="mb-1 mt-auto flex items-center justify-between gap-2 rounded-[10px] border border-[#E0DACB] bg-[#FFFFFF] px-3 py-2">
+                        <span className="text-[8px] uppercase text-[#0A0A0A]" style={MICRO}>{c.journey.today}</span>
+                        <span className="rounded-full bg-[#C6F24E] px-2 py-[3px] text-[8px] font-bold text-[#0A0A0A]">{c.journey.todayNote}</span>
+                      </div>
                     </div>
-                    <button type="button" className={`${GOLD_BTN} w-full py-2 text-sm`}><Zap className="mr-2 h-4 w-4" />{c.journey.chatCta}</button>
+                    <div className="mx-3 mb-[22px] mt-2 flex items-center gap-2">
+                      <div className="flex-1 rounded-full border border-[#E0DACB] bg-[#FFFFFF] px-3 py-2 text-[10px] text-[#938C7C]">{c.journey.chatInput}</div>
+                      <div className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-[#F6C124]"><Send className="h-3.5 w-3.5" color="#0A0A0A" /></div>
+                    </div>
                   </div>
-                </div>
-                <div className="absolute -right-3 -top-3 rounded-full bg-[#C6F24E] p-2 shadow-lg"><Check className="h-4 w-4" color="#0A0A0A" /></div>
-                <div className="absolute -bottom-4 -left-3 rounded-lg border border-[#E0DACB] bg-[#FFFFFF] p-2 shadow-lg">
-                  <div className="text-[10px] text-[#0A0A0A]" style={BADGE}>{c.journey.today}</div>
-                  <div className="text-xs text-[#5a5346]">{c.journey.todayNote}</div>
                 </div>
               </div>
             </div>
@@ -405,7 +412,7 @@ const IT: ConsumerCopy = {
     chips: ['20 messaggi al giorno', '3 programmi al mese', 'Registri in un tocco', 'Integrazione dispositivi'],
     closing: '👉 Tutto questo senza stress, in totale autonomia.', cta: 'Inizia Subito Gratis',
     chatOnline: 'Online ora', chat: ['Ciao! Ho creato il tuo programma da 3 giorni per dimagrire 💪', 'Perfetto! Quante calorie brucio?', 'Circa 300-400 cal per sessione. Vuoi che ti mostri il primo allenamento? 🔥'],
-    chatCta: 'Inizia Allenamento', today: 'Today: 245 kcal', todayNote: '🔥 Ottimo lavoro!' },
+    chatCta: 'Inizia Allenamento', today: 'Today: 245 kcal', todayNote: '🔥 Ottimo lavoro!', chatInput: 'Scrivi al Coach AI…' },
   what: { eyebrow: 'Cosa puoi fare', titleA: 'Tutto quello che ti serve,', titleB: 'in un posto solo.',
     lead: 'Tutto quello che fai in palestra e fuori, in un posto solo. E il Coach AI ci lavora sopra.',
     chips: ["Registri l'allenamento, serie per serie", 'Registri le attività: passi, corsa, nuoto', 'I tuoi obiettivi, con i progressi', 'Peso, massa grassa e misure nel tempo', "L'analisi di ogni allenamento", 'Chat con il tuo trainer', 'Prenoti le tue sedute', 'Integrazione dispositivi'] },
