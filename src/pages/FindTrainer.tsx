@@ -13,7 +13,7 @@ import { demoTrainers } from '@/data/trainerMockData';
 import './find-trainer.css';
 
 export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [city, setCity] = useState('');
   const [showDemoDialog, setShowDemoDialog] = useState(false);
