@@ -3,6 +3,8 @@ import { en } from './en';
 /** India: English copy with rupee prices, Mumbai demo data and GST invoicing. */
 export const inOverrides: Partial<Record<keyof typeof en, string>> = {
   // Basic card form
+  'market.cityPh': 'Mumbai',
+  'market.perHour': '/ session',
   'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/tWw25WDw',
 
   // Plan prices (1 € = ₹106.64)

@@ -62,7 +62,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     : location.pathname === '/en' ? 'en'
     : location.pathname === '/user-find-trainer' ? 'it'
     : location.pathname === '/user-find-trainer-en' ? 'en'
-    : ['/in', '/in-user', '/in-find-trainer'].includes(location.pathname) ? 'in'
+    : ['/in', '/in-user', '/in-find-trainer', '/in-coming-soon'].includes(location.pathname) ? 'in'
     : location.pathname === '/prossimamente' ? 'it'
     : location.pathname === '/coming-soon' ? 'en'
     : preferredLanguage;

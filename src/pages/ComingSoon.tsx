@@ -31,7 +31,7 @@ const ComingSoon = () => {
             <p className="mx-auto mt-5 max-w-[600px] text-[15.5px] leading-relaxed" style={{ color: '#bdb7aa' }}>{t('soon.body')}</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a href={`mailto:${EMAIL}`} className="hero-primary rounded-full px-8 py-[14px] text-[15px] font-bold" style={{ background: '#F6C124', color: '#0A0A0A' }}>{t('soon.write')}</a>
-              <Link to={language === 'en' ? '/en' : '/'} className="rounded-full border px-8 py-[13px] text-[15px] font-bold" style={{ borderColor: '#3a3a3a', color: '#ddd7ca' }}>{t('soon.home')}</Link>
+              <Link to={language === 'in' ? '/in' : language === 'en' ? '/en' : '/'} className="rounded-full border px-8 py-[13px] text-[15px] font-bold" style={{ borderColor: '#3a3a3a', color: '#ddd7ca' }}>{t('soon.home')}</Link>
             </div>
             <p className="mt-4 break-all" style={{ fontFamily: MONO, fontSize: 11, color: '#8c8678' }}>{EMAIL}</p>
             {TYPEFORM_URL && (
