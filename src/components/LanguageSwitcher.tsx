@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type LangCode = 'it' | 'en';
+type LangCode = 'it' | 'en' | 'in';
 
 const ItFlag = () => (
   <svg viewBox="0 0 3 2" preserveAspectRatio="none" className="h-full w-full">
@@ -31,13 +31,24 @@ const GbFlag = () => (
   </svg>
 );
 
+const InFlag = () => (
+  <svg viewBox="0 0 3 2" preserveAspectRatio="none" className="h-full w-full">
+    <rect width="3" height="2" fill="#ffffff" />
+    <rect width="3" height="0.667" fill="#FF9933" />
+    <rect width="3" height="0.667" y="1.333" fill="#138808" />
+    <circle cx="1.5" cy="1" r="0.25" fill="none" stroke="#000080" strokeWidth="0.05" />
+  </svg>
+);
+
 /** Add a language by adding one entry here. */
-const LANGUAGES: { code: LangCode; label: string; flag: () => JSX.Element; consumerRoute: string; publicRoute: string }[] = [
-  { code: 'it', label: 'Italiano', flag: ItFlag, consumerRoute: '/user', publicRoute: '/' },
-  { code: 'en', label: 'English', flag: GbFlag, consumerRoute: '/user-en', publicRoute: '/en' },
+const LANGUAGES: { code: LangCode; label: string; flag: () => JSX.Element; consumerRoute: string; publicRoute: string; marketRoute: string }[] = [
+  { code: 'it', label: 'Italiano', flag: ItFlag, consumerRoute: '/user', publicRoute: '/', marketRoute: '/user-find-trainer' },
+  { code: 'en', label: 'English', flag: GbFlag, consumerRoute: '/user-en', publicRoute: '/en', marketRoute: '/user-find-trainer-en' },
+  { code: 'in', label: 'India', flag: InFlag, consumerRoute: '/in-user', publicRoute: '/in', marketRoute: '/in-find-trainer' },
 ];
 
 const CONSUMER_ROUTES = LANGUAGES.map((l) => l.consumerRoute);
+const MARKET_ROUTES = LANGUAGES.map((l) => l.marketRoute);
 
 const FlagFrame = ({ children }: { children: ReactNode }) => (
   <span className="inline-flex h-3.5 w-5 shrink-0 overflow-hidden rounded-[2px] border border-border" aria-hidden="true">
@@ -62,8 +73,7 @@ const LanguageSwitcher = ({ className, onChange, align = 'end', theme = 'default
 
   const pick = (lang: (typeof LANGUAGES)[number]) => {
     setLanguage(lang.code);
-    const marketplace = pathname === '/user-find-trainer' || pathname === '/user-find-trainer-en';
-    navigate(marketplace ? (lang.code === 'it' ? '/user-find-trainer' : '/user-find-trainer-en') : CONSUMER_ROUTES.includes(pathname) ? lang.consumerRoute : lang.publicRoute);
+    navigate(MARKET_ROUTES.includes(pathname) ? lang.marketRoute : CONSUMER_ROUTES.includes(pathname) ? lang.consumerRoute : lang.publicRoute);
     onChange?.();
   };
 

@@ -87,7 +87,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
                       </div>
                       <div className="mb-5 mt-4 flex flex-wrap gap-1.5">{trainer.credentials.map(credential => <span key={credential} className={`market-credential credential-${credential} font-brand-mono`}>{t(`cred.${credential}`)}</span>)}</div>
                       <div className="market-divider mt-auto flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-                        <p className="font-brand-mono text-[17px] font-extrabold">€{trainer.hourlyRate} <span className="market-muted text-[9px] font-bold">{t('market.perHour')}</span></p>
+                        <p className="font-brand-mono text-[17px] font-extrabold">{language === 'in' ? `₹${(trainer.hourlyRate * 25).toLocaleString('en-IN')}` : `€${trainer.hourlyRate}`} <span className="market-muted text-[9px] font-bold">{t('market.perHour')}</span></p>
                         {consumer ? (
                           <div className="flex w-full flex-wrap gap-2">
                             <Button variant="outline" onClick={() => setShowDemoDialog(true)} className="h-9 rounded-full border-brand-canvas/20 bg-transparent px-4 text-xs font-bold text-brand-canvas hover:bg-brand-canvas/5 hover:text-brand-canvas">{t('market.viewProfile')}</Button>
