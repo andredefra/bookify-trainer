@@ -28,6 +28,7 @@ export const en = {
   'gymMock.t3': 'G. Verdi',
   'pv.s6.k1v': '€2,840',
   'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/JeSaWIge',
+  'earlyAccess.typeformUrl': 'https://andredefra64.typeform.com/to/z2CwBewR',
   // Public trainer header
   'publicProfile.perHour': '/ hour',
   'publicProfile.years': 'years',
