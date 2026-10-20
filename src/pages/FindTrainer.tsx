@@ -14,11 +14,11 @@ import indiaMarketplaceData from '@/data/indiaMarketplaceData.json';
 import './find-trainer.css';
 
 // Reuse presentation assets only; India identities never inherit Italian profile data.
-const indiaTrainers = indiaMarketplaceData.flatMap(record => {
-  const portrait = demoTrainers[record.portraitIndex];
-  if (!portrait) return [];
-  return [{ ...record, slug: record.id, profileImage: portrait.profileImage, credentials: portrait.credentials }];
-});
+const indiaTrainers = indiaMarketplaceData.map(record => ({
+  ...record,
+  slug: record.id,
+  profileImage: record.image
+}));
 
 export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) => {
   const { t, language } = useLanguage();
