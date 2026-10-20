@@ -36,7 +36,7 @@ const UserLogin = () => {
     <LoginContainer 
       onLogin={handleLogin} 
       onCancel={handleCancel}
-      title="Welcome back to Trainer.ai"
+      title="Welcome back to MyPersonal"
       subtitle="Continue your fitness journey"
     />
   );

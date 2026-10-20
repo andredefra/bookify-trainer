@@ -11,7 +11,7 @@ const UserRegister = () => {
     console.log("Registration data:", data);
     
     // Demo mode: Accept any credentials
-    toast.success("Welcome to Trainer.ai!");
+    toast.success("Welcome to MyPersonal!");
     // Store user data
     localStorage.setItem('user-app-user', JSON.stringify({
       name: data.name,
@@ -33,7 +33,7 @@ const UserRegister = () => {
       onRegister={handleRegister} 
       onCancel={handleCancel}
       hideUserTypeSelection={true}
-      title="Join Trainer.ai"
+      title="Join MyPersonal"
       subtitle="Start your AI-powered fitness journey"
     />
   );
