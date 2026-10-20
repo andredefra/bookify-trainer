@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
 import { CircleCheck, Sparkles, Crown } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import {
