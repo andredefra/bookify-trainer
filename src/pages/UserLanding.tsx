@@ -413,7 +413,7 @@ const IT: ConsumerCopy = {
     chips: ['20 messaggi al giorno', '3 programmi al mese', 'Registri in un tocco', 'Integrazione dispositivi'],
     closing: '👉 Tutto questo senza stress, in totale autonomia.', cta: 'Inizia Subito Gratis',
     chatOnline: 'Online ora', chat: ['Ciao! Ho creato il tuo programma da 3 giorni per dimagrire 💪', 'Perfetto! Quante calorie brucio?', 'Circa 300-400 cal per sessione. Vuoi che ti mostri il primo allenamento? 🔥'],
-    chatCta: 'Inizia Allenamento', today: 'Today: 245 kcal', todayNote: '🔥 Ottimo lavoro!', chatInput: 'Scrivi al Coach AI…' },
+    chatCta: 'Inizia Allenamento', today: 'Oggi: 245 kcal', todayNote: '🔥 Ottimo lavoro!', chatInput: 'Scrivi al Coach AI…' },
   what: { eyebrow: 'Cosa puoi fare', titleA: 'Tutto quello che ti serve,', titleB: 'in un posto solo.',
     lead: 'Tutto quello che fai in palestra e fuori, in un posto solo. E il Coach AI ci lavora sopra.',
     chips: ["Registri l'allenamento, serie per serie", 'Registri le attività: passi, corsa, nuoto', 'I tuoi obiettivi, con i progressi', 'Peso, massa grassa e misure nel tempo', "L'analisi di ogni allenamento", 'Chat con il tuo trainer', 'Prenoti le tue sedute', 'Integrazione dispositivi'] },

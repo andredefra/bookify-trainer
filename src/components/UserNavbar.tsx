@@ -11,14 +11,14 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
   const handleJoinWaitlist = () => {
     setIsMenuOpen(false);
     if (onJoinWaitlist) onJoinWaitlist();
-    else navigate(`${language === 'en' ? '/user-en' : '/user'}?waitlist=1`);
+    else navigate(`${language === 'en' ? '/user-en' : language === 'in' ? '/in-user' : '/user'}?waitlist=1`);
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const menuItems = [
     { key: 'userNav.features', href: '#features' },
-    { key: 'consumerMarket.nav', href: language === 'it' ? '/user-find-trainer' : '/user-find-trainer-en' },
+    { key: 'consumerMarket.nav', href: language === 'it' ? '/user-find-trainer' : language === 'in' ? '/in-find-trainer' : '/user-find-trainer-en' },
     { key: 'userNav.pricing', href: '#pricing' },
     { key: 'userNav.about', href: '#about' },
   ];
@@ -32,14 +32,14 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
     const currentPath = window.location.pathname;
     
     // Se siamo su /user o /user-en, fai scroll nella pagina corrente
-    if (currentPath === '/user' || currentPath === '/user-en') {
+    if (currentPath === '/user' || currentPath === '/user-en' || currentPath === '/in-user') {
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       // Se siamo su altre pagine (login/register), naviga alla landing con l'anchor
-      const targetPage = language === 'en' ? '/user-en' : '/user';
+      const targetPage = language === 'en' ? '/user-en' : language === 'in' ? '/in-user' : '/user';
       navigate(targetPage + href);
       
       // Dopo la navigazione, aspetta che la pagina sia caricata e poi fai scroll
@@ -59,7 +59,7 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to={language === 'it' ? '/user' : '/user-en'} className="flex items-center">
+            <Link to={language === 'it' ? '/user' : language === 'in' ? '/in-user' : '/user-en'} className="flex items-center">
               <span className="text-base text-white sm:text-lg" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", fontWeight: 800 }}>
                 mypersonal<span className="text-[#F6C124]">.fit</span>
               </span>

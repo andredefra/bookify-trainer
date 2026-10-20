@@ -35,7 +35,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       }
       
       const saved = localStorage.getItem('language');
-      return (saved === 'en' || saved === 'it') ? saved as Language : 'en'; // Default to English
+      return (saved === 'en' || saved === 'it' || saved === 'in') ? saved as Language : 'en'; // Default to English
     }
     return 'en'; // Default to English
   };
@@ -62,6 +62,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     : location.pathname === '/en' ? 'en'
     : location.pathname === '/user-find-trainer' ? 'it'
     : location.pathname === '/user-find-trainer-en' ? 'en'
+    : ['/in', '/in-user', '/in-find-trainer'].includes(location.pathname) ? 'in'
     : location.pathname === '/prossimamente' ? 'it'
     : location.pathname === '/coming-soon' ? 'en'
     : preferredLanguage;

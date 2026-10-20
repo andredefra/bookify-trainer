@@ -35,7 +35,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-10 md:grid-cols-12 md:gap-8">
           <div className="col-span-2 md:col-span-6">
             <Link
-              to={language === 'it' ? '/' : '/en'}
+              to={language === 'it' ? '/' : language === 'in' ? '/in' : '/en'}
               className="inline-flex shrink-0 items-center gap-2.5 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F6C124]"
               aria-label="mypersonal.fit"
             >
@@ -58,7 +58,7 @@ const Footer = () => {
             </p>
 
             <Link
-              to={language === 'it' ? '/user' : '/user-en'}
+              to={language === 'it' ? '/user' : language === 'in' ? '/in-user' : '/user-en'}
               className="mt-6 inline-flex max-w-[360px] items-start gap-2 rounded-[12px] border px-4 py-3 text-[12.5px] font-semibold leading-[1.45] transition-colors hover:bg-[rgba(246,193,36,.14)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F6C124]"
               style={{ borderColor: 'rgba(246,193,36,.32)', background: 'rgba(246,193,36,.07)', color: '#F6C124' }}
             >

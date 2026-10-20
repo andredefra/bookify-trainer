@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Home, Users, Dumbbell, Calendar, MessageCircle, CreditCard, LineChart, Check, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { numberLocale } from '@/translations';
 
 const railIcons = [Home, Users, Dumbbell, Calendar, MessageCircle, CreditCard, LineChart];
-const localeFor = (language: string) => language === 'it' ? 'it-IT' : language === 'in' ? 'en-IN' : 'en-US';
 
 const AppPreview = () => {
   const { t, language } = useLanguage();
@@ -61,7 +61,7 @@ const AppPreview = () => {
                   <div key={i} className={`hero-preview-kpi kpi-${i + 1}`}>
                     <p className="hero-preview-label font-brand-mono">{t(`heroPreview.kpi${i + 1}Label`)}</p>
                     <p className="hero-preview-value font-brand-mono" aria-label={t(`heroPreview.kpi${i + 1}Value`)}>
-                      {progress === 1 ? t(`heroPreview.kpi${i + 1}Value`) : `${values[i].match(/^\D*/)?.[0] ?? ''}${Math.round(target * progress).toLocaleString(localeFor(language))}`}
+                      {progress === 1 ? t(`heroPreview.kpi${i + 1}Value`) : `${values[i].match(/^\D*/)?.[0] ?? ''}${Math.round(target * progress).toLocaleString(numberLocale(language))}`}
                     </p>
                     <p className="hero-preview-delta">{t(`heroPreview.kpi${i + 1}Delta`)}</p>
                   </div>
