@@ -114,6 +114,7 @@ export const it = {
   'nav.closeMenu': 'Chiudi menu',
   'auth.login': 'Login',
   'auth.register': 'Prova la Demo',
+  'auth.backToSite': 'Torna al sito',
   'login.subtitle': "Prova le funzioni della piattaforma con un account demo: usa qualsiasi email e password per entrare. Se ti interessa l'app vera, scrivici a",
   'login.bottom': 'Ti interessa la demo per studi e palestre? Scrivici a',
   'login.tabTrainer': 'Trainer',
