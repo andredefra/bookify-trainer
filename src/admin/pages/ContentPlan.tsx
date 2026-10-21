@@ -13,6 +13,7 @@ import { usePlanPhases, useCreatePlanPhase, useClosePlanPhase } from "../hooks/u
 import { schedulePhase } from "../lib/ai";
 import PostEditorDialog from "../components/content/PostEditorDialog";
 import CsvImportDialog from "../components/content/CsvImportDialog";
+import MediaThumb from "../components/content/MediaThumb";
 import type { MktContent, MktStatus, MktPlanPhase } from "../types";
 import { it } from "../i18n/it";
 import { toast } from "sonner";
@@ -280,6 +281,18 @@ export default function ContentPlan() {
                         📅 {p.scheduled_date} {p.scheduled_time?.slice(0, 5) ?? ""}
                       </p>
                     )}
+                    {(() => {
+                      const media = p.media_urls?.length ? p.media_urls : p.media_url ? [p.media_url] : [];
+                      if (!media.length) return null;
+                      return (
+                        <div className="relative mt-2 w-14 h-14 rounded overflow-hidden border">
+                          <MediaThumb value={media[0]} className="w-full h-full" />
+                          <span className="absolute bottom-0 right-0 bg-background/90 text-foreground text-[10px] font-mono px-1 rounded-tl">
+                            {media.length}
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </Card>
                 ))
               )}
