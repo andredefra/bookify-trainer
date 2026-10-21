@@ -71,7 +71,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
             </form>
             <div className="mx-auto mt-5 flex max-w-5xl flex-wrap justify-center gap-2">
               {Array.from({ length: 8 }, (_, index) => (
-                <Button key={index} type="button" onClick={() => setActiveChip(index)} aria-pressed={index === activeChip} variant={index === activeChip ? 'default' : 'outline'} className={`h-9 rounded-full px-4 text-xs ${index === activeChip ? 'border border-brand-screen bg-brand-canvas font-bold text-brand-screen hover:bg-brand-canvas' : 'border-brand-text/20 bg-transparent text-brand-text/70 hover:bg-brand-text/10 hover:text-brand-text'}`}>{t(`market.f${index + 1}`)}</Button>
+                <Button key={index} type="button" onClick={() => setActiveChip(index)} aria-pressed={index === activeChip} variant={index === activeChip ? 'default' : 'outline'} className={`h-9 rounded-full px-4 text-xs ${index === activeChip ? 'border border-brand-screen bg-brand-screen font-bold text-brand-canvas hover:bg-brand-screen' : 'border-brand-text/20 bg-transparent text-brand-text/70 hover:bg-brand-text/10 hover:text-brand-text'}`}>{t(`market.f${index + 1}`)}</Button>
               ))}
             </div>
           </div>
