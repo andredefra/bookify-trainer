@@ -88,7 +88,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
               <p className="text-sm leading-relaxed">{t('market.demoNotice')}</p>
             </aside>
             {visibleTrainers.length === 0 && (
-              <p data-empty-specialty className="py-8 text-center text-sm">{t('market.emptySpecialty')} · <button type="button" onClick={() => { setActiveChip(0); setSearchQuery(''); setCity(''); }} className="font-bold underline">{t('market.emptyReset')}</button></p>
+              <p data-empty-specialty className="py-8 text-center text-sm">{t('market.emptySpecialty')} · <button type="button" onClick={() => setActiveChip(0)} className="font-bold underline">{t('market.emptyReset')}</button></p>
             )}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {visibleTrainers.map(trainer => {
