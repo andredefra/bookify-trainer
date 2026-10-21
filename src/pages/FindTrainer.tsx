@@ -20,12 +20,26 @@ const indiaTrainers = indiaMarketplaceData.map(record => ({
   profileImage: record.image
 }));
 
+// Chip order matches market.f1..f8; index 0 is "All".
+const FILTER_TAGS = [null, 'weight-loss', 'strength', 'group-bootcamp', 'pre-post-natal', 'posture', 'running', 'online'];
+
 export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) => {
   const { t, language } = useLanguage();
   const trainers = language === 'in' ? indiaTrainers : demoTrainers;
   const [searchQuery, setSearchQuery] = useState('');
   const [city, setCity] = useState('');
   const [showDemoDialog, setShowDemoDialog] = useState(false);
+  const [activeChip, setActiveChip] = useState(0);
+  const chipTag = FILTER_TAGS[activeChip];
+  const q = searchQuery.trim().toLowerCase();
+  const c = city.trim().toLowerCase();
+  const visibleTrainers = trainers.filter((trainer: any) => {
+    const tags: string[] = trainer.filterTags ?? trainer.specialties ?? [];
+    if (chipTag && !tags.includes(chipTag)) return false;
+    if (q && !`${trainer.name} ${trainer.title}`.toLowerCase().includes(q)) return false;
+    if (c && !trainer.location.toLowerCase().includes(c)) return false;
+    return true;
+  });
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
@@ -57,7 +71,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
             </form>
             <div className="mx-auto mt-5 flex max-w-5xl flex-wrap justify-center gap-2">
               {Array.from({ length: 8 }, (_, index) => (
-                <Button key={index} type="button" aria-pressed={index === 0} variant={index === 0 ? 'default' : 'outline'} className={`h-9 rounded-full px-4 text-xs ${index === 0 ? 'bg-brand-highlight font-bold text-brand-canvas hover:bg-brand-highlight/90' : 'border-brand-text/20 bg-transparent text-brand-text/70 hover:bg-brand-text/10 hover:text-brand-text'}`}>{t(`market.f${index + 1}`)}</Button>
+                <Button key={index} type="button" onClick={() => setActiveChip(index)} aria-pressed={index === activeChip} variant={index === activeChip ? 'default' : 'outline'} className={`h-9 rounded-full px-4 text-xs ${index === activeChip ? 'border border-brand-screen bg-brand-canvas font-bold text-brand-screen hover:bg-brand-canvas' : 'border-brand-text/20 bg-transparent text-brand-text/70 hover:bg-brand-text/10 hover:text-brand-text'}`}>{t(`market.f${index + 1}`)}</Button>
               ))}
             </div>
           </div>
@@ -66,15 +80,18 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
         <section className="bg-brand-screen px-5 py-9 text-brand-canvas md:px-8">
           <div className="mx-auto max-w-6xl">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm font-bold">{t('market.count').replace('{n}', String(trainers.length))}</p>
+              <p className="text-sm font-bold">{t('market.count').replace('{n}', String(visibleTrainers.length))}</p>
               <p className="market-muted font-brand-mono text-[10px] font-bold uppercase sm:text-xs">{t('market.sort')}</p>
             </div>
             <aside data-demo-notice className="market-demo-notice mb-6 flex flex-col gap-2 sm:flex-row sm:gap-4">
               <span className="shrink-0 font-brand-mono text-xs font-bold uppercase">{t('market.demoLabel')}</span>
               <p className="text-sm leading-relaxed">{t('market.demoNotice')}</p>
             </aside>
+            {visibleTrainers.length === 0 && (
+              <p data-empty-specialty className="py-8 text-center text-sm">{t('market.emptySpecialty')} · <button type="button" onClick={() => setActiveChip(0)} className="font-bold underline">{t('market.emptyReset')}</button></p>
+            )}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {trainers.map(trainer => {
+              {visibleTrainers.map(trainer => {
                 const today = trainer.availableLabel === 'Disponibile oggi' || trainer.availableLabel === 'Available today';
                 const availabilityKey = today ? 'availableToday' : trainer.availableLabel === 'Libera da giovedì' ? 'availableThursday' : 'availableMonday';
                 return (

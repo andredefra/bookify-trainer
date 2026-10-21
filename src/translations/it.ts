@@ -195,6 +195,8 @@ export const it = {
   'market.f6': "Postura",
   'market.f7': "Running",
   'market.f8': "Online",
+  'market.emptySpecialty': "Nessun trainer per questa specialità, per ora",
+  'market.emptyReset': "Mostra tutte le specialità",
   'market.count': "{n} trainer disponibili",
   'market.sort': "Ordina per · Più vicini a te",
   'market.viewProfile': "Vedi il profilo",
