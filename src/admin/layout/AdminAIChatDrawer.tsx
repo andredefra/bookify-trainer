@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import ReactMarkdown, { type Components } from "react-markdown";
 import { Sparkles, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -69,6 +70,49 @@ const PAGES: Record<string, { name: string; questions: string[] }> = {
       "Dove inserisco le chiavi API?",
     ],
   },
+};
+
+/**
+ * Assistant replies are markdown: headings stay the same size as bold text so the
+ * drawer keeps its look. Raw HTML is skipped (never rendered) for safety.
+ */
+const MD_COMPONENTS: Components = {
+  h1: ({ children }) => <p className="font-semibold">{children}</p>,
+  h2: ({ children }) => <p className="font-semibold">{children}</p>,
+  h3: ({ children }) => <p className="font-semibold">{children}</p>,
+  h4: ({ children }) => <p className="font-semibold">{children}</p>,
+  h5: ({ children }) => <p className="font-semibold">{children}</p>,
+  h6: ({ children }) => <p className="font-semibold">{children}</p>,
+  p: ({ children }) => <p className="leading-relaxed [&:not(:first-child)]:mt-2">{children}</p>,
+  ul: ({ children }) => <ul className="mt-1 list-disc space-y-1 pl-5">{children}</ul>,
+  ol: ({ children }) => <ol className="mt-1 list-decimal space-y-1 pl-5">{children}</ol>,
+  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+  a: ({ children, href }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline underline-offset-2 hover:opacity-80"
+    >
+      {children}
+    </a>
+  ),
+  strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+  em: ({ children }) => <em className="italic">{children}</em>,
+  code: ({ children }) => (
+    <code className="rounded bg-background px-1 py-0.5 font-mono text-[0.85em]">{children}</code>
+  ),
+  pre: ({ children }) => (
+    <pre className="mt-2 overflow-x-auto rounded bg-background p-2 text-xs leading-relaxed">
+      {children}
+    </pre>
+  ),
+  blockquote: ({ children }) => (
+    <blockquote className="mt-2 border-l-2 border-border pl-2 text-muted-foreground">
+      {children}
+    </blockquote>
+  ),
+  hr: () => <hr className="my-2 border-border" />,
 };
 
 /** Read-only help assistant for the whole admin (never writes data). */
@@ -145,16 +189,22 @@ export default function AdminAIChatDrawer() {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`rounded-lg p-3 text-sm whitespace-pre-wrap ${
-                  m.role === "user" ? "bg-primary text-primary-foreground ml-8" : "bg-muted mr-8"
-                }`}
-              >
-                {m.text}
-              </div>
-            ))}
+            {messages.map((m, i) =>
+              m.role === "user" ? (
+                <div
+                  key={i}
+                  className="rounded-lg p-3 text-sm whitespace-pre-wrap bg-primary text-primary-foreground ml-8"
+                >
+                  {m.text}
+                </div>
+              ) : (
+                <div key={i} className="rounded-lg p-3 text-sm bg-muted mr-8">
+                  <ReactMarkdown skipHtml components={MD_COMPONENTS}>
+                    {m.text}
+                  </ReactMarkdown>
+                </div>
+              )
+            )}
             {send.isPending && <p className="text-xs text-muted-foreground">Sto pensando...</p>}
           </div>
           <div className="p-3 border-t space-y-2">
