@@ -2,7 +2,7 @@
 // The key is read only from the GEMINI_API_KEY secret and never returned or logged.
 
 /** Single place to change the Gemini model. */
-export const GEMINI_MODEL = "gemini-2.5-flash";
+export const GEMINI_MODEL = "gemini-3.8-flash";
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
@@ -60,12 +60,16 @@ export async function geminiRaw(opts: GeminiRawOptions): Promise<GeminiPart[]> {
       }
       return parts;
     }
-    await res.text().catch(() => "");
-    if (res.status === 400 || res.status === 401 || res.status === 403) {
-      throw new GeminiError("invalid_key", "Chiave Gemini non valida o senza permessi", res.status === 400 ? 400 : 403);
+    const raw = await res.text().catch(() => "");
+    const detail = geminiMessage(raw);
+    if (res.status === 401 || res.status === 403) {
+      throw new GeminiError("invalid_key", "Chiave Gemini non valida o senza permessi", 403);
+    }
+    if (res.status === 400) {
+      throw new GeminiError("invalid_key", `Chiave Gemini non valida o senza permessi${detail ? `: ${detail}` : ""}`, 400);
     }
     if (res.status !== 429 && res.status < 500) {
-      throw new GeminiError("bad_response", `Errore Gemini ${res.status}`, 500);
+      throw new GeminiError("bad_response", `Errore Gemini ${res.status}${detail ? `: ${detail}` : ""}`, 500);
     }
   }
   throw new GeminiError(
