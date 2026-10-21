@@ -29,6 +29,20 @@ export interface GeminiRawOptions {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/** Short human-readable message from a Gemini error body. Never contains the key. */
+function geminiMessage(raw: string): string {
+  let msg = "";
+  try {
+    const data = JSON.parse(raw);
+    if (typeof data?.error?.message === "string") msg = data.error.message;
+  } catch {
+    msg = raw;
+  }
+  msg = msg.replace(/\s+/g, " ").trim();
+  if (!msg) return "";
+  return msg.length > 180 ? `${msg.slice(0, 180)}…` : msg;
+}
+
 /** Low-level call: returns the first candidate's parts. Retries 429/5xx twice with backoff. */
 export async function geminiRaw(opts: GeminiRawOptions): Promise<GeminiPart[]> {
   const key = Deno.env.get("GEMINI_API_KEY");
