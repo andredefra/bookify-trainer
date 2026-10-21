@@ -1,11 +1,21 @@
 
 import LegalPage from '@/components/legal/LegalPage';
 import { useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+import CookiesIt from '@/pages/legal/CookiesIt';
 
 const Cookies = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const { language } = useLanguage();
+  if (language === 'it') {
+    return (
+      <LegalPage title="Informativa sui cookie" current="cookies">
+        <CookiesIt />
+      </LegalPage>
+    );
+  }
 
   return (
     <LegalPage title="Cookie Policy" current="cookies">

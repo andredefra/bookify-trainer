@@ -1,9 +1,17 @@
 import { useEffect } from 'react';
 import LegalPage from '@/components/legal/LegalPage';
+import { useLanguage } from '@/context/LanguageContext';
+import PrivacyIt from '@/pages/legal/PrivacyIt';
 const Privacy = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const { language } = useLanguage();
+  if (language === 'it') {
+    return <LegalPage title="Informativa sulla privacy" current="privacy">
+      <PrivacyIt />
+    </LegalPage>;
+  }
   return <LegalPage title="Privacy Policy" current="privacy">
             <p className="legal-updated">Last updated: {new Date().toLocaleDateString('en-GB')}</p>
             
