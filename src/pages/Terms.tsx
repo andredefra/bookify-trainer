@@ -1,11 +1,21 @@
 
 import LegalPage from '@/components/legal/LegalPage';
 import { useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+import TermsIt from '@/pages/legal/TermsIt';
 
 const Terms = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const { language } = useLanguage();
+  if (language === 'it') {
+    return (
+      <LegalPage title="Termini e condizioni" current="terms">
+        <TermsIt />
+      </LegalPage>
+    );
+  }
 
   return (
     <LegalPage title="Terms and Conditions" current="terms">
