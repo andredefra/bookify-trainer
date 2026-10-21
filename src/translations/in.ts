@@ -5,8 +5,10 @@ export const inOverrides: Partial<Record<keyof typeof en, string>> = {
   // Basic card form
   'market.cityPh': 'Mumbai',
   'market.perHour': '/ session',
-  'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/tWw25WDw',
-  'earlyAccess.typeformUrl': 'https://andredefra64.typeform.com/to/cuAL2wU7',
+  'pricing.standard.ctaHref': 'https://forms.gle/8JRvAhLofmQPqooVA',
+  'earlyAccess.formUrl': 'https://forms.gle/RAbUNmkTVWY9tV8L8',
+  'comingSoon.formUrl': 'https://forms.gle/LGBYf515wkbhvbAQA',
+  'comingSoon.formCta': 'Fill in the form',
 
   // Plan prices (1 € = ₹106.64)
   'pricing.standard.price': '₹0',
