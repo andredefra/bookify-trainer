@@ -1,6 +1,7 @@
 // Contextual chat about a single post draft.
 // Returns assistant reply + structured field-level diff proposals.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { geminiText, geminiErrorInfo } from "../_shared/gemini.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,10 +15,8 @@ type AllowedField = typeof ALLOWED_FIELDS[number];
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
   const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY not configured" }, 500);
 
   const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -87,28 +86,13 @@ notes: ${post.notes ?? "(vuoto)"}
 format: ${post.content_format ?? "—"} · funnel: ${post.funnel_stage ?? "—"} · objective: ${post.objective ?? "—"}
 persona: ${persona ? `${persona.name} — ${persona.copy_focus ?? ""}` : "—"}`;
 
-  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${LOVABLE_API_KEY}` },
-    body: JSON.stringify({
-      model: "google/gemini-3-flash-preview",
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...history.map((h) => ({ role: h.role, content: h.content })),
-        { role: "user", content: message },
-      ],
-      response_format: { type: "json_object" },
-    }),
-  });
-
-  if (!aiRes.ok) {
-    const text = await aiRes.text();
-    const status = aiRes.status === 429 || aiRes.status === 402 ? aiRes.status : 500;
-    return json({ error: `AI gateway ${aiRes.status}: ${text.slice(0, 200)}` }, status);
+  let raw = "{}";
+  try {
+    raw = await geminiText({ system: systemPrompt, history, prompt: message, json: true }) || "{}";
+  } catch (e) {
+    const info = geminiErrorInfo(e);
+    return json({ error: info.message }, info.status);
   }
-
-  const aiJson = await aiRes.json();
-  const raw = aiJson?.choices?.[0]?.message?.content ?? "{}";
   let parsed: { reply?: string; proposals?: Array<{ field?: string; current_value?: string; proposed_value?: string; rationale?: string }> } = {};
   try { parsed = JSON.parse(raw); } catch { parsed = {}; }
 
