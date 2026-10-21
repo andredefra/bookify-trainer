@@ -57,15 +57,45 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return getSavedLanguage();
   });
 
-  // Home URLs determine the rendered language without saving an inferred choice.
-  const language = location.pathname === '/' ? 'it'
-    : location.pathname === '/en' ? 'en'
-    : location.pathname === '/user-find-trainer' ? 'it'
-    : location.pathname === '/user-find-trainer-en' ? 'en'
-    : ['/in', '/in-user', '/in-find-trainer', '/in-coming-soon'].includes(location.pathname) ? 'in'
-    : location.pathname === '/prossimamente' ? 'it'
-    : location.pathname === '/coming-soon' ? 'en'
-    : preferredLanguage;
+  // Routes that map to a locale determine the rendered language without saving an inferred choice.
+  const routeLanguageFor = (path: string): Language | null =>
+    path === '/' || path === '/user' || path === '/user-find-trainer' || path === '/prossimamente' ? 'it'
+    : path === '/en' || path === '/user-en' || path === '/user-find-trainer-en' || path === '/coming-soon' ? 'en'
+    : path === '/in' || path.startsWith('/in-') ? 'in'
+    : null;
+
+  const isLang = (v: unknown): v is Language => v === 'it' || v === 'en' || v === 'in';
+
+  const [rememberedRouteLanguage, setRememberedRouteLanguage] = useState<Language | null>(() => {
+    try {
+      const v = sessionStorage.getItem('routeLanguage');
+      return isLang(v) ? v : null;
+    } catch { return null; }
+  });
+  // Language explicitly picked with the selector on the current (neutral) page.
+  const [pickedOnPage, setPickedOnPage] = useState<{ path: string; lang: Language } | null>(null);
+
+  const mappedLanguage = routeLanguageFor(location.pathname);
+
+  useEffect(() => {
+    if (!mappedLanguage) return;
+    setRememberedRouteLanguage(mappedLanguage);
+    try { sessionStorage.setItem('routeLanguage', mappedLanguage); } catch { /* ignore */ }
+  }, [mappedLanguage]);
+
+  const neutralFallback = (): Language => {
+    if (pickedOnPage && pickedOnPage.path === location.pathname) return pickedOnPage.lang;
+    if (rememberedRouteLanguage) return rememberedRouteLanguage;
+    try {
+      const saved = localStorage.getItem('language');
+      if (isLang(saved)) return saved;
+    } catch { /* ignore */ }
+    if (typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('it')) return 'it';
+    return 'en';
+  };
+
+  const language: Language = mappedLanguage
+    ?? (location.pathname === '/dashboard' ? preferredLanguage : neutralFallback());
 
   // Forza la lingua in base alla route quando cambia
   useEffect(() => {
@@ -82,9 +112,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Only an explicit selection is a saved preference, never browser detection.
   const setLanguage = useCallback((newLanguage: Language) => {
     setLanguageState(newLanguage);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('language', newLanguage);
-    }
+    setPickedOnPage({ path: window.location.pathname, lang: newLanguage });
+    try { localStorage.setItem('language', newLanguage); } catch { /* ignore */ }
   }, []);
 
   const t = (key: string): string => {
