@@ -37,7 +37,7 @@ const Hero = () => {
             {pills.map((Icon, i) => <div key={i} className="hero-pill rounded-full font-brand-mono uppercase"><Icon className="h-4 w-4 shrink-0 text-brand-highlight" /><span>{t(`hero.pill${i + 1}`)}</span></div>)}
           </div>
           <div className="hero-actions mx-auto mt-8 flex max-w-xl flex-col items-stretch justify-center gap-3 md:max-w-none md:flex-row">
-            <Button asChild size="lg" className="hero-primary h-auto rounded-full bg-brand-highlight px-9 py-4 text-[16.5px] font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to="/register">{t('hero.cta')}</Link></Button>
+            <Button asChild size="lg" className="hero-primary h-auto rounded-full bg-brand-highlight px-9 py-4 text-[16.5px] font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to="/login">{t('hero.cta')}</Link></Button>
             <Button asChild variant="ghost" size="lg" className="h-auto rounded-full border border-brand-text/30 px-7 py-[15px] text-base font-semibold text-brand-text hover:bg-brand-text/10"><a href="#how-it-works" onClick={e => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}><span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-brand-text/10"><Play className="h-3 w-3" /></span>{t('hero.ctaSecondary')}</a></Button>
           </div>
           <p className="hero-trust mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13.5px] text-brand-text/45"><span>{t('hero.trust1')}</span><span aria-hidden="true">·</span><b className="text-brand-text/75">{t('hero.trust2')}</b><span aria-hidden="true">·</span><span>{t('hero.trust3')}</span></p>
