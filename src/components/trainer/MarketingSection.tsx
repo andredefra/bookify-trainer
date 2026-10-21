@@ -54,7 +54,7 @@ export const MarketingSection = ({ trainerName }: MarketingSectionProps) => {
       </div>
       
       <div className="text-center mt-10">
-        <Link to="/register">
+        <Link to="/login">
           <Button size="lg" className="px-8">
             Try MyPersonal for Your Training Business
           </Button>
