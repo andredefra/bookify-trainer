@@ -49,6 +49,7 @@ export interface MktContent {
   cta: string | null;
   media_prompt: string | null;
   media_url: string | null;
+  media_urls: string[];
   status: MktStatus;
   published_link: string | null;
   published_at: string | null;

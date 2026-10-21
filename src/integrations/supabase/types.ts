@@ -1834,6 +1834,7 @@ export type Database = {
           id: string
           media_prompt: string | null
           media_url: string | null
+          media_urls: string[]
           notes: string | null
           objective: string | null
           persona_id: string | null
@@ -1861,6 +1862,7 @@ export type Database = {
           id?: string
           media_prompt?: string | null
           media_url?: string | null
+          media_urls?: string[]
           notes?: string | null
           objective?: string | null
           persona_id?: string | null
@@ -1888,6 +1890,7 @@ export type Database = {
           id?: string
           media_prompt?: string | null
           media_url?: string | null
+          media_urls?: string[]
           notes?: string | null
           objective?: string | null
           persona_id?: string | null
