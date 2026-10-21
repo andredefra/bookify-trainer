@@ -7,13 +7,14 @@ const MONO = "'JetBrains Mono', ui-monospace, monospace";
 const Footer = () => {
   const { language, t } = useLanguage();
 
+  const home = language === 'in' ? '/in' : language === 'en' ? '/en' : '/';
   const footerLinks = [
     {
       title: t('footer.product'),
       links: [
-        { name: t('nav.features'), href: '/#features' },
-        { name: t('nav.pricing'), href: '/#pricing' },
-        { name: t('nav.howItWorks'), href: '/#how-it-works' },
+        { name: t('nav.features'), href: `${home}#features` },
+        { name: t('nav.pricing'), href: `${home}#pricing` },
+        { name: t('nav.howItWorks'), href: `${home}#how-it-works` },
       ],
     },
     {

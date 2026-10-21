@@ -112,6 +112,7 @@ export interface DemoTrainer extends Omit<Trainer, 'certifications' | 'education
   education: { title: string; org: string; years: string }[];
   experience: { role: string; org: string; from: string; to: string; description: string }[];
   credentials: TrainerCredential[];
+  filterTags: string[];
   availableLabel: string;
   stats: { clientsHelped: number; goalsHit: string; avgProgress: string };
   packages?: TrainerPackage[];
@@ -129,6 +130,7 @@ export const demoTrainers: DemoTrainer[] = [
     ],
     schedule: demoSchedule([{"start": "07:00", "end": "21:00", "break": {"start": "13:00", "end": "16:30"}}, {"start": "07:00", "end": "21:00", "break": {"start": "13:00", "end": "16:30"}}, {"start": "07:30", "end": "20:30", "break": {"start": "13:00", "end": "16:00"}}, {"start": "07:00", "end": "21:00", "break": {"start": "13:00", "end": "16:30"}}, {"start": "07:00", "end": "19:30", "break": {"start": "12:30", "end": "15:30"}}, { closed: true }, { closed: true }], [5, 0, 0, 4, 3, 0, 6]),
     id: 't1', slug: 'giulia-ferrero', name: 'Giulia Ferrero', title: 'Personal Trainer certificata', location: 'Milano', rating: 4.9, reviews: 38, hourlyRate: 50, yearsExperience: 6,
+    filterTags: ['weight-loss', 'strength', 'group-bootcamp', 'pre-post-natal'],
     packages: [
       { name: 'Prova', subtitle: 'Per capire se ci troviamo', price: 45, unit: '1 seduta', includes: ['1 seduta individuale', 'Valutazione iniziale', "Accesso all'app"], featured: false },
       { name: 'Percorso 3 mesi', subtitle: 'Il programma completo', price: 390, unit: '12 sedute · €32 a seduta', includes: ['12 sedute individuali', 'Scheda aggiornata ogni 4 settimane', 'Check-in misure e foto', 'Supporto in chat'], featured: true },
@@ -165,6 +167,7 @@ export const demoTrainers: DemoTrainer[] = [
     ],
     schedule: demoSchedule([{"start": "10:00", "end": "20:00", "break": {"start": "14:00", "end": "15:30"}}, {"start": "12:00", "end": "21:00", "break": {"start": "16:00", "end": "17:00"}}, {"start": "10:00", "end": "18:00"}, {"start": "12:00", "end": "21:00", "break": {"start": "16:00", "end": "17:00"}}, {"start": "10:00", "end": "18:00"}, {"start": "09:00", "end": "13:00"}, { closed: true }], [3, 2, 0, 4, 0, 2, 3]),
     id: 't2', slug: 'matteo-bianchi', name: 'Matteo Bianchi', title: 'Coach di forza e preparatore', location: 'Torino', rating: 4.8, reviews: 52, hourlyRate: 60, yearsExperience: 9,
+    filterTags: ['strength', 'online'],
     packages: [
       { name: 'Valutazione della forza', subtitle: 'Test e controllo delle alzate', price: 70, unit: '1 incontro', includes: ['Test di forza sui fondamentali', 'Analisi della tecnica', 'Indicazioni sui carichi di partenza'], featured: false },
       { name: 'Coaching forza 3 mesi', subtitle: 'Programma e revisioni settimanali', price: 540, unit: '12 settimane · €45 a settimana', includes: ['Programmazione per 12 settimane', 'Revisione video delle alzate', 'Aggiornamento settimanale dei carichi', 'Supporto in chat'], featured: true },
@@ -189,6 +192,7 @@ export const demoTrainers: DemoTrainer[] = [
     ],
     schedule: demoSchedule([{"start": "08:30", "end": "13:30", "break": {"start": "10:00", "end": "10:30"}}, {"start": "09:00", "end": "13:00"}, {"start": "08:30", "end": "13:30", "break": {"start": "10:00", "end": "10:30"}}, {"start": "09:00", "end": "14:00", "break": {"start": "11:30", "end": "12:00"}}, {"start": "08:30", "end": "12:30"}, { closed: true }, { closed: true }], [2, 0, 0, 3, 2, 1, 0]),
     id: 't3', slug: 'sara-moretti', name: 'Sara Moretti', title: 'Istruttrice pre e post parto', location: 'Bologna', rating: 4.9, reviews: 64, hourlyRate: 45, yearsExperience: 7,
+    filterTags: ['pre-post-natal', 'posture'],
     packages: [
       { name: 'Primo incontro', subtitle: 'Respirazione e movimenti di base', price: 40, unit: '1 seduta', includes: ['1 seduta individuale', 'Valutazione della mobilità', 'Esercizi di respirazione da ripetere a casa'], featured: false },
       { name: 'Ritorno al movimento', subtitle: 'Riprendere con incontri individuali', price: 320, unit: '10 sedute · €32 a seduta', includes: ['10 sedute individuali', 'Esercizi di mobilità e forza', 'Scheda per il lavoro a casa', 'Check-in sul percorso'], featured: true },
@@ -217,6 +221,7 @@ export const demoTrainers: DemoTrainer[] = [
     ],
     schedule: demoSchedule([{"start": "06:30", "end": "15:00", "break": {"start": "10:30", "end": "11:30"}}, {"start": "07:00", "end": "16:00", "break": {"start": "12:00", "end": "13:00"}}, { closed: true }, {"start": "06:30", "end": "15:00", "break": {"start": "10:30", "end": "11:30"}}, {"start": "07:00", "end": "14:00"}, {"start": "08:00", "end": "12:00"}, { closed: true }], [2, 3, 0, 4, 1, 0, 2]),
     id: 't4', slug: 'lorenzo-greco', name: 'Lorenzo Greco', title: 'Preparatore atletico', location: 'Roma', rating: 4.7, reviews: 29, hourlyRate: 45, yearsExperience: 5,
+    filterTags: ['running', 'strength'],
     packages: [
       { name: 'Test atletico', subtitle: 'Un punto di partenza per allenarsi', price: 40, unit: '1 valutazione', includes: ['Test di corsa e forza', 'Valutazione della coordinazione', 'Indicazioni per il programma'], featured: false },
       { name: 'Preparazione running', subtitle: 'Corsa e forza nella stessa settimana', price: 350, unit: '10 sedute · €35 a seduta', includes: ['10 sedute individuali', 'Programma settimanale di corsa', 'Esercizi di forza per runner', 'Ripetizione dei test iniziali'], featured: true },
@@ -241,6 +246,7 @@ export const demoTrainers: DemoTrainer[] = [
     ],
     schedule: demoSchedule([{"start": "09:00", "end": "18:00", "break": {"start": "13:00", "end": "14:30"}}, {"start": "09:30", "end": "17:30", "break": {"start": "13:00", "end": "14:00"}}, {"start": "09:00", "end": "18:00", "break": {"start": "13:00", "end": "14:30"}}, {"start": "09:30", "end": "17:30", "break": {"start": "13:00", "end": "14:00"}}, {"start": "09:00", "end": "15:00", "break": {"start": "12:00", "end": "12:30"}}, { closed: true }, { closed: true }], [1, 0, 0, 3, 2, 0, 4]),
     id: 't5', slug: 'chiara-rinaldi', name: 'Chiara Rinaldi', title: 'Chinesiologa e personal trainer', location: 'Firenze', rating: 4.8, reviews: 45, hourlyRate: 55, yearsExperience: 8,
+    filterTags: ['posture'],
     packages: [
       { name: 'Valutazione del movimento', subtitle: 'Osservare come ti muovi', price: 50, unit: '1 incontro', includes: ['Valutazione di mobilità ed equilibrio', 'Prova dei movimenti di base', 'Indicazioni per gli esercizi a casa'], featured: false },
       { name: 'Forza e postura', subtitle: 'Esercizi individuali da imparare e ripetere', price: 430, unit: '10 sedute · €43 a seduta', includes: ['10 sedute individuali', 'Esercizi progressivi di forza', 'Scheda di mobilità per casa', 'Check-in sui movimenti'], featured: true },
@@ -265,6 +271,7 @@ export const demoTrainers: DemoTrainer[] = [
     ],
     schedule: demoSchedule([{"start": "14:30", "end": "20:30", "break": {"start": "17:00", "end": "17:30"}}, {"start": "15:00", "end": "21:00", "break": {"start": "17:30", "end": "18:00"}}, {"start": "14:00", "end": "20:00"}, {"start": "15:00", "end": "21:00", "break": {"start": "17:30", "end": "18:00"}}, {"start": "14:30", "end": "20:30"}, {"start": "08:30", "end": "12:30"}, { closed: true }], [4, 2, 0, 3, 5, 0, 2]),
     id: 't6', slug: 'davide-ferrara', name: 'Davide Ferrara', title: 'Personal Trainer', location: 'Napoli', rating: 4.6, reviews: 21, hourlyRate: 38, yearsExperience: 3,
+    filterTags: ['weight-loss'],
     packages: [
       { name: 'Prima seduta', subtitle: 'Imparare i primi esercizi', price: 30, unit: '1 seduta', includes: ['1 seduta individuale', 'Prova delle attrezzature', 'Indicazioni sui carichi iniziali'], featured: false },
       { name: 'Riparti in sala pesi', subtitle: 'Un percorso per tornare ad allenarsi', price: 280, unit: '10 sedute · €28 a seduta', includes: ['10 sedute individuali', 'Scheda con i movimenti di base', 'Diario dei carichi in app', 'Revisione della tecnica'], featured: true },
