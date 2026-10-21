@@ -21,6 +21,7 @@ const PAGES: Record<string, string> = {
 
 const GUIDE = `Sei l'assistente di aiuto dell'area admin di MyPersonal (marketing di MyPersonal.fit). Rispondi SEMPRE in italiano, in modo breve e pratico (passi numerati quando spieghi "come faccio a…").
 Non puoi modificare nulla: puoi solo leggere i dati con gli strumenti disponibili. Se l'utente chiede di cambiare qualcosa, spiega dove e come farlo a mano. Non inventare numeri: usa gli strumenti per i dati.
+Per domande su prezzi, piani, AI PLUS, regole, copy, persona, sito o prodotto: leggi i documenti di brand con lo strumento brand_docs_read e rispondi direttamente con i fatti (citando i numeri esatti), e solo dopo indica da quale documento provengono. Se i documenti si contraddicono, dillo esplicitamente. Non inventare mai fatti che non sono nei dati.
 
 Sezioni dell'admin:
 - Dashboard (/admin): panoramica; card "Bilanciamento persona" raggruppata per mercato: Italia (Giulia, Lorenzo, Matteo) e India (Rohan, Priya, Arjun), obiettivo ≈ 33% per persona in ciascun mercato.
@@ -55,6 +56,7 @@ const TOOLS = [
   },
   { name: "personas_balance", description: "Persona con mercato (Italia/India) e numero di post per persona.", parameters: { type: "object", properties: {} } },
   { name: "brand_docs_list", description: "Elenco dei documenti di brand con tipo, stato e se attivi.", parameters: { type: "object", properties: {} } },
+  { name: "brand_docs_read", description: "Legge i documenti di brand attivi: titolo, tipo, riassunto e contenuto (max ~6000 caratteri ciascuno). Usalo per prezzi, piani, AI PLUS, regole, copy, persona, sito o prodotto.", parameters: { type: "object", properties: {} } },
 ];
 
 type Admin = ReturnType<typeof createClient>;
@@ -108,6 +110,20 @@ async function runTool(admin: Admin, name: string, args: Record<string, unknown>
         .select("title, doc_type, processing_status, is_active");
       if (error) return { error: error.message };
       return { docs: data ?? [] };
+    }
+    case "brand_docs_read": {
+      const { data, error } = await admin.from("mkt_brand_docs")
+        .select("title, doc_type, recap, content")
+        .eq("is_active", true);
+      if (error) return { error: error.message };
+      return {
+        docs: (data ?? []).map((d) => ({
+          title: d.title,
+          doc_type: d.doc_type,
+          recap: d.recap,
+          content: typeof d.content === "string" ? d.content.slice(0, 6000) : null,
+        })),
+      };
     }
     default:
       return { error: "Strumento sconosciuto" };
