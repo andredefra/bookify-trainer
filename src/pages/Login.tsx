@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { toast } from "sonner";
 import { getDemoUserData } from "@/utils/demoUserUtils";
 import { getInviteByEmail } from "@/utils/mockGymInvites";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const Login = () => {
   const [loginType, setLoginType] = useState('trainer');
   const [name, setName] = useState('Andrea');
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,10 +92,10 @@ const Login = () => {
 
   const getButtonLabel = () => {
     switch (loginType) {
-      case 'client': return 'Access Client Demo';
-      case 'gym': return 'Access Gym Demo';
-      case 'studio': return 'Access Studio Demo';
-      default: return 'Access Trainer Demo';
+      case 'client': return t('login.btnClient');
+      case 'gym': return t('login.btnGym');
+      case 'studio': return t('login.btnStudio');
+      default: return t('login.btnTrainer');
     }
   };
 
@@ -105,7 +107,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8 mt-6">
             <h1 className="text-3xl font-display font-bold text-primary mb-2">Demo Login</h1>
-            <p className="text-muted-foreground">Try our platform features with a demo account. If you are interested in the live app, please get in touch via this email andrea.mypersonal.fit@gmail.com</p>
+            <p className="text-muted-foreground">{t('login.subtitle')} <a href="mailto:andrea.mypersonal.fit@gmail.com" className="text-primary hover:underline">andrea.mypersonal.fit@gmail.com</a></p>
           </div>
           
           <div className="bg-white rounded-xl shadow-sm border border-border p-8">
@@ -117,28 +119,28 @@ const Login = () => {
                   className={`py-3 text-sm font-medium rounded-lg border transition-colors ${loginType === 'trainer' ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`} 
                   onClick={() => setLoginType('trainer')}
                 >
-                  Trainer
+                  {t('login.tabTrainer')}
                 </button>
                 <button 
                   type="button" 
                   className={`py-3 text-sm font-medium rounded-lg border transition-colors ${loginType === 'client' ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`} 
                   onClick={() => setLoginType('client')}
                 >
-                  Client
+                  {t('login.tabClient')}
                 </button>
                 <button 
                   type="button" 
                   className={`py-3 text-sm font-medium rounded-lg border transition-colors ${loginType === 'gym' ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`} 
                   onClick={() => setLoginType('gym')}
                 >
-                  Gym
+                  {t('login.tabGym')}
                 </button>
                 <button 
                   type="button" 
                   className={`py-3 text-sm font-medium rounded-lg border transition-colors ${loginType === 'studio' ? 'bg-primary text-white border-primary' : 'bg-white text-muted-foreground border-border hover:bg-muted/50'}`} 
                   onClick={() => setLoginType('studio')}
                 >
-                  Studio
+                  {t('login.tabStudio')}
                 </button>
               </div>
 
@@ -146,7 +148,7 @@ const Login = () => {
               
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-1">
-                  Email address
+                  {t('login.emailLabel')}
                 </label>
                 <input 
                   id="email" 
@@ -154,20 +156,15 @@ const Login = () => {
                   value={email} 
                   onChange={e => setEmail(e.target.value)} 
                   className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20" 
-                  placeholder="Enter your email here" 
+                  placeholder={t('login.emailPh')} 
                   required 
                 />
               </div>
               
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label htmlFor="password" className="block text-sm font-medium">
-                    Password
-                  </label>
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
+                <label htmlFor="password" className="block text-sm font-medium mb-1">
+                  {t('login.password')}
+                </label>
                 <input 
                   id="password" 
                   type="password" 
@@ -186,10 +183,8 @@ const Login = () => {
             
             <div className="mt-6 pt-6 border-t border-border text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have a demo account?{" "}
-                <Link to="/register" className="text-primary hover:underline">
-                  Try the Demo
-                </Link>
+                {t('login.bottom')}{" "}
+                <a href="mailto:andrea.mypersonal.fit@gmail.com" className="text-primary hover:underline">andrea.mypersonal.fit@gmail.com</a>
               </p>
             </div>
           </div>
