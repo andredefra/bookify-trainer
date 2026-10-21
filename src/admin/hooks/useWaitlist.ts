@@ -20,12 +20,13 @@ function applyFilters(q: any, f: WaitlistFilters) {
   return q;
 }
 
-export function useWaitlistStats() {
+export function useWaitlistStats(audience: WaitlistFilters["audience"] = "all") {
   return useQuery({
-    queryKey: ["mkt", "waitlist", "stats"],
+    queryKey: ["mkt", "waitlist", "stats", audience],
     queryFn: async () => {
       const count = async (mod?: (q: any) => any) => {
         let q = sb.from("waitlist").select("id", { count: "exact", head: true });
+        if (audience !== "all") q = q.eq("audience", audience);
         if (mod) q = mod(q);
         const { count: c, error } = await q;
         if (error) throw error;
