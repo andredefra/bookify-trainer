@@ -5,6 +5,7 @@ import { Check, Bot, Target, BarChart3, Zap, Smartphone, Clock, Shield, Dumbbell
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import WaitlistDialog from '@/components/WaitlistDialog';
+import { useLanguage } from '@/context/LanguageContext';
 
 // Flip to true when the free cohort closes to re-enable the paid plan card.
 const PAID_PLAN_ENABLED = false;
@@ -69,6 +70,7 @@ const CheckList = ({ items, check, text }: { items: string[]; check: string; tex
 );
 
 export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const openWaitlist = () => setWaitlistOpen(true);
@@ -328,7 +330,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 </div>
               </div>
 
-              <div aria-disabled={!PAID_PLAN_ENABLED} className={`relative rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-7 ${PAID_PLAN_ENABLED ? '' : 'opacity-50 grayscale pointer-events-none select-none'}`}>
+              <div className={`relative rounded-2xl border border-[#E0DACB] bg-[#FFFFFF] p-7 ${PAID_PLAN_ENABLED ? '' : 'opacity-50 grayscale select-none'}`}>
                 <span className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-[#E0DACB] bg-[#F4F2ED] px-3 py-1 text-[10px] text-[#8a8478]" style={BADGE}>{PAID_PLAN_ENABLED ? P.paidBadgeOn : P.paidBadgeOff}</span>
                 <div className="mb-4 flex items-start justify-between gap-4">
                   <h3 className="text-2xl text-[#0A0A0A]" style={H3}>{P.paidTitle}</h3>
@@ -341,7 +343,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 <p className="text-[#5a5346]">{P.paidDesc}</p>
                 <div className="mt-4 rounded-lg border border-[#E0DACB] bg-[#F4F2ED] p-3 text-sm text-[#3f3a33]">{P.paidTip}</div>
                 <CheckList items={P.features} check="#B98A00" text="#3f3a33" />
-                <button type="button" disabled={!PAID_PLAN_ENABLED} className="mt-8 w-full rounded-full bg-[#0A0A0A] py-3 font-semibold text-[#ECE7DB]">{P.paidCta}</button>
+                <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer" className="mt-8 block w-full rounded-full bg-[#0A0A0A] py-3 text-center font-semibold text-[#ECE7DB]">{P.paidCta}</a>
                 <div className="mt-4 text-center">
                   <p className="text-sm text-[#3f3a33]">{P.paidFoot}</p>
                   <p className="mt-2 text-xs text-[#938C7C]">{P.paidCancel}</p>

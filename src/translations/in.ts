@@ -7,6 +7,7 @@ export const inOverrides: Partial<Record<keyof typeof en, string>> = {
   'market.perHour': '/ session',
   'pricing.standard.ctaHref': 'https://forms.gle/8JRvAhLofmQPqooVA',
   'earlyAccess.formUrl': 'https://forms.gle/RAbUNmkTVWY9tV8L8',
+  'userPricing.formUrl': 'https://forms.gle/88sqSryMHUtWveDW9',
   'comingSoon.formUrl': 'https://forms.gle/LGBYf515wkbhvbAQA',
   'comingSoon.formCta': 'Fill in the form',
 
