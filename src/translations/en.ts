@@ -27,8 +27,8 @@ export const en = {
   'gymMock.t2': 'L. Bianchi',
   'gymMock.t3': 'G. Verdi',
   'pv.s6.k1v': '€2,840',
-  'pricing.standard.ctaHref': 'https://andredefra64.typeform.com/to/JeSaWIge',
-  'earlyAccess.typeformUrl': 'https://andredefra64.typeform.com/to/z2CwBewR',
+  'pricing.standard.ctaHref': 'https://forms.gle/QjQvxxBpfxoPp1XZ6',
+  'earlyAccess.formUrl': 'https://forms.gle/JrGdQTgrFQZwQfQFA',
   // Public trainer header
   'publicProfile.perHour': '/ hour',
   'publicProfile.years': 'years',
@@ -967,4 +967,6 @@ export const en = {
   'soon.body': "The version for studios and gyms is being built: one place for your team of trainers, their clients and the packages they sell. Leave us a contact and we'll write to you as soon as it's ready.",
   'soon.write': 'Write to us',
   'soon.home': 'Back to home',
+  'comingSoon.formUrl': 'https://forms.gle/uE88FRehDbkYhctN6',
+  'comingSoon.formCta': 'Fill in the form',
 };

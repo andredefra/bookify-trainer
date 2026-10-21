@@ -35,7 +35,7 @@ const RegistrationCTA = () => {
           </p>
 
           <a
-            href={t('earlyAccess.typeformUrl')}
+            href={t('earlyAccess.formUrl')}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-block w-full rounded-full px-9 py-[15px] text-[15px] font-bold leading-[1.3] transition-colors hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B98A00] focus-visible:ring-offset-2 sm:w-auto md:text-[15.5px]"

@@ -5,8 +5,6 @@ import Footer from '@/components/Footer';
 import { useLanguage } from '@/context/LanguageContext';
 import '@/components/hero/hero.css';
 
-// Paste the Typeform share URL here to show the embedded form; empty = nothing rendered.
-const TYPEFORM_URL = '';
 const EMAIL = 'andrea.mypersonal.fit@gmail.com';
 const MONO = "'JetBrains Mono', ui-monospace, monospace";
 const DISPLAY = "'Archivo', sans-serif";
@@ -30,15 +28,11 @@ const ComingSoon = () => {
             </h1>
             <p className="mx-auto mt-5 max-w-[600px] text-[15.5px] leading-relaxed" style={{ color: '#bdb7aa' }}>{t('soon.body')}</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a href={`mailto:${EMAIL}`} className="hero-primary rounded-full px-8 py-[14px] text-[15px] font-bold" style={{ background: '#F6C124', color: '#0A0A0A' }}>{t('soon.write')}</a>
+              <a href={t('comingSoon.formUrl')} target="_blank" rel="noopener noreferrer" className="hero-primary rounded-full px-8 py-[14px] text-[15px] font-bold" style={{ background: '#F6C124', color: '#0A0A0A' }}>{t('comingSoon.formCta')}</a>
               <Link to={language === 'in' ? '/in' : language === 'en' ? '/en' : '/'} className="rounded-full border px-8 py-[13px] text-[15px] font-bold" style={{ borderColor: '#3a3a3a', color: '#ddd7ca' }}>{t('soon.home')}</Link>
             </div>
-            <p className="mt-4 break-all" style={{ fontFamily: MONO, fontSize: 11, color: '#8c8678' }}>{EMAIL}</p>
-            {TYPEFORM_URL && (
-              <div className="mx-auto mt-10 w-full overflow-hidden rounded-[14px] border" style={{ borderColor: '#242424' }}>
-                <iframe src={TYPEFORM_URL} title="Typeform" className="block h-[560px] w-full" style={{ border: 0 }} allow="camera; microphone; autoplay; encrypted-media;" />
-              </div>
-            )}
+            <a href={`mailto:${EMAIL}`} className="mt-4 inline-block text-[14px] underline underline-offset-4" style={{ color: '#bdb7aa' }}>{t('soon.write')}</a>
+            <p className="mt-2 break-all" style={{ fontFamily: MONO, fontSize: 11, color: '#8c8678' }}>{EMAIL}</p>
           </div>
         </section>
       </main>
