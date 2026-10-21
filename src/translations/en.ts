@@ -29,6 +29,7 @@ export const en = {
   'pv.s6.k1v': '€2,840',
   'pricing.standard.ctaHref': 'https://forms.gle/QjQvxxBpfxoPp1XZ6',
   'earlyAccess.formUrl': 'https://forms.gle/JrGdQTgrFQZwQfQFA',
+  'userPricing.formUrl': 'https://forms.gle/TT4YvuZ5kHpznmHT6',
   // Public trainer header
   'publicProfile.perHour': '/ hour',
   'publicProfile.years': 'years',
