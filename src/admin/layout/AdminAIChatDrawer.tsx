@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { Sparkles, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,26 +12,98 @@ interface Msg {
   text: string;
 }
 
-/**
- * AI chat drawer. v1: read-only — generates copy suggestions only.
- * TODO(v3): agentic actions (rescheduling, replacing posts, etc.) hook here.
- */
+const PAGES: Record<string, { name: string; questions: string[] }> = {
+  "/admin": {
+    name: "Dashboard",
+    questions: [
+      "Come leggo il bilanciamento persona?",
+      "Quanti post sono programmati?",
+      "Il mercato India è bilanciato?",
+    ],
+  },
+  "/admin/branding": {
+    name: "Branding",
+    questions: [
+      "Come carico un documento di brand?",
+      "Quali documenti sono attivi?",
+      "A cosa servono i documenti attivi?",
+    ],
+  },
+  "/admin/content-plan": {
+    name: "Piano Contenuti",
+    questions: [
+      "Come genero la copy di un post?",
+      "Quanti post ci sono per stato?",
+      "Come porto un post a Validated?",
+    ],
+  },
+  "/admin/calendar": {
+    name: "Calendario",
+    questions: [
+      "Come programmo i post di una fase?",
+      "Quanti post sono programmati questo mese?",
+      "Come confermo una pubblicazione?",
+    ],
+  },
+  "/admin/crm": {
+    name: "CRM",
+    questions: [
+      "Quante opportunità ci sono per fase?",
+      "Come sposto un'opportunità di fase?",
+      "Come promuovo un iscritto dalla waitlist?",
+    ],
+  },
+  "/admin/waitlist": {
+    name: "Waitlist",
+    questions: [
+      "Quanti clienti si sono iscritti questa settimana?",
+      "Come importo un CSV da Google Forms?",
+      "Come aggiungo un iscritto a mano?",
+    ],
+  },
+  "/admin/settings": {
+    name: "Impostazioni",
+    questions: [
+      "Come attivo l'AI?",
+      "Cosa vuol dire \"Chiave mancante\"?",
+      "Dove inserisco le chiavi API?",
+    ],
+  },
+};
+
+/** Read-only help assistant for the whole admin (never writes data). */
 export default function AdminAIChatDrawer() {
+  const { pathname } = useLocation();
+  const path = pathname.replace(/\/+$/, "") || "/admin";
+  const page = PAGES[path] ?? { name: "Admin", questions: PAGES["/admin"].questions };
+
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
-      text: "Ciao! Sono il tuo assistente copy. Chiedimi idee, hook o riscritture — in v1 non scrivo nel database.",
+      text: "Ciao! Sono l'assistente dell'admin. Chiedimi come usare una sezione o un dato della pagina — leggo i dati ma non modifico nulla.",
     },
   ]);
 
   const send = useMutation({
-    mutationFn: async (prompt: string) => {
-      const { data, error } = await sb.functions.invoke("mkt-generate-copy", {
-        body: { mode: "chat", prompt },
+    mutationFn: async ({ prompt, history }: { prompt: string; history: Msg[] }) => {
+      const { data, error } = await sb.functions.invoke("mkt-admin-assistant", {
+        body: {
+          message: prompt,
+          path,
+          history: history.slice(1).map((m) => ({ role: m.role, content: m.text })),
+        },
       });
-      if (error) throw new Error(error.message);
+      if (data?.error) throw new Error(data.error);
+      if (error) {
+        let msg = error.message;
+        try {
+          const b = await (error as any).context?.json?.();
+          if (b?.error) msg = b.error;
+        } catch { /* ignore */ }
+        throw new Error(msg);
+      }
       return (data?.text ?? "") as string;
     },
     onSuccess: (text) => {
@@ -39,12 +112,13 @@ export default function AdminAIChatDrawer() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const submit = () => {
-    const text = input.trim();
-    if (!text) return;
+  const ask = (raw: string) => {
+    const text = raw.trim();
+    if (!text || send.isPending) return;
+    const history = messages;
     setMessages((m) => [...m, { role: "user", text }]);
     setInput("");
-    send.mutate(text);
+    send.mutate({ prompt: text, history });
   };
 
   return (
@@ -61,7 +135,10 @@ export default function AdminAIChatDrawer() {
           <div className="flex items-center justify-between p-4 border-b">
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-primary" />
-              <p className="font-medium text-sm">Assistente AI</p>
+              <div>
+                <p className="font-medium text-sm">Assistente AI</p>
+                <p className="text-xs text-muted-foreground">Pagina: {page.name}</p>
+              </div>
             </div>
             <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
               <X className="h-4 w-4" />
@@ -71,7 +148,7 @@ export default function AdminAIChatDrawer() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`rounded-lg p-3 text-sm ${
+                className={`rounded-lg p-3 text-sm whitespace-pre-wrap ${
                   m.role === "user" ? "bg-primary text-primary-foreground ml-8" : "bg-muted mr-8"
                 }`}
               >
@@ -81,13 +158,25 @@ export default function AdminAIChatDrawer() {
             {send.isPending && <p className="text-xs text-muted-foreground">Sto pensando...</p>}
           </div>
           <div className="p-3 border-t space-y-2">
+            <div className="flex flex-wrap gap-1.5">
+              {page.questions.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => ask(q)}
+                  disabled={send.isPending}
+                  className="text-xs rounded-full border px-2.5 py-1 text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Chiedi un hook, una riscrittura, idee..."
+              placeholder="Chiedi come fare qualcosa o un dato della pagina..."
               rows={3}
             />
-            <Button onClick={submit} disabled={send.isPending} className="w-full" size="sm">
+            <Button onClick={() => ask(input)} disabled={send.isPending} className="w-full" size="sm">
               <Send className="h-4 w-4" /> Invia
             </Button>
           </div>

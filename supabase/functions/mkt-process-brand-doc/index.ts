@@ -1,8 +1,9 @@
 // Async-style processing of a brand doc:
 // - Sets status to "processing"
-// - Uses Lovable AI to classify, recap, and extract personas
+// - Uses Google Gemini to classify, recap, and extract personas
 // - Updates the doc row + inserts any net-new personas with is_ai_generated=true
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { geminiText } from "../_shared/gemini.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,10 +14,9 @@ const corsHeaders = {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
   const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY not configured" }, 500);
+  if (!Deno.env.get("GEMINI_API_KEY")) return json({ error: "Chiave Gemini mancante" }, 500);
 
   const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
     .eq("id", docId);
 
   // Fire-and-forget background work. We intentionally do not await.
-  processDoc(admin, LOVABLE_API_KEY, docId).catch(async (err) => {
+  processDoc(admin, docId).catch(async (err) => {
     const msg = err instanceof Error ? err.message : String(err);
     await admin.from("mkt_brand_docs")
       .update({ processing_status: "failed", processing_error: msg })
@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
 
 type Admin = ReturnType<typeof createClient>;
 
-async function processDoc(admin: Admin, apiKey: string, docId: string) {
+async function processDoc(admin: Admin, docId: string) {
   const { data: doc, error } = await admin
     .from("mkt_brand_docs").select("*").eq("id", docId).single();
   if (error || !doc) throw new Error("Doc not found");
@@ -87,26 +87,7 @@ Se nessuna persona è descritta, restituisci "personas": [].`;
 
   const userPrompt = `## Titolo: ${doc.title}\n\n## Contenuto:\n${content.slice(0, 12000)}`;
 
-  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: "google/gemini-3-flash-preview",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      response_format: { type: "json_object" },
-    }),
-  });
-
-  if (!aiRes.ok) {
-    const text = await aiRes.text();
-    throw new Error(`AI gateway ${aiRes.status}: ${text.slice(0, 200)}`);
-  }
-
-  const aiJson = await aiRes.json();
-  const raw = aiJson?.choices?.[0]?.message?.content ?? "{}";
+  const raw = (await geminiText({ system: systemPrompt, prompt: userPrompt, json: true })) || "{}";
   let parsed: {
     doc_type?: string;
     recap?: string;
