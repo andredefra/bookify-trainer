@@ -44,7 +44,7 @@ const HowItWorksSteps = () => {
             </Button>)}
           </div>
         </div>
-        <div className="mt-10 text-center"><Button asChild className="h-auto w-full rounded-full bg-brand-highlight px-9 py-[15px] text-[15.5px] font-bold text-brand-canvas hover:bg-brand-highlight/90 sm:w-auto"><Link to="/register">{t('how2.cta')}</Link></Button>
+        <div className="mt-10 text-center"><Button asChild className="h-auto w-full rounded-full bg-brand-highlight px-9 py-[15px] text-[15.5px] font-bold text-brand-canvas hover:bg-brand-highlight/90 sm:w-auto"><Link to="/login">{t('how2.cta')}</Link></Button>
           <p className="mt-4 text-[12.5px] leading-relaxed text-brand-text/[.45]">{t('how2.m1')} · <strong className="text-brand-text/80">{t('how2.m2')}</strong> · {t('how2.m3')}</p>
         </div>
       </div>

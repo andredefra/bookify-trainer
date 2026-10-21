@@ -132,7 +132,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
         <section className="bg-brand-canvas px-5 py-16 text-center">
           <h2 className="trainer-headline text-[27px] leading-[1.12] md:text-[36px]"><span className="block">{t(consumer ? 'consumerMarket.ctaA' : 'market.ctaA')}</span><span className="block text-brand-highlight">{t(consumer ? 'consumerMarket.ctaB' : 'market.ctaB')}</span></h2>
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-brand-text/70">{t(consumer ? 'consumerMarket.ctaSub' : 'market.ctaSub')}</p>
-          <Button asChild className="mt-7 h-12 rounded-full bg-brand-highlight px-8 font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to={consumer ? '/user-register' : '/register'}>{t('market.ctaBtn')}</Link></Button>
+          <Button asChild className="mt-7 h-12 rounded-full bg-brand-highlight px-8 font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to={consumer ? '/user-register' : '/login'}>{t('market.ctaBtn')}</Link></Button>
         </section>
       </main>
       {consumer ? <UserFooter /> : <Footer />}

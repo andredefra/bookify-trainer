@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import FindTrainer from "./pages/FindTrainer";
 import UserFindTrainer from "./pages/UserFindTrainer";
 import TrainerProfile from "./pages/TrainerProfile";
@@ -102,7 +101,7 @@ const AppContent = () => {
         <Route path="/in-coming-soon" element={<ComingSoon />} />
         <Route path="/it" element={<Navigate to="/" replace />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Navigate to="/login" replace />} />
         <Route path="/find-trainer" element={<FindTrainer />} />
         <Route path="/trainer/:idOrSlug" element={<TrainerProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
