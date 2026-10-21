@@ -27,6 +27,7 @@ export interface MktPersona {
   copy_focus: string | null;
   is_ai_generated: boolean;
   source_doc_id: string | null;
+  market: string;
   created_at: string;
 }
 

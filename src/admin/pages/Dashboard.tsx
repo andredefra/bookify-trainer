@@ -42,7 +42,7 @@ export default function Dashboard() {
   const next: MktContent | undefined = validated[0];
   const nextPersona = personas.find((p) => p.id === next?.persona_id);
 
-  const upcoming = useMemo(() => {
+  const balanceByMarket = useMemo(() => {
     const upcomingPosts = posts.filter(
       (p) => (p.status === "Validated" || p.status === "Posted") && p.persona_id
     );
@@ -50,11 +50,20 @@ export default function Dashboard() {
     upcomingPosts.forEach((p) => {
       if (p.persona_id) byPersona.set(p.persona_id, (byPersona.get(p.persona_id) ?? 0) + 1);
     });
-    const total = upcomingPosts.length || 1;
-    return personas.map((p) => ({
-      name: p.name,
-      pct: Math.round(((byPersona.get(p.id) ?? 0) / total) * 100),
-    }));
+    const groups = [
+      { key: "it", label: "Italia", list: personas.filter((p) => (p.market ?? "it") === "it") },
+      { key: "in", label: "India", list: personas.filter((p) => p.market === "in") },
+    ].filter((g) => g.list.length > 0);
+    return groups.map((g) => {
+      const total = g.list.reduce((s, p) => s + (byPersona.get(p.id) ?? 0), 0) || 1;
+      return {
+        ...g,
+        rows: g.list.map((p) => ({
+          name: p.name,
+          pct: Math.round(((byPersona.get(p.id) ?? 0) / total) * 100),
+        })),
+      };
+    });
   }, [posts, personas]);
 
   const thisWeek = useMemo(() => {
@@ -112,25 +121,30 @@ export default function Dashboard() {
         <CardHeader>
           <CardTitle className="text-base">Bilanciamento persona (Validated + Posted)</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          {upcoming.length === 0 ? (
+        <CardContent className="space-y-5">
+          {balanceByMarket.length === 0 ? (
             <p className="text-sm text-muted-foreground">{it.common.empty}</p>
           ) : (
-            upcoming.map((u) => (
-              <div key={u.name}>
-                <div className="flex justify-between text-xs mb-1">
-                  <span>{u.name}</span>
-                  <span className="text-muted-foreground">{u.pct}%</span>
-                </div>
-                <div className="h-2 rounded-full bg-muted overflow-hidden">
-                  <div className="h-full bg-primary" style={{ width: `${u.pct}%` }} />
-                </div>
+            balanceByMarket.map((g) => (
+              <div key={g.key} className="space-y-2">
+                <p className="text-sm font-medium">{g.label}</p>
+                {g.rows.map((u) => (
+                  <div key={u.name}>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span>{u.name}</span>
+                      <span className="text-muted-foreground">{u.pct}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-muted overflow-hidden">
+                      <div className="h-full bg-primary" style={{ width: `${u.pct}%` }} />
+                    </div>
+                  </div>
+                ))}
+                <p className="text-xs text-muted-foreground pt-1">
+                  Suggerimento: distribuzione bilanciata ≈ {Math.round(100 / Math.max(1, g.list.length))}% per persona.
+                </p>
               </div>
             ))
           )}
-          <p className="text-xs text-muted-foreground pt-2">
-            Suggerimento: distribuzione bilanciata ≈ {Math.round(100 / Math.max(1, personas.length))}% per persona.
-          </p>
         </CardContent>
       </Card>
 

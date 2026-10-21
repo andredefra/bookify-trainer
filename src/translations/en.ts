@@ -114,6 +114,7 @@ export const en = {
   'nav.closeMenu': 'Close menu',
   'auth.login': 'Login',
   'auth.register': 'Try the Demo',
+  'auth.backToSite': 'Back to site',
   'login.subtitle': 'Try our platform features with a demo account, use any email or password to access. If you are interested in the live app, please get in touch via this email',
   'login.bottom': 'If you are interested in the Studio and Gym demo, please get in touch via this email',
   'login.tabTrainer': 'Trainer',

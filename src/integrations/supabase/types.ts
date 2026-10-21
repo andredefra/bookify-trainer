@@ -2478,6 +2478,7 @@ export type Database = {
           description: string | null
           id: string
           is_ai_generated: boolean
+          market: string
           name: string
           pain: string | null
           solution: string | null
@@ -2490,6 +2491,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_ai_generated?: boolean
+          market?: string
           name: string
           pain?: string | null
           solution?: string | null
@@ -2502,6 +2504,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_ai_generated?: boolean
+          market?: string
           name?: string
           pain?: string | null
           solution?: string | null
@@ -4018,6 +4021,7 @@ export type Database = {
           id: string
           language: string | null
           marketing_consent: boolean
+          notes: string | null
           phone: string | null
           source_page: string | null
           status: string
@@ -4037,6 +4041,7 @@ export type Database = {
           id?: string
           language?: string | null
           marketing_consent?: boolean
+          notes?: string | null
           phone?: string | null
           source_page?: string | null
           status?: string
@@ -4056,6 +4061,7 @@ export type Database = {
           id?: string
           language?: string | null
           marketing_consent?: boolean
+          notes?: string | null
           phone?: string | null
           source_page?: string | null
           status?: string

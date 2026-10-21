@@ -15,6 +15,8 @@ import { safeFormatDate } from "@/utils/safeFormatDate";
 import { it } from "../i18n/it";
 import { useWaitlistPage, useWaitlistStats, fetchAllWaitlist, WAITLIST_PAGE_SIZE, type WaitlistFilters } from "../hooks/useWaitlist";
 import { waitlistToCsv, downloadCsv } from "../lib/waitlistCsv";
+import AddEntryDialog from "../components/waitlist/AddEntryDialog";
+import ImportCsvDialog from "../components/waitlist/ImportCsvDialog";
 
 const t = it.waitlist;
 
@@ -114,6 +116,8 @@ export default function Waitlist() {
             <SelectItem value="yes">{t.consentOnly}</SelectItem>
           </SelectContent>
         </Select>
+        <AddEntryDialog audience={audience} />
+        <ImportCsvDialog audience={audience} />
         <Button variant="outline" className="ml-auto" onClick={onExport} disabled={exporting || totalFiltered === 0}>
           <Download className="h-4 w-4 mr-2" />
           {exporting ? it.common.loading : t.export}
