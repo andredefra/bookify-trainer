@@ -89,6 +89,10 @@ export const it = {
     audienceAll: "Tutto il pubblico",
     audienceUser: "Utenti",
     audienceTrainer: "Trainer",
+    tabClients: "Clienti",
+    tabTrainers: "Personal trainer",
+    trainerInfo:
+      "Dal 21 ottobre 2026 le richieste dei personal trainer arrivano dai Google Form (Fogli Google). Qui restano quelle arrivate prima.",
     export: "Esporta CSV",
     error: "Impossibile caricare la waitlist.",
     alone: "Si allena da solo",

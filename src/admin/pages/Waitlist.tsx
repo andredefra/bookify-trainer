@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, ArrowRight, Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { AlreadyPromotedError, useOpportunitiesForWaitlist, usePromoteWaitlist } from "../hooks/useCrm";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -20,7 +21,15 @@ const t = it.waitlist;
 export default function Waitlist() {
   const [search, setSearch] = useState("");
   const [consent, setConsent] = useState<"all" | "yes">("all");
-  const [audience, setAudience] = useState<WaitlistFilters["audience"]>("all");
+  const [params, setParams] = useSearchParams();
+  const tab = params.get("tab") === "trainer" ? "trainer" : "clienti";
+  const audience: WaitlistFilters["audience"] = tab === "trainer" ? "trainer" : "user";
+  const isTrainer = audience === "trainer";
+  const setTab = (v: string) => {
+    const next = new URLSearchParams(params);
+    next.set("tab", v === "trainer" ? "trainer" : "clienti");
+    setParams(next, { replace: true });
+  };
   const [page, setPage] = useState(0);
   const [exporting, setExporting] = useState(false);
   const debounced = useDebounce(search, 300);
@@ -28,7 +37,10 @@ export default function Waitlist() {
   const filters: WaitlistFilters = { search: debounced, consentOnly: consent === "yes", audience };
   useEffect(() => setPage(0), [debounced, consent, audience]);
 
-  const { data: stats } = useWaitlistStats();
+  const { data: stats } = useWaitlistStats(audience);
+  const { data: userStats } = useWaitlistStats("user");
+  const { data: trainerStats } = useWaitlistStats("trainer");
+  const cols = isTrainer ? 10 : 11;
   const { data, isLoading, error } = useWaitlistPage(filters, page);
   const rows = data?.rows ?? [];
   const totalFiltered = data?.count ?? 0;
@@ -50,7 +62,7 @@ export default function Waitlist() {
     setExporting(true);
     try {
       const all = await fetchAllWaitlist(filters);
-      downloadCsv(`waitlist-${safeFormatDate(new Date(), "yyyy-MM-dd")}.csv`, waitlistToCsv(all));
+      downloadCsv(`waitlist-${tab}-${safeFormatDate(new Date(), "yyyy-MM-dd")}.csv`, waitlistToCsv(all));
     } finally {
       setExporting(false);
     }
@@ -69,6 +81,13 @@ export default function Waitlist() {
         <h1 className="text-2xl font-semibold tracking-tight">{t.title}</h1>
         <p className="text-sm text-muted-foreground">{t.subtitle}</p>
       </div>
+
+      <Tabs value={tab} onValueChange={setTab}>
+        <TabsList>
+          <TabsTrigger value="clienti">{t.tabClients} ({userStats?.total ?? "—"})</TabsTrigger>
+          <TabsTrigger value="trainer">{t.tabTrainers} ({trainerStats?.total ?? "—"})</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {counters.map((c) => (
@@ -95,19 +114,13 @@ export default function Waitlist() {
             <SelectItem value="yes">{t.consentOnly}</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={audience} onValueChange={(v) => setAudience(v as any)}>
-          <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t.audienceAll}</SelectItem>
-            <SelectItem value="user">{t.audienceUser}</SelectItem>
-            <SelectItem value="trainer">{t.audienceTrainer}</SelectItem>
-          </SelectContent>
-        </Select>
         <Button variant="outline" className="ml-auto" onClick={onExport} disabled={exporting || totalFiltered === 0}>
           <Download className="h-4 w-4 mr-2" />
           {exporting ? it.common.loading : t.export}
         </Button>
       </div>
+
+      {isTrainer && <p className="text-sm text-muted-foreground">{t.trainerInfo}</p>}
 
       <Card>
         <Table>
@@ -120,7 +133,7 @@ export default function Waitlist() {
               <TableHead>{t.cols.city}</TableHead>
               <TableHead>{t.cols.source}</TableHead>
               <TableHead>{t.cols.language}</TableHead>
-              <TableHead>{t.cols.trains}</TableHead>
+              {!isTrainer && <TableHead>{t.cols.trains}</TableHead>}
               <TableHead>{t.cols.consent}</TableHead>
               <TableHead>{t.cols.campaign}</TableHead>
               <TableHead>{t.actions}</TableHead>
@@ -128,11 +141,11 @@ export default function Waitlist() {
           </TableHeader>
           <TableBody>
             {error ? (
-              <TableRow><TableCell colSpan={11} className="text-destructive">{t.error}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={cols} className="text-destructive">{t.error}</TableCell></TableRow>
             ) : isLoading ? (
-              <TableRow><TableCell colSpan={11} className="text-muted-foreground">{it.common.loading}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={cols} className="text-muted-foreground">{it.common.loading}</TableCell></TableRow>
             ) : rows.length === 0 ? (
-              <TableRow><TableCell colSpan={11} className="text-muted-foreground">{it.common.empty}</TableCell></TableRow>
+              <TableRow><TableCell colSpan={cols} className="text-muted-foreground">{it.common.empty}</TableCell></TableRow>
             ) : (
               rows.map((r) => (
                 <TableRow key={r.id}>
@@ -143,9 +156,11 @@ export default function Waitlist() {
                   <TableCell>{r.city || "—"}</TableCell>
                   <TableCell>{r.source_page || "—"}</TableCell>
                   <TableCell className="uppercase">{r.language || "—"}</TableCell>
-                  <TableCell>
-                    {r.trains_with_pt === "alone" ? t.alone : r.trains_with_pt === "with_pt" ? t.withPt : "—"}
-                  </TableCell>
+                  {!isTrainer && (
+                    <TableCell>
+                      {r.trains_with_pt === "alone" ? t.alone : r.trains_with_pt === "with_pt" ? t.withPt : "—"}
+                    </TableCell>
+                  )}
                   <TableCell>
                     <Badge variant={r.marketing_consent ? "default" : "secondary"}>
                       {r.marketing_consent ? t.yes : t.no}
