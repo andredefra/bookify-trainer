@@ -72,3 +72,81 @@ export async function fetchAllWaitlist(f: WaitlistFilters): Promise<WaitlistRow[
   }
   return out;
 }
+
+// ---- Manual add + CSV import ----
+
+export type WaitlistAudience = "user" | "trainer";
+
+export interface NewWaitlistEntry {
+  full_name: string;
+  email: string;
+  phone?: string | null;
+  city?: string | null;
+  language?: string | null;
+  marketing_consent: boolean;
+  notes?: string | null;
+  trains_with_pt?: string | null;
+  created_at?: string;
+}
+
+export class DuplicateWaitlistEmailError extends Error {}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const isValidEmail = (e: string) => EMAIL_RE.test(e.trim());
+
+async function fetchExistingEmails(audience: WaitlistAudience): Promise<Set<string>> {
+  const existing = new Set<string>();
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await sb
+      .from("waitlist")
+      .select("email")
+      .eq("audience", audience)
+      .range(from, from + 999);
+    if (error) throw error;
+    (data ?? []).forEach((r: { email: string }) => existing.add(String(r.email).trim().toLowerCase()));
+    if (!data || data.length < 1000) break;
+  }
+  return existing;
+}
+
+export function useAddWaitlistEntry(audience: WaitlistAudience) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (entry: NewWaitlistEntry) => {
+      const existing = await fetchExistingEmails(audience);
+      if (existing.has(entry.email.trim().toLowerCase())) throw new DuplicateWaitlistEmailError();
+      const { error } = await sb.from("waitlist").insert({
+        ...entry,
+        email: entry.email.trim().toLowerCase(),
+        audience,
+        source_page: "manuale",
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["mkt", "waitlist"] }),
+  });
+}
+
+export async function importWaitlistRows(
+  audience: WaitlistAudience,
+  rows: NewWaitlistEntry[]
+): Promise<{ imported: number; skipped: number }> {
+  const existing = await fetchExistingEmails(audience);
+  const seen = new Set<string>();
+  const toInsert: Record<string, unknown>[] = [];
+  let skipped = 0;
+  for (const r of rows) {
+    const email = (r.email ?? "").trim().toLowerCase();
+    if (!isValidEmail(email) || existing.has(email) || seen.has(email)) {
+      skipped++;
+      continue;
+    }
+    seen.add(email);
+    toInsert.push({ ...r, email, audience, source_page: "google-form" });
+  }
+  if (toInsert.length) {
+    const { error } = await sb.from("waitlist").insert(toInsert);
+    if (error) throw error;
+  }
+  return { imported: toInsert.length, skipped };
+}
