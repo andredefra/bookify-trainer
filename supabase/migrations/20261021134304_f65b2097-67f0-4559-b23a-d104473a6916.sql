@@ -1,0 +1,8 @@
+ALTER TABLE public.waitlist ADD COLUMN notes text;
+
+ALTER TABLE public.mkt_personas ADD COLUMN market text NOT NULL DEFAULT 'it';
+
+INSERT INTO public.mkt_personas (name, age_range, description, pain, solution, copy_focus, is_ai_generated, market) VALUES
+  ('Rohan', '24-30', 'On-floor gym trainer (India). Works the floor of a busy commercial gym in Mumbai, back-to-back 1-to-1 sessions from early morning to late evening.', 'No time to grow beyond floor hours; income capped by the gym''s cut and his own schedule.', 'A system to sell programs and follow-ups online without leaving the floor job.', 'Time freedom, extra income streams, escaping the hourly cap.', false, 'in'),
+  ('Priya', '23-28', 'Social-media trainer (India). Very active on Instagram Reels and YouTube Shorts, mixes online coaching with group bootcamps in parks and rented studios.', 'Followers and likes do not convert into paying clients; DMs are chaotic and unpaid.', 'A funnel that turns social attention into booked, paid programs.', 'Converting followers to clients, professional image, simple payments in rupees.', false, 'in'),
+  ('Arjun', '28-36', 'Analytical hybrid/online coach (India). Data-driven, loves periodization and metrics, coaches clients online and in hybrid format across cities.', 'Spreadsheets and chat apps scattered everywhere; hard to look professional and scale.', 'One platform for programs, check-ins and payments that matches his methodical style.', 'Structure, measurable progress, scaling online coaching across India.', false, 'in');
