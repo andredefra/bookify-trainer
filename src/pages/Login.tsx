@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { toast } from "sonner";
@@ -10,7 +10,8 @@ import { useLanguage } from "@/context/LanguageContext";
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginType, setLoginType] = useState('trainer');
+  const [searchParams] = useSearchParams();
+  const [loginType, setLoginType] = useState(() => searchParams.get('role') === 'client' ? 'client' : 'trainer');
   const [name, setName] = useState('Andrea');
   const navigate = useNavigate();
   const { t } = useLanguage();

@@ -3,16 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { Button } from '@/components/ui/button';
 
-const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) => {
+const UserNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language, t } = useLanguage();
   const navigate = useNavigate();
-  const handleJoinWaitlist = () => {
-    setIsMenuOpen(false);
-    if (onJoinWaitlist) onJoinWaitlist();
-    else navigate(`${language === 'en' ? '/user-en' : language === 'in' ? '/in-user' : '/user'}?waitlist=1`);
-  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -88,19 +84,13 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
           <div className="hidden md:flex items-center space-x-4">
             <LanguageSwitcher theme="trainer" />
 
-            <Link to="/user-login">
-              <span className="inline-flex items-center rounded-full border border-[#3a3a3a] px-4 py-1.5 text-sm font-medium text-[#ddd7ca] transition-colors hover:border-[#F6C124]">
-                {t('userNav.login')}
-              </span>
-            </Link>
-            <button type="button" onClick={handleJoinWaitlist} className="rounded-full bg-[#F6C124] px-4 py-1.5 text-sm font-semibold text-[#0A0A0A]">
-              {t('userNav.startTrial')}
-            </button>
+            <Button asChild size="sm" className="rounded-full px-5"><Link to="/login?role=client">{t('auth.register')}</Link></Button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               onClick={toggleMenu}
               className="inline-flex items-center justify-center p-2 rounded-md text-[#ddd7ca] hover:text-[#F6C124] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#F6C124]"
             >
@@ -134,14 +124,7 @@ const UserNavbar = ({ onJoinWaitlist }: { onJoinWaitlist?: () => void } = {}) =>
 
               {/* Mobile Actions */}
               <div className="px-3 py-2 space-y-2">
-                <Link to="/user-login" className="block">
-                  <span className="flex w-full justify-center rounded-full border border-[#3a3a3a] py-2 font-medium text-[#ddd7ca]">
-                    {t('userNav.login')}
-                  </span>
-                </Link>
-                <button type="button" className="w-full rounded-full bg-[#F6C124] py-2 font-semibold text-[#0A0A0A]" onClick={handleJoinWaitlist}>
-                  {t('userNav.startTrial')}
-                </button>
+                <Button asChild size="lg" className="w-full rounded-full"><Link to="/login?role=client" onClick={() => setIsMenuOpen(false)}>{t('auth.register')}</Link></Button>
               </div>
             </div>
           </div>

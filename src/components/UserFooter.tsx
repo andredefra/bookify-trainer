@@ -44,13 +44,13 @@ const UserFooter = () => {
         <div className="grid grid-cols-12 gap-8">
           {/* Logo and description */}
           <div className="col-span-12 md:col-span-5 lg:col-span-6">
-            <Link to="/user" className="inline-block">
+            <Link to={language === 'it' ? '/user' : language === 'in' ? '/in-user' : '/user-en'} className="inline-block">
               <span className="text-lg text-white" style={{ fontFamily: "'JetBrains Mono', ui-monospace, monospace", fontWeight: 800 }}>mypersonal<span className="text-[#F6C124]">.fit</span></span>
             </Link>
             <p className="mt-4 text-sm text-[#a8a296]">{t('userFooter.description')}</p>
             <div className="mt-8">{/* Increased margin to align with other links */}
               <Link 
-                to={language === 'in' ? '/in' : language === 'it' ? '/it' : '/'} 
+                to={language === 'in' ? '/in' : language === 'it' ? '/' : '/en'} 
                 className="text-sm text-[#a8a296] hover:text-[#F6C124] transition-colors"
               >
                 {t('userFooter.trainerPlatformLink')}

@@ -26,8 +26,6 @@ import ComingSoon from "./pages/ComingSoon";
 import UserLanding from "./pages/UserLanding";
 import UserLandingEn from "./pages/UserLandingEn";
 import UserLandingIn from "./pages/UserLandingIn";
-import UserLogin from "./pages/UserLogin";
-import UserRegister from "./pages/UserRegister";
 import UserDashboard from "./pages/UserDashboard";
 import GymOnboarding from "./pages/GymOnboarding";
 import AdminRoutes from "./admin/routes/AdminRoutes";
@@ -121,8 +119,8 @@ const AppContent = () => {
         <Route path="/user-en" element={<UserLandingEn />} />
         <Route path="/user-find-trainer" element={<UserFindTrainer />} />
         <Route path="/user-find-trainer-en" element={<UserFindTrainer />} />
-        <Route path="/user-login" element={<UserLogin />} />
-        <Route path="/user-register" element={<UserRegister />} />
+        <Route path="/user-login" element={<Navigate to="/login?role=client" replace />} />
+        <Route path="/user-register" element={<Navigate to="/login?role=client" replace />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="*" element={<NotFound />} />
