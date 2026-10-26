@@ -1,11 +1,15 @@
 
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import UserNavbar from "@/components/UserNavbar";
+import UserFooter from "@/components/UserFooter";
+import ClientDemoDialog from "@/components/ClientDemoDialog";
+import { getPublicDemoProfile, getPublicDemoRecord } from "@/data/publicDemoProfiles";
 
 // Import refactored components
 import { PublicHeader, type PublicProfileTab } from "@/components/trainer/PublicHeader";
@@ -26,13 +30,16 @@ import { useTrainerGymAffiliations } from "@/hooks/useTrainerGymAffiliations";
 import { 
   trainerData as defaultTrainerData, 
   aiConversation,
-  demoTrainers,
-  getTrainerById,
   Trainer
 } from "@/data/trainerMockData";
 
 const TrainerProfile = () => {
   const { idOrSlug } = useParams();
+  const [searchParams] = useSearchParams();
+  const consumer = searchParams.get('from') === 'user';
+  const PageNavbar = consumer ? UserNavbar : Navbar;
+  const PageFooter = consumer ? UserFooter : Footer;
+  const [showDemoDialog, setShowDemoDialog] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -47,7 +54,7 @@ const TrainerProfile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openMessageDialog, setOpenMessageDialog] = useState(false);
   const [activeTab, setActiveTab] = useState<PublicProfileTab>("about");
-  const demoTrainer = demoTrainers.find(record => record.id === trainer.id);
+  const demoTrainer = getPublicDemoRecord(trainer.id);
 
   const { reviews, averageRating, totalReviews } = useTrainerReviews(trainerId || undefined);
   const { affiliations, searchGyms } = useTrainerGymAffiliations(trainerId || undefined);
@@ -65,6 +72,15 @@ const TrainerProfile = () => {
     if (!idOrSlug) return;
 
     setLoading(true);
+    setTrainerProfile(null);
+    setTrainerId(null);
+    setPrimaryGymInfo(null);
+    const publicDemo = getPublicDemoProfile(idOrSlug);
+    if (publicDemo) {
+      setTrainer(publicDemo);
+      setLoading(false);
+      return;
+    }
 
     // Try the database first. A miss or an error here must never swallow the
     // mock-data fallback below.
@@ -144,7 +160,7 @@ const TrainerProfile = () => {
     }
 
     // Fallback to mock data for demo
-    const mockTrainer = getTrainerById(idOrSlug);
+    const mockTrainer = getPublicDemoProfile(idOrSlug);
     if (mockTrainer) {
       setTrainer(mockTrainer);
       setLoading(false);
@@ -163,6 +179,7 @@ const TrainerProfile = () => {
   };
 
   const handleBookSession = () => {
+    if (consumer) { setShowDemoDialog(true); return; }
     setBookingSelection(null);
     if (!isLoggedIn) {
       setShowRegister(true);
@@ -172,6 +189,7 @@ const TrainerProfile = () => {
   };
 
   const handleOfferBook = (selection: PublicBookingSelection) => {
+    if (consumer) { setShowDemoDialog(true); return; }
     setBookingSelection(selection);
     if (!isLoggedIn) setShowRegister(true);
     else setShowBookingForm(true);
@@ -202,7 +220,7 @@ const TrainerProfile = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
+        <PageNavbar />
         <main className="flex-grow pt-24 pb-16">
           <div className="max-w-6xl mx-auto px-6 lg:px-8">
             <div className="flex items-center justify-center py-12">
@@ -213,14 +231,14 @@ const TrainerProfile = () => {
             </div>
           </div>
         </main>
-        <Footer />
+        <PageFooter />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <PageNavbar />
       
       <main className="flex-grow pt-24 pb-16">
         <PublicHeader
@@ -230,11 +248,12 @@ const TrainerProfile = () => {
           onTabChange={setActiveTab}
           onBookSession={handleBookSession}
           onOfferBook={handleOfferBook}
-          onMessageClick={() => setOpenMessageDialog(true)}
+          onMessageClick={() => consumer ? setShowDemoDialog(true) : setOpenMessageDialog(true)}
           primaryGym={primaryGymInfo}
         />
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          <MarketingSection trainerName={trainer.name} />
+          {!consumer && <MarketingSection trainerName={trainer.name} />}
+          {consumer && <ClientDemoDialog open={showDemoDialog} onOpenChange={setShowDemoDialog} />}
           
           {/* Dialogs */}
           <SessionDialogs 
@@ -257,7 +276,7 @@ const TrainerProfile = () => {
         </div>
       </main>
       
-      <Footer />
+      <PageFooter />
     </div>
   );
 };
