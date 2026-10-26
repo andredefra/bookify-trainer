@@ -11,6 +11,8 @@ export interface Trainer {
   rating: number;
   reviews: number;
   hourlyRate: number;
+  currency?: 'EUR' | 'INR';
+  credentials?: string[];
   specialties: string[];
   certifications: string[];
   availability: {
