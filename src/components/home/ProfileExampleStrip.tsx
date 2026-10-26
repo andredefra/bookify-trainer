@@ -16,7 +16,7 @@ export default function ProfileExampleStrip() {
       <Button asChild className="mt-6 h-auto min-h-10 max-w-full whitespace-normal rounded-full bg-brand-highlight px-5 font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to={`/trainer/${trainer.slug}?lang=${language}`}>{t('profileExample.button')}<ArrowUpRight className="shrink-0" /></Link></Button>
     </div>
     <article className="mx-auto w-full max-w-sm overflow-hidden rounded-lg border border-brand-border bg-brand-surface">
-      <img src={trainer.profileImage} alt={trainer.name} className="h-44 w-full object-cover object-top" />
+      <img src={trainer.profileImage} alt={trainer.name} className="h-44 w-full object-cover object-center" />
       <div className="p-4">
         <p className="font-bold">{trainer.name}</p>
         <div className="mt-2 flex flex-wrap gap-2">{trainer.credentials?.map(credential => <span key={credential} className="rounded border border-brand-highlight/30 px-2 py-1 font-brand-mono text-[10px] font-bold text-brand-highlight">{t(`cred.${credential}`)}</span>)}</div>
