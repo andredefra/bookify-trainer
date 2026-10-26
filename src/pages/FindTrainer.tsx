@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import UserNavbar from '@/components/UserNavbar';
 import UserFooter from '@/components/UserFooter';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import ClientDemoDialog from '@/components/ClientDemoDialog';
 import { Search, MapPin, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -116,7 +116,7 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
                         <p className="font-brand-mono text-[17px] font-extrabold">{language === 'in' ? `₹${trainer.hourlyRate.toLocaleString('en-IN')}` : `€${trainer.hourlyRate}`} <span className="market-muted text-[9px] font-bold">{t('market.perHour')}</span></p>
                         {consumer ? (
                           <div className="flex w-full flex-wrap gap-2">
-                            <Button variant="outline" onClick={() => setShowDemoDialog(true)} className="h-9 rounded-full border-brand-canvas/20 bg-transparent px-4 text-xs font-bold text-brand-canvas hover:bg-brand-canvas/5 hover:text-brand-canvas">{t('market.viewProfile')}</Button>
+                            <Button asChild variant="outline" className="h-9 rounded-full border-brand-canvas/20 bg-transparent px-4 text-xs font-bold text-brand-canvas hover:bg-brand-canvas/5 hover:text-brand-canvas"><Link to={`/trainer/${trainer.slug}?from=user&lang=${language}`}>{t('market.viewProfile')}</Link></Button>
                             <Button onClick={() => setShowDemoDialog(true)} className="h-9 rounded-full bg-brand-highlight px-4 text-xs font-bold text-brand-canvas hover:bg-brand-highlight/90">{t('consumerMarket.contact')}</Button>
                           </div>
                         ) : <Button asChild className="h-9 rounded-full bg-brand-canvas px-4 text-xs font-bold text-brand-highlight hover:bg-brand-canvas/90"><Link to={`/trainer/${trainer.slug}`}>{t('market.viewProfile')}</Link></Button>}
@@ -132,20 +132,11 @@ export const MarketplacePage = ({ consumer = false }: { consumer?: boolean }) =>
         <section className="bg-brand-canvas px-5 py-16 text-center">
           <h2 className="trainer-headline text-[27px] leading-[1.12] md:text-[36px]"><span className="block">{t(consumer ? 'consumerMarket.ctaA' : 'market.ctaA')}</span><span className="block text-brand-highlight">{t(consumer ? 'consumerMarket.ctaB' : 'market.ctaB')}</span></h2>
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-brand-text/70">{t(consumer ? 'consumerMarket.ctaSub' : 'market.ctaSub')}</p>
-          <Button asChild className="mt-7 h-12 rounded-full bg-brand-highlight px-8 font-bold text-brand-canvas hover:bg-brand-highlight/90"><Link to={consumer ? '/user-register' : '/login'}>{t('market.ctaBtn')}</Link></Button>
+          <Button asChild className="mt-7 h-12 rounded-full bg-brand-highlight px-8 font-bold text-brand-canvas hover:bg-brand-highlight/90">{consumer ? <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer">{t('market.ctaBtn')}</a> : <Link to="/login">{t('market.ctaBtn')}</Link>}</Button>
         </section>
       </main>
       {consumer ? <UserFooter /> : <Footer />}
-      {consumer && <Dialog open={showDemoDialog} onOpenChange={setShowDemoDialog}>
-        <DialogContent className="trainer-brand max-w-[calc(100%-2rem)] rounded-xl border-brand-border bg-brand-canvas text-brand-text sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="trainer-headline pr-5 leading-tight">{t('consumerMarket.dialogTitle')}</DialogTitle>
-            <DialogDescription className="pt-3 text-brand-text/70 leading-relaxed">{t('consumerMarket.dialogBody')}</DialogDescription>
-          </DialogHeader>
-          <Button asChild className="rounded-full bg-brand-highlight text-brand-canvas hover:bg-brand-highlight/90"><Link to="/user-register">{t('consumerMarket.signup')}</Link></Button>
-          <Button variant="link" onClick={() => setShowDemoDialog(false)} className="text-brand-text/70">{t('consumerMarket.back')}</Button>
-        </DialogContent>
-      </Dialog>}
+      {consumer && <ClientDemoDialog open={showDemoDialog} onOpenChange={setShowDemoDialog} />}
     </div>
   );
 };

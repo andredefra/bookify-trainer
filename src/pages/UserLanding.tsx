@@ -2,9 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import UserNavbar from '@/components/UserNavbar';
 import UserFooter from '@/components/UserFooter';
 import { Check, Bot, Target, BarChart3, Zap, Smartphone, Clock, Shield, Dumbbell, Footprints, Ruler, MessageCircle, CalendarDays, Send } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import WaitlistDialog from '@/components/WaitlistDialog';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
 // Flip to true when the free cohort closes to re-enable the paid plan card.
@@ -71,24 +69,10 @@ const CheckList = ({ items, check, text }: { items: string[]; check: string; tex
 
 export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
   const { t } = useLanguage();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const openWaitlist = () => setWaitlistOpen(true);
-
-  useEffect(() => {
-    if (searchParams.get('waitlist') === '1') {
-      setWaitlistOpen(true);
-      const next = new URLSearchParams(searchParams);
-      next.delete('waitlist');
-      setSearchParams(next, { replace: true });
-    }
-  }, [searchParams, setSearchParams]);
-
   const P = c.pricing;
   return (
     <div className="trainer-brand min-h-screen flex flex-col bg-[#0A0A0A] text-left">
-      <UserNavbar onJoinWaitlist={openWaitlist} />
-      <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
+      <UserNavbar />
 
       <main className="flex-grow overflow-x-hidden">
         {/* Hero */}
@@ -103,10 +87,10 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
               {c.hero.sub1}<br />{c.hero.sub2}
             </p>
             <div className="mt-9 flex justify-center">
-              <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-6 py-3.5 text-base sm:px-8`} style={{ boxShadow: 'var(--hero-cta-shadow)' }}>
+              <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer" className={`${GOLD_BTN} px-6 py-3.5 text-base sm:px-8`} style={{ boxShadow: 'var(--hero-cta-shadow)' }}>
                 <span className="hidden sm:inline">{c.hero.ctaLong}</span>
                 <span className="sm:hidden">{c.hero.ctaShort}</span>
-              </button>
+              </a>
             </div>
             <p className="mt-5 text-[10px] text-[#8c8678] sm:text-[11px]" style={MICRO}>{c.hero.micro}</p>
           </div>
@@ -235,7 +219,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 </div>
                 <div>
                   <p className="mb-4 text-lg font-semibold text-[#0A0A0A]">{c.journey.closing}</p>
-                  <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-7 py-3`}>{c.journey.cta}</button>
+                  <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer" className={`${GOLD_BTN} px-7 py-3`}>{c.journey.cta}</a>
                 </div>
               </div>
 
@@ -257,7 +241,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                       <div className="rounded-[12px_12px_12px_4px] border border-[#E0DACB] bg-[#FFFFFF] p-2.5 text-[11px] leading-snug text-[#3f3a33]">{c.journey.chat[0]}</div>
                       <div className="self-end rounded-[12px_12px_4px_12px] bg-[#0A0A0A] p-2.5 text-[11px] leading-snug text-[#ECE7DB]">{c.journey.chat[1]}</div>
                       <div className="rounded-[12px_12px_12px_4px] border border-[#E0DACB] bg-[#FFFFFF] p-2.5 text-[11px] leading-snug text-[#3f3a33]">{c.journey.chat[2]}</div>
-                      <button type="button" className={`${GOLD_BTN} w-full py-2 text-[11px]`}><Zap className="mr-1.5 h-3.5 w-3.5" />{c.journey.chatCta}</button>
+                      <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer" className={`${GOLD_BTN} w-full py-2 text-[11px]`}><Zap className="mr-1.5 h-3.5 w-3.5" />{c.journey.chatCta}</a>
                       <div className="mb-1 mt-auto flex items-center justify-between gap-2 rounded-[10px] border border-[#E0DACB] bg-[#FFFFFF] px-3 py-2">
                         <span className="text-[8px] uppercase text-[#0A0A0A]" style={MICRO}>{c.journey.today}</span>
                         <span className="rounded-full bg-[#C6F24E] px-2 py-[3px] text-[8px] font-bold text-[#0A0A0A]">{c.journey.todayNote}</span>
@@ -324,7 +308,7 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                 <p className="text-[#5a5346]">{P.freeDesc}</p>
                 <div className="mt-4 rounded-lg border border-[#E0DACB] bg-[#F4F2ED] p-3 text-[11px] text-[#0A0A0A]" style={BADGE}>{P.counter}</div>
                 <CheckList items={P.features} check="#B98A00" text="#3f3a33" />
-                <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} mt-8 w-full py-3`}>{P.freeCta}</button>
+                <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer" className={`${GOLD_BTN} mt-8 w-full py-3`}>{P.freeCta}</a>
                 <div className="mt-4 space-y-1 text-center text-sm text-[#5a5346]">
                   {P.freeNotes.map((n) => <p key={n}>{n}</p>)}
                 </div>
@@ -381,10 +365,10 @@ export const ConsumerLanding = ({ c }: { c: ConsumerCopy }) => {
                   🎁 <strong className="text-white">{c.cta.offer1}</strong><br />
                   ⏰ <strong className="text-white">{c.cta.offer2}</strong>
                 </p>
-                <button type="button" onClick={openWaitlist} className={`${GOLD_BTN} px-6 py-4 text-lg sm:px-12`} style={{ boxShadow: 'var(--hero-cta-shadow)' }}>
+                <a href={t('userPricing.formUrl')} target="_blank" rel="noopener noreferrer" className={`${GOLD_BTN} px-6 py-4 text-lg sm:px-12`} style={{ boxShadow: 'var(--hero-cta-shadow)' }}>
                   <span className="hidden sm:inline">{c.cta.ctaLong}</span>
                   <span className="sm:hidden">{c.cta.ctaShort}</span>
-                </button>
+                </a>
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] text-[#8c8678]" style={MICRO}>
                   {c.cta.checks.map((ch) => (
                     <div key={ch} className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5" color="#F6C124" /><span>{ch}</span></div>

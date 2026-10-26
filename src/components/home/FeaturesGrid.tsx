@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import ProfileExampleStrip from './ProfileExampleStrip';
 
 const MONO = "'JetBrains Mono', ui-monospace, monospace";
 const DISPLAY = "'Archivo', sans-serif";
@@ -185,6 +186,7 @@ const FeaturesGrid = () => {
 
           </div>
         </div>
+        <ProfileExampleStrip />
       </div>
     </section>
   );

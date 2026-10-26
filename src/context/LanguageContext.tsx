@@ -75,7 +75,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Language explicitly picked with the selector on the current (neutral) page.
   const [pickedOnPage, setPickedOnPage] = useState<{ path: string; lang: Language } | null>(null);
 
-  const mappedLanguage = routeLanguageFor(location.pathname);
+  const profileLang = location.pathname.startsWith('/trainer/') ? new URLSearchParams(location.search).get('lang') : null;
+  const mappedLanguage = isLang(profileLang) ? profileLang : routeLanguageFor(location.pathname);
 
   useEffect(() => {
     if (!mappedLanguage) return;

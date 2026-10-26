@@ -33,7 +33,7 @@ export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onB
     { value: record.specialties.length, key: "specialties" },
   ];
   const tabs: PublicProfileTab[] = ["about", ...(demoTrainer?.packages?.length ? ["packages" as const] : []), ...(demoTrainer?.classes?.length ? ["classes" as const] : []), "experience", "education", "reviews", "availability"];
-  const rate = `€${record.hourlyRate} ${t("publicProfile.perHour")}`;
+  const rate = `${record.currency === 'INR' ? `₹${record.hourlyRate.toLocaleString('en-IN')}` : `€${record.hourlyRate}`} ${t("publicProfile.perHour")}`;
   return (
     <div className="public-profile">
       <section className="public-profile-band trainer-brand bg-brand-canvas relative overflow-hidden">
@@ -46,7 +46,7 @@ export function PublicHeader({ trainer, demoTrainer, activeTab, onTabChange, onB
               <div className="flex flex-wrap items-center gap-3">
                 <h1 className="trainer-headline public-profile-name">{record.name}</h1>
                 <div className="flex flex-wrap gap-2">
-                  {demoTrainer?.credentials.map(credential => <span key={credential} className={`public-profile-credential font-brand-mono ${credential}`}>{t(`cred.${credential}`)}</span>)}
+                  {(demoTrainer?.credentials ?? trainer.credentials ?? []).map(credential => <span key={credential} className={`public-profile-credential font-brand-mono ${credential}`}>{t(`cred.${credential}`)}</span>)}
                 </div>
               </div>
               <p className="public-profile-title">{record.title}</p>
