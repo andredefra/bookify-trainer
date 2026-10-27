@@ -24,3 +24,4 @@
 - [x] Switch admin AI to Gemini (GEMINI_API_KEY), admin help assistant, live AI health in Impostazioni; deploy and run health once.
 - [x] Update public client demo navigation, interest forms, locale-aware profiles/footer and legacy auth redirects.
 - [x] Add trainer home example strip and bilingual trainer profile marketing; verify public flows without publishing.
+- [ ] Add admin Excel/CSV text-only updates with editable phase mapping, preview, JSON backup and batches of 20; verify logic and compilation without browser tests.

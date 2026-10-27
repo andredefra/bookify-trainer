@@ -13,6 +13,7 @@ import { usePlanPhases, useCreatePlanPhase, useClosePlanPhase } from "../hooks/u
 import { schedulePhase } from "../lib/ai";
 import PostEditorDialog from "../components/content/PostEditorDialog";
 import CsvImportDialog from "../components/content/CsvImportDialog";
+import UpdateTextsDialog from "../components/content/UpdateTextsDialog";
 import MediaThumb from "../components/content/MediaThumb";
 import type { MktContent, MktStatus, MktPlanPhase } from "../types";
 import { it } from "../i18n/it";
@@ -99,6 +100,7 @@ export default function ContentPlan() {
 
   const [editing, setEditing] = useState<MktContent | null>(null);
   const [importOpen, setImportOpen] = useState(false);
+  const [updateTextsOpen, setUpdateTextsOpen] = useState(false);
   const [newPhaseOpen, setNewPhaseOpen] = useState(false);
   const [activePhaseId, setActivePhaseId] = useState<string | null>(null);
 
@@ -172,9 +174,12 @@ export default function ContentPlan() {
             Produci i post in fasi sequenziali. L'AI calendarizzerà rispettando l'ordine: Fase 1 prima della Fase 2.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" size="sm" onClick={() => setImportOpen(true)} disabled={!activePhase || phaseClosed}>
             <Upload className="h-4 w-4" /> Importa template
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setUpdateTextsOpen(true)} disabled={!phases.length}>
+            <Upload className="h-4 w-4" /> Aggiorna testi da Excel
           </Button>
           <Button
             size="sm"
@@ -303,6 +308,7 @@ export default function ContentPlan() {
 
       <PostEditorDialog post={editing} onClose={() => setEditing(null)} planPhase={activePhase} />
       <CsvImportDialog open={importOpen} onClose={() => setImportOpen(false)} planPhaseId={activePhaseId} />
+      <UpdateTextsDialog open={updateTextsOpen} onClose={() => setUpdateTextsOpen(false)} phases={phases} posts={posts} activePhaseId={activePhaseId} />
       <NewPhaseDialog open={newPhaseOpen} onClose={() => setNewPhaseOpen(false)} onCreate={handleCreatePhase} />
     </div>
   );
