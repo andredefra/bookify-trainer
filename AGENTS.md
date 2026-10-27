@@ -15,3 +15,4 @@
 - Public marketplace market-specific identities, portraits, rates and badges live in isolated structured datasets selected by locale; India cards never inherit Italian demo portraits or credentials, and the badge set per market comes from that dataset only.
 - Resolve public demo profiles through a dedicated adapter before live lookup; retain only supplied market facts and pass audience/locale in profile links so client shells and demo gates stay consistent.
 - Share the client demo dialog across discovery and profile actions, using the locale's existing interest-form key instead of registration or public waitlist writes.
+- Keep admin tracker text updates separate from template creation, with an explicit text-field allowlist and phase/sequence matching, so previews and backups cannot alter other post data or create posts.
