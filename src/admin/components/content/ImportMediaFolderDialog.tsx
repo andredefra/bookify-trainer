@@ -85,26 +85,27 @@ export default function ImportMediaFolderDialog({
     };
     await Promise.all([worker(), worker(), worker()]);
     let updated = 0;
+    const touched = new Set<string>();
     for (const g of groups) {
       const urls = results.get(g.key)!.filter(Boolean) as string[];
       if (!urls.length) continue;
-      // Uploaded files replace the old list; with cleaning off, keep nothing else either (replace semantics).
       const { error } = await sb.from("mkt_content").update({ media_urls: urls, media_url: urls[0] }).eq("id", g.post.id);
-      if (error) errors++; else updated++;
+      if (error) errors++; else { updated++; touched.add(g.post.id); }
     }
-    if (cleanInvalid) await cleanAll(false);
+    if (cleanInvalid) await cleanAll(false, touched);
     setBusy(false);
     setSummary(`Post aggiornati: ${updated} · File caricati: ${uploaded} · Errori: ${errors}`);
     qc.invalidateQueries({ queryKey: ["mkt_content"] });
   };
 
-  const cleanAll = async (ask = true) => {
+  const cleanAll = async (ask = true, exclude: Set<string> = new Set()) => {
     if (ask) {
       if (!invalidCount) { toast.info("Nessun media non valido"); return; }
       if (!confirm(`Rimuovere ${invalidCount} valori non validi ("Draft", link Drive…) dai media di tutti i post?`)) return;
     }
     let fixed = 0;
     for (const p of posts) {
+      if (exclude.has(p.id)) continue;
       const list = p.media_urls ?? [];
       const clean = list.filter(isValid);
       const mediaBad = !!p.media_url && !isValid(p.media_url);
