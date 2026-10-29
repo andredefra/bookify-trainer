@@ -179,13 +179,7 @@ const TrainerProfile = () => {
   };
 
   const handleBookSession = () => {
-    if (consumer) { setShowDemoDialog(true); return; }
-    setBookingSelection(null);
-    if (!isLoggedIn) {
-      setShowRegister(true);
-    } else {
-      setShowBookingForm(true);
-    }
+    setShowDemoDialog(true);
   };
 
   const handleOfferBook = (selection: PublicBookingSelection) => {
@@ -221,7 +215,7 @@ const TrainerProfile = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <PageNavbar />
-        <main className="flex-grow pt-24 pb-16">
+        <main className="flex-grow pt-16 pb-16">
           <div className="max-w-6xl mx-auto px-6 lg:px-8">
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
@@ -240,7 +234,7 @@ const TrainerProfile = () => {
     <div className="min-h-screen flex flex-col">
       <PageNavbar />
       
-      <main className="flex-grow pt-24 pb-16">
+      <main className="flex-grow pt-16 pb-16">
         <PublicHeader
           trainer={trainer}
           demoTrainer={demoTrainer}
@@ -248,12 +242,12 @@ const TrainerProfile = () => {
           onTabChange={setActiveTab}
           onBookSession={handleBookSession}
           onOfferBook={handleOfferBook}
-          onMessageClick={() => consumer ? setShowDemoDialog(true) : setOpenMessageDialog(true)}
+          onMessageClick={() => setShowDemoDialog(true)}
           primaryGym={primaryGymInfo}
         />
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
           {!consumer && <MarketingSection trainerName={trainer.name} />}
-          {consumer && <ClientDemoDialog open={showDemoDialog} onOpenChange={setShowDemoDialog} />}
+          <ClientDemoDialog open={showDemoDialog} onOpenChange={setShowDemoDialog} context={consumer ? 'client' : 'trainer'} />
           
           {/* Dialogs */}
           <SessionDialogs 
