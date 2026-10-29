@@ -28,6 +28,7 @@ export const MarketingSection = ({ trainerName }: MarketingSectionProps) => {
           <Link to="/login">{t('profileMarketing.stripSecondary')}</Link>
         </Button>
       </div>
+      </div>
     </div>
   );
 };

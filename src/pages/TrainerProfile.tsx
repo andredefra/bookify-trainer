@@ -234,7 +234,7 @@ const TrainerProfile = () => {
     <div className="min-h-screen flex flex-col">
       <PageNavbar />
       
-      <main className="flex-grow pt-16 pb-16">
+      <main className={`flex-grow pt-16${consumer ? " pb-16" : ""}`}>
         <PublicHeader
           trainer={trainer}
           demoTrainer={demoTrainer}
@@ -245,8 +245,8 @@ const TrainerProfile = () => {
           onMessageClick={() => setShowDemoDialog(true)}
           primaryGym={primaryGymInfo}
         />
+        {!consumer && <MarketingSection trainerName={trainer.name} />}
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
-          {!consumer && <MarketingSection trainerName={trainer.name} />}
           <ClientDemoDialog open={showDemoDialog} onOpenChange={setShowDemoDialog} context={consumer ? 'client' : 'trainer'} />
           
           {/* Dialogs */}
