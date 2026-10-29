@@ -10,7 +10,8 @@ interface MarketingSectionProps {
 export const MarketingSection = ({ trainerName }: MarketingSectionProps) => {
   const { t } = useLanguage();
   return (
-    <div className="trainer-brand mt-12 bg-brand-canvas p-7 text-brand-text md:p-9">
+    <div className="trainer-brand w-full bg-brand-canvas text-brand-text">
+      <div className="mx-auto max-w-6xl px-6 py-12 md:py-16 lg:px-8">
       <h2 className="trainer-headline text-2xl leading-tight md:text-[28px]">
         {t('profileMarketing.stripTitle')}
       </h2>
@@ -26,6 +27,7 @@ export const MarketingSection = ({ trainerName }: MarketingSectionProps) => {
         <Button asChild variant="outline" className="h-auto min-h-10 max-w-full whitespace-normal rounded-full border-brand-border px-5 font-bold text-brand-text hover:bg-brand-surface hover:text-brand-text">
           <Link to="/login">{t('profileMarketing.stripSecondary')}</Link>
         </Button>
+      </div>
       </div>
     </div>
   );
